@@ -19,6 +19,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:velocity_x/velocity_x.dart';
 
+import 'widget/chat_history_widget.dart';
+
 class FeedBack extends GetView<FeedbackController> {
   const FeedBack({super.key});
 
@@ -162,7 +164,7 @@ class FeedBack extends GetView<FeedbackController> {
                                     ?*/ Padding(
                                   padding: EdgeInsets.symmetric(
                                       horizontal: 12.w, vertical: 4.h),
-                                  child: MessageView(
+                                  child: MessageHistoryView(
                                     unreadMessageShow: true,
                                     index: index,
                                     userName: '',

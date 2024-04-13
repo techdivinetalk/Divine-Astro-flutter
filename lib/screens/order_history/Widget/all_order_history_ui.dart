@@ -45,22 +45,44 @@ class AllOrderHistoryUi extends StatelessWidget {
   }
 
   Widget orderDetailView(int index, List<AllHistoryData> data) {
+    String productTypeText;
+
+    switch (data[index].productType) {
+      case 7:
+        productTypeText = 'Chat';
+        break;
+      case 12:
+        productTypeText = 'Call';
+        break;
+      case 2:
+        productTypeText = 'Gifts';
+        break;
+      case 3:
+        productTypeText = 'Remedy Suggested';
+        break;
+      default:
+        productTypeText = 'Unknown';
+    }
+
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: appColors.white,
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.3),
-                blurRadius: 3.0,
-                offset: const Offset(0.3, 3.0)),
-          ]),
+        borderRadius: BorderRadius.circular(10),
+        color: appColors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 3.0,
+            offset: const Offset(0.3, 3.0),
+          ),
+        ],
+      ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          GestureDetector( onTap: () {
-            openBottomSheet(Get.context!,
+          GestureDetector(
+            onTap: () {
+              openBottomSheet(Get.context!,
                 functionalityWidget: Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
                   child: Column(
@@ -71,9 +93,9 @@ class AllOrderHistoryUi extends StatelessWidget {
                       ),
                     ],
                   ),
-                ));
-          },
-
+                ),
+              );
+            },
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -94,46 +116,41 @@ class AllOrderHistoryUi extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                // "chat".tr,
-                data[index].productType != 7 ? 'Chat' : 'Call',
+                productTypeText,
                 style: AppTextStyle.textStyle12(
                   fontWeight: FontWeight.w400,
-                  /*fontColor: "$type" == "PENALTY"
-                          ? appColors.appRedColour
-                          : appColors.darkBlue*/
                 ),
               ),
               Text(
-                // "$amount",
                 "+ ₹${data[index].amount}",
                 style: AppTextStyle.textStyle12(
-                    fontWeight: FontWeight.w400,
-                    fontColor: /*data[index].amount.toString().contains("+")
-                          ?*/ appColors.lightGreen
-                  /* : appColors.appRedColour*/),
-              )
+                  fontWeight: FontWeight.w400,
+                  fontColor: appColors.lightGreen,
+                ),
+              ),
             ],
           ),
           Text(
-            // "with Username(user id) for 8 minutes "
             "with ${data[index].getCustomers?.name}(${data[index].getCustomers?.id}) for ${data[index].duration} minutes",
             textAlign: TextAlign.start,
             style: AppTextStyle.textStyle12(
-                fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
+              fontWeight: FontWeight.w400,
+              fontColor: appColors.darkBlue,
+            ),
           ),
           const SizedBox(height: 8),
           Row(
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
               Text(
-                // "$time",
                 data[index].createdAt != null
-                    ? DateFormat("dd MMM, hh:mm aa")
-                    .format(data[index].createdAt!)
+                    ? DateFormat("dd MMM, hh:mm aa").format(data[index].createdAt!)
                     : "N/A",
                 textAlign: TextAlign.end,
                 style: AppTextStyle.textStyle12(
-                    fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
+                  fontWeight: FontWeight.w400,
+                  fontColor: appColors.darkBlue,
+                ),
               ),
             ],
           ),
@@ -157,6 +174,7 @@ class AllOrderHistoryUi extends StatelessWidget {
       ),
     );
   }
+
 
   Widget detailView(int index, List<AllHistoryData> data) {
     String getGenderText(int? gender) {
@@ -305,13 +323,13 @@ class AllOrderHistoryUi extends StatelessWidget {
               ],
             ),
             Text(
-              "₹${data[index].partnerPrice ?? "N/a"}/min",
+              "₹${data[index].partnerPrice ?? "${data[index].getGift?.giftPrice}"}/min",
               style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
             ),
           ],
         ),
         const SizedBox(height: 10),
-        Row(
+        data[index].productType != 2 ? Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
@@ -329,7 +347,7 @@ class AllOrderHistoryUi extends StatelessWidget {
               style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
             ),
           ],
-        )
+        ) : SizedBox.shrink()
       ],
     );
   }

@@ -1,15 +1,3 @@
-// To parse this JSON data, do
-//
-//     final allOrderHistoryModelClass = allOrderHistoryModelClassFromJson(jsonString);
-
-import 'dart:convert';
-
-AllOrderHistoryModelClass allOrderHistoryModelClassFromJson(String str) =>
-    AllOrderHistoryModelClass.fromJson(json.decode(str));
-
-String allOrderHistoryModelClassToJson(AllOrderHistoryModelClass data) =>
-    json.encode(data.toJson());
-
 class AllOrderHistoryModelClass {
   List<AllHistoryData>? data;
   bool? success;
@@ -28,20 +16,20 @@ class AllOrderHistoryModelClass {
         data: json["data"] == null
             ? []
             : List<AllHistoryData>.from(
-                json["data"]!.map((x) => AllHistoryData.fromJson(x))),
+            json["data"].map((x) => AllHistoryData.fromJson(x))),
         success: json["success"],
         statusCode: json["status_code"],
         message: json["message"],
       );
 
   Map<String, dynamic> toJson() => {
-        "data": data == null
-            ? []
-            : List<dynamic>.from(data!.map((x) => x.toJson())),
-        "success": success,
-        "status_code": statusCode,
-        "message": message,
-      };
+    "data": data == null
+        ? []
+        : List<dynamic>.from(data!.map((x) => x.toJson())),
+    "success": success,
+    "status_code": statusCode,
+    "message": message,
+  };
 }
 
 class AllHistoryData {
@@ -57,10 +45,10 @@ class AllHistoryData {
   int? astrologerId;
   int? productId;
   String? duration;
-  int? quantity; // New field
+  int? quantity;
   int? feedbackReviewStatus;
   GetCustomers? getCustomers;
-  dynamic getGift;
+  Gift? getGift;
   int? partnerPrice;
   String? partnerOrderId;
 
@@ -87,7 +75,7 @@ class AllHistoryData {
 
   factory AllHistoryData.fromJson(Map<String, dynamic> json) => AllHistoryData(
     id: json["id"] as int?,
-    amount: json["amount"] as dynamic,
+    amount: json["amount"],
     orderId: json["order_id"] as String?,
     status: json["status"] as String?,
     transactionId: json["transaction_id"] as int?,
@@ -105,7 +93,9 @@ class AllHistoryData {
     getCustomers: json["get_customers"] == null
         ? null
         : GetCustomers.fromJson(json["get_customers"] as Map<String, dynamic>),
-    getGift: json["get_gift"],
+    getGift: json["get_gift"] == null
+        ? null
+        : Gift.fromJson(json["get_gift"] as Map<String, dynamic>),
     partnerPrice: json["partner_price"] as int?,
     partnerOrderId: json["partner_order_id"] as String?,
   );
@@ -126,7 +116,7 @@ class AllHistoryData {
     "quantity": quantity,
     "feedback_review_status": feedbackReviewStatus,
     "get_customers": getCustomers?.toJson(),
-    "get_gift": getGift,
+    "get_gift": getGift?.toJson(),
     "partner_price": partnerPrice,
     "partner_order_id": partnerOrderId,
   }..removeWhere((key, value) => value == null);
@@ -174,3 +164,34 @@ class GetCustomers {
   };
 }
 
+class Gift {
+  final int id;
+  final String giftName;
+  final String giftImage;
+  final int giftPrice;
+
+  Gift({
+    required this.id,
+    required this.giftName,
+    required this.giftImage,
+    required this.giftPrice,
+  });
+
+  factory Gift.fromJson(Map<String, dynamic> json) {
+    return Gift(
+      id: json['id'] ?? 0,
+      giftName: json['gift_name'] ?? '',
+      giftImage: json['gift_image'] ?? '',
+      giftPrice: json['gift_price'] ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "gift_name": giftName,
+      "gift_image": giftImage,
+      "gift_price": giftPrice,
+    };
+  }
+}
