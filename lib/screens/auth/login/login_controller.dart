@@ -124,7 +124,7 @@ class LoginController extends GetxController {
   void onInit() {
     // isLogOut = false;
     super.onInit();
-    getLoginImages();
+    // getLoginImages();
     countryCodeController = TextEditingController(text: "+91");
     mobileNumberController = TextEditingController(text: "");
     TrueCallerService().isTrueCallerInstalled().then((value) {
@@ -373,20 +373,20 @@ class LoginController extends GetxController {
       loginImages = preferenceService.getLoginImages()!;
       update();
     } else {
-      loginImages = await getInitialLoginImages();
+      // loginImages = await getInitialLoginImages();
       update();
     }
   }
 
-  Future<LoginImages> getInitialLoginImages() async {
-    final response = await userRepository.getInitialLoginImages();
-
-    //added by: dev-dharam
-    Get.find<SharedPreferenceService>().setAmazonUrl(response.data.baseurl);
-    //
-
-    return response;
-  }
+  // Future<LoginImages> getInitialLoginImages() async {
+  //   final response = await userRepository.getInitialLoginImages();
+  //
+  //   //added by: dev-dharam
+  //   Get.find<SharedPreferenceService>().setAmazonUrl(response.data.baseurl);
+  //   //
+  //
+  //   return response;
+  // }
 
 /*@override
   void onDetached() {

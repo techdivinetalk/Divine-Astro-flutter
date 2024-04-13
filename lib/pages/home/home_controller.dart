@@ -137,69 +137,72 @@ class HomeController extends GetxController {
         }
       }
     });
-    userData = preferenceService.getUserDetail()!;
-    appbarTitle.value =
-        "${userData.name.toString().capitalizeFirst} (${userData.id})";
+    if(preferenceService.getUserDetail() != null){
+      userData = preferenceService.getUserDetail()!;
+      appbarTitle.value =
+      "${userData.name.toString().capitalizeFirst} (${userData.id})";
 
-    print("${preferenceService.getBaseImageURL()}/${userData.image}");
+      print("${preferenceService.getBaseImageURL()}/${userData.image}");
 
-    getAllDashboardData();
-    final String path = "astrologer/${(userData.id ?? 0)}/realTime";
-    FirebaseDatabase.instance.ref().child(path).onValue.listen(
-      (event) async {
-        final DataSnapshot dataSnapshot = event.snapshot;
+      getAllDashboardData();
+      final String path = "astrologer/${(userData.id ?? 0)}/realTime";
+      FirebaseDatabase.instance.ref().child(path).onValue.listen(
+            (event) async {
+          final DataSnapshot dataSnapshot = event.snapshot;
 
-        if (dataSnapshot.exists) {
-          if (dataSnapshot.value is Map<dynamic, dynamic>) {
-            Map<dynamic, dynamic> map = <dynamic, dynamic>{};
-            map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-                as Map<dynamic, dynamic>;
-            print("Home Realtime DB Listener: $map");
+          if (dataSnapshot.exists) {
+            if (dataSnapshot.value is Map<dynamic, dynamic>) {
+              Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+              map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+              as Map<dynamic, dynamic>;
+              print("Home Realtime DB Listener: $map");
 
-            final isCallSwitchRes = map["voiceCallStatus"] ?? 0;
-            callSwitch(isCallSwitchRes > 0);
+              final isCallSwitchRes = map["voiceCallStatus"] ?? 0;
+              callSwitch(isCallSwitchRes > 0);
 
-            final isChatSwitchRes = map["chatStatus"] ?? 0;
-            chatSwitch(isChatSwitchRes > 0);
+              final isChatSwitchRes = map["chatStatus"] ?? 0;
+              chatSwitch(isChatSwitchRes > 0);
 
-            final isVideoCallSwitchRes = map["videoCallStatus"] ?? 0;
-            videoSwitch(isVideoCallSwitchRes > 0);
+              final isVideoCallSwitchRes = map["videoCallStatus"] ?? 0;
+              videoSwitch(isVideoCallSwitchRes > 0);
 
-            final isCallEnableRes = map["is_call_enable"] ?? false;
-            isCallEnable(isCallEnableRes);
+              final isCallEnableRes = map["is_call_enable"] ?? false;
+              isCallEnable(isCallEnableRes);
 
-            final isChatEnableRes = map["is_chat_enable"] ?? false;
-            isChatEnable(isChatEnableRes);
+              final isChatEnableRes = map["is_chat_enable"] ?? false;
+              isChatEnable(isChatEnableRes);
 
-            final isVideoCallEnableRes = map["is_video_call_enable"] ?? false;
-            isVideoCallEnable(isVideoCallEnableRes);
+              final isVideoCallEnableRes = map["is_video_call_enable"] ?? false;
+              isVideoCallEnable(isVideoCallEnableRes);
 
-            final isLiveEnableRes = map["is_live_enable"] ?? false;
-            isLiveEnable(isLiveEnableRes);
+              final isLiveEnableRes = map["is_live_enable"] ?? false;
+              isLiveEnable(isLiveEnableRes);
 
-            final offers = map["offers"];
-            if (offers != null) {
-              if (homeData != null) {
-                for (int i = 0; i < homeData!.offers!.orderOffer!.length; i++) {
-                  for (int j = 0; j < offers.keys.toList().length; j++) {
-                    if ("${homeData!.offers!.orderOffer![i].id}" ==
-                        "${offers.keys.toList()[j]}") {
-                      if ("${offers.values.toList()[j]}" == "1") {
-                        homeData!.offers!.orderOffer![i].isOn = true;
-                        update();
-                      } else {
-                        homeData!.offers!.orderOffer![i].isOn = false;
-                        update();
+              final offers = map["offers"];
+              if (offers != null) {
+                if (homeData != null) {
+                  for (int i = 0; i < homeData!.offers!.orderOffer!.length; i++) {
+                    for (int j = 0; j < offers.keys.toList().length; j++) {
+                      if ("${homeData!.offers!.orderOffer![i].id}" ==
+                          "${offers.keys.toList()[j]}") {
+                        if ("${offers.values.toList()[j]}" == "1") {
+                          homeData!.offers!.orderOffer![i].isOn = true;
+                          update();
+                        } else {
+                          homeData!.offers!.orderOffer![i].isOn = false;
+                          update();
+                        }
                       }
                     }
                   }
                 }
               }
-            }
+            } else {}
           } else {}
-        } else {}
-      },
-    );
+        },
+      );
+    }
+
 
     // cron.schedule(Schedule.parse('*/5 * * * * *'), checkForScheduleUpdate);
   }

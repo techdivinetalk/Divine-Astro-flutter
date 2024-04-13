@@ -307,7 +307,8 @@ class MessageView extends StatelessWidget {
 
   Widget textMsgView(
       BuildContext context, ChatMessage chatMessage, bool yourMessage) {
-    RxInt msgType = (chatMessage.type ?? 0).obs;
+    RxInt msgType = (chatMessage.seenStatus ?? 0).obs;
+
     return SizedBox(
       width: double.maxFinite,
       child: Column(
@@ -416,16 +417,14 @@ class MessageView extends StatelessWidget {
                       ),
                       if (yourMessage) SizedBox(width: 8.w),
                       if (yourMessage)
-                        Obx(() => (msgType.value == 0 || msgType.value == 0) &&
-                                chatMessage.seenStatus == 0
+                        Obx(() => msgType.value == 0
                             ? Assets.images.icSingleTick.svg()
-                            : (msgType.value == 1 || msgType.value == 0) &&
-                                    chatMessage.seenStatus == 1
+                            : msgType.value == 1
                                 ? Assets.images.icDoubleTick.svg(
                                     colorFilter: ColorFilter.mode(
-                                        appColors.greyColor, BlendMode.srcIn))
-                                : (msgType.value == 3 || msgType.value == 0) &&
-                                        chatMessage.seenStatus == 3
+                                        appColors.disabledGrey,
+                                        BlendMode.srcIn))
+                                : msgType.value == 3
                                     ? Assets.images.icDoubleTick.svg()
                                     : Assets.images.icSingleTick.svg())
                     ],
@@ -1049,7 +1048,8 @@ class MessageView extends StatelessWidget {
         Get.toNamed(RouteName.kundliDetail, arguments: {
           "kundli_id": chatDetail.kundliId ?? chatDetail.kundli!.kundliId,
           "from_kundli": true,
-          "birth_place": chatDetail.kundliPlace ?? chatDetail.kundli!.kundliPlace,
+          "birth_place":
+              chatDetail.kundliPlace ?? chatDetail.kundli!.kundliPlace,
           "gender": chatDetail.gender ?? chatDetail.kundli!.gender,
           "name": chatDetail.kundliName ?? chatDetail.kundli!.kundliName,
           "longitude": chatDetail.longitude ?? chatDetail.kundli!.longitude,
@@ -1097,7 +1097,8 @@ class MessageView extends StatelessWidget {
                     ),
                     SizedBox(height: 5.h),
                     Text(
-                      chatDetail.kundliDateTime ?? chatDetail.kundli!.kundliDateTime,
+                      chatDetail.kundliDateTime ??
+                          chatDetail.kundli!.kundliDateTime,
                       style: TextStyle(
                         fontWeight: FontWeight.w400,
                         fontSize: 10.sp,
@@ -1131,8 +1132,6 @@ class MessageView extends StatelessWidget {
       ),
     );
   }
-
-
 
   Widget CustomProductView(
       {required ChatMessage chatDetail, required int index, String? baseUrl}) {
