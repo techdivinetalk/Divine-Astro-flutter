@@ -148,7 +148,7 @@ class SuggestProducts extends GetView<SuggestProductController> {
                                         ),
                                       ),*/
                                       MultipleTypeImageView(
-                                         height: 120,
+                                        // height: 120,
                                         width: double.infinity,
                                         imageUrlData: item.id == 0
                                             ? item.shopImage
