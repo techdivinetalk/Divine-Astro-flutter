@@ -309,8 +309,11 @@ Future<void> showNotification(String title, String message, String type,
       autoCancel: true,
       actions: type == "2"
           ? [
-              const AndroidNotificationAction('accept', 'ACCEPT'),
+              const AndroidNotificationAction(
+                'accept',
+                'ACCEPT',
 
+              ),
             ]
           : [],
     );
