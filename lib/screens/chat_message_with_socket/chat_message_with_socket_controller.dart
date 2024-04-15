@@ -406,12 +406,14 @@ class ChatMessageWithSocketController extends GetxController
     }
   }
 
-  void startExtraTimer(int futureTimeInEpochMillis) {
+  void startExtraTimer(int futureTimeInEpochMillis,String status) {
+    if (status == "4"){
+      showTalkTime.value = "-1";
+      chatTimer?.cancel();
+    }
     DateTime dateTime =
         DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis);
-    Duration timeLeft = const Duration(minutes: 1); // Start from 1 minute
-    // final endTime = DateTime.now().add(timeLeft);
-    // Duration timeDifference = dateTime.difference(DateTime.now());
+    Duration timeLeft = const Duration(minutes: 1);
     extraTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       // final currentTime = DateTime.now();
       final difference = dateTime.difference(DateTime.now());
@@ -420,6 +422,7 @@ class ChatMessageWithSocketController extends GetxController
               difference.inMinutes == 0 &&
               difference.inHours == 0)) {
         extraTimer?.cancel();
+        extraTalkTime.value = "0";
         timer.cancel();
         print("WentBack timeUp");
         timeLeft = Duration.zero;
@@ -447,7 +450,7 @@ class ChatMessageWithSocketController extends GetxController
         DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
     print("futureTime.minute");
     chatTimer?.cancel();
-   // chatTimer = null;
+    chatTimer = null;
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
       timeDifference = dateTime.difference(DateTime.now());
 
@@ -1464,12 +1467,9 @@ class ChatMessageWithSocketController extends GetxController
         );
         return;
       }
-       else if (p0["status"] == "4") {
-      print("chat status 4");
-      showTalkTime.value = "-1";
-      chatTimer?.cancel();
-      startExtraTimer(p0["order_end_time"]);
-      return;
+
+    if (p0["order_end_time"] != null) {
+      startExtraTimer(p0["order_end_time"],p0["status"]);
     }
     if (p0["isCustEntered"] != null &&
         p0["isCustEntered"] > DateTime.now().microsecondsSinceEpoch) {
