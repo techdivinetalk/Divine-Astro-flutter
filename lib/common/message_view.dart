@@ -164,6 +164,8 @@ class MessageView extends StatelessWidget {
     GetProduct getProdust = chatMessage.getProduct!;
     return GestureDetector(
       onTap: () {
+        print(getProdust.productPriceInr);
+        print("getProdust.productPriceInr");
         print(
             "data from page ${chatMessage.productId} ${chatMessage.isPoojaProduct} ${chatMessage.customerId}");
         if (chatMessage.isPoojaProduct ?? false) {
