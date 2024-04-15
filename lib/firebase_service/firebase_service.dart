@@ -54,14 +54,23 @@ class AppFirebaseService {
     }
   }
 
-  HiveServices hiveServices = HiveServices(boxName: userChatData);
   String tableName = "";
 
-  readData(String path) async {
+  checkFirebaseConnection(){
+    final connectedRef = FirebaseDatabase.instance.ref(".info/connected");
+    connectedRef.onValue.listen((event) async {
+      final connected = event.snapshot.value as bool? ?? false;
+      if (!connected) {
+        print("trying to reconnect in 4 seconds");
+        await Future.delayed(const Duration(seconds: 4));
+        final path = 'astrologer/${preferenceService.getUserDetail()!.id}/realTime';
+        readData(path);
+      }
+    });
+  }
+  Future<DatabaseEvent?> readData(String path) async {
+    checkFirebaseConnection();
     try {
-      var chatMessages = <ChatMessage>[].obs;
-      var databaseMessage = ChatMessagesOffline().obs;
-      await hiveServices.initialize();
       database.child(path).onValue.listen((event) async {
         debugPrint("real time $path ---> ${event.snapshot.value}");
         if (preferenceService.getToken() == null ||
@@ -121,34 +130,6 @@ class AppFirebaseService {
             isEngagedStatus(realTimeData['isEngagedStatus']);
           } else {
             isEngagedStatus(0);
-          }
-          if (realTimeData["notification"] != null) {
-            final HiveServices hiveServices =
-                HiveServices(boxName: userChatData);
-            await hiveServices.initialize();
-            realTimeData["notification"].forEach((key, notificationData) async {
-              if (notificationData["type"] == 2) {
-                final Map<String, dynamic> chatListMap =
-                    jsonDecode(notificationData["chatList"]);
-                final ChatMessage chatMessage =
-                    ChatMessage.fromOfflineJson(chatListMap);
-                chatMessages.add(chatMessage);
-                databaseMessage.value.chatMessages = chatMessages;
-                await hiveServices.addData(
-                    key: tableName,
-                    data: jsonEncode(databaseMessage.value.toOfflineJson()));
-              }
-
-              //   debugPrint("local notification $notificationData");
-              //   if (notificationData != null) {
-              //     showNotificationWithActions(
-              //         title: notificationData["value"] ?? "",
-              //         message: notificationData["message"] ??€ "",
-              //         payload: notificationData,
-              //         hiveServices: hiveServices);
-              //   }
-            });
-            FirebaseDatabase.instance.ref("$path/notification").remove();
           }
           if (realTimeData['giftCount'] != null) {
             giftCountUpdate(realTimeData["giftCount"]);
