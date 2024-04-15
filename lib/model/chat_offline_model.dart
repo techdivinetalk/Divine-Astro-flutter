@@ -79,7 +79,7 @@ class ChatMessage {
   int? type;
   String? userType;
   String? productPrice;
-
+   String? suggestedId;
   Kundli? kundli;
   GetProduct? getProduct;
   dynamic getCustomProduct;
@@ -89,6 +89,7 @@ class ChatMessage {
     this.id,
     this.orderId,
     this.memberId,
+    this.suggestedId,
     this.roleId,
     this.productId,
     this.title,
@@ -176,6 +177,7 @@ class ChatMessage {
     base64Image = json['base64image'];
     deletedAt = json['deleted_at'];
     chatMsgId = json['chat_msg_id'];
+    suggestedId = json['suggested_remedies_id'];
 
     astrologerId = json['astrologer_id'];
     callInitiate = json['call_initiate'];
@@ -231,6 +233,7 @@ class ChatMessage {
     data['msg_type'] = msgTypeValues.reverse[msgType];
     data['message'] = message;
     data['multiimage'] = multiImage;
+    data['suggested_remedies_id'] = suggestedId;
     data['msg_time'] = msgTime;
   //  data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
@@ -292,7 +295,7 @@ class GetProduct {
   final int? productPriceInr;
   final String? productLongDesc;
   final String? gst;
-  final String? suggestedId;
+
 
   GetProduct({
     this.id,
@@ -302,7 +305,6 @@ class GetProduct {
     this.productPriceInr,
     this.productLongDesc,
     this.gst,
-    this.suggestedId,
   });
 
   GetProduct.fromJson(Map<String, dynamic> json)
@@ -312,7 +314,7 @@ class GetProduct {
         prodDesc = json['prod_desc'] as String?,
         productPriceInr = json['product_price_inr'] as int?,
         productLongDesc = json['product_long_desc'] as String?,
-        suggestedId = json['suggested_id'] as String?,
+
         gst = json['gst'] as String?;
 
   Map<String, dynamic> toJson() => {
@@ -320,7 +322,7 @@ class GetProduct {
     'prod_name' : prodName,
     'prod_image' : prodImage,
     'prod_desc' : prodDesc,
-    'suggested_id' : suggestedId,
+
     'product_price_inr' : productPriceInr,
     'product_long_desc' : productLongDesc,
     'gst' : gst

@@ -475,7 +475,7 @@ class _LivePage extends State<LiveDharamScreen>
                   //     "https://divinenew-prod.s3.ap-south-1.amazonaws.com/divine/January2024/fGfpNU1Y40lV0ojgh0JBpgbc4mJtAdV6hgG5xZXJ.jpg",
                   avatar:
                   "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
-                  message: "Live Monitoring Team Joined",
+                  message: "Quality Team Joined",
                   timeStamp: DateTime.now().toString(),
                   fullGiftImage: "",
                   isBlockedCustomer: false,

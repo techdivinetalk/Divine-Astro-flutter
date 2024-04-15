@@ -901,6 +901,7 @@ class ChatMessageWithSocketController extends GetxController
     String? productPrice,
     String? productId,
     String? shopId,
+    String? suggestedId,
     String? customProductId,
   }) async {
     late ChatMessage newMessage;
@@ -942,14 +943,16 @@ class ChatMessageWithSocketController extends GetxController
           isPoojaProduct: true,
           awsUrl: productDetails.poojaImg ?? '',
           msgType: msgType,
+          suggestedId: saveRemediesData.data!.id.toString(),
           type: 0,
           msgSendBy: "1",
           orderId: AppFirebaseService().orderData.value["orderId"],
           userType: "astrologer",
-          memberId: saveRemediesData.data?.id,
+          memberId: saveRemediesData.data!.id,
           productId: productDetails.id.toString(),
           shopId: productDetails.id.toString(),
           // msgStatus: MsgStatus.sent,
+
           receiverId: int.parse(
               AppFirebaseService().orderData.value["userId"].toString()),
           senderId: preference.getUserDetail()!.id,
@@ -976,6 +979,7 @@ class ChatMessageWithSocketController extends GetxController
             time: int.parse(time),
             id: int.parse(time),
             isSuspicious: 0,
+            suggestedId: productData.data!.id.toString(),
             userType: "astrologer",
             isPoojaProduct: false,
             awsUrl: userData?.image ?? '',
