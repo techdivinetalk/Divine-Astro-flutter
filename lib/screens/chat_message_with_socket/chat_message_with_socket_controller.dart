@@ -430,7 +430,8 @@ class ChatMessageWithSocketController extends GetxController
             "${timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
             "${timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
         print("time Left ${extraTalkTime.value}");
-        if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+        if (MiddleWare.instance.currentPage == RouteName.dashboard || AppFirebaseService().orderData.value["status"] == "3") {
+          print("ExtraTalktime is closing");
           extraTimer?.cancel();
           //AppFirebaseService().orderData.value={};
         //  endChatApi();
@@ -444,9 +445,8 @@ class ChatMessageWithSocketController extends GetxController
     DateTime dateTime =
         DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
     print("futureTime.minute");
-    if (chatTimer != null) {
       chatTimer?.cancel();
-    }
+      chatTimer = null;
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
       timeDifference = dateTime.difference(DateTime.now());
 
