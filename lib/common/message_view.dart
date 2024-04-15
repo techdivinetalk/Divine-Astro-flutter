@@ -164,8 +164,6 @@ class MessageView extends StatelessWidget {
     GetProduct getProdust = chatMessage.getProduct!;
     return GestureDetector(
       onTap: () {
-        print(
-            "data from page ${chatMessage.productId} ${chatMessage.isPoojaProduct} ${chatMessage.customerId}");
         if (chatMessage.isPoojaProduct ?? false) {
           Get.toNamed(RouteName.poojaDharamDetailsScreen, arguments: {
             'detailOnly': true,

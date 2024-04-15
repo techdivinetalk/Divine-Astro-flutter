@@ -45,7 +45,7 @@ Future<void> firebaseMessagingConfig(BuildContext buildContext) async {
     criticalAlert: false,
     provisional: false,
     sound: true,
-   );
+  );
 
   firebaseMessaging.setForegroundNotificationPresentationOptions(
     alert: true,
@@ -63,8 +63,9 @@ Future<void> firebaseMessagingConfig(BuildContext buildContext) async {
       debugPrint(
           "onMessage Notification received : ${message.notification?.title}");
       showNotificationWithActions(
-          title: message.notification!.title ?? '',
-          message: message.notification!.body ?? '');
+        title: message.notification!.title ?? '',
+        message: message.notification!.body ?? '',
+      );
       //  checkNotification(isFromNotification: true);
     }
   });
