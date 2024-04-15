@@ -291,7 +291,8 @@ class PaymentLogTile extends StatelessWidget {
           ),
           Text(
             // "with Username(user id) for 8 minutes "
-            "with ${log.customerDetails?.name}(${log.customerDetails?.id.toString()}) for ${log.callDuration.toString()} minutes",
+            log.payoutFor == "gift" ? "with ${log.customerDetails?.name}(${log.customerDetails?.id.toString()})" : "with ${log.customerDetails?.name}(${log.customerDetails?.id.toString()}) for ${log.callDuration.toString()} minutes",
+           // "with ${log.customerDetails?.name}(${log.customerDetails?.id.toString()}) for ${log.callDuration.toString()} minutes",
             textAlign: TextAlign.start,
             style: AppTextStyle.textStyle12(
                 fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),

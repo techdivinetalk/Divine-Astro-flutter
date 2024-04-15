@@ -49,10 +49,10 @@ class AllOrderHistoryUi extends StatelessWidget {
 
     switch (data[index].productType) {
       case 7:
-        productTypeText = 'Chat';
+        productTypeText = 'Call';
         break;
       case 12:
-        productTypeText = 'Call';
+        productTypeText = 'Chat';
         break;
       case 2:
         productTypeText = 'Gifts';
@@ -131,7 +131,7 @@ class AllOrderHistoryUi extends StatelessWidget {
             ],
           ),
           Text(
-            "with ${data[index].getCustomers?.name}(${data[index].getCustomers?.id}) for ${data[index].duration} minutes",
+            productTypeText == "Gifts" ? "with ${data[index].getCustomers?.name}(${data[index].getCustomers?.id})" : "with ${data[index].getCustomers?.name}(${data[index].getCustomers?.id}) for ${data[index].duration} minutes",
             textAlign: TextAlign.start,
             style: AppTextStyle.textStyle12(
               fontWeight: FontWeight.w400,

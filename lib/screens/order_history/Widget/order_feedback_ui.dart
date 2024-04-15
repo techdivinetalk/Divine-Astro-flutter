@@ -72,6 +72,23 @@ class FeedBackOrderHistory extends StatelessWidget {
   }
 
   Widget orderDetailView(int index, List<FeedBackData> data) {
+    String productTypeText;
+    switch (data[index].productType) {
+      case 7:
+        productTypeText = 'Call';
+        break;
+      case 12:
+        productTypeText = 'Chat';
+        break;
+      case 2:
+        productTypeText = 'Gifts';
+        break;
+      case 3:
+        productTypeText = 'Remedy Suggested';
+        break;
+      default:
+        productTypeText = 'Unknown';
+    }
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
@@ -122,7 +139,7 @@ class FeedBackOrderHistory extends StatelessWidget {
             children: [
               Text(
                 // "chat".tr,
-                data[index].productType == 12 ? 'Chat' : 'Call',
+                productTypeText,
                 style: AppTextStyle.textStyle12(
                   fontWeight: FontWeight.w400,
                   /*fontColor: "$type" == "PENALTY"
@@ -143,7 +160,8 @@ class FeedBackOrderHistory extends StatelessWidget {
           ),
           Text(
             // "with Username(user id) for 8 minutes "
-            "with ${data[index].getCustomers?.name}(${data[index].getCustomers?.id}) for ${data[index].duration} minutes",
+            productTypeText == "Gifts" ? "with ${data[index].getCustomers?.name}(${data[index].getCustomers?.id})" : "with ${data[index].getCustomers?.name}(${data[index].getCustomers?.id}) for ${data[index].duration} minutes",
+            //"with ${data[index].getCustomers?.name}(${data[index].getCustomers?.id}) for ${data[index].duration} minutes",
             textAlign: TextAlign.start,
             style: AppTextStyle.textStyle12(
                 fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
