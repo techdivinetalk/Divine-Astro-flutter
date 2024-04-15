@@ -72,9 +72,6 @@ class AppFirebaseService {
     checkFirebaseConnection();
     try {
       database.child(path).onValue.listen((event) async {
-        if (realTimeData["order_id"] != null) {
-          watcher.strValue = realTimeData["order_id"].toString();
-        }
         debugPrint("real time $path ---> ${event.snapshot.value}");
         if (preferenceService.getToken() == null ||
             preferenceService.getToken() == "") {
@@ -84,6 +81,9 @@ class AppFirebaseService {
         if (event.snapshot.value is Map<Object?, Object?>) {
           Map<String, dynamic>? realTimeData = Map<String, dynamic>.from(
               event.snapshot.value! as Map<Object?, Object?>);
+          if (realTimeData["order_id"] != null) {
+            watcher.strValue = realTimeData["order_id"].toString();
+          }
           if (realTimeData["uniqueId"] != null) {
             print("uniqueId ---- uniqueId ${realTimeData["uniqueId"]}");
 
