@@ -1447,7 +1447,7 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   void initTask(Map<String, dynamic> p0) {
-    if (MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
+    if (MiddleWare.instance.currentPage == RouteName.chatMessageWithSocketUI) {
       if (p0["status"] == null || p0["status"] == "5") {
         WidgetsBinding.instance.endOfFrame.then(
           (_) async {
