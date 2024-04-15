@@ -72,6 +72,9 @@ class AppFirebaseService {
     checkFirebaseConnection();
     try {
       database.child(path).onValue.listen((event) async {
+        if (realTimeData["order_id"] != null) {
+          watcher.strValue = realTimeData["order_id"].toString();
+        }
         debugPrint("real time $path ---> ${event.snapshot.value}");
         if (preferenceService.getToken() == null ||
             preferenceService.getToken() == "") {
@@ -113,17 +116,6 @@ class AppFirebaseService {
                 .update();
             Get.put(ProfilePageController(Get.put(UserRepository()))).update();
           }
-          // if (realTimeData["engageId"] != null) {
-          //   tableName = "chat_${realTimeData["engageId"]}";
-          //   debugPrint("tableName ${tableName}");
-          // }
-          // var res = await hiveServices.getData(key: tableName);
-          // if (res != null) {
-          //   var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
-          //   chatMessages.value = msg.chatMessages ?? [];
-          //   databaseMessage.value.chatMessages = chatMessages;
-          //   debugPrint("msg.chatMessages ${msg.chatMessages?.length}");
-          // }
           if (realTimeData["isEngagedStatus"] != null) {
             print(realTimeData["isEngagedStatus"]);
             print('realTimeData["isEngagedStatus"]');
@@ -175,9 +167,7 @@ class AppFirebaseService {
               ),
             );
           }
-          if (realTimeData["order_id"] != null) {
-            watcher.strValue = realTimeData["order_id"].toString();
-          }
+
         }
       });
     } catch (e) {
