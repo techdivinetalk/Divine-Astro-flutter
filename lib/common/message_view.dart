@@ -550,7 +550,7 @@ print("view kundli");
           children: [
             Flexible(
               child: Text(
-                "$customerName have sent ${chatMessage.message!.contains("https") ? "" : chatMessage.message ?? ""}",
+                "You have sent ${chatMessage.message!.contains("https") ? "" : chatMessage.message ?? ""}",
                 // "$customerName have sent ${chatMessage.message ?? ""}",
                 style: const TextStyle(color: Colors.red),
               ),

@@ -315,7 +315,7 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
               height: 64,
               text: "Recommended Pooja",
               backgroundColor: appColors.guideColor,
-              fontColor: appColors.black,
+              fontColor: appColors.whiteGuidedColor,
               needCircularBorder: false,
               onPressed: () async {
                 Map<String, dynamic> params = {
@@ -324,7 +324,6 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
                   "customer_id":AppFirebaseService().orderData.value["userId"] != null ? int.parse(AppFirebaseService().orderData.value["userId"]):_controller.customerId.value,
                   "order_id":AppFirebaseService().orderData.value["orderId"]
                 };
-
                 var response =
                     await ShopRepository().saveRemediesForChatAssist(params);
                 Get.back();
