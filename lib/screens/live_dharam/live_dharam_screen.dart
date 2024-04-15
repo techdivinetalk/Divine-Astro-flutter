@@ -447,23 +447,41 @@ class _LivePage extends State<LiveDharamScreen>
                 } else {}
               } else {}
 
-              if (timer.tick % 600 == 0) {
-                // final ZegoCustomMessage model = ZegoCustomMessage(
-                //   type: 1,
-                //   liveId: _controller.liveId,
-                //   userId: "0",
-                //   userName: "Live Monitoring Team",
-                //   // avatar:
-                //   //     "https://divinenew-prod.s3.ap-south-1.amazonaws.com/divine/January2024/fGfpNU1Y40lV0ojgh0JBpgbc4mJtAdV6hgG5xZXJ.jpg",
-                //   avatar:
-                //       "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
-                //   message: "Live Monitoring Team Joined",
-                //   timeStamp: DateTime.now().toString(),
-                //   fullGiftImage: "",
-                //   isBlockedCustomer: false,
-                //   isMod: true,
-                // );
-                // await sendMessageToZego(model);
+              if (timer.tick % 300 == 0) {
+                final ZegoCustomMessage model = ZegoCustomMessage(
+                  type: 1,
+                  liveId: _controller.liveId,
+                  userId: "0",
+                  userName: "Live Monitoring Team",
+                  // avatar:
+                  //     "https://divinenew-prod.s3.ap-south-1.amazonaws.com/divine/January2024/fGfpNU1Y40lV0ojgh0JBpgbc4mJtAdV6hgG5xZXJ.jpg",
+                  avatar:
+                      "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
+                  message: "Live Monitoring Team Joined",
+                  timeStamp: DateTime.now().toString(),
+                  fullGiftImage: "",
+                  isBlockedCustomer: false,
+                  isMod: true,
+                );
+                await sendMessageToZego(model);
+              } else {}
+              if (timer.tick % 250 == 0) {
+                final ZegoCustomMessage model = ZegoCustomMessage(
+                  type: 1,
+                  liveId: _controller.liveId,
+                  userId: "0",
+                  userName: "Quality Team",
+                  // avatar:
+                  //     "https://divinenew-prod.s3.ap-south-1.amazonaws.com/divine/January2024/fGfpNU1Y40lV0ojgh0JBpgbc4mJtAdV6hgG5xZXJ.jpg",
+                  avatar:
+                  "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
+                  message: "Live Monitoring Team Joined",
+                  timeStamp: DateTime.now().toString(),
+                  fullGiftImage: "",
+                  isBlockedCustomer: false,
+                  isMod: true,
+                );
+                await sendMessageToZego(model);
               } else {}
             },
           );

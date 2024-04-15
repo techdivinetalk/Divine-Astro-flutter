@@ -2531,9 +2531,9 @@ class PerformanceDialog extends StatelessWidget {
                           )
                         : GestureDetector(
                             onTap: () {
-                              if (controller.performanceScoreList.last ==
+                              if (controller.performanceScoreList.last.performance?.totalMarks ==
                                   (controller.performanceScoreList[
-                                      controller.scoreIndex])) {
+                                      controller.scoreIndex].performance?.totalMarks)) {
                                 // Get.put(DashboardController(
                                 //         Get.put(PreDefineRepository())))
                                 //     .selectedIndex
@@ -2546,9 +2546,9 @@ class PerformanceDialog extends StatelessWidget {
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                  color: controller.performanceScoreList.last ==
+                                  color: controller.performanceScoreList.last.performance?.totalMarks ==
                                           controller.performanceScoreList[
-                                              controller.scoreIndex]
+                                              controller.scoreIndex].performance?.totalMarks
                                       ? appColors.guideColor
                                       : appColors.lightGrey.withOpacity(0.4),
                                   borderRadius: BorderRadius.circular(10)),

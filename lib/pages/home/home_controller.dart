@@ -213,6 +213,7 @@ class HomeController extends GetxController {
     if (getConstantDetails!.data!.isForceTraningVideo == 0) {
       print("if----getConstantDetails!.data!.isForceTraningVideo");
       getAllTrainingVideo(isReapeting: isReapeting);
+      update();
     } else {
       print("else----getConstantDetails!.data!.isForceTraningVideo");
       await getFilteredPerformance();
@@ -220,7 +221,9 @@ class HomeController extends GetxController {
       getFeedbackData();
       tarotCardData();
       getUserImage();
+      update();
     }
+    update();
   }
 
   void checkForScheduleUpdate() {
@@ -400,7 +403,7 @@ class HomeController extends GetxController {
 
   PerformanceResponse? performanceResponse;
   RxList<dynamic> overAllScoreList = <dynamic>[].obs;
-  RxList<dynamic> performanceScoreList = <dynamic>[].obs;
+  RxList<dynamic> performanceScoreList = [].obs;
 
   getFilteredPerformance() async {
     try {
