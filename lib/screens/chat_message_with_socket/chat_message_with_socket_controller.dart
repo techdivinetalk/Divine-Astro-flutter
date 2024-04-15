@@ -433,7 +433,7 @@ class ChatMessageWithSocketController extends GetxController
         if (MiddleWare.instance.currentPage == RouteName.dashboard) {
           extraTimer?.cancel();
           //AppFirebaseService().orderData.value={};
-          endChatApi();
+        //  endChatApi();
         }
         print("time Left ${MiddleWare.instance.currentPage}");
       }
@@ -479,6 +479,7 @@ class ChatMessageWithSocketController extends GetxController
     Map<String, dynamic> param = HashMap();
     param["order_id"] = AppFirebaseService().orderData.value["orderId"];
     param["queue_id"] = AppFirebaseService().orderData.value["queue_id"];
+    param["source"] = "Astro App";
     loading = Loading.loading;
     update();
     try {
