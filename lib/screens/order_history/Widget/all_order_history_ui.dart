@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/common_bottomsheet.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/screens/order_history/Widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -12,35 +13,80 @@ import '../../../model/order_history_model/all_order_history.dart';
 import '../order_history_controller.dart';
 
 class AllOrderHistoryUi extends StatelessWidget {
-  const AllOrderHistoryUi({super.key});
+  AllOrderHistoryUi({super.key});
+
+  final controller = Get.find<OrderHistoryController>();
+  final scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<OrderHistoryController>(
-      id: 'allOrders',
-      builder: (controller) {
-        if (controller.allHistoryList.isEmpty) {
-          return const Center(
-            child: Text(
-              'No data found',
-              style: TextStyle(fontSize: 18),
-            ),
-          );
-        }
-
-        return ListView.separated(
-          // controller: controller,
-          physics: const BouncingScrollPhysics(),
-          scrollDirection: Axis.vertical,
-          shrinkWrap: true,
-          itemCount: controller.allHistoryList.length,
-          padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 30,bottom: 20),
-          separatorBuilder: (context, index) => const SizedBox(height: 10),
-          itemBuilder: (context, index) {
-            return orderDetailView(index, controller.allHistoryList);
-          },
-        );
-      },
+    return Stack(
+      children: [
+        RefreshIndicator(
+            onRefresh: () async {
+              controller.allPageCount = 1;
+              controller.getOrderHistory(
+                  type: 0, page: controller.allPageCount);
+            },
+            backgroundColor: appColors.guideColor,
+            color: appColors.white,
+            child: GetBuilder<OrderHistoryController>(
+              id: 'allOrders',
+              builder: (context) {
+                scrollController.addListener(() {
+                  if (scrollController.position.atEdge &&
+                      scrollController.position.pixels == 0) {
+                  } else if (scrollController.position.atEdge &&
+                      scrollController.position.pixels ==
+                          scrollController.position.maxScrollExtent) {
+                    if (!controller.allApiCalling.value == true) {
+                      controller.getOrderHistory(
+                          type: 0, page: controller.allPageCount);
+                    }
+                  }
+                });
+                if (controller.allHistoryList.isEmpty) {
+                  return const Center(
+                    child: Text(
+                      'No data found',
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  );
+                } else {
+                  return Column(
+                    children: [
+                      Expanded(
+                        child: ListView.separated(
+                          controller: scrollController,
+                          scrollDirection: Axis.vertical,
+                          shrinkWrap: true,
+                          itemCount: controller.allHistoryList.length,
+                          padding: const EdgeInsets.symmetric(horizontal: 10)
+                              .copyWith(top: 30, bottom: 20),
+                          separatorBuilder: (context, index) =>
+                              const SizedBox(height: 10),
+                          itemBuilder: (context, index) {
+                            return orderDetailView(
+                                index, controller.allHistoryList);
+                          },
+                        ),
+                      ),
+                      if (controller.allApiCalling.value &&
+                          controller.allPageCount > 1)
+                        controller.paginationLoadingWidget(),
+                    ],
+                  );
+                }
+              },
+            )),
+        if (controller.allHistoryList.isEmpty)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              buildEmptyNew('noDataToShow'.tr),
+            ],
+          ),
+      ],
     );
   }
 
@@ -82,7 +128,8 @@ class AllOrderHistoryUi extends StatelessWidget {
         children: [
           GestureDetector(
             onTap: () {
-              openBottomSheet(Get.context!,
+              openBottomSheet(
+                Get.context!,
                 functionalityWidget: Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
                   child: Column(
@@ -131,7 +178,9 @@ class AllOrderHistoryUi extends StatelessWidget {
             ],
           ),
           Text(
-            productTypeText == "Gifts" ? "with ${data[index].getCustomers?.name}(${data[index].getCustomers?.id})" : "with ${data[index].getCustomers?.name}(${data[index].getCustomers?.id}) for ${data[index].duration} minutes",
+            productTypeText == "Gifts"
+                ? "with ${data[index].getCustomers?.name}(${data[index].getCustomers?.id})"
+                : "with ${data[index].getCustomers?.name}(${data[index].getCustomers?.id}) for ${data[index].duration} minutes",
             textAlign: TextAlign.start,
             style: AppTextStyle.textStyle12(
               fontWeight: FontWeight.w400,
@@ -144,7 +193,8 @@ class AllOrderHistoryUi extends StatelessWidget {
             children: [
               Text(
                 data[index].createdAt != null
-                    ? DateFormat("dd MMM, hh:mm aa").format(data[index].createdAt!)
+                    ? DateFormat("dd MMM, hh:mm aa")
+                        .format(data[index].createdAt!)
                     : "N/A",
                 textAlign: TextAlign.end,
                 style: AppTextStyle.textStyle12(
@@ -165,7 +215,8 @@ class AllOrderHistoryUi extends StatelessWidget {
               });
             },
             onRightTap: () {
-              Get.toNamed(RouteName.suggestRemediesView, arguments: data[index].id);
+              Get.toNamed(RouteName.suggestRemediesView,
+                  arguments: data[index].id);
             },
             rightBtnTitle: "suggestedRemediesEarning".tr,
           ),
@@ -174,7 +225,6 @@ class AllOrderHistoryUi extends StatelessWidget {
       ),
     );
   }
-
 
   Widget detailView(int index, List<AllHistoryData> data) {
     String getGenderText(int? gender) {
@@ -187,6 +237,7 @@ class AllOrderHistoryUi extends StatelessWidget {
           return 'Other';
       }
     }
+
     return Column(
       children: [
         Row(
@@ -329,25 +380,29 @@ class AllOrderHistoryUi extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 10),
-        data[index].productType != 2 ? Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Assets.images.icClock.svg(),
-                const SizedBox(width: 15),
-                Text(
-                  "duration".tr,
-                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
-                ),
-              ],
-            ),
-            Text(
-              "${data[index].duration ?? "N/a"} mins",
-              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
-            ),
-          ],
-        ) : SizedBox.shrink()
+        data[index].productType != 2
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Assets.images.icClock.svg(),
+                      const SizedBox(width: 15),
+                      Text(
+                        "duration".tr,
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    "${data[index].duration ?? "N/a"} mins",
+                    style:
+                        AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                  ),
+                ],
+              )
+            : SizedBox.shrink()
       ],
     );
   }

@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/common/common_bottomsheet.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/order_history_model/call_order_history.dart';
+import 'package:divine_astrologer/screens/order_history/Widget/empty_widget.dart';
 import 'package:divine_astrologer/screens/order_history/order_history_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,31 +13,60 @@ import '../../../common/common_options_row.dart';
 import '../../../common/routes.dart';
 
 class CallOrderHistory extends StatelessWidget {
-  const CallOrderHistory({super.key, this.controller});
+  CallOrderHistory({
+    super.key,
+  });
 
-  final ScrollController? controller;
+  final controller = Get.find<OrderHistoryController>();
+  final scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<OrderHistoryController>(builder: (controller) {
-      if (controller.callHistoryList.isEmpty) {
-        return const Center(
-          child: Text(
-            'No data found',
-            style: TextStyle(fontSize: 18),
-          ),
-        );
-      }
-      return ListView.separated(
-        // controller: controller,
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: controller.callHistoryList.length,
-        padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 30,bottom: 20),
-        separatorBuilder: (context, index) => const SizedBox(height: 10),
-        itemBuilder: (context, index) {
-          return orderDetailView(index, controller.callHistoryList);
-          /*return Column(
+    return Stack(
+      children: [
+        RefreshIndicator(
+          onRefresh: () async {
+            controller.callPageCount = 1;
+            controller.getOrderHistory(type: 1, page: controller.callPageCount);
+          },
+          backgroundColor: appColors.guideColor,
+          color: appColors.white,
+          child: GetBuilder<OrderHistoryController>(builder: (context) {
+            scrollController.addListener(() {
+              if (scrollController.position.atEdge &&
+                  scrollController.position.pixels == 0) {
+              } else if (scrollController.position.atEdge &&
+                  scrollController.position.pixels ==
+                      scrollController.position.maxScrollExtent) {
+                if (!controller.callApiCalling.value) {
+                  controller.getOrderHistory(
+                      type: 1, page: controller.callPageCount);
+                }
+              }
+            });
+            if (controller.callHistoryList.isEmpty) {
+              return const Center(
+                child: Text(
+                  'No data found',
+                  style: TextStyle(fontSize: 18),
+                ),
+              );
+            }
+            return Column(
+              children: [
+                Expanded(
+                  child: ListView.separated(
+                    controller: scrollController,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: controller.callHistoryList.length,
+                    padding: const EdgeInsets.symmetric(horizontal: 10)
+                        .copyWith(top: 30, bottom: 20),
+                    separatorBuilder: (context, index) =>
+                    const SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      return orderDetailView(index, controller.callHistoryList);
+                      /*return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (index == 2)
@@ -65,12 +95,42 @@ class CallOrderHistory extends StatelessWidget {
                 separator,
               ],
             );*/
-        },
-      );
-    });
+                    },
+                  ),
+                ),
+                if (controller.callApiCalling.value && controller.callPageCount > 1)
+                  controller.paginationLoadingWidget(),
+              ],
+            );
+          }),
+        ),
+        if (controller.callHistoryList.isEmpty)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              buildEmptyNew('noDataToShow'.tr),
+            ],
+          ),
+      ],
+    );
   }
 
   Widget orderDetailView(int index, List<CallHistoryData> data) {
+    String productTypeText;
+
+    switch (data[index].productType) {
+      case 7:
+        productTypeText = 'Audio Call';
+        break;
+      case 5:
+        productTypeText = 'Anonymous Call';
+        break;
+      case 3:
+        productTypeText = 'Video Call';
+        break;
+      default:
+        productTypeText = 'Unknown';
+    }
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
@@ -89,7 +149,8 @@ class CallOrderHistory extends StatelessWidget {
             onTap: () {
               openBottomSheet(Get.context!,
                   functionalityWidget: Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, top: 20),
                     child: Column(
                       children: [
                         Padding(
@@ -121,7 +182,7 @@ class CallOrderHistory extends StatelessWidget {
             children: [
               Text(
                 // "chat".tr,
-                data[index].productType != 7 ? 'Chat' : 'Call',
+                productTypeText,
                 style: AppTextStyle.textStyle12(
                   fontWeight: FontWeight.w400,
                   /*fontColor: "$type" == "PENALTY"
@@ -135,8 +196,8 @@ class CallOrderHistory extends StatelessWidget {
                 style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w400,
                     fontColor: /*data[index].amount.toString().contains("+")
-                          ?*/ appColors.lightGreen
-                  /*: appColors.appRedColour*/),
+                          ?*/
+                        appColors.lightGreen /*: appColors.appRedColour*/),
               )
             ],
           ),
@@ -154,13 +215,12 @@ class CallOrderHistory extends StatelessWidget {
               Text(
                 data[index].createdAt != null
                     ? DateFormat("dd MMM, hh:mm aa")
-                    .format(data[index].createdAt!)
+                        .format(data[index].createdAt!)
                     : "N/A",
                 // DateFormat("dd MMM, hh:mm aa").format(data[index].createdAt!),
                 textAlign: TextAlign.end,
                 style: AppTextStyle.textStyle12(
-                    fontWeight: FontWeight.w400,
-                    fontColor: appColors.darkBlue),
+                    fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
               ),
             ],
           ),
@@ -197,6 +257,7 @@ class CallOrderHistory extends StatelessWidget {
           return 'Other';
       }
     }
+
     return Column(
       children: [
         Row(

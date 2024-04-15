@@ -5,6 +5,7 @@ import 'package:divine_astrologer/common/common_options_row.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/order_history_model/feed_order_history.dart';
+import 'package:divine_astrologer/screens/order_history/Widget/empty_widget.dart';
 import 'package:divine_astrologer/screens/order_history/order_history_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,31 +14,59 @@ import 'package:intl/intl.dart';
 import '../../../model/order_history_model/chat_order_history.dart';
 
 class FeedBackOrderHistory extends StatelessWidget {
-  const FeedBackOrderHistory({super.key, this.controller});
+  FeedBackOrderHistory({super.key});
 
-  final ScrollController? controller;
+  final controller = Get.find<OrderHistoryController>();
+  final scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<OrderHistoryController>(builder: (controller) {
-      if (controller.feedHistoryList.isEmpty) {
-        return const Center(
-          child: Text(
-            'No data found',
-            style: TextStyle(fontSize: 18),
-          ),
-        );
-      }
-      return ListView.separated(
-        // controller: controller,
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: controller.feedHistoryList.length,
-        padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 30,bottom: 20),
-        separatorBuilder: (context, index) => const SizedBox(height: 10),
-        itemBuilder: (context, index) {
-          return orderDetailView(index, controller.feedHistoryList);
-          /*return Column(
+    return Stack(
+      children: [
+        RefreshIndicator(
+            onRefresh: () async {
+              controller.feedBackPageCount = 1;
+              controller.getOrderHistory(
+                  type: 5, page: controller.feedBackPageCount);
+            },
+            backgroundColor: appColors.guideColor,
+            color: appColors.white,
+            child: GetBuilder<OrderHistoryController>(builder: (context) {
+              scrollController.addListener(() {
+                if (scrollController.position.atEdge &&
+                    scrollController.position.pixels == 0) {
+                } else if (scrollController.position.atEdge &&
+                    scrollController.position.pixels ==
+                        scrollController.position.maxScrollExtent) {
+                  if (!controller.orderApiCalling.value) {
+                    controller.getOrderHistory(
+                        type: 5, page: controller.feedBackPageCount);
+                  }
+                }
+              });
+              if (controller.feedHistoryList.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'No data found',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                );
+              }
+              return Column(
+                children: [
+                  Expanded(
+                      child: ListView.separated(
+                    controller: scrollController,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: controller.feedHistoryList.length,
+                    padding: const EdgeInsets.symmetric(horizontal: 10)
+                        .copyWith(top: 30, bottom: 20),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      return orderDetailView(index, controller.feedHistoryList);
+                      /*return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (index == 2)
@@ -66,9 +95,23 @@ class FeedBackOrderHistory extends StatelessWidget {
                 separator,
               ],
             );*/
-        },
-      );
-    });
+                    },
+                  )),
+                  if (controller.orderApiCalling.value &&
+                      controller.feedBackPageCount > 1)
+                    controller.paginationLoadingWidget(),
+                ],
+              );
+            })),
+        if (controller.feedHistoryList.isEmpty)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              buildEmptyNew('noDataToShow'.tr),
+            ],
+          ),
+      ],
+    );
   }
 
   Widget orderDetailView(int index, List<FeedBackData> data) {
@@ -107,7 +150,8 @@ class FeedBackOrderHistory extends StatelessWidget {
             onTap: () {
               openBottomSheet(Get.context!,
                   functionalityWidget: Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, top: 20),
                     child: Column(
                       children: [
                         Padding(
@@ -153,14 +197,16 @@ class FeedBackOrderHistory extends StatelessWidget {
                 style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w400,
                     fontColor: /*data[index].amount.toString().contains("+")
-                          ?*/ appColors.lightGreen
-                  /*: appColors.appRedColour*/),
+                          ?*/
+                        appColors.lightGreen /*: appColors.appRedColour*/),
               )
             ],
           ),
           Text(
             // "with Username(user id) for 8 minutes "
-            productTypeText == "Gifts" ? "with ${data[index].getCustomers?.name}(${data[index].getCustomers?.id})" : "with ${data[index].getCustomers?.name}(${data[index].getCustomers?.id}) for ${data[index].duration} minutes",
+            productTypeText == "Gifts"
+                ? "with ${data[index].getCustomers?.name}(${data[index].getCustomers?.id})"
+                : "with ${data[index].getCustomers?.name}(${data[index].getCustomers?.id}) for ${data[index].duration} minutes",
             //"with ${data[index].getCustomers?.name}(${data[index].getCustomers?.id}) for ${data[index].duration} minutes",
             textAlign: TextAlign.start,
             style: AppTextStyle.textStyle12(
@@ -174,7 +220,7 @@ class FeedBackOrderHistory extends StatelessWidget {
                 // "$time",
                 data[index].createdAt != null
                     ? DateFormat("dd MMM, hh:mm aa")
-                    .format(data[index].createdAt!)
+                        .format(data[index].createdAt!)
                     : "N/A",
                 textAlign: TextAlign.end,
                 style: AppTextStyle.textStyle12(
@@ -193,7 +239,8 @@ class FeedBackOrderHistory extends StatelessWidget {
               });
             },
             onRightTap: () {
-              Get.toNamed(RouteName.suggestRemediesView, arguments: data[index].id);
+              Get.toNamed(RouteName.suggestRemediesView,
+                  arguments: data[index].id);
             },
             rightBtnTitle: "suggestedRemediesEarning".tr,
           ),
@@ -214,6 +261,7 @@ class FeedBackOrderHistory extends StatelessWidget {
           return 'Other';
       }
     }
+
     return Column(
       children: [
         Row(
