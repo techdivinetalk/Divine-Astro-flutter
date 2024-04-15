@@ -447,7 +447,7 @@ class ChatMessageWithSocketController extends GetxController
         DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
     print("futureTime.minute");
     chatTimer?.cancel();
-    chatTimer = null;
+   // chatTimer = null;
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
       timeDifference = dateTime.difference(DateTime.now());
 
@@ -1448,7 +1448,6 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   void initTask(Map<String, dynamic> p0) {
-    if (MiddleWare.instance.currentPage == RouteName.chatMessageWithSocketUI) {
       if (p0["status"] == null || p0["status"] == "5") {
         WidgetsBinding.instance.endOfFrame.then(
           (_) async {
@@ -1465,8 +1464,7 @@ class ChatMessageWithSocketController extends GetxController
         );
         return;
       }
-      return;
-    } else if (p0["status"] == "4") {
+       else if (p0["status"] == "4") {
       print("chat status 4");
       showTalkTime.value = "-1";
       chatTimer?.cancel();
