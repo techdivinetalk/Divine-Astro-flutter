@@ -430,11 +430,12 @@ class ChatMessageWithSocketController extends GetxController
             "${timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
             "${timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
         print("time Left ${extraTalkTime.value}");
-        if (MiddleWare.instance.currentPage == RouteName.dashboard || AppFirebaseService().orderData.value["status"] == "3") {
+        if (MiddleWare.instance.currentPage == RouteName.dashboard ||
+            AppFirebaseService().orderData.value["status"] == "3") {
           print("ExtraTalktime is closing");
           extraTimer?.cancel();
           //AppFirebaseService().orderData.value={};
-        //  endChatApi();
+          //  endChatApi();
         }
         print("time Left ${MiddleWare.instance.currentPage}");
       }
@@ -445,8 +446,8 @@ class ChatMessageWithSocketController extends GetxController
     DateTime dateTime =
         DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
     print("futureTime.minute");
-      chatTimer?.cancel();
-      chatTimer = null;
+    chatTimer?.cancel();
+    chatTimer = null;
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
       timeDifference = dateTime.difference(DateTime.now());
 
@@ -493,7 +494,7 @@ class ChatMessageWithSocketController extends GetxController
           extraTimer?.cancel();
           FirebaseDatabase.instance
               .ref(
-              "user/${AppFirebaseService().orderData.value["userId"]}/realTime/queue_list/${param["order_id"]}")
+                  "user/${AppFirebaseService().orderData.value["userId"]}/realTime/queue_list/${param["order_id"]}")
               .remove();
           Get.until(
             (route) {
@@ -952,15 +953,15 @@ class ChatMessageWithSocketController extends GetxController
           receiverId: int.parse(
               AppFirebaseService().orderData.value["userId"].toString()),
           senderId: preference.getUserDetail()!.id,
-            getProduct: GetProduct(
-              prodName: productDetails.poojaName,
-              id: productDetails.id, 
-              gst: "3",
-              prodDesc: productDetails.poojaDesc,
-              prodImage: productDetails.poojaImg,
-              productLongDesc: productDetails.poojaDesc,
-              productPriceInr: productDetails.poojaStartingPriceInr,
-            )
+          getProduct: GetProduct(
+            prodName: productDetails.poojaName,
+            id: productDetails.id,
+            gst: "3",
+            prodDesc: productDetails.poojaDesc,
+            prodImage: productDetails.poojaImg,
+            productLongDesc: productDetails.poojaDesc,
+            productPriceInr: productDetails.poojaStartingPriceInr,
+          ),
         );
       } else {
         final productData =

@@ -292,6 +292,7 @@ class GetProduct {
   final int? productPriceInr;
   final String? productLongDesc;
   final String? gst;
+  final String? suggestedId;
 
   GetProduct({
     this.id,
@@ -301,6 +302,7 @@ class GetProduct {
     this.productPriceInr,
     this.productLongDesc,
     this.gst,
+    this.suggestedId,
   });
 
   GetProduct.fromJson(Map<String, dynamic> json)
@@ -310,6 +312,7 @@ class GetProduct {
         prodDesc = json['prod_desc'] as String?,
         productPriceInr = json['product_price_inr'] as int?,
         productLongDesc = json['product_long_desc'] as String?,
+        suggestedId = json['suggested_id'] as String?,
         gst = json['gst'] as String?;
 
   Map<String, dynamic> toJson() => {
@@ -317,6 +320,7 @@ class GetProduct {
     'prod_name' : prodName,
     'prod_image' : prodImage,
     'prod_desc' : prodDesc,
+    'suggested_id' : suggestedId,
     'product_price_inr' : productPriceInr,
     'product_long_desc' : productLongDesc,
     'gst' : gst
