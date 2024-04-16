@@ -59,7 +59,7 @@ class Products {
   int? productPriceUsd;
   int? productStatus;
   String? productLongDesc;
-  String? gst;
+  int? gst;
   String? productBannerImage;
   ProductShop? productShop;
 

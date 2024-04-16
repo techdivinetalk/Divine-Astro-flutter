@@ -58,7 +58,7 @@ class Pooja {
   int? poojaStartingPriceUsd;
   String? poojaShortDesc;
   String? poojaBannerImage;
-  String? gst;
+  int? gst;
   int? referalAmount;
   int? payoutType;
   int? payoutValue;
