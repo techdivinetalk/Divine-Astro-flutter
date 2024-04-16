@@ -143,7 +143,7 @@ class OrderTab extends StatefulWidget {
 
 class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
   late final OrderHistoryController controller;
-  late final ScrollController scrollController;
+ // late final ScrollController scrollController;
 
   @override
   void initState() {
@@ -152,7 +152,7 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
     controller.tabbarController = TabController(
         length: 6, vsync: this, initialIndex: widget.initialPage ?? 0);
    // scrollController = ScrollController();
-    controller.tabbarController!.addListener(() {
+    controller.tabbarController?.addListener(() {
      /* if (controller.tabbarController!.index == 0) {
         controller.getOrderHistory(
             type: 0, page: controller.allPageCount); //wallet

@@ -33,11 +33,8 @@ class CallOrderHistory extends StatelessWidget {
           color: appColors.white,
           child: GetBuilder<OrderHistoryController>(builder: (context) {
             scrollController.addListener(() {
-              if (scrollController.position.atEdge &&
-                  scrollController.position.pixels == 0) {
-              } else if (scrollController.position.atEdge &&
-                  scrollController.position.pixels ==
-                      scrollController.position.maxScrollExtent) {
+              if (scrollController.position.maxScrollExtent ==
+                  scrollController.position.pixels)  {
                 if (!controller.callApiCalling.value) {
                   controller.getOrderHistory(
                       type: 1, page: controller.callPageCount);

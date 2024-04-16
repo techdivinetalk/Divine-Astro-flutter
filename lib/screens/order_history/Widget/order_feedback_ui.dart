@@ -33,11 +33,8 @@ class FeedBackOrderHistory extends StatelessWidget {
             color: appColors.white,
             child: GetBuilder<OrderHistoryController>(builder: (context) {
               scrollController.addListener(() {
-                if (scrollController.position.atEdge &&
-                    scrollController.position.pixels == 0) {
-                } else if (scrollController.position.atEdge &&
-                    scrollController.position.pixels ==
-                        scrollController.position.maxScrollExtent) {
+                if (scrollController.position.maxScrollExtent ==
+                    scrollController.position.pixels) {
                   if (!controller.orderApiCalling.value) {
                     controller.getOrderHistory(
                         type: 5, page: controller.feedBackPageCount);

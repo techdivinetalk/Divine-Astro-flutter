@@ -37,16 +37,14 @@ class LiveGiftsHistory extends StatelessWidget {
             color: appColors.white,
             child: GetBuilder<OrderHistoryController>(builder: (context) {
               scrollController.addListener(() {
-                if (scrollController.position.atEdge &&
-                    scrollController.position.pixels == 0) {
-                } else if (scrollController.position.atEdge &&
-                    scrollController.position.pixels ==
-                        scrollController.position.maxScrollExtent) {
+                if (scrollController.position.maxScrollExtent ==
+                    scrollController.position.pixels) {
                   if (!controller.giftsApiCalling.value) {
                     controller.getOrderHistory(
                         type: 3, page: controller.liveGiftPageCount);
                   }
                 }
+
               });
               if (controller.giftHistoryList.isEmpty) {
                 return const Center(

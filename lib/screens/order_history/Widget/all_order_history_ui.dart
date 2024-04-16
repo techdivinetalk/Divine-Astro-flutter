@@ -34,12 +34,9 @@ class AllOrderHistoryUi extends StatelessWidget {
               id: 'allOrders',
               builder: (context) {
                 scrollController.addListener(() {
-                  if (scrollController.position.atEdge &&
-                      scrollController.position.pixels == 0) {
-                  } else if (scrollController.position.atEdge &&
-                      scrollController.position.pixels ==
-                          scrollController.position.maxScrollExtent) {
-                    if (!controller.allApiCalling.value == true) {
+                  if (scrollController.position.maxScrollExtent ==
+                      scrollController.position.pixels) {
+                    if (!controller.allApiCalling.value) {
                       controller.getOrderHistory(
                           type: 0, page: controller.allPageCount);
                     }
