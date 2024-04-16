@@ -171,7 +171,7 @@ class MessageView extends StatelessWidget {
         productPriceInr: chatMessage.getPooja!.poojaPriceInr ?? 0,
         prodImage: chatMessage.getPooja!.poojaImage ?? "",
         prodDesc: chatMessage.getPooja!.poojaDesc ?? "",
-        gst: chatMessage.getPooja!.gst ?? "",
+        gst: chatMessage.getPooja!.gst ?? 0,
         id: chatMessage.getPooja!.id ?? 0,
         prodName: chatMessage.getPooja!.poojaName ?? "",
 

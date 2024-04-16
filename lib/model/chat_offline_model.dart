@@ -299,7 +299,7 @@ class GetProduct {
   final String? prodDesc;
   final int? productPriceInr;
   final String? productLongDesc;
-  final String? gst;
+  final int? gst;
 
   GetProduct({
     this.id,
@@ -318,7 +318,7 @@ class GetProduct {
         prodDesc = json['prod_desc'] as String?,
         productPriceInr = json['product_price_inr'] as int?,
         productLongDesc = json['product_long_desc'] as String?,
-        gst = json['gst'] as String?;
+        gst = json['gst'] as int?;
 
   Map<String, dynamic> toJson() => {
         'id': id,
@@ -337,7 +337,7 @@ class GetPooja {
   final String? poojaImage;
   final String? poojaDesc;
   final int? poojaPriceInr;
-  final String? gst;
+  final int?  gst;
 
   GetPooja({
     this.id,
@@ -354,7 +354,7 @@ class GetPooja {
         poojaImage = json['pooja_img'] as String?,
         poojaDesc = json['pooja_desc'] as String?,
         poojaPriceInr = json['pooja_starting_price_inr'] as int?,
-        gst = json['gst'] as String?;
+        gst = json['gst'] as int?;
 
   Map<String, dynamic> toJson() => {
         'id': id,

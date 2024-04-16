@@ -90,7 +90,7 @@ class AllFineDetailsList extends GetView<AllFineDetailsController> {
                                         fontColor: appColors.red,
                                         fontWeight: FontWeight.w500),
                                     CustomText(
-                                      "₹${controller.faqsResponse.value.data?[index].fine?.amount}" ?? '',
+                                      "₹${controller.faqsResponse.value.data?[index].fine?.amount ?? 0}",
                                       maxLines: 10,
                                       fontColor: appColors.red,
                                     )
