@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
@@ -53,7 +53,6 @@ class AppSocket {
       {required String chat, required String call, required String video}) {
     debugPrint(
         'data ${preferenceService.getUserDetail()!.id.toString()} chat: $chat "call": $call,"video": $video');
-    debugPrint('enter updateChatCallSocketEvent');
     socket?.emit(ApiProvider().joinRoomSocket, {
       "userId": preferenceService.getUserDetail()!.id.toString(),
       "userType": 'astrologer',
@@ -62,6 +61,9 @@ class AppSocket {
       "video": video,
     });
   }
+
+
+
 
   void emitForAstrologerEnterChatAssist(
       String? customerId, String? userId) {

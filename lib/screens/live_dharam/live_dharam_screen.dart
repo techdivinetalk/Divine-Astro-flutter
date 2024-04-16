@@ -467,7 +467,7 @@ class _LivePage extends State<LiveDharamScreen>
                 );
                 await sendMessageToZego(model);
               } else {}
-              if (timer.tick % 250 == 0) {
+              if (timer.tick % 600 == 0) {
                 final ZegoCustomMessage model = ZegoCustomMessage(
                   type: 1,
                   liveId: _controller.liveId,
