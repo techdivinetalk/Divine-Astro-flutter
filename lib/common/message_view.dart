@@ -8,6 +8,7 @@ import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_controller.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_controller.dart';
@@ -550,9 +551,8 @@ print("view kundli");
           children: [
             Flexible(
               child: Text(
-                "You have sent ${chatMessage.message!.contains("https") ? "" : chatMessage.message ?? ""}",
-                // "$customerName have sent ${chatMessage.message ?? ""}",
-                style: const TextStyle(color: Colors.red),
+                "${customerName} have sent ${chatMessage.message!.contains("https") ? "" : chatMessage.message ?? ""}",
+                style:  TextStyle(color: Colors.red,fontFamily: FontFamily.metropolis,),
               ),
             ),
             SizedBox(width: 10.h),
