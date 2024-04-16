@@ -162,10 +162,23 @@ class MessageView extends StatelessWidget {
   }
 
   Widget productMsgView(ChatMessage chatMessage, bool yourMessage) {
-    GetProduct getProdust = chatMessage.getProduct!;
+    GetProduct getProduct;
+
+    if (chatMessage.msgType == MsgType.pooja) {
+      getProduct = GetProduct(
+        productPriceInr: chatMessage.getPooja!.poojaPriceInr ?? 0,
+        prodImage: chatMessage.getPooja!.poojaImage ?? "",
+        prodDesc: chatMessage.getPooja!.poojaDesc ?? "",
+        gst: chatMessage.getPooja!.gst ?? "",
+        id: chatMessage.getPooja!.id ?? 0,
+        prodName: chatMessage.getPooja!.poojaName ?? "",
+      );
+    } else {
+      getProduct = chatMessage.getProduct!;
+    }
     return GestureDetector(
       onTap: () {
-        if (chatMessage.isPoojaProduct ?? false) {
+        if (chatMessage.msgType == MsgType.pooja) {
           Get.toNamed(RouteName.poojaDharamDetailsScreen, arguments: {
             'detailOnly': true,
             "isSentMessage": true,
@@ -200,17 +213,17 @@ class MessageView extends StatelessWidget {
               width: 50,
               placeHolder: Assets.images.defaultProfile.path,
               imagePath:
-              "${Get.find<SharedPreferenceService>().getAmazonUrl()}/${getProdust.prodImage}",
+              "${Get.find<SharedPreferenceService>().getAmazonUrl()}/${getProduct.prodImage}",
             ),
           ),
           title: CustomText(
-            "You have suggested a ${chatMessage.isPoojaProduct ?? false ? "Pooja" : "product"}",
+            "You have suggested a ${chatMessage.msgType == MsgType.pooja ? "Pooja" : "product"}",
             fontSize: 14.sp,
             maxLines: 2,
             fontWeight: FontWeight.w600,
           ),
           subtitle: CustomText(
-            getProdust.prodName ?? '',
+            getProduct.prodName ?? '',
             fontSize: 12.sp,
             maxLines: 20,
           ),
