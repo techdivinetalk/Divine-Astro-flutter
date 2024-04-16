@@ -413,8 +413,8 @@ class ChatMessageWithSocketController extends GetxController
 
   void startExtraTimer(int futureTimeInEpochMillis, String status) {
     if (status == "4") {
-      showTalkTime.value = "-1";
       chatTimer?.cancel();
+      showTalkTime.value = "-1";
     }
     DateTime dateTime =
         DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis);
