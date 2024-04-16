@@ -459,9 +459,23 @@ class ChatMessageWithSocketController extends GetxController
               timeDifference.inMinutes == 0 &&
               timeDifference.inHours == 0)) {
         await callHangup();
-
         showTalkTime.value = "-1";
         chatTimer?.cancel();
+        Future.delayed(const Duration(seconds: 4)).then((value) {
+          if(AppFirebaseService().orderData.value["status"] == "3") {
+            DatabaseReference ref = FirebaseDatabase.instance
+                .ref(
+                "order/${AppFirebaseService().orderData.value["orderId"]}");
+            ref.update({
+              "status": "4",
+              "source": "astrorApp",
+              "order_end_time": DateTime
+                  .now()
+                  .millisecondsSinceEpoch + 60000
+            });
+          }
+                 });
+
       } else {
         //         print('Countdown working');
         showTalkTime.value =
