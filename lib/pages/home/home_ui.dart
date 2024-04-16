@@ -981,7 +981,7 @@ class HomeUI extends GetView<HomeController> {
               ),
             ),
           )
-        : SizedBox();
+        : const SizedBox();
   }
 
   Widget sessionTypeWidget({HomeController? controller}) {

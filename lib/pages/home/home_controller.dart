@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:dio/dio.dart';
 
 import "package:contacts_service/contacts_service.dart";
 import 'package:divine_astrologer/app_socket/app_socket.dart';
@@ -20,19 +21,15 @@ import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/model/wallet_deatils_response.dart';
 import 'package:divine_astrologer/pages/home/home_ui.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
-import 'package:divine_astrologer/remote_config/remote_config_helper.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_remote_config/firebase_remote_config.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
-import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -136,24 +133,24 @@ class HomeController extends GetxController {
         }
       }
     });
-    if(preferenceService.getUserDetail() != null){
+    if (preferenceService.getUserDetail() != null) {
       userData = preferenceService.getUserDetail()!;
       appbarTitle.value =
-      "${userData.name.toString().capitalizeFirst} (${userData.id})";
+          "${userData.name.toString().capitalizeFirst} (${userData.id})";
 
       print("${preferenceService.getBaseImageURL()}/${userData.image}");
 
       getAllDashboardData();
       final String path = "astrologer/${(userData.id ?? 0)}/realTime";
       FirebaseDatabase.instance.ref().child(path).onValue.listen(
-            (event) async {
+        (event) async {
           final DataSnapshot dataSnapshot = event.snapshot;
 
           if (dataSnapshot.exists) {
             if (dataSnapshot.value is Map<dynamic, dynamic>) {
               Map<dynamic, dynamic> map = <dynamic, dynamic>{};
               map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-              as Map<dynamic, dynamic>;
+                  as Map<dynamic, dynamic>;
               print("Home Realtime DB Listener: $map");
 
               final isCallSwitchRes = map["voiceCallStatus"] ?? 0;
@@ -180,7 +177,9 @@ class HomeController extends GetxController {
               final offers = map["offers"];
               if (offers != null) {
                 if (homeData != null) {
-                  for (int i = 0; i < homeData!.offers!.orderOffer!.length; i++) {
+                  for (int i = 0;
+                      i < homeData!.offers!.orderOffer!.length;
+                      i++) {
                     for (int j = 0; j < offers.keys.toList().length; j++) {
                       if ("${homeData!.offers!.orderOffer![i].id}" ==
                           "${offers.keys.toList()[j]}") {
@@ -202,7 +201,6 @@ class HomeController extends GetxController {
       );
     }
 
-
     // cron.schedule(Schedule.parse('*/5 * * * * *'), checkForScheduleUpdate);
   }
 
@@ -215,8 +213,8 @@ class HomeController extends GetxController {
       update();
     } else {
       print("else----getConstantDetails!.data!.isForceTraningVideo");
-      await  getDashboardDetail();
-       getFilteredPerformance();
+      await getDashboardDetail();
+      getFilteredPerformance();
       getFeedbackData();
       tarotCardData();
       getUserImage();
@@ -488,7 +486,6 @@ class HomeController extends GetxController {
   }
 
   getFeedbackData() async {
-
     update();
     try {
       var response = await homePageRepository.getFeedbackData();
@@ -526,7 +523,6 @@ class HomeController extends GetxController {
       isFeedbackAvailable.value = response.success ?? false;
       homeData = response.data;
       print(homeData!.offers!.customOffer!.length);
-      print(homeData!.offers!.orderOffer!.length);
       print("homeData!.offers!.orderOffer!.length");
       loading = Loading.loaded;
       updateCurrentData();
@@ -534,7 +530,7 @@ class HomeController extends GetxController {
 
       showOnceInDay();
       update();
-      //   getFeedbackData();
+      //getFeedbackData();
       //log("DashboardData==>${jsonEncode(homeData)}");
     } catch (error) {
       if (error is AppException) {
@@ -592,6 +588,8 @@ class HomeController extends GetxController {
       chat: chatSwitch.value ? "1" : "0",
       video: videoSwitch.value ? "1" : "0",
     );
+    // astroOnlineOffline(status: "chat_status=${chatSwitch.value ? "1" : "0"}");
+    // astroOnlineOffline(status: "call_status=${callSwitch.value ? "1" : "0"}");
 
     if (homeData?.sessionType?.chatSchedualAt != null &&
         homeData?.sessionType?.chatSchedualAt != '') {
@@ -626,6 +624,20 @@ class HomeController extends GetxController {
         homeData?.offers?.customOffer != []) {}
 
     update();
+  }
+
+  Dio dio = Dio();
+
+  astroOnlineOffline({String? status}) async {
+    // try {
+    final response = await dio.get(
+        "http://15.206.23.215:8081/api/v3/updateAstroStatus?unique_no=${userData.uniqueNo}&${status}");
+    log(response.data.toString());
+    print("response.data");
+    if (response.statusCode == 200) {}
+    // } catch (e) {
+    //   print("getting error --- getAstroCustOfferData ${e}");
+    // }
   }
 
   getConstantDetailsData() async {
@@ -794,11 +806,25 @@ class HomeController extends GetxController {
           await userRepository.astroOnlineAPIForLive(
         params: params,
         successCallBack: (message) {
-          socket.updateChatCallSocketEvent(
-            call: callSwitch.value ? "1" : "0",
-            chat: chatSwitch.value ? "1" : "0",
-            video: videoSwitch.value ? "1" : "0",
-          );
+          /// o offline
+          /// 1 online
+          // socket.updateChatCallSocketEvent(
+          //   call: callSwitch.value ? "1" : "0",
+          //   chat: chatSwitch.value ? "1" : "0",
+          //   video: videoSwitch.value ? "1" : "0",
+          // );
+          switch (type) {
+            case 1:
+              astroOnlineOffline(
+                  status: 'chat_status=${chatSwitch.value ? "1" : "0"}');
+              break;
+            case 2:
+              astroOnlineOffline(
+                  status: 'call_status=${callSwitch.value ? "1" : "0"}');
+              break;
+            default:
+              break;
+          }
           divineSnackBar(data: message);
         },
         failureCallBack: (message) {
