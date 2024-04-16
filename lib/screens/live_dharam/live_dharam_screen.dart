@@ -6,6 +6,7 @@ import "dart:developer";
 import "dart:math" as math;
 
 import "package:after_layout/after_layout.dart";
+import "package:divine_astrologer/common/app_textstyle.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/generic_loading_widget.dart";
 import "package:divine_astrologer/common/routes.dart";
@@ -475,7 +476,7 @@ class _LivePage extends State<LiveDharamScreen>
                   // avatar:
                   //     "https://divinenew-prod.s3.ap-south-1.amazonaws.com/divine/January2024/fGfpNU1Y40lV0ojgh0JBpgbc4mJtAdV6hgG5xZXJ.jpg",
                   avatar:
-                  "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
+                      "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
                   message: "Quality Team Joined",
                   timeStamp: DateTime.now().toString(),
                   fullGiftImage: "",
@@ -1045,12 +1046,11 @@ class _LivePage extends State<LiveDharamScreen>
                           ),
                           const SizedBox(height: 8),
                           RichText(
-                            textAlign:
-                            TextAlign.center,
-                            text: HTML.toTextSpan(
-                                context,
-                                description ??
-                                    ""),
+                            textAlign: TextAlign.center,
+                            text: HTML.toTextSpan(context, description ?? "",
+                                defaultTextStyle: AppTextStyle.textStyle14(
+                                  fontColor: appColors.white,
+                                )),
                             maxLines: 5,
                           ),
                           // Text(
@@ -1628,7 +1628,6 @@ class _LivePage extends State<LiveDharamScreen>
               final ZegoInRoomMessage message = messages[index];
               print(joinedAstrologerList);
               print(message);
-
 
               print("messagemessagemessagemessage");
               final ZegoCustomMessage msg =

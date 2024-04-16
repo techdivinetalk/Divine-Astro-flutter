@@ -79,9 +79,10 @@ class ChatMessage {
   int? type;
   String? userType;
   String? productPrice;
-   String? suggestedId;
+   int? suggestedId;
   Kundli? kundli;
   GetProduct? getProduct;
+  GetPooja? getPooja;
   dynamic getCustomProduct;
 
 
@@ -141,6 +142,7 @@ class ChatMessage {
 
     this.type,
     this.userType,
+    this.getPooja,
     this.productPrice,
     this.kundli,
     this.getCustomProduct,
@@ -176,6 +178,7 @@ class ChatMessage {
     seenStatus = json['seen_status'];
     base64Image = json['base64image'];
     deletedAt = json['deleted_at'];
+
     chatMsgId = json['chat_msg_id'];
     suggestedId = json['suggested_remedies_id'];
 
@@ -210,7 +213,7 @@ class ChatMessage {
     gender = json['gender'];
     productPrice = json['productPrice'];
     getProduct = (json['get_product'] as Map<String,dynamic>?) != null ? GetProduct.fromJson(json['get_product'] as Map<String,dynamic>) : null;
-
+    getPooja = (json['get_pooja'] as Map<String,dynamic>?) != null ? GetPooja.fromJson(json['get_pooja'] as Map<String,dynamic>) : null;
     userType = json['userType'];
     kundli = json['kundli'] != null ? Kundli.fromJson(json['kundli']) : null;
   }
@@ -219,6 +222,7 @@ class ChatMessage {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['chatMessageId'] = id;
     data['order_id'] = orderId;
+    data['get_pooja'] = getPooja;
     data["get_custom_product"] = getCustomProduct;
 
     data['member_id'] = memberId;
@@ -279,7 +283,6 @@ class ChatMessage {
     data['kundliDateTime'] = kundliDateTime;
     data['kundliPlace'] = kundliPlace;
     data['gender'] = gender;
-
     data['userType'] = userType;
     data['kundli'] = kundli;
     return data;
@@ -325,6 +328,41 @@ class GetProduct {
 
     'product_price_inr' : productPriceInr,
     'product_long_desc' : productLongDesc,
+    'gst' : gst
+  };
+}
+class GetPooja {
+  final int? id;
+  final String?poojaName;
+  final String? poojaImage;
+  final String? poojaDesc;
+  final int? poojaPriceInr;
+  final String? gst;
+
+
+  GetPooja({
+    this.id,
+    this.poojaName,
+    this.poojaImage,
+    this.poojaDesc,
+    this.poojaPriceInr,
+    this.gst,
+  });
+
+  GetPooja.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as int?,
+        poojaName = json['pooja_name'] as String?,
+        poojaImage = json['pooja_img'] as String?,
+        poojaDesc = json['pooja_desc'] as String?,
+        poojaPriceInr = json['pooja_starting_price_inr'] as int?,
+        gst = json['gst'] as String?;
+
+  Map<String, dynamic> toJson() => {
+    'id' : id,
+    'pooja_name' : poojaName,
+    'pooja_img' : poojaImage,
+    'pooja_desc' : poojaDesc,
+    'pooja_starting_price_inr' : poojaPriceInr,
     'gst' : gst
   };
 }

@@ -8,6 +8,7 @@ import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_controller.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_controller.dart';
@@ -161,10 +162,26 @@ class MessageView extends StatelessWidget {
   }
 
   Widget productMsgView(ChatMessage chatMessage, bool yourMessage) {
-    GetProduct getProdust = chatMessage.getProduct!;
+    GetProduct getProduct;
+
+    if (chatMessage.msgType == MsgType.pooja) {
+      print(chatMessage.getPooja!.poojaName);
+      print("chatMessage.getPooja!.poojaName");
+      getProduct = GetProduct(
+        productPriceInr: chatMessage.getPooja!.poojaPriceInr ?? 0,
+        prodImage: chatMessage.getPooja!.poojaImage ?? "",
+        prodDesc: chatMessage.getPooja!.poojaDesc ?? "",
+        gst: chatMessage.getPooja!.gst ?? "",
+        id: chatMessage.getPooja!.id ?? 0,
+        prodName: chatMessage.getPooja!.poojaName ?? "",
+
+      );
+    } else {
+      getProduct = chatMessage.getProduct!;
+    }
     return GestureDetector(
       onTap: () {
-        if (chatMessage.isPoojaProduct ?? false) {
+        if (chatMessage.msgType == MsgType.pooja) {
           Get.toNamed(RouteName.poojaDharamDetailsScreen, arguments: {
             'detailOnly': true,
             "isSentMessage": true,
@@ -199,17 +216,17 @@ class MessageView extends StatelessWidget {
               width: 50,
               placeHolder: Assets.images.defaultProfile.path,
               imagePath:
-              "${Get.find<SharedPreferenceService>().getAmazonUrl()}/${getProdust.prodImage}",
+              "${Get.find<SharedPreferenceService>().getAmazonUrl()}/${getProduct.prodImage}",
             ),
           ),
           title: CustomText(
-            "You have suggested a ${chatMessage.isPoojaProduct ?? false ? "Pooja" : "product"}",
+            "You have suggested a ${chatMessage.msgType == MsgType.pooja ? "Pooja" : "product"}",
             fontSize: 14.sp,
             maxLines: 2,
             fontWeight: FontWeight.w600,
           ),
           subtitle: CustomText(
-            getProdust.prodName ?? '',
+            getProduct.prodName ?? '',
             fontSize: 12.sp,
             maxLines: 20,
           ),
@@ -550,9 +567,8 @@ print("view kundli");
           children: [
             Flexible(
               child: Text(
-                "You have sent ${chatMessage.message!.contains("https") ? "" : chatMessage.message ?? ""}",
-                // "$customerName have sent ${chatMessage.message ?? ""}",
-                style: const TextStyle(color: Colors.red),
+                "${customerName} have sent ${chatMessage.message!.contains("https") ? "" : chatMessage.message ?? ""}",
+                style:  TextStyle(color: Colors.red,fontFamily: FontFamily.metropolis,),
               ),
             ),
             SizedBox(width: 10.h),

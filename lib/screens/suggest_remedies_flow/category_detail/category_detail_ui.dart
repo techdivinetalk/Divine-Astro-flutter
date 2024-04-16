@@ -6,6 +6,7 @@ import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/res_product_detail.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/category_detail/category_detail_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -238,9 +239,12 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                               padding: const EdgeInsets.only(
                                   top: 20, left: 20, right: 20),
                               child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
                                 children: [
+
                                   Text(
                                     "Are You Sure You Want To Suggest ${controller.productDetail?.prodName} To User?",
+                                    textAlign: TextAlign.center,
                                     style: AppTextStyle.textStyle20(
                                       fontWeight: FontWeight.w600,
                                     ),
@@ -255,6 +259,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                   ),
                                   CustomLightYellowCurveButton(
                                     name: "suggestNow".tr,
+                                    textColor: appColors.whiteGuidedColor,
                                     onTaped: () {
                                       print(
                                           "value of controller chat assist ${controller.isChatAssist.value}");
@@ -276,7 +281,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                           style: TextStyle(
                             fontWeight: FontWeight.w600,
                             fontSize: 20.sp,
-                            color: appColors.brownColour,
+                            color: appColors.whiteGuidedColor,
                           ),
                         )),
                   ),

@@ -945,8 +945,8 @@ class ChatMessageWithSocketController extends GetxController
           isSuspicious: 0,
           isPoojaProduct: true,
           awsUrl: productDetails.poojaImg ?? '',
-          msgType: msgType,
-          suggestedId: saveRemediesData.data!.id.toString(),
+          msgType: MsgType.pooja,
+          suggestedId: saveRemediesData.data!.id,
           type: 0,
           msgSendBy: "1",
           orderId: AppFirebaseService().orderData.value["orderId"],
@@ -955,19 +955,17 @@ class ChatMessageWithSocketController extends GetxController
           productId: productDetails.id.toString(),
           shopId: productDetails.id.toString(),
           // msgStatus: MsgStatus.sent,
-
           receiverId: int.parse(
               AppFirebaseService().orderData.value["userId"].toString()),
           senderId: preference.getUserDetail()!.id,
-          getProduct: GetProduct(
-            prodName: productDetails.poojaName,
-            id: productDetails.id,
-            gst: "3",
-            prodDesc: productDetails.poojaDesc,
-            prodImage: productDetails.poojaImg,
-            productLongDesc: productDetails.poojaDesc,
-            productPriceInr: productDetails.poojaStartingPriceInr,
-          ),
+            getPooja: GetPooja(
+              poojaName: productDetails.poojaName,
+              id: productDetails.id,
+              gst: productDetails.gst,
+              poojaDesc: productDetails.poojaDesc,
+              poojaImage: productDetails.poojaImg,
+              poojaPriceInr: productDetails.poojaStartingPriceInr,
+            ),
         );
       } else {
         final productData =
@@ -982,11 +980,11 @@ class ChatMessageWithSocketController extends GetxController
             time: int.parse(time),
             id: int.parse(time),
             isSuspicious: 0,
-            suggestedId: productData.data!.id.toString(),
+            suggestedId: productData.data!.id,
             userType: "astrologer",
             isPoojaProduct: false,
             awsUrl: userData?.image ?? '',
-            msgType: msgType,
+            msgType: MsgType.product,
             msgSendBy: "1",
             type: 0,
             orderId: AppFirebaseService().orderData.value["orderId"],
@@ -999,7 +997,7 @@ class ChatMessageWithSocketController extends GetxController
             getProduct: GetProduct(
               prodName: productDetails.prodName,
               id: productDetails.id,
-              gst: "3",
+              gst: productDetails.gst,
               prodDesc: productDetails.prodDesc,
               prodImage: productDetails.prodImage,
               productLongDesc: productDetails.productLongDesc,

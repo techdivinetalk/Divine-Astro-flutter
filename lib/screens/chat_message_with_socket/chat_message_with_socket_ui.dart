@@ -102,7 +102,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     );
                   }).toList(),
                 ),
-
                 Expanded(
                   child: Stack(
                     children: [
