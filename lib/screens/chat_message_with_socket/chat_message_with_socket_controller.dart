@@ -961,7 +961,7 @@ class ChatMessageWithSocketController extends GetxController
             getPooja: GetPooja(
               poojaName: productDetails.poojaName,
               id: productDetails.id,
-              gst: "3",
+              gst: productDetails.gst,
               poojaDesc: productDetails.poojaDesc,
               poojaImage: productDetails.poojaImg,
               poojaPriceInr: productDetails.poojaStartingPriceInr,
@@ -997,7 +997,7 @@ class ChatMessageWithSocketController extends GetxController
             getProduct: GetProduct(
               prodName: productDetails.prodName,
               id: productDetails.id,
-              gst: "3",
+              gst: productDetails.gst,
               prodDesc: productDetails.prodDesc,
               prodImage: productDetails.prodImage,
               productLongDesc: productDetails.productLongDesc,

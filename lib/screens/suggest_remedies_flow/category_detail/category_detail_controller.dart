@@ -109,7 +109,7 @@ class CategoryDetailController extends GetxController {
       Get.back(result: {
         'isPooja':false,
         'saveRemedies': saveRemediesResponse,
-        'product_detail': productDetail
+        'product_detail': productDetail,
       });
     } catch (error) {
       if (error is AppException) {

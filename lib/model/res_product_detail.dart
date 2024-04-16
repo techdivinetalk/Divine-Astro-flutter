@@ -59,6 +59,7 @@ class Products {
   int? productPriceUsd;
   int? productStatus;
   String? productLongDesc;
+  String? gst;
   String? productBannerImage;
   ProductShop? productShop;
 
@@ -72,6 +73,7 @@ class Products {
     this.prodName,
     this.prodImage,
     this.prodDesc,
+    this.gst,
     this.productPriceInr,
     this.productPriceUsd,
     this.productStatus,
@@ -88,6 +90,7 @@ class Products {
     prodName = json['prod_name'];
     prodImage = json['prod_image'];
     prodDesc = json['prod_desc'];
+    gst = json['gst'];
     productPriceInr = json['product_price_inr'];
     productPriceUsd = json['product_price_usd'];
     productStatus = json['product_status'];
@@ -104,6 +107,7 @@ class Products {
     data['id'] = id;
     data['prod_shop_id'] = prodShopId;
     data['prod_cat_id'] = prodCatId;
+    data['gst'] = gst;
     data['prod_name'] = prodName;
     data['prod_image'] = prodImage;
     data['prod_desc'] = prodDesc;

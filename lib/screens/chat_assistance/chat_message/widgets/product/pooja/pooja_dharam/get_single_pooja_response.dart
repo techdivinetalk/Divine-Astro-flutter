@@ -58,6 +58,7 @@ class Pooja {
   int? poojaStartingPriceUsd;
   String? poojaShortDesc;
   String? poojaBannerImage;
+  String? gst;
   int? referalAmount;
   int? payoutType;
   int? payoutValue;
@@ -73,6 +74,7 @@ class Pooja {
       this.poojaStartingPriceUsd,
       this.poojaShortDesc,
       this.poojaBannerImage,
+      this.gst,
       this.referalAmount,
       this.payoutType,
       this.payoutValue,
@@ -86,6 +88,7 @@ class Pooja {
     poojaDesc = json['pooja_desc'];
     poojaStartingPriceInr = json['pooja_starting_price_inr'];
     poojaStartingPriceUsd = json['pooja_starting_price_usd'];
+    gst = json['gst'];
     poojaShortDesc = json['pooja_short_desc'];
     poojaBannerImage = json['pooja_banner_image'];
     referalAmount = json['referal_amount'];
@@ -100,6 +103,7 @@ class Pooja {
     data['id'] = id;
     data['pooja_name'] = poojaName;
     data['pooja_img'] = poojaImg;
+    data['gst'] = gst;
     data['pooja_desc'] = poojaDesc;
     data['pooja_starting_price_inr'] = poojaStartingPriceInr;
     data['pooja_starting_price_usd'] = poojaStartingPriceUsd;
