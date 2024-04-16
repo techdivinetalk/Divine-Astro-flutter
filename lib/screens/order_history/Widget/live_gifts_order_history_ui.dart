@@ -6,6 +6,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/order_history_model/gift_order_history.dart';
+import 'package:divine_astrologer/screens/order_history/Widget/empty_widget.dart';
 import 'package:divine_astrologer/screens/order_history/order_history_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -15,32 +16,59 @@ import 'package:intl/intl.dart';
 import '../../../di/shared_preference_service.dart';
 
 class LiveGiftsHistory extends StatelessWidget {
-  LiveGiftsHistory({Key? key, this.controller}) : super(key: key);
+  LiveGiftsHistory({Key? key}) : super(key: key);
 
-  final ScrollController? controller;
-  SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
+  final controller = Get.find<OrderHistoryController>();
+  final scrollController = ScrollController();
+  SharedPreferenceService preferenceService =
+      Get.find<SharedPreferenceService>();
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<OrderHistoryController>(builder: (controller) {
-      if (controller.giftHistoryList.isEmpty) {
-        return const Center(
-          child: Text(
-            'No data found',
-            style: TextStyle(fontSize: 18),
-          ),
-        );
-      }
-      return ListView.separated(
-        // controller: controller,
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: controller.giftHistoryList.length,
-        padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 30,bottom: 20),
-        separatorBuilder: (context, index) => const SizedBox(height: 10),
-        itemBuilder: (context, index) {
-          return orderDetailView(controller.giftHistoryList, index);
-          /*return Column(
+    return Stack(
+      children: [
+        RefreshIndicator(
+            onRefresh: () async {
+              controller.liveGiftPageCount = 1;
+              controller.getOrderHistory(
+                  type: 3, page: controller.liveGiftPageCount);
+            },
+            backgroundColor: appColors.guideColor,
+            color: appColors.white,
+            child: GetBuilder<OrderHistoryController>(builder: (context) {
+              scrollController.addListener(() {
+                if (scrollController.position.maxScrollExtent ==
+                    scrollController.position.pixels) {
+                  if (!controller.giftsApiCalling.value) {
+                    controller.getOrderHistory(
+                        type: 3, page: controller.liveGiftPageCount);
+                  }
+                }
+
+              });
+              if (controller.giftHistoryList.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'No data found',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                );
+              }
+              return Column(
+                children: [
+                  Expanded(
+                      child: ListView.separated(
+                    controller: scrollController,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: controller.giftHistoryList.length,
+                    padding: const EdgeInsets.symmetric(horizontal: 10)
+                        .copyWith(top: 30, bottom: 20),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      return orderDetailView(controller.giftHistoryList, index);
+                      /*return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if (index == 2)
@@ -67,20 +95,41 @@ class LiveGiftsHistory extends StatelessWidget {
               separator,
             ],
           );*/
-        },
-      );
-    });
+                    },
+                  )),
+                  if (controller.giftsApiCalling.value &&
+                      controller.liveGiftPageCount > 1)
+                    controller.paginationLoadingWidget(),
+                ],
+              );
+            })),
+        if (controller.giftHistoryList.isEmpty)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              buildEmptyNew('noDataToShow'.tr),
+            ],
+          ),
+      ],
+    );
   }
 
   Widget orderDetailView(List<GiftDataList> data, int index) {
-    print("giftImage :: ${preferenceService.getBaseImageURL()}/${data[index].getGift?.giftImage ?? ''}");
+    print(
+        "giftImage :: ${preferenceService.getBaseImageURL()}/${data[index].getGift?.giftImage ?? ''}");
     return InkWell(
       onTap: () {},
       child: Container(
         padding: const EdgeInsets.all(12.0),
-        decoration: BoxDecoration(borderRadius: BorderRadius.circular(10), color: appColors.white, boxShadow: [
-          BoxShadow(color: Colors.black.withOpacity(0.3), blurRadius: 3.0, offset: const Offset(0.3, 3.0)),
-        ]),
+        decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(10),
+            color: appColors.white,
+            boxShadow: [
+              BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 3.0,
+                  offset: const Offset(0.3, 3.0)),
+            ]),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -98,8 +147,10 @@ class LiveGiftsHistory extends StatelessWidget {
                               height: 65,
                               width: 65,
                               child: CachedNetworkImage(
-                                imageUrl: "${preferenceService.getBaseImageURL()}/${data[index].getGift?.giftImage ?? ''}",
-                                errorWidget: (context, s, d) => Assets.images.bgTmpUser.svg(),
+                                imageUrl:
+                                    "${preferenceService.getBaseImageURL()}/${data[index].getGift?.giftImage ?? ''}",
+                                errorWidget: (context, s, d) =>
+                                    Assets.images.bgTmpUser.svg(),
                                 fit: BoxFit.cover,
                               ),
                             ),
@@ -110,7 +161,9 @@ class LiveGiftsHistory extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("${'orderId'.tr} : ${data[index].orderId}",
-                            style: AppTextStyle.textStyle9(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
+                            style: AppTextStyle.textStyle9(
+                                fontWeight: FontWeight.w400,
+                                fontColor: appColors.darkBlue)),
                         SizedBox(
                           width: 140,
                           child: CustomText(
@@ -129,7 +182,9 @@ class LiveGiftsHistory extends StatelessWidget {
                 IntrinsicWidth(
                   child: Container(
                     decoration: BoxDecoration(
-                      border: Border.all(color: getStatusColor("${data[index].status}"), width: 1.0),
+                      border: Border.all(
+                          color: getStatusColor("${data[index].status}"),
+                          width: 1.0),
                       borderRadius: BorderRadius.circular(22.0),
                     ),
                     child: Row(
@@ -137,11 +192,13 @@ class LiveGiftsHistory extends StatelessWidget {
                       children: [
                         Text(
                           "${data[index].status}",
-                          style: AppTextStyle.textStyle10(fontWeight: FontWeight.w500, fontColor: getStatusColor("${data[index].status}")),
+                          style: AppTextStyle.textStyle10(
+                              fontWeight: FontWeight.w500,
+                              fontColor:
+                                  getStatusColor("${data[index].status}")),
                         ),
                       ],
-                    ).paddingSymmetric(
-                        horizontal: 9, vertical: 6),
+                    ).paddingSymmetric(horizontal: 9, vertical: 6),
                   ),
                 )
               ],
@@ -151,13 +208,17 @@ class LiveGiftsHistory extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("${'dateTime'.tr} :",
-                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
+                    style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.darkBlue)),
                 Text(
                   data[index].createdAt != null
                       ? DateFormat("dd MMM, hh:mm aa")
-                      .format(data[index].createdAt!)
+                          .format(data[index].createdAt!)
                       : "N/A",
-                  style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
+                  style: AppTextStyle.textStyle12(
+                      fontWeight: FontWeight.w400,
+                      fontColor: appColors.darkBlue),
                 ),
               ],
             ),
@@ -166,9 +227,13 @@ class LiveGiftsHistory extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("${'giftName'.tr} :",
-                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
+                    style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.darkBlue)),
                 Text("${data[index].getGift?.giftName}",
-                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
+                    style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
@@ -176,9 +241,13 @@ class LiveGiftsHistory extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("${'giftPrice'.tr} :",
-                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
+                    style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.darkBlue)),
                 Text("₹${data[index].getGift?.giftPrice}",
-                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
+                    style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
@@ -186,8 +255,13 @@ class LiveGiftsHistory extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("${'quantity'.tr} :",
-                    style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
-                Text("${data[index].quantity}", style: AppTextStyle.textStyle12(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue)),
+                    style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.darkBlue)),
+                Text("${data[index].quantity}",
+                    style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.darkBlue)),
               ],
             ),
             const SizedBox(height: 8),
@@ -200,7 +274,10 @@ class LiveGiftsHistory extends StatelessWidget {
                   "totalEarning".tr,
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600),
                 ),
-                Text("₹${data[index].amount}", style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600, fontColor: appColors.lightGreen)),
+                Text("₹${data[index].amount}",
+                    style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w600,
+                        fontColor: appColors.lightGreen)),
               ],
             ),
             const SizedBox(height: 8),
@@ -290,7 +367,6 @@ class LiveGiftsHistory extends StatelessWidget {
         ),
       ),
     );*/
-
 
     String _truncateText(String text, int maxWords) {
       if (text.split(' ').length <= maxWords) {

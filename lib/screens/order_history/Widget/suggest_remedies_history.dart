@@ -2,6 +2,7 @@
 
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/screens/order_history/Widget/empty_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -17,36 +18,79 @@ import '../order_history_controller.dart';
 class SuggestRemedies extends StatelessWidget {
   SuggestRemedies({super.key});
 
-  // final ScrollController? controller;
+  final controller = Get.find<OrderHistoryController>();
+  final scrollController = ScrollController();
 
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
+
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<OrderHistoryController>(builder: (controller) {
-      if (controller.remedySuggestedHistoryList.isEmpty) {
-        return const Center(
-          child: Text(
-            'No data found',
-            style: TextStyle(fontSize: 18),
+    return Stack(
+      children: [
+        RefreshIndicator(
+            onRefresh: () async {
+              controller.remedyPageCount = 1;
+              controller.getOrderHistory(
+                  type: 4, page: controller.remedyPageCount);
+            },
+            backgroundColor: appColors.guideColor,
+            color: appColors.white,
+            child: GetBuilder<OrderHistoryController>(builder: (context) {
+              scrollController.addListener(() {
+                if (scrollController.position.maxScrollExtent ==
+                    scrollController.position.pixels) {
+                  if (!controller.suggestApiCalling.value) {
+                    controller.getOrderHistory(
+                        type: 4, page: controller.remedyPageCount);
+                  }
+                }
+              });
+              if (controller.remedySuggestedHistoryList.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'No data found',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                );
+              }
+              return Column(
+                children: [
+                  Expanded(
+                      child: ListView.separated(
+                    controller: scrollController,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: controller.remedySuggestedHistoryList.length,
+                    padding: const EdgeInsets.symmetric(horizontal: 10)
+                        .copyWith(top: 30, bottom: 20),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      return remediesDetail(
+                          index, controller.remedySuggestedHistoryList);
+                    },
+                  )),
+                  if (controller.suggestApiCalling.value &&
+                      controller.remedyPageCount > 1)
+                    controller.paginationLoadingWidget(),
+                ],
+              );
+            })),
+        if (controller.remedySuggestedHistoryList.isEmpty)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              buildEmptyNew('noDataToShow'.tr),
+            ],
           ),
-        );
-      }
-      return ListView.separated(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: controller.remedySuggestedHistoryList.length,
-        padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 30,bottom: 20),
-        separatorBuilder: (context, index) => const SizedBox(height: 10),
-        itemBuilder: (context, index) {
-          return remediesDetail(index, controller.remedySuggestedHistoryList);
-        },
-      );
-    });
+      ],
+    );
   }
 
   Widget remediesDetail(int index, List<RemedySuggestedDataList> data) {
-    print("images ${"${preferenceService.getBaseImageURL()}/${data[index].getCustomers?.avatar}"}");
+    print(
+        "images ${"${preferenceService.getBaseImageURL()}/${data[index].getCustomers?.avatar}"}");
     return InkWell(
       onTap: () {},
       child: Container(
@@ -91,7 +135,6 @@ class SuggestRemedies extends StatelessWidget {
                             style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w400,
                                 fontColor: appColors.darkBlue)),
-
                         SizedBox(
                           width: 140,
                           child: CustomText(
@@ -125,12 +168,12 @@ class SuggestRemedies extends StatelessWidget {
                             "${data[index].status}",
                             style: AppTextStyle.textStyle10(
                               fontWeight: FontWeight.w500,
-                              fontColor: getStatusColor("${data[index].status}"),
+                              fontColor:
+                                  getStatusColor("${data[index].status}"),
                             ),
                           ),
                         ],
-                      ).paddingSymmetric(
-                          horizontal: 9, vertical: 6),
+                      ).paddingSymmetric(horizontal: 9, vertical: 6),
                     ),
                   ),
                 )
@@ -147,7 +190,7 @@ class SuggestRemedies extends StatelessWidget {
                 Text(
                     data[index].createdAt != null
                         ? DateFormat("dd MMM, hh:mm aa")
-                        .format(data[index].createdAt!)
+                            .format(data[index].createdAt!)
                         : "N/A",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
@@ -213,12 +256,14 @@ class SuggestRemedies extends StatelessWidget {
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600),
                 ),
                 Text(
-                  data[index].getOrder?.amount != null && data[index].getOrder?.amount != 0
+                  data[index].getOrder?.amount != null &&
+                          data[index].getOrder?.amount != 0
                       ? "₹${data[index].getOrder?.amount}"
                       : "Nill",
                   style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w600,
-                    fontColor: data[index].getOrder?.amount != null && data[index].getOrder?.amount != 0
+                    fontColor: data[index].getOrder?.amount != null &&
+                            data[index].getOrder?.amount != 0
                         ? appColors.lightGreen
                         : Colors.red,
                   ),

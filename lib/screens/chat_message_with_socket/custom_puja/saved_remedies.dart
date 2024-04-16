@@ -86,22 +86,26 @@ class SavedRemediesBottomSheet extends StatelessWidget {
                                   if (controller != null) {
                                     final String time =
                                         "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-                                    print("${Get.find<SharedPreferenceService>().getAmazonUrl()}${data.image}");
-                                    print("data.imagedata.imagedata.imagedata.image");
+
                                     controller!.addNewMessage(
-                                      time,
-                                      MsgType.customProduct,
-                                      messageText: data.name,
-                                      productPrice: data.amount.toString(),
-                                      productId: data.id.toString(),
-                                      awsUrl: "${Get.find<SharedPreferenceService>().getAmazonUrl()}/${data.image}",
-                                    );
+                                        time, MsgType.customProduct,
+                                        messageText: data.name,
+                                        productPrice: data.amount.toString(),
+                                        productId: data.id.toString(),
+                                        awsUrl: "${data.image}",
+                                        getCustomProduct: CustomProduct(
+                                          id: data.id,
+                                          name: data.name,
+                                          image: data.image,
+                                          amount: int.parse("${data.amount.toString()}"),
+                                          desc: "",
+                                        ));
                                   } else if (chatMessageController != null) {
                                     chatMessageController!
                                         .sendMsg(MsgType.customProduct, {
                                       'title': data.name,
                                       'image': data.image.toString(),
-                                      'product_price':data.amount.toString() ,
+                                      'product_price': data.amount.toString(),
                                       'product_id': data.id,
                                     });
                                   }
@@ -127,7 +131,8 @@ class SavedRemediesBottomSheet extends StatelessWidget {
                                         height: 65,
                                         width: 65,
                                         imagePath:
-                                        Get.find<SharedPreferenceService>().getAmazonUrl()! +
+                                            Get.find<SharedPreferenceService>()
+                                                    .getAmazonUrl()! +
                                                 "/${data.image!}",
                                         radius: BorderRadius.circular(10),
                                         placeHolder:
@@ -189,7 +194,10 @@ class SavedRemediesBottomSheet extends StatelessWidget {
                     onTap: () {
                       Get.back();
                       Get.bottomSheet(
-                          CreateCustomProductSheet(controller: controller,chatMessageController: chatMessageController,),
+                          CreateCustomProductSheet(
+                            controller: controller,
+                            chatMessageController: chatMessageController,
+                          ),
                           isScrollControlled: true);
                     },
                     child: Container(

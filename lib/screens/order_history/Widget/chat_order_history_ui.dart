@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/common/common_bottomsheet.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/order_history_model/chat_order_history.dart';
+import 'package:divine_astrologer/screens/order_history/Widget/empty_widget.dart';
 import 'package:divine_astrologer/screens/order_history/order_history_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -12,31 +13,58 @@ import '../../../common/common_options_row.dart';
 import '../../../common/routes.dart';
 
 class ChatOrderHistory extends StatelessWidget {
-  const ChatOrderHistory({super.key, this.controller});
+  ChatOrderHistory({
+    super.key,
+  });
 
-  final ScrollController? controller;
+  final controller = Get.find<OrderHistoryController>();
+  final scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<OrderHistoryController>(builder: (controller) {
-      if (controller.chatHistoryList.isEmpty) {
-        return const Center(
-          child: Text(
-            'No data found',
-            style: TextStyle(fontSize: 18),
-          ),
-        );
-      }
-      return ListView.separated(
-        // controller: controller,
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: controller.chatHistoryList.length,
-        padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(top: 30,bottom: 20),
-        separatorBuilder: (context, index) => const SizedBox(height: 10),
-        itemBuilder: (context, index) {
-          return orderDetailView(index, controller.chatHistoryList);
-          /*return Column(
+    return Stack(
+      children: [
+        RefreshIndicator(
+            onRefresh: () async {
+              controller.chatPageCount = 1;
+              controller.getOrderHistory(
+                  type: 2, page: controller.chatPageCount);
+            },
+            backgroundColor: appColors.guideColor,
+            color: appColors.white,
+            child: GetBuilder<OrderHistoryController>(builder: (context) {
+              scrollController.addListener(() {
+                if (scrollController.position.maxScrollExtent ==
+                    scrollController.position.pixels) {
+                  if (!controller.chatApiCalling.value) {
+                    controller.getOrderHistory(
+                        type: 2, page: controller.chatPageCount);
+                  }
+                }
+              });
+              if (controller.chatHistoryList.isEmpty) {
+                return const Center(
+                  child: Text(
+                    'No data found',
+                    style: TextStyle(fontSize: 18),
+                  ),
+                );
+              }
+              return Column(
+                children: [
+                  Expanded(
+                      child: ListView.separated(
+                    controller: scrollController,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: controller.chatHistoryList.length,
+                    padding: const EdgeInsets.symmetric(horizontal: 10)
+                        .copyWith(top: 30, bottom: 20),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      return orderDetailView(index, controller.chatHistoryList);
+                      /*return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 if (index == 2)
@@ -65,9 +93,23 @@ class ChatOrderHistory extends StatelessWidget {
                 separator,
               ],
             );*/
-        },
-      );
-    });
+                    },
+                  )),
+                  if (controller.chatApiCalling.value &&
+                      controller.chatPageCount > 1)
+                    controller.paginationLoadingWidget(),
+                ],
+              );
+            })),
+        if (controller.chatHistoryList.isEmpty)
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              buildEmptyNew('noDataToShow'.tr),
+            ],
+          ),
+      ],
+    );
   }
 
   Widget orderDetailView(int index, List<ChatDataList> data) {
@@ -89,7 +131,8 @@ class ChatOrderHistory extends StatelessWidget {
             onTap: () {
               openBottomSheet(Get.context!,
                   functionalityWidget: Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, top: 20),
                     child: Column(
                       children: [
                         Padding(
@@ -121,7 +164,7 @@ class ChatOrderHistory extends StatelessWidget {
             children: [
               Text(
                 // "chat".tr,
-                data[index].productType != 7 ? 'Chat' : 'Call',
+                data[index].productType == 12 ? 'Chat' : 'Unknown',
                 style: AppTextStyle.textStyle12(
                   fontWeight: FontWeight.w400,
                   /*fontColor: "$type" == "PENALTY"
@@ -135,8 +178,8 @@ class ChatOrderHistory extends StatelessWidget {
                 style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w400,
                     fontColor: /*data[index].amount.toString().contains("+")
-                          ?*/ appColors.lightGreen
-                  /*: appColors.appRedColour*/),
+                          ?*/
+                        appColors.lightGreen /*: appColors.appRedColour*/),
               )
             ],
           ),
@@ -155,7 +198,7 @@ class ChatOrderHistory extends StatelessWidget {
                 // "$time",
                 data[index].createdAt != null
                     ? DateFormat("dd MMM, hh:mm aa")
-                    .format(data[index].createdAt!)
+                        .format(data[index].createdAt!)
                     : "N/A",
                 textAlign: TextAlign.end,
                 style: AppTextStyle.textStyle12(
@@ -174,7 +217,8 @@ class ChatOrderHistory extends StatelessWidget {
               });
             },
             onRightTap: () {
-              Get.toNamed(RouteName.suggestRemediesView, arguments: data[index].id);
+              Get.toNamed(RouteName.suggestRemediesView,
+                  arguments: data[index].id);
             },
             rightBtnTitle: "suggestedRemediesEarning".tr,
           ),
@@ -195,6 +239,7 @@ class ChatOrderHistory extends StatelessWidget {
           return 'Other';
       }
     }
+
     return Column(
       children: [
         Row(

@@ -968,8 +968,7 @@ print("view kundli");
 
   Widget CustomProductView(
       {required ChatMessage chatDetail, required int index, String? baseUrl}) {
-    print(chatDetail.id);
-    print("chatDetail.id");
+
     return Align(
       alignment: Alignment.bottomRight,
       child: Container(
@@ -985,13 +984,13 @@ print("view kundli");
             CustomImageView(
               height: 165,
               width: 165,
-              imagePath: "${chatDetail.awsUrl}",
+              imagePath: "${Get.find<SharedPreferenceService>().getAmazonUrl()}/${chatDetail.getCustomProduct!.image}",
               radius: const BorderRadius.vertical(top: Radius.circular(10)),
               placeHolder: "assets/images/default_profiles.svg",
               fit: BoxFit.cover,
             ),
             Text(
-              chatDetail.message ?? "",
+              chatDetail.getCustomProduct!.name ?? "",
               maxLines: 1,
               style: AppTextStyle.textStyle12(
                 fontColor: appColors.textColor,
@@ -1000,7 +999,7 @@ print("view kundli");
             ),
             const SizedBox(height: 5),
             Text(
-              "₹${chatDetail.productPrice ?? '${chatDetail.getCustomProduct != null ? chatDetail.getCustomProduct["amount"] : "0"}'}",
+              "₹${chatDetail.getCustomProduct!.amount ?? "0"}",
               style: AppTextStyle.textStyle12(
                 fontColor: appColors.textColor,
                 fontWeight: FontWeight.w400,

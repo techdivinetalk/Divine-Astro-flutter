@@ -28,7 +28,12 @@ class OrderHistoryController extends GetxController {
       ['daily'.tr, 'weekly'.tr, 'monthly'.tr, 'custom'.tr].obs;
   RxString selectedValue = "daily".tr.obs;
 
-  var apiCalling = false.obs;
+  var allApiCalling = false.obs;
+  var callApiCalling = false.obs;
+  var chatApiCalling = false.obs;
+  var giftsApiCalling = false.obs;
+  var suggestApiCalling = false.obs;
+  var orderApiCalling = false.obs;
   var emptyMsg = "".obs;
 
   RxList<AllHistoryData> allHistoryList = <AllHistoryData>[].obs;
@@ -53,8 +58,8 @@ class OrderHistoryController extends GetxController {
       initialPage = Get.arguments;
       print(initialPage);
 
-      getOrderHistory(type: 3, page: liveGiftPageCount);
-      update();
+     /* getOrderHistory(type: 3, page: liveGiftPageCount);
+      update();*/
     }
     super.onInit();
     getOrderHistory(type: 0, page: allPageCount);
@@ -107,101 +112,123 @@ class OrderHistoryController extends GetxController {
     // 4:Remedy Suggested
 
     try {
-      apiCalling.value = true;
+
       if (type == 0) {
+        allApiCalling.value = true;
+        update();
         AllOrderHistoryModelClass data =
             await OrderHistoryRepository().getAllOrderHistory(params);
-        apiCalling.value = false;
+        allApiCalling.value = false;
         var history = data.data;
 
         if (history!.isNotEmpty && data.data != null) {
           emptyMsg.value = "";
           if (page == 1) allHistoryList.clear();
           allHistoryList.addAll(history);
-          // callPageCount++;
+          allPageCount++;
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
         update(['allOrders']);
 
       } else if (type == 1) {
+        callApiCalling.value = true;
+        update();
         CallOrderHistoryModelClass data =
         await OrderHistoryRepository().getCallOrderHistory(params);
-        apiCalling.value = false;
+        callApiCalling.value = false;
         var history = data.data;
 
         if (history!.isNotEmpty && data.data != null) {
           emptyMsg.value = "";
           if (page == 1) callHistoryList.clear();
           callHistoryList.addAll(history);
-          // chatPageCount++;
+          callPageCount++;
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
         update();
 
       } else if (type == 2) {
+        chatApiCalling.value = true;
+        update();
         ChatOrderHistoryModelClass data =
         await OrderHistoryRepository().getChatOrderHistory(params);
-        apiCalling.value = false;
+        chatApiCalling.value = false;
         var history = data.data;
 
         if (history!.isNotEmpty && data.data != null) {
           emptyMsg.value = "";
           if (page == 1) chatHistoryList.clear();
           chatHistoryList.addAll(history);
-          // shopPageCount++;
+          chatPageCount++;
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
         update();
       } else if (type == 3) {
+        giftsApiCalling.value = true;
+        update();
         GiftOrderHistoryModelClass data =
             await OrderHistoryRepository().getGiftOrderHistory(params);
-        apiCalling.value = false;
+        giftsApiCalling.value = false;
         var history = data.data;
 
         if (history!.isNotEmpty && data.data != null) {
           emptyMsg.value = "";
           if (page == 1) giftHistoryList.clear();
           giftHistoryList.addAll(history);
-          // liveGiftPageCount++;
+          liveGiftPageCount++;
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
       } else if (type == 4) {
+        suggestApiCalling.value = true;
+        update();
         RemedySuggestedOrderHistoryModelClass data =
             await OrderHistoryRepository()
                 .getRemedySuggestedOrderHistory(params);
-        apiCalling.value = false;
+        suggestApiCalling.value = false;
         var history = data.data;
 
         if (history!.isNotEmpty && data.data != null) {
           emptyMsg.value = "";
           if (page == 1) remedySuggestedHistoryList.clear();
           remedySuggestedHistoryList.addAll(history);
-          // liveGiftPageCount++;
+          remedyPageCount++;
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
       } else if(type == 5){
+        orderApiCalling.value = true;
+        update();
         FeedBackOrder data =
         await OrderHistoryRepository().getFeedbackChatOrderHistory(params);
-        apiCalling.value = false;
+        orderApiCalling.value = false;
         var feedbackOrder = data.data;
 
         if (feedbackOrder!.isNotEmpty && data.data != null) {
           emptyMsg.value = "";
           if (page == 1) feedHistoryList.clear();
           feedHistoryList.addAll(feedbackOrder);
-          // shopPageCount++;
+          feedBackPageCount++;
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
       }
       update();
     } catch (error) {
-      apiCalling.value = false;
+      if (type == 1) {
+        allApiCalling.value = false;
+      }else if (type == 1) {
+        callApiCalling.value = false;
+      }else if (type == 2) {
+        chatApiCalling.value = false;
+      }else if (type == 3) {
+        giftsApiCalling.value = false;
+      }else if (type == 3) {
+        suggestApiCalling.value = false;
+      }
       debugPrint("error $error");
       if (error is AppException) {
         error.onException();
@@ -210,6 +237,11 @@ class OrderHistoryController extends GetxController {
       }
     }
   }
+
+  Widget paginationLoadingWidget() => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 10),
+    child: CircularProgressIndicator(color: appColors.guideColor),
+  );
 
   /*getFilterDate({String? type}) {
     String startDate = "";

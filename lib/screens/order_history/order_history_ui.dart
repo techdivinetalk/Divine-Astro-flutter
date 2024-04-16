@@ -143,7 +143,7 @@ class OrderTab extends StatefulWidget {
 
 class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
   late final OrderHistoryController controller;
-  late final ScrollController scrollController;
+ // late final ScrollController scrollController;
 
   @override
   void initState() {
@@ -151,9 +151,9 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
     controller = Get.find<OrderHistoryController>();
     controller.tabbarController = TabController(
         length: 6, vsync: this, initialIndex: widget.initialPage ?? 0);
-    scrollController = ScrollController();
-    /*controller.tabbarController!.addListener(() {
-      if (controller.tabbarController!.index == 0) {
+   // scrollController = ScrollController();
+    controller.tabbarController?.addListener(() {
+     /* if (controller.tabbarController!.index == 0) {
         controller.getOrderHistory(
             type: 0, page: controller.allPageCount); //wallet
       } else if (controller.tabbarController!.index == 1) {
@@ -169,8 +169,8 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
       } else if (controller.tabbarController!.index == 4) {
         controller.getOrderHistory(
             type: 4, page: controller.remedyPageCount); // shop
-      }
-    });*/
+      }*/
+    });
   }
 
   @override
@@ -188,16 +188,17 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
               labelColor: appColors.blackColor,
               unselectedLabelColor: appColors.blackColor,
               labelStyle: AppTextStyle.textStyle16(fontWeight: FontWeight.w700),
+              enableFeedback: true,
               onTap: (value) {
                 if (value == 0) {
                   controller.getOrderHistory(
                       type: 0, page: controller.allPageCount); //wallet
                 } else if (value == 1) {
                   controller.getOrderHistory(
-                      type: 1, page: controller.chatPageCount); //chat
+                      type: 1, page: controller.callPageCount); //call
                 } else if (value == 2) {
                   controller.getOrderHistory(
-                      type: 2, page: controller.callPageCount); //call
+                      type: 2, page: controller.chatPageCount); //chat
                 } else if (value == 3) {
                   controller.getOrderHistory(
                       type: 3,
@@ -231,30 +232,30 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
               physics: const NeverScrollableScrollPhysics(),
               controller: controller.tabbarController,
               children: [
-                Obx(() => (controller.apiCalling.value &&
+                Obx(() => (controller.allApiCalling.value &&
                     controller.allPageCount == 1)
                     ? const GenericLoadingWidget()
-                    : const AllOrderHistoryUi()),
-                Obx(() => (controller.apiCalling.value &&
+                    : AllOrderHistoryUi()),
+                Obx(() => (controller.callApiCalling.value &&
                     controller.callPageCount == 1)
                     ? const GenericLoadingWidget()
-                    : const CallOrderHistory()),
-                Obx(() => (controller.apiCalling.value &&
+                    :  CallOrderHistory()),
+                Obx(() => (controller.chatApiCalling.value &&
                     controller.chatPageCount == 1)
                     ? const GenericLoadingWidget()
-                    : const ChatOrderHistory()),
-                Obx(() => (controller.apiCalling.value &&
+                    : ChatOrderHistory()),
+                Obx(() => (controller.giftsApiCalling.value &&
                     controller.liveGiftPageCount == 1)
                     ? const GenericLoadingWidget()
                     :  LiveGiftsHistory()),
-                Obx(() => (controller.apiCalling.value &&
+                Obx(() => (controller.suggestApiCalling.value &&
                     controller.remedyPageCount == 1)
                     ? const GenericLoadingWidget()
                     :  SuggestRemedies()),
-                Obx(() => (controller.apiCalling.value &&
+                Obx(() => (controller.orderApiCalling.value &&
                     controller.feedBackPageCount == 1)
                     ? const LoadingWidget()
-                    : const FeedBackOrderHistory()),
+                    : FeedBackOrderHistory()),
               ],
             ),
           ),
