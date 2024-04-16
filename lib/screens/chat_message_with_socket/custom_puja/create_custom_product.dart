@@ -33,7 +33,8 @@ class CreateCustomProductSheet extends StatefulWidget {
   final ChatMessageWithSocketController? controller;
   final ChatMessageController? chatMessageController;
 
-  const CreateCustomProductSheet({super.key, this.controller, this.chatMessageController});
+  const CreateCustomProductSheet(
+      {super.key, this.controller, this.chatMessageController});
 
   @override
   State<CreateCustomProductSheet> createState() =>
@@ -394,24 +395,30 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
 
       if (response.data != null) {
         customProductData = response.data!;
-        if(widget.controller != null){
+        if (widget.controller != null) {
           widget.controller!.customProductData.add(customProductData!);
           final String time =
               "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
           widget.controller!.addNewMessage(
-            time, 
-            MsgType.customProduct, 
+            time,
+            MsgType.customProduct,
             messageText: productName.text,
             productPrice: productPrice.text,
             productId: customProductData!.id.toString(),
             awsUrl: productImageUrl,
+            getCustomProduct: CustomProduct(
+              id: customProductData!.id,
+              name: productName.text,
+              image: productApiPath,
+              amount: int.parse(productPrice.text),
+              desc: "",
+            ),
           );
-        }else if(widget.chatMessageController != null){
-          widget.chatMessageController!
-              .sendMsg(MsgType.customProduct, {
-            'title': productName.text, 
+        } else if (widget.chatMessageController != null) {
+          widget.chatMessageController!.sendMsg(MsgType.customProduct, {
+            'title': productName.text,
             'image': productApiPath.toString(),
-            'product_price':productPrice.text.toString() ,
+            'product_price': productPrice.text.toString(),
             'product_id': customProductData!.id.toString(),
           });
         }

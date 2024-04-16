@@ -79,12 +79,11 @@ class ChatMessage {
   int? type;
   String? userType;
   String? productPrice;
-   int? suggestedId;
+  int? suggestedId;
   Kundli? kundli;
   GetProduct? getProduct;
   GetPooja? getPooja;
-  dynamic getCustomProduct;
-
+  CustomProduct? getCustomProduct;
 
   ChatMessage({
     this.id,
@@ -139,7 +138,6 @@ class ChatMessage {
     this.kundliPlace,
     this.gender,
     this.getProduct,
-
     this.type,
     this.userType,
     this.getPooja,
@@ -162,13 +160,12 @@ class ChatMessage {
         ? msgTypeValues.map[json["msg_type"].toString()]
         : MsgType.text;
     message = json['message'];
-    getCustomProduct = json["get_custom_product"];
     productId = json['product_id'].toString();
     shopId = json['shop_id'].toString();
     isPoojaProduct = json['is_pooja_product'].toString() == "1" ? true : false;
     multiImage = json['multiimage'];
     msgTime = json['msg_time'];
-   // createdAt = json['created_at'] != null ? DateTime.parse(json['created_at']).millisecondsSinceEpoch.toString() : "";
+    // createdAt = json['created_at'] != null ? DateTime.parse(json['created_at']).millisecondsSinceEpoch.toString() : "";
     updatedAt = json['updated_at'];
     msgSendBy = json['msg_send_by'];
     isSuspicious = json['is_suspicious'];
@@ -212,8 +209,15 @@ class ChatMessage {
     kundliId = json['kundliId'];
     gender = json['gender'];
     productPrice = json['productPrice'];
-    getProduct = (json['get_product'] as Map<String,dynamic>?) != null ? GetProduct.fromJson(json['get_product'] as Map<String,dynamic>) : null;
-    getPooja = (json['get_pooja'] as Map<String,dynamic>?) != null ? GetPooja.fromJson(json['get_pooja'] as Map<String,dynamic>) : null;
+    getProduct = (json['get_product'] as Map<String, dynamic>?) != null
+        ? GetProduct.fromJson(json['get_product'] as Map<String, dynamic>)
+        : null;
+    getCustomProduct = (json['get_custom_product'] as Map<String, dynamic>?) != null
+        ? CustomProduct.fromJson(json['get_custom_product'] as Map<String, dynamic>)
+        : null;
+    getPooja = (json['get_pooja'] as Map<String, dynamic>?) != null
+        ? GetPooja.fromJson(json['get_pooja'] as Map<String, dynamic>)
+        : null;
     userType = json['userType'];
     kundli = json['kundli'] != null ? Kundli.fromJson(json['kundli']) : null;
   }
@@ -223,14 +227,13 @@ class ChatMessage {
     data['chatMessageId'] = id;
     data['order_id'] = orderId;
     data['get_pooja'] = getPooja;
-    data["get_custom_product"] = getCustomProduct;
-
+    data['get_custom_product'] = getCustomProduct;
     data['member_id'] = memberId;
     data['productPrice'] = productPrice;
     data['role_id'] = roleId;
     data['latitude'] = latitude;
     data['longitude'] = longitude;
-    data['get_product'] =getProduct;
+    data['get_product'] = getProduct;
     data['title'] = title;
     data['customer_id'] = customerId;
     data['msg_sequence'] = msgSequence;
@@ -239,7 +242,7 @@ class ChatMessage {
     data['multiimage'] = multiImage;
     data['suggested_remedies_id'] = suggestedId;
     data['msg_time'] = msgTime;
-  //  data['created_at'] = createdAt;
+    //  data['created_at'] = createdAt;
     data['updated_at'] = updatedAt;
     data['msg_send_by'] = msgSendBy;
     data['shop_id'] = shopId;
@@ -287,7 +290,6 @@ class ChatMessage {
     data['kundli'] = kundli;
     return data;
   }
-
 }
 
 class GetProduct {
@@ -298,7 +300,6 @@ class GetProduct {
   final int? productPriceInr;
   final String? productLongDesc;
   final String? gst;
-
 
   GetProduct({
     this.id,
@@ -317,28 +318,26 @@ class GetProduct {
         prodDesc = json['prod_desc'] as String?,
         productPriceInr = json['product_price_inr'] as int?,
         productLongDesc = json['product_long_desc'] as String?,
-
         gst = json['gst'] as String?;
 
   Map<String, dynamic> toJson() => {
-    'id' : id,
-    'prod_name' : prodName,
-    'prod_image' : prodImage,
-    'prod_desc' : prodDesc,
-
-    'product_price_inr' : productPriceInr,
-    'product_long_desc' : productLongDesc,
-    'gst' : gst
-  };
+        'id': id,
+        'prod_name': prodName,
+        'prod_image': prodImage,
+        'prod_desc': prodDesc,
+        'product_price_inr': productPriceInr,
+        'product_long_desc': productLongDesc,
+        'gst': gst
+      };
 }
+
 class GetPooja {
   final int? id;
-  final String?poojaName;
+  final String? poojaName;
   final String? poojaImage;
   final String? poojaDesc;
   final int? poojaPriceInr;
   final String? gst;
-
 
   GetPooja({
     this.id,
@@ -358,13 +357,48 @@ class GetPooja {
         gst = json['gst'] as String?;
 
   Map<String, dynamic> toJson() => {
-    'id' : id,
-    'pooja_name' : poojaName,
-    'pooja_img' : poojaImage,
-    'pooja_desc' : poojaDesc,
-    'pooja_starting_price_inr' : poojaPriceInr,
-    'gst' : gst
-  };
+        'id': id,
+        'pooja_name': poojaName,
+        'pooja_img': poojaImage,
+        'pooja_desc': poojaDesc,
+        'pooja_starting_price_inr': poojaPriceInr,
+        'gst': gst
+      };
+}
+
+class CustomProduct {
+  final int? id;
+  final String? name;
+  final String? image;
+  final String? desc;
+  final int? amount;
+  final int? astrologerId;
+
+  CustomProduct({
+    this.id,
+    this.name,
+    this.image,
+    this.desc,
+    this.amount,
+    this.astrologerId,
+  });
+
+  CustomProduct.fromJson(Map<String, dynamic> json)
+      : id = json['id'] as int?,
+        name = json['name'] as String?,
+        image = json['image'] as String?,
+        desc = json['desc'] as String?,
+        amount = json['amount'] as int?,
+        astrologerId = json['astrologer_id'] as int?;
+
+  Map<String, dynamic> toJson() => {
+        'id': id,
+        'name': name,
+        'image': image,
+        'desc': desc,
+        'amount': amount,
+        'astrologer_id': astrologerId,
+      };
 }
 
 class Kundli {

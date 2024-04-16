@@ -406,8 +406,8 @@ class ChatMessageWithSocketController extends GetxController
     }
   }
 
-  void startExtraTimer(int futureTimeInEpochMillis,String status) {
-    if (status == "4"){
+  void startExtraTimer(int futureTimeInEpochMillis, String status) {
+    if (status == "4") {
       showTalkTime.value = "-1";
       chatTimer?.cancel();
     }
@@ -906,6 +906,7 @@ class ChatMessageWithSocketController extends GetxController
     String? shopId,
     String? suggestedId,
     String? customProductId,
+        CustomProduct? getCustomProduct,
   }) async {
     late ChatMessage newMessage;
     if (msgType == MsgType.customProduct) {
@@ -929,6 +930,7 @@ class ChatMessageWithSocketController extends GetxController
         type: 0,
         productId: productId,
         userType: "astrologer",
+        getCustomProduct:getCustomProduct,
       );
     } else if (msgType == MsgType.product) {
       final isPooja = data?['data']['isPooja'] as bool;
@@ -958,14 +960,14 @@ class ChatMessageWithSocketController extends GetxController
           receiverId: int.parse(
               AppFirebaseService().orderData.value["userId"].toString()),
           senderId: preference.getUserDetail()!.id,
-            getPooja: GetPooja(
-              poojaName: productDetails.poojaName,
-              id: productDetails.id,
-              gst: productDetails.gst,
-              poojaDesc: productDetails.poojaDesc,
-              poojaImage: productDetails.poojaImg,
-              poojaPriceInr: productDetails.poojaStartingPriceInr,
-            ),
+          getPooja: GetPooja(
+            poojaName: productDetails.poojaName,
+            id: productDetails.id,
+            gst: productDetails.gst,
+            poojaDesc: productDetails.poojaDesc,
+            poojaImage: productDetails.poojaImg,
+            poojaPriceInr: productDetails.poojaStartingPriceInr,
+          ),
         );
       } else {
         final productData =
@@ -1453,25 +1455,25 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   void initTask(Map<String, dynamic> p0) {
-      if (p0["status"] == null || p0["status"] == "5") {
-        WidgetsBinding.instance.endOfFrame.then(
-          (_) async {
-            socket.socket?.disconnect();
-            chatTimer?.cancel();
-            print("WentBack Status-5");
-            extraTimer?.cancel();
-            Get.until(
-              (route) {
-                return Get.currentRoute == RouteName.dashboard;
-              },
-            );
-          },
-        );
-        return;
-      }
+    if (p0["status"] == null || p0["status"] == "5") {
+      WidgetsBinding.instance.endOfFrame.then(
+        (_) async {
+          socket.socket?.disconnect();
+          chatTimer?.cancel();
+          print("WentBack Status-5");
+          extraTimer?.cancel();
+          Get.until(
+            (route) {
+              return Get.currentRoute == RouteName.dashboard;
+            },
+          );
+        },
+      );
+      return;
+    }
 
     if (p0["order_end_time"] != null) {
-      startExtraTimer(p0["order_end_time"],p0["status"]);
+      startExtraTimer(p0["order_end_time"], p0["status"]);
     }
     if (p0["isCustEntered"] != null &&
         p0["isCustEntered"] > DateTime.now().microsecondsSinceEpoch) {
