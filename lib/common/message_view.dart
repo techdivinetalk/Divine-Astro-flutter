@@ -165,6 +165,8 @@ class MessageView extends StatelessWidget {
     GetProduct getProduct;
 
     if (chatMessage.msgType == MsgType.pooja) {
+      print(chatMessage.getPooja!.poojaName);
+      print("chatMessage.getPooja!.poojaName");
       getProduct = GetProduct(
         productPriceInr: chatMessage.getPooja!.poojaPriceInr ?? 0,
         prodImage: chatMessage.getPooja!.poojaImage ?? "",
@@ -172,6 +174,7 @@ class MessageView extends StatelessWidget {
         gst: chatMessage.getPooja!.gst ?? "",
         id: chatMessage.getPooja!.id ?? 0,
         prodName: chatMessage.getPooja!.poojaName ?? "",
+
       );
     } else {
       getProduct = chatMessage.getProduct!;

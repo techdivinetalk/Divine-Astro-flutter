@@ -359,10 +359,10 @@ class GetPooja {
 
   Map<String, dynamic> toJson() => {
     'id' : id,
-    'prod_name' : poojaName,
-    'prod_image' : poojaImage,
-    'prod_desc' : poojaDesc,
-    'product_price_inr' : poojaPriceInr,
+    'pooja_name' : poojaName,
+    'pooja_img' : poojaImage,
+    'pooja_desc' : poojaDesc,
+    'pooja_starting_price_inr' : poojaPriceInr,
     'gst' : gst
   };
 }
