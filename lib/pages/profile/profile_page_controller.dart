@@ -112,7 +112,7 @@ class ProfilePageController extends GetxController {
           Assets.images.icLanguages.svg(width: 30.h, height: 30.h),
           '/languagePopup'),
       ProfileOptionModelClass(
-          "F&Q", Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
+          "FAQ", Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
 /*      ProfileOptionModelClass(
           "priceChange".tr,
           Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
@@ -151,7 +151,7 @@ class ProfilePageController extends GetxController {
         Assets.images.icLanguages.svg(width: 30.h, height: 30.h),
         '/languagePopup'),
     ProfileOptionModelClass(
-        "F&Q", Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
+        "FAQ", Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
    /* ProfileOptionModelClass(
         "priceChange".tr,
         Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
