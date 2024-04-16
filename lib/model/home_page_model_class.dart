@@ -64,7 +64,7 @@ class HomeData {
   int? bonusWallet;
   int? ecommerceWallet;
   dynamic retention;
-  int? repurchaseRate;
+  dynamic repurchaseRate;
   int? minimumRetention;
   int? minimumRepurchaseRate;
 
