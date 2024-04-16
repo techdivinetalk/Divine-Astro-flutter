@@ -55,7 +55,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         return Stack(
           children: [
             Assets.images.bgChatWallpaper.image(
-              width: MediaQuery.of(context).size.width,
+              width: MediaQuery
+                  .of(context)
+                  .size
+                  .width,
               height: double.infinity,
               fit: BoxFit.cover,
             ),
@@ -78,7 +81,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             clipBehavior: Clip.none,
                             margin: const EdgeInsets.symmetric(horizontal: 10),
                             padding: const EdgeInsets.symmetric(horizontal: 10),
-                            width: MediaQuery.of(context).size.width,
+                            width: MediaQuery
+                                .of(context)
+                                .size
+                                .width,
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                                 color: appColors.white,
@@ -95,7 +101,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             child: RichText(
                               textAlign: TextAlign.center,
                               text:
-                                  HTML.toTextSpan(context, i.description ?? ""),
+                              HTML.toTextSpan(context, i.description ?? ""),
                               maxLines: 2,
                             ));
                       },
@@ -106,81 +112,92 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   child: Stack(
                     children: [
                       Obx(
-                        () => ListView.builder(
-                          controller: controller.messgeScrollController,
-                          itemCount: controller.chatMessages.length,
-                          shrinkWrap: true,
-                          reverse: false,
-                          itemBuilder: (context, index) {
-                            var chatMessage = controller.chatMessages[index];
-                            print(
-                                "${myList.length < 3 && chatMessage.msgType == MsgType.text && chatMessage.orderId == AppFirebaseService().orderData["orderId"]}");
-                            print(
-                                "${AppFirebaseService().orderData["orderId"]}");
-                            if (myList.length < 3 &&
-                                chatMessage.msgType == MsgType.text &&
-                                chatMessage.orderId ==
-                                    AppFirebaseService().orderData["orderId"]) {
-                              myList.add(chatMessage.time.toString());
-                              print("timeSet ${chatMessage.time}");
-                              print("${chatMessage.msgType}");
-                              print("${chatMessage.msgType}");
-                            }
-                            return Column(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 4.h, horizontal: 12.w),
-                                  child: MessageView(
-                                    index: index,
-                                    nextChatMessage: index ==
+                            () =>
+                            ListView.builder(
+                              controller: controller.messgeScrollController,
+                              itemCount: controller.chatMessages.length,
+                              shrinkWrap: true,
+                              reverse: false,
+                              itemBuilder: (context, index) {
+                                var chatMessage = controller
+                                    .chatMessages[index];
+                                print(
+                                    "${myList.length < 3 &&
+                                        chatMessage.msgType == MsgType.text &&
+                                        chatMessage.orderId ==
+                                            AppFirebaseService()
+                                                .orderData["orderId"]}");
+                                print(
+                                    "${AppFirebaseService()
+                                        .orderData["orderId"]}");
+                                if (myList.length < 3 &&
+                                    chatMessage.msgType == MsgType.text &&
+                                    chatMessage.orderId ==
+                                        AppFirebaseService()
+                                            .orderData["orderId"]) {
+                                  myList.add(chatMessage.time.toString());
+                                  print("timeSet ${chatMessage.time}");
+                                  print("${chatMessage.msgType}");
+                                  print("${chatMessage.msgType}");
+                                }
+                                return Column(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: 4.h, horizontal: 12.w),
+                                      child: MessageView(
+                                        index: index,
+                                        nextChatMessage: index ==
                                             controller.chatMessages.length - 1
-                                        ? controller.chatMessages[index]
-                                        : controller.chatMessages[index + 1],
-                                    chatMessage: chatMessage,
-                                    /*  yourMessage: "${chatMessage.senderId.toString()}" ==
+                                            ? controller.chatMessages[index]
+                                            : controller.chatMessages[index +
+                                            1],
+                                        chatMessage: chatMessage,
+                                        /*  yourMessage: "${chatMessage.senderId.toString()}" ==
                                               "${preferenceService.getUserDetail()!.id.toString()}",*/
-                                    yourMessage: chatMessage.msgSendBy == "1",
-                                    userName: controller.customerName.value,
-                                    unreadMessage:
+                                        yourMessage: chatMessage.msgSendBy ==
+                                            "1",
+                                        userName: controller.customerName.value,
+                                        unreadMessage:
                                         controller.unreadMessageIndex.value,
-                                    myList: myList,
-                                  ),
-                                ),
-                                if (index ==
-                                    (controller.chatMessages.length - 1))
-                                  typingWidget()
-                              ],
-                            );
-                          },
-                        ),
+                                        myList: myList,
+                                      ),
+                                    ),
+                                    if (index ==
+                                        (controller.chatMessages.length - 1))
+                                      typingWidget()
+                                  ],
+                                );
+                              },
+                            ),
                       ),
                       Positioned(
                         bottom: 4.h,
                         right: 25.w,
-                        child: Obx(() => controller.scrollToBottom.value
+                        child: Obx(() =>
+                        controller.scrollToBottom.value
                             ? InkWell(
-                                onTap: () {
-                                  //  controller.scrollToBottomFunc();
-                                  //  controller.updateReadMessageStatus();
-                                },
-                                child: Badge(
-                                  backgroundColor: appColors.darkBlue,
-                                  offset: const Offset(4, -2),
-                                  isLabelVisible:
-                                      (controller.unreadMsgCount.value > 0),
-                                  label: Text(
-                                      "${controller.unreadMsgCount.value}"),
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 6.w),
-                                  smallSize: 14.sp,
-                                  largeSize: 20.sp,
-                                  child: Icon(
-                                      Icons.arrow_drop_down_circle_outlined,
-                                      color: appColors.guideColor,
-                                      size: 40.h),
-                                ),
-                              )
+                          onTap: () {
+                            //  controller.scrollToBottomFunc();
+                            //  controller.updateReadMessageStatus();
+                          },
+                          child: Badge(
+                            backgroundColor: appColors.darkBlue,
+                            offset: const Offset(4, -2),
+                            isLabelVisible:
+                            (controller.unreadMsgCount.value > 0),
+                            label: Text(
+                                "${controller.unreadMsgCount.value}"),
+                            padding:
+                            EdgeInsets.symmetric(horizontal: 6.w),
+                            smallSize: 14.sp,
+                            largeSize: 20.sp,
+                            child: Icon(
+                                Icons.arrow_drop_down_circle_outlined,
+                                color: appColors.guideColor,
+                                size: 40.h),
+                          ),
+                        )
                             : const SizedBox()),
                       ),
                     ],
@@ -189,7 +206,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                 Obx(() {
                   return Visibility(
                       visible:
-                          AppFirebaseService().orderData.value["card"] != null,
+                      AppFirebaseService().orderData.value["card"] != null,
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Container(
@@ -201,145 +218,159 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           ), // First container color
                           child: !controller.isCardVisible.value
                               ? Text(
-                                  "${AppFirebaseService().orderData.value["customerName"]} is picking tarot cards...",
-                                  maxLines: 2,
-                                  textAlign: TextAlign.center,
-                                  style: AppTextStyle.textStyle15(
-                                    fontColor: appColors.white,
-                                  ),
-                                )
+                            "${AppFirebaseService().orderData
+                                .value["customerName"]} is picking tarot cards...",
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                            style: AppTextStyle.textStyle15(
+                              fontColor: appColors.white,
+                            ),
+                          )
                               : Column(
-                                  children: [
-                                    Row(
-                                      children: [
-                                        GestureDetector(
-                                          onTap: () {
-                                            FirebaseDatabase.instance
-                                                .ref(
-                                                    "order/${AppFirebaseService().orderData.value["orderId"]}/card")
-                                                .remove();
-                                            controller.isCardVisible.value =
-                                                false;
-                                          },
-                                          child: Icon(Icons.cancel,
-                                              color: appColors.white),
-                                        ),
-                                        const Text(
-                                          "Chosen cards",
-                                          style: TextStyle(
-                                              color: Color(0x00ffffff)),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(height: 10),
-                                    Obx(() {
-                                      return Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: List.generate(
-                                          controller
-                                              .getListOfCardLength(context),
-                                          (index) => Expanded(
-                                            flex: 1,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 4),
-                                              child: Container(
-                                                width: double.infinity,
-                                                height: 120,
-                                                // Adjust the height as needed
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      const Color(0xFF212121),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10), // Second container border radius
-                                                ),
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.all(5.0),
-                                                  child: Image.network(
-                                                    "${controller.pref.getAmazonUrl() ?? ""}/${controller.getValueByPosition(index)}",
-                                                  ),
+                            children: [
+                              Row(
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      FirebaseDatabase.instance
+                                          .ref(
+                                          "order/${AppFirebaseService()
+                                              .orderData
+                                              .value["orderId"]}/card")
+                                          .remove();
+                                      controller.isCardVisible.value =
+                                      false;
+                                    },
+                                    child: Icon(Icons.cancel,
+                                        color: appColors.white),
+                                  ),
+                                  const Text(
+                                    "Chosen cards",
+                                    style: TextStyle(
+                                        color: Color(0x00ffffff)),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              Obx(() {
+                                return Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: List.generate(
+                                    controller
+                                        .getListOfCardLength(context),
+                                        (index) =>
+                                        Expanded(
+                                          flex: 1,
+                                          child: Padding(
+                                            padding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 4),
+                                            child: Container(
+                                              width: double.infinity,
+                                              height: 120,
+                                              // Adjust the height as needed
+                                              decoration: BoxDecoration(
+                                                color:
+                                                const Color(0xFF212121),
+                                                borderRadius:
+                                                BorderRadius.circular(
+                                                    10), // Second container border radius
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                const EdgeInsets.all(5.0),
+                                                child: Image.network(
+                                                  "${controller.pref
+                                                      .getAmazonUrl() ??
+                                                      ""}/${controller
+                                                      .getValueByPosition(
+                                                      index)}",
                                                 ),
                                               ),
                                             ),
                                           ),
                                         ),
-                                      );
-                                    }),
-                                    Obx(() {
-                                      return Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: List.generate(
-                                          controller
-                                              .getListOfCardLength(context),
-                                          (index) => Expanded(
-                                            flex: 1,
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 2),
-                                              child: Center(
-                                                  child: Text(
-                                                textAlign: TextAlign.center,
-                                                // Add this line for text alignment
-                                                controller
-                                                    .getKeyByPosition(index),
-                                                style: TextStyle(
-                                                  color: appColors.white,
-                                                  fontSize:
-                                                      12, // Adjust the font size as needed
-                                                ),
-                                                softWrap: true,
-                                                maxLines: 3,
-                                                // Maximum lines allowed
-                                                overflow: TextOverflow
-                                                    .ellipsis, // Optional: use ellipsis to indicate text overflow
-                                              )),
-                                            ),
+                                  ),
+                                );
+                              }),
+                              Obx(() {
+                                return Row(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.spaceBetween,
+                                  children: List.generate(
+                                    controller
+                                        .getListOfCardLength(context),
+                                        (index) =>
+                                        Expanded(
+                                          flex: 1,
+                                          child: Padding(
+                                            padding:
+                                            const EdgeInsets.symmetric(
+                                                horizontal: 2),
+                                            child: Center(
+                                                child: Text(
+                                                  textAlign: TextAlign.center,
+                                                  // Add this line for text alignment
+                                                  controller
+                                                      .getKeyByPosition(index),
+                                                  style: TextStyle(
+                                                    color: appColors.white,
+                                                    fontSize:
+                                                    12, // Adjust the font size as needed
+                                                  ),
+                                                  softWrap: true,
+                                                  maxLines: 3,
+                                                  // Maximum lines allowed
+                                                  overflow: TextOverflow
+                                                      .ellipsis, // Optional: use ellipsis to indicate text overflow
+                                                )),
                                           ),
                                         ),
-                                      );
-                                    }),
-                                    const SizedBox(height: 10),
-                                  ],
-                                ),
+                                  ),
+                                );
+                              }),
+                              const SizedBox(height: 10),
+                            ],
+                          ),
                         ),
                       ));
                 }),
                 SizedBox(height: 10.h),
-                Obx(() => Visibility(
-                    visible: controller.showTalkTime.value == "-1",
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: appColors.grey, width: 2),
-                            borderRadius:
+                Obx(() =>
+                    Visibility(
+                        visible: controller.showTalkTime.value == "-1",
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: appColors.grey, width: 2),
+                                borderRadius:
                                 const BorderRadius.all(Radius.circular(10.0)),
-                            color: appColors.white,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                                "Chat Ended you can still send message till ${controller.extraTalkTime.value}",
-                                style: TextStyle(color: Colors.red),
-                                textAlign: TextAlign.center),
-                          )),
-                    ))),
+                                color: appColors.white,
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Text(
+                                    "Chat Ended you can still send message till ${controller
+                                        .extraTalkTime.value}",
+                                    style: TextStyle(color: Colors.red),
+                                    textAlign: TextAlign.center),
+                              )),
+                        ))),
                 Obx(
-                  () => Column(
-                    children: [
-                      messageTemplateRow(),
-                      SizedBox(height: 20.h),
-                    ],
-                  ),
+                      () =>
+                      Column(
+                        children: [
+                          messageTemplateRow(),
+                          SizedBox(height: 20.h),
+                        ],
+                      ),
                 ),
                 chatBottomBar(context),
-                Obx(() => AnimatedContainer(
+                Obx(() =>
+                    AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       height: controller.isEmojiShowing.value ? 300 : 0,
                       child: SizedBox(
@@ -360,8 +391,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
     );
   }
 
-  Widget giftSendUi(
-      BuildContext context, ChatMessage chatMessage, bool yourMessage) {
+  Widget giftSendUi(BuildContext context, ChatMessage chatMessage,
+      bool yourMessage) {
     return Container(
       color: appColors.white,
       child: Padding(
@@ -381,9 +412,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
             ),
             Flexible(
                 child: Text(
-              "You have received ${chatMessage.message}",
-              style: const TextStyle(color: Colors.red),
-            )),
+                  "You have received ${chatMessage.message}",
+                  style: const TextStyle(color: Colors.red),
+                )),
           ],
         ),
       ),
@@ -489,7 +520,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
           Map<dynamic, dynamic> map = <dynamic, dynamic>{};
           map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-              as Map<dynamic, dynamic>;
+          as Map<dynamic, dynamic>;
           hasPermission = map["customer_permission"] ?? false;
         } else {}
       } else {}
@@ -539,44 +570,44 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
           late final MessageTemplates msg;
           return index == 0
               ? GestureDetector(
-                  onTap: () async {
-                    await Get.toNamed(RouteName.messageTemplate);
-                    controller.getMessageTemplatesLocally();
-                    controller.update();
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: const BoxDecoration(
-                      color: Color(0xFFFFD196),
-                      borderRadius: BorderRadius.all(Radius.circular(18)),
-                    ),
-                    child: Text(
-                      '+ Add',
-                      style:
-                          AppTextStyle.textStyle12(fontColor: appColors.white),
-                    ),
-                  ),
-                )
+            onTap: () async {
+              await Get.toNamed(RouteName.messageTemplate);
+              controller.getMessageTemplatesLocally();
+              controller.update();
+            },
+            child: Container(
+              padding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: const BoxDecoration(
+                color: Color(0xFFFFD196),
+                borderRadius: BorderRadius.all(Radius.circular(18)),
+              ),
+              child: Text(
+                '+ Add',
+                style:
+                AppTextStyle.textStyle12(fontColor: appColors.white),
+              ),
+            ),
+          )
               : GestureDetector(
-                  onTap: () {
-                    controller.sendMsgTemplate(
-                        controller.messageTemplates[index - 1]);
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: appColors.brownColour,
-                      borderRadius: const BorderRadius.all(Radius.circular(18)),
-                    ),
-                    child: Text(
-                      '${controller.messageTemplates[index - 1].message}',
-                      style:
-                          AppTextStyle.textStyle12(fontColor: appColors.white),
-                    ),
-                  ),
-                );
+            onTap: () {
+              controller.sendMsgTemplate(
+                  controller.messageTemplates[index - 1]);
+            },
+            child: Container(
+              padding:
+              const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: appColors.brownColour,
+                borderRadius: const BorderRadius.all(Radius.circular(18)),
+              ),
+              child: Text(
+                '${controller.messageTemplates[index - 1].message}',
+                style:
+                AppTextStyle.textStyle12(fontColor: appColors.white),
+              ),
+            ),
+          );
         },
       ),
     );
@@ -585,37 +616,38 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   Widget typingWidget() {
     return Align(
       alignment: Alignment.centerLeft,
-      child: Obx(() => AnimatedContainer(
+      child: Obx(() =>
+          AnimatedContainer(
             duration: const Duration(milliseconds: 200),
             child: controller.isTyping.value
                 ? Container(
-                    margin:
-                        const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                    clipBehavior: Clip.antiAlias,
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 3.0,
-                            offset: const Offset(0.0, 3.0)),
-                      ],
-                      color: Colors.white,
-                      borderRadius: const BorderRadius.all(Radius.circular(10)),
-                    ),
-                    // child: Assets.images.icTyping.image(
-                    //   width: 45,
-                    //   height: 30,
-                    // ),
-                    child: Assets.lottie.loadingDots.lottie(
-                      width: 45,
-                      height: 30,
-                      repeat: true,
-                      frameRate: FrameRate(120),
-                      animate: true,
-                    ),
-                  )
+              margin:
+              const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+              padding:
+              const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 3.0,
+                      offset: const Offset(0.0, 3.0)),
+                ],
+                color: Colors.white,
+                borderRadius: const BorderRadius.all(Radius.circular(10)),
+              ),
+              // child: Assets.images.icTyping.image(
+              //   width: 45,
+              //   height: 30,
+              // ),
+              child: Assets.lottie.loadingDots.lottie(
+                width: 45,
+                height: 30,
+                repeat: true,
+                frameRate: FrameRate(120),
+                animate: true,
+              ),
+            )
                 : const SizedBox(),
           )),
     );
@@ -623,7 +655,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
   Widget chatBottomBar(BuildContext context) {
     return Obx(
-      () {
+          () {
         debugPrint('is recording value ${controller.isRecording.value}');
         return Padding(
           padding: EdgeInsets.symmetric(
@@ -642,117 +674,120 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           duration: const Duration(milliseconds: 200),
                           child: controller.isRecording.value
                               ? AudioWaveforms(
-                                  enableGesture: true,
-                                  size: Size(
-                                      MediaQuery.of(Get.context!).size.width,
-                                      50),
-                                  recorderController:
-                                      controller.recorderController!,
-                                  waveStyle: WaveStyle(
-                                    waveColor: appColors.guideColor,
-                                    extendWaveform: true,
-                                    showMiddleLine: false,
-                                  ),
-                                  decoration: BoxDecoration(
-                                      color: appColors.white,
-                                      borderRadius: BorderRadius.circular(30),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color:
-                                                Colors.black.withOpacity(0.3),
-                                            blurRadius: 3.0,
-                                            offset: const Offset(0.3, 3.0))
-                                      ]),
-                                  padding: const EdgeInsets.only(left: 18),
-                                  margin: const EdgeInsets.only(left: 15),
-                                )
+                            enableGesture: true,
+                            size: Size(
+                                MediaQuery
+                                    .of(Get.context!)
+                                    .size
+                                    .width,
+                                50),
+                            recorderController:
+                            controller.recorderController!,
+                            waveStyle: WaveStyle(
+                              waveColor: appColors.guideColor,
+                              extendWaveform: true,
+                              showMiddleLine: false,
+                            ),
+                            decoration: BoxDecoration(
+                                color: appColors.white,
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color:
+                                      Colors.black.withOpacity(0.3),
+                                      blurRadius: 3.0,
+                                      offset: const Offset(0.3, 3.0))
+                                ]),
+                            padding: const EdgeInsets.only(left: 18),
+                            margin: const EdgeInsets.only(left: 15),
+                          )
                               : Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color:
-                                                Colors.black.withOpacity(0.3),
-                                            blurRadius: 3.0,
-                                            offset: const Offset(0.3, 3.0))
-                                      ]),
-                                  child: TextFormField(
-                                    controller: controller.messageController,
-                                    keyboardType: TextInputType.text,
-                                    minLines: 1,
-                                    maxLines: 3,
-                                    onTap: () {
-                                      if (controller.isEmojiShowing.value) {
-                                        controller.isEmojiShowing.value = false;
-                                      }
-                                    },
-                                    scrollController:
-                                        controller.typingScrollController,
-                                    onChanged: (value) {
-                                      controller.tyingSocket();
-                                      // controller.update();
-                                    },
-                                    decoration: InputDecoration(
-                                      hintText: "message".tr,
-                                      isDense: true,
-                                      helperStyle: AppTextStyle.textStyle16(),
-                                      fillColor: appColors.white,
-                                      hintStyle: AppTextStyle.textStyle16(
-                                          fontColor: appColors.grey),
-                                      hoverColor: appColors.white,
-                                      prefixIcon: InkWell(
-                                        onTap: () async {
-                                          controller.isEmojiShowing.value =
-                                              !controller.isEmojiShowing.value;
-                                          FocusManager.instance.primaryFocus
-                                              ?.unfocus();
-                                        },
-                                        child: Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                              6.w, 5.h, 6.w, 8.h),
-                                          child: Assets.images.icEmojiShare
-                                              .image(),
-                                        ),
-                                      ),
-                                      suffixIcon: InkWell(
-                                        onTap: () async {
-                                          showCurvedBottomSheet(context);
-
-                                          // Move focus to an invisible focus node to dismiss the keyboard
-                                          FocusScope.of(context)
-                                              .requestFocus(FocusNode());
-                                          // if (controller.isOngoingChat.value) {
-
-                                          //   } else {
-                                          //     divineSnackBar(
-                                          //         data: "${'chatEnded'.tr}.", color: appColors.appYellowColour);
-                                          //   }
-                                        },
-                                        child: Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                              0.w, 9.h, 10.w, 10.h),
-                                          child:
-                                              Assets.images.icAttechment.svg(),
-                                        ),
-                                      ),
-                                      filled: true,
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30.0.sp),
-                                          borderSide: BorderSide(
-                                            color: appColors.white,
-                                            width: 1.0,
-                                          )),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30.0.sp),
-                                          borderSide: BorderSide(
-                                            color: appColors.guideColor,
-                                            width: 1.0,
-                                          )),
-                                    ),
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                boxShadow: [
+                                  BoxShadow(
+                                      color:
+                                      Colors.black.withOpacity(0.3),
+                                      blurRadius: 3.0,
+                                      offset: const Offset(0.3, 3.0))
+                                ]),
+                            child: TextFormField(
+                              controller: controller.messageController,
+                              keyboardType: TextInputType.text,
+                              minLines: 1,
+                              maxLines: 3,
+                              onTap: () {
+                                if (controller.isEmojiShowing.value) {
+                                  controller.isEmojiShowing.value = false;
+                                }
+                              },
+                              scrollController:
+                              controller.typingScrollController,
+                              onChanged: (value) {
+                                controller.tyingSocket();
+                                // controller.update();
+                              },
+                              decoration: InputDecoration(
+                                hintText: "message".tr,
+                                isDense: true,
+                                helperStyle: AppTextStyle.textStyle16(),
+                                fillColor: appColors.white,
+                                hintStyle: AppTextStyle.textStyle16(
+                                    fontColor: appColors.grey),
+                                hoverColor: appColors.white,
+                                prefixIcon: InkWell(
+                                  onTap: () async {
+                                    controller.isEmojiShowing.value =
+                                    !controller.isEmojiShowing.value;
+                                    FocusManager.instance.primaryFocus
+                                        ?.unfocus();
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(
+                                        6.w, 5.h, 6.w, 8.h),
+                                    child: Assets.images.icEmojiShare
+                                        .image(),
                                   ),
                                 ),
+                                suffixIcon: InkWell(
+                                  onTap: () async {
+                                    showCurvedBottomSheet(context);
+
+                                    // Move focus to an invisible focus node to dismiss the keyboard
+                                    FocusScope.of(context)
+                                        .requestFocus(FocusNode());
+                                    // if (controller.isOngoingChat.value) {
+
+                                    //   } else {
+                                    //     divineSnackBar(
+                                    //         data: "${'chatEnded'.tr}.", color: appColors.appYellowColour);
+                                    //   }
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.fromLTRB(
+                                        0.w, 9.h, 10.w, 10.h),
+                                    child:
+                                    Assets.images.icAttechment.svg(),
+                                  ),
+                                ),
+                                filled: true,
+                                enabledBorder: OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(30.0.sp),
+                                    borderSide: BorderSide(
+                                      color: appColors.white,
+                                      width: 1.0,
+                                    )),
+                                focusedBorder: OutlineInputBorder(
+                                    borderRadius:
+                                    BorderRadius.circular(30.0.sp),
+                                    borderSide: BorderSide(
+                                      color: appColors.guideColor,
+                                      width: 1.0,
+                                    )),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                       const SizedBox(
@@ -760,66 +795,69 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       ),
                       controller.isRecording.value
                           ? GestureDetector(
-                              onTap: () => controller.refreshWave(),
-                              child: Container(
-                                height: kToolbarHeight - Get.width * 0.008,
-                                width: kToolbarHeight - Get.width * 0.008,
-                                decoration: BoxDecoration(
-                                  color: appColors.guideColor,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Center(
-                                  child: Assets.images.icClose.svg(
-                                    height: 20,
-                                  ),
-                                ),
-                              ))
-                          : GestureDetector(
-                              onTap: () {
-                                controller.askForGift();
-                              },
-                              child:
-                                  SvgPicture.asset('assets/svg/chat_gift.svg')),
+                          onTap: () => controller.refreshWave(),
+                          child: Container(
+                            height: kToolbarHeight - Get.width * 0.008,
+                            width: kToolbarHeight - Get.width * 0.008,
+                            decoration: BoxDecoration(
+                              color: appColors.guideColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Assets.images.icClose.svg(
+                                height: 20,
+                              ),
+                            ),
+                          ))
+                          : Obx(() {
+                        return isGifts.value == 1  ? GestureDetector(
+                          onTap: () {
+                            controller.askForGift();
+                          },
+                          child:
+                          SvgPicture.asset('assets/svg/chat_gift.svg'),
+                        ):SizedBox();
+                      }),
                       const SizedBox(width: 10),
                       controller.hasMessage.value == false
                           ? GestureDetector(
-                              onTap: controller.startOrStopRecording,
-                              child: Container(
-                                height: kToolbarHeight - Get.width * 0.008,
-                                width: kToolbarHeight - Get.width * 0.008,
-                                margin: EdgeInsets.only(right: 10.h),
-                                decoration: const BoxDecoration(
-                                  color: Color(0xFFFFD196),
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    controller.isRecording.value
-                                        ? Icons.send
-                                        : Icons.mic,
-                                    color: appColors.white,
-                                  ),
-                                ),
-                              ))
+                          onTap: controller.startOrStopRecording,
+                          child: Container(
+                            height: kToolbarHeight - Get.width * 0.008,
+                            width: kToolbarHeight - Get.width * 0.008,
+                            margin: EdgeInsets.only(right: 10.h),
+                            decoration: const BoxDecoration(
+                              color: Color(0xFFFFD196),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Icon(
+                                controller.isRecording.value
+                                    ? Icons.send
+                                    : Icons.mic,
+                                color: appColors.white,
+                              ),
+                            ),
+                          ))
                           : InkWell(
-                              onTap: () {
-                                controller.sendMsg();
-                              },
-                              child: Container(
-                                height: kToolbarHeight - Get.width * 0.008,
-                                width: kToolbarHeight - Get.width * 0.008,
-                                margin: EdgeInsets.only(right: 10.h),
-                                decoration: BoxDecoration(
-                                  color: appColors.guideColor,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.send,
-                                    color: appColors.white,
-                                  ),
-                                ),
-                              )),
+                          onTap: () {
+                            controller.sendMsg();
+                          },
+                          child: Container(
+                            height: kToolbarHeight - Get.width * 0.008,
+                            width: kToolbarHeight - Get.width * 0.008,
+                            margin: EdgeInsets.only(right: 10.h),
+                            decoration: BoxDecoration(
+                              color: appColors.guideColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Center(
+                              child: Icon(
+                                Icons.send,
+                                color: appColors.white,
+                              ),
+                            ),
+                          )),
                       // const SizedBox(width: 10),
                     ],
                   ),
@@ -834,16 +872,52 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   }
 
   void showCurvedBottomSheet(context) {
-    List<SvgPicture> itemList = [
-      SvgPicture.asset('assets/svg/camera_icon.svg'),
-      SvgPicture.asset('assets/svg/gallery_icon.svg'),
-      SvgPicture.asset('assets/svg/remedies_icon.svg'),
-      SvgPicture.asset('assets/svg/deck_icon.svg'),
-      SvgPicture.asset('assets/svg/product.svg'),
-      SvgPicture.asset('assets/svg/custom.svg'),
-      // SvgPicture.asset('assets/svg/custom_puja.svg'),
-      // Add more items as needed
+    // List<SvgPicture> itemList = [
+    //   SvgPicture.asset('assets/svg/camera_icon.svg'),
+    //   SvgPicture.asset('assets/svg/gallery_icon.svg'),
+    //   SvgPicture.asset('assets/svg/remedies_icon.svg'),
+    //   SvgPicture.asset('assets/svg/deck_icon.svg'),
+    //   SvgPicture.asset('assets/svg/product.svg'),
+    //   SvgPicture.asset('assets/svg/custom.svg'),
+    // ];
+    List<BottomSheetModel> itemList = [
+      BottomSheetModel(
+          svgPicture: SvgPicture.asset('assets/svg/deck_icon.svg'),
+          title: "deck"),
     ];
+    if (isCamera.value == 1) {
+      itemList.add(BottomSheetModel(
+          svgPicture: SvgPicture.asset('assets/svg/camera_icon.svg'),
+          title: "camera"));
+      itemList.add(BottomSheetModel(
+          svgPicture: SvgPicture.asset('assets/svg/gallery_icon.svg'),
+          title: "gallery"));
+    }
+    if (isRemidies.value == 1) {
+      itemList.add(BottomSheetModel(
+          svgPicture: SvgPicture.asset('assets/svg/remedies_icon.svg'),
+          title: "remedies"));
+    }
+    if (isEcom.value == 1) {
+      itemList.add(BottomSheetModel(
+          svgPicture: SvgPicture.asset('assets/svg/product.svg'),
+          title: "product"));
+      itemList.add(BottomSheetModel(
+          svgPicture: SvgPicture.asset('assets/svg/custom.svg'),
+          title: "custom"));
+    }
+    // isCall
+    // isRemidies
+    // isEcom
+    // isChatAssistance
+    // isChat
+    // isKundli
+    // isTemplates
+    // isCamera
+    // isLive
+    // isQueue
+    // isGifts
+    // isTruecaller
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
@@ -862,22 +936,25 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
               mainAxisSpacing: 10,
               crossAxisSpacing: 10,
               children: List.generate(itemList.length, (index) {
+                BottomSheetModel data = itemList[index];
                 return GestureDetector(
                   onTap: () async {
                     Navigator.pop(context);
-                    switch (index) {
-                      case 0:
+                    switch (data.title) {
+                      case "camera":
                         controller.getImage(true);
                         break;
-                      case 1:
+                      case "gallery":
                         controller.getImage(false);
                         break;
-                      case 2:
+                      case "remedies":
                         var result =
-                            await Get.toNamed(RouteName.chatSuggestRemedy);
+                        await Get.toNamed(RouteName.chatSuggestRemedy);
                         if (result != null) {
                           final String time =
-                              "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+                              "${DateTime
+                              .now()
+                              .millisecondsSinceEpoch ~/ 1000}";
                           controller.addNewMessage(
                             time,
                             MsgType.remedies,
@@ -885,11 +962,11 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           );
                         }
                         break;
-                      case 3:
+                      case "deck":
                         controller.isCardBotOpen.value = true;
                         showCardChoiceBottomSheet(context, controller);
                         break;
-                      case 4:
+                      case "product":
                         var result = await Get.toNamed(
                             RouteName.chatAssistProductPage,
                             arguments: {
@@ -900,12 +977,20 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             });
                         if (result != null) {
                           final String time =
-                              "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-                          controller.addNewMessage(time, MsgType.product,
-                              data: {'data': result}, messageText: 'Product');
+                              "${DateTime
+                              .now()
+                              .millisecondsSinceEpoch ~/ 1000}";
+                          controller.addNewMessage(
+                            time,
+                            MsgType.product,
+                            data: {
+                              'data': result,
+                            },
+                            messageText: 'Product',
+                          );
                         }
                         break;
-                      case 5:
+                      case "custom":
                         print(controller.customProductData);
                         print("controller.customProductData");
                         Get.bottomSheet(
@@ -925,7 +1010,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: <Widget>[
-                      itemList[index],
+                      data.svgPicture ?? const SizedBox(),
                       // Replace with your asset images
                     ],
                   ),
@@ -1078,110 +1163,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   //   );
   // }
 
-  Widget kundliView({required ChatMessage chatDetail, required int index}) {
-    return InkWell(
-      onTap: () {
-        Get.toNamed(RouteName.kundliDetail, arguments: {
-          "kundli_id": chatDetail.kundliId is int
-              ? chatDetail.kundliId
-              : chatDetail.kundliId.toString(),
-          "from_kundli": true,
-          "birth_place": chatDetail.kundliPlace,
-          "gender": chatDetail.gender,
-          "name": chatDetail.kundliName,
-        });
-        debugPrint("KundliId : ${chatDetail.kundliId}");
-      },
-      child: Card(
-        color: appColors.white,
-        surfaceTintColor: appColors.white,
-        child: Container(
-          padding: EdgeInsets.all(12.h),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle, color: appColors.extraLightGrey),
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text(
-                    chatDetail.kundliName?[0] ?? "",
-                    style: AppTextStyle.textStyle24(
-                        fontColor: appColors.white,
-                        fontWeight: FontWeight.w600),
-                  ),
-                ),
-              ),
-              SizedBox(width: 15.w),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      chatDetail.kundliName ?? "",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.sp,
-                        color: appColors.darkBlue,
-                      ),
-                    ),
-                    SizedBox(height: 5.h),
-                    Text(
-                      chatDetail.kundliDateTime ?? "",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 10.sp,
-                        color: appColors.lightGrey,
-                      ),
-                    ),
-                    SizedBox(height: 5.h),
-                    Text(
-                      chatDetail.kundliPlace ?? "",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 10.sp,
-                        color: appColors.lightGrey,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              const Padding(
-                padding: EdgeInsets.only(top: 15),
-                child: Icon(
-                  Icons.keyboard_arrow_right,
-                  size: 35,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget unreadMessageView() {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: Container(
-        padding: EdgeInsets.all(10.h),
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 1.0,
-                offset: const Offset(0.0, 3.0)),
-          ],
-          color: appColors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
-        ),
-        child: Text("unreadMessages".tr),
-      ),
-    );
-  }
-
   _onBackspacePressed() {
     controller.messageController
       ..text = controller.messageController.text.characters.toString()
@@ -1190,11 +1171,21 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   }
 }
 
+class BottomSheetModel {
+  final SvgPicture? svgPicture;
+  final String? title;
+
+  BottomSheetModel({
+    this.svgPicture,
+    this.title,
+  });
+}
+
 class AstrologerChatAppBar extends StatelessWidget {
   AstrologerChatAppBar({super.key});
 
   final ChatMessageWithSocketController controller =
-      Get.find<ChatMessageWithSocketController>();
+  Get.find<ChatMessageWithSocketController>();
 
   @override
   Widget build(BuildContext context) {
@@ -1246,12 +1237,13 @@ class AstrologerChatAppBar extends StatelessWidget {
                             //     url: controller.profileImage.value),
 
                             Obx(
-                              () {
+                                  () {
                                 Map<String, dynamic> order = {};
                                 order = AppFirebaseService().orderData.value;
                                 String imageURL = order["customerImage"] ?? "";
                                 String appended =
-                                    "${controller.preference.getAmazonUrl()}/$imageURL";
+                                    "${controller.preference
+                                    .getAmazonUrl()}/$imageURL";
                                 print("img:: $appended");
                                 return SizedBox(
                                   height: 50,
@@ -1271,29 +1263,31 @@ class AstrologerChatAppBar extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Obx(
-                                  () => Text(
-                                    AppFirebaseService()
+                                      () =>
+                                      Text(
+                                        AppFirebaseService()
                                             .orderData
                                             .value["customerName"] ??
-                                        "",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14.sp,
-                                        color: appColors.darkBlue),
-                                  ),
+                                            "",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14.sp,
+                                            color: appColors.darkBlue),
+                                      ),
                                 ),
-                                Obx(() => AnimatedCrossFade(
+                                Obx(() =>
+                                    AnimatedCrossFade(
                                       duration:
-                                          const Duration(milliseconds: 200),
+                                      const Duration(milliseconds: 200),
                                       crossFadeState: CrossFadeState.showFirst,
                                       secondChild: const SizedBox(),
                                       firstChild: Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         children: [
                                           Text(
                                             controller.showTalkTime.value ==
-                                                    "-1"
+                                                "-1"
                                                 ? "Chat Ended"
                                                 : controller.showTalkTime.value,
                                             style: TextStyle(
@@ -1320,7 +1314,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                     Row(
                       children: [
                         Obx(
-                          () {
+                              () {
                             Map orderData =
                                 AppFirebaseService().orderData.value;
                             final String astrImage =
@@ -1329,53 +1323,55 @@ class AstrologerChatAppBar extends StatelessWidget {
                                 orderData["customerImage"] ?? "";
 
                             String appendedAstrImage =
-                                "${controller.preference.getAmazonUrl()}/$astrImage";
+                                "${controller.preference
+                                .getAmazonUrl()}/$astrImage";
                             String appendedCustImage =
-                                "${controller.preference.getAmazonUrl()}/$custImage";
+                                "${controller.preference
+                                .getAmazonUrl()}/$custImage";
 
                             return false
                                 ? const SizedBox()
                                 : ZegoService().buttonUI(
-                                    isVideoCall: false,
-                                    targetUserID: orderData["userId"] ?? "",
-                                    targetUserName:
-                                        orderData["customerName"] ?? "",
-                                    checkOppositeSidePermGranted: () {
-                                      String name = preferenceService
-                                              .getUserDetail()
-                                              ?.name ??
-                                          "";
-                                      String message =
-                                          "$name wants to start a call, please allow all required permissions";
-                                      controller.messageController.text =
-                                          message;
-                                      controller.sendMsg();
-                                    },
-                                    customData: {
-                                      "astr_id": orderData["astroId"] ?? "",
-                                      "astr_name":
-                                          orderData["astrologerName"] ?? "",
-                                      "astr_image": appendedAstrImage,
-                                      "cust_id": orderData["userId"] ?? "",
-                                      "cust_name":
-                                          orderData["customerName"] ?? "",
-                                      "cust_image": appendedCustImage,
-                                      // "time": "00:20:00",
-                                      "time": controller.showTalkTime.value,
-                                    },
-                                    isAstrologer: true,
-                                    astrologerDisabledCalls: () {
-                                      astroNotAcceptingCallsSnackBar(
-                                        context: context,
-                                        isVideoCall: false,
-                                      );
-                                    },
-                                  );
+                              isVideoCall: false,
+                              targetUserID: orderData["userId"] ?? "",
+                              targetUserName:
+                              orderData["customerName"] ?? "",
+                              checkOppositeSidePermGranted: () {
+                                String name = preferenceService
+                                    .getUserDetail()
+                                    ?.name ??
+                                    "";
+                                String message =
+                                    "$name wants to start a call, please allow all required permissions";
+                                controller.messageController.text =
+                                    message;
+                                controller.sendMsg();
+                              },
+                              customData: {
+                                "astr_id": orderData["astroId"] ?? "",
+                                "astr_name":
+                                orderData["astrologerName"] ?? "",
+                                "astr_image": appendedAstrImage,
+                                "cust_id": orderData["userId"] ?? "",
+                                "cust_name":
+                                orderData["customerName"] ?? "",
+                                "cust_image": appendedCustImage,
+                                // "time": "00:20:00",
+                                "time": controller.showTalkTime.value,
+                              },
+                              isAstrologer: true,
+                              astrologerDisabledCalls: () {
+                                astroNotAcceptingCallsSnackBar(
+                                  context: context,
+                                  isVideoCall: false,
+                                );
+                              },
+                            );
                           },
                         ),
                         SizedBox(width: 10.w),
                         Obx(
-                          () {
+                              () {
                             Map orderData =
                                 AppFirebaseService().orderData.value;
                             final String astrImage =
@@ -1384,48 +1380,50 @@ class AstrologerChatAppBar extends StatelessWidget {
                                 orderData["customerImage"] ?? "";
 
                             String appendedAstrImage =
-                                "${controller.preference.getAmazonUrl()}/$astrImage";
+                                "${controller.preference
+                                .getAmazonUrl()}/$astrImage";
                             String appendedCustImage =
-                                "${controller.preference.getAmazonUrl()}/$custImage";
+                                "${controller.preference
+                                .getAmazonUrl()}/$custImage";
 
                             return false
                                 ? const SizedBox()
                                 : ZegoService().buttonUI(
-                                    isVideoCall: true,
-                                    targetUserID: orderData["userId"] ?? "",
-                                    targetUserName:
-                                        orderData["customerName"] ?? "",
-                                    checkOppositeSidePermGranted: () {
-                                      String name = preferenceService
-                                              .getUserDetail()
-                                              ?.name ??
-                                          "";
-                                      String message =
-                                          "$name wants to start a call, please allow all required permissions";
-                                      controller.messageController.text =
-                                          message;
-                                      controller.sendMsg();
-                                    },
-                                    customData: {
-                                      "astr_id": orderData["astroId"] ?? "",
-                                      "astr_name":
-                                          orderData["astrologerName"] ?? "",
-                                      "astr_image": appendedAstrImage,
-                                      "cust_id": orderData["userId"] ?? "",
-                                      "cust_name":
-                                          orderData["customerName"] ?? "",
-                                      "cust_image": appendedCustImage,
-                                      // "time": "00:20:00",
-                                      "time": controller.showTalkTime.value,
-                                    },
-                                    isAstrologer: true,
-                                    astrologerDisabledCalls: () {
-                                      astroNotAcceptingCallsSnackBar(
-                                        context: context,
-                                        isVideoCall: true,
-                                      );
-                                    },
-                                  );
+                              isVideoCall: true,
+                              targetUserID: orderData["userId"] ?? "",
+                              targetUserName:
+                              orderData["customerName"] ?? "",
+                              checkOppositeSidePermGranted: () {
+                                String name = preferenceService
+                                    .getUserDetail()
+                                    ?.name ??
+                                    "";
+                                String message =
+                                    "$name wants to start a call, please allow all required permissions";
+                                controller.messageController.text =
+                                    message;
+                                controller.sendMsg();
+                              },
+                              customData: {
+                                "astr_id": orderData["astroId"] ?? "",
+                                "astr_name":
+                                orderData["astrologerName"] ?? "",
+                                "astr_image": appendedAstrImage,
+                                "cust_id": orderData["userId"] ?? "",
+                                "cust_name":
+                                orderData["customerName"] ?? "",
+                                "cust_image": appendedCustImage,
+                                // "time": "00:20:00",
+                                "time": controller.showTalkTime.value,
+                              },
+                              isAstrologer: true,
+                              astrologerDisabledCalls: () {
+                                astroNotAcceptingCallsSnackBar(
+                                  context: context,
+                                  isVideoCall: true,
+                                );
+                              },
+                            );
                           },
                         ),
                         SizedBox(width: 5.w),

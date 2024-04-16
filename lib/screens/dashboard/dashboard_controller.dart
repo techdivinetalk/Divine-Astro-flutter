@@ -40,6 +40,7 @@ class DashboardController extends GetxController
   // StreamSubscription<DatabaseEvent>? astroChatListener;
   // Socket? socket;
   var preference = Get.find<SharedPreferenceService>();
+
   @override
   void onInit() async {
     super.onInit();
@@ -62,6 +63,12 @@ class DashboardController extends GetxController
           print("is logged in");
           appFirebaseService.readData(
               'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
+        });
+        Future.delayed(const Duration(seconds: 5), () {
+          print("is logged in");
+          appFirebaseService.masterData(
+            'masters',
+          );
         });
       });
     } else {

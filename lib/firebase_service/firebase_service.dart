@@ -26,6 +26,19 @@ import "../screens/live_page/constant.dart";
 bool isLogOut = false;
 RxInt giftCountUpdate = 0.obs;
 RxString giftImageUpdate = "".obs;
+
+RxInt isCall = 1.obs;
+RxInt isRemidies = 1.obs;
+RxInt isEcom = 1.obs;
+RxInt isChatAssistance = 1.obs;
+RxInt isChat = 1.obs;
+RxInt isKundli = 1.obs;
+RxInt isTemplates = 1.obs;
+RxInt isCamera = 1.obs;
+RxInt isLive = 1.obs;
+RxInt isQueue = 1.obs;
+RxInt isGifts = 1.obs;
+RxInt isTruecaller = 1.obs;
 RxMap<dynamic, dynamic> callKunadliUpdated = {}.obs;
 
 class AppFirebaseService {
@@ -56,18 +69,24 @@ class AppFirebaseService {
 
   String tableName = "";
 
-  checkFirebaseConnection(){
+  checkFirebaseConnection() {
     final connectedRef = FirebaseDatabase.instance.ref(".info/connected");
     connectedRef.onValue.listen((event) async {
       final connected = event.snapshot.value as bool? ?? false;
       if (!connected) {
         print("trying to reconnect in 4 seconds");
         await Future.delayed(const Duration(seconds: 4));
-        final path = 'astrologer/${preferenceService.getUserDetail()!.id}/realTime';
+        String path = "";
+        if (preferenceService.getUserDetail() != null) {
+          path = 'astrologer/${preferenceService.getUserDetail()!.id}/realTime';
+        }
+        const masterPath = 'masters';
         readData(path);
+        masterData(masterPath);
       }
     });
   }
+
   Future<DatabaseEvent?> readData(String path) async {
     checkFirebaseConnection();
     try {
@@ -157,7 +176,6 @@ class AppFirebaseService {
             sendBroadcast(BroadcastMessage(
                 name: "deliveredMsg",
                 data: {'deliveredMsgList': realTimeData["deliveredMsg"]}));
-
           }
           if (realTimeData["totalGift"] != null) {
             sendBroadcast(
@@ -167,7 +185,6 @@ class AppFirebaseService {
               ),
             );
           }
-
         }
       });
     } catch (e) {
@@ -188,47 +205,161 @@ class AppFirebaseService {
                       as Map<dynamic, dynamic>;
                   orderData(Map<String, dynamic>.from(map));
                   if (orderData.value["status"] != null) {
-                  if (orderData.value["orderType"] == "chat") {
-                    switch ((orderData.value["status"])) {
-                      case "0":
-                        if (Get.currentRoute !=
-                            RouteName.acceptChatRequestScreen) {
-                          await Get.toNamed(RouteName.acceptChatRequestScreen);
-                        }
-                        break;
-                      case "1":
-                        if (Get.currentRoute !=
-                            RouteName.acceptChatRequestScreen) {
-                          await Get.toNamed(RouteName.acceptChatRequestScreen);
-                        }
-                        break;
+                    if (orderData.value["orderType"] == "chat") {
+                      switch ((orderData.value["status"])) {
+                        case "0":
+                          if (Get.currentRoute !=
+                              RouteName.acceptChatRequestScreen) {
+                            await Get.toNamed(
+                                RouteName.acceptChatRequestScreen);
+                          }
+                          break;
+                        case "1":
+                          if (Get.currentRoute !=
+                              RouteName.acceptChatRequestScreen) {
+                            await Get.toNamed(
+                                RouteName.acceptChatRequestScreen);
+                          }
+                          break;
 
-                      case "2":
-                        if (Get.currentRoute !=
-                            RouteName.chatMessageWithSocketUI) {
-                          await Get.toNamed(
-                            RouteName.chatMessageWithSocketUI,
-                            arguments: {"orderData": orderData},
-                          );
-                        }
-                        break;
+                        case "2":
+                          if (Get.currentRoute !=
+                              RouteName.chatMessageWithSocketUI) {
+                            await Get.toNamed(
+                              RouteName.chatMessageWithSocketUI,
+                              arguments: {"orderData": orderData},
+                            );
+                          }
+                          break;
 
-                      case "3":
-                        if (Get.currentRoute !=
-                            RouteName.chatMessageWithSocketUI) {
-                          await Get.toNamed(
-                            RouteName.chatMessageWithSocketUI,
-                            arguments: {"orderData": orderData},
-                          );
-                        }
-                        break;
+                        case "3":
+                          if (Get.currentRoute !=
+                              RouteName.chatMessageWithSocketUI) {
+                            await Get.toNamed(
+                              RouteName.chatMessageWithSocketUI,
+                              arguments: {"orderData": orderData},
+                            );
+                          }
+                          break;
 
-                      default:
-                        break;
+                        default:
+                          break;
+                      }
+                    } else {
+                      orderData({});
                     }
-                  }else{
-                    orderData({});
-                  }
+                  } else {}
+                } else {}
+              } else {
+                orderData({});
+                sendBroadcast(BroadcastMessage(name: "orderEnd"));
+              }
+            },
+          );
+        } else {
+          orderData({});
+          sendBroadcast(BroadcastMessage(name: "orderEnd"));
+        }
+      },
+    );
+  }
+
+  Future<DatabaseEvent?> masterData(String path) async {
+    checkFirebaseConnection();
+    try {
+      database.child(path).onValue.listen((event) async {
+        debugPrint("master database access $path ---> ${event.snapshot.value}");
+        if (event.snapshot.value is Map<Object?, Object?>) {
+          Map<String, dynamic>? realTimeData = Map<String, dynamic>.from(
+              event.snapshot.value! as Map<Object?, Object?>);
+          /// {call: 1, remidies: 1, ecom: 1, chat_assistance: 1, chat: 1, kundli: 1, templates: 1, camera: 1, live: 1, queue: 1, gifts: 1}
+          isCall(realTimeData["call"]);
+          print("isCall-----on ?? ${isCall}");
+          isRemidies(realTimeData["remidies"]);
+          print("isRemidies-----on ?? ${isRemidies}");
+          isEcom(realTimeData["ecom"]);
+          print("isEcom-----on ?? ${isEcom}");
+          isChatAssistance(realTimeData["chat_assistance"]);
+          print("isChatAssistance-----on ?? ${isChatAssistance}");
+          isChat(realTimeData["chat"]);
+          print("isChat-----on ?? ${isChat}");
+          isKundli(realTimeData["kundli"]);
+          print("isKundli-----on ?? ${isKundli}");
+          isTemplates(realTimeData["templates"]);
+          print("isTemplates-----on ?? ${isTemplates}");
+          isCamera(realTimeData["camera"]);
+          print("isCamera-----on ?? ${isCamera}");
+          isLive(realTimeData["live"]);
+          print("isLive-----on ?? ${isLive}");
+          isQueue(realTimeData["queue"]);
+          print("isQueue-----on ?? ${isQueue}");
+          isGifts(realTimeData["gifts"]);
+          print("isGifts-----on ?? ${isGifts}");
+          isTruecaller(realTimeData["truecaller"]);
+          print("isTruecaller-----on ?? ${isTruecaller}");
+        }
+      });
+    } catch (e) {
+      debugPrint("Error reading data from the database: $e");
+    }
+
+    watcher.nameStream.listen(
+      (value) {
+        if (value != "") {
+          database.child("order/$value").onValue.listen(
+            (DatabaseEvent event) async {
+              final DataSnapshot dataSnapshot = event.snapshot;
+              if (dataSnapshot.exists) {
+                print("data from snapshot ${dataSnapshot.value}");
+                if (dataSnapshot.value is Map<dynamic, dynamic>) {
+                  Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+                  map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+                      as Map<dynamic, dynamic>;
+                  orderData(Map<String, dynamic>.from(map));
+                  if (orderData.value["status"] != null) {
+                    if (orderData.value["orderType"] == "chat") {
+                      switch ((orderData.value["status"])) {
+                        case "0":
+                          if (Get.currentRoute !=
+                              RouteName.acceptChatRequestScreen) {
+                            await Get.toNamed(
+                                RouteName.acceptChatRequestScreen);
+                          }
+                          break;
+                        case "1":
+                          if (Get.currentRoute !=
+                              RouteName.acceptChatRequestScreen) {
+                            await Get.toNamed(
+                                RouteName.acceptChatRequestScreen);
+                          }
+                          break;
+
+                        case "2":
+                          if (Get.currentRoute !=
+                              RouteName.chatMessageWithSocketUI) {
+                            await Get.toNamed(
+                              RouteName.chatMessageWithSocketUI,
+                              arguments: {"orderData": orderData},
+                            );
+                          }
+                          break;
+
+                        case "3":
+                          if (Get.currentRoute !=
+                              RouteName.chatMessageWithSocketUI) {
+                            await Get.toNamed(
+                              RouteName.chatMessageWithSocketUI,
+                              arguments: {"orderData": orderData},
+                            );
+                          }
+                          break;
+
+                        default:
+                          break;
+                      }
+                    } else {
+                      orderData({});
+                    }
                   } else {}
                 } else {}
               } else {
