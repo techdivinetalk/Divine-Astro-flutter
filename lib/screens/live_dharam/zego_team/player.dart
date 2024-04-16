@@ -186,6 +186,7 @@ class ZegoGiftPlayer {
             } while (giftEntryPathCache.length > 1);
           }
         },
+
       );
     });
     SchedulerBinding.instance.addPostFrameCallback((_) async {

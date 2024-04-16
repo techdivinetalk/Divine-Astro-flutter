@@ -262,8 +262,8 @@ Future<void> initServices() async {
 @pragma('vm:entry-point')
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  print("pushNotification");
-  FirebaseDatabase.instance.ref().child("pushR").set(DateTime.now());
+
+  // FirebaseDatabase.instance.ref().child("pushR").set(DateTime.now());
 
   if (message.data["type"] == "8" &&
       MiddleWare.instance.currentPage == RouteName.chatMessageUI &&
@@ -290,7 +290,6 @@ Future<void> showNotification(String title, String message, String type,
     Map<String, dynamic> data) async {
   AndroidNotificationDetails? androidNotificationDetails;
   if (type == "1") {
-    print("getting type --- ${type}");
     androidNotificationDetails = const AndroidNotificationDetails(
       "DivineCustomer", "CustomerNotification",
       // sound: RawResourceAndroidNotificationSound('accept_ring'),
@@ -298,21 +297,26 @@ Future<void> showNotification(String title, String message, String type,
       priority: Priority.high,
       autoCancel: true,
       playSound: true,
+      setAsGroupSummary: true,
+      styleInformation: BigTextStyleInformation(''),
     );
   } else {
-    androidNotificationDetails =
-        AndroidNotificationDetails("DivineCustomer", "CustomerNotification",
-            importance: Importance.max,
-            priority: Priority.high,
-            autoCancel: true,
-            actions: type == "1"
-                ? [
-                    const AndroidNotificationAction(
-                      'accept',
-                      'Accept',
-                    ),
-                  ]
-                : []);
+    androidNotificationDetails = AndroidNotificationDetails(
+      "DivineCustomer",
+      "CustomerNotification",
+      importance: Importance.max,
+      priority: Priority.high,
+      autoCancel: true,
+      actions: type == "2"
+          ? [
+              const AndroidNotificationAction(
+                'accept',
+                'ACCEPT',
+
+              ),
+            ]
+          : [],
+    );
   }
   NotificationDetails notificationDetails =
       NotificationDetails(android: androidNotificationDetails);

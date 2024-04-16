@@ -406,12 +406,14 @@ class ChatMessageWithSocketController extends GetxController
     }
   }
 
-  void startExtraTimer(int futureTimeInEpochMillis) {
+  void startExtraTimer(int futureTimeInEpochMillis,String status) {
+    if (status == "4"){
+      showTalkTime.value = "-1";
+      chatTimer?.cancel();
+    }
     DateTime dateTime =
         DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis);
-    Duration timeLeft = const Duration(minutes: 1); // Start from 1 minute
-    // final endTime = DateTime.now().add(timeLeft);
-    // Duration timeDifference = dateTime.difference(DateTime.now());
+    Duration timeLeft = const Duration(minutes: 1);
     extraTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       // final currentTime = DateTime.now();
       final difference = dateTime.difference(DateTime.now());
@@ -420,6 +422,7 @@ class ChatMessageWithSocketController extends GetxController
               difference.inMinutes == 0 &&
               difference.inHours == 0)) {
         extraTimer?.cancel();
+        extraTalkTime.value = "0";
         timer.cancel();
         print("WentBack timeUp");
         timeLeft = Duration.zero;
@@ -430,10 +433,12 @@ class ChatMessageWithSocketController extends GetxController
             "${timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
             "${timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
         print("time Left ${extraTalkTime.value}");
-        if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+        if (MiddleWare.instance.currentPage == RouteName.dashboard ||
+            AppFirebaseService().orderData.value["status"] == "3") {
+          print("ExtraTalktime is closing");
           extraTimer?.cancel();
           //AppFirebaseService().orderData.value={};
-          endChatApi();
+          //  endChatApi();
         }
         print("time Left ${MiddleWare.instance.currentPage}");
       }
@@ -444,9 +449,8 @@ class ChatMessageWithSocketController extends GetxController
     DateTime dateTime =
         DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
     print("futureTime.minute");
-    if (chatTimer != null) {
-      chatTimer?.cancel();
-    }
+    chatTimer?.cancel();
+    chatTimer = null;
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
       timeDifference = dateTime.difference(DateTime.now());
 
@@ -479,6 +483,7 @@ class ChatMessageWithSocketController extends GetxController
     Map<String, dynamic> param = HashMap();
     param["order_id"] = AppFirebaseService().orderData.value["orderId"];
     param["queue_id"] = AppFirebaseService().orderData.value["queue_id"];
+    param["source"] = "Astro App";
     loading = Loading.loading;
     update();
     try {
@@ -492,7 +497,7 @@ class ChatMessageWithSocketController extends GetxController
           extraTimer?.cancel();
           FirebaseDatabase.instance
               .ref(
-              "user/${AppFirebaseService().orderData.value["userId"]}/realTime/queue_list/${param["order_id"]}")
+                  "user/${AppFirebaseService().orderData.value["userId"]}/realTime/queue_list/${param["order_id"]}")
               .remove();
           Get.until(
             (route) {
@@ -899,6 +904,7 @@ class ChatMessageWithSocketController extends GetxController
     String? productPrice,
     String? productId,
     String? shopId,
+    String? suggestedId,
     String? customProductId,
   }) async {
     late ChatMessage newMessage;
@@ -940,26 +946,28 @@ class ChatMessageWithSocketController extends GetxController
           isPoojaProduct: true,
           awsUrl: productDetails.poojaImg ?? '',
           msgType: msgType,
+          suggestedId: saveRemediesData.data!.id.toString(),
           type: 0,
           msgSendBy: "1",
           orderId: AppFirebaseService().orderData.value["orderId"],
           userType: "astrologer",
-          memberId: saveRemediesData.data?.id,
+          memberId: saveRemediesData.data!.id,
           productId: productDetails.id.toString(),
           shopId: productDetails.id.toString(),
           // msgStatus: MsgStatus.sent,
+
           receiverId: int.parse(
               AppFirebaseService().orderData.value["userId"].toString()),
           senderId: preference.getUserDetail()!.id,
-            getProduct: GetProduct(
-              prodName: productDetails.poojaName,
-              id: productDetails.id, 
-              gst: "3",
-              prodDesc: productDetails.poojaDesc,
-              prodImage: productDetails.poojaImg,
-              productLongDesc: productDetails.poojaDesc,
-              productPriceInr: productDetails.poojaStartingPriceInr,
-            )
+          getProduct: GetProduct(
+            prodName: productDetails.poojaName,
+            id: productDetails.id,
+            gst: "3",
+            prodDesc: productDetails.poojaDesc,
+            prodImage: productDetails.poojaImg,
+            productLongDesc: productDetails.poojaDesc,
+            productPriceInr: productDetails.poojaStartingPriceInr,
+          ),
         );
       } else {
         final productData =
@@ -974,6 +982,7 @@ class ChatMessageWithSocketController extends GetxController
             time: int.parse(time),
             id: int.parse(time),
             isSuspicious: 0,
+            suggestedId: productData.data!.id.toString(),
             userType: "astrologer",
             isPoojaProduct: false,
             awsUrl: userData?.image ?? '',
@@ -1446,7 +1455,6 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   void initTask(Map<String, dynamic> p0) {
-    if (MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
       if (p0["status"] == null || p0["status"] == "5") {
         WidgetsBinding.instance.endOfFrame.then(
           (_) async {
@@ -1463,13 +1471,9 @@ class ChatMessageWithSocketController extends GetxController
         );
         return;
       }
-      return;
-    } else if (p0["status"] == "4") {
-      print("chat status 4");
-      showTalkTime.value = "-1";
-      chatTimer?.cancel();
-      startExtraTimer(p0["order_end_time"]);
-      return;
+
+    if (p0["order_end_time"] != null) {
+      startExtraTimer(p0["order_end_time"],p0["status"]);
     }
     if (p0["isCustEntered"] != null &&
         p0["isCustEntered"] > DateTime.now().microsecondsSinceEpoch) {

@@ -47,6 +47,7 @@ import "package:flutter/material.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 import "package:intl/intl.dart";
+import "package:simple_html_css/simple_html_css.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
@@ -475,7 +476,7 @@ class _LivePage extends State<LiveDharamScreen>
                   //     "https://divinenew-prod.s3.ap-south-1.amazonaws.com/divine/January2024/fGfpNU1Y40lV0ojgh0JBpgbc4mJtAdV6hgG5xZXJ.jpg",
                   avatar:
                   "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
-                  message: "Live Monitoring Team Joined",
+                  message: "Quality Team Joined",
                   timeStamp: DateTime.now().toString(),
                   fullGiftImage: "",
                   isBlockedCustomer: false,
@@ -1008,14 +1009,13 @@ class _LivePage extends State<LiveDharamScreen>
                   final NoticeBoardResData noticeBoardResData =
                       _controller.noticeBoardRes.data?[timerCurrentIndex] ??
                           NoticeBoardResData();
-                  final int id = noticeBoardResData.id ?? 0;
                   final String title = noticeBoardResData.title ?? "";
                   final String description =
                       noticeBoardResData.description ?? "";
-                  final String createdAt =
-                      noticeBoardResData.createdAt ?? DateTime.now().toString();
-                  final DateTime tzDateTime = DateTime.parse(createdAt).toUtc();
-                  final String formattedDate = formatDate(tzDateTime);
+                  // final String createdAt =
+                  //     noticeBoardResData.createdAt ?? DateTime.now().toString();
+                  // final DateTime tzDateTime = DateTime.parse(createdAt).toUtc();
+                  // final String formattedDate = formatDate(tzDateTime);
                   return DecoratedBox(
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(
@@ -1044,16 +1044,25 @@ class _LivePage extends State<LiveDharamScreen>
                             overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(height: 8),
-                          Text(
-                            description,
-                            style: const TextStyle(
-                              fontSize: 10,
-                              color: Colors.white,
-                            ),
+                          RichText(
+                            textAlign:
+                            TextAlign.center,
+                            text: HTML.toTextSpan(
+                                context,
+                                description ??
+                                    ""),
                             maxLines: 5,
-                            overflow: TextOverflow.ellipsis,
                           ),
-                          const SizedBox(height: 8),
+                          // Text(
+                          //   description,
+                          //   style: const TextStyle(
+                          //     fontSize: 10,
+                          //     color: Colors.white,
+                          //   ),
+                          //   maxLines: 5,
+                          //   overflow: TextOverflow.ellipsis,
+                          // ),
+                          /*const SizedBox(height: 8),
                           Text(
                             formattedDate,
                             style: const TextStyle(
@@ -1063,7 +1072,7 @@ class _LivePage extends State<LiveDharamScreen>
                             ),
                             maxLines: 5,
                             overflow: TextOverflow.ellipsis,
-                          ),
+                          ),*/
                           const SizedBox(height: 8),
                         ],
                       ),

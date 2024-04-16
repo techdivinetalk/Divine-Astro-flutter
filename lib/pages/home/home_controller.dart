@@ -74,7 +74,6 @@ class HomeController extends GetxController {
 
   double xPosition = 10.0;
   double yPosition = Get.height * 0.4;
-  RxString chatSchedule = "".obs, callSchedule = "".obs, videoSchedule = "".obs;
   RxList<bool> customOfferSwitch = RxList([]);
 
   RxString appbarTitle = "Astrologer Name ".obs;
@@ -216,8 +215,8 @@ class HomeController extends GetxController {
       update();
     } else {
       print("else----getConstantDetails!.data!.isForceTraningVideo");
-      await getFilteredPerformance();
-      getDashboardDetail();
+      await  getDashboardDetail();
+       getFilteredPerformance();
       getFeedbackData();
       tarotCardData();
       getUserImage();
@@ -489,7 +488,7 @@ class HomeController extends GetxController {
   }
 
   getFeedbackData() async {
-    loading = Loading.initial;
+
     update();
     try {
       var response = await homePageRepository.getFeedbackData();
@@ -529,9 +528,9 @@ class HomeController extends GetxController {
       print(homeData!.offers!.customOffer!.length);
       print(homeData!.offers!.orderOffer!.length);
       print("homeData!.offers!.orderOffer!.length");
+      loading = Loading.loaded;
       updateCurrentData();
       shopDataSync.value = true;
-      loading = Loading.loaded;
 
       showOnceInDay();
       update();
@@ -950,7 +949,9 @@ class HomeController extends GetxController {
 
     if (difference) {
       try {
-        ///Type 1: for call 2 for chat.
+        ///Type 1:call
+        ///Type 2:chat
+        ///Type 3:Video
         int type = 0;
 
         late AstroScheduleRequest request;
@@ -971,6 +972,7 @@ class HomeController extends GetxController {
           );
         }
         if (value == "VIDEO") {
+          type = 3;
           request = AstroScheduleRequest(
             scheduleDate: selectedVideoDate.value.toFormattedString(),
             scheduleTime: selectedVideoTime.value,

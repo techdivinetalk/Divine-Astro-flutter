@@ -54,14 +54,23 @@ class AppFirebaseService {
     }
   }
 
-  HiveServices hiveServices = HiveServices(boxName: userChatData);
   String tableName = "";
 
-  readData(String path) async {
+  checkFirebaseConnection(){
+    final connectedRef = FirebaseDatabase.instance.ref(".info/connected");
+    connectedRef.onValue.listen((event) async {
+      final connected = event.snapshot.value as bool? ?? false;
+      if (!connected) {
+        print("trying to reconnect in 4 seconds");
+        await Future.delayed(const Duration(seconds: 4));
+        final path = 'astrologer/${preferenceService.getUserDetail()!.id}/realTime';
+        readData(path);
+      }
+    });
+  }
+  Future<DatabaseEvent?> readData(String path) async {
+    checkFirebaseConnection();
     try {
-      var chatMessages = <ChatMessage>[].obs;
-      var databaseMessage = ChatMessagesOffline().obs;
-      await hiveServices.initialize();
       database.child(path).onValue.listen((event) async {
         debugPrint("real time $path ---> ${event.snapshot.value}");
         if (preferenceService.getToken() == null ||
@@ -72,6 +81,9 @@ class AppFirebaseService {
         if (event.snapshot.value is Map<Object?, Object?>) {
           Map<String, dynamic>? realTimeData = Map<String, dynamic>.from(
               event.snapshot.value! as Map<Object?, Object?>);
+          if (realTimeData["order_id"] != null) {
+            watcher.strValue = realTimeData["order_id"].toString();
+          }
           if (realTimeData["uniqueId"] != null) {
             print("uniqueId ---- uniqueId ${realTimeData["uniqueId"]}");
 
@@ -104,51 +116,12 @@ class AppFirebaseService {
                 .update();
             Get.put(ProfilePageController(Get.put(UserRepository()))).update();
           }
-          // if (realTimeData["engageId"] != null) {
-          //   tableName = "chat_${realTimeData["engageId"]}";
-          //   debugPrint("tableName ${tableName}");
-          // }
-          // var res = await hiveServices.getData(key: tableName);
-          // if (res != null) {
-          //   var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
-          //   chatMessages.value = msg.chatMessages ?? [];
-          //   databaseMessage.value.chatMessages = chatMessages;
-          //   debugPrint("msg.chatMessages ${msg.chatMessages?.length}");
-          // }
           if (realTimeData["isEngagedStatus"] != null) {
             print(realTimeData["isEngagedStatus"]);
             print('realTimeData["isEngagedStatus"]');
             isEngagedStatus(realTimeData['isEngagedStatus']);
           } else {
             isEngagedStatus(0);
-          }
-          if (realTimeData["notification"] != null) {
-            final HiveServices hiveServices =
-                HiveServices(boxName: userChatData);
-            await hiveServices.initialize();
-            realTimeData["notification"].forEach((key, notificationData) async {
-              if (notificationData["type"] == 2) {
-                final Map<String, dynamic> chatListMap =
-                    jsonDecode(notificationData["chatList"]);
-                final ChatMessage chatMessage =
-                    ChatMessage.fromOfflineJson(chatListMap);
-                chatMessages.add(chatMessage);
-                databaseMessage.value.chatMessages = chatMessages;
-                await hiveServices.addData(
-                    key: tableName,
-                    data: jsonEncode(databaseMessage.value.toOfflineJson()));
-              }
-
-              //   debugPrint("local notification $notificationData");
-              //   if (notificationData != null) {
-              //     showNotificationWithActions(
-              //         title: notificationData["value"] ?? "",
-              //         message: notificationData["message"] ??€ "",
-              //         payload: notificationData,
-              //         hiveServices: hiveServices);
-              //   }
-            });
-            FirebaseDatabase.instance.ref("$path/notification").remove();
           }
           if (realTimeData['giftCount'] != null) {
             giftCountUpdate(realTimeData["giftCount"]);
@@ -194,9 +167,7 @@ class AppFirebaseService {
               ),
             );
           }
-          if (realTimeData["order_id"] != null) {
-            watcher.strValue = realTimeData["order_id"].toString();
-          }
+
         }
       });
     } catch (e) {

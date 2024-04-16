@@ -114,7 +114,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           reverse: false,
                           itemBuilder: (context, index) {
                             var chatMessage = controller.chatMessages[index];
-                            print("AppFirebaseService().orderData");
                             print(
                                 "${myList.length < 3 && chatMessage.msgType == MsgType.text && chatMessage.orderId == AppFirebaseService().orderData["orderId"]}");
                             print(

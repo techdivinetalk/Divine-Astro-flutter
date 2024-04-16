@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 
 class PoojaCustomButton extends StatelessWidget {
@@ -37,8 +38,10 @@ class PoojaCustomButton extends StatelessWidget {
           text,
           style: TextStyle(
             color: fontColor,
-            fontSize: 12,
-            fontWeight: FontWeight.bold,
+            fontSize: 15,
+            fontWeight: FontWeight.w600,
+            fontFamily: FontFamily.metropolis,
+
           ),
           maxLines: 1,
         ),
