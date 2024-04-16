@@ -246,15 +246,18 @@ class ChatMessageWithSocketController extends GetxController
     _listener = AppLifecycleListener(
       onShow: () {},
       onResume: () {
+        print("resume");
         isGalleryOpen = false;
         socket.socketConnect();
         socket.startAstroCustumerSocketEvent(
           orderId: AppFirebaseService().orderData.value["orderId"].toString(),
           userId: AppFirebaseService().orderData.value["userId"],
         );
+        initTask(AppFirebaseService().orderData);
       },
       onHide: () {},
       onInactive: () {
+        print("InActiveResume");
         WidgetsBinding.instance.endOfFrame.then(
           (_) async {
             if (!isGalleryOpen) {
@@ -266,6 +269,8 @@ class ChatMessageWithSocketController extends GetxController
             // }
           },
         );
+        chatTimer?.cancel();
+        extraTimer?.cancel();
       },
       onPause: () {},
       onDetach: () {
@@ -448,7 +453,7 @@ class ChatMessageWithSocketController extends GetxController
   void talkTimeStartTimer(int futureTimeInEpochMillis) {
     DateTime dateTime =
         DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
-    print("futureTime.minute");
+    print("futureTime.minute $futureTimeInEpochMillis");
     chatTimer?.cancel();
     chatTimer = null;
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
@@ -460,9 +465,10 @@ class ChatMessageWithSocketController extends GetxController
               timeDifference.inHours == 0)) {
         await callHangup();
         showTalkTime.value = "-1";
+        print("chatTimeLeft ${showTalkTime.value}");
         chatTimer?.cancel();
         Future.delayed(const Duration(seconds: 4)).then((value) {
-          if(AppFirebaseService().orderData.value["status"] == "3") {
+          if(AppFirebaseService().orderData.value["status"] == "3" &&  showTalkTime.value == "-1") {
             DatabaseReference ref = FirebaseDatabase.instance
                 .ref(
                 "order/${AppFirebaseService().orderData.value["orderId"]}");
@@ -477,6 +483,7 @@ class ChatMessageWithSocketController extends GetxController
                  });
 
       } else {
+        extraTimer?.cancel();
         //         print('Countdown working');
         showTalkTime.value =
             "${timeDifference.inHours.toString().padLeft(2, '0')}:"
@@ -486,7 +493,7 @@ class ChatMessageWithSocketController extends GetxController
           timer.cancel();
         }
         print(
-            'timer called ${timeDifference.inHours}:${timeDifference.inMinutes.remainder(60)}:${timeDifference.inSeconds.remainder(60)}');
+            'chatTimeLeft ${timeDifference.inHours}:${timeDifference.inMinutes.remainder(60)}:${timeDifference.inSeconds.remainder(60)}');
       }
     });
   }
