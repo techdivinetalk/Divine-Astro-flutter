@@ -186,6 +186,10 @@ Future<void> main() async {
   //   runApp(const MyApp());
   // });
   await checkIfTokenUpdated();
+  final appFirebaseService = AppFirebaseService();
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    appFirebaseService.masterData('masters');
+  });
 
   ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
   // call the useSystemCallingUI
@@ -312,7 +316,6 @@ Future<void> showNotification(String title, String message, String type,
               const AndroidNotificationAction(
                 'accept',
                 'ACCEPT',
-
               ),
             ]
           : [],

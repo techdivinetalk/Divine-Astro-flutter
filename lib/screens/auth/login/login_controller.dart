@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:device_apps/device_apps.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/firebase_model.dart';
@@ -32,6 +33,7 @@ class LoginController extends GetxController {
       Get.find<SharedPreferenceService>();
   late TextEditingController countryCodeController;
   late TextEditingController mobileNumberController;
+  final appFirebaseService = AppFirebaseService();
 
   RxString get countryCode => countryCodeController.text.obs;
   var enable = true.obs;
@@ -62,6 +64,7 @@ class LoginController extends GetxController {
   }
 
   var isLoading = false.obs;
+
   login() async {
     //deviceToken = await FirebaseMessaging.instance.getToken();
     Map<String, dynamic> params = {
@@ -127,105 +130,107 @@ class LoginController extends GetxController {
     // getLoginImages();
     countryCodeController = TextEditingController(text: "+91");
     mobileNumberController = TextEditingController(text: "");
-    TrueCallerService().isTrueCallerInstalled().then((value) {
-      showTrueCaller.value = value;
-    });
 
-    TcSdk.streamCallbackData.listen(
-      (TcSdkCallback event) async {
-        switch (event.result) {
-          case TcSdkCallbackResult.success:
-            TcOAuthData oAuth = event.tcOAuthData ?? TcOAuthData.fromJson({});
-            String authCode = oAuth.authorizationCode;
-            String stateReceivedFromServer = oAuth.state;
-            List<dynamic> scopesGranted = oAuth.scopesGranted;
-            log("TrueCallerService: event: result: success");
-            log("TrueCallerService: event: OAuth: $oAuth");
-            log("TrueCallerService: event: authCode: $authCode");
-            log("TrueCallerService: event: state: $stateReceivedFromServer");
-            log("TrueCallerService: event: scopes: $scopesGranted");
+    if (isTruecaller.value == 1) {
+      TrueCallerService().isTrueCallerInstalled().then((value) {
+        showTrueCaller.value = value;
+      });
+      TcSdk.streamCallbackData.listen(
+        (TcSdkCallback event) async {
+          switch (event.result) {
+            case TcSdkCallbackResult.success:
+              TcOAuthData oAuth = event.tcOAuthData ?? TcOAuthData.fromJson({});
+              String authCode = oAuth.authorizationCode;
+              String stateReceivedFromServer = oAuth.state;
+              List<dynamic> scopesGranted = oAuth.scopesGranted;
+              log("TrueCallerService: event: result: success");
+              log("TrueCallerService: event: OAuth: $oAuth");
+              log("TrueCallerService: event: authCode: $authCode");
+              log("TrueCallerService: event: state: $stateReceivedFromServer");
+              log("TrueCallerService: event: scopes: $scopesGranted");
 
-            await onSuccess(authCode: authCode);
-            break;
+              await onSuccess(authCode: authCode);
+              break;
 
-          case TcSdkCallbackResult.failure:
-            int errorCode = event.error?.code ?? 0;
-            String errorMessage = event.error?.message ?? "";
-            log("TrueCallerService: event: result: failure");
-            log("TrueCallerService: event: errorCode: $errorCode");
-            log("TrueCallerService: event: errorMessage: $errorMessage");
-            break;
+            case TcSdkCallbackResult.failure:
+              int errorCode = event.error?.code ?? 0;
+              String errorMessage = event.error?.message ?? "";
+              log("TrueCallerService: event: result: failure");
+              log("TrueCallerService: event: errorCode: $errorCode");
+              log("TrueCallerService: event: errorMessage: $errorMessage");
+              break;
 
-          case TcSdkCallbackResult.verification:
-            int errorCode = event.error?.code ?? 0;
-            String errorMessage = event.error?.message ?? "";
-            log("TrueCallerService: event: result: verification");
-            log("TrueCallerService: event: errorCode: $errorCode");
-            log("TrueCallerService: event: errorMessage: $errorMessage");
-            break;
+            case TcSdkCallbackResult.verification:
+              int errorCode = event.error?.code ?? 0;
+              String errorMessage = event.error?.message ?? "";
+              log("TrueCallerService: event: result: verification");
+              log("TrueCallerService: event: errorCode: $errorCode");
+              log("TrueCallerService: event: errorMessage: $errorMessage");
+              break;
 
-          case TcSdkCallbackResult.missedCallInitiated:
-            String ttl = event.ttl ?? "";
-            String requestNonce = event.requestNonce ?? "";
-            log("TrueCallerService: event: result: missedCallInitiated");
-            log("TrueCallerService: event: ttl: $ttl");
-            log("TrueCallerService: event: requestNonce: $requestNonce");
-            break;
+            case TcSdkCallbackResult.missedCallInitiated:
+              String ttl = event.ttl ?? "";
+              String requestNonce = event.requestNonce ?? "";
+              log("TrueCallerService: event: result: missedCallInitiated");
+              log("TrueCallerService: event: ttl: $ttl");
+              log("TrueCallerService: event: requestNonce: $requestNonce");
+              break;
 
-          case TcSdkCallbackResult.missedCallReceived:
-            log("TrueCallerService: event: result: missedCallReceived");
-            break;
+            case TcSdkCallbackResult.missedCallReceived:
+              log("TrueCallerService: event: result: missedCallReceived");
+              break;
 
-          case TcSdkCallbackResult.otpInitiated:
-            String ttl = event.ttl ?? "";
-            String requestNonce = event.requestNonce ?? "";
-            log("TrueCallerService: event: result: otpInitiated");
-            log("TrueCallerService: event: ttl: $ttl");
-            log("TrueCallerService: event: requestNonce: $requestNonce");
-            break;
+            case TcSdkCallbackResult.otpInitiated:
+              String ttl = event.ttl ?? "";
+              String requestNonce = event.requestNonce ?? "";
+              log("TrueCallerService: event: result: otpInitiated");
+              log("TrueCallerService: event: ttl: $ttl");
+              log("TrueCallerService: event: requestNonce: $requestNonce");
+              break;
 
-          case TcSdkCallbackResult.otpReceived:
-            String otp = event.otp ?? "";
-            log("TrueCallerService: event: result: otpReceived");
-            log("TrueCallerService: event: otp: $otp");
-            break;
+            case TcSdkCallbackResult.otpReceived:
+              String otp = event.otp ?? "";
+              log("TrueCallerService: event: result: otpReceived");
+              log("TrueCallerService: event: otp: $otp");
+              break;
 
-          case TcSdkCallbackResult.verifiedBefore:
-            String firstName = event.profile?.firstName ?? "";
-            String lastName = event.profile?.lastName ?? "";
-            String phNo = event.profile?.phoneNumber ?? "";
-            String token = event.profile?.accessToken ?? "";
-            String requestNonce = event.requestNonce ?? "";
-            log("TrueCallerService: event: result: verifiedBefore");
-            log("TrueCallerService: event: firstName: $firstName");
-            log("TrueCallerService: event: lastName: $lastName");
-            log("TrueCallerService: event: phNo: $phNo");
-            log("TrueCallerService: event: token: $token");
-            log("TrueCallerService: event: requestNonce: $requestNonce");
-            break;
+            case TcSdkCallbackResult.verifiedBefore:
+              String firstName = event.profile?.firstName ?? "";
+              String lastName = event.profile?.lastName ?? "";
+              String phNo = event.profile?.phoneNumber ?? "";
+              String token = event.profile?.accessToken ?? "";
+              String requestNonce = event.requestNonce ?? "";
+              log("TrueCallerService: event: result: verifiedBefore");
+              log("TrueCallerService: event: firstName: $firstName");
+              log("TrueCallerService: event: lastName: $lastName");
+              log("TrueCallerService: event: phNo: $phNo");
+              log("TrueCallerService: event: token: $token");
+              log("TrueCallerService: event: requestNonce: $requestNonce");
+              break;
 
-          case TcSdkCallbackResult.verificationComplete:
-            String accessToken = event.accessToken ?? "";
-            String requestNonce = event.requestNonce ?? "";
-            log("TrueCallerService: event: result: verificationComplete");
-            log("TrueCallerService: event: accessToken: $accessToken");
-            log("TrueCallerService: event: requestNonce: $requestNonce");
-            break;
+            case TcSdkCallbackResult.verificationComplete:
+              String accessToken = event.accessToken ?? "";
+              String requestNonce = event.requestNonce ?? "";
+              log("TrueCallerService: event: result: verificationComplete");
+              log("TrueCallerService: event: accessToken: $accessToken");
+              log("TrueCallerService: event: requestNonce: $requestNonce");
+              break;
 
-          case TcSdkCallbackResult.exception:
-            int exceptionCode = event.exception?.code ?? 0;
-            String exceptionMsg = event.exception?.message ?? "";
-            log("TrueCallerService: event: result: exception");
-            log("TrueCallerService: event: exceptionCode: $exceptionCode");
-            log("TrueCallerService: event: exceptionMsg: $exceptionMsg");
-            break;
+            case TcSdkCallbackResult.exception:
+              int exceptionCode = event.exception?.code ?? 0;
+              String exceptionMsg = event.exception?.message ?? "";
+              log("TrueCallerService: event: result: exception");
+              log("TrueCallerService: event: exceptionCode: $exceptionCode");
+              log("TrueCallerService: event: exceptionMsg: $exceptionMsg");
+              break;
 
-          default:
-            log("TrueCallerService: event: result: default");
-            break;
-        }
-      },
-    );
+            default:
+              log("TrueCallerService: event: result: default");
+              break;
+          }
+        },
+      );
+    }
   }
 
   String advertisingId = "";
@@ -309,10 +314,7 @@ class LoginController extends GetxController {
     deviceTokenNode["deviceToken"] =
         deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
     firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
-    firebaseDatabase
-        .ref()
-        .child("$firebaseNodeUrl/realTime")
-        .update(realTime);
+    firebaseDatabase.ref().child("$firebaseNodeUrl/realTime").update(realTime);
     // if (dataSnapshot.exists) {
     //
     // } else {
@@ -378,15 +380,15 @@ class LoginController extends GetxController {
     }
   }
 
-  // Future<LoginImages> getInitialLoginImages() async {
-  //   final response = await userRepository.getInitialLoginImages();
-  //
-  //   //added by: dev-dharam
-  //   Get.find<SharedPreferenceService>().setAmazonUrl(response.data.baseurl);
-  //   //
-  //
-  //   return response;
-  // }
+// Future<LoginImages> getInitialLoginImages() async {
+//   final response = await userRepository.getInitialLoginImages();
+//
+//   //added by: dev-dharam
+//   Get.find<SharedPreferenceService>().setAmazonUrl(response.data.baseurl);
+//   //
+//
+//   return response;
+// }
 
 /*@override
   void onDetached() {
