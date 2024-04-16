@@ -492,6 +492,7 @@ class ChatMessageWithSocketController extends GetxController
         if (MiddleWare.instance.currentPage == RouteName.dashboard) {
           timer.cancel();
         }
+        print("${MiddleWare.instance.currentPage}");
         print(
             'chatTimeLeft ${timeDifference.inHours}:${timeDifference.inMinutes.remainder(60)}:${timeDifference.inSeconds.remainder(60)}');
       }
@@ -1492,19 +1493,23 @@ class ChatMessageWithSocketController extends GetxController
       );
       return;
     }
-
-    if (p0["order_end_time"] != null) {
-      startExtraTimer(p0["order_end_time"], p0["status"]);
+    if (p0["status"] == "3" || p0["status"] == "2") {
+      extraTimer?.cancel();
+      print("extraTime closing");
+      int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
+      talkTimeStartTimer(remainingTime);
+    }else{
+      if (p0["order_end_time"] != null) {
+        startExtraTimer(p0["order_end_time"], p0["status"]);
+      }
     }
+
     if (p0["isCustEntered"] != null &&
         p0["isCustEntered"] > DateTime.now().microsecondsSinceEpoch) {
       updateReadMessage();
     }
     print("extraTime ${p0["status"]}");
-    if (p0["status"] == "3") {
-      extraTimer?.cancel();
-      print("extraTime closing");
-    }
+
     isCardVisible.value =
         p0["card"] != null ? (p0["card"]["isCardVisible"] ?? false) : false;
 
@@ -1514,8 +1519,7 @@ class ChatMessageWithSocketController extends GetxController
       // "Picking tarot card...";
       update();
     }
-    int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
-    talkTimeStartTimer(remainingTime);
+
   }
 
   final noticeRepository = Get.put(NoticeRepository());
