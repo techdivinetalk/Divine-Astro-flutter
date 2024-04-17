@@ -19,7 +19,7 @@ class ApiProvider {
   // static const String socketUrl = "http://13.127.116.89:4000";
   static const String socketUrl = "http://15.206.23.215:8081";
   final String baseUrl =
-      "https://wakanda-api.divinetalk.live/api/astro/$version/";
+      "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
   //final String baseUrl = "http://13.235.46.27/admin/$version/";
 
   //Socket Event

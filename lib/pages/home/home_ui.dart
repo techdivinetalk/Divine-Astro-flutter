@@ -728,7 +728,7 @@ class HomeUI extends GetView<HomeController> {
                                 ))))
                   ]);
                 } else {
-                  return SizedBox();
+                  return Container(color: Colors.white);
                 }
               }));
         });

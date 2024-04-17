@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:developer';
 
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/screens/otp_verification/timer_controller.dart';
@@ -105,6 +106,7 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
     try {
       enableSubmit.value = false;
       VerifyOtpModel data = await userRepository.verifyOtp(params);
+
       await astroLogin();
       enableSubmit.value = true;
     } catch (error) {
@@ -131,7 +133,17 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
     try {
       ResLogin data = await userRepository.userLogin(params);
 
-      await updateLoginDataInFirebase(data);
+      await preferenceService.erase();
+      await preferenceService.setUserDetail(data.data!);
+      await preferenceService.setToken(data.token!);
+      await preferenceService.setDeviceToken(deviceToken ?? "");
+      if(data.data != null){
+        var commonConstants = await userRepository.constantDetailsData();
+        log(commonConstants.data!.toJson().toString());
+        print("responseresponseresponseresponse");
+      }
+      log("commonConstants.toJson().toString()");
+      // await updateLoginDataInFirebase(data);
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {

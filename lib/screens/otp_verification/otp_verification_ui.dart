@@ -64,7 +64,7 @@ class OtpVerificationUI extends GetView<OtpVerificationController> {
                             ? CustomMaterialButton(
                                 buttonName: "submit".tr,
                                 radius: 10.sp,
-                                textColor: appColors.brown,
+                                textColor: appColors.whiteGuidedColor,
                                 disabledColor:
                                     appColors.guideColor.withOpacity(0.5),
                                 onPressed: controller.otpLength.value == 6
@@ -97,7 +97,7 @@ class OtpVerificationUI extends GetView<OtpVerificationController> {
                                             child:
                                                  CircularProgressIndicator(
                                                     strokeWidth: 3,
-                                                    color: appColors.brown)),
+                                                    color: appColors.whiteGuidedColor)),
                                       ),
                                     ),
                                   ],

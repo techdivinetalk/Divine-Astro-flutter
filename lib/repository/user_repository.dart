@@ -451,11 +451,12 @@ class UserRepository extends ApiProvider {
   Future<ConstantDetailsModelClass> constantDetailsData() async {
     try {
       // debugPrint("Params $param");
+
       final response =
           await post(constantDetails, headers: await getJsonHeaderURL());
-
+      log(response.body);
+      log("response.body");
       if (response.statusCode == 200) {
-        log(response.body);
         final constantDetailsModelClass =
             ConstantDetailsModelClass.fromJson(json.decode(response.body));
         if (constantDetailsModelClass.statusCode == successResponse &&

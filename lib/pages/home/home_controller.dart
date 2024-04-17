@@ -133,6 +133,7 @@ class HomeController extends GetxController {
         }
       }
     });
+    getAllDashboardData();
     if (preferenceService.getUserDetail() != null) {
       userData = preferenceService.getUserDetail()!;
       appbarTitle.value =
@@ -140,7 +141,6 @@ class HomeController extends GetxController {
 
       print("${preferenceService.getBaseImageURL()}/${userData.image}");
 
-      getAllDashboardData();
       final String path = "astrologer/${(userData.id ?? 0)}/realTime";
       FirebaseDatabase.instance.ref().child(path).onValue.listen(
         (event) async {
@@ -207,18 +207,20 @@ class HomeController extends GetxController {
   getAllDashboardData({bool isReapeting = false}) async {
     await getConstantDetailsData();
 
-    if (getConstantDetails!.data!.isForceTraningVideo == 0) {
-      print("if----getConstantDetails!.data!.isForceTraningVideo");
-      getAllTrainingVideo(isReapeting: isReapeting);
-      update();
-    } else {
-      print("else----getConstantDetails!.data!.isForceTraningVideo");
-      await getDashboardDetail();
-      getFilteredPerformance();
-      getFeedbackData();
-      tarotCardData();
-      getUserImage();
-      update();
+    if (getConstantDetails != null) {
+      if (getConstantDetails!.data!.isForceTraningVideo == 0) {
+        print("if----getConstantDetails!.data!.isForceTraningVideo");
+        getAllTrainingVideo(isReapeting: isReapeting);
+        update();
+      } else {
+        print("else----getConstantDetails!.data!.isForceTraningVideo");
+        await getDashboardDetail();
+        getFilteredPerformance();
+        getFeedbackData();
+        tarotCardData();
+        getUserImage();
+        update();
+      }
     }
     update();
   }
@@ -643,10 +645,8 @@ class HomeController extends GetxController {
   getConstantDetailsData() async {
     try {
       var data = await userRepository.constantDetailsData();
-      print(data);
-      log(jsonEncode(data));
       getConstantDetails = data;
-      print(getConstantDetails!.data!.isForceTraningVideo);
+      log(getConstantDetails!.data!.toJson().toString());
       print("getting is force training video flag");
       preferenceService.setConstantDetails(data);
       profileDataSync.value = true;
