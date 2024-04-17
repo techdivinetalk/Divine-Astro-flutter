@@ -64,12 +64,9 @@ class DashboardController extends GetxController
           appFirebaseService.readData(
               'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
         });
-        Future.delayed(const Duration(seconds: 5), () {
-          print("is logged in");
-          appFirebaseService.masterData(
-            'masters',
-          );
-        });
+        appFirebaseService.masterData(
+          'masters',
+        );
       });
     } else {
       print("is logged out");

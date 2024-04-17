@@ -541,7 +541,7 @@ class HomeUI extends GetView<HomeController> {
                           SizedBox(height: 10.h),
                           Obx(
                             () {
-                              return controller.isLiveEnable.value
+                              return isLive.value ==1  ? controller.isLiveEnable.value
                                   ? Column(
                                       children: [
                                         SizedBox(height: 10.h),
@@ -616,7 +616,7 @@ class HomeUI extends GetView<HomeController> {
                                         SizedBox(height: 10.h),
                                       ],
                                     )
-                                  : const SizedBox();
+                                  : const SizedBox():const SizedBox();
                             },
                           ),
                           SizedBox(height: 10.h),

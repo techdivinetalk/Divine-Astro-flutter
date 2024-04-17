@@ -186,10 +186,10 @@ Future<void> main() async {
   //   runApp(const MyApp());
   // });
   await checkIfTokenUpdated();
-  final appFirebaseService = AppFirebaseService();
-  WidgetsBinding.instance.addPostFrameCallback((_) {
-    appFirebaseService.masterData('masters');
-  });
+    // final appFirebaseService = AppFirebaseService();
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   appFirebaseService.masterData('masters');
+    // });
 
   ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
   // call the useSystemCallingUI
