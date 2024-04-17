@@ -263,11 +263,11 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
   }
 
   navigateToDashboard(ResLogin data) async {
-    preferenceService.erase();
-    preferenceService.setUserDetail(data.data!);
-    preferenceService.setToken(data.token!);
-    // globalToken = data.token!;
-    preferenceService.setDeviceToken(deviceToken ?? "");
+    // preferenceService.erase();
+    // preferenceService.setUserDetail(data.data!);
+    // preferenceService.setToken(data.token!);
+    // // globalToken = data.token!;
+    // preferenceService.setDeviceToken(deviceToken ?? "");
     Get.offAllNamed(RouteName.dashboard);
     //Get.offAllNamed(RouteName.dashboard, arguments: [data.data!.phoneNo, data.data!.sessionId]);
   }

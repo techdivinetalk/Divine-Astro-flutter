@@ -103,7 +103,7 @@ class ChatMessageWithSocketController extends GetxController
   // FocusNode msgFocus = FocusNode();
   RxInt unreadMessageIndex = 0.obs;
   RxBool scrollToBottom = false.obs;
-  HiveServices hiveServices = HiveServices(boxName: userChatData);
+
   RxInt unreadMsgCount = 0.obs;
 
   // final KundliRepository? kundliRepository;
@@ -657,9 +657,9 @@ class ChatMessageWithSocketController extends GetxController
         update();
       }
     }
-    await hiveServices.addData(
-        key: userDataKey,
-        data: jsonEncode(databaseMessage.value.toOfflineJson()));
+    // await hiveServices.addData(
+    //     key: userDataKey,
+    //     data: jsonEncode(databaseMessage.value.toOfflineJson()));
   }
 
   void typingListenerSocket() {
@@ -1192,9 +1192,7 @@ class ChatMessageWithSocketController extends GetxController
     databaseMessage.value.chatMessages = chatMessages;
     unreadMsgCount.value = 0;
     chatMessages.refresh();
-    await hiveServices.addData(
-        key: userDataKey,
-        data: jsonEncode(databaseMessage.value.toOfflineJson()));
+
     Future.delayed(const Duration(seconds: 1))
         .then((value) => unreadMessageIndex.value = -1);
   }
