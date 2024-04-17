@@ -67,6 +67,8 @@ class GiftsSingleton {
       // debugPrint(
       //   '${DateTime.now()} GiftsSingleton(): cache(): try cache ${itemData.animation}',
       // );
+      print(itemData.animation);
+      print("itemData.animationitemData.animation");
       GiftCache().read(url: itemData.animation ?? "").then(
         (value) {
           // debugPrint(

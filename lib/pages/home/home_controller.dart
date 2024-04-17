@@ -206,9 +206,8 @@ class HomeController extends GetxController {
 
   getAllDashboardData({bool isReapeting = false}) async {
     await getConstantDetailsData();
-
     if (getConstantDetails != null) {
-      if (getConstantDetails!.data!.isForceTraningVideo == 0) {
+      if (getConstantDetails!.data!.isForceTraningVideo == 1) {
         print("if----getConstantDetails!.data!.isForceTraningVideo");
         getAllTrainingVideo(isReapeting: isReapeting);
         update();
@@ -221,6 +220,9 @@ class HomeController extends GetxController {
         getUserImage();
         update();
       }
+    }else{
+      print("getConstantDetails is null");
+
     }
     update();
   }

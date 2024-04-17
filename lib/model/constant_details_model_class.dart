@@ -62,7 +62,10 @@ class Data {
   String whatsappNo;
   AwsCredential awsCredentails;
   String? taroCard;
+  String? firebaseAuthEmail;
+  String? firebaseAuthPassword;
   int? isForceTraningVideo;
+
 
   Data({
     required this.leaderboardRankImage,
@@ -80,6 +83,8 @@ class Data {
     required this.awsCredentails,
     this.taroCard,
     this.isForceTraningVideo,
+    this.firebaseAuthEmail,
+    this.firebaseAuthPassword,
   });
 
   Data copyWith({
@@ -97,6 +102,8 @@ class Data {
     AwsCredential? awsCredential,
     String? whatsappNo,
     String? taroCard,
+    String? firebaseAuthEmail,
+    String? firebaseAuthPassword,
     int? isForceTraningVideo,
   }) =>
       Data(
@@ -107,6 +114,8 @@ class Data {
         chat: chat ?? this.chat,
         call: call ?? this.call,
         isForceTraningVideo: isForceTraningVideo ?? this.isForceTraningVideo,
+        firebaseAuthEmail: firebaseAuthEmail ?? this.firebaseAuthEmail,
+        firebaseAuthPassword: firebaseAuthPassword ?? this.firebaseAuthPassword,
         badWordsData: badWordsData ?? this.badWordsData,
         liveBackgroundImage: liveBackgroundImage ?? this.liveBackgroundImage,
         chatSuspiciousRegex: chatSuspiciousRegex ?? this.chatSuspiciousRegex,
@@ -128,6 +137,8 @@ class Data {
             .map((k, v) => MapEntry<String, String>(k, v)),
         reviewFreeAnimation: json["review_free_animation"],
         giftTimeInterval: json["gift_time_interval"],
+        firebaseAuthEmail: json["firebase_auth_email"],
+        firebaseAuthPassword: json["firebase_auth_password"],
         isForceTraningVideo: json["is_force_traning_video"],
         chat: Chat.fromJson(json["chat"]),
         call: Call.fromJson(json["call"]),
@@ -163,6 +174,8 @@ class Data {
         "aws_credential": awsCredentails.toJson(),
         "whatsappNo": whatsappNo,
          'taro_card': taroCard,
+         'firebase_auth_email': firebaseAuthEmail,
+         'firebase_auth_password': firebaseAuthPassword,
       };
 }
 

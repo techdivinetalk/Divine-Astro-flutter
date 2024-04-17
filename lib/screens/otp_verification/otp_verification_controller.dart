@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:developer';
 
+import 'package:divine_astrologer/firebase_service/firebase_authentication.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/screens/otp_verification/timer_controller.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -18,7 +19,6 @@ import '../../model/res_login.dart';
 import '../../model/send_otp.dart';
 import '../../model/verify_otp.dart';
 import '../../repository/user_repository.dart';
-
 
 //var globalToken = "";
 class OtpVerificationController extends GetxController with CodeAutoFill {
@@ -137,13 +137,12 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
       await preferenceService.setUserDetail(data.data!);
       await preferenceService.setToken(data.token!);
       await preferenceService.setDeviceToken(deviceToken ?? "");
-      if(data.data != null){
+      if (data.data != null) {
         var commonConstants = await userRepository.constantDetailsData();
-        log(commonConstants.data!.toJson().toString());
-        print("responseresponseresponseresponse");
+        Auth().handleSignInEmail(commonConstants.data!.firebaseAuthEmail!,
+            commonConstants.data!.firebaseAuthPassword!);
       }
-      log("commonConstants.toJson().toString()");
-      // await updateLoginDataInFirebase(data);
+      await updateLoginDataInFirebase(data);
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
@@ -267,7 +266,7 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
     preferenceService.erase();
     preferenceService.setUserDetail(data.data!);
     preferenceService.setToken(data.token!);
-   // globalToken = data.token!;
+    // globalToken = data.token!;
     preferenceService.setDeviceToken(deviceToken ?? "");
     Get.offAllNamed(RouteName.dashboard);
     //Get.offAllNamed(RouteName.dashboard, arguments: [data.data!.phoneNo, data.data!.sessionId]);
@@ -278,6 +277,7 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
       attempts.value = attempts.value - 1;
     }
   }
+
   String? otpCode;
 
   @override

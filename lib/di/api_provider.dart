@@ -295,7 +295,7 @@ class ApiProvider {
       log('url: $baseUrl$url');
       var response = await http
           .get(Uri.parse(baseUrl + url), headers: headers)
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+          .timeout(const Duration(seconds: 30), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
         }
@@ -327,7 +327,7 @@ class ApiProvider {
       log('url: $baseUrl$url');
       var response = await http
           .get(Uri.parse(baseUrl + url), headers: headers)
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+          .timeout(const Duration(seconds: 30), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
         }
@@ -351,7 +351,7 @@ class ApiProvider {
       log('url: $baseUrl$url');
       var response = await http
           .delete(Uri.parse(baseUrl + url), headers: headers)
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+          .timeout(const Duration(seconds: 30), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
         }
@@ -375,7 +375,7 @@ class ApiProvider {
       log('url:$baseUrl$url');
       var response = await http
           .get(url, headers: headers)
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+          .timeout(const Duration(seconds: 30), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
         }
@@ -408,7 +408,7 @@ class ApiProvider {
         body: body,
         encoding: encoding,
       )
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+          .timeout(const Duration(seconds: 30), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
         }
@@ -437,7 +437,7 @@ class ApiProvider {
       var response = await http
           .put(Uri.parse(baseUrl + url),
               headers: headers, body: body, encoding: encoding)
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+          .timeout(const Duration(seconds: 30), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
         }
