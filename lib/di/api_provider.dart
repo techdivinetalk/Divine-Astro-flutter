@@ -25,6 +25,8 @@ class ApiProvider {
   //Socket Event
   final String deleteSession = "deleteSession";
   final String deleteSessionResponse = "deleteSessionResponse";
+  static String playStoreLiveUrl = "https://play.google.com/store/apps/details?id=app.divine.astrologer";
+
   final String initResponse = "initResponse";
   final String initLeaderBoardSession = "initLeaderBoardSession";
   final String leaderBoardResponse = "leaderBoardResponse";

@@ -64,8 +64,8 @@ class Data {
   String? taroCard;
   String? firebaseAuthEmail;
   String? firebaseAuthPassword;
+  String? appVersion;
   int? isForceTraningVideo;
-
 
   Data({
     required this.leaderboardRankImage,
@@ -83,6 +83,7 @@ class Data {
     required this.awsCredentails,
     this.taroCard,
     this.isForceTraningVideo,
+    this.appVersion,
     this.firebaseAuthEmail,
     this.firebaseAuthPassword,
   });
@@ -101,6 +102,7 @@ class Data {
     Map<String, String>? notificationType,
     AwsCredential? awsCredential,
     String? whatsappNo,
+    String? appVersion,
     String? taroCard,
     String? firebaseAuthEmail,
     String? firebaseAuthPassword,
@@ -113,6 +115,7 @@ class Data {
         giftTimeInterval: giftTimeInterval ?? this.giftTimeInterval,
         chat: chat ?? this.chat,
         call: call ?? this.call,
+        appVersion: appVersion ?? this.appVersion,
         isForceTraningVideo: isForceTraningVideo ?? this.isForceTraningVideo,
         firebaseAuthEmail: firebaseAuthEmail ?? this.firebaseAuthEmail,
         firebaseAuthPassword: firebaseAuthPassword ?? this.firebaseAuthPassword,
@@ -139,6 +142,7 @@ class Data {
         giftTimeInterval: json["gift_time_interval"],
         firebaseAuthEmail: json["firebase_auth_email"],
         firebaseAuthPassword: json["firebase_auth_password"],
+        appVersion: json["app_version"],
         isForceTraningVideo: json["is_force_traning_video"],
         chat: Chat.fromJson(json["chat"]),
         call: Call.fromJson(json["call"]),
@@ -173,9 +177,9 @@ class Data {
             .map((k, v) => MapEntry<String, dynamic>(k, v)),
         "aws_credential": awsCredentails.toJson(),
         "whatsappNo": whatsappNo,
-         'taro_card': taroCard,
-         'firebase_auth_email': firebaseAuthEmail,
-         'firebase_auth_password': firebaseAuthPassword,
+        'taro_card': taroCard,
+        'firebase_auth_email': firebaseAuthEmail,
+        'firebase_auth_password': firebaseAuthPassword,
       };
 }
 

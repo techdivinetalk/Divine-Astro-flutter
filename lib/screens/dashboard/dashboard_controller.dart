@@ -2,19 +2,24 @@ import 'dart:async';
 
 import 'package:contacts_service/contacts_service.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
+import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
+import 'package:divine_astrologer/model/constant_model_class.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
+import 'package:divine_astrologer/utils/force_update_sheet.dart';
 import 'package:divine_astrologer/zego_call/zego_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:get/get.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../common/app_exception.dart';
 import '../../common/common_functions.dart';
 import '../../common/permission_handler.dart';
 import '../../di/fcm_notification.dart';
@@ -90,6 +95,7 @@ class DashboardController extends GetxController
     //  connectSocket();
     loadPreDefineData();
     firebaseMessagingConfig(Get.context!);
+    getConstantDetailsData();
     // FirebaseMessaging.instance.onTokenRefresh.listen((newtoken) {
     //   AppFirebaseService()
     //       .database
@@ -107,7 +113,39 @@ class DashboardController extends GetxController
   void onReady() {
     final socket = AppSocket();
     socket.socketConnect();
+
     super.onReady();
+  }
+
+
+  getConstantDetailsData() async {
+    try {
+      final data =
+      await userRepository.constantDetailsData();
+      if (data.data != null) {
+        PackageInfo packageInfo = await PackageInfo.fromPlatform();
+        print(data.data!.appVersion!.split(".").join(""));
+        print(packageInfo.version.split(".").join(""));
+        print('packageInfo.version!.split(".").join("")');
+        if (int.parse(data.data!.appVersion!.split(".").join("")) <=
+            int.parse(packageInfo.version.split(".").join(""))) {
+          print("objectobjectobjectobject");
+          Get.bottomSheet(
+            const ForceUpdateSheet(),
+            isDismissible: false,
+          );
+        }
+      }
+
+      update();
+    } catch (error) {
+      debugPrint("error::::: $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.red);
+      }
+    }
   }
 
   // @override

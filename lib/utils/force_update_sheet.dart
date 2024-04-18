@@ -1,7 +1,10 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class ForceUpdateSheet extends StatelessWidget {
   const ForceUpdateSheet({super.key});
@@ -36,23 +39,28 @@ class ForceUpdateSheet extends StatelessWidget {
                 textAlign: TextAlign.center,
                 style: AppTextStyle.textStyle14(
                   fontColor: appColors.lightGrey,
-                  fontWeight: FontWeight.w400,
+                  fontWeight: FontWeight.w500,
                 ),
               ),
               const SizedBox(height: 32),
-              Container(
-                height: 60,
-                width: double.infinity,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: appColors.guideColor,
-                  borderRadius: BorderRadius.circular(35),
-                ),
-                child: Text(
-                  "Update Now",
-                  style: AppTextStyle.textStyle20(
-                    fontColor: appColors.white,
-                    fontWeight: FontWeight.w600,
+              GestureDetector(
+                onTap: () {
+                  canLaunchUrl(Uri.parse(ApiProvider.playStoreLiveUrl));
+                },
+                child: Container(
+                  height: 60,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: appColors.guideColor,
+                    borderRadius: BorderRadius.circular(35),
+                  ),
+                  child: Text(
+                    "Update Now",
+                    style: AppTextStyle.textStyle20(
+                      fontColor: appColors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),
