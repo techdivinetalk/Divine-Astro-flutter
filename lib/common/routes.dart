@@ -368,7 +368,7 @@ class Routes {
         name: RouteName.waitList,
         binding: WaitListBinding()),
     GetPage(
-      page: () => const WalletPage(),
+      page: () => WalletPage(),
       name: RouteName.wallet,
       binding: WalletBinding(),
     ),

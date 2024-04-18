@@ -8,21 +8,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class WalletController extends GetxController {
-
   final WalletListRepo walletRepository = Get.put(WalletListRepo());
   Rx<PayoutDetails> walletListRepo = PayoutDetails().obs;
+  ScrollController scrollController = ScrollController();
   Loading loading = Loading.initial;
- // RxInt orderList = 7.obs;
-
- /* ScrollController orderScrollController = ScrollController();
-  ScrollController amountScrollController = ScrollController();
-  List<String> amountTypeList = [
-    "availableBalance".tr,
-    "pgCharges".tr,
-    "subTotal".tr,
-    "tds".tr,
-    "totalAmount".tr
-  ];*/
+  var currentPage = 1.obs;
+  int pageSize = 10;
 
   @override
   void onInit() {
@@ -30,24 +21,40 @@ class WalletController extends GetxController {
     getWalletDetailsApi();
   }
 
-
   getWalletDetailsApi() async {
+    if (loading == Loading.loading) return;
+
     loading = Loading.loading;
     update();
+
+    Map<String, dynamic> params = {
+      "page": currentPage.value,
+    };
     try {
-      PayoutDetails response = await walletRepository.walletPayOutDetails();
-      walletListRepo.value = response;
-      print("Walet Data:: ${walletListRepo.value.toJson()}");
+      PayoutDetails response =
+      await walletRepository.walletPayOutDetails(params);
+      if (currentPage.value == 1) {
+        walletListRepo.value = response;
+      } else {
+        walletListRepo.update((val) {
+          val?.data?.paymentLog?.addAll(response.data?.paymentLog ?? []);
+        });
+      }
+      currentPage.value++;
       loading = Loading.loaded;
     } catch (error) {
       debugPrint("error $error");
-      if (error is AppException) {
-        error.onException();
-      } else {
-        divineSnackBar(data: error.toString(), color: appColors.red);
-      }
       loading = Loading.loaded;
     }
     update();
   }
+
+
+  void loadNextPage() {
+    currentPage.value++;
+    getWalletDetailsApi();
+  }
+
 }
+
+

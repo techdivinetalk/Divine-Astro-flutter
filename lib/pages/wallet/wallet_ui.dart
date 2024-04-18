@@ -34,166 +34,176 @@ class WalletPage extends GetView<WalletController> {
       body: Column(
         children: [
           /*  balanceView(),*/
-         Row(
-           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-           children: [
-             SizedBox(
-               width: 60.w,
-               child: Column(
-                 children: [
-                   Text(
-                     'Available Balance:',
-                     textAlign: TextAlign.center,
-                     maxLines: 2,
-                     style: AppTextStyle.textStyle12(
-                         fontColor: appColors.darkBlue,
-                         fontWeight: FontWeight.w400
-                     ),
-                   ),
-                   const SizedBox(height: 10),
-                   Text(
-                     '₹${controller.walletListRepo.value.data?.totalAmountEarned.amountEarned ?? 0}',
-                     style: AppTextStyle.textStyle12(
-                         fontColor: appColors.darkBlue,
-                         fontWeight: FontWeight.w400
-                     ),
-                   ),
-                 ],
-               ),
-             ),
-             SizedBox(
-               width: 60.w,
-               child: Column(
-                 children: [
-                   Text(
-                     'PG \n Charges:',
-                     textAlign: TextAlign.center,
-                     maxLines: 2,
-                     style: AppTextStyle.textStyle12(
-                         fontColor: appColors.darkBlue,
-                         fontWeight: FontWeight.w400
-                     ),
-                   ),
-                   const SizedBox(height: 10),
-                   Text(
-                     '₹${controller.walletListRepo.value.data?.productRevenue.amount ?? 0}',
-                     style: AppTextStyle.textStyle12(
-                         fontColor: appColors.darkBlue,
-                         fontWeight: FontWeight.w400
-                     ),
-                   ),
-                 ],
-               ),
-             ),
-             SizedBox(
-               width: 60.w,
-               child: Column(
-                 children: [
-                   Text(
-                     'Sub \n Total:',
-                     textAlign: TextAlign.center,
-                     maxLines: 2,
-                     style: AppTextStyle.textStyle12(
-                         fontColor: appColors.darkBlue,
-                         fontWeight: FontWeight.w400
-                     ),
-                   ),
-                   const SizedBox(height: 10),
-                   Text(
-                     '₹${controller.walletListRepo.value.data?.weeklyOrder.count ?? 0}',
-                     style: AppTextStyle.textStyle12(
-                         fontColor: appColors.darkBlue,
-                         fontWeight: FontWeight.w400
-                     ),
-                   ),
-                 ],
-               ),
-             ),
-             SizedBox(
-               width: 60.w,
-               child: Column(
-                 children: [
-                   Text(
-                     'Product  \n Sold:',
-                     textAlign: TextAlign.center,
-                     maxLines: 2,
-                     style: AppTextStyle.textStyle12(
-                         fontColor: appColors.darkBlue,
-                         fontWeight: FontWeight.w400
-                     ),
-                   ),
-                   const SizedBox(height: 10),
-                   Text(
-                     '₹${controller.walletListRepo.value.data?.productSold.count ?? 0}',
-                     style: AppTextStyle.textStyle12(
-                         fontColor: appColors.darkBlue,
-                         fontWeight: FontWeight.w400
-                     ),
-                   ),
-                 ],
-               ),
-             ),
-             SizedBox(
-               width: 60.w,
-               child: Column(
-                 children: [
-                   Text(
-                     'Total \n Amount',
-                     textAlign: TextAlign.center,
-                     maxLines: 2,
-                     style: AppTextStyle.textStyle12(
-                       fontWeight: FontWeight.bold,
-                     ),
-                   ),
-                   const SizedBox(height: 10),
-                   Text(
-                     '₹${controller.walletListRepo.value.data?.totalAmountEarned.amountEarned ?? 0}',
-                     style: AppTextStyle.textStyle12(
-                       fontWeight: FontWeight.bold,
-                     ),
-                   ),
-                 ],
-               ),
-             ),
-           ],
-         ).scrollHorizontal(),
-           const SizedBox(height: 20),
-              Container(
-                  height: 1.h, color: appColors.darkBlue.withOpacity(0.5)),
-              const SizedBox(height: 20),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Obx(
-                      () {
-                    final paymentLogList =
-                        controller.walletListRepo.value.data?.paymentLog;
-                    if (controller.loading == Loading.loading) {
-                      return const GenericLoadingWidget();
-                    } else if (paymentLogList != null &&
-                        paymentLogList.isNotEmpty) {
-                      return ListView.separated(
-                        shrinkWrap: true,
-                        physics: const NeverScrollableScrollPhysics(),
-                        itemCount: paymentLogList.length,
-                        padding: const EdgeInsets.symmetric(horizontal: 10).copyWith(bottom: 20),
-                        separatorBuilder: (context, index) => const SizedBox(height: 10),
-                        itemBuilder: (context, index) {
-                          final log = paymentLogList[index];
-                          return PaymentLogTile(log: log!);
-                        },
-                      );
-                    } else {
-                      return const Text('No data available');
-                    }
-                  },
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              SizedBox(
+                width: 60.w,
+                child: Column(
+                  children: [
+                    Text(
+                      'Available Balance:',
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      style: AppTextStyle.textStyle12(
+                          fontColor: appColors.darkBlue,
+                          fontWeight: FontWeight.w400),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      '₹${controller.walletListRepo.value.data?.totalAmountEarned.amountEarned ?? 0}',
+                      style: AppTextStyle.textStyle12(
+                          fontColor: appColors.darkBlue,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ],
                 ),
+              ),
+              SizedBox(
+                width: 60.w,
+                child: Column(
+                  children: [
+                    Text(
+                      'PG \n Charges:',
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      style: AppTextStyle.textStyle12(
+                          fontColor: appColors.darkBlue,
+                          fontWeight: FontWeight.w400),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      '₹${controller.walletListRepo.value.data?.productRevenue.amount ?? 0}',
+                      style: AppTextStyle.textStyle12(
+                          fontColor: appColors.darkBlue,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 60.w,
+                child: Column(
+                  children: [
+                    Text(
+                      'Sub \n Total:',
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      style: AppTextStyle.textStyle12(
+                          fontColor: appColors.darkBlue,
+                          fontWeight: FontWeight.w400),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      '₹${controller.walletListRepo.value.data?.weeklyOrder.count ?? 0}',
+                      style: AppTextStyle.textStyle12(
+                          fontColor: appColors.darkBlue,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 60.w,
+                child: Column(
+                  children: [
+                    Text(
+                      'Product  \n Sold:',
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      style: AppTextStyle.textStyle12(
+                          fontColor: appColors.darkBlue,
+                          fontWeight: FontWeight.w400),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      '₹${controller.walletListRepo.value.data?.productSold.count ?? 0}',
+                      style: AppTextStyle.textStyle12(
+                          fontColor: appColors.darkBlue,
+                          fontWeight: FontWeight.w400),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(
+                width: 60.w,
+                child: Column(
+                  children: [
+                    Text(
+                      'Total \n Amount',
+                      textAlign: TextAlign.center,
+                      maxLines: 2,
+                      style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      '₹${controller.walletListRepo.value.data?.totalAmountEarned.amountEarned ?? 0}',
+                      style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ).scrollHorizontal(),
+          const SizedBox(height: 20),
+          Container(height: 1.h, color: appColors.darkBlue.withOpacity(0.5)),
+          const SizedBox(height: 20),
+          Expanded(
+              child: NotificationListener<ScrollNotification>(
+            onNotification: (ScrollNotification scrollInfo) {
+              if (scrollInfo is ScrollEndNotification &&
+                  scrollInfo.metrics.pixels ==
+                      scrollInfo.metrics.maxScrollExtent) {
+                controller.loadNextPage();
+              }
+              return true;
+            },
+            child: Obx(
+              () {
+                final paymentLogList =
+                    controller.walletListRepo.value.data?.paymentLog;
+                if (controller.loading == Loading.loading) {
+                  return const GenericLoadingWidget();
+                } else if (paymentLogList != null &&
+                    paymentLogList.isNotEmpty) {
+                  return ListView.separated(
+                    physics: const ScrollPhysics(),
+                    itemCount: paymentLogList.length + 1,
+                    padding: const EdgeInsets.symmetric(horizontal: 10)
+                        .copyWith(bottom: 20),
+                    separatorBuilder: (context, index) =>
+                        const SizedBox(height: 10),
+                    itemBuilder: (context, index) {
+                      if (index < paymentLogList.length) {
+                        final log = paymentLogList[index];
+
+                        return PaymentLogTile(log: log!);
+                      } else {
+                        return Text(
+                          "Load More",
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            color: appColors.guideColor,
+                          ),
+                          textAlign: TextAlign.center,
+                        );
+                      }
+                    },
+                  );
+                } else {
+                  return const Text('No data available');
+                }
+              },
             ),
-          )
+          ))
         ],
       ),
     );
   }
-
 }
 
 class PaymentLogTile extends StatelessWidget {
@@ -203,7 +213,7 @@ class PaymentLogTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   /* String productTypeText;
+    /* String productTypeText;
 
     switch (log.productType) {
       case 7:
@@ -291,8 +301,10 @@ class PaymentLogTile extends StatelessWidget {
           ),
           Text(
             // "with Username(user id) for 8 minutes "
-            log.payoutFor == "gift" ? "with ${log.customerDetails?.name}(${log.customerDetails?.id.toString()})" : "with ${log.customerDetails?.name}(${log.customerDetails?.id.toString()}) for ${log.callDuration.toString()} minutes",
-           // "with ${log.customerDetails?.name}(${log.customerDetails?.id.toString()}) for ${log.callDuration.toString()} minutes",
+            log.payoutFor == "gift"
+                ? "with ${log.customerDetails?.name}(${log.customerDetails?.id.toString()})"
+                : "with ${log.customerDetails?.name}(${log.customerDetails?.id.toString()}) for ${log.callDuration.toString()} minutes",
+            // "with ${log.customerDetails?.name}(${log.customerDetails?.id.toString()}) for ${log.callDuration.toString()} minutes",
             textAlign: TextAlign.start,
             style: AppTextStyle.textStyle12(
                 fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
@@ -341,6 +353,7 @@ class PaymentLogTile extends StatelessWidget {
           return 'Other';
       }
     }
+
     return Column(
       children: [
         Row(
@@ -483,25 +496,29 @@ class PaymentLogTile extends StatelessWidget {
           ],
         ),
         const SizedBox(height: 10),
-        log.payoutFor != 'gift'? Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Row(
-              children: [
-                Assets.images.icClock.svg(),
-                const SizedBox(width: 15),
-                Text(
-                  "duration".tr,
-                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
-                ),
-              ],
-            ),
-            Text(
-              "${log.callDuration?? "N/a"} mins",
-              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
-            ),
-          ],
-        ) : SizedBox.shrink()
+        log.payoutFor != 'gift'
+            ? Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Row(
+                    children: [
+                      Assets.images.icClock.svg(),
+                      const SizedBox(width: 15),
+                      Text(
+                        "duration".tr,
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    "${log.callDuration ?? "N/a"} mins",
+                    style:
+                        AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                  ),
+                ],
+              )
+            : SizedBox.shrink()
       ],
     );
   }
