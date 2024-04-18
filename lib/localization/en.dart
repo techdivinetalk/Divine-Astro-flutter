@@ -11,6 +11,7 @@ Map<String, String> en() {
     "timeoutMessage":
         "Something went wrong.\nPlease check you internet connection and please try again.",
     "today": "Today",
+    'noDataToShow': 'No data to show',
     'deleteChat':'Delete Chat',
     "followers": "Followers",
     'voucherPopUpTitle':'Choose The Gift Voucher To Send',

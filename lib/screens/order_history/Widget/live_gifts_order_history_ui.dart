@@ -46,14 +46,6 @@ class LiveGiftsHistory extends StatelessWidget {
                 }
 
               });
-              if (controller.giftHistoryList.isEmpty) {
-                return const Center(
-                  child: Text(
-                    'No data found',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                );
-              }
               return Column(
                 children: [
                   Expanded(
@@ -274,7 +266,7 @@ class LiveGiftsHistory extends StatelessWidget {
                   "totalEarning".tr,
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600),
                 ),
-                Text("₹${data[index].amount}",
+                Text("₹${data[index].amount ?? "0"}",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w600,
                         fontColor: appColors.lightGreen)),

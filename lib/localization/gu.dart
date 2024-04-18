@@ -9,6 +9,7 @@ Map<String, String> gu() {
     "noticeBoard": "સૂચના બોર્ડ",
     "viewAll": "બધુજ જુઓ",
     "message": "સંદેશ",
+    'noDataToShow': 'બતાવવા માટે કોઈ ડેટા નથી',
     'dasha': 'દશા',
     'planets': 'ગ્રહો',
     'rulingPlanets': 'શાસક ગ્રહો',

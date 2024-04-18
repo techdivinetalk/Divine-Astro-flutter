@@ -9,9 +9,9 @@ import 'package:get/get.dart';
 
 class WalletListRepo extends ApiProvider {
 
-  Future<PayoutDetails> walletPayOutDetails() async {
+  Future<PayoutDetails> walletPayOutDetails(Map<String, dynamic> param) async {
     try {
-      final response = await post(walletPayout);
+      final response = await post(walletPayout,body: jsonEncode(param));
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {

@@ -42,14 +42,6 @@ class ChatOrderHistory extends StatelessWidget {
                   }
                 }
               });
-              if (controller.chatHistoryList.isEmpty) {
-                return const Center(
-                  child: Text(
-                    'No data found',
-                    style: TextStyle(fontSize: 18),
-                  ),
-                );
-              }
               return Column(
                 children: [
                   Expanded(
@@ -174,7 +166,7 @@ class ChatOrderHistory extends StatelessWidget {
               ),
               Text(
                 // "$amount",
-                "+ ₹${data[index].amount}",
+                "+ ₹${data[index].amount ?? "0"}",
                 style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w400,
                     fontColor: /*data[index].amount.toString().contains("+")

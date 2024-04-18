@@ -137,7 +137,7 @@ class HomeController extends GetxController {
     if (preferenceService.getUserDetail() != null) {
       userData = preferenceService.getUserDetail()!;
       appbarTitle.value =
-          "${userData.name.toString().capitalizeFirst} (${userData.id})";
+          "${userData.name.toString().capitalizeFirst} (${userData.uniqueNo})";
 
       print("${preferenceService.getBaseImageURL()}/${userData.image}");
 
