@@ -15,6 +15,7 @@ Map<String, String> mr() {
     'bhavChalitChart': 'भाव चालित चार्ट',
     'cusps': 'कुस्प्स',
     'cusp': 'कस्प',
+    'noDataToShow': 'दर्शविण्यासाठी कोणताही डेटा नाही',
     'planets': 'ग्रह',
     'rulingPlanets': 'सत्ताधारी ग्रह',
     'vimshottari': 'विमशोत्तरी',

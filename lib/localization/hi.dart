@@ -11,6 +11,7 @@ Map<String, String> hi() {
     'bhavChalitChart': 'भाव चलित चार्ट',
     'cusps': 'कुस्प्स',
     'cusp': 'कुस्प',
+    'noDataToShow': 'दिखाने के लिए कोई डेटा नहीं',
     'planets': 'ग्रहों',
     'rulingPlanets': 'शासक ग्रह',
     "message": "संदेश",
