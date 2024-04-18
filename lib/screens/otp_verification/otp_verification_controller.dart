@@ -284,6 +284,9 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
   void codeUpdated() {
     otpCode = code!;
     pinController.text = code ?? "";
+    if (pinController.text.isNotEmpty) {
+      verifyOtp();
+    }
     update();
   }
 }
