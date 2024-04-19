@@ -15,6 +15,7 @@ import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -60,11 +61,36 @@ Future<void> main() async {
   Get.put(AppColors());
   // await RemoteConfigService.instance.initFirebaseRemoteConfig();
   final remoteConfig = FirebaseRemoteConfig.instance;
+
   final remoteConfigHelper = RemoteConfigHelper(remoteConfig: remoteConfig);
   await remoteConfigHelper.initialize();
   remoteConfigHelper.updateGlobalConstantWithFirebaseData();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await GetStorage.init();
+  // Non-async exceptions
+  const fatalError = true;
+  FlutterError.onError = (errorDetails) {
+    if (fatalError) {
+      // If you want to record a "fatal" exception
+      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
+      // ignore: dead_code
+    } else {
+      // If you want to record a "non-fatal" exception
+      FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
+    }
+  };
+  // Async exceptions
+  PlatformDispatcher.instance.onError = (error, stack) {
+    if (fatalError) {
+      // If you want to record a "fatal" exception
+      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+      // ignore: dead_code
+    } else {
+      // If you want to record a "non-fatal" exception
+      FirebaseCrashlytics.instance.recordError(error, stack);
+    }
+    return true;
+  };
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("pushNotification1");
     print('Message data-: dasboardCurrentIndex');

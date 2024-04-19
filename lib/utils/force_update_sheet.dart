@@ -45,7 +45,7 @@ class ForceUpdateSheet extends StatelessWidget {
               const SizedBox(height: 32),
               GestureDetector(
                 onTap: () {
-                  canLaunchUrl(Uri.parse(ApiProvider.playStoreLiveUrl));
+                  urlLuncher(url:Uri.parse(ApiProvider.playStoreLiveUrl));
                 },
                 child: Container(
                   height: 60,
@@ -70,5 +70,11 @@ class ForceUpdateSheet extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  Future<void> urlLuncher({Uri? url}) async {
+    if (!await launchUrl(url!)) {
+      throw Exception('Could not launch $url');
+    }
   }
 }
