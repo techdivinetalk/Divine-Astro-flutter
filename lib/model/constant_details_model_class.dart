@@ -31,13 +31,22 @@ class ConstantDetailsModelClass {
 
   String toRawJson() => json.encode(toJson());
 
-  factory ConstantDetailsModelClass.fromJson(Map<String, dynamic> json) =>
-      ConstantDetailsModelClass(
-        data: Data.fromJson(json["data"]),
-        success: json["success"],
-        statusCode: json["status_code"],
-        message: json["message"],
-      );
+  factory ConstantDetailsModelClass.fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      throw Exception('Failed to parse JSON data. Data is null.');
+    }
+    final dataJson = json["data"];
+    if (dataJson == null) {
+      throw Exception('"data" key is null or not present in JSON data.');
+    }
+    return ConstantDetailsModelClass(
+      data: Data.fromJson(dataJson),
+      success: json["success"],
+      statusCode: json["status_code"],
+      message: json["message"],
+    );
+  }
+
 
   Map<String, dynamic> toJson() => {
         "data": data?.toJson(),

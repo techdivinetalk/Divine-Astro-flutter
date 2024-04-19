@@ -268,7 +268,10 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
     // preferenceService.setToken(data.token!);
     // // globalToken = data.token!;
     // preferenceService.setDeviceToken(deviceToken ?? "");
-    Get.offAllNamed(RouteName.dashboard);
+    Future.delayed(
+      const Duration(seconds: 1),
+          () => Get.offAllNamed(RouteName.dashboard),
+    );
     //Get.offAllNamed(RouteName.dashboard, arguments: [data.data!.phoneNo, data.data!.sessionId]);
   }
 
