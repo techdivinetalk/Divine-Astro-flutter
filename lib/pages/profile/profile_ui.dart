@@ -196,7 +196,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                             SizedBox(width: 5.h),
                             Expanded(
                               child: Text(
-                                  "${controller.userData?.id ??
+                                  "${controller.userData?.uniqueNo ??
                                       ""}",
                                   style: AppTextStyle.textStyle14(
                                       fontWeight: FontWeight.w400,

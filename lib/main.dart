@@ -24,6 +24,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -67,6 +68,26 @@ Future<void> main() async {
   remoteConfigHelper.updateGlobalConstantWithFirebaseData();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await GetStorage.init();
+  InAppUpdate.checkForUpdate().then((updateInfo) {
+    if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
+      if (updateInfo.immediateUpdateAllowed) {
+        // Perform immediate update
+        InAppUpdate.performImmediateUpdate().then((appUpdateResult) {
+          if (appUpdateResult == AppUpdateResult.success) {
+            Fluttertoast.showToast(msg: "AppUpdated lets Re-start");
+          }
+        });
+      } else if (updateInfo.flexibleUpdateAllowed) {
+        //Perform flexible update
+        InAppUpdate.startFlexibleUpdate().then((appUpdateResult) {
+          if (appUpdateResult == AppUpdateResult.success) {
+            //App Update successful
+            InAppUpdate.completeFlexibleUpdate();
+          }
+        });
+      }
+    }
+  });
   // Non-async exceptions
   const fatalError = true;
   FlutterError.onError = (errorDetails) {
