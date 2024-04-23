@@ -37,7 +37,7 @@ class ConstantDetailsModelClass {
     }
     final dataJson = json["data"];
     if (dataJson == null) {
-      throw Exception('"data" key is null or not present in JSON data.');
+      throw Exception('Token expired. Please log in again.');
     }
     return ConstantDetailsModelClass(
       data: Data.fromJson(dataJson),

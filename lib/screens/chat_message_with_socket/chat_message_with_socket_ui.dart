@@ -66,8 +66,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
               children: [
                 AstrologerChatAppBar(),
                 // permissionRequestWidget(),
-                const SizedBox(height: 10),
-                CarouselSlider(
+                controller.noticeDataChat.isNotEmpty ? const SizedBox(height: 10): const SizedBox.shrink(),
+                controller.noticeDataChat.isNotEmpty ? CarouselSlider(
                   options: CarouselOptions(
                     height: 50,
                     autoPlay: true,
@@ -107,7 +107,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       },
                     );
                   }).toList(),
-                ),
+                ) : const SizedBox.shrink(),
                 Expanded(
                   child: Stack(
                     children: [
