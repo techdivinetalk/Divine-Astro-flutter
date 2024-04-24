@@ -148,6 +148,7 @@ class SplashController extends GetxController with WidgetsBindingObserver {
     if (preferenceService.getUserDetail() == null ||
         preferenceService.getToken() == null ||
         preferenceService.getToken() == "") {
+      print("moveLogin1");
       Get.offAllNamed(RouteName.login);
       // await getInitialLoginImages().then(
       //   (value) async => await preferenceService
@@ -155,6 +156,7 @@ class SplashController extends GetxController with WidgetsBindingObserver {
       //       .then((value) => Get.offAllNamed(RouteName.login)),
       // );
     } else {
+      print("moveLogin0");
       // final socket = AppSocket();
       //  final appFirebaseService = AppFirebaseService();
       //  socket.socketConnect();
