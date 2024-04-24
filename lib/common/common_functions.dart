@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:aws_s3_upload/aws_s3_upload.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:divine_astrologer/di/api_provider.dart';
 
 import 'package:divine_astrologer/model/chat/req_common_chat_model.dart';
 import 'package:divine_astrologer/repository/chat_repository.dart';
@@ -56,7 +57,7 @@ Future<String?> uploadImageFileToAws(
   var token = preferenceService.getToken();
 
   var uri =
-      Uri.parse("https://wakanda-api.divinetalk.live/api/astro/v7/uploadImage");
+      Uri.parse("${ApiProvider.baseUrl}uploadImage");
 
   var request = http.MultipartRequest('POST', uri);
 

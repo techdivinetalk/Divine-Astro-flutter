@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:http/http.dart' as http;
 
 import 'common_functions.dart';
@@ -8,7 +9,7 @@ Future<String?> uploadImageFileToAws(File imageFile) async {
   var token = await preferenceService.getToken();
 
   var uri =
-      Uri.parse("https://wakanda-api.divinetalk.live/api/astro/v7/uploadImage");
+      Uri.parse("${ApiProvider.baseUrl}uploadImage");
 
   var request = http.MultipartRequest('POST', uri);
 

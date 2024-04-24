@@ -121,7 +121,7 @@ class KundliRepository extends ApiProvider {
       Map<String, dynamic> param) async {
     try {
       final response = await post(getKundliData,
-          endPoint: "https://wakanda-api.divinetalk.live/api/v7/",
+          endPoint: ApiProvider.baseUrl,
           body: jsonEncode(param),
           headers: await getJsonHeaderURL());
 
