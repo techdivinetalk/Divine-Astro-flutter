@@ -2,7 +2,7 @@ name: divine_astrologer
 description: A new Flutter project.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-version: 1.0.0+1
+version: 4.0.2
 
 environment:
   sdk: '>=3.0.5 <4.0.0'
@@ -15,7 +15,6 @@ dependencies:
   camera: ^0.10.5+9
   in_app_update: ^4.2.2
   chips_choice: ^3.0.0
-  sms_autofill: ^2.3.1
   compress_images_flutter: ^0.0.3+5
   connectivity_plus: ^4.0.1
   contacts_service: ^0.6.3
@@ -100,7 +99,6 @@ dependencies:
   flutter_json_viewer: ^1.0.1
   device_apps: ^2.2.0
   call_log: ^4.0.0
-  flutter_sms_inbox: ^1.0.3
   # flutter_screen_recording: ^2.0.10
   # overlapped_carousel: ^1.0.1
   # coverflow: ^2.0.3

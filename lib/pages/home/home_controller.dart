@@ -81,8 +81,8 @@ class HomeController extends GetxController {
   ExpandedTileController? expandedTile2Controller = ExpandedTileController();
   UserData userData = UserData();
   final preferenceService = Get.find<SharedPreferenceService>();
-  final UserRepository userRepository = Get.put(UserRepository());
-  final HomePageRepository homePageRepository = Get.put(HomePageRepository());
+  UserRepository userRepository = UserRepository();
+  HomePageRepository homePageRepository = HomePageRepository();
   final homeScreenKey = GlobalKey<ScaffoldState>();
   int scoreIndex = 0;
   List<Map<String, dynamic>> yourScore = [];
@@ -133,8 +133,8 @@ class HomeController extends GetxController {
         }
       }
     });
-    getAllDashboardData();
     if (preferenceService.getUserDetail() != null) {
+      getAllDashboardData();
       userData = preferenceService.getUserDetail()!;
       appbarTitle.value =
           "${userData.name.toString().capitalizeFirst} (${userData.uniqueNo})";
@@ -220,9 +220,8 @@ class HomeController extends GetxController {
         getUserImage();
         update();
       }
-    }else{
+    } else {
       print("getConstantDetails is null");
-
     }
     update();
   }
@@ -650,7 +649,7 @@ class HomeController extends GetxController {
       getConstantDetails = data;
       log(getConstantDetails!.data!.toJson().toString());
       print("getting is force training video flag");
-      preferenceService.setConstantDetails(data);
+      await preferenceService.setConstantDetails(data);
       profileDataSync.value = true;
 
       // getDashboardDetail();
@@ -659,7 +658,7 @@ class HomeController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      //  divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
   }

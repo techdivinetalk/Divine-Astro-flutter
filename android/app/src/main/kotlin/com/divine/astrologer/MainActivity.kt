@@ -13,11 +13,11 @@ import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugins.GeneratedPluginRegistrant
 
 class MainActivity : FlutterFragmentActivity() {
-    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
-        GeneratedPluginRegistrant.registerWith(flutterEngine)
-    }
-
-    override fun getBackgroundMode(): FlutterActivityLaunchConfigs.BackgroundMode {
-        return FlutterActivityLaunchConfigs.BackgroundMode.transparent
-    }
+//    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
+//        GeneratedPluginRegistrant.registerWith(flutterEngine)
+//    }
+//
+//    override fun getBackgroundMode(): FlutterActivityLaunchConfigs.BackgroundMode {
+//        return FlutterActivityLaunchConfigs.BackgroundMode.transparent
+//    }
 }

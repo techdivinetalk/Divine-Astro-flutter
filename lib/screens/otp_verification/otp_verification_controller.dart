@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:divine_astrologer/firebase_service/firebase_authentication.dart';
@@ -8,8 +9,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:sms_autofill/sms_autofill.dart';
-
 import '../../common/app_exception.dart';
 import '../../common/colors.dart';
 import '../../common/common_functions.dart';
@@ -21,7 +20,7 @@ import '../../model/verify_otp.dart';
 import '../../repository/user_repository.dart';
 
 //var globalToken = "";
-class OtpVerificationController extends GetxController with CodeAutoFill {
+class OtpVerificationController extends GetxController {
   OtpVerificationController(this.userRepository);
 
   final UserRepository userRepository;
@@ -44,7 +43,7 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
 
   @override
   void onReady() async {
-    listenForCode();
+  //  listenForCode();
     var arguments = Get.arguments;
     if (arguments != null) {
       var args = arguments as List;
@@ -137,6 +136,10 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
       await preferenceService.setUserDetail(data.data!);
       await preferenceService.setToken(data.token!);
       await preferenceService.setDeviceToken(deviceToken ?? "");
+      print(data.token);
+      log(jsonEncode(data.data));
+      print("jsonEncode(data.data)");
+      await Future.delayed(const Duration(milliseconds: 300));
       if (data.data != null) {
         var commonConstants = await userRepository.constantDetailsData();
         Auth().handleSignInEmail(commonConstants.data!.firebaseAuthEmail!,
@@ -283,13 +286,12 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
 
   String? otpCode;
 
-  @override
-  void codeUpdated() {
-    otpCode = code!;
-    pinController.text = code ?? "";
-    if (pinController.text.isNotEmpty) {
-      verifyOtp();
-    }
-    update();
-  }
+  // void codeUpdated() {
+  //   otpCode = code!;
+  //   pinController.text = code ?? "";
+  //   if (pinController.text.isNotEmpty) {
+  //     verifyOtp();
+  //   }
+  //   update();
+  // }
 }
