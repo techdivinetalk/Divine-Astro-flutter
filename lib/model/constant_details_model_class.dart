@@ -32,18 +32,14 @@ class ConstantDetailsModelClass {
   String toRawJson() => json.encode(toJson());
 
   factory ConstantDetailsModelClass.fromJson(Map<String, dynamic>? json) {
-    if (json == null) {
-      throw Exception('Failed to parse JSON data. Data is null.');
-    }
-    final dataJson = json["data"];
-    if (dataJson == null) {
-      throw Exception('Token expired. Please log in again.');
-    }
+
     return ConstantDetailsModelClass(
-      data: Data.fromJson(dataJson),
-      success: json["success"],
-      statusCode: json["status_code"],
-      message: json["message"],
+      data:(json?['data'] as Map<String, dynamic>?) != null
+          ? Data.fromJson(json?['data'] as Map<String, dynamic>)
+          : null,
+      success: json?["success"],
+      statusCode: json?["status_code"],
+      message: json?["message"],
     );
   }
 

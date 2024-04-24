@@ -142,13 +142,12 @@ class SplashController extends GetxController with WidgetsBindingObserver {
     return false;
   }
 
-  final repository = Get.put(UserRepository());
 
   navigation() async {
-    if (preferenceService.getUserDetail() == null ||
-        preferenceService.getToken() == null ||
-        preferenceService.getToken() == "") {
-      print("moveLogin1");
+    log(jsonEncode(preferenceService.getUserDetail()));
+    log("jsonEncode(preferenceService.getUserDetail())");
+    if (preferenceService.getUserDetail() == null) {
+      print("goining in if part");
       Get.offAllNamed(RouteName.login);
       // await getInitialLoginImages().then(
       //   (value) async => await preferenceService
@@ -156,7 +155,7 @@ class SplashController extends GetxController with WidgetsBindingObserver {
       //       .then((value) => Get.offAllNamed(RouteName.login)),
       // );
     } else {
-      print("moveLogin0");
+      print("goining in else part");
       // final socket = AppSocket();
       //  final appFirebaseService = AppFirebaseService();
       //  socket.socketConnect();
@@ -169,10 +168,10 @@ class SplashController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  Future<LoginImages> getInitialLoginImages() async {
-    final response = await repository.getInitialLoginImages();
-    return response;
-  }
+  // Future<LoginImages> getInitialLoginImages() async {
+  //   final response = await repository.getInitialLoginImages();
+  //   return response;
+  // }
 
   requestPermissions() async {
     var status = await Permission.contacts.status;

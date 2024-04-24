@@ -106,7 +106,7 @@ class GetAstrolopgerDetails {
   String? sessionId;
   int? callPreviousStatus;
   int? chatPreviousStatus;
-  double? retention;
+  num? retention;
   String? premium;
   // Null? astroCat;
   List<AstroCatPivot>? astroCatPivot;

@@ -1,4 +1,5 @@
 import 'dart:collection';
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:divine_astrologer/firebase_service/firebase_authentication.dart';
@@ -135,6 +136,10 @@ class OtpVerificationController extends GetxController {
       await preferenceService.setUserDetail(data.data!);
       await preferenceService.setToken(data.token!);
       await preferenceService.setDeviceToken(deviceToken ?? "");
+      print(data.token);
+      log(jsonEncode(data.data));
+      print("jsonEncode(data.data)");
+      await Future.delayed(const Duration(milliseconds: 300));
       if (data.data != null) {
         var commonConstants = await userRepository.constantDetailsData();
         Auth().handleSignInEmail(commonConstants.data!.firebaseAuthEmail!,

@@ -63,7 +63,6 @@ class SettingsController extends GetxController {
         if (value.statusCode == 200 && value.success == true) {
           preferenceService.erase().whenComplete(() async {
             // To disconnect
-
             await FirebaseDatabase.instance.goOffline();
             Get.offAllNamed(RouteName.login);
 

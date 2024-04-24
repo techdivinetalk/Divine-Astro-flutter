@@ -69,9 +69,7 @@ class DashboardController extends GetxController
           appFirebaseService.readData(
               'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
         });
-        appFirebaseService.masterData(
-          'masters',
-        );
+        appFirebaseService.masterData('masters');
       });
     } else {
       print("is logged out");
@@ -117,11 +115,9 @@ class DashboardController extends GetxController
     super.onReady();
   }
 
-
   getConstantDetailsData() async {
     try {
-      final data =
-      await userRepository.constantDetailsData();
+      final data = await userRepository.constantDetailsData();
       if (data.data != null) {
         PackageInfo packageInfo = await PackageInfo.fromPlatform();
         print(data.data!.appVersion!.split(".").join(""));
