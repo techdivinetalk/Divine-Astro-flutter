@@ -98,7 +98,6 @@ dependencies:
   uuid: ^4.3.2
   flutter_json_viewer: ^1.0.1
   device_apps: ^2.2.0
-  call_log: ^4.0.0
   # flutter_screen_recording: ^2.0.10
   # overlapped_carousel: ^1.0.1
   # coverflow: ^2.0.3
