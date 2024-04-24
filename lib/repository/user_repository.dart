@@ -226,7 +226,6 @@ class UserRepository extends ApiProvider {
     }
   }*/
 
-  //
   Future<ResLogin> astrologerLoginWithTrueCaller({
     required Map<String, dynamic> params,
   }) async {
@@ -451,7 +450,6 @@ class UserRepository extends ApiProvider {
   Future<ConstantDetailsModelClass> constantDetailsData() async {
     try {
       // debugPrint("Params $param");
-
       final response =
           await post(constantDetails, headers: await getJsonHeaderURL());
       log(response.body);
