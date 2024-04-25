@@ -75,7 +75,7 @@ class EditProfileController extends GetxController {
           Get.back();
         }
       } else if (response.statusCode == 400) {
-        Fluttertoast.showToast(msg: response.statusCode.toString());
+        Fluttertoast.showToast(msg: response.message.toString());
       }
     }
   }
