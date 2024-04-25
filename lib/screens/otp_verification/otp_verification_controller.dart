@@ -159,8 +159,6 @@ class OtpVerificationController extends GetxController {
     final String uniqueId = await getDeviceId() ?? '';
     final String firebaseNodeUrl = 'astrologer/${data.data?.id}';
     final FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
-    final DatabaseReference ref = firebaseDatabase.ref();
-    //AppFirebaseService().readData("$firebaseNodeUrl/realTime");
     firebaseDatabase.ref().child(firebaseNodeUrl).onValue.listen((events) async {
       DataSnapshot dataSnapshot = events.snapshot;
       if (dataSnapshot.exists) {
