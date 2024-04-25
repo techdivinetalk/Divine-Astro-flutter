@@ -66,7 +66,7 @@ class LoginUI extends GetView<LoginController> {
                                     "By signing up, you agree to our ",
                                     style: TextStyle(
                                       color: appColors.textColor,
-                                      fontSize: 11.5.sp,
+                                      fontSize: 12,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
@@ -80,7 +80,7 @@ class LoginUI extends GetView<LoginController> {
                                       "terms of use",
                                       style: TextStyle(
                                         color: appColors.textColor,
-                                        fontSize: 11.5.sp,
+                                        fontSize: 12,
                                         fontWeight: FontWeight.w400,
                                         decoration:
                                         TextDecoration.underline,
@@ -93,7 +93,7 @@ class LoginUI extends GetView<LoginController> {
                                     " ${"and".tr} ",
                                     style: TextStyle(
                                       color: appColors.textColor,
-                                      fontSize: 11.5.sp,
+                                      fontSize: 12,
                                       fontWeight: FontWeight.w400,
                                     ),
                                   ),
@@ -107,7 +107,7 @@ class LoginUI extends GetView<LoginController> {
                                         child: Text("privacy policy",
                                             style: TextStyle(
                                                 color: appColors.textColor,
-                                                fontSize: 11.5.sp,
+                                                fontSize: 12,
                                                 fontWeight: FontWeight.w400,
                                                 decoration: TextDecoration
                                                     .underline))))

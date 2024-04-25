@@ -139,7 +139,6 @@ class OtpVerificationController extends GetxController {
       print(data.token);
       log(jsonEncode(data.data));
       print("jsonEncode(data.data)");
-      await Future.delayed(const Duration(milliseconds: 300));
       if (data.data != null) {
         var commonConstants = await userRepository.constantDetailsData();
         Auth().handleSignInEmail(commonConstants.data!.firebaseAuthEmail!,
@@ -155,77 +154,6 @@ class OtpVerificationController extends GetxController {
       }
     }
   }
-
-  // Future<void> updateLoginDatainFirebase(ResLogin data) async {
-  //   String uniqueId = await getDeviceId() ?? '';
-  //   FirebaseUserData firebaseUserData = FirebaseUserData(
-  //     data.data!.name!,
-  //     data.data!.deviceToken!,
-  //     data.data!.image ?? "",
-  //     RealTime(
-  //         isEngagedStatus: 0,
-  //         uniqueId: uniqueId,
-  //         walletBalance: 0),
-  //   );
-  //   FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
-  //
-  //   final DatabaseReference databaseRef =
-  //   firebaseDatabase.ref().child("astrologer/${data.data?.id}");
-  //   databaseRef.set(firebaseUserData.toJson());
-  // }
-
-  // updateLoginDataInFirebase(ResLogin data) async {
-  //   await FirebaseDatabase.instance.goOnline();
-  //   String uniqueId = await getDeviceId() ?? '';
-  //   String firebaseNodeUrl = 'astrologer/${data.data?.id}';
-  //   FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
-  //   firebaseDatabase
-  //       .ref()
-  //       .child(firebaseNodeUrl)
-  //       .onValue
-  //       .listen((DatabaseEvent event) {
-  //     if (event.snapshot.value == null) {
-  //       print("userStatus  New user");
-  //       FirebaseUserData firebaseUserData = FirebaseUserData(
-  //           data.data!.name!,
-  //           deviceToken ?? FirebaseMessaging.instance.getToken().toString(),
-  //           data.data!.image ?? "",
-  //           RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0));
-  //       firebaseDatabase
-  //           .ref()
-  //           .child(firebaseNodeUrl)
-  //           .set(firebaseUserData.toJson());
-  //       navigateToDashboard(data);
-  //     } else {
-  //       print("userStatus existing user");
-  //       HashMap<String, dynamic> realTime = HashMap();
-  //       realTime["uniqueId"] = uniqueId; // Add to HashMap
-
-  //       // Added by divine-dharam
-  //       realTime["voiceCallStatus"] = (data.data?.callPreviousStatus ?? 0);
-  //       realTime["chatStatus"] = (data.data?.chatPreviousStatus ?? 0);
-  //       realTime["videoCallStatus"] = (data.data?.videoCallPreviousStatus ?? 0);
-  //       realTime["is_call_enable"] = (data.data?.isCall ?? 0) == 1;
-  //       realTime["is_chat_enable"] = (data.data?.isChat ?? 0) == 1;
-  //       realTime["is_video_call_enable"] = (data.data?.isVideo ?? 0) == 1;
-  //       realTime["is_live_enable"] = (data.data?.isLive ?? 0) == 1;
-  //       //
-
-  //       HashMap<String, dynamic> deviceTokenNode = HashMap();
-  //       deviceTokenNode["deviceToken"] = deviceToken; // Add to HashMap
-  //       firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
-  //       firebaseDatabase
-  //           .ref()
-  //           .child("$firebaseNodeUrl/realTime")
-  //           .update(realTime);
-  //       navigateToDashboard(data);
-  //     }
-  //     final appFirebaseService = AppFirebaseService();
-
-  //     appFirebaseService.readData('$firebaseNodeUrl/realTime');
-  //   });
-  // }
-
   Future<void> updateLoginDataInFirebase(ResLogin data) async {
     await FirebaseDatabase.instance.goOnline();
     final String uniqueId = await getDeviceId() ?? '';
@@ -266,16 +194,12 @@ class OtpVerificationController extends GetxController {
   }
 
   navigateToDashboard(ResLogin data) async {
-    // preferenceService.erase();
-    // preferenceService.setUserDetail(data.data!);
-    // preferenceService.setToken(data.token!);
-    // // globalToken = data.token!;
-    // preferenceService.setDeviceToken(deviceToken ?? "");
+    print("beforeGoing ${preferenceService.getUserDetail()?.id}");
+
     Future.delayed(
       const Duration(seconds: 1),
           () => Get.offAllNamed(RouteName.dashboard),
     );
-    //Get.offAllNamed(RouteName.dashboard, arguments: [data.data!.phoneNo, data.data!.sessionId]);
   }
 
   removeAttempts() {

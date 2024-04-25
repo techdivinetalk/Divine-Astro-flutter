@@ -80,7 +80,6 @@ class HomeController extends GetxController {
   ExpandedTileController? expandedTileController = ExpandedTileController();
   ExpandedTileController? expandedTile2Controller = ExpandedTileController();
   UserData userData = UserData();
-  final preferenceService = Get.find<SharedPreferenceService>();
   UserRepository userRepository = UserRepository();
   HomePageRepository homePageRepository = HomePageRepository();
   final homeScreenKey = GlobalKey<ScaffoldState>();
@@ -120,7 +119,7 @@ class HomeController extends GetxController {
   @override
   void onInit() async {
     super.onInit();
-
+    print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
       debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');

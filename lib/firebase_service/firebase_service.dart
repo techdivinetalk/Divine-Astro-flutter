@@ -119,6 +119,7 @@ class AppFirebaseService {
           }
 
           if (realTimeData["profilePhoto"] != null) {
+            print("beforeGoing 0 - first");
             UserData? userData =
                 Get.find<SharedPreferenceService>().getUserDetail();
             userData!.image = realTimeData["profilePhoto"];

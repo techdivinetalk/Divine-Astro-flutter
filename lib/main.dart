@@ -30,6 +30,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:overlay_support/overlay_support.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
@@ -217,27 +218,8 @@ Future<void> main() async {
   });
   await initServices();
   Get.put(UserRepository());
-  /* Get.put(DashboardController(PreDefineRepository()));
-  var data = await userRepository.constantDetailsData();
-  preferenceService.setConstantDetails(data);*/
-
   GiftsSingleton().init();
   LiveSharedPreferencesSingleton().init();
-
-  // final navigatorKey = GlobalKey<NavigatorState>();
-  // ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
-  // ZegoUIKit().initLog().then((value) {
-  //   ZegoUIKitPrebuiltCallInvitationService().useSystemCallingUI(
-  //     [ZegoUIKitSignalingPlugin()],
-  //   );
-  //   runApp(const MyApp());
-  // });
-  await checkIfTokenUpdated();
-    // final appFirebaseService = AppFirebaseService();
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   appFirebaseService.masterData('masters');
-    // });
-
   ZegoUIKitPrebuiltCallInvitationService().setNavigatorKey(navigatorKey);
   // call the useSystemCallingUI
   ZegoUIKit().initLog().then((value) {
@@ -246,47 +228,12 @@ Future<void> main() async {
     );
     runApp(MyApp());
   });
-}
-
-//conditions to update firebase token by dev-chetan
-checkIfTokenUpdated() {
-  FirebaseMessaging.instance.onTokenRefresh.listen((newToken) async {
-    await updateFirebaseToken();
+  Permission.notification.isDenied.then((value) {
+    if (value) {
+      Permission.notification.request();
+    }
   });
 }
-
-updateFirebaseToken() async {
-  String? newtoken = await FirebaseMessaging.instance.getToken();
-  final data = await AppFirebaseService()
-      .database
-      .child("astrologer/${userData?.id}/deviceToken")
-      .once();
-  final currentToken = data.snapshot.value;
-  if (newtoken.toString() != currentToken.toString()) {
-    print("token updated from ${currentToken} to ${newtoken}");
-    await AppFirebaseService()
-        .database
-        .child("astrologer/${userData?.id}/")
-        .update({'deviceToken': newtoken});
-    await AppFirebaseService()
-        .database
-        .child("astrologer/${userData?.id}/")
-        .update({'from main': "true"});
-  }
-}
-
-// @pragma('vm:entry-point')
-// void callbackDispatcher() {
-//   Workmanager().executeTask((task, inputData) async {
-//     if (task == "updateTokenTask") {
-//       // Retrieve the refreshed FCM token
-//       updateFirebaseToken();
-//     }
-//     return Future.value(true);
-//   });
-// }
-
-//end- conditions to update firebase token by dev-chetan
 
 Future<bool> saveLanguage(String? lang) async {
   final box = GetStorage();
@@ -446,8 +393,10 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                 navigatorKey: navigatorKey,
                 color: appColors.white,
                 debugShowCheckedModeBanner: false,
-                initialRoute: RouteName.initial,
-                getPages: Routes.routes,
+                initialRoute: preferenceService.getUserDetail()?.id == null
+                    ? RouteName.login
+                    : RouteName.dashboard,
+                 getPages: Routes.routes,
                 // home: ZegoLoginScreen(),
                 locale: getLanStrToLocale(
                     GetStorages.get(GetStorageKeys.language) ?? ""),

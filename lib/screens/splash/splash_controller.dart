@@ -147,20 +147,9 @@ class SplashController extends GetxController with WidgetsBindingObserver {
     log(jsonEncode(preferenceService.getUserDetail()));
     log("jsonEncode(preferenceService.getUserDetail())");
     if (preferenceService.getUserDetail() == null) {
-      print("goining in if part");
       Get.offAllNamed(RouteName.login);
-      // await getInitialLoginImages().then(
-      //   (value) async => await preferenceService
-      //       .saveLoginImages(jsonEncode(value.toJson()))
-      //       .then((value) => Get.offAllNamed(RouteName.login)),
-      // );
     } else {
       print("goining in else part");
-      // final socket = AppSocket();
-      //  final appFirebaseService = AppFirebaseService();
-      //  socket.socketConnect();
-      //  debugPrint('preferenceService.getUserDetail()!.id ${preferenceService.getUserDetail()!.id}');
-      // appFirebaseService.readData('astrologer/${preferenceService.getUserDetail()!.id}/realTime');
       Future.delayed(
         const Duration(seconds: 1),
         () => Get.offAllNamed(RouteName.dashboard),
@@ -178,7 +167,7 @@ class SplashController extends GetxController with WidgetsBindingObserver {
     bool isGranted = false;
     if (!status.isGranted) {
       await Permission.contacts.request().then((value) {
-        print("is granted contact permission ? ==> ${isGranted}");
+        print("is granted contact permission ? ==> $isGranted");
       });
     } else {}
     return Permission.contacts.isGranted;

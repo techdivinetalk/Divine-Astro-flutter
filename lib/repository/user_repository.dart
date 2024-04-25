@@ -27,6 +27,7 @@ import 'package:get/get.dart' hide FormData;
 import 'package:get/get_connect/http/src/status/http_status.dart';
 
 import '../common/app_exception.dart';
+import '../common/common_functions.dart';
 import '../common/routes.dart';
 import '../di/api_provider.dart';
 import "../model/blocked_customers_response.dart";
@@ -54,13 +55,15 @@ class UserRepository extends ApiProvider {
       print("response.statusCode");
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
-          throw CustomException(json.decode(response.body)["error"]);
+
         } else if (json.decode(response.body)["status_code"] == 400) {
           preferenceService.erase();
-          Get.offNamed(RouteName.login);
-          throw CustomException(json.decode(response.body)["message"]);
+          divineSnackBar(
+              data: "Astrologer Not registered, Contact Admin",
+              color: appColors.redColor,
+              duration: const Duration(milliseconds: 1000));
+         // Get.offNamed(RouteName.login);
+         //  throw CustomException(json.decode(response.body)["message"]);
         } else {
           print(jsonDecode(response.body));
           SendOtpModel sendOtpModel =
