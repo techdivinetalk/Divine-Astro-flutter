@@ -143,6 +143,7 @@ class OtpVerificationController extends GetxController {
         var commonConstants = await userRepository.constantDetailsData();
         Auth().handleSignInEmail(commonConstants.data!.firebaseAuthEmail!,
             commonConstants.data!.firebaseAuthPassword!);
+        print("resultresultresultresult2");
       }
       await updateLoginDataInFirebase(data);
     } catch (error) {
@@ -155,47 +156,53 @@ class OtpVerificationController extends GetxController {
     }
   }
   Future<void> updateLoginDataInFirebase(ResLogin data) async {
-    await FirebaseDatabase.instance.goOnline();
     final String uniqueId = await getDeviceId() ?? '';
     final String firebaseNodeUrl = 'astrologer/${data.data?.id}';
     final FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
     final DatabaseReference ref = firebaseDatabase.ref();
-    final DataSnapshot dataSnapshot = await ref.child(firebaseNodeUrl).get();
-    if (dataSnapshot.exists) {
-      final HashMap<String, dynamic> realTime = HashMap();
-      realTime["uniqueId"] = uniqueId;
-      realTime["voiceCallStatus"] = (data.data?.callPreviousStatus ?? 0);
-      realTime["chatStatus"] = (data.data?.chatPreviousStatus ?? 0);
-      realTime["videoCallStatus"] = (data.data?.videoCallPreviousStatus ?? 0);
-      realTime["is_call_enable"] = (data.data?.isCall ?? 0) == 1;
-      realTime["is_chat_enable"] = (data.data?.isChat ?? 0) == 1;
-      realTime["is_video_call_enable"] = (data.data?.isVideo ?? 0) == 1;
-      realTime["is_live_enable"] = (data.data?.isLive ?? 0) == 1;
-      final HashMap<String, dynamic> deviceTokenNode = HashMap();
-      deviceTokenNode["deviceToken"] =
-          deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
-      firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
-      firebaseDatabase
-          .ref()
-          .child("$firebaseNodeUrl/realTime")
-          .update(realTime);
-      navigateToDashboard(data);
-    } else {
-      final FirebaseUserData userData = FirebaseUserData(
-        data.data?.name ?? "",
-        deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "",
-        data.data?.image ?? "",
-        RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
-      );
-      firebaseDatabase.ref().child(firebaseNodeUrl).set(userData.toJson());
-      navigateToDashboard(data);
-    }
+    //AppFirebaseService().readData("$firebaseNodeUrl/realTime");
+    firebaseDatabase.ref().child(firebaseNodeUrl).onValue.listen((events) async {
+      DataSnapshot dataSnapshot = events.snapshot;
+      if (dataSnapshot.exists) {
+        print("resultresultresultresult 4");
+        final HashMap<String, dynamic> realTime = HashMap();
+        realTime["uniqueId"] = uniqueId;
+        realTime["voiceCallStatus"] = (data.data?.callPreviousStatus ?? 0);
+        realTime["chatStatus"] = (data.data?.chatPreviousStatus ?? 0);
+        realTime["videoCallStatus"] = (data.data?.videoCallPreviousStatus ?? 0);
+        realTime["is_call_enable"] = (data.data?.isCall ?? 0) == 1;
+        realTime["is_chat_enable"] = (data.data?.isChat ?? 0) == 1;
+        realTime["is_video_call_enable"] = (data.data?.isVideo ?? 0) == 1;
+        realTime["is_live_enable"] = (data.data?.isLive ?? 0) == 1;
+        final HashMap<String, dynamic> deviceTokenNode = HashMap();
+        deviceTokenNode["deviceToken"] =
+            deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
+        firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
+        firebaseDatabase
+            .ref()
+            .child("$firebaseNodeUrl/realTime")
+            .update(realTime);
+        navigateToDashboard(data);
+      } else {
+        print("resultresultresultresult 4");
+        final FirebaseUserData userData = FirebaseUserData(
+          data.data?.name ?? "",
+          deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "",
+          data.data?.image ?? "",
+          RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
+        );
+        firebaseDatabase.ref().child(firebaseNodeUrl).set(userData.toJson());
+        navigateToDashboard(data);
+      }
+    });
+    // final DataSnapshot dataSnapshot = await ref.child(firebaseNodeUrl).get();
+    // print("resultresultresultresult 3");
+
     return Future<void>.value();
   }
 
   navigateToDashboard(ResLogin data) async {
     print("beforeGoing ${preferenceService.getUserDetail()?.id}");
-
     Future.delayed(
       const Duration(seconds: 1),
           () => Get.offAllNamed(RouteName.dashboard),
