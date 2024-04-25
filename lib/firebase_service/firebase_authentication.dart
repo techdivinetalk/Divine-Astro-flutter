@@ -12,12 +12,5 @@ class Auth {
 
     return user;
   }
-
-  Future<User> handleSignUp(email, password) async {
-    UserCredential result = await auth.createUserWithEmailAndPassword(
-        email: email, password: password);
-    final User user = result.user!;
-
-    return user;
-  }
+  logoutUser(){}
 }

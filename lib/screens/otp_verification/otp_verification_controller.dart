@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:divine_astrologer/firebase_service/firebase_authentication.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/screens/otp_verification/timer_controller.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -141,11 +142,13 @@ class OtpVerificationController extends GetxController {
       print("jsonEncode(data.data)");
       if (data.data != null) {
         var commonConstants = await userRepository.constantDetailsData();
-        Auth().handleSignInEmail(commonConstants.data!.firebaseAuthEmail!,
+        await Auth().handleSignInEmail(commonConstants.data!.firebaseAuthEmail!,
             commonConstants.data!.firebaseAuthPassword!);
-        print("resultresultresultresult2");
+        updateLoginDataInFirebase(data);
+          print("resultresultresultresult2");
+       // print("astrologer/${preferenceService.getUserDetail()!.id}/realTime");
       }
-      await updateLoginDataInFirebase(data);
+     // await updateLoginDataInFirebase(data);
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
@@ -155,63 +158,95 @@ class OtpVerificationController extends GetxController {
       }
     }
   }
-  late StreamSubscription<DatabaseEvent> _counterSubscription;
   Future<void> updateLoginDataInFirebase(ResLogin data) async {
+  //  await FirebaseDatabase.instance.goOnline();
     final String uniqueId = await getDeviceId() ?? '';
     final String firebaseNodeUrl = 'astrologer/${data.data?.id}';
     final FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
-    _counterSubscription = firebaseDatabase.ref().child(firebaseNodeUrl).onValue.listen(
-          (DatabaseEvent event) async {
-            DataSnapshot dataSnapshot = event.snapshot;
-            if (dataSnapshot.exists) {
-              print("resultresultresultresult 4");
-              final HashMap<String, dynamic> realTime = HashMap();
-              realTime["uniqueId"] = uniqueId;
-              realTime["voiceCallStatus"] = (data.data?.callPreviousStatus ?? 0);
-              realTime["chatStatus"] = (data.data?.chatPreviousStatus ?? 0);
-              realTime["videoCallStatus"] = (data.data?.videoCallPreviousStatus ?? 0);
-              realTime["is_call_enable"] = (data.data?.isCall ?? 0) == 1;
-              realTime["is_chat_enable"] = (data.data?.isChat ?? 0) == 1;
-              realTime["is_video_call_enable"] = (data.data?.isVideo ?? 0) == 1;
-              realTime["is_live_enable"] = (data.data?.isLive ?? 0) == 1;
-              final HashMap<String, dynamic> deviceTokenNode = HashMap();
-              deviceTokenNode["deviceToken"] =
-                  deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
-              firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
-              firebaseDatabase
-                  .ref()
-                  .child("$firebaseNodeUrl/realTime")
-                  .update(realTime);
-              navigateToDashboard(data);
-            } else {
-              print("resultresultresultresult 4");
-              final FirebaseUserData userData = FirebaseUserData(
-                  data.data?.name ?? "",
-                  deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "",
-                  data.data?.image ?? "",
-            RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
-            );
-            firebaseDatabase.ref().child(firebaseNodeUrl).set(userData.toJson());
-            navigateToDashboard(data);
-            }
-      },
-      onError: (Object o) {
-
-      },
-    );
-    // firebaseDatabase.ref().child(firebaseNodeUrl).onValue.listen((events) async {
-    //   DataSnapshot dataSnapshot = events.snapshot;
-    //
-    // });
+    //final DatabaseReference ref = firebaseDatabase.ref();
     // final DataSnapshot dataSnapshot = await ref.child(firebaseNodeUrl).get();
-    // print("resultresultresultresult 3");
-
+    // if (dataSnapshot.exists) {
+      final HashMap<String, dynamic> realTime = HashMap();
+      realTime["uniqueId"] = uniqueId;
+      realTime["voiceCallStatus"] = (data.data?.callPreviousStatus ?? 0);
+      realTime["chatStatus"] = (data.data?.chatPreviousStatus ?? 0);
+      realTime["videoCallStatus"] = (data.data?.videoCallPreviousStatus ?? 0);
+      realTime["is_call_enable"] = (data.data?.isCall ?? 0) == 1;
+      realTime["is_chat_enable"] = (data.data?.isChat ?? 0) == 1;
+      realTime["is_video_call_enable"] = (data.data?.isVideo ?? 0) == 1;
+      realTime["is_live_enable"] = (data.data?.isLive ?? 0) == 1;
+      final HashMap<String, dynamic> deviceTokenNode = HashMap();
+      deviceTokenNode["deviceToken"] =
+          deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
+      firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
+      firebaseDatabase
+          .ref()
+          .child("$firebaseNodeUrl/realTime")
+          .update(realTime);
+      navigateToDashboard(data);
+    // } else {
+    //   final FirebaseUserData userData = FirebaseUserData(
+    //     data.data?.name ?? "",
+    //     deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "",
+    //     data.data?.image ?? "",
+    //     RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
+    //   );
+    //   firebaseDatabase.ref().child(firebaseNodeUrl).set(userData.toJson());
+    //   navigateToDashboard(data);
+    // }
     return Future<void>.value();
   }
+  // late StreamSubscription<DatabaseEvent> _counterSubscription;
+  // Future<void> updateLoginDataInFirebase(ResLogin data) async {
+  //   final String uniqueId = await getDeviceId() ?? '';
+  //   final String firebaseNodeUrl = 'astrologer/${data.data?.id}';
+  //   final FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+  //   print("resultresultresultresult 411");
+  //   _counterSubscription = firebaseDatabase.ref().child(firebaseNodeUrl).onValue.listen(
+  //         (DatabaseEvent event) async {
+  //           DataSnapshot dataSnapshot = event.snapshot;
+  //           if (dataSnapshot.exists) {
+  //             print("resultresultresultresult 4");
+  //             final HashMap<String, dynamic> realTime = HashMap();
+  //             realTime["uniqueId"] = uniqueId;
+  //             realTime["voiceCallStatus"] = (data.data?.callPreviousStatus ?? 0);
+  //             realTime["chatStatus"] = (data.data?.chatPreviousStatus ?? 0);
+  //             realTime["videoCallStatus"] = (data.data?.videoCallPreviousStatus ?? 0);
+  //             realTime["is_call_enable"] = (data.data?.isCall ?? 0) == 1;
+  //             realTime["is_chat_enable"] = (data.data?.isChat ?? 0) == 1;
+  //             realTime["is_video_call_enable"] = (data.data?.isVideo ?? 0) == 1;
+  //             realTime["is_live_enable"] = (data.data?.isLive ?? 0) == 1;
+  //             final HashMap<String, dynamic> deviceTokenNode = HashMap();
+  //             deviceTokenNode["deviceToken"] =
+  //                 deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
+  //             firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
+  //             firebaseDatabase
+  //                 .ref()
+  //                 .child("$firebaseNodeUrl/realTime")
+  //                 .update(realTime);
+  //             navigateToDashboard(data);
+  //           } else {
+  //             print("resultresultresultresult 4");
+  //             final FirebaseUserData userData = FirebaseUserData(
+  //                 data.data?.name ?? "",
+  //                 deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "",
+  //                 data.data?.image ?? "",
+  //           RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
+  //           );
+  //           firebaseDatabase.ref().child(firebaseNodeUrl).set(userData.toJson());
+  //           navigateToDashboard(data);
+  //           }
+  //     },
+  //     onError: (Object o) {
+  //       print("resultresultresultresult error $o");
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
 
   navigateToDashboard(ResLogin data) async {
     print("beforeGoing ${preferenceService.getUserDetail()?.id}");
-    _counterSubscription.cancel();
+    //_counterSubscription.cancel();
     Future.delayed(
       const Duration(seconds: 1),
           () => Get.offAllNamed(RouteName.dashboard),
