@@ -343,7 +343,7 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
 
   Future<void> uploadImage(File imageFile) async {
     var uri = Uri.parse(
-        "https://wakanda-api.divinetalk.live/api/astro/v7/uploadImage");
+        "${ApiProvider.baseUrl}uploadImage");
 
     var request = http.MultipartRequest('POST', uri);
 

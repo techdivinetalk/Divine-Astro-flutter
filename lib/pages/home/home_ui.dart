@@ -46,6 +46,7 @@ class HomeUI extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    print("beforeGoing 5 - ${preferenceService.getUserDetail()?.id}");
     return GetBuilder<HomeController>(
         assignId: true,
         init: HomeController(),

@@ -519,7 +519,7 @@ class ProfilePageController extends GetxController {
     var token = preferenceService.getToken();
     // Create a Uri from the URL string
     var uri = Uri.parse(
-        "https://wakanda-api.divinetalk.live/api/astro/v7/uploadAstroImage");
+        "${ApiProvider.baseUrl}uploadAstroImage");
 
     // Create a MultipartRequest
     var request = http.MultipartRequest('POST', uri);

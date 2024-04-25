@@ -10,6 +10,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import '../../../common/colors.dart';
 import '../../../gen/assets.gen.dart';
+import '../../common/common_functions.dart';
 import "../../common/routes.dart";
 import '../../pages/home/home_ui.dart';
 import '../../pages/performance/performance_ui.dart';
@@ -23,6 +24,7 @@ class DashboardScreen extends GetView<DashboardController> {
 
   @override
   Widget build(BuildContext context) {
+    print("beforeGoing 4 - ${preferenceService.getUserDetail()?.id}");
     return GetBuilder<DashboardController>(
       assignId: true,
       builder: (controller) {
@@ -104,24 +106,6 @@ class DashboardScreen extends GetView<DashboardController> {
                                         ),
                                         label: 'performance'.tr,
                                       ),
-                                      // Remedies icon comment
-                                      /* BottomNavigationBarItem(
-                                        icon: Column(
-                                          children: [
-                                            Assets.images.icSelectedSuggest.svg(
-                                                height: 22.h,
-                                                colorFilter: ColorFilter.mode(
-                                                    controller.selectedIndex
-                                                                .value ==
-                                                            2
-                                                        ? appColors.darkBlue
-                                                        : appColors.lightGrey,
-                                                    BlendMode.srcIn)),
-                                            const SizedBox(height: 5),
-                                          ],
-                                        ),
-                                        label: "Remedies",
-                                      ),*/
                                       BottomNavigationBarItem(
                                         icon: Column(
                                           crossAxisAlignment:
@@ -200,14 +184,6 @@ class DashboardScreen extends GetView<DashboardController> {
                                                         BorderRadius.circular(
                                                             100.h),
                                                   ),
-                                                 /*CommonImageView(
-                                          imagePath:
-                                              "${controller.userProfileImage}",
-                                          fit: BoxFit.cover,
-                                          height: 30,
-                                          width: 30,
-                                          radius: BorderRadius.circular(50),
-                                        ), */
                                             const SizedBox(height: 5),
                                           ],
                                         ),
@@ -239,33 +215,6 @@ class DashboardScreen extends GetView<DashboardController> {
                             ))),
 
                     rejoinVisibility(),
-                    // if (broadcastSnapshot.data!.name == 'ReJoinChat' &&
-                    //     broadcastSnapshot.data!.data!['orderData']['status'] ==
-                    //         '3')
-                    //   Positioned(
-                    //       bottom: kToolbarHeight + 20.w,
-                    //       left: 0,
-                    //       right: 0,
-                    //       child: RejoinWidget(
-                    //           data: broadcastSnapshot.data!.data!)),
-                    // if (broadcastSnapshot.data!.name == 'AcceptChat' &&
-                    //     broadcastSnapshot.data!.data!['orderData']['status'] ==
-                    //         '0')
-                    //   Positioned(
-                    //       bottom: kToolbarHeight + 20.w,
-                    //       left: 0,
-                    //       right: 0,
-                    //       child: AcceptChatWidget(
-                    //         data: broadcastSnapshot.data!.data!,
-                    //         onTap: () {
-                    //           debugPrint('AcceptChatWidget onTap');
-                    //           controller.appFirebaseService.writeData(
-                    //               'order/${broadcastSnapshot.data!.data!['orderId']}',
-                    //               {'status': '1'});
-                    //           controller.appFirebaseService.acceptBottomWatcher
-                    //               .strValue = '1';
-                    //         },
-                    //       ))
                   ],
                 );
               }),

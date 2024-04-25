@@ -5,6 +5,7 @@ import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
+import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/screens/add_puja/model/puja_product_categories_model.dart';
 import 'package:divine_astrologer/screens/puja/model/pooja_listing_model.dart';
@@ -383,7 +384,7 @@ class AddPujaController extends GetxController {
     var token = await preferenceService.getToken();
 
     var uri = Uri.parse(
-        "https://wakanda-api.divinetalk.live/api/astro/v7/uploadImage");
+        "${ApiProvider.baseUrl}uploadImage");
 
     var request = http.MultipartRequest('POST', uri);
 

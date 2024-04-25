@@ -114,7 +114,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
     _listener = AppLifecycleListener(
       onShow: () {},
       onResume: () {
-        updateFirebaseToken();
+        //updateFirebaseToken();
         getBackGroundMessages();
       },
       onHide: () {},
@@ -122,7 +122,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
       onPause: () {},
       onDetach: () {},
       onRestart: () {
-        updateFirebaseToken();
+       // updateFirebaseToken();
         getBackGroundMessages();
       },
       onStateChange: (value) {
