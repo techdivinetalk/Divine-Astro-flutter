@@ -159,7 +159,7 @@ class OtpVerificationController extends GetxController {
     }
   }
   Future<void> updateLoginDataInFirebase(ResLogin data) async {
-  //  await FirebaseDatabase.instance.goOnline();
+    await FirebaseDatabase.instance.goOnline();
     final String uniqueId = await getDeviceId() ?? '';
     final String firebaseNodeUrl = 'astrologer/${data.data?.id}';
     final FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;

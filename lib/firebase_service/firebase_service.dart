@@ -69,30 +69,30 @@ class AppFirebaseService {
 
   String tableName = "";
   // int x = 0;
-  // checkFirebaseConnection() {
-  //   final connectedRef = FirebaseDatabase.instance.ref(".info/connected");
-  //   connectedRef.onValue.listen((event) async {
-  //     final connected = event.snapshot.value as bool? ?? false;
-  //     if (!connected) {
-  //       print("trying to reconnect in 4 seconds");
-  //       await Future.delayed(const Duration(seconds: 4));
-  //       String path = "";
-  //       if (preferenceService.getUserDetail() != null) {
-  //         path = 'astrologer/${preferenceService.getUserDetail()!.id}/realTime';
-  //       }
-  //       const masterPath = 'masters';
-  //       readData(path);
-  //       masterData(masterPath);
-  //       x = x +1;
-  //     }
-  //   });
-  // }
+  checkFirebaseConnection() {
+    final connectedRef = FirebaseDatabase.instance.ref(".info/connected");
+    connectedRef.onValue.listen((event) async {
+      final connected = event.snapshot.value as bool? ?? false;
+      if (!connected) {
+        print("trying to reconnect in 4 seconds");
+        // await Future.delayed(const Duration(seconds: 4));
+        // String path = "";
+        // if (preferenceService.getUserDetail() != null) {
+        //   path = 'astrologer/${preferenceService.getUserDetail()!.id}/realTime';
+        // }
+        // const masterPath = 'masters';
+        // readData(path);
+        // masterData(masterPath);
+      }else{
+        print("disconnected");
+      }
+    });
+  }
 
   Future<DatabaseEvent?> readData(String path) async {
-   // checkFirebaseConnection();
+    checkFirebaseConnection();
     try {
       database.child(path).onValue.listen((event) async {
-        database.child(path).keepSynced(true);
         debugPrint("real time $path ---> ${event.snapshot.value}");
         if (preferenceService.getToken() == null ||
             preferenceService.getToken() == "") {

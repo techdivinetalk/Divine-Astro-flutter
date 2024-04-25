@@ -14,12 +14,12 @@ if (keystorePropertiesFile.exists()) {
 
     def flutterVersionCode = keystoreProperties.getProperty('flutter.versionCode')
     if (flutterVersionCode == null) {
-        flutterVersionCode = '49'
+        flutterVersionCode = '50'
     }
 
     def flutterVersionName = keystoreProperties.getProperty('flutter.versionName')
     if (flutterVersionName == null) {
-        flutterVersionName = '4.0.8'
+        flutterVersionName = '4.0.9'
     }
 
     apply plugin: 'com.android.application'
