@@ -90,7 +90,7 @@ class AppFirebaseService {
   }
 
   Future<DatabaseEvent?> readData(String path) async {
-    checkFirebaseConnection();
+    database.keepSynced(true);
     try {
       database.child(path).onValue.listen((event) async {
         debugPrint("real time $path ---> ${event.snapshot.value}");
