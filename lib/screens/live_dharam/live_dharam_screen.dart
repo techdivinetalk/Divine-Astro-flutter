@@ -1672,14 +1672,14 @@ class _LivePage extends State<LiveDharamScreen>
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        msg.userName ?? "",
+                                        "${msg.userName} ${ !_controller.isHost || (msg.userId == _controller.userId) || msg.userId == "0" ? "" : '(${msg.userId})'}",
                                         style: TextStyle(
                                           fontSize: 10,
                                           color: isBlocked
                                               ? Colors.red
                                               : isModerator
-                                                  ? appColors.guideColor
-                                                  : Colors.white,
+                                              ? appColors.guideColor
+                                              : Colors.white,
                                           shadows: const [
                                             Shadow(
                                               color: Colors.black,
