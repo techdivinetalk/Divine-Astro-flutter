@@ -1954,6 +1954,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> endOrderFirst() async {
+    // await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
     // final int id = _controller.orderGenerate.data?.generatedOrderId ?? 0;
     // if (id == 0) {
     // } else {
@@ -4783,6 +4784,7 @@ class _LivePage extends State<LiveDharamScreen>
       // if (hasMyIdInWaitList) {
       //   await _controller.removeFromWaitList();
       // } else {}
+      await  LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
       await _controller.removeMyNode();
     } else {}
   }

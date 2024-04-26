@@ -1402,6 +1402,7 @@ class LiveDharamController extends GetxController {
 
   Future<void> removeMyNode() async {
     await ref.child("live/$liveId").remove();
+    update();
     return Future<void>.value();
   }
 
