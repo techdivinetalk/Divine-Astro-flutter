@@ -585,13 +585,13 @@ class HomeController extends GetxController {
     print("updateCurrentData Audio ${homeData?.audioCallPrevStatus}");
     print("updateCurrentData Video ${homeData?.videoCallPrevStatus}");
 
-    socket.updateChatCallSocketEvent(
-      call: callSwitch.value ? "1" : "0",
-      chat: chatSwitch.value ? "1" : "0",
-      video: videoSwitch.value ? "1" : "0",
-    );
-    // astroOnlineOffline(status: "chat_status=${chatSwitch.value ? "1" : "0"}");
-    // astroOnlineOffline(status: "call_status=${callSwitch.value ? "1" : "0"}");
+    // socket.updateChatCallSocketEvent(
+    //     //   call: callSwitch.value ? "1" : "0",
+    //     //   chat: chatSwitch.value ? "1" : "0",
+    //     //   video: videoSwitch.value ? "1" : "0",
+    //     // );
+     astroOnlineOffline(status: "chat_status=${chatSwitch.value ? "1" : "0"}");
+     astroOnlineOffline(status: "call_status=${callSwitch.value ? "1" : "0"}");
 
     if (homeData?.sessionType?.chatSchedualAt != null &&
         homeData?.sessionType?.chatSchedualAt != '') {

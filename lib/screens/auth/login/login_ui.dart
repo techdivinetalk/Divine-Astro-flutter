@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
@@ -15,6 +17,7 @@ import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../../common/colors.dart';
+import '../../../firebase_service/firebase_service.dart';
 import 'login_controller.dart';
 
 class LoginUI extends GetView<LoginController> {
@@ -146,7 +149,7 @@ class LoginUI extends GetView<LoginController> {
                   }),
                   SizedBox(height: 20.h),
                   Obx(() => Visibility(
-                      visible: controller.enable.value,
+                      visible: controller.enable.value && isTruecaller.value.toString() == "1",
                       child: TextWithDivider(
                         text: 'Or',
                         textColor: appColors.greyColor,
@@ -154,8 +157,9 @@ class LoginUI extends GetView<LoginController> {
                       ))),
                   SizedBox(height: 20.h),
                   Obx(() {
+                    print("showTrueCaller ${controller.showTrueCaller.value}");
                     return Visibility(
-                      visible: (controller.showTrueCaller.value && controller.enable.value),
+                      visible: (controller.showTrueCaller.value && controller.enable.value && isTruecaller.value.toString() == "1"),
                       child: Padding(
                         padding: const EdgeInsets.symmetric(vertical: 10.0),
                         child: SizedBox(

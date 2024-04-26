@@ -90,7 +90,6 @@ class AppFirebaseService {
   }
 
   Future<DatabaseEvent?> readData(String path) async {
-    database.keepSynced(true);
     try {
       database.child(path).onValue.listen((event) async {
         debugPrint("real time $path ---> ${event.snapshot.value}");
@@ -193,7 +192,6 @@ class AppFirebaseService {
     } catch (e) {
       debugPrint("Error reading data from the database: $e");
     }
-    masterData("masters");
     watcher.nameStream.listen(
       (value) {
         if (value != "") {
@@ -270,7 +268,6 @@ class AppFirebaseService {
   Future<DatabaseEvent?> masterData(String path) async {
     try {
       database.child(path).onValue.listen((event) async {
-        database.child(path).keepSynced(true);
         debugPrint("master database access $path ---> ${event.snapshot.value}");
         if (event.snapshot.value is Map<Object?, Object?>) {
           Map<String, dynamic>? realTimeData = Map<String, dynamic>.from(
@@ -299,7 +296,7 @@ class AppFirebaseService {
           isGifts(realTimeData["gifts"]);
           print("isGifts-----on ?? ${isGifts}");
           isTruecaller(realTimeData["truecaller"]);
-          print("isTruecaller-----on ?? ${isTruecaller}");
+          print("isTruecaller-----on ?? ${isTruecaller} ${realTimeData["truecaller"]}");
         }
       });
     } catch (e) {
