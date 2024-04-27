@@ -442,10 +442,10 @@ class _LivePage extends State<LiveDharamScreen>
             duration,
                 (Timer timer) async {
               /// if any function after some second
-              if (timer.tick % 1 == 0) {
-                // math.Random.secure().nextInt(30).isEven
-                //     ? await manMessage()
-                //     : await womanMessage();
+              if (timer.tick % 3 == 0) {
+                math.Random.secure().nextInt(30).isEven
+                    ? await manMessage()
+                    : await womanMessage();
               } else {}
 
               if (timer.tick % 30 == 0) {
@@ -559,7 +559,7 @@ class _LivePage extends State<LiveDharamScreen>
     return;
   }
 
-  /*Future<void> manMessage() async {
+  Future<void> manMessage() async {
     var num = math.Random.secure().nextInt(30);
     var url = "https://xsgames.co/randomusers/assets/avatars/male/$num.jpg";
     final String fullName = RandomNames(Zone.india).manFullName();
@@ -579,8 +579,8 @@ class _LivePage extends State<LiveDharamScreen>
     );
     await sendMessageToZego(model);
     return Future<void>.value();
-  }*/
-  /*Future<void> womanMessage() async {
+  }
+  Future<void> womanMessage() async {
     var num = math.Random.secure().nextInt(30);
     var url = "https://xsgames.co/randomusers/assets/avatars/female/$num.jpg";
     final String fullName = RandomNames(Zone.india).womanFullName();
@@ -600,7 +600,7 @@ class _LivePage extends State<LiveDharamScreen>
     );
     await sendMessageToZego(model);
     return Future<void>.value();
-  }*/
+  }
 
   Future<void> onUserJoin(ZegoUIKitUser zegoUIKitUser) async {
     final bool cond1 = _controller.isHost;

@@ -1131,18 +1131,18 @@ class LiveDharamController extends GetxController {
   // }
 
   void getLatestWaitList(
-    DataSnapshot? dataSnapshot,
-  ) {
+      DataSnapshot? dataSnapshot,
+      ) {
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
           Map<dynamic, dynamic> map = <dynamic, dynamic>{};
           map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-              as Map<dynamic, dynamic>;
+          as Map<dynamic, dynamic>;
           final List<WaitListModel> tempList = <WaitListModel>[];
           map.forEach(
             // ignore: always_specify_types
-            (key, value) {
+                (key, value) {
               tempList.add(
                 WaitListModel(
                   // ignore:  avoid_dynamic_calls
@@ -1169,7 +1169,10 @@ class LiveDharamController extends GetxController {
               );
             },
           );
-          waitListModel = tempList;
+          waitListModel
+            ..clear()
+            ..addAll(tempList);
+          // waitListModel = tempList;
         } else {}
       } else {
         waitListModel.clear();

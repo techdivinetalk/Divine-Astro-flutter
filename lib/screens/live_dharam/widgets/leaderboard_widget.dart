@@ -323,11 +323,11 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
           Map<dynamic, dynamic> map = <dynamic, dynamic>{};
           map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-              as Map<dynamic, dynamic>;
+          as Map<dynamic, dynamic>;
           final List<LeaderboardModel> tempList = <LeaderboardModel>[];
           map.forEach(
             // ignore: always_specify_types
-            (key, value) {
+                (key, value) {
               tempList.add(
                 LeaderboardModel(
                   // ignore:  avoid_dynamic_calls
@@ -342,9 +342,12 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
               );
             },
           );
-          leaderboardModel = tempList;
+          leaderboardModel
+            ..clear()
+            ..addAll(tempList);
+          // leaderboardModel = tempList;
           leaderboardModel.sort(
-            (LeaderboardModel a, LeaderboardModel b) {
+                (LeaderboardModel a, LeaderboardModel b) {
               return b.amount.compareTo(a.amount);
             },
           );
