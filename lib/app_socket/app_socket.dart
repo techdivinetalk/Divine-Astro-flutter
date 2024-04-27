@@ -36,35 +36,8 @@ class AppSocket {
         ..connect();
     }
     socket?.onConnect((_) {
-  //    Get.put(HomeController());
-      //Get.find<HomeController>();
-      socket?.emit(ApiProvider().joinRoomSocket, {
-        "userId": preferenceService.getUserDetail()?.id.toString(),
-        "userType": 'astrologer',
-        "chat": chatSwitch.value ? "1" : "0",
-        "call": callSwitch.value ? "1" : "0",
-        "video":videoSwitch.value ? "1" : "0"
-      });
-
     });
   }
-
-  void updateChatCallSocketEvent(
-      {required String chat, required String call, required String video}) {
-    debugPrint(
-        'data ${preferenceService.getUserDetail()!.id.toString()} chat: $chat "call": $call,"video": $video');
-    socket?.emit(ApiProvider().joinRoomSocket, {
-      "userId": preferenceService.getUserDetail()!.id.toString(),
-      "userType": 'astrologer',
-      "chat": chat,
-      "call": call,
-      "video": video,
-    });
-  }
-
-
-
-
   void emitForAstrologerEnterChatAssist(
       String? customerId, String? userId) {
     socket?.emit(ApiProvider().enterChatAssist,
