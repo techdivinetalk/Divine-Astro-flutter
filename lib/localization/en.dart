@@ -196,7 +196,7 @@ Map<String, String> en() {
     "enterAmount": "Enter Amount",
     "enterCustomAmount": "Enter Custom Amount",
     "donateNow": "Donate Now",
-    "customerCare": "Customer Care",
+    "customerCare": "Astro Care",
     "addContact": "Add Contact",
     "mobileNumber": "Mobile Number",
     "astrologySkill": "Astrology Skill",

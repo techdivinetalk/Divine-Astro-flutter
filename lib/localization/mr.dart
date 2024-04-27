@@ -300,7 +300,7 @@ Map<String, String> mr() {
     'attemptsRemaining': 'प्रयत्न बाकी',
     'phoneNumberMustBe10Digit': 'फोन नंबर 10 अंकी असणे आवश्यक आहे',
     'specialityNotEmpty': "स्पेशॅलिटी रिक्त असू शकत नाही",
-    "customerCare": "ग्राहक सेवा",
+    "customerCare": "ज्योतिष सेवा",
     'ScheduleOnlineDate': 'तुमची पुढील ऑनलाइन तारीख शेड्यूल करा',
     'confirmNextDate': 'पुढील ऑनलाइन तारखेची पुष्टी करा',
     'scheduleOnlineTime': 'तुमची पुढील ऑनलाइन वेळ शेड्यूल करा',
