@@ -9,6 +9,7 @@ import 'package:divine_astrologer/screens/otp_verification/timer_controller.dart
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import '../../common/app_exception.dart';
 import '../../common/colors.dart';
@@ -142,8 +143,12 @@ class OtpVerificationController extends GetxController {
       print("jsonEncode(data.data)");
       if (data.data != null) {
         var commonConstants = await userRepository.constantDetailsData();
-        await Auth().handleSignInEmail(commonConstants.data!.firebaseAuthEmail!,
-            commonConstants.data!.firebaseAuthPassword!);
+
+        if(!kDebugMode){
+          await Auth().handleSignInEmail(
+              commonConstants.data!.firebaseAuthEmail!,
+              commonConstants.data!.firebaseAuthPassword!);
+        }
         updateLoginDataInFirebase(data);
           print("resultresultresultresult2");
        // print("astrologer/${preferenceService.getUserDetail()!.id}/realTime");
