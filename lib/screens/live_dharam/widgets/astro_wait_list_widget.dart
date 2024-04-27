@@ -123,18 +123,18 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
   Widget listViewForWaitList() {
     return widget.list.length > 1
         ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Waitlist",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              (widget.list.length - 1) >= 3
-                  ? Expanded(child: commonListView())
-                  : commonListView(),
-            ],
-          )
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Waitlist",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16),
+        (widget.list.length - 1) >= 3
+            ? Expanded(child: commonListView())
+            : commonListView(),
+      ],
+    )
         : const SizedBox();
   }
 
@@ -154,25 +154,25 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
   Widget listViewForNextInLine() {
     return widget.list.length > 0
         ? Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text(
-                "Next In Line",
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              const SizedBox(height: 16),
-              ListView.builder(
-                shrinkWrap: true,
-                itemCount: 1,
-                physics: const ScrollPhysics(),
-                padding: EdgeInsets.zero,
-                itemBuilder: (BuildContext context, int index) {
-                  final WaitListModel item = widget.list[index];
-                  return listTile(item: item);
-                },
-              ),
-            ],
-          )
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Text(
+          "Next In Line",
+          style: TextStyle(fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 16),
+        ListView.builder(
+          shrinkWrap: true,
+          itemCount: 1,
+          physics: const ScrollPhysics(),
+          padding: EdgeInsets.zero,
+          itemBuilder: (BuildContext context, int index) {
+            final WaitListModel item = widget.list[index];
+            return listTile(item: item);
+          },
+        ),
+      ],
+    )
         : const SizedBox();
   }
 
@@ -197,13 +197,11 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
           children: <Widget>[
             callTypeIcon(callType: item.callType),
             const SizedBox(width: 16),
-            // Text(
-            //   getTotalWaitTime(
-            //     int.parse(item.totalTime),
-            //   ),
-            //   style: const TextStyle(fontWeight: FontWeight.bold),
-            // ),
-            newTimerWidget(item),
+            Text(
+              getTotalWaitTime(item),
+              style: const TextStyle(fontWeight: FontWeight.bold),
+            ),
+            // newTimerWidget(item),
           ],
         ),
       ),
@@ -230,23 +228,23 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
     return widget.model.isEngaded && widget.model.id == widget.myUserId
         ? const SizedBox()
         : widget.isHost
-            ? CommonButton(
-                buttonCallback: widget.onAccept,
-                buttonText: "Accept",
-              )
-            : widget.hasMyIdInWaitList
-                ? TextButton(
-                    onPressed: widget.onExitWaitList,
-                    child: const Text(
-                      "Exit Waitlist",
-                      style: TextStyle(
-                        color: Colors.red,
-                        decoration: TextDecoration.underline,
-                        decorationColor: Colors.red,
-                      ),
-                    ),
-                  )
-                : const SizedBox();
+        ? CommonButton(
+      buttonCallback: widget.onAccept,
+      buttonText: "Accept",
+    )
+        : widget.hasMyIdInWaitList
+        ? TextButton(
+      onPressed: widget.onExitWaitList,
+      child: const Text(
+        "Exit Waitlist",
+        style: TextStyle(
+          color: Colors.red,
+          decoration: TextDecoration.underline,
+          decorationColor: Colors.red,
+        ),
+      ),
+    )
+        : const SizedBox();
   }
 
   String getTotalWaitTime(WaitListModel item) {
@@ -258,42 +256,42 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
     return formattedTime;
   }
 
-  Widget newTimerWidget(WaitListModel item) {
-    final String source = item.totalTime;
-    final int epoch = int.parse(source);
-    final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
-    return TimerCountdown(
-      format: CountDownTimerFormat.hoursMinutesSeconds,
-      enableDescriptions: false,
-      spacerWidth: 4,
-      colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
-      timeTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
-      onTick: (Duration duration) async {},
-      endTime: dateTime,
-      onEnd: () {},
-    );
-  }
+// Widget newTimerWidget(WaitListModel item) {
+//   final String source = item.totalTime;
+//   final int epoch = int.parse(source);
+//   final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
+//   return TimerCountdown(
+//     format: CountDownTimerFormat.hoursMinutesSeconds,
+//     enableDescriptions: false,
+//     spacerWidth: 4,
+//     colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
+//     timeTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
+//     onTick: (Duration duration) async {},
+//     endTime: dateTime,
+//     onEnd: () {},
+//   );
+// }
 
-  // String getTotalWaitTime(totalMinutes) {
-  //   String time = "";
-  //   Duration duration = Duration(minutes: totalMinutes);
-  //   String formattedTime = formatDuration(duration);
-  //   time = formattedTime;
-  //   return time;
-  // }
+// String getTotalWaitTime(totalMinutes) {
+//   String time = "";
+//   Duration duration = Duration(minutes: totalMinutes);
+//   String formattedTime = formatDuration(duration);
+//   time = formattedTime;
+//   return time;
+// }
 
-  // String formatDuration(Duration duration) {
-  //   int hours = duration.inHours;
-  //   int minutes = duration.inMinutes % 60;
-  //   int seconds = duration.inSeconds % 60;
-  //   return '${_twoDigits(hours)}H ${_twoDigits(minutes)}M ${_twoDigits(seconds)}S';
-  // }
+// String formatDuration(Duration duration) {
+//   int hours = duration.inHours;
+//   int minutes = duration.inMinutes % 60;
+//   int seconds = duration.inSeconds % 60;
+//   return '${_twoDigits(hours)}H ${_twoDigits(minutes)}M ${_twoDigits(seconds)}S';
+// }
 
-  // String _twoDigits(int n) {
-  //   if (n >= 10) {
-  //     return '$n';
-  //   } else {
-  //     return '0$n';
-  //   }
-  // }
+// String _twoDigits(int n) {
+//   if (n >= 10) {
+//     return '$n';
+//   } else {
+//     return '0$n';
+//   }
+// }
 }

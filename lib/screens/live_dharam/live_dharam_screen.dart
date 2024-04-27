@@ -1602,8 +1602,10 @@ class _LivePage extends State<LiveDharamScreen>
       height: Get.height * 0.30,
       child: StreamBuilder<List<ZegoInRoomMessage>>(
         stream: zegoController.message.stream(),
-        builder: (BuildContext context,
-            AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,) {
+        builder: (
+            BuildContext context,
+            AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,
+            ) {
           List<ZegoInRoomMessage> messages =
               snapshot.data ?? <ZegoInRoomMessage>[];
           messages = messages.reversed.toList();
@@ -1619,10 +1621,6 @@ class _LivePage extends State<LiveDharamScreen>
             physics: const ScrollPhysics(),
             itemBuilder: (BuildContext context, int index) {
               final ZegoInRoomMessage message = messages[index];
-              print(joinedAstrologerList);
-              print(message);
-
-              print("messagemessagemessagemessage");
               final ZegoCustomMessage msg =
               receiveMessageToZego(message.message);
               final bool isBlocked =
@@ -1664,12 +1662,10 @@ class _LivePage extends State<LiveDharamScreen>
                               CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  "${msg.userName} ${ !_controller.isHost ||
-                                      (msg.userId == _controller.userId) ||
-                                      msg.userId == "0" ? "" : '(${msg
-                                      .userId})'}",
+                                  // msg.userName ?? "",
+                                  nameWithWithoutIDs(msg, isModerator),
                                   style: TextStyle(
-                                    fontSize: 13,
+                                    fontSize: 12,
                                     color: isBlocked
                                         ? Colors.red
                                         : isModerator
@@ -1690,7 +1686,7 @@ class _LivePage extends State<LiveDharamScreen>
                                   style: TextStyle(
                                     fontSize: 12,
                                     color: isBlocked
-                                        ? Colors.red 
+                                        ? Colors.red
                                         : isModerator
                                         ? appColors.guideColor
                                         : Colors.white,
@@ -1757,17 +1753,22 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
+  String nameWithWithoutIDs(ZegoCustomMessage msg, bool isModerator) {
+    return _controller.isHost
+        ? "${msg.userName} ${!_controller.isHost || (msg.userId == _controller.userId) || msg.userId == "0" ? "" : '(${msg.userId})'}"
+        : "${msg.userName} ${_controller.isHost || (msg.userId != _controller.userId) || _controller.isMod || msg.userId == "0" ? "" : '(${msg.userId})'}";
+  }
+
   bool moreOptionConditions(ZegoCustomMessage msg, bool isModerator) {
     final bool cond1 = msg.userId != _controller.userId;
     final bool cond2 = !(_controller.orderModel.id == (msg.userId ?? ""));
-    final bool cond3 = !_controller.currentCaller.isEngaded;
+    // final bool cond3 = !_controller.currentCaller.isEngaded;
     final bool cond4 = msg.userId != _controller.liveId;
-
     return _controller.isHost
-        ? cond1 && cond2 && cond3
+        ? cond1 && cond2 /*&& cond3*/
         : _controller.isMod
-        ? cond1 && cond2 && cond4
-        : false;
+    ? cond1 && cond2 && cond4
+    : false;
   }
 
   Widget inRoomMessageTop() {
@@ -1932,9 +1933,14 @@ class _LivePage extends State<LiveDharamScreen>
       getUntil();
 
       await endOrderFirst();
+      await Future<void>.delayed(const Duration(seconds: 2));
 
+      _controller.initData();
       _controller.updateInfo();
-      List<dynamic> list = await _controller.onLiveStreamingEnded();
+
+      final List<dynamic> list = await _controller.onLiveStreamingEnded();
+      print("onLiveStreamingEnded: $list");
+
       if (list.isNotEmpty) {
         zegoController.swiping.next();
 
@@ -4245,26 +4251,26 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> navigate() async {
-    // await Get.toNamed(
-    //   RouteName.astrologerProfile,
-    //   arguments: <String, dynamic>{"astrologer_id": _controller.liveId},
-    // );
-    // await _controller.getAstrologerDetails(
-    //   successCallBack: (String message) {
-    //     eventListnerSuccessAndFailureCallBack(
-    //       message: message,
-    //       isForSuccess: true,
-    //       isForFailure: false,
-    //     );
-    //   },
-    //   failureCallBack: (String message) {
-    //     eventListnerSuccessAndFailureCallBack(
-    //       message: message,
-    //       isForSuccess: false,
-    //       isForFailure: true,
-    //     );
-    //   },
-    // );
+      // await Get.toNamed(
+      //   RouteName.astrologerProfile,
+      //   arguments: <String, dynamic>{"astrologer_id": _controller.liveId},
+      // );
+      // await _controller.getAstrologerDetails(
+      //   successCallBack: (String message) {
+      //     eventListnerSuccessAndFailureCallBack(
+      //       message: message,
+      //       isForSuccess: true,
+      //       isForFailure: false,
+      //     );
+      //   },
+      //   failureCallBack: (String message) {
+      //     eventListnerSuccessAndFailureCallBack(
+      //       message: message,
+      //       isForSuccess: false,
+      //       isForFailure: true,
+      //     );
+      //   },
+      // );
     return Future<void>.value();
   }
 
@@ -4350,18 +4356,17 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> sendKeyboardMesage(msg) async {
-    print("sendKeyboardMesage: $msg");
-    final bool hasBadWord = _controller.hasMessageContainsAnyBadWord(msg);
     final String text = _controller.algoForSendMessage(msg);
-    if (hasBadWord) {
+    final bool hasBadWord = _controller.hasMessageContainsAnyBadWord(msg);
+    if (text.isNotEmpty) {
       successAndFailureCallBack(
-        message: "Bad words are restricted",
+        message: "$text is restricted text",
         isForSuccess: false,
         isForFailure: true,
       );
-    } else if (text.isNotEmpty) {
+    } else if (hasBadWord) {
       successAndFailureCallBack(
-        message: "$text is restricted text",
+        message: "Bad words are restricted",
         isForSuccess: false,
         isForFailure: true,
       );
@@ -4742,7 +4747,7 @@ class _LivePage extends State<LiveDharamScreen>
       context: context,
       builder: (BuildContext context) {
         return ShowAllAvailAstroWidget(
-          onClose: Get.back,
+          onClose: Get.back, 
           data: _controller.data,
           onSelect: (liveId) async {
             Get.back();
@@ -4751,9 +4756,14 @@ class _LivePage extends State<LiveDharamScreen>
             getUntil();
 
             await endOrderFirst();
+            await Future<void>.delayed(const Duration(seconds: 2));
 
+            _controller.initData();
             _controller.updateInfo();
-            List<dynamic> list = await _controller.onLiveStreamingEnded();
+
+            final List<dynamic> list = await _controller.onLiveStreamingEnded();
+            print("onLiveStreamingEnded: $list");
+
             _controller.liveId = liveId;
             _controller.currentIndex = list.indexWhere((e) => e == liveId);
             zegoController.swiping.jumpTo(liveId);

@@ -144,15 +144,15 @@ class _WaitListWidgetState extends State<WaitListWidget> {
             const SizedBox(height: 8),
             widget.list.length > 1
                 ? Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: <Widget>[
-                      Image.asset("assets/images/live_mini_hourglass.png"),
-                      const SizedBox(width: 4),
-                      const Text("Wait Time - "),
-                      const SizedBox(width: 4),
-                      Text(widget.waitTime),
-                    ],
-                  )
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Image.asset("assets/images/live_mini_hourglass.png"),
+                const SizedBox(width: 4),
+                const Text("Wait Time - "),
+                const SizedBox(width: 4),
+                Text(widget.waitTime),
+              ],
+            )
                 : const SizedBox(),
             SizedBox(height: widget.list.length > 1 ? 8 : 0),
             const Divider(),
@@ -200,8 +200,8 @@ class _WaitListWidgetState extends State<WaitListWidget> {
         children: <Widget>[
           callTypeIcon(callType: item.callType),
           const SizedBox(width: 16),
-          // Text(getTotalWaitTime(item)),
-          newTimerWidget(item),
+          Text(getTotalWaitTime(item)),
+          // newTimerWidget(item),
         ],
       ),
     );
@@ -227,23 +227,23 @@ class _WaitListWidgetState extends State<WaitListWidget> {
     return widget.model.isEngaded && widget.model.id == widget.myUserId
         ? const SizedBox()
         : widget.isHost
-            ? CommonButton(
-                buttonCallback: widget.onAccept,
-                buttonText: "Accept",
-              )
-            : widget.hasMyIdInWaitList
-                ? TextButton(
-                    onPressed: widget.onExitWaitList,
-                    child: const Text(
-                      "Exit Waitlist",
-                      style: TextStyle(
-                        color: Colors.red,
-                        decoration: TextDecoration.underline,
-                        decorationColor: Colors.red,
-                      ),
-                    ),
-                  )
-                : const SizedBox();
+        ? CommonButton(
+      buttonCallback: widget.onAccept,
+      buttonText: "Accept",
+    )
+        : widget.hasMyIdInWaitList
+        ? TextButton(
+      onPressed: widget.onExitWaitList,
+      child: const Text(
+        "Exit Waitlist",
+        style: TextStyle(
+          color: Colors.red,
+          decoration: TextDecoration.underline,
+          decorationColor: Colors.red,
+        ),
+      ),
+    )
+        : const SizedBox();
   }
 
   String getTotalWaitTime(WaitListModel item) {
@@ -255,42 +255,42 @@ class _WaitListWidgetState extends State<WaitListWidget> {
     return formattedTime;
   }
 
-  Widget newTimerWidget(WaitListModel item) {
-    final String source = item.totalTime;
-    final int epoch = int.parse(source);
-    final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
-    return TimerCountdown(
-      format: CountDownTimerFormat.hoursMinutesSeconds,
-      enableDescriptions: false,
-      spacerWidth: 4,
-      colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
-      timeTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
-      onTick: (Duration duration) async {},
-      endTime: dateTime,
-      onEnd: () {},
-    );
-  }
+// Widget newTimerWidget(WaitListModel item) {
+//   final String source = item.totalTime;
+//   final int epoch = int.parse(source);
+//   final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
+//   return TimerCountdown(
+//     format: CountDownTimerFormat.hoursMinutesSeconds,
+//     enableDescriptions: false,
+//     spacerWidth: 4,
+//     colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
+//     timeTextStyle: const TextStyle(fontSize: 12, color: Colors.black),
+//     onTick: (Duration duration) async {},
+//     endTime: dateTime,
+//     onEnd: () {},
+//   );
+// }
 
-  // String getTotalWaitTime(totalMinutes) {
-  //   String time = "";
-  //   Duration duration = Duration(minutes: totalMinutes);
-  //   String formattedTime = formatDuration(duration);
-  //   time = formattedTime;
-  //   return time;
-  // }
+// String getTotalWaitTime(totalMinutes) {
+//   String time = "";
+//   Duration duration = Duration(minutes: totalMinutes);
+//   String formattedTime = formatDuration(duration);
+//   time = formattedTime;
+//   return time;
+// }
 
-  // String formatDuration(Duration duration) {
-  //   int hours = duration.inHours;
-  //   int minutes = duration.inMinutes % 60;
-  //   int seconds = duration.inSeconds % 60;
-  //   return '$hours:${_twoDigits(minutes)}:${_twoDigits(seconds)}';
-  // }
+// String formatDuration(Duration duration) {
+//   int hours = duration.inHours;
+//   int minutes = duration.inMinutes % 60;
+//   int seconds = duration.inSeconds % 60;
+//   return '$hours:${_twoDigits(minutes)}:${_twoDigits(seconds)}';
+// }
 
-  // String _twoDigits(int n) {
-  //   if (n >= 10) {
-  //     return '$n';
-  //   } else {
-  //     return '0$n';
-  //   }
-  // }
+// String _twoDigits(int n) {
+//   if (n >= 10) {
+//     return '$n';
+//   } else {
+//     return '0$n';
+//   }
+// }
 }

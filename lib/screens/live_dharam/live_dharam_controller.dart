@@ -120,6 +120,16 @@ class LiveDharamController extends GetxController {
     super.onInit();
 
     initData();
+
+    if (!isHost) {
+      if (Get.arguments != null) {
+        final String targetLiveID = Get.arguments ?? "";
+        if (targetLiveID.isNotEmpty) {
+          liveId = targetLiveID;
+          zegoController.swiping.jumpTo(targetLiveID);
+        } else {}
+      } else {}
+    } else {}
   }
 
   void initData() {
@@ -382,8 +392,11 @@ class LiveDharamController extends GetxController {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
           Map<dynamic, dynamic> map = <dynamic, dynamic>{};
           map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-              as Map<dynamic, dynamic>;
-          data.addAll(map);
+          as Map<dynamic, dynamic>;
+          // data.addAll(map);
+          data
+            ..clear()
+            ..addAll(map);
           if (data.isEmpty) {
           } else if (data.isNotEmpty) {
             if (data.keys.toList().isEmpty) {
@@ -541,8 +554,11 @@ class LiveDharamController extends GetxController {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
           Map<dynamic, dynamic> map = <dynamic, dynamic>{};
           map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-              as Map<dynamic, dynamic>;
-          data.addAll(map);
+          as Map<dynamic, dynamic>;
+          // data.addAll(map);
+          data
+            ..clear()
+            ..addAll(map);
           liveList.addAll(data.keys.toList());
         } else {}
       } else {}
@@ -997,11 +1013,11 @@ class LiveDharamController extends GetxController {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
           Map<dynamic, dynamic> map = <dynamic, dynamic>{};
           map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-              as Map<dynamic, dynamic>;
+          as Map<dynamic, dynamic>;
           final List<LeaderboardModel> tempList = <LeaderboardModel>[];
           map.forEach(
             // ignore: always_specify_types
-            (key, value) {
+                (key, value) {
               tempList.add(
                 LeaderboardModel(
                   // ignore:  avoid_dynamic_calls
@@ -1016,9 +1032,12 @@ class LiveDharamController extends GetxController {
               );
             },
           );
-          leaderboardModel = tempList;
+          leaderboardModel
+            ..clear()
+            ..addAll(tempList);
+          // leaderboardModel = tempList;
           leaderboardModel.sort(
-            (LeaderboardModel a, LeaderboardModel b) {
+                (LeaderboardModel a, LeaderboardModel b) {
               return b.amount.compareTo(a.amount);
             },
           );
@@ -1530,26 +1549,22 @@ class LiveDharamController extends GetxController {
   }
 
   bool hasMessageContainsAnyBadWord(String input) {
-    // for (var badWord in LiveSharedPreferencesSingleton().getBadWordsList()) {
-    //   if (input.toLowerCase().contains(badWord.toLowerCase())) {
-    //     return true;
-    //   }
-    // }
+    List<String> badWords = LiveSharedPreferencesSingleton().getBadWordsList();
+    print("hasBadWord: ${badWords.length}");
+    List<String> words = input.toLowerCase().split(' ');
 
-    bool containsBadWord = false;
-    for (String word in LiveSharedPreferencesSingleton().getBadWordsList()) {
-      if (input.toLowerCase().contains(word)) {
-        containsBadWord = true;
-        break;
+    for (String word in words) {
+      if (badWords.contains(word)) {
+        return true;
       }
     }
 
-    return containsBadWord;
+    return false;
   }
 
   final RegExp indianPhoneNumberRegex = RegExp(r'\b(?:\+?91|0)?[ -]?\d{10}\b');
   final RegExp emailRegex =
-      RegExp(r'\b[A-Za-z0-9._%+-]+@\b[A-Za-z0-9.-]+\.[A-Z|a-z]{2,6}\b');
+  RegExp(r'\b[A-Za-z0-9._%+-]+@\b[A-Za-z0-9.-]+\.[A-Z|a-z]{2,6}\b');
   final RegExp instagramIdRegex = RegExp(r'@[a-zA-Z0-9_]{1,30}\b');
 
   String algoForSendMessage(String input) {
@@ -1568,6 +1583,11 @@ class LiveDharamController extends GetxController {
     } else {}
     return data.isEmpty ? "" : data.join(", ");
   }
+
+
+
+
+
 
   // Future<void> callblockCustomerByMod({
   //   required int id,

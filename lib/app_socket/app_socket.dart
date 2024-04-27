@@ -1,7 +1,9 @@
 
 
+import 'package:dio/dio.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
+import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/pages/home/home_controller.dart';
@@ -35,9 +37,18 @@ class AppSocket {
         ?..disconnect()
         ..connect();
     }
-    socket?.onConnect((_) {
-    });
+    socket?.onConnect(
+          (_) async {
+        await socketAPI();
+      },
+    );
+    socket?.onReconnect(
+          (_) async {
+        await socketAPI();
+      },
+    );
   }
+
   void emitForAstrologerEnterChatAssist(
       String? customerId, String? userId) {
     socket?.emit(ApiProvider().enterChatAssist,
@@ -83,6 +94,25 @@ class AppSocket {
       "userType": 'astrologer',
       "orderId": orderId
     });
+  }
+
+  Future<void> socketAPI() async {
+    try {
+      final SharedPreferenceService pref = Get.put(SharedPreferenceService());
+
+      final response = await Dio().post(
+        "http://15.206.23.215:8081/api/v3/removeLiveData",
+        data: {
+          "astroId": pref.getUserDetail()?.id ?? 0,
+          "clientId": socket?.id ?? "",
+        },
+      );
+      print("socketAPI(): ${response.data}");
+    } on Exception catch (error, stack) {
+      debugPrint("socketAPI(): Exception caught: error: $error");
+      debugPrint("socketAPI(): Exception caught: stack: $stack");
+    }
+    return Future<void>.value();
   }
 
   // void isAstroJoinedChat(void Function(dynamic) callback) {
