@@ -36,7 +36,8 @@ class AppSocket {
         ..connect();
     }
     socket?.onConnect((_) {
-
+    });
+  }
   void emitForAstrologerEnterChatAssist(
       String? customerId, String? userId) {
     socket?.emit(ApiProvider().enterChatAssist,
