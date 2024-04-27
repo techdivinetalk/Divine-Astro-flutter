@@ -1669,7 +1669,7 @@ class _LivePage extends State<LiveDharamScreen>
                                       msg.userId == "0" ? "" : '(${msg
                                       .userId})'}",
                                   style: TextStyle(
-                                    fontSize: 10,
+                                    fontSize: 13,
                                     color: isBlocked
                                         ? Colors.red
                                         : isModerator
@@ -1688,9 +1688,9 @@ class _LivePage extends State<LiveDharamScreen>
                                 Text(
                                   msg.message ?? "",
                                   style: TextStyle(
-                                    fontSize: 10,
+                                    fontSize: 12,
                                     color: isBlocked
-                                        ? Colors.red
+                                        ? Colors.red 
                                         : isModerator
                                         ? appColors.guideColor
                                         : Colors.white,
@@ -4787,7 +4787,9 @@ class _LivePage extends State<LiveDharamScreen>
       // } else {}
       await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
       await _controller.removeMyNode();
-    } else {}
+    } else {
+
+    }
   }
 
   @override
