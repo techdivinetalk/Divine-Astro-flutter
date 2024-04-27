@@ -633,7 +633,7 @@ class HomeController extends GetxController {
   astroOnlineOffline({String? status}) async {
     // try {
     final response = await dio.get(
-        "http://15.206.23.215:8081/api/v3/updateAstroStatus?unique_no=${userData.uniqueNo}&${status}");
+        "http://15.206.23.215:8081/api/v3/updateAstroStatus2?unique_no=${userData.uniqueNo}&${status}");
     log(response.data.toString());
     print("response.data");
     if (response.statusCode == 200) {}
