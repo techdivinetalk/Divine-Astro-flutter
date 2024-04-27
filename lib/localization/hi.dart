@@ -106,7 +106,7 @@ Map<String, String> hi() {
     "termsAndConditions": "नियम और शर्तें",
     "gst": "जीएसटी:",
     "uploadStory": "स्टोरी अपलोड करें",
-    "customerSupport": "ग्राहक सहेयता",
+    "customerSupport": "ज्योतिष सहेयता",
     "chooseLanguage": "भाषा चुनें",
     "fAndQ": "एफ एंड क्यू",
     "priceChange": "मूल्य परिवर्तन",

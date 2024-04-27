@@ -54,7 +54,7 @@ Map<String, String> en() {
     "call": "Call",
     "uploadStory": "Upload story",
     "uploadYourPhoto": "Upload your photo",
-    "customerSupport": "Customer Support",
+    "customerSupport": "Astro Support",
     "chooseLanguage": "Choose Language",
     "priceChange": "Price Change",
     "numberChange": "Number Change",

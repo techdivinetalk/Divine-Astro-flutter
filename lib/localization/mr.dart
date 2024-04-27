@@ -28,7 +28,7 @@ Map<String, String> mr() {
     "live": "राहतात",
     "uploadStory": "कथा अपलोड करा",
     "uploadYourPhoto": "तुमचा फोटो अपलोड करा",
-    "customerSupport": "ग्राहक सहाय्यता",
+    "customerSupport": "ज्योतिष सहाय्यता",
     "chooseLanguage": "भाषा निवडा",
     "fAndQ": "f&Q",
     "congratulations": "अभिनंदन",

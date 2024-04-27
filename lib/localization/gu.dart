@@ -23,7 +23,7 @@ Map<String, String> gu() {
     'kp': 'કે.પી',
     "uploadStory": "વાર્તા અપલોડ કરો",
     "uploadYourPhoto": "તમારો ફોટો અપલોડ કરો",
-    "customerSupport": "ગ્રાહક સેવા",
+    "customerSupport": "જ્યોતિષ સેવા",
     "chooseLanguage": "ભાષા પસંદ કરો",
     "fAndQ": "F&Q",
     "priceChange": "ભાવ ફેરફાર",
