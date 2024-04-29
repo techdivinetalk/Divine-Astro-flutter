@@ -182,7 +182,7 @@ class _LivePage extends State<LiveDharamScreen>
 
     zegoController.coHost.audienceLocalConnectStateNotifier
         .addListener(onAudienceLocalConnectStateChanged);
-    zegoController.audioVideo.camera.switchVideoMirroring(false);
+    // zegoController.audioVideo.camera.switchVideoMirroring(false);
     _controller.ref
         .child("live")
         .onValue
