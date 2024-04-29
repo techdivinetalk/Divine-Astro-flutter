@@ -443,9 +443,9 @@ class _LivePage extends State<LiveDharamScreen>
                 (Timer timer) async {
               /// if any function after some second
               if (timer.tick % 7 == 0) {
-                math.Random.secure().nextInt(30).isEven
-                    ? await manMessage()
-                    : await womanMessage();
+                // math.Random.secure().nextInt(30).isEven
+                //     ? await manMessage()
+                //     : await womanMessage();
               } else {}
 
               if (timer.tick % 30 == 0) {
@@ -1755,8 +1755,8 @@ class _LivePage extends State<LiveDharamScreen>
 
   String nameWithWithoutIDs(ZegoCustomMessage msg, bool isModerator) {
     return _controller.isHost
-        ? "${msg.userName} ${!_controller.isHost || (msg.userId == _controller.userId) || msg.userId == "0" ? "" : '(${msg.userId})'}"
-        : "${msg.userName} ${_controller.isHost || (msg.userId != _controller.userId) || _controller.isMod || msg.userId == "0" ? "" : '(${msg.userId})'}";
+        ? "${msg.userName}"
+        : "${msg.userName}";
   }
 
   bool moreOptionConditions(ZegoCustomMessage msg, bool isModerator) {
