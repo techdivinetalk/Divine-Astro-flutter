@@ -147,23 +147,27 @@ class SuggestProducts extends GetView<SuggestProductController> {
                                           ),
                                         ),
                                       ),*/
-                                      MultipleTypeImageView(
-                                        // height: 120,
-                                        width: double.infinity,
-                                        imageUrlData: item.id == 0
-                                            ? item.shopImage
-                                            : "${controller.imageUrl}/${item.shopImage}",
-                                        onTapOfLottie: (p0) async {
-                                          if (item.id == 0) {
-                                            Get.toNamed(
-                                                RouteName.poojaDharamMainScreen,
-                                                arguments: {
-                                                  "customerId": controller
-                                                      .customerId.value,
-                                                });
-                                          }
-                                        },
-                                      ),
+                                      ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(12.r),
+                                          child: MultipleTypeImageView(
+                                            // height: 120,
+                                            width: double.infinity,
+                                            imageUrlData: item.id == 0
+                                                ? item.shopImage
+                                                : "${controller.imageUrl}/${item.shopImage}",
+                                            onTapOfLottie: (p0) async {
+                                              if (item.id == 0) {
+                                                Get.toNamed(
+                                                    RouteName
+                                                        .poojaDharamMainScreen,
+                                                    arguments: {
+                                                      "customerId": controller
+                                                          .customerId.value,
+                                                    });
+                                              }
+                                            },
+                                          )),
                                       SizedBox(height: 8.h),
                                       CustomText(
                                         item.shopName ?? "",
