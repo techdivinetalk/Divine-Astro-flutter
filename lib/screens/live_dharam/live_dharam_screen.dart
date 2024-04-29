@@ -442,7 +442,7 @@ class _LivePage extends State<LiveDharamScreen>
             duration,
                 (Timer timer) async {
               /// if any function after some second
-              if (timer.tick % 1 == 0) {
+              if (timer.tick % 7 == 0) {
                 math.Random.secure().nextInt(30).isEven
                     ? await manMessage()
                     : await womanMessage();
