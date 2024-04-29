@@ -182,7 +182,7 @@ class _LivePage extends State<LiveDharamScreen>
 
     zegoController.coHost.audienceLocalConnectStateNotifier
         .addListener(onAudienceLocalConnectStateChanged);
-
+    zegoController.audioVideo.camera.switchVideoMirroring(false);
     _controller.ref
         .child("live")
         .onValue
@@ -443,9 +443,9 @@ class _LivePage extends State<LiveDharamScreen>
                 (Timer timer) async {
               /// if any function after some second
               if (timer.tick % 7 == 0) {
-                math.Random.secure().nextInt(30).isEven
-                    ? await manMessage()
-                    : await womanMessage();
+                // math.Random.secure().nextInt(30).isEven
+                //     ? await manMessage()
+                //     : await womanMessage();
               } else {}
 
               if (timer.tick % 30 == 0) {

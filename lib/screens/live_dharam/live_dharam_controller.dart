@@ -393,10 +393,10 @@ class LiveDharamController extends GetxController {
           Map<dynamic, dynamic> map = <dynamic, dynamic>{};
           map = (dataSnapshot.value ?? <dynamic, dynamic>{})
           as Map<dynamic, dynamic>;
-          // data.addAll(map);
-          data
-            ..clear()
-            ..addAll(map);
+          data.addAll(map);
+          // data
+          //   ..clear()
+          //   ..addAll(map);
           if (data.isEmpty) {
           } else if (data.isNotEmpty) {
             if (data.keys.toList().isEmpty) {
@@ -555,10 +555,10 @@ class LiveDharamController extends GetxController {
           Map<dynamic, dynamic> map = <dynamic, dynamic>{};
           map = (dataSnapshot.value ?? <dynamic, dynamic>{})
           as Map<dynamic, dynamic>;
-          // data.addAll(map);
-          data
-            ..clear()
-            ..addAll(map);
+          data.addAll(map);
+          // data
+          //   ..clear()
+          //   ..addAll(map);
           liveList.addAll(data.keys.toList());
         } else {}
       } else {}
