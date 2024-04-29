@@ -742,6 +742,7 @@ class _LivePage extends State<LiveDharamScreen>
               userName: _controller.userName,
               liveID: _controller.liveId,
               config: streamingConfig
+                ..audioVideoView.isVideoMirror = false
                 ..preview.showPreviewForHost = false
                 ..maxCoHostCount = 1
                 ..confirmDialogInfo = null
