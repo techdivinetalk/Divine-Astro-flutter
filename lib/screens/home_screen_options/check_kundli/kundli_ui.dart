@@ -27,17 +27,12 @@ class KundliUi extends GetView<KundliController> {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         centerTitle: false,
-        leading: GestureDetector(
-          onTap: (){
-            Get.back();
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(left: 8.0, right: 8),
-            child: Center(child: Assets.images.leftArrow.svg()),
-          ),
+        leading: IconButton(
+          onPressed: () => Get.back(),
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
         title: CustomText(
-          'Add Kundali',
+          "checkKundli".tr,
           fontSize: 16.sp,
         ),
       ),
@@ -61,7 +56,7 @@ class KundliUi extends GetView<KundliController> {
             }
           },
           child: Text(
-            'Check Kundali',
+            "checkKundli".tr,
             style: TextStyle(
               fontWeight: FontWeight.w600,
               fontSize: 20.sp,
@@ -92,7 +87,7 @@ class KundliUi extends GetView<KundliController> {
           ),
           SizedBox(height: 8.h),
           Text(
-            'Add Kundali',
+            "addkundali".tr,
             textAlign: TextAlign.center,
             style: AppTextStyle.textStyle24(
               fontWeight: FontWeight.w600,
@@ -103,7 +98,7 @@ class KundliUi extends GetView<KundliController> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 74),
             child: Text(
-              'Fill in the details below to get the free personalized kundali',
+              "addKundaliText".tr,
               style: AppTextStyle.textStyle16(),
               textAlign: TextAlign.center,
               maxLines: 3,

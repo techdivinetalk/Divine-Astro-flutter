@@ -394,6 +394,8 @@ Map<String, String> mr() {
     'maximumOrderTime':'जास्तीत जास्त ऑर्डर वेळ',
     'specialty':'स्पेशालिटी',
     'languageProficiency':'भाषा प्रवीणता',
-    'astrologerRating':'ज्योतिषी रेटिंग'
+    'astrologerRating':'ज्योतिषी रेटिंग',
+    'addkundali': 'कुंडली घाला',
+    'addKundaliText': 'मोफत वैयक्तिकृत कुंडली मिळविण्यासाठी खालील तपशील भरा',
   };
 }
