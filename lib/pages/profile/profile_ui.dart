@@ -84,10 +84,12 @@ class ProfileUI extends GetView<ProfilePageController> {
                         ),
                         child: InkWell(
                             onTap: () async {
-                              if (await PermissionHelper()
+
+                              /// Told to remove
+                             /* if (await PermissionHelper()
                                   .askMediaPermission()) {
                                 controller.updateProfileImage();
-                              }
+                              }*/
                             },
                             child: /*ClipRRect(
                                     borderRadius: BorderRadius.circular(80),

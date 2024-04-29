@@ -64,19 +64,20 @@ class EditProfileUI extends GetView<EditProfileController> {
                           "name".tr,
                           style: AppTextStyle.textStyle14(),
                         ),
-                        Assets.images.icEdit.svg(),
+                       // Assets.images.icEdit.svg(),
                       ],
                     ),
                     SizedBox(
                       height: 5.h,
                     ),
                     ReferAstrologerField(
-                        validator: (value) {
+                     /*   validator: (value) {
                           if (value! == "") {
                             return "";
                           }
                           return null;
-                        },
+                        },*/
+                        notEditText: true,
                         hintText: "hintTextName".tr,
                         controller: controller.state.nameController,
                         inputAction: TextInputAction.next,
