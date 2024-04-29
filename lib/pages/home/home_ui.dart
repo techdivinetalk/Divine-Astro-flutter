@@ -542,7 +542,7 @@ class HomeUI extends GetView<HomeController> {
                           SizedBox(height: 10.h),
                           Obx(
                             () {
-                              return isLive.value ==1  ? controller.isLiveEnable.value
+                              return isLive.value ==1  ? !controller.isLiveEnable.value
                                   ? Column(
                                       children: [
                                         SizedBox(height: 10.h),
