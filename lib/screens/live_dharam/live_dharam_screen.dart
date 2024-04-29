@@ -1662,10 +1662,10 @@ class _LivePage extends State<LiveDharamScreen>
                               CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  // msg.userName ?? "",
-                                  nameWithWithoutIDs(msg, isModerator),
+                                  msg.userName ?? "",
+                                  // nameWithWithoutIDs(msg, isModerator),
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: 14,
                                     color: isBlocked
                                         ? Colors.red
                                         : isModerator
@@ -1684,7 +1684,7 @@ class _LivePage extends State<LiveDharamScreen>
                                 Text(
                                   msg.message ?? "",
                                   style: TextStyle(
-                                    fontSize: 12,
+                                    fontSize: 13,
                                     color: isBlocked
                                         ? Colors.red
                                         : isModerator
