@@ -115,17 +115,17 @@ Future<void> main() async {
   };
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("pushNotification1");
-    print('Message data-: dasboardCurrentIndex');
+    print('Message data-: dasboardCurrentIndex---${message.data}');
     print(
         'Message data-: ${MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI}');
     if (message.data["type"] == "2") {
       print('msg ---- from notification');
       return;
     }
-    if (message.data["type"] == "1") {
-      print('msg ---- from notification');
-      return;
-    }
+    // if (message.data["type"] == "1") {
+    //   print('msg ---- from notification');
+    //   return;
+    // }
     if (message.data["type"] == "1" &&
         MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
       showNotification(message.data["title"], message.data["message"],
