@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:after_layout/after_layout.dart';
+import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:dynamic_height_grid_view/dynamic_height_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../../../../../../common/appbar.dart';
 import '../../../../../../common/colors.dart';
@@ -403,7 +405,7 @@ class _PoojaDharamMainScreenState extends State<PoojaDharamMainScreen>
   Widget gridWidget() {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: DynamicHeightGridView(
+      child:  _controller.getPooja.data!.pooja!.isEmpty  ? CustomText("Nothing here!", fontSize: 20, fontColor: appColors.textColor, textAlign: TextAlign.center,fontWeight: FontWeight.w500,).centered() : DynamicHeightGridView(
         shrinkWrap: true,
         itemCount: _controller.getPooja.data?.pooja?.length ?? 0,
         crossAxisCount: 2,

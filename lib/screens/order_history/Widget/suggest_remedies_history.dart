@@ -46,14 +46,14 @@ class SuggestRemedies extends StatelessWidget {
                   }
                 }
               });
-              if (controller.remedySuggestedHistoryList.isEmpty) {
+              /*if (controller.remedySuggestedHistoryList.isEmpty) {
                 return const Center(
                   child: Text(
                     'No data found',
                     style: TextStyle(fontSize: 18),
                   ),
                 );
-              }
+              }*/
               return Column(
                 children: [
                   Expanded(

@@ -259,6 +259,7 @@ class ReferAstrologerField extends StatelessWidget {
   final int? maxLine;
   final double? height;
   final List<TextInputFormatter>? inputFormatter;
+  final bool notEditText;
 
   const ReferAstrologerField({
     super.key,
@@ -273,6 +274,7 @@ class ReferAstrologerField extends StatelessWidget {
     this.maxLine,
     this.height,
     this.inputFormatter,
+    this.notEditText = false,
   });
 
   @override
@@ -296,6 +298,7 @@ class ReferAstrologerField extends StatelessWidget {
         maxLines: maxLine,
         inputFormatters: inputFormatter,
         textInputAction: inputAction,
+        readOnly: notEditText,
         decoration: InputDecoration(
           isDense: true,
           errorStyle: const TextStyle(height: 0),

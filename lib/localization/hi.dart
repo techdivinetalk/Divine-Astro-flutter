@@ -394,6 +394,8 @@ Map<String, String> hi() {
     'maximumOrderTime':'अधिकतम आदेश समय',
     'specialty':'विशेषता',
     'languageProficiency':'भाषा प्रवीणता',
-    'astrologerRating':'ज्योतिषी रेटिंग'
+    'astrologerRating':'ज्योतिषी रेटिंग',
+    'addkundali': 'कुंडली जोड़ें',
+    'addKundaliText': 'निःशुल्क वैयक्तिकृत कुंडली प्राप्त करने के लिए नीचे विवरण भरें',
   };
 }
