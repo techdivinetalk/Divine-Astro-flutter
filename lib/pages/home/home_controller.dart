@@ -11,6 +11,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 
 import 'package:divine_astrologer/common/routes.dart';
+import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/di/fcm_notification.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/model/feedback_response.dart';
@@ -633,7 +634,7 @@ class HomeController extends GetxController {
   astroOnlineOffline({String? status}) async {
     // try {
     final response = await dio.get(
-        "http://15.206.23.215:8081/api/v3/updateAstroStatusV2?unique_no=${userData.uniqueNo}&${status}");
+        "${ApiProvider.astOnlineOffline}${userData.uniqueNo}&${status}");
     log(response.data.toString());
     print("response.data");
     if (response.statusCode == 200) {}
