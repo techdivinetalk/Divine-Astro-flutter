@@ -125,7 +125,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                             const SizedBox(height: 5),
                                           ],
                                         ),
-                                        label: "Assistance",
+                                        label: "assistance".tr,
                                       ),
                                       BottomNavigationBarItem(
                                         icon: Column(
@@ -146,7 +146,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                             const SizedBox(height: 5),
                                           ],
                                         ),
-                                        label: "Queue",
+                                        label: "queue".tr,
                                       ),
 
                                       // Profile Tab comment

@@ -512,7 +512,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                       } else if (index == 3) {
                         controller.whatsapp();
                       } else if (item.nav != "") {
-                        if (item.name == "uploadYourPhoto".tr) {
+                        if (item.name == "uploadYourPhotosUi") {
                           if (await PermissionHelper()
                               .askStoragePermission(Permission.photos)) {
                             Get.toNamed(item.nav.toString());

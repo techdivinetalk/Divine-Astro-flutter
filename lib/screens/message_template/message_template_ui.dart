@@ -21,7 +21,7 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
         centerTitle: false,
         forceMaterialTransparency: true,
         backgroundColor: appColors.white,
-        title: Text("Template",
+        title: Text("template".tr,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
@@ -34,7 +34,7 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Message Template',
+              'messageTemplate'.tr,
               style: AppTextStyle.textStyle20().copyWith(
                 decoration: TextDecoration.underline,
                 decorationColor: appColors.textColor,
@@ -58,7 +58,7 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                 ),
                 child: Center(
                     child: Text(
-                  '+ Click here to add message template',
+                  'clickToAdd'.tr,
                   style: AppTextStyle.textStyle14(),
                 )),
               ),

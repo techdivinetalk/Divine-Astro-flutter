@@ -43,7 +43,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
           return Column(
             children: [
               Padding(
-                padding: const EdgeInsets.fromLTRB(10, 0, 10, 0),
+                padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
                 child: SizedBox(
                   child: Obx(
                     () => Row(
@@ -55,7 +55,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                               controller.getAssistantAstrologerList();
                             },
                             child: Container(
-                              padding: const EdgeInsets.all(10),
+                              padding: const EdgeInsets.symmetric(vertical: 10),
                               // Adjust padding as needed
                               decoration: BoxDecoration(
                                 border: Border(
@@ -68,18 +68,18 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                                   ),
                                 ),
                               ),
-                              child: const Center(
+                              child:  Center(
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
-                                    Icon(
+                                    const Icon(
                                       Icons.person, // User icon
-                                      size: 30,
+                                      size: 24,
                                     ),
-                                    SizedBox(width: 8),
+                                    const SizedBox(width: 8),
                                     // Provides a space between the icon and the text
                                     Text(
-                                      "Users",
+                                      "users".tr,
                                       textAlign: TextAlign.center,
                                     ),
                                   ],
@@ -95,7 +95,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                               controller.getConsulation();
                             },
                             child: Container(
-                              padding: const EdgeInsets.all(10),
+                              padding: const EdgeInsets.symmetric(vertical: 10),
                               // Adjust padding as needed
                               decoration: BoxDecoration(
                                 border: Border(
@@ -108,18 +108,18 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                                   ),
                                 ),
                               ),
-                              child: const Center(
+                              child:  Center(
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
-                                    Icon(
+                                    const Icon(
                                       Icons.folder, // User icon
-                                      size: 30,
+                                      size: 24,
                                     ),
-                                    SizedBox(width: 8),
+                                    const SizedBox(width: 8),
                                     // Provides a space between the icon and the text
                                     Text(
-                                      "User's Data",
+                                      "userData".tr,
                                       textAlign: TextAlign.center,
                                     ),
                                   ],
@@ -425,7 +425,7 @@ class ChatAssistanceTile extends StatelessWidget {
               'assets/svg/remedies_icon.svg',
               width: 10,
             ),
-            Text(
+            const Text(
               "  Remedy",
               style: TextStyle(fontSize: 10),
             )
@@ -439,7 +439,7 @@ class ChatAssistanceTile extends StatelessWidget {
               'assets/svg/product.svg',
               width: 10,
             ),
-            Text(
+            const Text(
               "  Product",
               style: TextStyle(fontSize: 10),
             )
@@ -455,7 +455,7 @@ class ChatAssistanceTile extends StatelessWidget {
             ),
             Text(
               "  ${data.lastMessage}",
-              style: TextStyle(fontSize: 10),
+              style: const TextStyle(fontSize: 10),
             )
           ],
         );
@@ -503,7 +503,7 @@ class ChatAssistanceTile extends StatelessWidget {
         );
         break;
       default:
-        lastMessageWidget = SizedBox();
+        lastMessageWidget = const SizedBox();
         break;
     }
     return lastMessageWidget;

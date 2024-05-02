@@ -1,7 +1,7 @@
 name: divine_astrologer
 description: A new Flutter project.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
-
+# Change Version code on Drawer page
 version: 4.1.0
 
 environment:

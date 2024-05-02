@@ -33,7 +33,7 @@ class PujaScreen extends GetView<PujaController> {
               leading: IconButton(
                   onPressed: () => Get.back(),
                   icon: const Icon(Icons.arrow_back_ios_new_rounded)),
-              title: const CustomText('E-Commerce')),
+              title:  CustomText('eCommerce'.tr)),
           bottomNavigationBar: Container(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
             child: Row(
@@ -58,7 +58,7 @@ class PujaScreen extends GetView<PujaController> {
                       );
                     },
                     child: Text(
-                      'Add E-Commerce',
+                      'addECommerce'.tr,
                       style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w600,
                         fontColor: appColors.white,
@@ -250,11 +250,11 @@ class PujaScreen extends GetView<PujaController> {
   String getStatus(int status) {
     switch (status) {
       case 0:
-        return "Under Review";
+        return "underReview".tr;
       case 2:
-        return "Rejected";
+        return "rejected".tr;
       case 1:
-        return "Approved";
+        return "approved".tr;
       default:
         return "";
     }

@@ -28,7 +28,7 @@ class SideMenuDrawer extends GetView<HomeController> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text(
-                  "${'version'.tr} 0.0.0.0.0",
+                  "${'version'.tr} 4.1.0",
                   style: TextStyle(fontSize: 16, color: appColors.grey),
                 ),
                 InkWell(
@@ -53,7 +53,7 @@ class SideMenuDrawer extends GetView<HomeController> {
             ),
             ListTile(
               leading: Assets.images.icMessageTemplate.svg(),
-              title: Text("Message Template"),
+              title: Text("messageTemplate".tr),
               onTap: () => {Get.back(), Get.toNamed(RouteName.messageTemplate)},
             ),
             ListTile(

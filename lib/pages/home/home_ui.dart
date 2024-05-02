@@ -90,7 +90,7 @@ class HomeUI extends GetView<HomeController> {
                             : Assets.images.icVisibilityOff.svg(),
                       ),
                       Text(
-                        !controller.isShowTitle.value ? "Unhide" : "Hide",
+                        !controller.isShowTitle.value ? "unHide".tr : "hide".tr,
                         style: AppTextStyle.textStyle13(
                             fontWeight: FontWeight.w400,
                             fontColor: appColors.textColor),
@@ -119,8 +119,7 @@ class HomeUI extends GetView<HomeController> {
                                 Get.toNamed(RouteName.profileUi);
                               },
                             ),
-                      Text(
-                        "Profile",
+                      Text("profile".tr,
                         style: AppTextStyle.textStyle13(
                             fontWeight: FontWeight.w400,
                             fontColor: appColors.textColor),
@@ -316,9 +315,9 @@ class HomeUI extends GetView<HomeController> {
                                   child: RetentionWidget(
                                     isEligible: true,
                                 title:
-                                    "Bonus Wallet \n ₹${abbreviateNumber(controller.homeData?.bonusWallet)}",
+                                    "${"paidWallet".tr} \n ₹${abbreviateNumber(controller.homeData?.bonusWallet)}",
                                 subTitle:
-                                    "Retention Rate \n ${controller.homeData?.retention ?? 0}%",
+                                    "${"retentionRate".tr} \n ${controller.homeData?.retention ?? 0}%",
                                 borderColor: (controller.homeData!.retention! <
                                         controller.homeData!.minimumRetention!)
                                     ? appColors.red
@@ -340,9 +339,9 @@ class HomeUI extends GetView<HomeController> {
                               Expanded(
                                 child: RetentionWidget(
                                   title:
-                                      "Paid Wallet \n ₹${abbreviateNumber(controller.homeData?.paidWallet)}",
+                                      "${"paidWallet".tr} \n ₹${abbreviateNumber(controller.homeData?.paidWallet)}",
                                   subTitle:
-                                      "Repurchase Rate \n ${controller.homeData?.repurchaseRate ?? 0}%",
+                                      "${"rePurchaseRate".tr} \n ${controller.homeData?.repurchaseRate ?? 0}%",
                                   borderColor:
                                       (controller.homeData!.repurchaseRate! <
                                               controller.homeData!
@@ -386,7 +385,7 @@ class HomeUI extends GetView<HomeController> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     CustomText(
-                                      "Ecommerce Wallet",
+                                      "ecommerceWallet".tr,
                                       fontWeight: FontWeight.w500,
                                       textAlign: TextAlign.center,
                                       fontSize: 9.sp,
@@ -410,7 +409,7 @@ class HomeUI extends GetView<HomeController> {
                             alignment: Alignment.centerLeft,
                             child: CustomText(
                               (controller.homeData!.retention! <
-                                  controller.homeData!.minimumRetention!) ? "You are Not Eligible for Bonus wallet!" : "You are Eligible for Bonus wallet!",
+                                  controller.homeData!.minimumRetention!) ? "notEligibleBonus".tr : "eligibleBonus".tr,
                               fontWeight: FontWeight.w400,
                               textAlign: TextAlign.start,
                               fontSize: 14,
