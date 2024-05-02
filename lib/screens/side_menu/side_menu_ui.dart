@@ -25,16 +25,17 @@ class SideMenuDrawer extends GetView<HomeController> {
           children: <Widget>[
             const SizedBox(height: 10),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                Text(
-                  "${'version'.tr} 4.1.0",
+                /*Text(
+                 *//* "${'version'.tr} 4.1.0"*//*"",
                   style: TextStyle(fontSize: 16, color: appColors.grey),
-                ),
+                ),*/
                 InkWell(
                   onTap: () => Navigator.pop(context),
                   child: const Icon(Icons.close),
                 ),
+                const SizedBox(width: 10),
               ],
             ),
             const SizedBox(height: 10),
