@@ -742,6 +742,7 @@ class _LivePage extends State<LiveDharamScreen>
                       ..maxCoHostCount = 1
                       ..confirmDialogInfo = null
                       ..disableCoHostInvitationReceivedDialog = true
+                      ..video = ZegoUIKitVideoConfig.preset1080P()
                       ..audioVideoView = ZegoLiveStreamingAudioVideoViewConfig(
                         showUserNameOnView: false,
                         showAvatarInAudioMode: true,

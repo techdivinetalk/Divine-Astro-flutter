@@ -538,7 +538,7 @@ class HomeUI extends GetView<HomeController> {
                           // noticeBoardWidget(),
                           SizedBox(height: 10.h),
                           // viewKundliWidget(),
-                          viewKundliWidgetUpdated(),
+                          viewKundliWidgetUpdated(),  
                           SizedBox(height: 10.h),
                           Obx(
                             () {
