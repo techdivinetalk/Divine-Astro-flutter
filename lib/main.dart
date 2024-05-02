@@ -115,17 +115,17 @@ Future<void> main() async {
   };
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("pushNotification1");
-    print('Message data-: dasboardCurrentIndex');
+    print('Message data-: dasboardCurrentIndex---${message.data}');
     print(
         'Message data-: ${MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI}');
     if (message.data["type"] == "2") {
       print('msg ---- from notification');
       return;
     }
-    if (message.data["type"] == "1") {
-      print('msg ---- from notification');
-      return;
-    }
+    // if (message.data["type"] == "1") {
+    //   print('msg ---- from notification');
+    //   return;
+    // }
     if (message.data["type"] == "1" &&
         MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
       showNotification(message.data["title"], message.data["message"],
@@ -386,86 +386,90 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
               MediaQuery.sizeOf(context).height),
           builder: (context, child) {
             return OverlaySupport.global(
-              child: GetMaterialApp(
-                navigatorObservers: <NavigatorObserver>[
-                  GetObserver(MiddleWare.instance.observer, Get.routing),
-                ],
-                defaultTransition: Transition.fadeIn,
-                navigatorKey: navigatorKey,
-                color: appColors.white,
-                debugShowCheckedModeBanner: false,
-                initialRoute: preferenceService.getUserDetail()?.id == null
-                    ? RouteName.login
-                    : RouteName.dashboard,
-                 getPages: Routes.routes,
-                // home: ZegoLoginScreen(),
-                locale: getLanStrToLocale(
-                    GetStorages.get(GetStorageKeys.language) ?? ""),
-                fallbackLocale: AppTranslations.fallbackLocale,
-                translations: AppTranslations(),
-                theme: ThemeData(
-                  bottomSheetTheme: const BottomSheetThemeData(
-                      backgroundColor: Colors.transparent, modalElevation: 0),
-                  splashColor: appColors.transparent,
-                  highlightColor: Colors.transparent,
-                  colorScheme: ColorScheme.fromSeed(
-                      seedColor: Colors.white,
-                      background: appColors.white,
-                      surfaceTint: appColors.white),
-                  useMaterial3: true,
-                  fontFamily: FontFamily.poppins,
-                  // cardTheme: const CardTheme(
-                  //     color: appColors.white, surfaceTintColor: appColors.white),
+              child: MediaQuery(
+                data: MediaQueryData.fromWindow(WidgetsBinding.instance.window)
+                    .copyWith(textScaleFactor: 1.0),
+                child: GetMaterialApp(
+                  navigatorObservers: <NavigatorObserver>[
+                    GetObserver(MiddleWare.instance.observer, Get.routing),
+                  ],
+                  defaultTransition: Transition.fadeIn,
+                  navigatorKey: navigatorKey,
+                  color: appColors.white,
+                  debugShowCheckedModeBanner: false,
+                  initialRoute: preferenceService.getUserDetail()?.id == null
+                      ? RouteName.login
+                      : RouteName.dashboard,
+                   getPages: Routes.routes,
+                  // home: ZegoLoginScreen(),
+                  locale: getLanStrToLocale(
+                      GetStorages.get(GetStorageKeys.language) ?? ""),
+                  fallbackLocale: AppTranslations.fallbackLocale,
+                  translations: AppTranslations(),
+                  theme: ThemeData(
+                    bottomSheetTheme: const BottomSheetThemeData(
+                        backgroundColor: Colors.transparent, modalElevation: 0),
+                    splashColor: appColors.transparent,
+                    highlightColor: Colors.transparent,
+                    colorScheme: ColorScheme.fromSeed(
+                        seedColor: Colors.white,
+                        background: appColors.white,
+                        surfaceTint: appColors.white),
+                    useMaterial3: true,
+                    fontFamily: FontFamily.poppins,
+                    // cardTheme: const CardTheme(
+                    //     color: appColors.white, surfaceTintColor: appColors.white),
+                  ),
+                  localizationsDelegates: const [
+                    DefaultMaterialLocalizations.delegate,
+                    DefaultWidgetsLocalizations.delegate,
+                  ],
+                  // builder: (context, widget) {
+                  //   return widget ?? const SizedBox();
+                  //   // Container();
+                  //   //   Stack(
+                  //   //   children: <Widget>[
+                  //   //     // Obx(() => IgnorePointer(
+                  //   //     //     ignoring:
+                  //   //     //         Get.find<ProgressService>().showProgress.value,
+                  //   //     //     child: widget)),
+                  //   //
+                  //   //     //
+                  //   //     widget ?? SizedBox(),
+                  //   //     //
+                  //   //     // StreamBuilder<bool?>(
+                  //   //     //   initialData: true,
+                  //   //     //   stream: Get.find<FirebaseNetworkService>()
+                  //   //     //       .databaseConnectionStream,
+                  //   //     //   builder: (context, snapshot) {
+                  //   //     //     final appTheme = AppTheme.of(context);
+                  //   //     //     return SafeArea(
+                  //   //     //       child: AnimatedContainer(
+                  //   //     //         height: snapshot.data as bool
+                  //   //     //             ? 0
+                  //   //     //             : appTheme.getHeight(36),
+                  //   //     //         duration: Utils.animationDuration,
+                  //   //     //         color: appTheme.redColor,
+                  //   //     //         child: Material(
+                  //   //     //           type: MaterialType.transparency,
+                  //   //     //           child: Center(
+                  //   //     //               child: Text(AppString.noInternetConnection,
+                  //   //     //                   style: appTheme.customTextStyle(
+                  //   //     //                     fontSize: 16.sp,
+                  //   //     //                     color: appTheme.whiteColor,
+                  //   //     //                   ))),
+                  //   //     //         ),
+                  //   //     //       ),
+                  //   //     //     );
+                  //   //     //   },
+                  //   //     // ),
+                  //   //     // Obx(() => Get.find<ProgressService>().showProgress.isTrue
+                  //   //     //     ? Center(child: CustomProgressDialog())
+                  //   //     //     : const Offstage())
+                  //   //   ],
+                  //   // );
+                  // },
                 ),
-                localizationsDelegates: const [
-                  DefaultMaterialLocalizations.delegate,
-                  DefaultWidgetsLocalizations.delegate,
-                ],
-                // builder: (context, widget) {
-                //   return widget ?? const SizedBox();
-                //   // Container();
-                //   //   Stack(
-                //   //   children: <Widget>[
-                //   //     // Obx(() => IgnorePointer(
-                //   //     //     ignoring:
-                //   //     //         Get.find<ProgressService>().showProgress.value,
-                //   //     //     child: widget)),
-                //   //
-                //   //     //
-                //   //     widget ?? SizedBox(),
-                //   //     //
-                //   //     // StreamBuilder<bool?>(
-                //   //     //   initialData: true,
-                //   //     //   stream: Get.find<FirebaseNetworkService>()
-                //   //     //       .databaseConnectionStream,
-                //   //     //   builder: (context, snapshot) {
-                //   //     //     final appTheme = AppTheme.of(context);
-                //   //     //     return SafeArea(
-                //   //     //       child: AnimatedContainer(
-                //   //     //         height: snapshot.data as bool
-                //   //     //             ? 0
-                //   //     //             : appTheme.getHeight(36),
-                //   //     //         duration: Utils.animationDuration,
-                //   //     //         color: appTheme.redColor,
-                //   //     //         child: Material(
-                //   //     //           type: MaterialType.transparency,
-                //   //     //           child: Center(
-                //   //     //               child: Text(AppString.noInternetConnection,
-                //   //     //                   style: appTheme.customTextStyle(
-                //   //     //                     fontSize: 16.sp,
-                //   //     //                     color: appTheme.whiteColor,
-                //   //     //                   ))),
-                //   //     //         ),
-                //   //     //       ),
-                //   //     //     );
-                //   //     //   },
-                //   //     // ),
-                //   //     // Obx(() => Get.find<ProgressService>().showProgress.isTrue
-                //   //     //     ? Center(child: CustomProgressDialog())
-                //   //     //     : const Offstage())
-                //   //   ],
-                //   // );
-                // },
               ),
             );
           }),

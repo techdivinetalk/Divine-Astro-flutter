@@ -20,6 +20,8 @@ class ApiProvider {
   static const String socketUrl = "http://15.206.23.215:8081";
   static String baseUrl =
       "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+
+  static const String astOnlineOffline = "http://15.206.23.215:8081/api/v3/updateAstroStatusV2?unique_no=";
   //final String baseUrl = "http://13.235.46.27/admin/$version/";
 
   //Socket Event
