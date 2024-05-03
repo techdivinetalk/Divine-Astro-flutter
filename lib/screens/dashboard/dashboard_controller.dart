@@ -15,18 +15,20 @@ import 'package:divine_astrologer/zego_call/zego_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
+import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../common/app_exception.dart';
+import '../../common/app_textstyle.dart';
 import '../../common/common_functions.dart';
 import '../../common/permission_handler.dart';
 import '../../di/fcm_notification.dart';
 import '../../model/res_login.dart';
 
 class DashboardController extends GetxController
-    with GetSingleTickerProviderStateMixin , WidgetsBindingObserver {
+    with GetSingleTickerProviderStateMixin, WidgetsBindingObserver {
   final PreDefineRepository repository;
 
   DashboardController(this.repository);
@@ -58,27 +60,56 @@ class DashboardController extends GetxController
       checkPermissions();
     }
   }
+
   void checkPermissions() async {
     if (await Permission.camera.isDenied ||
-        await Permission.microphone.isDenied ||
-        await Permission.storage.isDenied) {
+        await Permission.microphone.isDenied) {
       Get.bottomSheet(
         Container(
-          padding: EdgeInsets.all(20),
-          height: 200,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+            ),
+          ),
+          padding: const EdgeInsets.all(20),
+          height: 250,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Text(
-                "Allow permission to take audio and video calls smoothly",
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              const Center(
+                child: Text(
+                  "Permission Missing",
+                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                ),
               ),
-              SizedBox(height: 20),
-              ElevatedButton(
-                child: Text("Grant Permission"),
-                onPressed: () {
+              const SizedBox(height: 20),
+              const Text(
+                "Allow permission to take audio and video calls smoothly",
+                style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 30),
+              GestureDetector(
+                onTap: () {
                   requestPermissions();
                 },
+                child: Container(
+                  height: 60,
+                  width: double.infinity,
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    color: appColors.guideColor,
+                    borderRadius: BorderRadius.circular(35),
+                  ),
+                  child: Text(
+                    "Grant Permission",
+                    style: AppTextStyle.textStyle20(
+                      fontColor: appColors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
@@ -87,14 +118,17 @@ class DashboardController extends GetxController
       );
     }
   }
+
   void requestPermissions() async {
     await [
       Permission.camera,
       Permission.microphone,
-      Permission.storage, // Assuming storage is needed; adjust as necessary.
     ].request();
     Get.back(); // Close the bottom sheet after requesting permissions
+    await FlutterOverlayWindow
+        .requestPermission();
   }
+
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -184,13 +218,10 @@ class DashboardController extends GetxController
     }
   }
 
-
   @override
   void onClose() {
     super.onClose();
   }
-
-
 
   void loadPreDefineData() async {
     SpecialityList response = await repository.loadPreDefineData();

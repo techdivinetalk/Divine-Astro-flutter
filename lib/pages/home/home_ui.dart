@@ -917,7 +917,10 @@ class HomeUI extends GetView<HomeController> {
                         children: [
                           Text(
                             controller.homeData?.noticeBoard?.title ?? '',
-                            style: AppTextStyle.textStyle16(
+                            maxLines: 4,
+                            overflow: TextOverflow.ellipsis,
+                            textAlign: TextAlign.justify,
+                            style: AppTextStyle.textStyle14(
                                 fontWeight: FontWeight.w500,
                                 fontColor: appColors.darkBlue),
                           ),
