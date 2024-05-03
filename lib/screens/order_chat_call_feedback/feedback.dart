@@ -194,7 +194,7 @@ class FeedBack extends GetView<FeedbackController> {
                                         children: [
                                           TextSpan(
                                             text:
-                                                '-₹ ${controller.astroFeedbackDetailData.value?.fineAmounts ?? 0}',
+                                                '₹ ${controller.astroFeedbackDetailData.value?.fineAmounts ?? 0}',
                                             style:
                                                 TextStyle(color: appColors.red),
                                           ),

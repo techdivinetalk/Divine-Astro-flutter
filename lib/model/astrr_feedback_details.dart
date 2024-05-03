@@ -38,8 +38,8 @@ class AstroFeedbackDetailResponse {
 }
 
 class AstroFeedbackDetailData {
-  int? totalProblem;
-  int? fineAmounts;
+  dynamic totalProblem;
+  dynamic fineAmounts;
   List<FeedbackProblem>? problems;
 
   AstroFeedbackDetailData({
