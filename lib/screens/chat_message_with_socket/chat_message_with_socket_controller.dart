@@ -312,8 +312,13 @@ class ChatMessageWithSocketController extends GetxController
     noticeAPi();
     getSavedRemedies();
     AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
-      print("orderData Changed");
-      initTask(p0);
+      if(p0["status"] == null || p0["astroId"] == null){
+        backFunction();
+        AppFirebaseService().database.child("order/${p0["orderId"]}").remove();
+      }else {
+        print("orderData Changed");
+        initTask(p0);
+      }
     });
     //stateHandling();
     broadcastReceiver.start();

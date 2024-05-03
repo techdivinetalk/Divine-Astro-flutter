@@ -5,7 +5,9 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class ForceUpdateSheet extends StatelessWidget {
@@ -15,7 +17,7 @@ class ForceUpdateSheet extends StatelessWidget {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: () {
-        return exit(0);
+        return backMethod();
       },
       child: Wrap(
         alignment: WrapAlignment.center,
@@ -51,7 +53,7 @@ class ForceUpdateSheet extends StatelessWidget {
                 const SizedBox(height: 32),
                 GestureDetector(
                   onTap: () {
-                    urlLuncher(url:Uri.parse(ApiProvider.playStoreLiveUrl));
+                    urlLuncher(url: Uri.parse(ApiProvider.playStoreLiveUrl));
                   },
                   child: Container(
                     height: 60,
@@ -77,6 +79,14 @@ class ForceUpdateSheet extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  backMethod() {
+    if (kDebugMode) {
+      return Get.back();
+    } else {
+      return exit(0);
+    }
   }
 
   Future<void> urlLuncher({Uri? url}) async {

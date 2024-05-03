@@ -19,7 +19,7 @@ class AddMessageTemplateUI extends GetView<AddMessageTemplateController> {
         centerTitle: false,
         forceMaterialTransparency: true,
         backgroundColor: appColors.white,
-        title: Text("Add Template",
+        title: Text("addTemplate".tr,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
@@ -44,7 +44,7 @@ class AddMessageTemplateUI extends GetView<AddMessageTemplateController> {
                 //enabled: controller.enableTextField.value,
                 inputType: TextInputType.text,
                 inputAction: TextInputAction.next,
-                hintText: "Enter Template Name",
+                hintText: "enterTemplateName".tr,
                 inputFormatters: [LengthLimitingTextInputFormatter(15)],
                 errorBorder: appColors.white,
                 suffixIcon: Padding(
@@ -74,7 +74,7 @@ class AddMessageTemplateUI extends GetView<AddMessageTemplateController> {
               controller: controller.messageController,
               inputType: TextInputType.text,
               inputAction: TextInputAction.next,
-              hintText: "Enter Default Message",
+              hintText: "enterDefaultMessage".tr,
               errorBorder: appColors.white,
               maxLines: 4,
             ),
@@ -87,7 +87,7 @@ class AddMessageTemplateUI extends GetView<AddMessageTemplateController> {
                 : const SizedBox()),
             SizedBox(height: 26.h),
             CustomLightYellowButton(
-              name: controller.isUpdate ? "Update Form" : "submitForm".tr,
+              name: controller.isUpdate ? "updateForm".tr : "submitForm".tr,
               onTaped: () {
                 controller.isUpdate ? controller.updateForm() : controller.submit();
               },

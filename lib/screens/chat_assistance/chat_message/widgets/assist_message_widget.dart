@@ -627,8 +627,7 @@ class AssistMessageView extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children:
               List.generate(temp.length, (index) {
-                return GestureDetector( onTap: () => Get.toNamed(RouteName.remediesDetail,
-                    arguments: {'title': temp[0], 'subtitle': jsonString}),child: CustomText(temp[index], fontSize: 12.sp));
+                return CustomText(temp[index], fontSize: 12.sp);
               }),
             ),
           ),

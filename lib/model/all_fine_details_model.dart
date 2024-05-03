@@ -60,7 +60,7 @@ class FeedbackItem {
       name: json['name'],
       status: json['status'],
       fine: json['fine'] != null ? FeedbackFine.fromJson(json['fine']) : null,
-      solution: FeedbackSolution.fromJson(json['solution']),
+      solution: json['solution'] != null ? FeedbackSolution.fromJson(json['solution']) : null,
     );
   }
 

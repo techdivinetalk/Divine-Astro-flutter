@@ -163,7 +163,7 @@ class DashboardController extends GetxController
         print(data.data!.appVersion!.split(".").join(""));
         print(packageInfo.version.split(".").join(""));
         print('packageInfo.version!.split(".").join("")');
-        if (int.parse(data.data!.appVersion!.split(".").join("")) <=
+        if (int.parse(data.data!.appVersion!.split(".").join("")) >
             int.parse(packageInfo.version.split(".").join(""))) {
           print("objectobjectobjectobject");
           Get.bottomSheet(

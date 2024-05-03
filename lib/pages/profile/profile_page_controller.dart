@@ -101,10 +101,10 @@ class ProfilePageController extends GetxController {
           "bankDetails".tr,
           Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h),
           '/bankDetailsUI'),
-      ProfileOptionModelClass("Upload Story",
+      ProfileOptionModelClass("uploadStory".tr,
           Assets.images.icUploadStory.svg(width: 30.h, height: 30.h), ''),
-      ProfileOptionModelClass('Upload Your Photos',
-          Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h), ''),
+      ProfileOptionModelClass("uploadYourPhoto".tr,
+          Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h), '/uploadYourPhotosUi'),
       ProfileOptionModelClass("customerSupport".tr,
           Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), ''),
       ProfileOptionModelClass(
@@ -112,7 +112,7 @@ class ProfilePageController extends GetxController {
           Assets.images.icLanguages.svg(width: 30.h, height: 30.h),
           '/languagePopup'),
       ProfileOptionModelClass(
-          "FAQ", Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
+          "faq".tr, Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
 /*      ProfileOptionModelClass(
           "priceChange".tr,
           Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
@@ -125,8 +125,8 @@ class ProfilePageController extends GetxController {
           "blockedUsers".tr,
           Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
           '/blockedUser'),
-      ProfileOptionModelClass("Remedies",
-          Assets.images.remedies.svg(width: 30.h, height: 30.h), '/remedies'),
+      ProfileOptionModelClass("eCommerce".tr,
+          Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja'),
     ].obs;
   }
 
@@ -137,11 +137,11 @@ class ProfilePageController extends GetxController {
         Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h),
         '/bankDetailsUI'),
     ProfileOptionModelClass(
-        "Upload Story".tr,
+        "uploadStory".tr,
         Assets.images.icUploadStory.svg(width: 30.h, height: 30.h),
         '/uploadStoryUi'),
     ProfileOptionModelClass(
-        "Upload Your Photos",
+        "uploadYourPhoto".tr,
         Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h),
         '/uploadYourPhotosUi'),
     ProfileOptionModelClass("customerSupport".tr,
@@ -151,7 +151,7 @@ class ProfilePageController extends GetxController {
         Assets.images.icLanguages.svg(width: 30.h, height: 30.h),
         '/languagePopup'),
     ProfileOptionModelClass(
-        "FAQ", Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
+        "faq".tr, Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
    /* ProfileOptionModelClass(
         "priceChange".tr,
         Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
@@ -165,7 +165,7 @@ class ProfilePageController extends GetxController {
         Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
         '/blockedUser'),
     ProfileOptionModelClass(
-        "E-Commerce", Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja'),
+        "eCommerce".tr, Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja'),
     // ProfileOptionModelClass("Add Remedies",
     //     Assets.images.remedies.svg(width: 30.h, height: 30.h), ''),
   ].obs;
