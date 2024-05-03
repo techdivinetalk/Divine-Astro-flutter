@@ -126,20 +126,26 @@ Future<void> main() async {
     //   print('msg ---- from notification');
     //   return;
     // }
-    if (message.data["type"] == "1" &&
-        MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
-      showNotification(message.data["title"], message.data["message"],
-          message.data['type'], message.data);
-      HashMap<String, dynamic> updateData = HashMap();
-      updateData[message.data["chatId"]] = 1;
-      print('Message data-:-users ${message.data}');
-      FirebaseDatabase.instance
-          .ref("user")
-          .child(
-              "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
-          .update(updateData);
-      print('Message data: ${message.data['userid']}');
-      print('Message data: ${message.data['sender_id']}');
+    if (message.data["type"] == "1") {
+      print("messageReceive2 ${MiddleWare.instance.currentPage}");
+      if(MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
+        showNotification(message.data["title"], message.data["message"],
+            message.data['type'], message.data);
+        HashMap<String, dynamic> updateData = HashMap();
+        updateData[message.data["chatId"]] = 1;
+        print('Message data-:-users ${message.data}');
+        FirebaseDatabase.instance
+            .ref("user")
+            .child(
+            "${message.data['sender_id']}/realTime/deliveredMsg/${message
+                .data["userid"]}")
+            .update(updateData);
+        sendBroadcast(BroadcastMessage(name: "messageReceive", data: message.data));
+      }else{
+        sendBroadcast(
+            BroadcastMessage(name: "messageReceive", data: message.data));
+      }
+
     } else if (message.data["type"] == "8") {
       print(
           "inside page for realtime notification ${message.data} ${MiddleWare.instance.currentPage}");

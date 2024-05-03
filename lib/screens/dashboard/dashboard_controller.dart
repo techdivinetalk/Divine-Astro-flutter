@@ -26,7 +26,7 @@ import '../../di/fcm_notification.dart';
 import '../../model/res_login.dart';
 
 class DashboardController extends GetxController
-    with GetSingleTickerProviderStateMixin {
+    with GetSingleTickerProviderStateMixin , WidgetsBindingObserver {
   final PreDefineRepository repository;
 
   DashboardController(this.repository);
@@ -46,8 +46,60 @@ class DashboardController extends GetxController
   // Socket? socket;
 
   @override
-  void onInit() async {
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      // Check permissions when app is resumed
+      checkPermissions();
+    }
+  }
+  void checkPermissions() async {
+    if (await Permission.camera.isDenied ||
+        await Permission.microphone.isDenied ||
+        await Permission.storage.isDenied) {
+      Get.bottomSheet(
+        Container(
+          padding: EdgeInsets.all(20),
+          height: 200,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                "Allow permission to take audio and video calls smoothly",
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                child: Text("Grant Permission"),
+                onPressed: () {
+                  requestPermissions();
+                },
+              ),
+            ],
+          ),
+        ),
+        isScrollControlled: true,
+      );
+    }
+  }
+  void requestPermissions() async {
+    await [
+      Permission.camera,
+      Permission.microphone,
+      Permission.storage, // Assuming storage is needed; adjust as necessary.
+    ].request();
+    Get.back(); // Close the bottom sheet after requesting permissions
+  }
+  @override
+  Future<void> onInit() async {
     super.onInit();
+    WidgetsBinding.instance.addObserver(this);
+    checkPermissions();
     print("beforeGoing 2 - ${preferenceService.getUserDetail()?.id}");
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {

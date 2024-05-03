@@ -26,6 +26,7 @@ import "package:divine_astrologer/screens/live_page/constant.dart";
 import "package:divine_astrologer/zego_call/zego_service.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter/scheduler.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
@@ -40,6 +41,7 @@ import "package:path_provider/path_provider.dart";
 import "package:permission_handler/permission_handler.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:socket_io_client/socket_io_client.dart";
+import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 
 import "../../common/MiddleWare.dart";
 import "../../common/app_exception.dart";
@@ -116,7 +118,7 @@ class ChatMessageWithSocketController extends GetxController
   // MessageTemplateController messageTemplateController = Get.find<MessageTemplateController>();
   RxBool isTyping = false.obs;
   BroadcastReceiver broadcastReceiver =
-      BroadcastReceiver(names: <String>["deliveredMsg"]);
+      BroadcastReceiver(names: <String>["deliveredMsg","messageReceive"]);
   late Duration timeDifference;
   RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
 
@@ -315,8 +317,44 @@ class ChatMessageWithSocketController extends GetxController
     });
     //stateHandling();
     broadcastReceiver.start();
-    broadcastReceiver.messages.listen((BroadcastMessage event) {
-      if (event.name == 'deliveredMsg') {
+    broadcastReceiver.messages.listen((BroadcastMessage event) async {
+      if (event.name == 'messageReceive') {
+        var index = await chatMessages.indexWhere((element) {
+          return element.time.toString() == event.data!["chatId"];
+        });
+        print('messageReceiveRR: $index');
+        if (index == -1) {
+          if(event.data!["msg_type"].toString() != "0"){
+            getChatList();
+          }else {
+            final String time = "${DateTime
+                .now()
+                .millisecondsSinceEpoch ~/ 1000}";
+            ChatMessage chatMessage = ChatMessage(
+              orderId: AppFirebaseService().orderData.value["orderId"],
+              id: int.parse(time),
+              message: event.data!["message"],
+              // createdAt: DateTime.now().toIso8601String(),
+              receiverId: int.parse(
+                  AppFirebaseService().orderData.value["userId"].toString()),
+              senderId: preference.getUserDetail()!.id,
+              time: int.parse(time),
+              msgSendBy: "0",
+              awsUrl: event.data!["message"],
+              base64Image: null,
+              downloadedPath: null,
+              msgType: MsgType.text,
+              kundliId: null,
+              productPrice: null,
+              type: 0,
+              userType: "customer",
+            );
+            chatMessages.add(chatMessage);
+            scrollToBottomFunc();
+          }
+          updateReadMessage();
+        }
+      }else if (event.name == 'deliveredMsg') {
         print('deliveredData-Key:${event.data}');
         var response = event.data?['deliveredMsgList'];
         print('deliveredData Outer Key:${response.toString()}');
@@ -352,10 +390,12 @@ class ChatMessageWithSocketController extends GetxController
     // leavePrivateChat();
     customerLeavedPrivateChatListenerSocket();
     astrologerJoinedPrivateChat();
-    socket.startAstroCustumerSocketEvent(
-      orderId: AppFirebaseService().orderData.value["orderId"].toString(),
-      userId: AppFirebaseService().orderData.value["userId"],
-    );
+    if(!kDebugMode) {
+      socket.startAstroCustumerSocketEvent(
+        orderId: AppFirebaseService().orderData.value["orderId"].toString(),
+        userId: AppFirebaseService().orderData.value["userId"],
+      );
+    }
     //  if (Get.arguments is ResAstroChatListener) {
     sendReadMessageStatus = true;
     // if (data!.customerId != null) {
