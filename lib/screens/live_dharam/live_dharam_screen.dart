@@ -1620,7 +1620,7 @@ class _LivePage extends State<LiveDharamScreen>
           List<ZegoInRoomMessage> messages =
               snapshot.data ?? <ZegoInRoomMessage>[];
           messages = messages.reversed.toList();
-          return ListView.builder(
+          return ListView.separated(
             reverse: true,
             shrinkWrap: true,
             padding: EdgeInsets.zero,
@@ -1642,15 +1642,16 @@ class _LivePage extends State<LiveDharamScreen>
               return msg.type == 0
                   ? const SizedBox()
                   : Container(
-                padding: const EdgeInsets.symmetric(vertical: 4.0),
+                padding: const EdgeInsets.symmetric(vertical: 4.0,horizontal: 5.0),
                 decoration: BoxDecoration(
                   borderRadius: const BorderRadius.all(
-                    Radius.circular(50.0),
+                    Radius.circular(10),
                   ),
                   border: Border.all(
                     color: Colors.transparent,
                   ),
-                  color: Colors.transparent,
+
+                  color: appColors.black.withOpacity(0.2),
                 ),
                 child: Row(
                   children: <Widget>[
@@ -1758,6 +1759,7 @@ class _LivePage extends State<LiveDharamScreen>
                 ),
               );
             },
+            separatorBuilder: (context, index) => const SizedBox(height: 10,),
           );
         },
       ),
