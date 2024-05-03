@@ -134,6 +134,7 @@ class DashboardController extends GetxController
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
     checkPermissions();
+    print("microphone.isDenied ${await FlutterOverlayWindow.requestPermission()}");
     print("beforeGoing 2 - ${preferenceService.getUserDetail()?.id}");
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
