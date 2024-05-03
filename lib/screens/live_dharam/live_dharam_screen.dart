@@ -1642,16 +1642,17 @@ class _LivePage extends State<LiveDharamScreen>
               return msg.type == 0
                   ? const SizedBox()
                   : Container(
-                      padding: const EdgeInsets.symmetric(vertical: 4.0),
-                      decoration: BoxDecoration(
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(50.0),
-                        ),
-                        border: Border.all(
-                          color: Colors.transparent,
-                        ),
-                        color: Colors.transparent,
-                      ),
+                padding: const EdgeInsets.symmetric(
+                    vertical: 4.0, horizontal: 5.0),
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(10),
+                  ),
+                  border: Border.all(
+                    color: Colors.transparent,
+                  ),
+                  color: appColors.black.withOpacity(0.3),
+                ),
                       child: Row(
                         children: <Widget>[
                           SizedBox(

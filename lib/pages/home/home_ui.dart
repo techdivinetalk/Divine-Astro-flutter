@@ -506,7 +506,7 @@ class HomeUI extends GetView<HomeController> {
                               ? const SizedBox()
                               : Column(
                                   children: [
-                                    /* GestureDetector(
+                                     GestureDetector(
                                       onTap: () {
                                         Get.toNamed(RouteName.noticeBoard);
                                       },
@@ -529,7 +529,7 @@ class HomeUI extends GetView<HomeController> {
                                         ],
                                       ),
                                     ),
-                                    SizedBox(height: 10.h),*/
+                                    SizedBox(height: 10.h),
                                     noticeBoardWidget(controller: controller),
                                   ],
                                 ),
@@ -915,14 +915,14 @@ class HomeUI extends GetView<HomeController> {
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text(
-                            controller.homeData?.noticeBoard?.title ?? '',
-                            maxLines: 4,
-                            overflow: TextOverflow.ellipsis,
-                            textAlign: TextAlign.justify,
-                            style: AppTextStyle.textStyle14(
-                                fontWeight: FontWeight.w500,
-                                fontColor: appColors.darkBlue),
+                          SizedBox(
+                            width: 140,
+                            child: CustomText(
+                              controller.homeData?.noticeBoard?.title ?? '',
+                              fontWeight: FontWeight.w500,
+                              fontColor: appColors.darkBlue,
+                              fontSize: 16.sp,
+                            ),
                           ),
                           Row(
                             children: [
