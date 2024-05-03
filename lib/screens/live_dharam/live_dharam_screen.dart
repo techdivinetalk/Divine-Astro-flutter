@@ -50,6 +50,7 @@ import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 import "package:intl/intl.dart";
 import "package:simple_html_css/simple_html_css.dart";
+import "package:zego_uikit_beauty_plugin/zego_uikit_beauty_plugin.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
@@ -1758,7 +1759,6 @@ class _LivePage extends State<LiveDharamScreen>
                         ],
                       ),
                     );
-
             },
             separatorBuilder: (context, index) => SizedBox(height: 10),
           );
@@ -1771,6 +1771,14 @@ class _LivePage extends State<LiveDharamScreen>
     return _controller.isHost
         ? "${msg.userName}"
         : "${msg.userName}";
+  }
+
+  ZegoUIKitBeautyPlugin getBeautyPlugin() {
+    final plugin = ZegoUIKitBeautyPlugin();
+    final config = ZegoBeautyParamConfig(ZegoBeautyPluginEffectsType.beautyBasicSmoothing, true, value: 80);
+    final config1 = ZegoBeautyParamConfig(ZegoBeautyPluginEffectsType.backgroundMosaicing, true, value: 90);
+    plugin.setBeautyParams([config, config1], forceUpdateCache: true);
+    return plugin;
   }
 
   bool moreOptionConditions(ZegoCustomMessage msg, bool isModerator) {

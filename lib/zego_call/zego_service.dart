@@ -161,72 +161,70 @@ class ZegoService {
               return SizedBox(
                 height: boxConstraints.maxHeight,
                 width: boxConstraints.maxWidth,
-                child: Expanded(
-                  child: Obx(
-                    () {
-                      return Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: <Widget>[
-                          const SizedBox(height: 32),
-                          Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              SizedBox(
-                                height: 24,
-                                width: 24,
-                                child: Image.asset(
-                                  data.type == ZegoCallType.videoCall
-                                      ? "assets/images/chat_video_call_lock.png"
-                                      : "assets/images/chat_voice_call_lock.png",
-                                ),
+                child: Obx(
+                  () {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: <Widget>[
+                        const SizedBox(height: 32),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 24,
+                              width: 24,
+                              child: Image.asset(
+                                data.type == ZegoCallType.videoCall
+                                    ? "assets/images/chat_video_call_lock.png"
+                                    : "assets/images/chat_voice_call_lock.png",
                               ),
-                              const SizedBox(width: 4),
-                              Text(
-                                "100% Private Call",
-                                style: TextStyle(
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  color: color,
-                                  shadows: [
-                                    Shadow(
-                                      color: color,
-                                      offset: const Offset(1.0, 1.0),
-                                      blurRadius: 1.0,
-                                    ),
-                                  ],
-                                ),
+                            ),
+                            const SizedBox(width: 4),
+                            Text(
+                              "100% Private Call",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.w400,
+                                color: color,
+                                shadows: [
+                                  Shadow(
+                                    color: color,
+                                    offset: const Offset(1.0, 1.0),
+                                    blurRadius: 1.0,
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          AppFirebaseService().orderData.value["customerName"],
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600,
+                            color: color,
+                            shadows: [
+                              Shadow(
+                                color: color,
+                                offset: const Offset(1.0, 1.0),
+                                blurRadius: 1.0,
                               ),
                             ],
                           ),
-                          const SizedBox(height: 16),
-                          Text(
-                            AppFirebaseService().orderData.value["customerName"],
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.w600,
-                              color: color,
-                              shadows: [
-                                Shadow(
-                                  color: color,
-                                  offset: const Offset(1.0, 1.0),
-                                  blurRadius: 1.0,
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                          commonTimerCountdown(color, false),
-                          // SizedBox(height: Get.height * 0.60),
-                          const Spacer(),
-                          commonBottomCard(),
-                          const SizedBox(height: 16),
-                          settingsColForCust(data.type),
-                          const SizedBox(height: 32),
-                        ],
-                      );
-                    },
-                  ),
+                        ),
+                        const SizedBox(height: 8),
+                        commonTimerCountdown(color, false),
+                        // SizedBox(height: Get.height * 0.60),
+                        const Spacer(),
+                        commonBottomCard(),
+                        const SizedBox(height: 16),
+                        settingsColForCust(data.type),
+                        const SizedBox(height: 32),
+                      ],
+                    );
+                  },
                 ),
               );
             },
