@@ -1620,7 +1620,7 @@ class _LivePage extends State<LiveDharamScreen>
           List<ZegoInRoomMessage> messages =
               snapshot.data ?? <ZegoInRoomMessage>[];
           messages = messages.reversed.toList();
-          return ListView.builder(
+          return ListView.separated(
             reverse: true,
             shrinkWrap: true,
             padding: EdgeInsets.zero,
@@ -1758,7 +1758,9 @@ class _LivePage extends State<LiveDharamScreen>
                         ],
                       ),
                     );
+
             },
+            separatorBuilder: (context, index) => SizedBox(height: 10),
           );
         },
       ),
@@ -2127,6 +2129,7 @@ class _LivePage extends State<LiveDharamScreen>
         // return WaitListWidget(
         return AstroWaitListWidget(
           onClose: Get.back,
+            isInCall:_controller.currentCaller.isEngaded,
           waitTime: _controller.getTotalWaitTime(),
           myUserId: _controller.userId,
           list: _controller.waitListModel,
