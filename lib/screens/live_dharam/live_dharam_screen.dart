@@ -46,6 +46,7 @@ import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
+import "package:flutter/widgets.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 import "package:intl/intl.dart";
@@ -2132,6 +2133,7 @@ class _LivePage extends State<LiveDharamScreen>
         // return WaitListWidget(
         return AstroWaitListWidget(
           onClose: Get.back,
+          isInCall: _controller.currentCaller.isEngaded ,
           waitTime: _controller.getTotalWaitTime(),
           myUserId: _controller.userId,
           list: _controller.waitListModel,
@@ -3355,7 +3357,7 @@ class _LivePage extends State<LiveDharamScreen>
           ),
           child: Row(
             children: <Widget>[
-              const SizedBox(width: 8),
+              /*const SizedBox(width: 8),
               InkWell(
                 onTap: navigate,
                 child: SizedBox(
@@ -3363,7 +3365,7 @@ class _LivePage extends State<LiveDharamScreen>
                   width: 52,
                   child: stacked(),
                 ),
-              ),
+              ),*/
               const SizedBox(width: 8),
               Expanded(
                 child: InkWell(
@@ -3390,7 +3392,7 @@ class _LivePage extends State<LiveDharamScreen>
                             overflow: TextOverflow.ellipsis,
                           ),
                           const SizedBox(width: 8),
-                          newTimerWidget(),
+                          Expanded(child: newTimerWidget()),
                         ],
                       ),
                     ],

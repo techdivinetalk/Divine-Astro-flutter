@@ -23,6 +23,7 @@ class AstroWaitListWidget extends StatefulWidget {
     required this.onAccept,
     required this.onReject,
     required this.model,
+    required this.isInCall,
     super.key,
   });
 
@@ -36,6 +37,7 @@ class AstroWaitListWidget extends StatefulWidget {
   final String astologerImage;
   final String astologerSpeciality;
   final bool isHost;
+  final bool? isInCall;
   final void Function() onAccept;
   final void Function() onReject;
   final WaitListModel model;
@@ -228,10 +230,10 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
     return widget.model.isEngaded && widget.model.id == widget.myUserId
         ? const SizedBox()
         : widget.isHost
-        ? CommonButton(
+        ? !widget.isInCall! ? CommonButton(
       buttonCallback: widget.onAccept,
       buttonText: "Accept",
-    )
+    ) :SizedBox()
         : widget.hasMyIdInWaitList
         ? TextButton(
       onPressed: widget.onExitWaitList,

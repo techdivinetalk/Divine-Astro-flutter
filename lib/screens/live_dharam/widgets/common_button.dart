@@ -27,7 +27,7 @@ class CommonButton extends StatelessWidget {
           ),
         ),
         onPressed: buttonCallback,
-        child: Text(buttonText, style:  TextStyle(color: appColors.black)),
+        child: Text(buttonText, style:  TextStyle(color: appColors.whiteGuidedColor)),
       ),
     );
   }
