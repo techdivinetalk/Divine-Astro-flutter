@@ -738,7 +738,7 @@ class _LivePage extends State<LiveDharamScreen>
                     userName: _controller.userName,
                     liveID: _controller.liveId,
                     config: streamingConfig
-                        ..video = ZegoUIKitVideoConfig.preset1080P()
+                        ..video = ZegoUIKitVideoConfig.preset720P()
                       ..preview.showPreviewForHost = false
                       ..audioVideoView.isVideoMirror = false
                       ..maxCoHostCount = 1
