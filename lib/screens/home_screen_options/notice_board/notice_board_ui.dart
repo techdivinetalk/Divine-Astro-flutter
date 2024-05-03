@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:flutter/material.dart';
@@ -92,11 +93,14 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    title ?? "",
-                    style: AppTextStyle.textStyle16(
-                        fontWeight: FontWeight.w500,
-                        fontColor: appColors.darkBlue),
+                  SizedBox(
+                    width: 140,
+                    child: CustomText(
+                      title ?? "",
+                      fontWeight: FontWeight.w500,
+                      fontColor: appColors.darkBlue,
+                      fontSize: 16.sp,
+                    ),
                   ),
                   Text(
                     '${dateToString(date ?? DateTime.now(), format: "h:mm a")}  '
