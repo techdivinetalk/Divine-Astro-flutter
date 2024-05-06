@@ -114,7 +114,7 @@ Future<void> main() async {
     return true;
   };
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print("pushNotification1");
+    print("pushNotification1 ${message.notification?.title ?? ""}");
     print('Message data-: dasboardCurrentIndex---${message.data}');
     print(
         'Message data-: ${MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI}');
@@ -127,8 +127,8 @@ Future<void> main() async {
     //   return;
     // }
     if (message.data["type"] == "1") {
-      print("messageReceive2 ${MiddleWare.instance.currentPage}");
       if(MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
+        print("messageReceive21 ${MiddleWare.instance.currentPage}");
         showNotification(message.data["title"], message.data["message"],
             message.data['type'], message.data);
         HashMap<String, dynamic> updateData = HashMap();
@@ -142,6 +142,7 @@ Future<void> main() async {
             .update(updateData);
         sendBroadcast(BroadcastMessage(name: "messageReceive", data: message.data));
       }else{
+        print("messageReceive2 ${MiddleWare.instance.currentPage}");
         sendBroadcast(
             BroadcastMessage(name: "messageReceive", data: message.data));
       }
@@ -219,7 +220,7 @@ Future<void> main() async {
           message.data['type'], message.data);
     }
     if (message.notification != null) {
-      print('Message also contained a notification: ${message.notification}');
+      print('Message also contained a notification: ${message.notification?.title}');
     }
   });
   await initServices();

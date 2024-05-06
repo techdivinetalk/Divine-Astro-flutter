@@ -355,7 +355,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 child: Text(
                                     "Chat Ended you can still send message till ${controller
                                         .extraTalkTime.value}",
-                                    style: TextStyle(color: Colors.red),
+                                    style: const TextStyle(color: Colors.red,fontSize: 11),
                                     textAlign: TextAlign.center),
                               )),
                         ))),

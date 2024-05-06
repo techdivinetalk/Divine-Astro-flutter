@@ -57,7 +57,7 @@ class DashboardController extends GetxController
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
       // Check permissions when app is resumed
-      checkPermissions();
+     // checkPermissions();
     }
   }
 
@@ -133,8 +133,8 @@ class DashboardController extends GetxController
   Future<void> onInit() async {
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
-    checkPermissions();
-    print("microphone.isDenied ${await FlutterOverlayWindow.requestPermission()}");
+   // checkPermissions();
+    print("microphone ${await FlutterOverlayWindow.isPermissionGranted()}");
     print("beforeGoing 2 - ${preferenceService.getUserDetail()?.id}");
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
