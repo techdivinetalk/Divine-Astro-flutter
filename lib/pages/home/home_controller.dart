@@ -153,14 +153,14 @@ class HomeController extends GetxController {
                   as Map<dynamic, dynamic>;
               print("Home Realtime DB Listener: $map");
 
-              final isCallSwitchRes = map["voiceCallStatus"] ?? 0;
-              callSwitch(isCallSwitchRes > 0);
-
-              final isChatSwitchRes = map["chatStatus"] ?? 0;
-              chatSwitch(isChatSwitchRes > 0);
-
-              final isVideoCallSwitchRes = map["videoCallStatus"] ?? 0;
-              videoSwitch(isVideoCallSwitchRes > 0);
+              // final isCallSwitchRes = map["voiceCallStatus"] ?? 0;
+              // callSwitch(isCallSwitchRes > 0);
+              //
+              // final isChatSwitchRes = map["chatStatus"] ?? 0;
+              // chatSwitch(isChatSwitchRes > 0);
+              //
+              // final isVideoCallSwitchRes = map["videoCallStatus"] ?? 0;
+              // videoSwitch(isVideoCallSwitchRes > 0);
 
               final isCallEnableRes = map["is_call_enable"] ?? false;
               isCallEnable(isCallEnableRes);

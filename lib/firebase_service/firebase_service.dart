@@ -106,6 +106,17 @@ class AppFirebaseService {
           if (realTimeData["order_id"] != null) {
             watcher.strValue = realTimeData["order_id"].toString();
           }
+
+          final isCallSwitchRes = realTimeData["voiceCallStatus"] ?? 0;
+          callSwitch(isCallSwitchRes > 0);
+
+          final isChatSwitchRes = realTimeData["chatStatus"] ?? 0;
+          chatSwitch(isChatSwitchRes > 0);
+
+          final isVideoCallSwitchRes = realTimeData["videoCallStatus"] ?? 0;
+          videoSwitch(isVideoCallSwitchRes > 0);
+
+
           if (realTimeData["uniqueId"] != null) {
             print("uniqueId ---- uniqueId ${realTimeData["uniqueId"]}");
 
