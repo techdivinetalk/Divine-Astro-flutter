@@ -69,6 +69,7 @@ class AppFirebaseService {
   }
 
   String tableName = "";
+
   // int x = 0;
   checkFirebaseConnection() {
     final connectedRef = FirebaseDatabase.instance.ref(".info/connected");
@@ -84,7 +85,7 @@ class AppFirebaseService {
         // const masterPath = 'masters';
         // readData(path);
         // masterData(masterPath);
-      }else{
+      } else {
         print("disconnected");
       }
     });
@@ -106,6 +107,49 @@ class AppFirebaseService {
           if (realTimeData["order_id"] != null) {
             watcher.strValue = realTimeData["order_id"].toString();
           }
+
+          final isCallSwitchRes = realTimeData["voiceCallStatus"] ?? 0;
+          callSwitch(isCallSwitchRes > 0);
+
+          final isChatSwitchRes = realTimeData["chatStatus"] ?? 0;
+          chatSwitch(isChatSwitchRes > 0);
+
+          final isVideoCallSwitchRes = realTimeData["videoCallStatus"] ?? 0;
+          videoSwitch(isVideoCallSwitchRes > 0);
+
+          final isLiveEnableRes = realTimeData["is_live_enable"] ?? false;
+          isLiveEnable(isLiveEnableRes);
+
+          final isCallEnableRes = realTimeData["is_call_enable"] ?? false;
+          isCallEnable(isCallEnableRes);
+
+          final isChatEnableRes = realTimeData["is_chat_enable"] ?? false;
+          isChatEnable(isChatEnableRes);
+
+          final isVideoCallEnableRes =
+              realTimeData["is_video_call_enable"] ?? false;
+          isVideoCallEnable(isVideoCallEnableRes);
+
+          final offers = realTimeData["offers"];
+          if (offers != null) {
+            if (homeData != null) {
+              for (int i = 0;
+                  i < homeData.value.offers!.orderOffer!.length;
+                  i++) {
+                for (int j = 0; j < offers.keys.toList().length; j++) {
+                  if ("${homeData.value.offers!.orderOffer![i].id}" ==
+                      "${offers.keys.toList()[j]}") {
+                    if ("${offers.values.toList()[j]}" == "1") {
+                      homeData.value.offers!.orderOffer![i].isOn = true;
+                    } else {
+                      homeData.value.offers!.orderOffer![i].isOn = false;
+                    }
+                  }
+                }
+              }
+            }
+          }
+
           if (realTimeData["uniqueId"] != null) {
             print("uniqueId ---- uniqueId ${realTimeData["uniqueId"]}");
 
@@ -276,6 +320,7 @@ class AppFirebaseService {
         if (event.snapshot.value is Map<Object?, Object?>) {
           Map<String, dynamic>? realTimeData = Map<String, dynamic>.from(
               event.snapshot.value! as Map<Object?, Object?>);
+
           /// {call: 1, remidies: 1, ecom: 1, chat_assistance: 1, chat: 1, kundli: 1, templates: 1, camera: 1, live: 1, queue: 1, gifts: 1}
           isCall(realTimeData["call"]);
           print("isCall-----on ?? ${isCall}");
@@ -308,7 +353,5 @@ class AppFirebaseService {
     } catch (e) {
       debugPrint("Error reading data from the database: $e");
     }
-
-
   }
 }

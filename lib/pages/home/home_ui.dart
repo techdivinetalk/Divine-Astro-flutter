@@ -152,8 +152,8 @@ class HomeUI extends GetView<HomeController> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               Text(
-                                                "₹${abbreviateNumber(controller.homeData?.todaysEarning?.toStringAsFixed(2))}",
-                                                // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
+                                                "₹${abbreviateNumber(homeData.value.todaysEarning?.toStringAsFixed(2))}",
+                                                // "₹${homeData.value.todaysEarning?.toStringAsFixed(2)}",
                                                 style: AppTextStyle.textStyle16(
                                                     fontColor:
                                                         appColors.appRedColour,
@@ -213,7 +213,7 @@ class HomeUI extends GetView<HomeController> {
                                               Row(
                                                 children: [
                                                   Text(
-                                                    "₹${abbreviateNumber(controller.homeData?.totalEarning?.toStringAsFixed(2))}",
+                                                    "₹${abbreviateNumber(homeData.value.totalEarning?.toStringAsFixed(2))}",
                                                     style: AppTextStyle
                                                         .textStyle16(
                                                             fontColor: appColors
@@ -316,11 +316,11 @@ class HomeUI extends GetView<HomeController> {
                                   child: RetentionWidget(
                                     isEligible: true,
                                 title:
-                                    "Bonus Wallet \n ₹${abbreviateNumber(controller.homeData?.bonusWallet)}",
+                                    "Bonus Wallet \n ₹${abbreviateNumber(homeData.value.bonusWallet)}",
                                 subTitle:
-                                    "Retention Rate \n ${controller.homeData?.retention ?? 0}%",
-                                borderColor: (controller.homeData!.retention! <
-                                        controller.homeData!.minimumRetention!)
+                                    "Retention Rate \n ${homeData.value.retention ?? 0}%",
+                                borderColor: (homeData.value.retention! <
+                                        homeData.value.minimumRetention!)
                                     ? appColors.red
                                     : appColors.green,
                                 onTap: () async {
@@ -340,12 +340,12 @@ class HomeUI extends GetView<HomeController> {
                               Expanded(
                                 child: RetentionWidget(
                                   title:
-                                      "Paid Wallet \n ₹${abbreviateNumber(controller.homeData?.paidWallet)}",
+                                      "Paid Wallet \n ₹${abbreviateNumber(homeData.value.paidWallet)}",
                                   subTitle:
-                                      "Repurchase Rate \n ${controller.homeData?.repurchaseRate ?? 0}%",
+                                      "Repurchase Rate \n ${homeData.value.repurchaseRate ?? 0}%",
                                   borderColor:
-                                      (controller.homeData!.repurchaseRate! <
-                                              controller.homeData!
+                                      (homeData.value.repurchaseRate! <
+                                              homeData.value
                                                   .minimumRepurchaseRate!)
                                           ? appColors.red
                                           : appColors.green,
@@ -394,7 +394,7 @@ class HomeUI extends GetView<HomeController> {
                                     ),
                                     SizedBox(height: 5.h),
                                     CustomText(
-                                      "₹${abbreviateNumber(controller.homeData?.ecommerceWallet)}",
+                                      "₹${abbreviateNumber(homeData.value.ecommerceWallet)}",
                                       fontWeight: FontWeight.w400,
                                       textAlign: TextAlign.center,
                                       fontSize: 9.sp,
@@ -409,19 +409,19 @@ class HomeUI extends GetView<HomeController> {
                           Align(
                             alignment: Alignment.centerLeft,
                             child: CustomText(
-                              (controller.homeData!.retention! <
-                                  controller.homeData!.minimumRetention!) ? "You are Not Eligible for Bonus wallet!" : "You are Eligible for Bonus wallet!",
+                              (homeData.value.retention! <
+                                  homeData.value.minimumRetention!) ? "You are Not Eligible for Bonus wallet!" : "You are Eligible for Bonus wallet!",
                               fontWeight: FontWeight.w400,
                               textAlign: TextAlign.start,
                               fontSize: 14,
-                              fontColor: !(controller.homeData!.retention! <
-                                  controller.homeData!.minimumRetention!)! ? appColors.green :appColors.red,
+                              fontColor: !(homeData.value.retention! <
+                                  homeData.value.minimumRetention!)! ? appColors.green :appColors.red,
                             ),
                           ),
                           SizedBox(height: 10.h),
                           Obx(
                             () => controller.isFeedbackAvailable.value
-                                ? controller.homeData?.feedback == null
+                                ? homeData.value.feedback == null
                                     ? const SizedBox.shrink()
                                     : Column(
                                         children: [
@@ -461,36 +461,26 @@ class HomeUI extends GetView<HomeController> {
                                           ),
                                           SizedBox(height: 10.h),
                                           FeedbackCardWidget(
-                                              feedback: controller
-                                                      .homeData?.feedback ??
+                                              feedback: homeData.value.feedback ??
                                                   FeedbackData(
-                                                    id: controller
-                                                        .homeData?.feedback?.id,
-                                                    orderId: controller.homeData
-                                                        ?.feedback?.orderId,
-                                                    remark: controller.homeData
-                                                        ?.feedback?.remark,
+                                                    id: homeData.value.feedback?.id,
+                                                    orderId: homeData.value
+                                                        .feedback?.orderId,
+                                                    remark: homeData.value
+                                                        .feedback?.remark,
                                                     order: OrderDetails(
-                                                      astrologerId: controller
-                                                          .homeData
-                                                          ?.feedback
+                                                      astrologerId: homeData.value
+                                                          .feedback
                                                           ?.order
                                                           ?.astrologerId,
-                                                      id: controller.homeData
-                                                          ?.feedback?.order?.id,
-                                                      productType: controller
-                                                          .homeData
-                                                          ?.feedback
+                                                      id: homeData.value.feedback?.order?.id,
+                                                      productType: homeData.value.feedback
                                                           ?.order
                                                           ?.productType,
-                                                      orderId: controller
-                                                          .homeData
-                                                          ?.feedback
+                                                      orderId:homeData.value.feedback
                                                           ?.order
                                                           ?.orderId,
-                                                      createdAt: controller
-                                                          .homeData
-                                                          ?.feedback
+                                                      createdAt:homeData.value.feedback
                                                           ?.order
                                                           ?.createdAt,
                                                     ),
@@ -503,7 +493,7 @@ class HomeUI extends GetView<HomeController> {
                           // SizedBox(height: 10.h),
                           // availableFeedbackWidget(controller.feedbackResponse ?? FeedbackData()),
                           // SizedBox(height: 10.h),
-                          controller.homeData?.noticeBoard == null
+                          homeData.value.noticeBoard == null
                               ? const SizedBox()
                               : Column(
                                   children: [
@@ -542,9 +532,9 @@ class HomeUI extends GetView<HomeController> {
                           SizedBox(height: 10.h),
                           Obx(
                             () {
-                              return isLive.value ==1  ? !controller.isLiveEnable.value
+                              return isLive.value ==1  ? isLiveEnable.value
                                   ? Column(
-                                      children: [
+                                      children: [ 
                                         SizedBox(height: 10.h),
                                         GestureDetector(
                                           onTap: () async {
@@ -627,23 +617,23 @@ class HomeUI extends GetView<HomeController> {
                           SizedBox(height: 10.h),
                           Obx(
                             () {
-                              final bool cond1 = controller.isCallEnable.value;
-                              final bool cond2 = controller.isChatEnable.value;
+                              final bool cond1 = isCallEnable.value;
+                              final bool cond2 = isChatEnable.value;
                               final bool cond3 =
-                                  controller.isVideoCallEnable.value;
+                                  isVideoCallEnable.value; 
 
                               return cond1 || cond2 || cond3
                                   ? sessionTypeWidget(controller: controller)
                                   : const SizedBox();
                             },
                           ),
-                          // if (controller.homeData?.offerType != null &&
-                          //     controller.homeData?.offerType != [])
+                          // if (homeData.value.offerType != null &&
+                          //     homeData.value.offerType != [])
                           //   offerTypeWidget(),
-                          controller.homeData?.offers?.orderOffer!.length != 0
+                          homeData.value.offers?.orderOffer!.length != 0
                               ? orderOfferWidget(homeController: controller)
                               : const SizedBox(),
-                          controller.homeData?.offers?.customOffer!.length != 0
+                          homeData.value.offers?.customOffer!.length != 0
                               ? customerOfferWidget(context,
                                   controller: controller)
                               : const SizedBox(),
@@ -887,7 +877,7 @@ class HomeUI extends GetView<HomeController> {
 
 
   Widget noticeBoardWidget({HomeController? controller}) {
-    return controller!.homeData != null
+    return homeData.value != null
         ? ClipRRect(
             borderRadius: BorderRadius.all(Radius.circular(20.r)),
             child: Material(
@@ -895,7 +885,7 @@ class HomeUI extends GetView<HomeController> {
               child: InkWell(
                 onTap: () {
                   Get.toNamed(RouteName.noticeDetail,
-                      arguments: controller!.homeData?.noticeBoard,
+                      arguments: homeData.value.noticeBoard,
                       parameters: {"from_list": "0"});
                 },
                 child: Ink(
@@ -917,7 +907,7 @@ class HomeUI extends GetView<HomeController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            controller.homeData?.noticeBoard?.title ?? '',
+                            homeData.value.noticeBoard?.title ?? '',
                             style: AppTextStyle.textStyle16(
                                 fontWeight: FontWeight.w500,
                                 fontColor: appColors.darkBlue),
@@ -925,8 +915,8 @@ class HomeUI extends GetView<HomeController> {
                           Row(
                             children: [
                               Text(
-                                '${dateToString(controller.homeData?.noticeBoard?.createdAt ?? DateTime.now(), format: "h:mm a")}  '
-                                '${formatDateTime(controller.homeData?.noticeBoard?.createdAt ?? DateTime.now())} ',
+                                '${dateToString(homeData.value.noticeBoard?.createdAt ?? DateTime.now(), format: "h:mm a")}  '
+                                '${formatDateTime(homeData.value.noticeBoard?.createdAt ?? DateTime.now())} ',
                                 style: AppTextStyle.textStyle10(
                                     fontWeight: FontWeight.w400,
                                     fontColor: appColors.darkBlue),
@@ -938,7 +928,7 @@ class HomeUI extends GetView<HomeController> {
                                       title: "noticeBoard".tr,
                                       subTitle: "noticeBoardDes".tr,
                                       argument:
-                                          controller!.homeData?.noticeBoard,
+                                      homeData.value.noticeBoard,
                                     ));
                                   },
                                   child: Assets.images.icInfo
@@ -949,13 +939,13 @@ class HomeUI extends GetView<HomeController> {
                       ),
                       const SizedBox(height: 10),
                       /*Html(
-                  data: controller.homeData?.noticeBoard?.description ?? '',
+                  data: homeData.value.noticeBoard?.description ?? '',
                   onLinkTap: (url, __, ___) {
                     launchUrl(Uri.parse(url ?? ''));
                   },
                 ),
                 ReadMoreText(
-                  controller.homeData?.noticeBoard?.description ?? '',
+                  homeData.value.noticeBoard?.description ?? '',
                   trimLines: 4,
                   colorClickableText: appColors.blackColor,
                   trimMode: TrimMode.Line,
@@ -973,7 +963,7 @@ class HomeUI extends GetView<HomeController> {
                   ),
                 ),*/
                       ExpandableHtml(
-                        htmlData: controller.homeData?.noticeBoard?.description ?? "",
+                        htmlData: homeData.value.noticeBoard?.description ?? "",
                         trimLength: 100,
                       ),
                     ],
@@ -987,9 +977,9 @@ class HomeUI extends GetView<HomeController> {
 
   Widget sessionTypeWidget({HomeController? controller}) {
     if (controller != null) {
-      final bool cond1 = controller.isCallEnable.value;
-      final bool cond2 = controller.isChatEnable.value;
-      final bool cond3 = controller.isVideoCallEnable.value;
+      final bool cond1 = isCallEnable.value;
+      final bool cond2 = isChatEnable.value;
+      final bool cond3 = isVideoCallEnable.value;
       return Container(
         padding: EdgeInsets.all(16.h),
         decoration: BoxDecoration(
@@ -1030,7 +1020,7 @@ class HomeUI extends GetView<HomeController> {
                                   fontWeight: FontWeight.w700),
                             ),
                             Text(
-                              "₹${controller.homeData?.sessionType?.chatAmount}/Min",
+                              "₹${homeData.value.sessionType?.chatAmount}/Min",
                               style: AppTextStyle.textStyle10(
                                   fontColor: appColors.darkBlue,
                                   fontWeight: FontWeight.w400),
@@ -1052,7 +1042,7 @@ class HomeUI extends GetView<HomeController> {
                                   fontWeight: FontWeight.w700),
                             ),
                             Text(
-                              "₹${controller.homeData?.sessionType?.callAmount}/Min",
+                              "₹${homeData.value.sessionType?.callAmount}/Min",
                               style: AppTextStyle.textStyle10(
                                   fontColor: appColors.darkBlue,
                                   fontWeight: FontWeight.w400),
@@ -1074,7 +1064,7 @@ class HomeUI extends GetView<HomeController> {
                                   fontWeight: FontWeight.w700),
                             ),
                             Text(
-                              "₹${controller.homeData?.sessionType?.videoCallAmount}/Min",
+                              "₹${homeData.value.sessionType?.videoCallAmount}/Min",
                               style: AppTextStyle.textStyle10(
                                   fontColor: appColors.darkBlue,
                                   fontWeight: FontWeight.w400),
@@ -1346,7 +1336,7 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget orderOfferWidget({HomeController? homeController}) {
-    return homeController!.homeData!.offers!.orderOffer!.isNotEmpty
+    return homeData.value.offers!.orderOffer!.isNotEmpty
         ? Container(
             margin: EdgeInsets.only(top: 10.h),
             padding: EdgeInsets.all(16.h),
@@ -1386,11 +1376,11 @@ class HomeUI extends GetView<HomeController> {
                   shrinkWrap: true,
                   physics: const NeverScrollableScrollPhysics(),
                   itemCount:
-                      homeController.homeData?.offers?.orderOffer?.length ?? 0,
+                  homeData.value.offers?.orderOffer?.length ?? 0,
                   separatorBuilder: (context, _) => SizedBox(height: 10.h),
                   itemBuilder: (context, index) {
                     OrderOffer orderOffer =
-                        homeController.homeData!.offers!.orderOffer![index];
+                    homeData.value.offers!.orderOffer![index];
                     return Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -1414,7 +1404,7 @@ class HomeUI extends GetView<HomeController> {
                         SwitchWidget(
                           onTap: () {
                             orderOffer.isOn = !orderOffer.isOn!;
-                            homeController.update();
+                            homeController!.update();
                             homeController.updateOrderOffer(
                               index: index,
                               offerId: orderOffer.id ?? 0,
@@ -1481,11 +1471,11 @@ class HomeUI extends GetView<HomeController> {
           ListView.separated(
             shrinkWrap: true,
             physics: const NeverScrollableScrollPhysics(),
-            itemCount: controller!.homeData!.offers!.customOffer!.length,
+            itemCount: homeData.value!.offers!.customOffer!.length,
             separatorBuilder: (context, _) => SizedBox(height: 10.h),
             itemBuilder: (context, index) {
               DiscountOffer data =
-                  controller.homeData!.offers!.customOffer![index];
+                  homeData.value.offers!.customOffer![index];
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1504,7 +1494,7 @@ class HomeUI extends GetView<HomeController> {
                       //     0) >
                       //     0)
                       //   CustomText(
-                      //     " (₹${controller.homeData?.offers?.orderOffer?[index].callRate}/min)"
+                      //     " (₹${homeData.value.offers?.orderOffer?[index].callRate}/min)"
                       //         .toUpperCase(),
                       //     fontSize: 10.sp,
                       //   ),
@@ -1514,26 +1504,26 @@ class HomeUI extends GetView<HomeController> {
                     onTap: () {
                       if (data.isOn!) {
                         data.isOn = !data.isOn!;
-                        controller.updateOfferType(
+                        controller!.updateOfferType(
                             value: data.isOn!,
                             index: index,
                             offerId: data.id!,
                             offerType: 2);
-                      } else if (controller.homeData!.offers!.customOffer!
+                      } else if (homeData.value.offers!.customOffer!
                           .any((element) => element.isOn!)) {
                         divineSnackBar(
                             data: "Only 1 custom offer is allowed at once",
                             color: appColors.redColor);
                       } else {
                         data.isOn = !data.isOn!;
-                        controller.updateOfferType(
+                        controller!.updateOfferType(
                             value: data.isOn!,
                             index: index,
                             offerId: data.id!,
                             offerType: 2);
                       }
 
-                      controller.update();
+                      controller!.update();
                     },
                     switchValue: data.isOn,
                   )
@@ -1600,7 +1590,7 @@ class HomeUI extends GetView<HomeController> {
               ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                itemCount: controller!.homeData?.offerType?.length ?? 0,
+                itemCount: homeData.value.offerType?.length ?? 0,
                 separatorBuilder: (context, _) => SizedBox(height: 10.h),
                 itemBuilder: (context, index) {
                   return Row(
@@ -1610,18 +1600,17 @@ class HomeUI extends GetView<HomeController> {
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           Text(
-                            "${controller.homeData?.offerType?[index].offerName}"
+                            "${homeData.value.offerType?[index].offerName}"
                                 .toUpperCase(),
                             style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w700,
                             ),
                           ),
-                          if ((controller
-                                      .homeData?.offerType?[index].callRate ??
+                          if ((homeData.value.offerType?[index].callRate ??
                                   0) >
                               0)
                             CustomText(
-                              " (₹${controller.homeData?.offerType?[index].callRate}/min)"
+                              " (₹${homeData.value.offerType?[index].callRate}/min)"
                                   .toUpperCase(),
                               fontSize: 10.sp,
                             ),
@@ -1634,12 +1623,12 @@ class HomeUI extends GetView<HomeController> {
                             //     Loading.loading) {
                             //   controller.updateOfferType(
                             //       !controller.promotionOfferSwitch[index],
-                            //       controller.homeData?.offerType?[index].id ??
+                            //       homeData.value.offerType?[index].id ??
                             //           0,
                             //       index);
                             // }
                           },
-                          switchValue: controller.customOfferSwitch[index],
+                          switchValue: controller!.customOfferSwitch[index],
                         ),
                       ),
                     ],
@@ -1717,8 +1706,8 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget trainingVideoWidget({HomeController? controller}) {
-    if (controller!.homeData?.trainingVideo == null ||
-        (controller.homeData?.trainingVideo ?? []).isEmpty) {
+    if (homeData.value.trainingVideo == null ||
+        (homeData.value.trainingVideo ?? []).isEmpty) {
       return const SizedBox.shrink();
     }
     return Container(
@@ -1768,7 +1757,7 @@ class HomeUI extends GetView<HomeController> {
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemCount: controller.homeData?.trainingVideo?.length ?? 0,
+              itemCount: homeData.value.trainingVideo?.length ?? 0,
               separatorBuilder: (context, i) => SizedBox(width: 10.w),
               itemBuilder: (BuildContext context, int index) {
                 return Row(
@@ -1782,7 +1771,7 @@ class HomeUI extends GetView<HomeController> {
                         ]);
                         Get.to(() {
                           return TrainingVideoUI(
-                            video: controller.homeData?.trainingVideo?[index],
+                            video: homeData.value.trainingVideo?[index],
                           );
                         });
                       },
@@ -1798,8 +1787,7 @@ class HomeUI extends GetView<HomeController> {
                           child: LoadImage(
                             boxFit: BoxFit.cover,
                             imageModel: ImageModel(
-                              imagePath: getYoutubeThumbnail(controller
-                                      .homeData?.trainingVideo?[index].url ??
+                              imagePath: getYoutubeThumbnail(homeData.value.trainingVideo?[index].url ??
                                   ''),
                               loadingIndicator: SizedBox(
                                 child: CircularProgressIndicator(
@@ -1940,7 +1928,7 @@ class HomeUI extends GetView<HomeController> {
                         fontColor: appColors.appRedColour),
                   ),
                   Text(
-                    "₹${controller!.homeData?.totalEarning?.toStringAsFixed(2)}",
+                    "₹${homeData.value.totalEarning?.toStringAsFixed(2)}",
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w500,
                         fontColor: appColors.appRedColour),
@@ -1956,7 +1944,7 @@ class HomeUI extends GetView<HomeController> {
                 contentBackgroundColor: appColors.white,
                 headerColor: appColors.white,
               ),
-              controller: controller.expandedTileController!,
+              controller: controller!.expandedTileController!,
               title: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -1967,7 +1955,7 @@ class HomeUI extends GetView<HomeController> {
                         fontColor: appColors.darkBlue),
                   ),
                   Text(
-                    "₹${controller.homeData?.payoutPending.toString()}",
+                    "₹${homeData.value.payoutPending.toString()}",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w500,
                         fontColor: appColors.darkBlue),
@@ -1986,7 +1974,7 @@ class HomeUI extends GetView<HomeController> {
                             fontColor: appColors.darkBlue.withOpacity(0.5)),
                       ),
                       Text(
-                        "₹${controller.homeData?.totalOrderPayout?.toStringAsFixed(2)}",
+                        "₹${homeData.value.totalOrderPayout?.toStringAsFixed(2)}",
                         style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w500,
                             fontColor: appColors.darkBlue.withOpacity(0.5)),
@@ -2004,7 +1992,7 @@ class HomeUI extends GetView<HomeController> {
                             fontColor: appColors.darkBlue.withOpacity(0.5)),
                       ),
                       Text(
-                        "₹${controller.homeData?.totalDivineWalletPayout?.toStringAsFixed(2)}",
+                        "₹${homeData.value.totalDivineWalletPayout?.toStringAsFixed(2)}",
                         style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w500,
                             fontColor: appColors.darkBlue.withOpacity(0.5)),
@@ -2023,7 +2011,7 @@ class HomeUI extends GetView<HomeController> {
                       ),
                       const Spacer(),
                       Text(
-                        "₹${controller.homeData?.totalRefundPayout?.toStringAsFixed(2)}",
+                        "₹${homeData.value.totalRefundPayout?.toStringAsFixed(2)}",
                         style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w500,
                             fontColor: appColors.darkBlue.withOpacity(0.5)),
@@ -2041,7 +2029,7 @@ class HomeUI extends GetView<HomeController> {
                             fontColor: appColors.darkBlue.withOpacity(0.5)),
                       ),
                       Text(
-                        "₹${controller.homeData?.totalFinePayout?.toStringAsFixed(2)}",
+                        "₹${homeData.value.totalFinePayout?.toStringAsFixed(2)}",
                         style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w500,
                             fontColor: appColors.darkBlue.withOpacity(0.5)),
@@ -2071,7 +2059,7 @@ class HomeUI extends GetView<HomeController> {
                           fontColor: appColors.darkBlue),
                     ),
                     Text(
-                      "₹${controller.homeData?.totalTax?.toStringAsFixed(2)}",
+                      "₹${homeData.value.totalTax?.toStringAsFixed(2)}",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w500,
                           fontColor: appColors.darkBlue),
@@ -2090,7 +2078,7 @@ class HomeUI extends GetView<HomeController> {
                               fontColor: appColors.darkBlue.withOpacity(0.5)),
                         ),
                         Text(
-                          "₹${controller.homeData?.tds?.toStringAsFixed(2)}",
+                          "₹${homeData.value.tds?.toStringAsFixed(2)}",
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
                               fontColor: appColors.darkBlue.withOpacity(0.5)),
@@ -2108,7 +2096,7 @@ class HomeUI extends GetView<HomeController> {
                               fontColor: appColors.darkBlue.withOpacity(0.5)),
                         ),
                         Text(
-                          "₹${controller.homeData?.totalPaymentGatewayCharges?.toStringAsFixed(2)}",
+                          "₹${homeData.value.totalPaymentGatewayCharges?.toStringAsFixed(2)}",
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
                               fontColor: appColors.darkBlue.withOpacity(0.5)),

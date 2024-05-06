@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:divine_astrologer/model/home_page_model_class.dart';
 import 'package:get/get.dart';
 
 import '../../di/timer_duration_service.dart';
@@ -23,7 +24,12 @@ RxInt walletBalance = 0.obs;
 RxList<AssistChatData> assistChatUnreadMessages = <AssistChatData>[].obs;
 RxBool chatSwitch = false.obs;
 RxBool callSwitch = false.obs;
+RxBool isLiveEnable = false.obs;
 RxBool videoSwitch = false.obs;
+RxBool isCallEnable = true.obs;
+RxBool isChatEnable = true.obs;
+Rx<HomeData> homeData = HomeData().obs;
+RxBool isVideoCallEnable = true.obs;
 RxString userImage = ''.obs;
 
 

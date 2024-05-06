@@ -62,12 +62,9 @@ class HomeController extends GetxController {
   bool isOpenPaidSheet = false;
   bool isOpenECommerceSheet = false;
 
-  RxBool liveSwitch = true.obs;
 
-  RxBool isCallEnable = true.obs;
-  RxBool isChatEnable = true.obs;
-  RxBool isVideoCallEnable = true.obs;
-  RxBool isLiveEnable = true.obs;
+
+
 
   double xPosition = 10.0;
   double yPosition = Get.height * 0.4;
@@ -150,51 +147,29 @@ class HomeController extends GetxController {
               Map<dynamic, dynamic> map = <dynamic, dynamic>{};
               map = (dataSnapshot.value ?? <dynamic, dynamic>{})
                   as Map<dynamic, dynamic>;
-              print("Home Realtime DB Listener: $map");
 
-              final isCallSwitchRes = map["voiceCallStatus"] ?? 0;
-              callSwitch(isCallSwitchRes > 0);
+              // final isCallSwitchRes = map["voiceCallStatus"] ?? 0;
+              // callSwitch(isCallSwitchRes > 0);
+              //
+              // final isChatSwitchRes = map["chatStatus"] ?? 0;
+              // chatSwitch(isChatSwitchRes > 0);
+              //
+              // final isVideoCallSwitchRes = map["videoCallStatus"] ?? 0;
+              // videoSwitch(isVideoCallSwitchRes > 0);
 
-              final isChatSwitchRes = map["chatStatus"] ?? 0;
-              chatSwitch(isChatSwitchRes > 0);
+              // final isCallEnableRes = map["is_call_enable"] ?? false;
+              // isCallEnable(isCallEnableRes);
+              //
+              // final isChatEnableRes = map["is_chat_enable"] ?? false;
+              // isChatEnable(isChatEnableRes);
+              //
+              // final isVideoCallEnableRes = map["is_video_call_enable"] ?? false;
+              // isVideoCallEnable(isVideoCallEnableRes)
 
-              final isVideoCallSwitchRes = map["videoCallStatus"] ?? 0;
-              videoSwitch(isVideoCallSwitchRes > 0);
 
-              final isCallEnableRes = map["is_call_enable"] ?? false;
-              isCallEnable(isCallEnableRes);
+            } else {
 
-              final isChatEnableRes = map["is_chat_enable"] ?? false;
-              isChatEnable(isChatEnableRes);
-
-              final isVideoCallEnableRes = map["is_video_call_enable"] ?? false;
-              isVideoCallEnable(isVideoCallEnableRes);
-
-              final isLiveEnableRes = map["is_live_enable"] ?? false;
-              isLiveEnable(isLiveEnableRes);
-
-              final offers = map["offers"];
-              if (offers != null) {
-                if (homeData != null) {
-                  for (int i = 0;
-                      i < homeData!.offers!.orderOffer!.length;
-                      i++) {
-                    for (int j = 0; j < offers.keys.toList().length; j++) {
-                      if ("${homeData!.offers!.orderOffer![i].id}" ==
-                          "${offers.keys.toList()[j]}") {
-                        if ("${offers.values.toList()[j]}" == "1") {
-                          homeData!.offers!.orderOffer![i].isOn = true;
-                          update();
-                        } else {
-                          homeData!.offers!.orderOffer![i].isOn = false;
-                          update();
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            } else {}
+            }
           } else {}
         },
       );
@@ -389,7 +364,7 @@ class HomeController extends GetxController {
   ConstantDetailsModelClass? getConstantDetails;
   RxBool profileDataSync = false.obs;
 
-  HomeData? homeData;
+  
   var walletData = <WalletPoint>[].obs;
   RxBool isFeedbackAvailable = false.obs;
   FeedbackData? feedbackResponse;
@@ -523,9 +498,9 @@ class HomeController extends GetxController {
     try {
       var response = await HomePageRepository().getDashboardData(params);
       isFeedbackAvailable.value = response.success ?? false;
-      homeData = response.data;
-      print(homeData!.offers!.customOffer!.length);
-      print("homeData!.offers!.orderOffer!.length");
+      homeData.value = response.data!;
+      print(homeData.value.offers!.customOffer!.length);
+      print("homeData.value.offers!.orderOffer!.length");
       loading = Loading.loaded;
       updateCurrentData();
       shopDataSync.value = true;
@@ -572,18 +547,18 @@ class HomeController extends GetxController {
   }
 
   updateCurrentData() {
-    // chatSwitch.value = homeData?.sessionType?.chat == 1;
-    // callSwitch.value = homeData?.sessionType?.call == 1;
-    // videoSwitch.value = homeData?.sessionType?.video == 1;
+    // chatSwitch.value = homeData.value.sessionType?.chat == 1;
+    // callSwitch.value = homeData.value.sessionType?.call == 1;
+    // videoSwitch.value = homeData.value.sessionType?.video == 1;
 
-    chatSwitch.value = (homeData?.inAppChatPrevStatus ?? 0) == 1;
-    callSwitch.value = (homeData?.audioCallPrevStatus ?? 0) == 1;
-    videoSwitch.value = (homeData?.videoCallPrevStatus ?? 0) == 1;
+    chatSwitch.value = (homeData.value.inAppChatPrevStatus ?? 0) == 1;
+    callSwitch.value = (homeData.value.audioCallPrevStatus ?? 0) == 1;
+    videoSwitch.value = (homeData.value.videoCallPrevStatus ?? 0) == 1;
 
     print("updateCurrentData called");
-    print("updateCurrentData Chat ${homeData?.inAppChatPrevStatus}");
-    print("updateCurrentData Audio ${homeData?.audioCallPrevStatus}");
-    print("updateCurrentData Video ${homeData?.videoCallPrevStatus}");
+    print("updateCurrentData Chat ${homeData.value.inAppChatPrevStatus}");
+    print("updateCurrentData Audio ${homeData.value.audioCallPrevStatus}");
+    print("updateCurrentData Video ${homeData.value.videoCallPrevStatus}");
 
     // socket.updateChatCallSocketEvent(
     //     //   call: callSwitch.value ? "1" : "0",
@@ -593,28 +568,28 @@ class HomeController extends GetxController {
      astroOnlineOffline(status: "chat_status=${chatSwitch.value ? "1" : "0"}");
      astroOnlineOffline(status: "call_status=${callSwitch.value ? "1" : "0"}");
 
-    if (homeData?.sessionType?.chatSchedualAt != null &&
-        homeData?.sessionType?.chatSchedualAt != '') {
+    if (homeData.value.sessionType?.chatSchedualAt != null &&
+        homeData.value.sessionType?.chatSchedualAt != '') {
       DateTime formattedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
-          .parse(homeData!.sessionType!.chatSchedualAt!);
+          .parse(homeData.value.sessionType!.chatSchedualAt!);
       String formattedTime = DateFormat("hh:mm a").format(formattedDate);
 
       selectedChatDate.value = formattedDate;
       selectedChatTime.value = formattedTime;
     }
-    if (homeData?.sessionType?.callSchedualAt != null &&
-        homeData?.sessionType?.callSchedualAt != '') {
+    if (homeData.value.sessionType?.callSchedualAt != null &&
+        homeData.value.sessionType?.callSchedualAt != '') {
       DateTime formattedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
-          .parse(homeData!.sessionType!.callSchedualAt!);
+          .parse(homeData.value.sessionType!.callSchedualAt!);
       String formattedTime = DateFormat("hh:mm a").format(formattedDate);
 
       selectedCallDate.value = formattedDate;
       selectedCallTime.value = formattedTime;
     }
-    if (homeData?.sessionType?.videoSchedualAt != null &&
-        homeData?.sessionType?.videoSchedualAt != '') {
+    if (homeData.value.sessionType?.videoSchedualAt != null &&
+        homeData.value.sessionType?.videoSchedualAt != '') {
       DateTime formattedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
-          .parse(homeData!.sessionType!.videoSchedualAt!);
+          .parse(homeData.value.sessionType!.videoSchedualAt!);
       String formattedTime = DateFormat("hh:mm a").format(formattedDate);
 
       selectedVideoDate.value = formattedDate;
@@ -622,8 +597,8 @@ class HomeController extends GetxController {
     }
 
     ///Customer Offer data
-    if (homeData?.offers?.customOffer != null &&
-        homeData?.offers?.customOffer != []) {}
+    if (homeData.value.offers?.customOffer != null &&
+        homeData.value.offers?.customOffer != []) {}
 
     update();
   }
@@ -894,7 +869,7 @@ class HomeController extends GetxController {
       UpdateOfferResponse response =
           await userRepository.updateOfferTypeApi(params);
       if (response.statusCode == 200) {
-        homeData!.offers!.customOffer![index].isOn = value;
+        homeData.value.offers!.customOffer![index].isOn = value;
       }
       update();
     } catch (error) {
@@ -924,8 +899,8 @@ class HomeController extends GetxController {
       UpdateOfferResponse response =
           await userRepository.updateOfferTypeApi(params);
       if (response.statusCode == 200) {
-        homeData!.offers!.orderOffer![index].isOn = value;
-        // homeData!.offers!.orderOffer![index].isOn = !homeData!.offers!.orderOffer![index].isOn!;
+        homeData.value.offers!.orderOffer![index].isOn = value;
+        // homeData.value.offers!.orderOffer![index].isOn = !homeData.value.offers!.orderOffer![index].isOn!;
         update();
       }
       update();
