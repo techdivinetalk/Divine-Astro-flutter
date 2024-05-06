@@ -916,11 +916,12 @@ class HomeUI extends GetView<HomeController> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           SizedBox(
-                            width: 140,
+                            width: 150,
                             child: CustomText(
                               controller.homeData?.noticeBoard?.title ?? '',
                               fontWeight: FontWeight.w500,
                               fontColor: appColors.darkBlue,
+                              maxLines: 2,
                               fontSize: 16.sp,
                             ),
                           ),

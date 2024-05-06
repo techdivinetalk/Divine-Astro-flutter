@@ -94,11 +94,12 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   SizedBox(
-                    width: 140,
+                    width: 150,
                     child: CustomText(
                       title ?? "",
                       fontWeight: FontWeight.w500,
                       fontColor: appColors.darkBlue,
+                      maxLines: 2,
                       fontSize: 16.sp,
                     ),
                   ),

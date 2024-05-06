@@ -277,12 +277,12 @@ class MessageHistoryView extends StatelessWidget {
                       children: [
                         Text(chatMessage.message ?? "",
                             style: AppTextStyle.textStyle14(
-                              fontColor: chatMessage.id.toString() ==
+                              fontColor: /*chatMessage.id.toString() ==
                                       AppFirebaseService()
                                           .orderData["astroId"]
                                           .toString()
                                   ? appColors.red
-                                  : appColors.black,
+                                  :*/ appColors.black,
                             )),
                       ],
                     ),
