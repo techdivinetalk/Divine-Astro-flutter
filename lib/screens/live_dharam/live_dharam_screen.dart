@@ -748,7 +748,7 @@ class _LivePage extends State<LiveDharamScreen>
                                   enableMakeup: true,
                                   enableStyle: true,
                                 ) +
-                                ZegoBeautyPluginConfig.filterEffectsTypes(),
+                                ZegoBeautyPluginConfig.filterEffectsTypes()+ZegoBeautyPluginConfig.backgroundEffectsTypes(),
                       )
                       ..video = ZegoUIKitVideoConfig.preset1080P()
                       ..preview.showPreviewForHost = false
@@ -820,7 +820,10 @@ class _LivePage extends State<LiveDharamScreen>
                       }
                       ..bottomMenuBar = ZegoLiveStreamingBottomMenuBarConfig(
                         showInRoomMessageButton: false,
-                        hostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
+                        hostButtons: <ZegoLiveStreamingMenuBarButtonName>[
+                          ZegoLiveStreamingMenuBarButtonName.beautyEffectButton,
+                          // ZegoLiveStreamingMenuBarButtonName.beautyEffectButton,
+                        ],
                         coHostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
                       )
                       ..layout = galleryLayout()
@@ -883,7 +886,7 @@ class _LivePage extends State<LiveDharamScreen>
     final ZegoUIKitSignalingPlugin plugin = ZegoUIKitSignalingPlugin();
     final List<IZegoUIKitPlugin> pluginsList = <IZegoUIKitPlugin>[
       plugin,
-      // ZegoUIKitBeautyPlugin(),
+      ZegoUIKitBeautyPlugin(),
       getBeautyPlugin()
     ];
     return _controller.isHost
@@ -3550,8 +3553,8 @@ class _LivePage extends State<LiveDharamScreen>
     return Row(
       children: [
         const SizedBox(width: 8),
-        newAppBarLeft(),
-        const SizedBox(width: 8),
+        // newAppBarLeft(),
+        const SizedBox(width: 50),
         _controller.currentCaller.isEngaded
             ? newAppBarCenterWithCall()
             : newAppBarCenter(),
