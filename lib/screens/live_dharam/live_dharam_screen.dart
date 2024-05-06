@@ -40,6 +40,7 @@ import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget
 import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
 import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
+import "package:divine_astrologer/screens/puja/widget/svg_widget.dart";
 
 // import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:firebase_database/firebase_database.dart";
@@ -48,6 +49,7 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter/widgets.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
+import "package:flutter_svg/svg.dart";
 import "package:get/get.dart";
 import "package:intl/intl.dart";
 import "package:simple_html_css/simple_html_css.dart";
@@ -748,10 +750,7 @@ class _LivePage extends State<LiveDharamScreen>
                                   enableMakeup: true,
                                   enableStyle: true,
                                 ) +
-                                ZegoBeautyPluginConfig.filterEffectsTypes(
-
-                                ) +
-                                ZegoBeautyPluginConfig.backgroundEffectsTypes(),
+                                ZegoBeautyPluginConfig.filterEffectsTypes(),
                       )
                       ..video = ZegoUIKitVideoConfig.preset1080P()
                       ..preview.showPreviewForHost = false
@@ -762,7 +761,7 @@ class _LivePage extends State<LiveDharamScreen>
                       ..audioVideoView = ZegoLiveStreamingAudioVideoViewConfig(
                         showUserNameOnView: false,
                         showAvatarInAudioMode: true,
-                        isVideoMirror: false,
+                        isVideoMirror: true,
                         useVideoViewAspectFill: true,
                         showSoundWavesInAudioMode: true,
                         visible: (
@@ -821,15 +820,11 @@ class _LivePage extends State<LiveDharamScreen>
                         }
                         return true;
                       }
-                      // ..bottomMenuBar = ZegoLiveStreamingBottomMenuBarConfig(
-
-                      // showInRoomMessageButton: false,
-                      // hostButtons: <ZegoLiveStreamingMenuBarButtonName>[
-                      // ZegoLiveStreamingMenuBarButtonName.beautyEffectButton,
-                      // ZegoLiveStreamingMenuBarButtonName.beautyEffectButton,
-                      // ],
-                      // coHostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
-                      // )
+                      ..bottomMenuBar = ZegoLiveStreamingBottomMenuBarConfig(
+                        showInRoomMessageButton: false,
+                        hostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
+                        coHostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
+                      )
                       ..layout = galleryLayout()
                       ..swiping = swipingConfig
                       ..avatarBuilder = avatarWidget
@@ -1019,7 +1014,7 @@ class _LivePage extends State<LiveDharamScreen>
           // horizontalGiftBar(ctx: context),
           // const SizedBox(height: 8),
           newUI(),
-          const SizedBox(height: 80),
+          const SizedBox(height: 8),
         ],
       ),
     );
@@ -4142,6 +4137,22 @@ class _LivePage extends State<LiveDharamScreen>
                     ),
             );
           },
+        ),
+        GestureDetector(
+          onTap: () {
+            if (ZegoUIKit.instance.getPlugin(ZegoUIKitPluginType.beauty) !=
+                null) {
+              ZegoUIKit.instance.getBeautyPlugin().showBeautyUI(context);
+            }
+          },
+          child: Padding(
+            padding:  const EdgeInsets.only(bottom:8.0),
+            child: SvgPicture.asset(
+                "assets/svg/beauty_icon.svg",
+                height: 50,
+                width: 50,
+            ),
+          ),
         ),
         _controller.isHost
             ? StreamBuilder<Object>(
