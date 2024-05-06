@@ -748,7 +748,10 @@ class _LivePage extends State<LiveDharamScreen>
                                   enableMakeup: true,
                                   enableStyle: true,
                                 ) +
-                                ZegoBeautyPluginConfig.filterEffectsTypes()+ZegoBeautyPluginConfig.backgroundEffectsTypes(),
+                                ZegoBeautyPluginConfig.filterEffectsTypes(
+
+                                ) +
+                                ZegoBeautyPluginConfig.backgroundEffectsTypes(),
                       )
                       ..video = ZegoUIKitVideoConfig.preset1080P()
                       ..preview.showPreviewForHost = false
@@ -818,14 +821,15 @@ class _LivePage extends State<LiveDharamScreen>
                         }
                         return true;
                       }
-                      ..bottomMenuBar = ZegoLiveStreamingBottomMenuBarConfig(
-                        showInRoomMessageButton: false,
-                        hostButtons: <ZegoLiveStreamingMenuBarButtonName>[
-                          ZegoLiveStreamingMenuBarButtonName.beautyEffectButton,
-                          // ZegoLiveStreamingMenuBarButtonName.beautyEffectButton,
-                        ],
-                        coHostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
-                      )
+                      // ..bottomMenuBar = ZegoLiveStreamingBottomMenuBarConfig(
+
+                      // showInRoomMessageButton: false,
+                      // hostButtons: <ZegoLiveStreamingMenuBarButtonName>[
+                      // ZegoLiveStreamingMenuBarButtonName.beautyEffectButton,
+                      // ZegoLiveStreamingMenuBarButtonName.beautyEffectButton,
+                      // ],
+                      // coHostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
+                      // )
                       ..layout = galleryLayout()
                       ..swiping = swipingConfig
                       ..avatarBuilder = avatarWidget
@@ -1015,7 +1019,7 @@ class _LivePage extends State<LiveDharamScreen>
           // horizontalGiftBar(ctx: context),
           // const SizedBox(height: 8),
           newUI(),
-          const SizedBox(height: 8),
+          const SizedBox(height: 80),
         ],
       ),
     );
@@ -3553,8 +3557,8 @@ class _LivePage extends State<LiveDharamScreen>
     return Row(
       children: [
         const SizedBox(width: 8),
-        // newAppBarLeft(),
-        const SizedBox(width: 50),
+        newAppBarLeft(),
+        const SizedBox(width: 8),
         _controller.currentCaller.isEngaded
             ? newAppBarCenterWithCall()
             : newAppBarCenter(),
