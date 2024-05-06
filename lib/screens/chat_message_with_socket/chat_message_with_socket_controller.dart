@@ -1091,6 +1091,7 @@ class ChatMessageWithSocketController extends GetxController
       );
     }
     socket.sendMessageSocket(newMessage);
+    scrollToBottomFunc();
     print("newMessage10909");
     print(newMessage.toOfflineJson());
     // chatMessages.add(newMessage);
