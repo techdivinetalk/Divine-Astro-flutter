@@ -55,8 +55,8 @@ class ConsultationData {
       customerId: json['customer_id'],
       customerName: json['customer_name'],
       customerNo: json['customer_no'],
-      customerImage: json['customer_image'],
-      customerEmail: json['customer_email'],
+      customerImage: json['customer_image'] ?? "",
+      customerEmail: json['customer_email'] ?? "",
       daySinceLastConsulted: json['day_since_last_consulted'],
     );
   }
