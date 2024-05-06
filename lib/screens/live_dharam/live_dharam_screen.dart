@@ -4147,10 +4147,15 @@ class _LivePage extends State<LiveDharamScreen>
           },
           child: Padding(
             padding:  const EdgeInsets.only(bottom:8.0),
-            child: SvgPicture.asset(
-              "assets/svg/beauty_icon.svg",
-              height: 50,
-              width: 50,
+            child: Column(
+              children: [
+                SvgPicture.asset(
+                  "assets/svg/beauty_icon.svg",
+                  height: 50,
+                  width: 50,
+                ),
+                Text("Beautify",style: TextStyle(fontFamily: "Metropolis",color: Colors.white),),
+              ],
             ),
           ),
         ),
