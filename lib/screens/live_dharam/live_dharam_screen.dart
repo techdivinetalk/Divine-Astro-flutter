@@ -51,6 +51,7 @@ import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 import "package:intl/intl.dart";
 import "package:simple_html_css/simple_html_css.dart";
+import "package:zego_uikit_beauty_plugin/zego_uikit_beauty_plugin.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
@@ -739,6 +740,16 @@ class _LivePage extends State<LiveDharamScreen>
                     userName: _controller.userName,
                     liveID: _controller.liveId,
                     config: streamingConfig
+                      ..beautyConfig = ZegoBeautyPluginConfig(
+                        effectsTypes:
+                            ZegoBeautyPluginConfig.beautifyEffectsTypes(
+                                  enableBasic: true,
+                                  enableAdvanced: true,
+                                  enableMakeup: true,
+                                  enableStyle: true,
+                                ) +
+                                ZegoBeautyPluginConfig.filterEffectsTypes(),
+                      )
                       ..video = ZegoUIKitVideoConfig.preset1080P()
                       ..preview.showPreviewForHost = false
                       // ..audioVideoView.isVideoMirror = false
@@ -811,27 +822,23 @@ class _LivePage extends State<LiveDharamScreen>
                         showInRoomMessageButton: false,
                         hostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
                         coHostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
-
                       )
                       ..layout = galleryLayout()
                       ..swiping = swipingConfig
                       ..avatarBuilder = avatarWidget
                       ..topMenuBar = ZegoLiveStreamingTopMenuBarConfig(
-
                         hostAvatarBuilder: (ZegoUIKitUser host) {
                           return const SizedBox();
                         },
                         showCloseButton: false,
                       )
                       ..memberButton = ZegoLiveStreamingMemberButtonConfig(
-
                         icon: const Icon(Icons.remove_red_eye_outlined),
                         builder: (int memberCount) {
                           return const SizedBox();
                         },
                       )
                       ..memberList = ZegoLiveStreamingMemberListConfig(
-
                         itemBuilder: (
                           BuildContext context,
                           Size size,
@@ -874,10 +881,26 @@ class _LivePage extends State<LiveDharamScreen>
 
   ZegoUIKitPrebuiltLiveStreamingConfig get streamingConfig {
     final ZegoUIKitSignalingPlugin plugin = ZegoUIKitSignalingPlugin();
-    final List<IZegoUIKitPlugin> pluginsList = <IZegoUIKitPlugin>[plugin];
+    final List<IZegoUIKitPlugin> pluginsList = <IZegoUIKitPlugin>[
+      plugin,
+      // ZegoUIKitBeautyPlugin(),
+      getBeautyPlugin()
+    ];
     return _controller.isHost
         ? ZegoUIKitPrebuiltLiveStreamingConfig.host(plugins: pluginsList)
         : ZegoUIKitPrebuiltLiveStreamingConfig.audience(plugins: pluginsList);
+  }
+
+  ZegoUIKitBeautyPlugin getBeautyPlugin() {
+    final plugin = ZegoUIKitBeautyPlugin();
+    final config = ZegoBeautyParamConfig(
+        ZegoBeautyPluginEffectsType.beautyBasicSmoothing, true,
+        value: 80);
+    final config1 = ZegoBeautyParamConfig(
+        ZegoBeautyPluginEffectsType.backgroundMosaicing, true,
+        value: 90);
+    plugin.setBeautyParams([config, config1], forceUpdateCache: true);
+    return plugin;
   }
 
   ZegoLayout galleryLayout() {
@@ -2133,7 +2156,7 @@ class _LivePage extends State<LiveDharamScreen>
         // return WaitListWidget(
         return AstroWaitListWidget(
           onClose: Get.back,
-          isInCall: _controller.currentCaller.isEngaded ,
+          isInCall: _controller.currentCaller.isEngaded,
           waitTime: _controller.getTotalWaitTime(),
           myUserId: _controller.userId,
           list: _controller.waitListModel,

@@ -109,6 +109,7 @@ dependencies:
   audioplayers: ^5.2.1
   speed_test_dart: ^1.0.4+1
   shimmer: ^3.0.0
+  zego_uikit_beauty_plugin: ^1.5.2
   cron: ^0.6.0
 
 dependency_overrides:
