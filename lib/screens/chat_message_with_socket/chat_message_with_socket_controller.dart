@@ -327,9 +327,7 @@ class ChatMessageWithSocketController extends GetxController
       if (event.name == 'messageReceive') {
         if (!chatIdList.contains(event.data!["chatId"].toString())) {
           chatIdList.add(event.data!["chatId"].toString());
-          if (event.data!["msg_type"].toString() != "0") {
-            getChatList();
-          } else {
+          if (event.data!["msg_type"].toString() == "0") {
             final String time =
                 "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
             ChatMessage chatMessage = ChatMessage(
@@ -353,6 +351,8 @@ class ChatMessageWithSocketController extends GetxController
             );
             chatMessages.add(chatMessage);
             scrollToBottomFunc();
+          } else {
+            getChatList();
           }
           updateReadMessage();
         }
@@ -392,12 +392,11 @@ class ChatMessageWithSocketController extends GetxController
     // leavePrivateChat();
     customerLeavedPrivateChatListenerSocket();
     astrologerJoinedPrivateChat();
-    if (!kDebugMode) {
       socket.startAstroCustumerSocketEvent(
         orderId: AppFirebaseService().orderData.value["orderId"].toString(),
         userId: AppFirebaseService().orderData.value["userId"],
       );
-    }
+
     //  if (Get.arguments is ResAstroChatListener) {
     sendReadMessageStatus = true;
     // if (data!.customerId != null) {
