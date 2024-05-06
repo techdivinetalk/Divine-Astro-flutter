@@ -739,6 +739,16 @@ class _LivePage extends State<LiveDharamScreen>
                     userName: _controller.userName,
                     liveID: _controller.liveId,
                     config: streamingConfig
+                      ..beautyConfig = ZegoBeautyPluginConfig(
+                        effectsTypes:
+                        ZegoBeautyPluginConfig.beautifyEffectsTypes(
+                          enableBasic: true,
+                          enableAdvanced: true,
+                          enableMakeup: true,
+                          enableStyle: true,
+                        ) +
+                            ZegoBeautyPluginConfig.filterEffectsTypes(),
+                      )
                         ..video = ZegoUIKitVideoConfig.preset720P()
                       ..preview.showPreviewForHost = false
                       ..audioVideoView.isVideoMirror = false
@@ -870,7 +880,11 @@ class _LivePage extends State<LiveDharamScreen>
 
   ZegoUIKitPrebuiltLiveStreamingConfig get streamingConfig {
     final ZegoUIKitSignalingPlugin plugin = ZegoUIKitSignalingPlugin();
-    final List<IZegoUIKitPlugin> pluginsList = <IZegoUIKitPlugin>[plugin];
+    final List<IZegoUIKitPlugin> pluginsList = <IZegoUIKitPlugin>[
+      plugin,
+      // ZegoUIKitBeautyPlugin(),
+      getBeautyPlugin()
+    ];
     return _controller.isHost
         ? ZegoUIKitPrebuiltLiveStreamingConfig.host(plugins: pluginsList)
         : ZegoUIKitPrebuiltLiveStreamingConfig.audience(plugins: pluginsList);
