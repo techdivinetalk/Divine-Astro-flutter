@@ -118,7 +118,7 @@ class ChatMessageWithSocketController extends GetxController
   // MessageTemplateController messageTemplateController = Get.find<MessageTemplateController>();
   RxBool isTyping = false.obs;
   BroadcastReceiver broadcastReceiver =
-      BroadcastReceiver(names: <String>["deliveredMsg","messageReceive"]);
+      BroadcastReceiver(names: <String>["deliveredMsg", "messageReceive"]);
   late Duration timeDifference;
   RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
 
@@ -304,6 +304,7 @@ class ChatMessageWithSocketController extends GetxController
     }
   }
 
+  List<String> chatIdList = []; // Initial list
   @override
   void onInit() {
     super.onInit();
@@ -312,10 +313,10 @@ class ChatMessageWithSocketController extends GetxController
     noticeAPi();
     getSavedRemedies();
     AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
-      if(p0["status"] == null || p0["astroId"] == null){
+      if (p0["status"] == null || p0["astroId"] == null) {
         backFunction();
         AppFirebaseService().database.child("order/${p0["orderId"]}").remove();
-      }else {
+      } else {
         print("orderData Changed");
         initTask(p0);
       }
@@ -324,17 +325,11 @@ class ChatMessageWithSocketController extends GetxController
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) async {
       if (event.name == 'messageReceive') {
-        var index = await chatMessages.indexWhere((element) {
-          return element.time.toString() == event.data!["chatId"];
-        });
-        print('messageReceiveRR: $index');
-        if (index == -1) {
-          if(event.data!["msg_type"].toString() != "0"){
-            getChatList();
-          }else {
-            final String time = "${DateTime
-                .now()
-                .millisecondsSinceEpoch ~/ 1000}";
+        if (!chatIdList.contains(event.data!["chatId"].toString())) {
+          chatIdList.add(event.data!["chatId"].toString());
+          if (event.data!["msg_type"].toString() == "0") {
+            final String time =
+                "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
             ChatMessage chatMessage = ChatMessage(
               orderId: AppFirebaseService().orderData.value["orderId"],
               id: int.parse(time),
@@ -356,10 +351,12 @@ class ChatMessageWithSocketController extends GetxController
             );
             chatMessages.add(chatMessage);
             scrollToBottomFunc();
+          } else {
+            getChatList();
           }
           updateReadMessage();
         }
-      }else if (event.name == 'deliveredMsg') {
+      } else if (event.name == 'deliveredMsg') {
         print('deliveredData-Key:${event.data}');
         var response = event.data?['deliveredMsgList'];
         print('deliveredData Outer Key:${response.toString()}');
@@ -395,12 +392,11 @@ class ChatMessageWithSocketController extends GetxController
     // leavePrivateChat();
     customerLeavedPrivateChatListenerSocket();
     astrologerJoinedPrivateChat();
-    if(!kDebugMode) {
       socket.startAstroCustumerSocketEvent(
         orderId: AppFirebaseService().orderData.value["orderId"].toString(),
         userId: AppFirebaseService().orderData.value["userId"],
       );
-    }
+
     //  if (Get.arguments is ResAstroChatListener) {
     sendReadMessageStatus = true;
     // if (data!.customerId != null) {
@@ -513,20 +509,17 @@ class ChatMessageWithSocketController extends GetxController
         print("chatTimeLeft ${showTalkTime.value}");
         chatTimer?.cancel();
         Future.delayed(const Duration(seconds: 4)).then((value) {
-          if(AppFirebaseService().orderData.value["status"] == "3" &&  showTalkTime.value == "-1") {
-            DatabaseReference ref = FirebaseDatabase.instance
-                .ref(
+          if (AppFirebaseService().orderData.value["status"] == "3" &&
+              showTalkTime.value == "-1") {
+            DatabaseReference ref = FirebaseDatabase.instance.ref(
                 "order/${AppFirebaseService().orderData.value["orderId"]}");
             ref.update({
               "status": "4",
               "source": "astrorApp",
-              "order_end_time": DateTime
-                  .now()
-                  .millisecondsSinceEpoch + 60000
+              "order_end_time": DateTime.now().millisecondsSinceEpoch + 60000
             });
           }
-                 });
-
+        });
       } else {
         extraTimer?.cancel();
         //         print('Countdown working');
@@ -973,7 +966,7 @@ class ChatMessageWithSocketController extends GetxController
     String? shopId,
     String? suggestedId,
     String? customProductId,
-        CustomProduct? getCustomProduct,
+    CustomProduct? getCustomProduct,
   }) async {
     late ChatMessage newMessage;
     if (msgType == MsgType.customProduct) {
@@ -997,7 +990,7 @@ class ChatMessageWithSocketController extends GetxController
         type: 0,
         productId: productId,
         userType: "astrologer",
-        getCustomProduct:getCustomProduct,
+        getCustomProduct: getCustomProduct,
       );
     } else if (msgType == MsgType.product) {
       final isPooja = data?['data']['isPooja'] as bool;
@@ -1541,7 +1534,7 @@ class ChatMessageWithSocketController extends GetxController
       print("extraTime closing");
       int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
       talkTimeStartTimer(remainingTime);
-    }else{
+    } else {
       if (p0["order_end_time"] != null) {
         startExtraTimer(p0["order_end_time"], p0["status"]);
       }
@@ -1562,7 +1555,6 @@ class ChatMessageWithSocketController extends GetxController
       // "Picking tarot card...";
       update();
     }
-
   }
 
   final noticeRepository = Get.put(NoticeRepository());

@@ -126,11 +126,12 @@ Future<void> main() async {
     //   print('msg ---- from notification');
     //   return;
     // }
-    if (message.data["type"] == "1") {
+    if (message.data["type"].toString() == "1") {
       if(MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
         print("messageReceive21 ${MiddleWare.instance.currentPage}");
         showNotification(message.data["title"], message.data["message"],
             message.data['type'], message.data);
+      }
         HashMap<String, dynamic> updateData = HashMap();
         updateData[message.data["chatId"]] = 1;
         print('Message data-:-users ${message.data}');
@@ -141,11 +142,7 @@ Future<void> main() async {
                 .data["userid"]}")
             .update(updateData);
         sendBroadcast(BroadcastMessage(name: "messageReceive", data: message.data));
-      }else{
-        print("messageReceive2 ${MiddleWare.instance.currentPage}");
-        sendBroadcast(
-            BroadcastMessage(name: "messageReceive", data: message.data));
-      }
+
 
     } else if (message.data["type"] == "8") {
       print(
