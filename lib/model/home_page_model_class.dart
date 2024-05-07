@@ -60,13 +60,13 @@ class HomeData {
   dynamic totalDivineWalletPayout;
   dynamic totalRefundPayout;
   dynamic totalTax;
-  int? paidWallet;
-  int? bonusWallet;
-  int? ecommerceWallet;
+  dynamic paidWallet;
+  dynamic bonusWallet;
+  dynamic ecommerceWallet;
   dynamic retention;
   dynamic repurchaseRate;
-  int? minimumRetention;
-  int? minimumRepurchaseRate;
+  dynamic minimumRetention;
+  dynamic minimumRepurchaseRate;
 
   HomeData({
     this.noticeBoard,

@@ -19,6 +19,7 @@ class UploadYourPhotosController extends GetxController {
   final picker = ImagePicker();
   UserData? userData;
   var preference = Get.find<SharedPreferenceService>();
+  var isLoading = false.obs;
 
   @override
   void onInit() {
@@ -77,6 +78,7 @@ class UploadYourPhotosController extends GetxController {
     }
     List<dynamic> response = await Future.wait(futures);
     if (response.isNotEmpty) {
+      isLoading.value = true;
       try {
         final pref = Get.find<SharedPreferenceService>();
         UploadImageRequest request = UploadImageRequest(
@@ -86,16 +88,19 @@ class UploadYourPhotosController extends GetxController {
         final imageUpload =
             await userRepository.uploadYourPhotoApi(request.toJson());
         if (imageUpload.success && imageUpload.statusCode == 200) {
+          isLoading.value = false;
           Get.back();
           divineSnackBar(data: "Image uploaded successfully");
           debugPrint("Uploaded Url : $response");
         }
       } catch (err) {
+        isLoading.value = false;
         if (err is AppException) {
           err.onException();
         }
       }
     } else {
+      isLoading.value = false;
       CustomException("Something went wrong");
     }
   }

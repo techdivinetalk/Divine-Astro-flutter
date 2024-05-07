@@ -105,7 +105,7 @@ class UploadYourPhotosUi extends GetView<UploadYourPhotosController> {
                                               shape: BoxShape.circle,
                                               color: appColors.blackColor),
                                           child:  Padding(
-                                            padding: EdgeInsets.all(3.0),
+                                            padding: const EdgeInsets.all(3.0),
                                             child: Icon(
                                               Icons.close,
                                               color: appColors.white,
@@ -121,8 +121,11 @@ class UploadYourPhotosUi extends GetView<UploadYourPhotosController> {
                 ),
               ),
             ),
-            GetBuilder<UploadYourPhotosController>(
-              builder: (controller) => CustomLightYellowButton(
+            Obx(() {
+              return controller.isLoading.value ?  CustomLightYellowButton(
+                name: "pleaseWait".tr,
+                onTaped: () {},
+              ) : CustomLightYellowButton(
                 name: "uploadImages".tr,
                 onTaped: () {
                   if (controller.selectedImages.isNotEmpty) {
@@ -137,8 +140,8 @@ class UploadYourPhotosUi extends GetView<UploadYourPhotosController> {
                     divineSnackBar(data: "No images selected. Please choose at least one image to upload.".tr);
                   }
                 },
-              ),
-            ),
+              );
+            }),
           ],
         ),
       ),

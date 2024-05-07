@@ -57,7 +57,7 @@ class UserData {
 
   // int? anonymousCallPayout;
   // String? chatPayout;
-  double? giftPayout;
+  dynamic giftPayout;
   String? accountNumber;
   String? ifscCode;
   String? accountHolderName;
@@ -204,7 +204,7 @@ class UserData {
     audioCallPayout = json['audio_call_payout'];
     // anonymousCallPayout = json['anonymous_call_payout'];
     // chatPayout = json['chat_payout'];
-    giftPayout = double.parse(json['gift_payout'].toString());
+    giftPayout = json['gift_payout'] ?? 0.0;
     accountNumber = json['account_number'];
     ifscCode = json['ifsc_code'];
     accountHolderName = json['account_holder_name'];
