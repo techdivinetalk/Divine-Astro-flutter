@@ -26,7 +26,7 @@ import "package:http/http.dart" as http;
 //
 
 class LiveDharamController extends GetxController {
-  final SharedPreferenceService pref = Get.put(SharedPreferenceService());
+  SharedPreferenceService pref = SharedPreferenceService();
 
   final AstrologerProfileRepository liveRepository =
       AstrologerProfileRepository();

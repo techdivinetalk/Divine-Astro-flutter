@@ -70,6 +70,7 @@ dependencies:
   voice_message_package: ^2.1.2
   youtube_player_flutter: ^8.1.2
   firebase_remote_config: ^4.3.13
+  zego_uikit_prebuilt_live_audio_room:
 
   firebase_crashlytics: ^3.3.5
 

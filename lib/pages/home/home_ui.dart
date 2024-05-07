@@ -14,6 +14,7 @@ import 'package:divine_astrologer/model/wallet_deatils_response.dart';
 import 'package:divine_astrologer/pages/home/widgets/offer_bottom_widget.dart';
 import 'package:divine_astrologer/pages/home/widgets/can_not_online.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
+import 'package:divine_astrologer/satsang_module/satsang_screen.dart';
 import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_ui.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/screens/order_feedback/widget/feedback_card_widget.dart';
@@ -21,6 +22,7 @@ import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/force_update_sheet.dart';
 import 'package:divine_astrologer/utils/load_image.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -618,6 +620,54 @@ class HomeUI extends GetView<HomeController> {
                                     )
                                   : const SizedBox():const SizedBox();
                             },
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              await FirebaseDatabase.instance.ref().child("satsang/${controller.userData.id}").update(
+                                {
+                                  "id": controller.userData.id,
+                                  "name": controller.userData.name,
+                                  "image": controller.userData.image,
+                                },
+                              );
+                            Get.to(()=>SatSangPage())!.then((value) async {
+                              await FirebaseDatabase.instance.ref().child("satsang/${controller.userData.id}").remove();
+                            });
+                            },
+                            child: Container(
+                              height: 60,
+                              decoration: BoxDecoration(
+                                color: appColors.guideColor,
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black
+                                        .withOpacity(0.2),
+                                    blurRadius: 1.0,
+                                    offset:
+                                    const Offset(0.0, 3.0),
+                                  ),
+                                ],
+                                borderRadius:
+                                BorderRadius.circular(10.0),
+                              ),
+                              child: Row(
+                                mainAxisAlignment:
+                                MainAxisAlignment.center,
+                                children: [
+                                  Assets.images.icGoLive
+                                      .svg(color: Colors.white),
+                                  const SizedBox(width: 15),
+                                  Text(
+                                    "SatSang".tr,
+                                    style:
+                                    AppTextStyle.textStyle20(
+                                      fontWeight: FontWeight.w700,
+                                      fontColor: appColors.white,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                           SizedBox(height: 10.h),
                           Container(
