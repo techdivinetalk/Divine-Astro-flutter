@@ -631,6 +631,7 @@ class _LivePage extends State<LiveDharamScreen>
     final bool cond3 = _controller.currentCaller.id == zegoUIKitUser.id;
     final bool cond4 = zegoUIKitUser.id != _controller.liveId;
     if (cond1 && cond2 && cond3 && cond4) {
+      print("on user leave");
       await removeCoHostOrStopCoHost();
     } else {}
     return Future<void>.value();
@@ -2918,7 +2919,6 @@ class _LivePage extends State<LiveDharamScreen>
           userName: _controller.currentCaller.userName,
           onTimeout: () async {
             Get.back();
-
             await sendTaroCardClose();
           },
           totalTime: _controller.engagedCoHostWithAstro().totalTime,
@@ -3469,6 +3469,8 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget newTimerWidget() {
     final String source = _controller.engagedCoHostWithAstro().totalTime;
+    print(_controller.engagedCoHostWithAstro().totalTime);
+    print("_controller.engagedCoHostWithAstro().totalTime");
     final int epoch = int.parse(source.isEmpty ? "0" : source);
     final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
     return TimerCountdown(
@@ -3489,6 +3491,7 @@ class _LivePage extends State<LiveDharamScreen>
       },
       endTime: dateTime,
       onEnd: () async {
+        print("time is ending newTimerWidget");
         await removeCoHostOrStopCoHost();
       },
     );
@@ -4361,6 +4364,7 @@ class _LivePage extends State<LiveDharamScreen>
       await disconnectPopup(
         noDisconnect: () {},
         yesDisconnect: () async {
+          print("when exit function");
           await removeCoHostOrStopCoHost();
         },
       );
@@ -4704,6 +4708,7 @@ class _LivePage extends State<LiveDharamScreen>
         //   final connectInvite = _zegoController.coHost;
         //   await connectInvite.hostSendCoHostInvitationToAudience(user);
         // } else {}
+        print("calling accept button");
         final connectInvite = zegoController.coHost;
         await connectInvite.hostSendCoHostInvitationToAudience(user);
       },

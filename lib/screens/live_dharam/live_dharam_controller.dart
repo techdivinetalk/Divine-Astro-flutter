@@ -2,6 +2,7 @@
 
 import "dart:async";
 import "dart:convert";
+import "dart:developer";
 
 import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
@@ -19,6 +20,7 @@ import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 import "package:get/get_connect/http/src/status/http_status.dart";
 import "package:http/http.dart" as http;
+
 //
 //
 //
@@ -45,6 +47,7 @@ class LiveDharamController extends GetxController {
   final RxString _hostSpeciality = "".obs;
   final RxInt _currentIndex = 0.obs;
   final RxMap<dynamic, dynamic> _data = <dynamic, dynamic>{}.obs;
+
   // final Rx<GetAstroDetailsRes> _details = GetAstroDetailsRes().obs;
   // final Rx<IsCustomerBlockedRes> _isCustBlocked = IsCustomerBlockedRes().obs;
   final RxList<LeaderboardModel> _leaderboardModel = <LeaderboardModel>[].obs;
@@ -61,6 +64,7 @@ class LiveDharamController extends GetxController {
     offerId: 0,
     callStatus: 0,
   ).obs;
+
   // final Rx<AstrologerFollowingResponse> _followRes =
   //     AstrologerFollowingResponse().obs;
   // final Rx<WalletRecharge> _walletRecharge = WalletRecharge().obs;
@@ -81,18 +85,21 @@ class LiveDharamController extends GetxController {
     callStatus: 0,
   ).obs;
   final RxBool _showTopBanner = false.obs;
+
   // final Rx<InsufficientBalModel> _insufficientBalModel =
   //     InsufficientBalModel().obs;
   final Rx<BlockedCustomerListRes> _blockedCustomerList =
       BlockedCustomerListRes().obs;
   final Rx<NoticeBoardRes> _noticeBoardRes = NoticeBoardRes().obs;
   final RxInt _timerCurrentIndex = 1.obs;
+
   // final RxList<String> _astroFollowPopup = <String>[].obs;
   final Rx<bool> _isWaitingForCallAstrologerPopupRes = false.obs;
   final RxList<dynamic> _firebaseBlockUsersIds = <dynamic>[].obs;
   final RxList<DeckCardModel> _deckCardModelList = <DeckCardModel>[].obs;
   final Rx<TarotGameModel> _tarotGameModel = TarotGameModel().obs;
   final RxBool _hasFollowPopupOpen = false.obs;
+
   // final RxBool _hasCallAcceptRejectPopupOpen = false.obs;
   // final RxString _openAceeptRejectDialogForId = "".obs;
   final Rx<RequestClass> _requestClass = RequestClass(
@@ -134,6 +141,8 @@ class LiveDharamController extends GetxController {
 
   void initData() {
     userId = (pref.getUserDetail()?.id ?? "").toString();
+    print(userId);
+    print("userIduserIduserIduserId");
     userName = pref.getUserDetail()?.name ?? "";
     // avatar = _pref.getUserDetail()?.avatar ?? "";
     final String awsURL = pref.getAmazonUrl() ?? "";
@@ -250,33 +259,43 @@ class LiveDharamController extends GetxController {
   }
 
   String get userId => _userId.value;
+
   set userId(String value) => _userId(value);
 
   String get userName => _userName.value;
+
   set userName(String value) => _userName(value);
 
   String get avatar => _avatar.value;
+
   set avatar(String value) => _avatar(value);
 
   bool get isMod => _isMod.value;
+
   set isMod(bool value) => _isMod(value);
 
   String get liveId => _liveId.value;
+
   set liveId(String value) => _liveId(value);
 
   bool get isHost => _isHost.value;
+
   set isHost(bool value) => _isHost(value);
 
   bool get isHostAvailable => _isHostAvailable.value;
+
   set isHostAvailable(bool value) => _isHostAvailable(value);
 
   String get hostSpeciality => _hostSpeciality.value;
+
   set hostSpeciality(String value) => _hostSpeciality(value);
 
   int get currentIndex => _currentIndex.value;
+
   set currentIndex(int value) => _currentIndex(value);
 
   Map<dynamic, dynamic> get data => _data.value;
+
   set data(Map<dynamic, dynamic> value) => _data(value);
 
   // GetAstroDetailsRes get details => _details.value;
@@ -286,13 +305,16 @@ class LiveDharamController extends GetxController {
   // set isCustBlocked(IsCustomerBlockedRes value) => _isCustBlocked(value);
 
   List<LeaderboardModel> get leaderboardModel => _leaderboardModel.value;
+
   set leaderboardModel(List<LeaderboardModel> value) =>
       _leaderboardModel(value);
 
   List<WaitListModel> get waitListModel => _waitListModel.value;
+
   set waitListModel(List<WaitListModel> value) => _waitListModel(value);
 
   WaitListModel get orderModel => _orderModel.value;
+
   set orderModel(WaitListModel value) => _orderModel(value);
 
   // AstrologerFollowingResponse get followRes => _followRes.value;
@@ -305,18 +327,23 @@ class LiveDharamController extends GetxController {
   // set orderGenerate(OrderGenerate value) => _orderGenerate(value);
 
   bool get isFront => _isFront.value;
+
   set isFront(bool value) => _isFront(value);
 
   bool get isCamOn => _isCamOn.value;
+
   set isCamOn(bool value) => _isCamOn(value);
 
   bool get isMicOn => _isMicOn.value;
+
   set isMicOn(bool value) => _isMicOn(value);
 
   WaitListModel get currentCaller => _currentCaller.value;
+
   set currentCaller(WaitListModel value) => _currentCaller(value);
 
   bool get showTopBanner => _showTopBanner.value;
+
   set showTopBanner(bool value) => _showTopBanner(value);
 
   // InsufficientBalModel get insufficientBalModel => _insufficientBalModel.value;
@@ -324,13 +351,16 @@ class LiveDharamController extends GetxController {
   //     _insufficientBalModel(value);
 
   BlockedCustomerListRes get blockedCustomerList => _blockedCustomerList.value;
+
   set blockedCustomerList(BlockedCustomerListRes value) =>
       _blockedCustomerList(value);
 
   NoticeBoardRes get noticeBoardRes => _noticeBoardRes.value;
+
   set noticeBoardRes(NoticeBoardRes value) => _noticeBoardRes(value);
 
   int get timerCurrentIndex => _timerCurrentIndex.value;
+
   set timerCurrentIndex(int value) => _timerCurrentIndex(value);
 
   // List<String> get astroFollowPopup => _astroFollowPopup.value;
@@ -338,20 +368,25 @@ class LiveDharamController extends GetxController {
 
   bool get isWaitingForCallAstrologerPopupRes =>
       _isWaitingForCallAstrologerPopupRes.value;
+
   set isWaitingForCallAstrologerPopupRes(bool value) =>
       _isWaitingForCallAstrologerPopupRes(value);
 
   List<dynamic> get firebaseBlockUsersIds => _firebaseBlockUsersIds.value;
+
   set firebaseBlockUsersIds(List<dynamic> value) =>
       _firebaseBlockUsersIds(value);
 
   List<DeckCardModel> get deckCardModelList => _deckCardModelList.value;
+
   set deckCardModelList(List<DeckCardModel> value) => _deckCardModelList(value);
 
   TarotGameModel get tarotGameModel => _tarotGameModel.value;
+
   set tarotGameModel(TarotGameModel value) => _tarotGameModel(value);
 
   bool get hasFollowPopupOpen => _hasFollowPopupOpen.value;
+
   set hasFollowPopupOpen(bool value) => _hasFollowPopupOpen(value);
 
   // bool get hasCallAcceptRejectPopupOpen => _hasCallAcceptRejectPopupOpen.value;
@@ -363,18 +398,23 @@ class LiveDharamController extends GetxController {
   //     _openAceeptRejectDialogForId(value);
 
   RequestClass get requestClass => _requestClass.value;
+
   set requestClass(RequestClass value) => _requestClass(value);
 
   bool get isProcessing => _isProcessing.value;
+
   set isProcessing(bool value) => _isProcessing(value);
 
   bool get extendTimeWidgetVisible => _extendTimeWidgetVisible.value;
+
   set extendTimeWidgetVisible(bool value) => _extendTimeWidgetVisible(value);
 
   bool get hasReInitCoHost => _hasReInitCoHost.value;
+
   set hasReInitCoHost(bool value) => _hasReInitCoHost(value);
 
   int get testingVar => _testingVar.value;
+
   set testingVar(int value) => _testingVar(value);
 
   Future<void> eventListner({
@@ -392,7 +432,9 @@ class LiveDharamController extends GetxController {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
           Map<dynamic, dynamic> map = <dynamic, dynamic>{};
           map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-          as Map<dynamic, dynamic>;
+              as Map<dynamic, dynamic>;
+          log(data.toString());
+          print("datadatadatadata");
           data.addAll(map);
           // data
           //   ..clear()
@@ -554,7 +596,7 @@ class LiveDharamController extends GetxController {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
           Map<dynamic, dynamic> map = <dynamic, dynamic>{};
           map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-          as Map<dynamic, dynamic>;
+              as Map<dynamic, dynamic>;
           data.addAll(map);
           // data
           //   ..clear()
@@ -589,17 +631,22 @@ class LiveDharamController extends GetxController {
       callStatus: 0,
     );
 
-    if (data.keys.toList() != null &&
-        data.keys.toList().length > currentIndex) {
-      if (data.keys.toList()[currentIndex] != null) {
-        var liveId = data.keys.toList()[currentIndex];
-        var liveIdNode = data[liveId];
+
+
+      if (data[userId] != null) {
+print(data);
+print("datadatadatadatadatadata");
+        // var liveId = data.keys.toList()[pref.getUserDetail()!.id!];
+
+        var liveIdNode = data[userId];
         if (liveIdNode != null) {
           var orderNode = liveIdNode["order"];
+          print(orderNode);
+          print("orderNodeorderNodeorderNodeorderNodeorderNode");
           temp = getOrderModelGeneric(orderNode, forMe: false);
         } else {}
       } else {}
-    } else {}
+
 
     return temp;
   }
@@ -1013,11 +1060,11 @@ class LiveDharamController extends GetxController {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
           Map<dynamic, dynamic> map = <dynamic, dynamic>{};
           map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-          as Map<dynamic, dynamic>;
+              as Map<dynamic, dynamic>;
           final List<LeaderboardModel> tempList = <LeaderboardModel>[];
           map.forEach(
             // ignore: always_specify_types
-                (key, value) {
+            (key, value) {
               tempList.add(
                 LeaderboardModel(
                   // ignore:  avoid_dynamic_calls
@@ -1037,7 +1084,7 @@ class LiveDharamController extends GetxController {
             ..addAll(tempList);
           // leaderboardModel = tempList;
           leaderboardModel.sort(
-                (LeaderboardModel a, LeaderboardModel b) {
+            (LeaderboardModel a, LeaderboardModel b) {
               return b.amount.compareTo(a.amount);
             },
           );
@@ -1102,6 +1149,8 @@ class LiveDharamController extends GetxController {
   }
 
   Future<void> addUpdateOrder(Map<String, dynamic> orderDetails) async {
+    print(orderDetails);
+    print("updating entry orderDetails");
     await ref.child("live/$liveId/order").update(orderDetails);
     return Future<void>.value();
   }
@@ -1131,18 +1180,18 @@ class LiveDharamController extends GetxController {
   // }
 
   void getLatestWaitList(
-      DataSnapshot? dataSnapshot,
-      ) {
+    DataSnapshot? dataSnapshot,
+  ) {
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
           Map<dynamic, dynamic> map = <dynamic, dynamic>{};
           map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-          as Map<dynamic, dynamic>;
+              as Map<dynamic, dynamic>;
           final List<WaitListModel> tempList = <WaitListModel>[];
           map.forEach(
             // ignore: always_specify_types
-                (key, value) {
+            (key, value) {
               tempList.add(
                 WaitListModel(
                   // ignore:  avoid_dynamic_calls
@@ -1372,6 +1421,7 @@ class LiveDharamController extends GetxController {
     };
     final int offerId = getOfferId();
     param.addAll(<String, dynamic>{"offer_id": offerId});
+    print("makeAPICallForEndCall Without Firebase");
     await liveRepository.endLiveApi(
       params: param,
       successCallBack: successCallBack,
@@ -1567,7 +1617,7 @@ class LiveDharamController extends GetxController {
 
   final RegExp indianPhoneNumberRegex = RegExp(r'\b(?:\+?91|0)?[ -]?\d{10}\b');
   final RegExp emailRegex =
-  RegExp(r'\b[A-Za-z0-9._%+-]+@\b[A-Za-z0-9.-]+\.[A-Z|a-z]{2,6}\b');
+      RegExp(r'\b[A-Za-z0-9._%+-]+@\b[A-Za-z0-9.-]+\.[A-Z|a-z]{2,6}\b');
   final RegExp instagramIdRegex = RegExp(r'@[a-zA-Z0-9_]{1,30}\b');
 
   String algoForSendMessage(String input) {
@@ -1587,28 +1637,23 @@ class LiveDharamController extends GetxController {
     return data.isEmpty ? "" : data.join(", ");
   }
 
-
-
-
-
-
-  // Future<void> callblockCustomerByMod({
-  //   required int id,
-  //   required Function(String message) successCallBack,
-  //   required Function(String message) failureCallBack,
-  // }) async {
-  //   Map<String, dynamic> param = <String, dynamic>{};
-  //   param = <String, dynamic>{
-  //     "customer_id": id,
-  //     // "unblock": 0,
-  //   };
-  //   await liveRepository.blockedCustomerFromModAPI(
-  //     params: param,
-  //     successCallBack: successCallBack,
-  //     failureCallBack: failureCallBack,
-  //   );
-  //   return Future<void>.value();
-  // }
+// Future<void> callblockCustomerByMod({
+//   required int id,
+//   required Function(String message) successCallBack,
+//   required Function(String message) failureCallBack,
+// }) async {
+//   Map<String, dynamic> param = <String, dynamic>{};
+//   param = <String, dynamic>{
+//     "customer_id": id,
+//     // "unblock": 0,
+//   };
+//   await liveRepository.blockedCustomerFromModAPI(
+//     params: param,
+//     successCallBack: successCallBack,
+//     failureCallBack: failureCallBack,
+//   );
+//   return Future<void>.value();
+// }
 }
 
 class CustomGiftModel {
