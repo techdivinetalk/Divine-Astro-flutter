@@ -1324,12 +1324,12 @@ class HomeUI extends GetView<HomeController> {
     const List<String> suffixes = ['M', 'K', 'B', 'T'];
 
     // Extract numeric part by removing non-numeric characters
-    String numericPart = value.toString().replaceAll(RegExp(r'[^0-9.]'), '');
+    String numericPart = value.toString().replaceAll(RegExp(r'[^0-9.-]'), '');
 
     double numericValue = double.tryParse(numericPart) ?? 0.0;
 
-    // Check if balance is greater than 0
-    if (numericValue > 0) {
+    // Check if balance is greater than or equal to 0
+    if (numericValue >= 0) {
       int index = 0;
 
       // Check if balance is above 9999
@@ -1343,8 +1343,20 @@ class HomeUI extends GetView<HomeController> {
         return numericValue.toStringAsFixed(0);
       }
     } else {
-      // If balance is 0, return '0'
-      return '0.00';
+      // If balance is negative, format it with a minus sign
+      numericValue = -numericValue;
+      int index = 0;
+
+      // Check if balance is above 9999
+      if (numericValue > 9999) {
+        while (numericValue >= 1000 && index < suffixes.length - 1) {
+          numericValue /= 1000;
+          index++;
+        }
+        return '-${numericValue.toStringAsFixed(1)}${suffixes[index]}';
+      } else {
+        return '-${numericValue.toStringAsFixed(0)}';
+      }
     }
   }
 
