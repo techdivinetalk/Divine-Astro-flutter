@@ -2941,6 +2941,8 @@ class _LivePage extends State<LiveDharamScreen>
       context: context,
       barrierDismissible: false,
       builder: (BuildContext context) {
+        print(_controller.deckCardModelList);
+        print("_controller.deckCardModelList");
         return LiveCarousal(
           onClose: () async {
             Get.back();

@@ -130,6 +130,8 @@ class _LiveCarousalState extends State<LiveCarousal> {
               enlargeStrategy: CenterPageEnlargeStrategy.height,
             ),
             itemBuilder: (BuildContext context, int index, int realIndex) {
+              print(widget.allCards);
+              print("widget.allCards");
               final DeckCardModel model = widget.allCards[index];
               return InkWell(
                 onTap: () async {
