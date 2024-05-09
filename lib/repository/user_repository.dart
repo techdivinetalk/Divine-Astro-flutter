@@ -25,7 +25,6 @@ import 'package:divine_astrologer/screens/puja/model/pooja_listing_model.dart';
 import 'package:divine_astrologer/screens/remedies/model/remedies_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_config_plus/flutter_config_plus.dart';
 import 'package:get/get.dart' hide FormData;
 import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -482,31 +481,24 @@ class UserRepository extends ApiProvider {
 
   Future<ConstantDetailsModelClass> constantDetailsData() async {
     try {
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      String version = packageInfo.version;
+      String buildNumber = packageInfo.buildNumber;
       DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-      AndroidDeviceInfo? androidInfo;
-      IosDeviceInfo? iosInfo;
-
-      /*PackageInfo packageInfo = await PackageInfo.fromPlatform();
-      String appVersion = packageInfo.version;
-*/
-      if (Platform.isAndroid) {
-        androidInfo = await deviceInfo.androidInfo;
-      } else if (Platform.isIOS) {
-        iosInfo = await deviceInfo.iosInfo;
-      }
-
-      Map<String, String> requestData = {
-        "device_brand": androidInfo != null ? androidInfo.brand : iosInfo != null ? iosInfo.model : "Unknown",
-        "device_model": androidInfo != null ? androidInfo.model : iosInfo != null ? iosInfo.utsname.machine : "Unknown",
-        "device_manufacture": androidInfo != null ? androidInfo.manufacturer : "Unknown",
-        "device_sdk_code": androidInfo != null ? androidInfo.version.sdkInt.toString() : iosInfo != null ? iosInfo.systemVersion : "Unknown",
-        "appCurrentVersion": FlutterConfigPlus.get('FLUTTER_VERSION_NAME')
-      };
+      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+      print('Running on ${androidInfo.model}'); // e.g., "Pixel 3"
+      print('App Version: $version');
+      Map<String, dynamic> param = new Map();
+      param["device_brand"] = androidInfo.brand;
+      param["device_model"] = androidInfo.model;
+      param["device_manufacture"] = androidInfo.manufacturer;
+      param["device_sdk_code"] = buildNumber;
+      param["appCurrentVersion"] = version;
 
       final response = await post(
         constantDetails,
         headers: await getJsonHeaderURL(),
-        body: jsonEncode(requestData),
+        body: jsonEncode(param).toString(),
       );
 
       log(response.body);
