@@ -279,7 +279,7 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
                                 : null,
                             child: (index != 0 && index != 1 && index != 2)
                                 ? Text(
-                                    index.toString(),
+                                    (index + 1).toString(),
                                   )
                                 : null,
                           ),
