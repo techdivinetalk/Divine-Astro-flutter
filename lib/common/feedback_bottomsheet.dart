@@ -138,10 +138,11 @@ selectDateOrTime(
   DateTime updateDateTime = DateTime.now();
   return showCupertinoModalPopup(
     context: context,
+    barrierDismissible: false,
     builder: (context) => Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        GestureDetector(
+       /* GestureDetector(
           onTap: () {
             Get.back();
           },
@@ -154,7 +155,7 @@ selectDateOrTime(
             child: Assets.images.icClose.svg(height: 12.h, width: 12.h),
           ),
         ),
-        const SizedBox(height: 10),
+        const SizedBox(height: 10),*/
         Container(
           decoration: BoxDecoration(
             borderRadius:

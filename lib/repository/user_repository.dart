@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/log_out_response.dart';
@@ -25,6 +26,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide FormData;
 import 'package:get/get_connect/http/src/status/http_status.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 
 import '../common/app_exception.dart';
 import '../common/common_functions.dart';
@@ -450,7 +452,7 @@ class UserRepository extends ApiProvider {
     }
   }
 
-  Future<ConstantDetailsModelClass> constantDetailsData() async {
+  /*Future<ConstantDetailsModelClass> constantDetailsData() async {
     try {
       // debugPrint("Params $param");
       final response =
@@ -474,7 +476,57 @@ class UserRepository extends ApiProvider {
       debugPrint("we got $e $s");
       rethrow;
     }
+  }*/
+
+  Future<ConstantDetailsModelClass> constantDetailsData() async {
+    try {
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      AndroidDeviceInfo? androidInfo;
+      IosDeviceInfo? iosInfo;
+
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      String appVersion = packageInfo.version;
+
+      if (Theme.of(Get.context!).platform == TargetPlatform.android) {
+        androidInfo = await deviceInfo.androidInfo;
+      } else if (Theme.of(Get.context!).platform == TargetPlatform.iOS) {
+        iosInfo = await deviceInfo.iosInfo;
+      }
+
+      Map<String, String> requestData = {
+        "device_brand": androidInfo != null ? androidInfo.brand : iosInfo != null ? iosInfo.model : "Unknown",
+        "device_model": androidInfo != null ? androidInfo.model : iosInfo != null ? iosInfo.utsname.machine : "Unknown",
+        "device_manufacture": androidInfo != null ? androidInfo.manufacturer : "Unknown",
+        "device_sdk_code": androidInfo != null ? androidInfo.version.sdkInt.toString() : iosInfo != null ? iosInfo.systemVersion : "Unknown",
+        "appCurrentVersion": appVersion
+      };
+
+      final response = await post(
+        constantDetails,
+        headers: await getJsonHeaderURL(),
+        body: jsonEncode(requestData),
+      );
+
+      log(response.body);
+      log("response.body");
+      if (response.statusCode == 200) {
+        final constantDetailsModelClass = ConstantDetailsModelClass.fromJson(json.decode(response.body));
+        if (constantDetailsModelClass.statusCode == successResponse &&
+            constantDetailsModelClass.success == true) {
+          return constantDetailsModelClass;
+        } else {
+          throw CustomException(json.decode(response.body)["error"]);
+        }
+      } else {
+        throw CustomException(json.decode(response.body)[0]["message"]);
+      }
+    } catch (e, s) {
+      preferenceService.erase();
+      debugPrint("we got $e $s");
+      rethrow;
+    }
   }
+
 
   Future<UpdateProfileResponse> updateProfile(
       Map<String, dynamic> param) async {
