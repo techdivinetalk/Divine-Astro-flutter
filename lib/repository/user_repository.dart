@@ -25,6 +25,7 @@ import 'package:divine_astrologer/screens/puja/model/pooja_listing_model.dart';
 import 'package:divine_astrologer/screens/remedies/model/remedies_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_config_plus/flutter_config_plus.dart';
 import 'package:get/get.dart' hide FormData;
 import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -485,9 +486,9 @@ class UserRepository extends ApiProvider {
       AndroidDeviceInfo? androidInfo;
       IosDeviceInfo? iosInfo;
 
-      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      /*PackageInfo packageInfo = await PackageInfo.fromPlatform();
       String appVersion = packageInfo.version;
-
+*/
       if (Platform.isAndroid) {
         androidInfo = await deviceInfo.androidInfo;
       } else if (Platform.isIOS) {
@@ -499,7 +500,7 @@ class UserRepository extends ApiProvider {
         "device_model": androidInfo != null ? androidInfo.model : iosInfo != null ? iosInfo.utsname.machine : "Unknown",
         "device_manufacture": androidInfo != null ? androidInfo.manufacturer : "Unknown",
         "device_sdk_code": androidInfo != null ? androidInfo.version.sdkInt.toString() : iosInfo != null ? iosInfo.systemVersion : "Unknown",
-        "appCurrentVersion": appVersion
+        "appCurrentVersion": FlutterConfigPlus.get('FLUTTER_VERSION_NAME')
       };
 
       final response = await post(
