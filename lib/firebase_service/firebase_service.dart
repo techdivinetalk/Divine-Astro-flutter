@@ -16,6 +16,7 @@ import "package:divine_astrologer/screens/live_dharam/perm/app_permission_servic
 import "package:divine_astrologer/screens/side_menu/settings/settings_controller.dart";
 import "package:divine_astrologer/watcher/real_time_watcher.dart";
 import "package:firebase_database/firebase_database.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
@@ -69,6 +70,7 @@ class AppFirebaseService {
   }
 
   String tableName = "";
+
   // int x = 0;
   checkFirebaseConnection() {
     final connectedRef = FirebaseDatabase.instance.ref(".info/connected");
@@ -84,7 +86,7 @@ class AppFirebaseService {
         // const masterPath = 'masters';
         // readData(path);
         // masterData(masterPath);
-      }else{
+      } else {
         print("disconnected");
       }
     });
@@ -115,7 +117,6 @@ class AppFirebaseService {
 
           final isVideoCallSwitchRes = realTimeData["videoCallStatus"] ?? 0;
           videoSwitch(isVideoCallSwitchRes > 0);
-
 
           if (realTimeData["uniqueId"] != null) {
             print("uniqueId ---- uniqueId ${realTimeData["uniqueId"]}");
@@ -205,7 +206,10 @@ class AppFirebaseService {
     } catch (e) {
       debugPrint("Error reading data from the database: $e");
     }
-    masterData("masters");
+    if (!kDebugMode) {
+      masterData("masters");
+    }
+
     watcher.nameStream.listen(
       (value) {
         if (value != "") {
@@ -287,6 +291,7 @@ class AppFirebaseService {
         if (event.snapshot.value is Map<Object?, Object?>) {
           Map<String, dynamic>? realTimeData = Map<String, dynamic>.from(
               event.snapshot.value! as Map<Object?, Object?>);
+
           /// {call: 1, remidies: 1, ecom: 1, chat_assistance: 1, chat: 1, kundli: 1, templates: 1, camera: 1, live: 1, queue: 1, gifts: 1}
           isCall(realTimeData["call"]);
           print("isCall-----on ?? ${isCall}");
@@ -319,7 +324,5 @@ class AppFirebaseService {
     } catch (e) {
       debugPrint("Error reading data from the database: $e");
     }
-
-
   }
 }

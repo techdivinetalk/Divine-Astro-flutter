@@ -239,7 +239,10 @@ Future<void> main() async {
       Permission.notification.request();
     }
   });
-  AppFirebaseService().masterData("masters");
+  if(!kDebugMode){
+    AppFirebaseService().masterData("masters");
+  }
+
 }
 
 Future<bool> saveLanguage(String? lang) async {
