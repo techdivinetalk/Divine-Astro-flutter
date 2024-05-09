@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -487,9 +488,9 @@ class UserRepository extends ApiProvider {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       String appVersion = packageInfo.version;
 
-      if (Theme.of(Get.context!).platform == TargetPlatform.android) {
+      if (Platform.isAndroid) {
         androidInfo = await deviceInfo.androidInfo;
-      } else if (Theme.of(Get.context!).platform == TargetPlatform.iOS) {
+      } else if (Platform.isIOS) {
         iosInfo = await deviceInfo.iosInfo;
       }
 
