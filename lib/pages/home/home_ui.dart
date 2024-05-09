@@ -315,7 +315,7 @@ class HomeUI extends GetView<HomeController> {
                                   child: RetentionWidget(
                                     isEligible: true,
                                 title:
-                                    "${"paidWallet".tr} \n ₹${abbreviateNumber(controller.homeData?.bonusWallet)}",
+                                    "${"bonusWallet".tr} \n ₹${abbreviateNumber(controller.homeData?.bonusWallet)}",
                                 subTitle:
                                     "${"retentionRate".tr} \n ${controller.homeData?.retention ?? 0}%",
                                 borderColor: (controller.homeData!.retention! <
