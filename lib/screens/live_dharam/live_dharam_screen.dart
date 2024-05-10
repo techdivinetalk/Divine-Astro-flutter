@@ -4738,9 +4738,7 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
     final bool removed = _controller.isHost
         ? await connect.removeCoHost(user)
         : await connect.stopCoHost(showRequestDialog: false);
-    final bool removed2 = _controller.isHost
-        ? await connect.removeCoHost(user)  
-        : await connect.stopCoHost(showRequestDialog: false);
+
     if (removed) {
       await _controller.makeAPICallForEndCall(
         successCallBack: (String message) {
