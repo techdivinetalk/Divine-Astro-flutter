@@ -250,12 +250,13 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
   }
 
   String getTotalWaitTime(WaitListModel item) {
-    final String source = item.totalTime;
-    final int epoch = int.parse(source);
-    final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
-    final String formattedTime =
-        "${dateTime.hour}:${dateTime.minute}:${dateTime.second}";
-    return formattedTime;
+    // final String source = item.totalTime;
+    // final int epoch = int.parse(source);
+    // final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
+    // final String formattedTime =
+    //     "${dateTime.hour}:${dateTime.minute}:${dateTime.second}";
+    // return formattedTime;
+    return item.totalMin > 1 ? "${item.totalMin} mins" : "${item.totalMin} min";
   }
 
 // Widget newTimerWidget(WaitListModel item) {

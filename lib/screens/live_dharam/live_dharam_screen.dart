@@ -175,10 +175,13 @@ class _LivePage extends State<LiveDharamScreen>
 
     WidgetsBinding.instance.addObserver(this);
 
-    ZegoUIKit()
+    ZegoUIKit() 
         .getSignalingPlugin()
         .getInRoomCommandMessageReceivedEventStream()
         .listen(onInRoomCommandMessageReceived);
+    zegoController.coHost.hostNotifier.addListener(() { 
+      print("zegoController.coHost.hostNotifier.addListener");
+    });
 
     zegoController.coHost.audienceLocalConnectStateNotifier
         .addListener(onAudienceLocalConnectStateChanged);
@@ -631,7 +634,7 @@ class _LivePage extends State<LiveDharamScreen>
     final bool cond3 = _controller.currentCaller.id == zegoUIKitUser.id;
     final bool cond4 = zegoUIKitUser.id != _controller.liveId;
     if (cond1 && cond2 && cond3 && cond4) {
-      print("on user leave");
+      print("on user leave"); 
       await removeCoHostOrStopCoHost();
     } else {}
     return Future<void>.value();
@@ -653,7 +656,8 @@ class _LivePage extends State<LiveDharamScreen>
   Future<void> onAudienceLocalConnectStateChanged() async {
     final audienceConnectState =
         zegoController.coHost.audienceLocalConnectStateNotifier.value;
-
+print(audienceConnectState.name);
+print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConnectState");
     switch (audienceConnectState) {
       case ZegoLiveStreamingAudienceConnectState.idle:
         await refreshCurrentAstrologerDetails();
@@ -4615,7 +4619,7 @@ class _LivePage extends State<LiveDharamScreen>
               callType: "",
               isEngaded: false,
               isRequest: false,
-              callStatus: 1,
+              callStatus: 1, 
               isForAdd: false,
             );
           },
@@ -4733,6 +4737,9 @@ class _LivePage extends State<LiveDharamScreen>
     final connect = zegoController.coHost;
     final bool removed = _controller.isHost
         ? await connect.removeCoHost(user)
+        : await connect.stopCoHost(showRequestDialog: false);
+    final bool removed2 = _controller.isHost
+        ? await connect.removeCoHost(user)  
         : await connect.stopCoHost(showRequestDialog: false);
     if (removed) {
       await _controller.makeAPICallForEndCall(

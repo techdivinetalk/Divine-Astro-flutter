@@ -61,6 +61,7 @@ class LiveDharamController extends GetxController {
     userName: "",
     id: "",
     generatedOrderId: 0,
+    totalMin: 0,
     offerId: 0,
     callStatus: 0,
   ).obs;
@@ -82,6 +83,7 @@ class LiveDharamController extends GetxController {
     id: "",
     generatedOrderId: 0,
     offerId: 0,
+    totalMin: 0,
     callStatus: 0,
   ).obs;
   final RxBool _showTopBanner = false.obs;
@@ -169,6 +171,7 @@ class LiveDharamController extends GetxController {
       userName: "",
       id: "",
       generatedOrderId: 0,
+      totalMin: 0,
       offerId: 0,
       callStatus: 0,
     );
@@ -188,6 +191,7 @@ class LiveDharamController extends GetxController {
       id: "",
       generatedOrderId: 0,
       offerId: 0,
+      totalMin: 0,
       callStatus: 0,
     );
     showTopBanner = false;
@@ -526,6 +530,7 @@ class LiveDharamController extends GetxController {
       id: "",
       generatedOrderId: 0,
       offerId: 0,
+      totalMin: 0,
       callStatus: 0,
     );
 
@@ -552,6 +557,7 @@ class LiveDharamController extends GetxController {
     int generatedOrderId = 0;
     int offerId = 0;
     int callStatus = 0;
+    int totalMin = 0;
 
     if (map != null) {
       if (map.isNotEmpty) {
@@ -569,6 +575,7 @@ class LiveDharamController extends GetxController {
             id = value["id"] ?? "";
             generatedOrderId = value["generatedOrderId"] ?? 0;
             offerId = value["offerId"] ?? 0;
+            totalMin = value["totalMin"] ?? 0;
             callStatus = value["callStatus"] ?? 0;
           },
         );
@@ -582,6 +589,7 @@ class LiveDharamController extends GetxController {
       avatar: avatar,
       userName: userName,
       id: id,
+      totalMin: totalMin,
       generatedOrderId: generatedOrderId,
       offerId: offerId,
       callStatus: callStatus,
@@ -627,6 +635,7 @@ class LiveDharamController extends GetxController {
       userName: "",
       id: "",
       generatedOrderId: 0,
+      totalMin: 0,
       offerId: 0,
       callStatus: 0,
     );
@@ -661,6 +670,7 @@ print("datadatadatadatadatadata");
     String id = "";
     int generatedOrderId = 0;
     int offerId = 0;
+    int totalMin = 0;
     int callStatus = 0;
     if (map != null) {
       if (map.isNotEmpty) {
@@ -669,6 +679,7 @@ print("datadatadatadatadatadata");
         callType = map["callType"] ?? "";
         totalTime = map["totalTime"] ?? "";
         avatar = map["avatar"] ?? "";
+        totalMin = map["totalMin"] ?? "";
         userName = map["userName"] ?? "";
         id = map["id"] ?? "";
         generatedOrderId = map["generatedOrderId"] ?? 0;
@@ -682,6 +693,7 @@ print("datadatadatadatadatadata");
       callType: callType,
       totalTime: totalTime,
       avatar: avatar,
+      totalMin: totalMin,
       userName: userName,
       id: id,
       generatedOrderId: generatedOrderId,
@@ -699,6 +711,7 @@ print("datadatadatadatadatadata");
     String userName = "";
     String id = "";
     int generatedOrderId = 0;
+    int totalMin = 0;
     int offerId = 0;
     int callStatus = 0;
     if (map != null) {
@@ -714,6 +727,7 @@ print("datadatadatadatadatadata");
         id = map["id"] ?? "";
         generatedOrderId = map["generatedOrderId"] ?? 0;
         offerId = map["offerId"] ?? 0;
+        totalMin = map["totalMin"] ?? 0;
         callStatus = map["callStatus"] ?? 0;
       } else {}
     } else {}
@@ -724,6 +738,7 @@ print("datadatadatadatadatadata");
       totalTime: totalTime,
       avatar: avatar,
       userName: userName,
+      totalMin: totalMin,
       id: id,
       generatedOrderId: generatedOrderId,
       offerId: offerId,
@@ -1104,6 +1119,7 @@ print("datadatadatadatadatadata");
     required bool isEngaded,
     required bool isRequest,
     required int callStatus,
+    // required int totalMin,
     required bool isForAdd,
   }) async {
     String previousType = callType != "" ? callType : "";
@@ -1128,6 +1144,7 @@ print("datadatadatadatadatadata");
       // "totalTime": "2",
       "userName": userName,
       "avatar": avatar,
+      // "totalMin": totalMin,
       "id": userId,
       // "generatedOrderId": (orderGenerate.data?.generatedOrderId ?? 0),
       // "offerId": (details.data?.offerDetails?.offerId ?? 0)
@@ -1202,6 +1219,7 @@ print("datadatadatadatadatadata");
                   callType: value["callType"] ?? "",
                   // ignore:  avoid_dynamic_calls
                   totalTime: value["totalTime"] ?? "",
+                  totalMin: value["totalMin"] ?? 0,
                   // ignore:  avoid_dynamic_calls
                   avatar: value["avatar"] ?? "",
                   // ignore:  avoid_dynamic_calls
@@ -1699,6 +1717,7 @@ class WaitListModel {
     required this.id,
     required this.generatedOrderId,
     required this.offerId,
+    required this.totalMin,
     required this.callStatus,
   });
 
@@ -1712,6 +1731,7 @@ class WaitListModel {
   final int generatedOrderId;
   final int offerId;
   final int callStatus;
+  final int totalMin;
 }
 
 class ZegoCustomMessage {
