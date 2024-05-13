@@ -1676,7 +1676,7 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
               final isModerator = msg.isMod;
               return msg.type == 0
                   ? const SizedBox()
-                  : Container(
+                  : Container( 
                 padding: const EdgeInsets.symmetric(
                     vertical: 4.0, horizontal: 5.0),
                 decoration: BoxDecoration(
@@ -1690,14 +1690,22 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
                 ),
                 child: Row(
                   children: <Widget>[
-                    SizedBox(
-                      height: 24,
-                      width: 24,
-                      child: CustomImageWidget(
-                        imageUrl: msg.avatar ?? "",
-                        rounded: true,
-                        typeEnum: TypeEnum.user,
+                    Container(
+                      height: 25,
+                      width: 25,
+                      margin: const EdgeInsets.only(top: 3),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: appColors.guideColor,
                       ),
+                      child: Text(msg.userName.split("").first.toUpperCase(),
+                          style: TextStyle(
+                            color: appColors.whiteGuidedColor,
+                            fontSize: 12,
+                            fontFamily: "Metropolis",
+                            fontWeight: FontWeight.w500,
+                          )),
                     ),
                     const SizedBox(width: 4),
                     Flexible(

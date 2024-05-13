@@ -1,6 +1,7 @@
 import "dart:ui";
 
 import "package:divine_astrologer/common/colors.dart";
+import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 
@@ -56,7 +57,7 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
             border: Border.all(color: appColors.white),
             color: appColors.white.withOpacity(0.2),
           ),
-          child:  Icon(Icons.close, color: appColors.white),
+          child: Icon(Icons.close, color: appColors.white),
         ),
       ),
     );
@@ -95,26 +96,34 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
         children: <Widget>[
           const SizedBox(height: 8),
           const SizedBox(height: 8),
-          moreOptionsButton(
-            buttonText: "Ask For Gift",
-            buttonCallback: widget.onTapAskForGifts,
-            buttonImage: "assets/images/live_new_gift_latest.png",
-          ),
-          moreOptionsButton(
-            buttonText: "Ask For Video Call",
-            buttonCallback: widget.onTapAskForVideoCall,
-            buttonImage: "assets/images/live_call_video.png",
-          ),
-          moreOptionsButton(
-            buttonText: "Ask For Voice Call",
-            buttonCallback: widget.onTapAskForAudioCall,
-            buttonImage: "assets/images/live_call_audio.png",
-          ),
-          moreOptionsButton(
-            buttonText: "Ask For Private Call",
-            buttonCallback: widget.onTapAskForPrivateCall,
-            buttonImage: "assets/images/live_call_private.png",
-          ),
+          isGifts.value == 1
+              ? moreOptionsButton(
+                  buttonText: "Ask For Gift",
+                  buttonCallback: widget.onTapAskForGifts,
+                  buttonImage: "assets/images/live_new_gift_latest.png",
+                )
+              : const SizedBox(),
+          isLiveCall.value == 1
+              ? moreOptionsButton(
+                  buttonText: "Ask For Video Call",
+                  buttonCallback: widget.onTapAskForVideoCall,
+                  buttonImage: "assets/images/live_call_video.png",
+                )
+              : const SizedBox(),
+          isLiveCall.value == 1
+              ? moreOptionsButton(
+                  buttonText: "Ask For Voice Call",
+                  buttonCallback: widget.onTapAskForAudioCall,
+                  buttonImage: "assets/images/live_call_audio.png",
+                )
+              : const SizedBox(),
+          isLiveCall.value == 1
+              ? moreOptionsButton(
+                  buttonText: "Ask For Private Call",
+                  buttonCallback: widget.onTapAskForPrivateCall,
+                  buttonImage: "assets/images/live_call_private.png",
+                )
+              : const SizedBox(),
           moreOptionsButton2(
             buttonText: "${widget.isBlocked ? "Unblock" : "Block"} This User",
             buttonCallback: widget.onTapAskForBlockUnBlockUser,
@@ -160,7 +169,7 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
               const SizedBox(width: 16),
               Text(
                 buttonText,
-                style:  TextStyle(color: appColors.black),
+                style: TextStyle(color: appColors.black),
               ),
             ],
           ),
@@ -184,7 +193,7 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
             elevation: MaterialStateProperty.all(4),
             backgroundColor: MaterialStateProperty.all(appColors.white),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-               RoundedRectangleBorder(
+              RoundedRectangleBorder(
                 borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 side: BorderSide(width: 1, color: appColors.red),
               ),
@@ -202,7 +211,7 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
               const SizedBox(width: 16),
               Text(
                 buttonText,
-                style:  TextStyle(color: appColors.red),
+                style: TextStyle(color: appColors.red),
               ),
             ],
           ),
