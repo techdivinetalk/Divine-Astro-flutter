@@ -9,6 +9,7 @@ import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/screens/add_puja/model/puja_product_categories_model.dart';
 import 'package:divine_astrologer/screens/puja/model/pooja_listing_model.dart';
+import 'package:divine_astrologer/screens/puja/puja_controller.dart';
 import 'package:divine_astrologer/screens/puja/widget/pooja_submited_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -236,8 +237,11 @@ class AddPujaController extends GetxController {
   }
 
   /// add puja or edit api function
+  bool isPujaLoading = false;
 
   void addEditPoojaApi() async {
+    isPujaLoading = true;
+    update();
     List tagList = [];
     for (int i = 0; i < selectedTag.length; i++) {
       tagList.add(selectedTag[i].id.toString());
@@ -259,8 +263,18 @@ class AddPujaController extends GetxController {
     try {
       final response = await userRepository.addEditPujaApi(param);
       if (response.data != null) {
-        Get.back();
-        Get.bottomSheet(const PujaSubmitedBottomSheet());
+        isPujaLoading = false;
+        update();
+
+        Get.bottomSheet(
+          const PujaSubmitedBottomSheet(),
+          enableDrag: false,
+          isDismissible: false,
+        ).then((value) {
+          Get.back();
+          PujaController().getPujaList(); 
+          PujaController().update();
+        }); 
       }
     } catch (error) {
       debugPrint("error $error");
@@ -273,6 +287,8 @@ class AddPujaController extends GetxController {
   }
 
   void addEditProduct() async {
+    isPujaLoading = true;
+    update();
     Map<String, dynamic> param = {
       "prod_cat_id": selectedCategory?.id,
       "prod_name": poojaName.text,
@@ -288,7 +304,9 @@ class AddPujaController extends GetxController {
     try {
       final response = await userRepository.addEditProductApi(param);
       if (response.data != null) {
-        Get.back();
+        isPujaLoading = false;
+        update();
+        Get.back(result: 1);
         Get.bottomSheet(const PujaSubmitedBottomSheet());
       }
     } catch (error) {
@@ -383,8 +401,7 @@ class AddPujaController extends GetxController {
   Future<void> uploadImage(File imageFile) async {
     var token = await preferenceService.getToken();
 
-    var uri = Uri.parse(
-        "${ApiProvider.baseUrl}uploadImage");
+    var uri = Uri.parse("${ApiProvider.baseUrl}uploadImage");
 
     var request = http.MultipartRequest('POST', uri);
 

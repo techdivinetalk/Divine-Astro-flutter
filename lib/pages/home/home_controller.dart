@@ -1157,6 +1157,7 @@ class HomeController extends GetxController {
       btnTitle: "confirmNextDate".tr,
       pickerStyle: "DateCalendar",
       looping: true,
+      type: "VIDEO",
       lastDate: DateTime(2050),
       onConfirm: (value) => selectVideoDate(value),
       onChange: (value) => selectVideoDate(value),
@@ -1165,6 +1166,8 @@ class HomeController extends GetxController {
         selectDateOrTime(Get.context!,
             title: "scheduleOnlineTime".tr,
             btnTitle: "confirmOnlineTime".tr,
+            type: "VIDEO",
+            selectedDate: selectedVideoDate.value,
             pickerStyle: "TimeCalendar",
             looping: true, onConfirm: (value) {
           // controller.selectVideoTime(value),
@@ -1174,7 +1177,7 @@ class HomeController extends GetxController {
             selectVideoTime(value);
             scheduleCall("VIDEO");
           } else {
-            Fluttertoast.showToast(msg: "Please select future date and time");
+            // Fluttertoast.showToast(msg: "Please select future date and time");
           }
         });
       },
@@ -1189,8 +1192,8 @@ class HomeController extends GetxController {
       btnTitle: "confirmNextDate".tr,
       pickerStyle: "DateCalendar",
       looping: true,
+      type: "CALL",
       lastDate: DateTime(2050),
-
       onConfirm: (value) => selectCallDate(value),
       onChange: (value) => selectCallDate(value),
       onClickOkay: (value) {
@@ -1198,6 +1201,8 @@ class HomeController extends GetxController {
         selectDateOrTime(Get.context!,
             title: "scheduleOnlineTime".tr,
             btnTitle: "confirmOnlineTime".tr,
+            type: "CALL",
+            selectedDate: selectedCallDate.value,
             pickerStyle: "TimeCalendar",
             looping: true, onConfirm: (value) {
           // controller.selectCallTime(value),
@@ -1208,7 +1213,7 @@ class HomeController extends GetxController {
             selectCallTime(value1);
             scheduleCall("CALL");
           } else {
-            Fluttertoast.showToast(msg: "Please select future date and time");
+            // Fluttertoast.showToast(msg: "Please select future date and time");
           }
         });
       },
@@ -1221,6 +1226,7 @@ class HomeController extends GetxController {
       futureDate: true,
       title: "ScheduleOnlineDate".tr,
       btnTitle: "confirmNextDate".tr,
+      type: "CHAT",
       pickerStyle: "DateCalendar",
       looping: true,
       initialDate: DateTime.now(),
@@ -1232,9 +1238,11 @@ class HomeController extends GetxController {
 
         selectDateOrTime(
           Get.context!,
+          type: "CHAT",
           title: "scheduleOnlineTime".tr,
           btnTitle: "confirmOnlineTime".tr,
           pickerStyle: "TimeCalendar",
+          selectedDate: selectedChatDate.value,
           looping: true,
           onConfirm: (value) {
             // controller.selectChatTime(value),
@@ -1247,7 +1255,7 @@ class HomeController extends GetxController {
               selectChatTime(timeValue);
               scheduleCall("CHAT");
             } else {
-              Fluttertoast.showToast(msg: "Please select future date and time");
+              // Fluttertoast.showToast(msg: "Please select future date and time");
             }
           },
         );

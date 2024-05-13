@@ -54,26 +54,32 @@ class AddPujaScreen extends GetView<AddPujaController> {
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                     ),
-                    onPressed: () {
-                      if (controller.formKey.currentState?.validate() ??
-                          false) {
-                        print("going in inside");
-                        if (controller.validation()) {
-                          if (controller.selectedValue.value == "Puja") {
-                            controller.addEditPoojaApi();
-                          } else {
-                            controller.addEditProduct();
+                    onPressed: !controller.isPujaLoading
+                        ? () {
+                            if (controller.formKey.currentState?.validate() ??
+                                false) {
+                              print("going in inside");
+                              if (controller.validation()) {
+                                if (controller.selectedValue.value == "Puja") {
+                                  controller.addEditPoojaApi();
+                                } else {
+                                  controller.addEditProduct();
+                                }
+                              }
+                            }
                           }
-                        }
-                      }
-                    },
-                    child: Text(
-                      'Add ${controller.selectedValue}',
-                      style: AppTextStyle.textStyle16(
-                        fontWeight: FontWeight.w600,
-                        fontColor: appColors.white,
-                      ),
-                    ),
+                        : () {},
+                    child: !controller.isPujaLoading
+                        ? Text(
+                            'Add ${controller.selectedValue}',
+                            style: AppTextStyle.textStyle16(
+                              fontWeight: FontWeight.w600,
+                              fontColor: appColors.white,
+                            ),
+                          )
+                        : CircularProgressIndicator(
+                            backgroundColor: appColors.whiteGuidedColor,
+                          ),
                   ),
                 ),
               ],
@@ -146,7 +152,8 @@ class AddPujaScreen extends GetView<AddPujaController> {
                 ),
                 SizedBox(height: 20.h),
                 controller.selectedPujaName != null &&
-                        controller.selectedPujaName!.id == 0 || controller.selectedValue.value  == "Product"
+                            controller.selectedPujaName!.id == 0 ||
+                        controller.selectedValue.value == "Product"
                     ? PoojaRemedyTextFiled(
                         title: "${controller.selectedValue} Name",
                         maxLength: 20,
