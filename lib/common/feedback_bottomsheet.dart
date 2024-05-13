@@ -191,6 +191,7 @@ selectDateOrTime(
                 child: DatePickerWidget(
                   initialDate: initialDate ?? DateTime.now(),
                   lastDate: lastDate ?? DateTime.now(),
+
                   firstDate: (futureDate ?? false)
                       ? DateTime.now()
                       : DateTime(DateTime.now().year - 100),
@@ -255,7 +256,7 @@ selectDateOrTime(
                   color: appColors.guideColor,
                   child: Text(
                     btnTitle,
-                    style:  TextStyle(color: appColors.brownColour),
+                    style:  TextStyle(color: appColors.whiteGuidedColor),
                   )),
               const SizedBox(height: 30),
             ],

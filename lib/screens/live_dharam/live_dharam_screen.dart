@@ -185,7 +185,7 @@ class _LivePage extends State<LiveDharamScreen>
 
     zegoController.coHost.audienceLocalConnectStateNotifier
         .addListener(onAudienceLocalConnectStateChanged);
-    // zegoController.audioVideo.camera.switchVideoMirroring(false);
+
     _controller.ref.child("live").onValue.listen(
           (event) async {
         final DataSnapshot dataSnapshot = event.snapshot;
@@ -223,7 +223,9 @@ class _LivePage extends State<LiveDharamScreen>
 
     if (kReleaseMode) {
       // _startTimer();
-    } else {}
+    } else {
+
+    }
     _startTimer();
 
     receiver.start();
@@ -760,9 +762,9 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
                 ..video = ZegoUIKitVideoConfig.preset1080P()
                 ..preview.showPreviewForHost = false
               // ..audioVideoView.isVideoMirror = false
-                ..maxCoHostCount = 1
+                ..coHost.maxCoHostCount = 1
                 ..confirmDialogInfo = null
-                ..disableCoHostInvitationReceivedDialog = true
+                ..coHost.disableCoHostInvitationReceivedDialog = true
                 ..audioVideoView = ZegoLiveStreamingAudioVideoViewConfig(
                   showUserNameOnView: false,
                   showAvatarInAudioMode: true,
@@ -778,7 +780,7 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
                     return true;
                   },
                 )
-                ..turnOnCameraWhenCohosted = () {
+                ..coHost.turnOnCameraWhenCohosted = () {
                   final callType = _controller.currentCaller.callType;
                   //
                   if (callType == "video") {
