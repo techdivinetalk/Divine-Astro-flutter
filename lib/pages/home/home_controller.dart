@@ -632,15 +632,15 @@ class HomeController extends GetxController {
   Dio dio = Dio();
 
   astroOnlineOffline({String? status}) async {
-    // try {
+    try {
     final response = await dio
         .get("${ApiProvider.astOnlineOffline}${userData.uniqueNo}&${status}");
     log(response.data.toString());
     print("response.data");
     if (response.statusCode == 200) {}
-    // } catch (e) {
-    //   print("getting error --- getAstroCustOfferData ${e}");
-    // }
+    } catch (e) {
+      print("getting error --- getAstroCustOfferData ${e}");
+    }
   }
 
   getConstantDetailsData() async {
