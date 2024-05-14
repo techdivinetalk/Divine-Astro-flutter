@@ -101,7 +101,7 @@ class AppSocket {
       final SharedPreferenceService pref = Get.put(SharedPreferenceService());
 
       final response = await Dio().post(
-        "http://15.206.23.215:8081/api/v3/removeLiveData",
+        "https://list.divinetalk.live/api/v3/removeLiveData",
         data: {
           "astroId": pref.getUserDetail()?.id ?? 0,
           "clientId": socket?.id ?? "",
