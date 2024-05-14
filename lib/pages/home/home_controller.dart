@@ -624,7 +624,14 @@ class HomeController extends GetxController {
 
     ///Customer Offer data
     if (homeData?.offers?.customOffer != null &&
-        homeData?.offers?.customOffer != []) {}
+        homeData?.offers?.customOffer != []) {
+      for(int i =0;i<homeData!.offers!.customOffer!.length;i++){
+        if(homeData!.offers!.customOffer![i].toggle == 1){
+          homeData!.offers!.customOffer![i].isOn = true;
+          update();
+        }
+      }
+    }
 
     update();
   }

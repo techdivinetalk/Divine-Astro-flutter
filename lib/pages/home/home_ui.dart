@@ -1501,6 +1501,8 @@ class HomeUI extends GetView<HomeController> {
             itemBuilder: (context, index) {
               DiscountOffer data =
                   controller.homeData!.offers!.customOffer![index];
+              print(data.isOn);
+              print("data.isOn");
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
