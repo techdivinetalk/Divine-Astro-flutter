@@ -144,11 +144,11 @@ class OtpVerificationController extends GetxController {
       if (data.data != null) {
         var commonConstants = await userRepository.constantDetailsData();
 
-        if(!kDebugMode){
+      //  if(!kDebugMode){
           await Auth().handleSignInEmail(
               commonConstants.data!.firebaseAuthEmail!,
               commonConstants.data!.firebaseAuthPassword!);
-        }
+      //  }
         updateLoginDataInFirebase(data);
           print("resultresultresultresult2");
        // print("astrologer/${preferenceService.getUserDetail()!.id}/realTime");
