@@ -468,7 +468,7 @@ class LiveDharamController extends GetxController {
                     currentCaller =
                         getOrderModelGeneric(orderNode, forMe: false);
 
-                    reInitCoHost();
+                    // reInitCoHost();
 
                     await Future.delayed(const Duration(seconds: 1));
 

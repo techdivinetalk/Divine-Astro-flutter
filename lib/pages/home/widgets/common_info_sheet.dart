@@ -81,7 +81,7 @@ class CommonInfoSheet extends StatelessWidget {
                     "Got it",
                     textAlign: TextAlign.center,
                     style: AppTextStyle.textStyle20(
-                      fontColor: appColors.brownColour,
+                      fontColor: appColors.whiteGuidedColor,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
