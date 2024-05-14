@@ -148,7 +148,9 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   String greetingEnglish() {
-    var hour = DateTime.now().hour;
+    var hour = DateTime
+        .now()
+        .hour;
     if (hour < 12) {
       return 'Good morning';
     }
@@ -159,7 +161,9 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   String greetingHindi() {
-    var hour = DateTime.now().hour;
+    var hour = DateTime
+        .now()
+        .hour;
     if (hour < 12) {
       return 'शुभ प्रभात';
     }
@@ -175,18 +179,21 @@ class _LivePage extends State<LiveDharamScreen>
 
     WidgetsBinding.instance.addObserver(this);
 
-    ZegoUIKit() 
+    ZegoUIKit()
         .getSignalingPlugin()
         .getInRoomCommandMessageReceivedEventStream()
         .listen(onInRoomCommandMessageReceived);
-    zegoController.coHost.hostNotifier.addListener(() { 
+    zegoController.coHost.hostNotifier.addListener(() {
       print("zegoController.coHost.hostNotifier.addListener");
     });
 
     zegoController.coHost.audienceLocalConnectStateNotifier
         .addListener(onAudienceLocalConnectStateChanged);
 
-    _controller.ref.child("live").onValue.listen(
+    _controller.ref
+        .child("live")
+        .onValue
+        .listen(
           (event) async {
         final DataSnapshot dataSnapshot = event.snapshot;
         await _controller.eventListner(
@@ -275,8 +282,7 @@ class _LivePage extends State<LiveDharamScreen>
             backgroundColor: appColors.guideColor,
             behavior: SnackBarBehavior.floating,
           );
-          if (isForSuccess) {
-          } else if (isForFailure) {
+          if (isForSuccess) {} else if (isForFailure) {
             ScaffoldMessenger.of(context).showSnackBar(snackBar);
           } else {}
         } else {}
@@ -508,8 +514,7 @@ class _LivePage extends State<LiveDharamScreen>
           (_) async {
         if (mounted) {
           const duration = Duration(seconds: 1);
-          if (_msgTimerForFollowPopup?.isActive ?? false) {
-          } else {
+          if (_msgTimerForFollowPopup?.isActive ?? false) {} else {
             _msgTimerForFollowPopup = Timer.periodic(
               duration,
                   (Timer timer) async {
@@ -636,7 +641,7 @@ class _LivePage extends State<LiveDharamScreen>
     final bool cond3 = _controller.currentCaller.id == zegoUIKitUser.id;
     final bool cond4 = zegoUIKitUser.id != _controller.liveId;
     if (cond1 && cond2 && cond3 && cond4) {
-      print("on user leave"); 
+      print("on user leave");
       await removeCoHostOrStopCoHost();
     } else {}
     return Future<void>.value();
@@ -658,8 +663,9 @@ class _LivePage extends State<LiveDharamScreen>
   Future<void> onAudienceLocalConnectStateChanged() async {
     final audienceConnectState =
         zegoController.coHost.audienceLocalConnectStateNotifier.value;
-print(audienceConnectState.name);
-print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConnectState");
+    print(audienceConnectState.name);
+    print(
+        "audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConnectState");
     switch (audienceConnectState) {
       case ZegoLiveStreamingAudienceConnectState.idle:
         await refreshCurrentAstrologerDetails();
@@ -768,15 +774,13 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
                 ..audioVideoView = ZegoLiveStreamingAudioVideoViewConfig(
                   showUserNameOnView: false,
                   showAvatarInAudioMode: true,
-                  isVideoMirror: true,
+                  isVideoMirror: false,
                   useVideoViewAspectFill: true,
                   showSoundWavesInAudioMode: true,
-                  visible: (
-                      ZegoUIKitUser localUser,
+                  visible: (ZegoUIKitUser localUser,
                       ZegoLiveStreamingRole localRole,
                       ZegoUIKitUser targetUser,
-                      ZegoLiveStreamingRole targetUserRole,
-                      ) {
+                      ZegoLiveStreamingRole targetUserRole,) {
                     return true;
                   },
                 )
@@ -791,13 +795,10 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
                   }
                   return false;
                 }
-                ..audioVideoView.playCoHostAudio = (
-                    ZegoUIKitUser localUser,
+                ..audioVideoView.playCoHostAudio = (ZegoUIKitUser localUser,
                     ZegoLiveStreamingRole localRole,
-                    ZegoUIKitUser coHost,
-                    ) {
-                  if (_controller.isHost) {
-                  } else {
+                    ZegoUIKitUser coHost,) {
+                  if (_controller.isHost) {} else {
                     callJoinConfiguration();
                   }
                   final callType = _controller.currentCaller.callType;
@@ -811,13 +812,10 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
                   }
                   return true;
                 }
-                ..audioVideoView.playCoHostVideo = (
-                    ZegoUIKitUser localUser,
+                ..audioVideoView.playCoHostVideo = (ZegoUIKitUser localUser,
                     ZegoLiveStreamingRole localRole,
-                    ZegoUIKitUser coHost,
-                    ) {
-                  if (_controller.isHost) {
-                  } else {
+                    ZegoUIKitUser coHost,) {
+                  if (_controller.isHost) {} else {
                     callJoinConfiguration();
                   }
                   final callType = _controller.currentCaller.callType;
@@ -848,12 +846,10 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
                   },
                 )
                 ..memberList = ZegoLiveStreamingMemberListConfig(
-                  itemBuilder: (
-                      BuildContext context,
+                  itemBuilder: (BuildContext context,
                       Size size,
                       ZegoUIKitUser user,
-                      Map<String, dynamic> extraInfo,
-                      ) {
+                      Map<String, dynamic> extraInfo,) {
                     return ListTile(
                       dense: true,
                       title: Text(
@@ -869,11 +865,9 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
                 )
                 ..foreground = foregroundWidget()
                 ..inRoomMessage = ZegoLiveStreamingInRoomMessageConfig(
-                  itemBuilder: (
-                      BuildContext context,
+                  itemBuilder: (BuildContext context,
                       ZegoInRoomMessage message,
-                      Map<String, dynamic> extraInfo,
-                      ) {
+                      Map<String, dynamic> extraInfo,) {
                     return const SizedBox();
                   },
                 )
@@ -922,12 +916,10 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
         : ZegoLayout.pictureInPicture(smallViewSize: const Size(0, 0));
   }
 
-  Widget avatarWidget(
-      BuildContext context,
+  Widget avatarWidget(BuildContext context,
       Size size,
       ZegoUIKitUser? user,
-      Map<String, dynamic> extraInfo,
-      ) {
+      Map<String, dynamic> extraInfo,) {
     final String zegoUser = user?.id ?? "";
     final String mineUser = _controller.userId;
     // final String astroUser = (_controller.details.data?.id ?? 0).toString();
@@ -1289,7 +1281,9 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
         _controller.getLatestLeaderboard(snapshot.data?.snapshot);
         bool isEngaged = _controller.isHost
             ? _controller.currentCaller.isEngaded
-            : _controller.engagedCoHostWithAstro().isEngaded;
+            : _controller
+            .engagedCoHostWithAstro()
+            .isEngaded;
         return AnimatedOpacity(
           opacity:
           _controller.leaderboardModel.isEmpty || isEngaged ? 0.0 : 1.0,
@@ -1650,10 +1644,8 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
       height: Get.height * 0.30,
       child: StreamBuilder<List<ZegoInRoomMessage>>(
         stream: zegoController.message.stream(),
-        builder: (
-            BuildContext context,
-            AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,
-            ) {
+        builder: (BuildContext context,
+            AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,) {
           List<ZegoInRoomMessage> messages =
               snapshot.data ?? <ZegoInRoomMessage>[];
           messages = messages.reversed.toList();
@@ -1678,7 +1670,7 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
               final isModerator = msg.isMod;
               return msg.type == 0
                   ? const SizedBox()
-                  : Container( 
+                  : Container(
                 padding: const EdgeInsets.symmetric(
                     vertical: 4.0, horizontal: 5.0),
                 decoration: BoxDecoration(
@@ -1701,7 +1693,10 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
                         shape: BoxShape.circle,
                         color: appColors.guideColor,
                       ),
-                      child: Text(msg.userName.split("").first.toUpperCase(),
+                      child: Text(msg.userName
+                          .split("")
+                          .first
+                          .toUpperCase(),
                           style: TextStyle(
                             color: appColors.whiteGuidedColor,
                             fontSize: 12,
@@ -1764,6 +1759,17 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
                           // _controller.isHost &&
                           //         !_controller.currentCaller.isEngaded &&
                           //         !isLiveMonitoringTeam
+                          msg.fullGiftImage.isNotEmpty
+                              ? Padding(
+                            padding: const EdgeInsets.only(left: 8.0),
+                            child: CustomImageWidget(
+                              imageUrl: msg.fullGiftImage,
+                              rounded: true,
+                              radius: 13,
+                              typeEnum: TypeEnum.gift,
+                            ),
+                          )
+                              : SizedBox(),
                           moreOptionConditions(msg, isModerator)
                               ? SizedBox(
                             height: 24,
@@ -1804,7 +1810,8 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
                 ),
               );
             },
-            separatorBuilder: (context, index) => const SizedBox(
+            separatorBuilder: (context, index) =>
+            const SizedBox(
               height: 10,
             ),
           );
@@ -1835,10 +1842,8 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
       width: Get.width / 1.5,
       child: StreamBuilder<List<ZegoInRoomMessage>>(
         stream: zegoController.message.stream(),
-        builder: (
-            BuildContext context,
-            AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,
-            ) {
+        builder: (BuildContext context,
+            AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,) {
           List<ZegoInRoomMessage> messages =
               snapshot.data ?? <ZegoInRoomMessage>[];
           messages = messages.reversed.toList();
@@ -2718,8 +2723,7 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
   }
 
   Future<void> onInRoomCommandMessageReceived(
-      ZegoSignalingPluginInRoomCommandMessageReceivedEvent event,
-      ) async {
+      ZegoSignalingPluginInRoomCommandMessageReceivedEvent event,) async {
     final List<ZegoSignalingPluginInRoomCommandMessage> msgs = event.messages;
     for (final ZegoSignalingPluginInRoomCommandMessage commandMessage in msgs) {
       final String senderUserID = commandMessage.senderUserID;
@@ -2935,7 +2939,9 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
             Get.back();
             await sendTaroCardClose();
           },
-          totalTime: _controller.engagedCoHostWithAstro().totalTime,
+          totalTime: _controller
+              .engagedCoHostWithAstro()
+              .totalTime,
         );
       },
     );
@@ -2991,8 +2997,7 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
             );
             await sendTaroCard(item);
 
-            if (_controller.isHost) {
-            } else {}
+            if (_controller.isHost) {} else {}
           },
           numOfSelection: _controller.tarotGameModel.canPick ?? 0,
           userName: _controller.currentCaller.userName,
@@ -3005,8 +3010,7 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
 
     _endMsgTimerForTarotCardPopup();
 
-    if (hasSelected) {
-    } else {
+    if (hasSelected) {} else {
       await sendTaroCardClose();
     }
     return Future<void>.value();
@@ -3416,7 +3420,8 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${_controller.userName} with ${_controller.currentCaller.userName}",
+                        "${_controller.userName} with ${_controller
+                            .currentCaller.userName}",
                         style: const TextStyle(
                           color: Colors.white,
                         ),
@@ -3425,7 +3430,8 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
                       Row(
                         children: [
                           Text(
-                            "${_controller.currentCaller.callType.capitalize ?? ""} Call:",
+                            "${_controller.currentCaller.callType.capitalize ??
+                                ""} Call:",
                             style: const TextStyle(
                               fontSize: 12,
                               color: Colors.white,
@@ -3484,8 +3490,12 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
   }
 
   Widget newTimerWidget() {
-    final String source = _controller.engagedCoHostWithAstro().totalTime;
-    print(_controller.engagedCoHostWithAstro().totalTime);
+    final String source = _controller
+        .engagedCoHostWithAstro()
+        .totalTime;
+    print(_controller
+        .engagedCoHostWithAstro()
+        .totalTime);
     print("_controller.engagedCoHostWithAstro().totalTime");
     final int epoch = int.parse(source.isEmpty ? "0" : source);
     final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
@@ -4165,7 +4175,7 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
             }
           },
           child: Padding(
-            padding:  const EdgeInsets.only(bottom:8.0),
+            padding: const EdgeInsets.only(bottom: 8.0),
             child: Column(
               children: [
                 SvgPicture.asset(
@@ -4173,7 +4183,8 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
                   height: 50,
                   width: 50,
                 ),
-                Text("Beautify",style: TextStyle(fontFamily: "Metropolis",color: Colors.white),),
+                Text("Beautify", style: TextStyle(
+                    fontFamily: "Metropolis", color: Colors.white),),
               ],
             ),
           ),
@@ -4629,7 +4640,7 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
               callType: "",
               isEngaded: false,
               isRequest: false,
-              callStatus: 1, 
+              callStatus: 1,
               isForAdd: false,
             );
           },
@@ -4816,8 +4827,7 @@ print("audienceConnectStateaudienceConnectStateaudienceConnectStateaudienceConne
           isHost: _controller.isHost,
           onTimeout: () {
             Get.back();
-            if (_controller.isHost) {
-            } else {
+            if (_controller.isHost) {} else {
               onDeclineButton();
             }
           },

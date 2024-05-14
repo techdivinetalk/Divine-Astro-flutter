@@ -28,16 +28,16 @@ class CustomImageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return rounded
         ? CircleAvatar(
-      foregroundColor: Colors.white,
-      backgroundColor: Colors.white,
-      radius: radius ?? 50,
-      child: ClipOval(
-        child: SizedBox.fromSize(
-          size: const Size.fromRadius(50),
-          child: dec(),
-        ),
-      ),
-    )
+            foregroundColor: Colors.white,
+            backgroundColor: Colors.white,
+            radius: radius ?? 50,
+            child: ClipOval(
+              child: SizedBox.fromSize(
+                size: const Size.fromRadius(50),
+                child: dec(),
+              ),
+            ),
+          )
         : dec();
   }
 
@@ -55,22 +55,22 @@ class CustomImageWidget extends StatelessWidget {
       case TypeEnum.user:
         widget = GetUtils.isURL(imageUrl)
             ? (condition1 || condition2 || condition3 || condition4)
-            ? assetImage()
-            : cachedNetworkImage()
+                ? assetImage()
+                : cachedNetworkImage()
             : assetImage();
         break;
       case TypeEnum.gift:
         widget = GetUtils.isURL(imageUrl)
             ? (condition1 || condition2 || condition3 || condition4)
-            ? assetImage()
-            : cachedNetworkImage()
+                ? assetImage()
+                : cachedNetworkImage()
             : assetImage();
         break;
       case TypeEnum.pooja:
         widget = GetUtils.isURL(imageUrl)
             ? (condition1 || condition2 || condition3 || condition4)
-            ? assetImage()
-            : cachedNetworkImage()
+                ? assetImage()
+                : cachedNetworkImage()
             : assetImage();
         break;
     }
