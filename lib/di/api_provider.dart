@@ -17,11 +17,11 @@ import 'shared_preference_service.dart';
 class ApiProvider {
   static const String version = 'v7';
   // static const String socketUrl = "http://13.127.116.89:4000";
-  static const String socketUrl = "http://15.206.23.215:8081";
+  static const String socketUrl = "https://list.divinetalk.live";
   static String baseUrl =
       "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
 
-  static const String astOnlineOffline = "http://15.206.23.215:8081/api/v3/updateAstroStatusV2?unique_no=";
+  static const String astOnlineOffline = "https://list.divinetalk.live/api/v3/updateAstroStatusV2?unique_no=";
   //final String baseUrl = "http://13.235.46.27/admin/$version/";
 
   //Socket Event
