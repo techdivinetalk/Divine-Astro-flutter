@@ -193,6 +193,10 @@ class ZegoGiftPlayer {
       await Future.delayed(const Duration(seconds: 1));
       Overlay.of(context/*, rootOverlay: false*/).insert(currentGiftEntries!);
     });
+    Future.delayed(const Duration(seconds: 2), () async {
+      print("playerCleared1");
+      clear();
+    });
   }
 
   bool clear() {
