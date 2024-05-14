@@ -1680,7 +1680,11 @@ class _LivePage extends State<LiveDharamScreen>
                   border: Border.all(
                     color: Colors.transparent,
                   ),
-                  color: appColors.black.withOpacity(0.3),
+                  color: msg.message.contains("Started following")
+                      ? appColors.yellow
+                      : msg.fullGiftImage.isNotEmpty
+                      ? appColors.white
+                      : appColors.black.withOpacity(0.3),
                 ),
                 child: Row(
                   children: <Widget>[
@@ -1722,14 +1726,19 @@ class _LivePage extends State<LiveDharamScreen>
                                         ? Colors.red
                                         : isModerator
                                         ? appColors.guideColor
+                                        : msg.fullGiftImage.isNotEmpty
+                                        ? appColors.black
+                                        : msg.message.contains(
+                                        "Started following")
+                                        ? appColors.black
                                         : Colors.white,
-                                    shadows: const [
-                                      Shadow(
-                                        color: Colors.black,
-                                        offset: Offset(1.0, 1.0),
-                                        blurRadius: 1.0,
-                                      ),
-                                    ],
+                                    // shadows: const [
+                                    //   Shadow(
+                                    //     color: Colors.black,
+                                    //     offset: Offset(1.0, 1.0),
+                                    //     blurRadius: 1.0,
+                                    //   ),
+                                    // ],
                                   ),
                                   overflow: TextOverflow.ellipsis,
                                 ),
@@ -1741,14 +1750,19 @@ class _LivePage extends State<LiveDharamScreen>
                                         ? Colors.red
                                         : isModerator
                                         ? appColors.guideColor
+                                        : msg.fullGiftImage.isNotEmpty
+                                        ? appColors.black
+                                        : msg.message.contains(
+                                        "Started following")
+                                        ? appColors.black
                                         : Colors.white,
-                                    shadows: const [
-                                      Shadow(
-                                        color: Colors.black,
-                                        offset: Offset(1.0, 1.0),
-                                        blurRadius: 1.0,
-                                      ),
-                                    ],
+                                    // shadows: const [
+                                    //   Shadow(
+                                    //     color: Colors.black,
+                                    //     offset: Offset(1.0, 1.0),
+                                    //     blurRadius: 1.0,
+                                    //   ),
+                                    // ],
                                   ),
                                   // maxLines: 2,
                                   // overflow: TextOverflow.ellipsis,
