@@ -5037,8 +5037,8 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> reInitCoHostFunction() async {
-    bool cond1 = _controller.currentCaller.isEngaded;
-    bool cond2 = _controller.userId == _controller.currentCaller.id;
+    // bool cond1 = _controller.currentCaller.isEngaded;
+    // bool cond2 = _controller.userId == _controller.currentCaller.id;
 
     // SnackBar snackBar = SnackBar(
     //   content: Column(
@@ -5051,34 +5051,34 @@ class _LivePage extends State<LiveDharamScreen>
     // );
     // ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-    if (cond1 && cond2) {
-      await Future<void>.delayed(const Duration(seconds: 1));
-      turnOff();
-      await Future<void>.delayed(const Duration(seconds: 1));
-      turnOn();
-    } else {}
+    // if (cond1 && cond2) {
+    //   await Future<void>.delayed(const Duration(seconds: 1));
+    //   turnOff();
+    //   await Future<void>.delayed(const Duration(seconds: 1));
+    //   turnOn();
+    // } else {}
     return Future<void>.value();
   }
 
   void turnOff() {
-    _controller.isFront = false;
-    _controller.isCamOn = false;
-    _controller.isMicOn = false;
-
-    ZegoUIKit.instance.useFrontFacingCamera(_controller.isFront);
-    ZegoUIKit.instance.turnCameraOn(_controller.isCamOn);
-    ZegoUIKit.instance.turnMicrophoneOn(_controller.isMicOn, muteMode: true);
+    // _controller.isFront = false;
+    // _controller.isCamOn = false;
+    // _controller.isMicOn = false;
+    //
+    // ZegoUIKit.instance.useFrontFacingCamera(_controller.isFront);
+    // ZegoUIKit.instance.turnCameraOn(_controller.isCamOn);
+    // ZegoUIKit.instance.turnMicrophoneOn(_controller.isMicOn, muteMode: true);
     return;
   }
 
   void turnOn() {
-    _controller.isFront = true;
-    _controller.isCamOn = true;
-    _controller.isMicOn = true;
-
-    ZegoUIKit.instance.useFrontFacingCamera(_controller.isFront);
-    ZegoUIKit.instance.turnCameraOn(_controller.isCamOn);
-    ZegoUIKit.instance.turnMicrophoneOn(_controller.isMicOn, muteMode: true);
+    // _controller.isFront = true;
+    // _controller.isCamOn = true;
+    // _controller.isMicOn = true;
+    //
+    // ZegoUIKit.instance.useFrontFacingCamera(_controller.isFront);
+    // ZegoUIKit.instance.turnCameraOn(_controller.isCamOn);
+    // ZegoUIKit.instance.turnMicrophoneOn(_controller.isMicOn, muteMode: true);
     return;
   }
 

@@ -194,7 +194,7 @@ class ZegoGiftPlayer {
     });
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       await Future.delayed(const Duration(seconds: 1));
-      Overlay.of(context/*, rootOverlay: false*/).insert(currentGiftEntries!);
+      Overlay.of(context, rootOverlay: false).insert(currentGiftEntries!);
     });
     // Future.delayed(const Duration(seconds: 2), () async {
     //   print("playerCleared1");
