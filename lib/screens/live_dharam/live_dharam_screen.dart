@@ -9,12 +9,10 @@ import "package:after_layout/after_layout.dart";
 import "package:divine_astrologer/common/app_textstyle.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/generic_loading_widget.dart";
-import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/model/live/deck_card_model.dart";
 import "package:divine_astrologer/model/live/notice_board_res.dart";
-import "package:divine_astrologer/screens/live_dharam/gift/gift.dart";
 import "package:divine_astrologer/screens/live_dharam/gifts_singleton.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/live_global_singleton.dart";
@@ -34,33 +32,32 @@ import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widge
 import "package:divine_astrologer/screens/live_dharam/widgets/disconnect_call_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/end_session_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/exit_wait_list_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/extend_time_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/follow_player.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/gift_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_astro_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
-import "package:divine_astrologer/screens/puja/widget/svg_widget.dart";
-
 // import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:flutter/widgets.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import "package:flutter_svg/svg.dart";
+import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import "package:get/get.dart";
 import "package:intl/intl.dart";
+import 'package:random_name_generator/random_name_generator.dart';
 import "package:simple_html_css/simple_html_css.dart";
+import "package:svgaplayer_flutter/parser.dart";
+import "package:svgaplayer_flutter/player.dart";
 import "package:zego_uikit_beauty_plugin/zego_uikit_beauty_plugin.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
-import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_astro_widget.dart";
-import "package:divine_astrologer/screens/live_dharam/widgets/extend_time_widget.dart";
-import 'package:random_name_generator/random_name_generator.dart';
 
 //
 //
@@ -93,13 +90,14 @@ class LiveDharamScreen extends StatefulWidget {
 }
 
 class _LivePage extends State<LiveDharamScreen>
-    with WidgetsBindingObserver, AfterLayoutMixin<LiveDharamScreen> {
+    with WidgetsBindingObserver, AfterLayoutMixin<LiveDharamScreen> , SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   final LiveDharamController _controller = Get.find();
 
   final ScrollController _scrollControllerForTop = ScrollController();
   final ScrollController _scrollControllerForBottom = ScrollController();
 
   final keyboardVisibilityController = KeyboardVisibilityController();
+  late SVGAAnimationController _svgController;
 
   bool _isKeyboardSheetOpen = false;
   Timer? _timer;
@@ -263,8 +261,52 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    _svgController = SVGAAnimationController(vsync: this);
+    _svgController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _svgController.reset();
+        svgaUrls.remove(svgaUrls.entries.first.key);
+        if(svgaUrls.isNotEmpty){
+          _loadRandomAnimation();
+        }
+        if(svgaUrls.isEmpty){
+          print("Animation -removed");
+          _removeOverlay();
+        }
+      }
+    });
+  }
+  Future<void> _showOverlay() async {
+    if(_overlayEntry == null) {
+      _overlayEntry = _createOverlayEntry();
+      Overlay.of(context)?.insert(_overlayEntry!);
+    }
+  }
+  OverlayEntry _createOverlayEntry() {
+    return OverlayEntry(
+      builder: (context) => Positioned(
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
+        child: Material(
+          color: Colors.transparent,
+          child: Center(
+            child: SVGAImage(_svgController),
+          ),
+        ),
+      ),
+    );
   }
 
+  Future<void> _loadRandomAnimation() async {
+    _showOverlay();
+    const SVGAParser parser = SVGAParser();
+    Map<String, dynamic> giftInfo = svgaUrls.entries.first.value;
+    print(giftInfo["giftUrl"]);
+    await parser.decodeFromURL(giftInfo["giftUrl"]).then((videoItem) {
+      _svgController.videoItem = videoItem;
+      _svgController.forward();
+    });
+  }
   void successAndFailureCallBack({
     required String message,
     required bool isForSuccess,
@@ -659,7 +701,13 @@ class _LivePage extends State<LiveDharamScreen>
 
     super.dispose();
   }
-
+  void _removeOverlay() {
+    if (_overlayEntry != null) {
+      _overlayEntry!.remove();
+      _overlayEntry?.markNeedsBuild();
+      _overlayEntry = null; // Clear the reference
+    }
+  }
   Future<void> onAudienceLocalConnectStateChanged() async {
     final audienceConnectState =
         zegoController.coHost.audienceLocalConnectStateNotifier.value;
@@ -1270,8 +1318,34 @@ class _LivePage extends State<LiveDharamScreen>
       ),
     );
   }
-
+  OverlayEntry? _overlayEntry;
+  StreamSubscription<DatabaseEvent>? _subscription;
+  Map<String, dynamic> svgaUrls = {};
   Widget newLeaderboard() {
+    if(_subscription == null) {
+      print("Animation -url ${_controller.liveId}");
+      _subscription = FirebaseDatabase.instance
+          .ref()
+          .child("live")
+          .child(_controller.liveId).child("realTime")
+          .child("gift")
+          .onChildAdded
+          .listen((event) {
+        if (event.snapshot.value != null) {
+          final key = event.snapshot.key; // Get the key of the changed child
+          final value =
+              event.snapshot.value; // Get the new value of the changed child
+          print("onChildAdded1 $key");
+          print("onChildAdded2 $value");
+          svgaUrls[key.toString()] =
+          {"astroId": "11764", "giftUrl": value.toString()};
+          print(svgaUrls.length);
+          if (svgaUrls.length == 1) {
+            _loadRandomAnimation();
+          }
+        }
+      });
+    }
     return StreamBuilder<DatabaseEvent>(
       stream: _controller.ref
           .child("live/${_controller.liveId}/leaderboard")
@@ -5007,4 +5081,8 @@ class _LivePage extends State<LiveDharamScreen>
     ZegoUIKit.instance.turnMicrophoneOn(_controller.isMicOn, muteMode: true);
     return;
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }
