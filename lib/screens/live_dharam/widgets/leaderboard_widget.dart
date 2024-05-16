@@ -234,7 +234,7 @@ class _LeaderboardWidgetState extends State<LeaderboardWidget> {
     return StreamBuilder<DatabaseEvent>(
       stream: FirebaseDatabase.instance
           .ref()
-          .child("live/${widget.liveId}/leaderboard")
+          .child("live/${widget.liveId}/realTime/leaderboard")
           .onValue
           .asBroadcastStream(),
       builder: (context, snapshot) {
