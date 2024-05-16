@@ -2737,7 +2737,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> onInRoomCommandMessageReceived(
-      ZegoSignalingPluginInRoomCommandMessageReceivedEvent event,) async {
+      ZegoSignalingPluginInRoomCommandMessageReceivedEvent event) async {
     final List<ZegoSignalingPluginInRoomCommandMessage> msgs = event.messages;
     for (final ZegoSignalingPluginInRoomCommandMessage commandMessage in msgs) {
       final String senderUserID = commandMessage.senderUserID;
@@ -2766,7 +2766,7 @@ class _LivePage extends State<LiveDharamScreen>
       if (senderUserID != _controller.userId) {
         if (roomId == _controller.liveId) {
           if (type == "") {
-            await Future.delayed(const Duration(seconds: 3));
+            // await Future.delayed(const Duration(seconds: 3));
             if (mounted) {
               // animationsList.add(item["animation"]);
               // await Future.delayed(const Duration(seconds:2));
