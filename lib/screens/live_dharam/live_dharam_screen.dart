@@ -1352,7 +1352,7 @@ class _LivePage extends State<LiveDharamScreen>
                 .child("live")
                 .child(_controller.liveId)
                 .child("realTime")
-                .child("gift").child(key).remove();
+                .child("gift").child(key.toString()).remove();
           });
         }
       });
