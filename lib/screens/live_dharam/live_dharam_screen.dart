@@ -1359,7 +1359,7 @@ class _LivePage extends State<LiveDharamScreen>
     }
     return StreamBuilder<DatabaseEvent>(
       stream: _controller.ref
-          .child("live/${_controller.liveId}/realTime/leaderboard")
+          .child("live/${_controller.liveId}/leaderboard")
           .onValue
           .asBroadcastStream(),
       builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
@@ -4224,7 +4224,7 @@ class _LivePage extends State<LiveDharamScreen>
         ),
         StreamBuilder<DatabaseEvent>(
           stream: _controller.ref
-              .child("live/${_controller.liveId}/realTime/leaderboard")
+              .child("live/${_controller.liveId}/leaderboard")
               .onValue
               .asBroadcastStream(),
           builder: (context, snapshot) {
