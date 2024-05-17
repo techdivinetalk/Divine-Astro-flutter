@@ -366,7 +366,7 @@ print("view kundli");
                       alignment: WrapAlignment.end,
                       children: [
                         Text(chatMessage.message ?? "",
-                            style: AppTextStyle.textStyle14(
+                            style: AppTextStyle.textStyle12(
                               fontColor: chatMessage.id.toString() ==
                                       AppFirebaseService()
                                           .orderData["astroId"]

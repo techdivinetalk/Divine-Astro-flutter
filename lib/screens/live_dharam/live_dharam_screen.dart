@@ -289,7 +289,7 @@ class _LivePage extends State<LiveDharamScreen>
             child: Material(
               color: Colors.transparent,
               child: Center(
-                child: SVGAImage(_svgController),
+                child: SVGAImage(_svgController,fit: BoxFit.fitHeight,),
               ),
             ),
           ),
