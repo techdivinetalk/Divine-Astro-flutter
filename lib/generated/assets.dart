@@ -44,8 +44,14 @@ class Assets {
   static const String imagesChatVideoCallCameraOn = 'assets/images/chat_video_call_camera_on.png';
   static const String imagesChatVideoCallIcon = 'assets/images/chat_video_call_icon.png';
   static const String imagesChatVideoCallLock = 'assets/images/chat_video_call_lock.png';
-  static const String imagesChatVideoCallMicOff = 'assets/images/chat_video_call_mic_off.png';
-  static const String imagesChatVideoCallMicOn = 'assets/images/chat_video_call_mic_on.png';
+
+  // static const String imagesChatVideoCallMicOff = 'assets/images/chat_video_call_mic_off.png';
+  static const String imagesChatVideoCallMicOff =
+      'assets/images/chat_voice_call_mic_off.png';
+
+  // static const String imagesChatVideoCallMicOn = 'assets/images/chat_video_call_mic_on.png';
+  static const String imagesChatVideoCallMicOn =
+      'assets/images/chat_voice_call_mic_on.png';
   static const String imagesChatVideoCallSwitchCam = 'assets/images/chat_video_call_switch_cam.png';
   static const String imagesChatVideoVoiceHangUp = 'assets/images/chat_video_voice_hang_up.png';
   static const String imagesChatVoiceCallIcon = 'assets/images/chat_voice_call_icon.png';

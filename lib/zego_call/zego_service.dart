@@ -429,10 +429,18 @@ class ZegoService {
                     child: SizedBox(
                       height: 64,
                       width: 64,
-                      child: Image.asset(
-                        isMicOn.value
-                            ? "assets/images/chat_video_call_mic_on.png"
-                            : "assets/images/chat_video_call_mic_off.png",
+                      // child: Image.asset(
+                      //   isMicOn.value
+                      //       ? "assets/images/chat_video_call_mic_on.png"
+                      //       : "assets/images/chat_video_call_mic_off.png",
+                      // ),
+                      child: isMicOn.value
+                          ? Image.asset(
+                        "assets/images/chat_voice_call_mic_on.png",
+                      )
+                          : Image.asset(
+                        color: appColors.white,
+                        "assets/images/chat_voice_call_mic_off.png",
                       ),
                     ),
                   ),

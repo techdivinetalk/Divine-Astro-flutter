@@ -143,13 +143,19 @@ class $AssetsImagesGen {
   AssetGenImage get chatVideoCallLock =>
       const AssetGenImage('assets/images/chat_video_call_lock.png');
 
+
+
   /// File path: assets/images/chat_video_call_mic_off.png
-  AssetGenImage get chatVideoCallMicOff =>
-      const AssetGenImage('assets/images/chat_video_call_mic_off.png');
+  AssetGenImage get chatVideoCallMicOff {
+    // return const AssetGenImage('assets/images/chat_video_call_mic_off.png');
+    return const AssetGenImage('assets/images/chat_voice_call_mic_off.png');
+  }
 
   /// File path: assets/images/chat_video_call_mic_on.png
-  AssetGenImage get chatVideoCallMicOn =>
-      const AssetGenImage('assets/images/chat_video_call_mic_on.png');
+  AssetGenImage get chatVideoCallMicOn {
+    // return const AssetGenImage('assets/images/chat_video_call_mic_on.png');
+    return const AssetGenImage('assets/images/chat_voice_call_mic_on.png');
+  }
 
   /// File path: assets/images/chat_video_call_switch_cam.png
   AssetGenImage get chatVideoCallSwitchCam =>
