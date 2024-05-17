@@ -3,7 +3,6 @@ import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
-import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 
 import 'package:divine_astrologer/common/switch_component.dart';
@@ -13,30 +12,24 @@ import 'package:divine_astrologer/model/home_page_model_class.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/model/wallet_deatils_response.dart';
 import 'package:divine_astrologer/pages/home/widgets/offer_bottom_widget.dart';
-import 'package:divine_astrologer/pages/home/widgets/can_not_online.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_ui.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/screens/order_feedback/widget/feedback_card_widget.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
-import 'package:divine_astrologer/utils/force_update_sheet.dart';
 import 'package:divine_astrologer/utils/load_image.dart';
-import 'package:divine_astrologer/zego_call/audio_calling_page.dart';
-import 'package:divine_astrologer/zego_call/zego_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
-import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:velocity_x/velocity_x.dart';
-import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../model/feedback_response.dart';
@@ -45,7 +38,6 @@ import 'home_controller.dart';
 import 'widgets/common_info_sheet.dart';
 import 'widgets/retention_widget.dart';
 
-import 'dart:math' as math;
 
 class HomeUI extends GetView<HomeController> {
   const HomeUI({Key? key}) : super(key: key);
