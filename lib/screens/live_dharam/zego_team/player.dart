@@ -82,17 +82,17 @@ class GiftPlayerWidgetState extends State<GiftPlayerWidget>
     }
   }
 
-  // @override
-  // void dispose() {
-  //   widget.onRemove();
-  //
-  //   if (animationController?.isAnimating ?? false) {
-  //     animationController?.stop();
-  //   }
-  //   animationController?.dispose();
-  //
-  //   super.dispose();
-  // }
+  @override
+  void dispose() {
+    widget.onRemove();
+
+    if (animationController?.isAnimating ?? false) {
+      animationController?.stop();
+    }
+    animationController?.dispose();
+
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -158,7 +158,7 @@ class ZegoGiftPlayer {
       if (!(giftEntryPathCache.length > 3)) {
         giftEntryPathCache.add(data);
       } else {
-        currentGiftEntries?.remove();
+        // currentGiftEntries?.remove();
         // currentGiftEntries = null;
         clear();
         giftEntryPathCache.clear();
@@ -168,35 +168,43 @@ class ZegoGiftPlayer {
     }
 
     currentGiftEntries = OverlayEntry(builder: (context) {
-      return GiftPlayerWidget(
-        data: data,
-        onRemove: () {
-          if (currentGiftEntries?.mounted ?? false) {
-            currentGiftEntries?.remove();
-          }
-          currentGiftEntries = null;
-          print(giftEntryPathCache.length);
-          print("giftEntryPathCache.length");
-          if (giftEntryPathCache.isNotEmpty) {
-            var nextGiftPath = giftEntryPathCache.first;
-            giftEntryPathCache.removeAt(0);
-            debugPrint("has gift cache, play $nextGiftPath");
-            do {
-              play(context, nextGiftPath);
-            } while (giftEntryPathCache.length > 1);
-          }
-        },
+      return Material(
+        color: Colors.transparent,
+        child: GiftPlayerWidget(
+          data: data,
+          onRemove: () {
+            if (currentGiftEntries?.mounted ?? false) {
+              currentGiftEntries?.remove();
+            }
+            currentGiftEntries = null;
+            print(giftEntryPathCache.length);
+            print("giftEntryPathCache.length");
+            if (giftEntryPathCache.isNotEmpty) {
+              var nextGiftPath = giftEntryPathCache.first;
+              giftEntryPathCache.removeAt(0);
+              debugPrint("has gift cache, play $nextGiftPath");
+              do {
+                play(context, nextGiftPath);
+              } while (giftEntryPathCache.length > 1);
+            }
+          },
 
+        ),
       );
     });
     SchedulerBinding.instance.addPostFrameCallback((_) async {
       await Future.delayed(const Duration(seconds: 1));
-      Overlay.of(context/*, rootOverlay: false*/).insert(currentGiftEntries!);
+      Overlay.of(context, rootOverlay: false).insert(currentGiftEntries!);
     });
+    // Future.delayed(const Duration(seconds: 2), () async {
+    //   print("playerCleared1");
+    //   clear();
+    // });
   }
 
   bool clear() {
     if (currentGiftEntries?.mounted ?? false) {
+      currentGiftEntries?.markNeedsBuild();
       currentGiftEntries?.remove();
       currentGiftEntries = null;
     }

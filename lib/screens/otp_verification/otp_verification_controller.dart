@@ -6,6 +6,7 @@ import 'dart:developer';
 import 'package:divine_astrologer/firebase_service/firebase_authentication.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/screens/otp_verification/timer_controller.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -45,7 +46,7 @@ class OtpVerificationController extends GetxController {
 
   @override
   void onReady() async {
-  //  listenForCode();
+    //  listenForCode();
     var arguments = Get.arguments;
     if (arguments != null) {
       var args = arguments as List;
@@ -144,16 +145,22 @@ class OtpVerificationController extends GetxController {
       if (data.data != null) {
         var commonConstants = await userRepository.constantDetailsData();
 
-      //  if(!kDebugMode){
-          await Auth().handleSignInEmail(
-              commonConstants.data!.firebaseAuthEmail!,
-              commonConstants.data!.firebaseAuthPassword!);
-      //  }
+        if (commonConstants.data!.token != null) {
+          customTokenWithFirebase(
+            token: commonConstants.data!.token,
+          );
+        } else {
+          if (commonConstants.data!.firebaseAuthEmail != null &&
+              commonConstants.data!.firebaseAuthPassword != null) {
+            Auth().handleSignInEmail(commonConstants.data!.firebaseAuthEmail!,
+                commonConstants.data!.firebaseAuthPassword!);
+          }
+        }
         updateLoginDataInFirebase(data);
-          print("resultresultresultresult2");
-       // print("astrologer/${preferenceService.getUserDetail()!.id}/realTime");
+        print("resultresultresultresult2");
+        // print("astrologer/${preferenceService.getUserDetail()!.id}/realTime");
       }
-     // await updateLoginDataInFirebase(data);
+      // await updateLoginDataInFirebase(data);
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
@@ -163,6 +170,29 @@ class OtpVerificationController extends GetxController {
       }
     }
   }
+
+  customTokenWithFirebase({String? token}) async {
+    try {
+      final userCredential =
+          await FirebaseAuth.instance.signInWithCustomToken(token!);
+      print(userCredential);
+      print("Sign-in successful.");
+    } on FirebaseAuthException catch (e) {
+      print(e.email);
+      print("e.emaile.emaile.email");
+      switch (e.code) {
+        case "invalid-custom-token":
+          print("The supplied token is not a Firebase custom auth token.");
+          break;
+        case "custom-token-mismatch":
+          print("The supplied token is for a different Firebase project.");
+          break;
+        default:
+          print("Unkown error.");
+      }
+    }
+  }
+
   Future<void> updateLoginDataInFirebase(ResLogin data) async {
     await FirebaseDatabase.instance.goOnline();
     final String uniqueId = await getDeviceId() ?? '';
@@ -171,24 +201,21 @@ class OtpVerificationController extends GetxController {
     //final DatabaseReference ref = firebaseDatabase.ref();
     // final DataSnapshot dataSnapshot = await ref.child(firebaseNodeUrl).get();
     // if (dataSnapshot.exists) {
-      final HashMap<String, dynamic> realTime = HashMap();
-      realTime["uniqueId"] = uniqueId;
-      realTime["voiceCallStatus"] = (data.data?.callPreviousStatus ?? 0);
-      realTime["chatStatus"] = (data.data?.chatPreviousStatus ?? 0);
-      realTime["videoCallStatus"] = (data.data?.videoCallPreviousStatus ?? 0);
-      realTime["is_call_enable"] = (data.data?.isCall ?? 0) == 1;
-      realTime["is_chat_enable"] = (data.data?.isChat ?? 0) == 1;
-      realTime["is_video_call_enable"] = (data.data?.isVideo ?? 0) == 1;
-      realTime["is_live_enable"] = (data.data?.isLive ?? 0) == 1;
-      final HashMap<String, dynamic> deviceTokenNode = HashMap();
-      deviceTokenNode["deviceToken"] =
-          deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
-      firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
-      firebaseDatabase
-          .ref()
-          .child("$firebaseNodeUrl/realTime")
-          .update(realTime);
-      navigateToDashboard(data);
+    final HashMap<String, dynamic> realTime = HashMap();
+    realTime["uniqueId"] = uniqueId;
+    realTime["voiceCallStatus"] = (data.data?.callPreviousStatus ?? 0);
+    realTime["chatStatus"] = (data.data?.chatPreviousStatus ?? 0);
+    realTime["videoCallStatus"] = (data.data?.videoCallPreviousStatus ?? 0);
+    realTime["is_call_enable"] = (data.data?.isCall ?? 0) == 1;
+    realTime["is_chat_enable"] = (data.data?.isChat ?? 0) == 1;
+    realTime["is_video_call_enable"] = (data.data?.isVideo ?? 0) == 1;
+    realTime["is_live_enable"] = (data.data?.isLive ?? 0) == 1;
+    final HashMap<String, dynamic> deviceTokenNode = HashMap();
+    deviceTokenNode["deviceToken"] =
+        deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
+    firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
+    firebaseDatabase.ref().child("$firebaseNodeUrl/realTime").update(realTime);
+    navigateToDashboard(data);
     // } else {
     //   final FirebaseUserData userData = FirebaseUserData(
     //     data.data?.name ?? "",
@@ -201,6 +228,7 @@ class OtpVerificationController extends GetxController {
     // }
     return Future<void>.value();
   }
+
   // late StreamSubscription<DatabaseEvent> _counterSubscription;
   // Future<void> updateLoginDataInFirebase(ResLogin data) async {
   //   final String uniqueId = await getDeviceId() ?? '';
@@ -254,7 +282,7 @@ class OtpVerificationController extends GetxController {
     //_counterSubscription.cancel();
     Future.delayed(
       const Duration(seconds: 1),
-          () => Get.offAllNamed(RouteName.dashboard),
+      () => Get.offAllNamed(RouteName.dashboard),
     );
   }
 
@@ -266,12 +294,12 @@ class OtpVerificationController extends GetxController {
 
   String? otpCode;
 
-  // void codeUpdated() {
-  //   otpCode = code!;
-  //   pinController.text = code ?? "";
-  //   if (pinController.text.isNotEmpty) {
-  //     verifyOtp();
-  //   }
-  //   update();
-  // }
+// void codeUpdated() {
+//   otpCode = code!;
+//   pinController.text = code ?? "";
+//   if (pinController.text.isNotEmpty) {
+//     verifyOtp();
+//   }
+//   update();
+// }
 }

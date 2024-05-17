@@ -65,6 +65,7 @@ class Data {
   List<String> cityList;
   Map<String, String> notificationType;
   String whatsappNo;
+  String? token;
   AwsCredential awsCredentails;
   String? taroCard;
   String? firebaseAuthEmail;
@@ -87,6 +88,7 @@ class Data {
     required this.whatsappNo,
     required this.awsCredentails,
     this.taroCard,
+    this.token,
     this.isForceTraningVideo,
     this.appVersion,
     this.firebaseAuthEmail,
@@ -107,6 +109,7 @@ class Data {
     Map<String, String>? notificationType,
     AwsCredential? awsCredential,
     String? whatsappNo,
+    String? token,
     String? appVersion,
     String? taroCard,
     String? firebaseAuthEmail,
@@ -120,6 +123,7 @@ class Data {
         giftTimeInterval: giftTimeInterval ?? this.giftTimeInterval,
         chat: chat ?? this.chat,
         call: call ?? this.call,
+        token: token ?? this.token,
         appVersion: appVersion ?? this.appVersion,
         isForceTraningVideo: isForceTraningVideo ?? this.isForceTraningVideo,
         firebaseAuthEmail: firebaseAuthEmail ?? this.firebaseAuthEmail,
@@ -153,6 +157,7 @@ class Data {
         call: Call.fromJson(json["call"]),
         badWordsData: List<String>.from(json["bad_words_data"].map((x) => x)),
         liveBackgroundImage: json["live_background_image"],
+    token: json["token"] ??  "",
         chatSuspiciousRegex:
             List<String>.from(json["chat_suspicious_regex"].map((x) => x)),
         cityList: List<String>.from(json["city_list"].map((x) => x)),
@@ -173,6 +178,7 @@ class Data {
         "is_force_traning_video": isForceTraningVideo,
         "chat": chat.toJson(),
         "call": call.toJson(),
+        "token": token,
         "bad_words_data": List<dynamic>.from(badWordsData.map((x) => x)),
         "live_background_image": liveBackgroundImage,
         "chat_suspicious_regex":

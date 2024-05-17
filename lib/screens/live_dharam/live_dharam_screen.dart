@@ -9,12 +9,10 @@ import "package:after_layout/after_layout.dart";
 import "package:divine_astrologer/common/app_textstyle.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/generic_loading_widget.dart";
-import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/model/live/deck_card_model.dart";
 import "package:divine_astrologer/model/live/notice_board_res.dart";
-import "package:divine_astrologer/screens/live_dharam/gift/gift.dart";
 import "package:divine_astrologer/screens/live_dharam/gifts_singleton.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/live_global_singleton.dart";
@@ -34,49 +32,34 @@ import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widge
 import "package:divine_astrologer/screens/live_dharam/widgets/disconnect_call_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/end_session_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/exit_wait_list_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/extend_time_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/follow_player.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/gift_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_astro_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
-import "package:divine_astrologer/screens/puja/widget/svg_widget.dart";
 
 // import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:flutter/widgets.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import "package:flutter_svg/svg.dart";
+import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
+import "package:fluttertoast/fluttertoast.dart";
 import "package:get/get.dart";
 import "package:intl/intl.dart";
+import 'package:random_name_generator/random_name_generator.dart';
 import "package:simple_html_css/simple_html_css.dart";
+import "package:svgaplayer_flutter/parser.dart";
+import "package:svgaplayer_flutter/player.dart";
 import "package:zego_uikit_beauty_plugin/zego_uikit_beauty_plugin.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
-import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_astro_widget.dart";
-import "package:divine_astrologer/screens/live_dharam/widgets/extend_time_widget.dart";
-import 'package:random_name_generator/random_name_generator.dart';
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 const int appID = 696414715;
 const String appSign =
@@ -94,13 +77,18 @@ class LiveDharamScreen extends StatefulWidget {
 }
 
 class _LivePage extends State<LiveDharamScreen>
-    with WidgetsBindingObserver, AfterLayoutMixin<LiveDharamScreen> {
+    with
+        WidgetsBindingObserver,
+        AfterLayoutMixin<LiveDharamScreen>,
+        SingleTickerProviderStateMixin,
+        AutomaticKeepAliveClientMixin {
   final LiveDharamController _controller = Get.find();
 
   final ScrollController _scrollControllerForTop = ScrollController();
   final ScrollController _scrollControllerForBottom = ScrollController();
 
   final keyboardVisibilityController = KeyboardVisibilityController();
+  late SVGAAnimationController _svgController;
 
   bool _isKeyboardSheetOpen = false;
   Timer? _timer;
@@ -264,6 +252,57 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    _svgController = SVGAAnimationController(vsync: this);
+    _svgController.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        _svgController.reset();
+        svgaUrls.remove(svgaUrls.entries.first.key);
+        if(svgaUrls.isNotEmpty){
+          _loadRandomAnimation();
+        }
+        if(svgaUrls.isEmpty){
+          print("Animation -removed");
+          _removeOverlay();
+        }
+      }
+    });
+  }
+  Future<void> _showOverlay() async {
+    if (_overlayEntry == null) {
+      _overlayEntry = _createOverlayEntry();
+      Overlay.of(context)?.insert(_overlayEntry!);
+    }
+  }
+  OverlayEntry _createOverlayEntry() {
+    return OverlayEntry(
+      builder: (context) =>
+          Positioned(
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height,
+            child: Material(
+              color: Colors.transparent,
+              child: Center(
+                child: SVGAImage(_svgController,fit: BoxFit.fitHeight,),
+              ),
+            ),
+          ),
+    );
+  }
+
+  Future<void> _loadRandomAnimation() async {
+    _showOverlay();
+    const SVGAParser parser = SVGAParser();
+    String giftInfo = svgaUrls.entries.first.value;
+    await parser.decodeFromURL(giftInfo).then((videoItem) {
+      _svgController.videoItem = videoItem;
+      _svgController.forward();
+    });
   }
 
   void successAndFailureCallBack({
@@ -294,7 +333,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   void getUntil() {
     WidgetsBinding.instance.endOfFrame.then(
-          (_) async {
+      (_) async {
         if (mounted) {
           final int length = LiveGlobalSingleton().getCountOfOpenDialogs();
           print("getUntil():: closing $length items");
@@ -386,7 +425,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> engaging(WaitListModel currentCaller) async {
     WidgetsBinding.instance.endOfFrame.then(
-          (_) async {
+      (_) async {
         if (mounted) {
           final bool cond1 = _controller.isHost;
           final bool cond2 = _controller.waitListModel.isNotEmpty;
@@ -445,12 +484,12 @@ class _LivePage extends State<LiveDharamScreen>
 
   void _startTimer() {
     WidgetsBinding.instance.endOfFrame.then(
-          (_) async {
+      (_) async {
         if (mounted) {
           const duration = Duration(seconds: 1);
           _timer = Timer.periodic(
             duration,
-                (Timer timer) async {
+            (Timer timer) async {
               /// if any function after some second
               if (timer.tick % 7 == 0) {
                 // math.Random.secure().nextInt(30).isEven
@@ -494,7 +533,7 @@ class _LivePage extends State<LiveDharamScreen>
                   // avatar:
                   //     "https://divinenew-prod.s3.ap-south-1.amazonaws.com/divine/January2024/fGfpNU1Y40lV0ojgh0JBpgbc4mJtAdV6hgG5xZXJ.jpg",
                   avatar:
-                  "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
+                      "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
                   message: "Quality Team Joined",
                   timeStamp: DateTime.now().toString(),
                   fullGiftImage: "",
@@ -512,13 +551,14 @@ class _LivePage extends State<LiveDharamScreen>
 
   void _startMsgTimerForFollowPopup() {
     WidgetsBinding.instance.endOfFrame.then(
-          (_) async {
+      (_) async {
         if (mounted) {
           const duration = Duration(seconds: 1);
-          if (_msgTimerForFollowPopup?.isActive ?? false) {} else {
+          if (_msgTimerForFollowPopup?.isActive ?? false) {
+          } else {
             _msgTimerForFollowPopup = Timer.periodic(
               duration,
-                  (Timer timer) async {
+              (Timer timer) async {
                 if (timer.tick % 15 == 0) {
                   await showFollowPopup();
                   _msgTimerForFollowPopup?.cancel();
@@ -533,12 +573,12 @@ class _LivePage extends State<LiveDharamScreen>
 
   void _startMsgTimerForTarotCardPopup() {
     WidgetsBinding.instance.endOfFrame.then(
-          (_) async {
+      (_) async {
         if (mounted) {
           const duration = Duration(seconds: 1);
           _msgTimerForTarotCardPopup = Timer.periodic(
             duration,
-                (Timer timer) async {
+            (Timer timer) async {
               print("_startMsgTimerForTarotCardPopup(): ${timer.tick}");
 
               if (timer.tick % 60 == 0) {
@@ -661,6 +701,13 @@ class _LivePage extends State<LiveDharamScreen>
     super.dispose();
   }
 
+  void _removeOverlay() {
+    if (_overlayEntry != null) {
+      _overlayEntry!.remove();
+      _overlayEntry?.markNeedsBuild();
+      _overlayEntry = null; // Clear the reference
+    }
+  }
   Future<void> onAudienceLocalConnectStateChanged() async {
     final audienceConnectState =
         zegoController.coHost.audienceLocalConnectStateNotifier.value;
@@ -750,132 +797,144 @@ class _LivePage extends State<LiveDharamScreen>
             return _controller.liveId == ""
                 ? const Center(child: GenericLoadingWidget())
                 : ZegoUIKitPrebuiltLiveStreaming(
-              appID: appID,
-              appSign: appSign,
-              userID: _controller.userId,
-              userName: _controller.userName,
-              liveID: _controller.liveId,
-              config: streamingConfig
-                ..beautyConfig = ZegoBeautyPluginConfig(
-                  effectsTypes:
-                  ZegoBeautyPluginConfig.beautifyEffectsTypes(
-                    enableBasic: true,
-                    enableAdvanced: true,
-                    enableMakeup: true,
-                    enableStyle: true,
-                  ) +
-                      ZegoBeautyPluginConfig.filterEffectsTypes(),
-                )
-                ..video = ZegoUIKitVideoConfig.preset1080P()
-                ..preview.showPreviewForHost = false
-              // ..audioVideoView.isVideoMirror = false
-                ..coHost.maxCoHostCount = 1
-                ..confirmDialogInfo = null
-                ..coHost.disableCoHostInvitationReceivedDialog = true
-                ..audioVideoView = ZegoLiveStreamingAudioVideoViewConfig(
-                  showUserNameOnView: false,
-                  showAvatarInAudioMode: true,
-                  isVideoMirror: false,
-                  useVideoViewAspectFill: true,
-                  showSoundWavesInAudioMode: true,
-                  visible: (ZegoUIKitUser localUser,
-                      ZegoLiveStreamingRole localRole,
-                      ZegoUIKitUser targetUser,
-                      ZegoLiveStreamingRole targetUserRole,) {
-                    return true;
-                  },
-                )
-                ..coHost.turnOnCameraWhenCohosted = () {
-                  final callType = _controller.currentCaller.callType;
-                  //
-                  if (callType == "video") {
-                    return true;
-                  } else if (callType == "private" ||
-                      callType == "audio") {
-                    return false;
-                  }
-                  return false;
-                }
-                ..audioVideoView.playCoHostAudio = (ZegoUIKitUser localUser,
-                    ZegoLiveStreamingRole localRole,
-                    ZegoUIKitUser coHost,) {
-                  if (_controller.isHost) {} else {
-                    callJoinConfiguration();
-                  }
-                  final callType = _controller.currentCaller.callType;
-                  //
-                  if (callType == "private") {
-                    if (ZegoLiveStreamingRole.host == localRole ||
-                        ZegoLiveStreamingRole.coHost == localRole) {
-                      return true;
-                    }
-                    return false;
-                  }
-                  return true;
-                }
-                ..audioVideoView.playCoHostVideo = (ZegoUIKitUser localUser,
-                    ZegoLiveStreamingRole localRole,
-                    ZegoUIKitUser coHost,) {
-                  if (_controller.isHost) {} else {
-                    callJoinConfiguration();
-                  }
-                  final callType = _controller.currentCaller.callType;
-                  //
-                  if (callType == "private" || callType == "audio") {
-                    return false;
-                  }
-                  return true;
-                }
-                ..bottomMenuBar = ZegoLiveStreamingBottomMenuBarConfig(
-                  showInRoomMessageButton: false,
-                  hostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
-                  coHostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
-                )
-                ..layout = galleryLayout()
-                ..swiping = swipingConfig
-                ..avatarBuilder = avatarWidget
-                ..topMenuBar = ZegoLiveStreamingTopMenuBarConfig(
-                  hostAvatarBuilder: (ZegoUIKitUser host) {
-                    return const SizedBox();
-                  },
-                  showCloseButton: false,
-                )
-                ..memberButton = ZegoLiveStreamingMemberButtonConfig(
-                  icon: const Icon(Icons.remove_red_eye_outlined),
-                  builder: (int memberCount) {
-                    return const SizedBox();
-                  },
-                )
-                ..memberList = ZegoLiveStreamingMemberListConfig(
-                  itemBuilder: (BuildContext context,
-                      Size size,
-                      ZegoUIKitUser user,
-                      Map<String, dynamic> extraInfo,) {
-                    return ListTile(
-                      dense: true,
-                      title: Text(
-                        user.name,
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    );
-                  },
-                )
-                ..foreground = foregroundWidget()
-                ..inRoomMessage = ZegoLiveStreamingInRoomMessageConfig(
-                  itemBuilder: (BuildContext context,
-                      ZegoInRoomMessage message,
-                      Map<String, dynamic> extraInfo,) {
-                    return const SizedBox();
-                  },
-                )
-                ..slideSurfaceToHide = false
-                ..duration.isVisible = false,
-              events: events,
-            );
+                    appID: appID,
+                    appSign: appSign,
+                    userID: _controller.userId,
+                    userName: _controller.userName,
+                    liveID: _controller.liveId,
+                    config: streamingConfig
+                      ..beautyConfig = ZegoBeautyPluginConfig(
+                        effectsTypes:
+                            ZegoBeautyPluginConfig.beautifyEffectsTypes(
+                                  enableBasic: true,
+                                  enableAdvanced: true,
+                                  enableMakeup: true,
+                                  enableStyle: true,
+                                ) +
+                                ZegoBeautyPluginConfig.filterEffectsTypes(),
+                      )
+                      ..video = ZegoUIKitVideoConfig.preset1080P()
+                      ..preview.showPreviewForHost = false
+                      // ..audioVideoView.isVideoMirror = false
+                      ..coHost.maxCoHostCount = 1
+                      ..confirmDialogInfo = null
+                      ..coHost.disableCoHostInvitationReceivedDialog = true
+                      ..audioVideoView = ZegoLiveStreamingAudioVideoViewConfig(
+                        showUserNameOnView: false,
+                        showAvatarInAudioMode: true,
+                        isVideoMirror: false,
+                        useVideoViewAspectFill: true,
+                        showSoundWavesInAudioMode: true,
+                        visible: (
+                          ZegoUIKitUser localUser,
+                          ZegoLiveStreamingRole localRole,
+                          ZegoUIKitUser targetUser,
+                          ZegoLiveStreamingRole targetUserRole,
+                        ) {
+                          return true;
+                        },
+                      )
+                      ..coHost.turnOnCameraWhenCohosted = () {
+                        final callType = _controller.currentCaller.callType;
+                        //
+                        if (callType == "video") {
+                          return true;
+                        } else if (callType == "private" ||
+                            callType == "audio") {
+                          return false;
+                        }
+                        return false;
+                      }
+                      ..audioVideoView.playCoHostAudio = (
+                        ZegoUIKitUser localUser,
+                        ZegoLiveStreamingRole localRole,
+                        ZegoUIKitUser coHost,
+                      ) {
+                        if (_controller.isHost) {
+                        } else {
+                          callJoinConfiguration();
+                        }
+                        final callType = _controller.currentCaller.callType;
+                        //
+                        if (callType == "private") {
+                          if (ZegoLiveStreamingRole.host == localRole ||
+                              ZegoLiveStreamingRole.coHost == localRole) {
+                            return true;
+                          }
+                          return false;
+                        }
+                        return true;
+                      }
+                      ..audioVideoView.playCoHostVideo = (
+                        ZegoUIKitUser localUser,
+                        ZegoLiveStreamingRole localRole,
+                        ZegoUIKitUser coHost,
+                      ) {
+                        if (_controller.isHost) {
+                        } else {
+                          callJoinConfiguration();
+                        }
+                        final callType = _controller.currentCaller.callType;
+                        //
+                        if (callType == "private" || callType == "audio") {
+                          return false;
+                        }
+                        return true;
+                      }
+                      ..bottomMenuBar = ZegoLiveStreamingBottomMenuBarConfig(
+                        showInRoomMessageButton: false,
+                        hostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
+                        coHostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
+                      )
+                      ..layout = galleryLayout()
+                      ..swiping = swipingConfig
+                      ..avatarBuilder = avatarWidget
+                      ..topMenuBar = ZegoLiveStreamingTopMenuBarConfig(
+                        hostAvatarBuilder: (ZegoUIKitUser host) {
+                          return const SizedBox();
+                        },
+                        showCloseButton: false,
+                      )
+                      ..memberButton = ZegoLiveStreamingMemberButtonConfig(
+                        icon: const Icon(Icons.remove_red_eye_outlined),
+                        builder: (int memberCount) {
+                          return const SizedBox();
+                        },
+                      )
+                      ..memberList = ZegoLiveStreamingMemberListConfig(
+                        itemBuilder: (
+                          BuildContext context,
+                          Size size,
+                          ZegoUIKitUser user,
+                          Map<String, dynamic> extraInfo,
+                        ) {
+                          return ListTile(
+                            dense: true,
+                            title: Text(
+                              user.name,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          );
+                        },
+                      )
+                      ..foreground = foregroundWidget()
+                      ..inRoomMessage = ZegoLiveStreamingInRoomMessageConfig(
+                        itemBuilder: (
+                          BuildContext context,
+                          ZegoInRoomMessage message,
+                          Map<String, dynamic> extraInfo,
+                        ) {
+                          return const SizedBox();
+                        },
+                      )
+                      ..slideSurfaceToHide = false
+                      ..duration.isVisible = false,
+                    events: events,
+                  );
           },
         ),
       ),
@@ -917,10 +976,12 @@ class _LivePage extends State<LiveDharamScreen>
         : ZegoLayout.pictureInPicture(smallViewSize: const Size(0, 0));
   }
 
-  Widget avatarWidget(BuildContext context,
-      Size size,
-      ZegoUIKitUser? user,
-      Map<String, dynamic> extraInfo,) {
+  Widget avatarWidget(
+    BuildContext context,
+    Size size,
+    ZegoUIKitUser? user,
+    Map<String, dynamic> extraInfo,
+  ) {
     final String zegoUser = user?.id ?? "";
     final String mineUser = _controller.userId;
     // final String astroUser = (_controller.details.data?.id ?? 0).toString();
@@ -929,8 +990,8 @@ class _LivePage extends State<LiveDharamScreen>
       child: CustomImageWidget(
         imageUrl: zegoUser == mineUser
             ? _controller.avatar
-        //  : zegoUser == astroUser
-        //     ? (_controller.details.data?.image ?? "")
+            //  : zegoUser == astroUser
+            //     ? (_controller.details.data?.image ?? "")
             : "",
         rounded: true,
         typeEnum: TypeEnum.user,
@@ -942,27 +1003,27 @@ class _LivePage extends State<LiveDharamScreen>
     return _controller.isHost
         ? null
         : ZegoLiveStreamingSwipingConfig(
-      requirePreviousLiveID: () => "",
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      requireNextLiveID: () => "",
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-      //
-    );
+            requirePreviousLiveID: () => "",
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            requireNextLiveID: () => "",
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+            //
+          );
   }
 
   Widget foregroundWidget() {
@@ -1271,8 +1332,42 @@ class _LivePage extends State<LiveDharamScreen>
       ),
     );
   }
-
+  OverlayEntry? _overlayEntry;
+  StreamSubscription<DatabaseEvent>? _subscription;
+  Map<String, dynamic> svgaUrls = {};
   Widget newLeaderboard() {
+    if (_subscription == null) {
+      print("Animation -url ${_controller.liveId}");
+      _subscription = FirebaseDatabase.instance
+          .ref()
+          .child("live")
+          .child(_controller.liveId)
+          .child("realTime")
+          .child("gift")
+          .onChildAdded
+          .listen((event) {
+        if (event.snapshot.value != null) {
+          final key = event.snapshot.key; // Get the key of the changed child
+          final value =
+              event.snapshot.value; // Get the new value of the changed child
+          print("onChildAdded1 $key");
+          print("onChildAdded2 $value");
+          svgaUrls[key.toString()] = value.toString();
+          print(svgaUrls.length);
+          if (svgaUrls.length == 1) {
+            _loadRandomAnimation();
+          }
+          Future.delayed(const Duration(seconds: 1)).then((value) async {
+            FirebaseDatabase.instance
+                .ref()
+                .child("live")
+                .child(_controller.liveId)
+                .child("realTime")
+                .child("gift").child(key.toString()).remove();
+          });
+        }
+      });
+    }
     return StreamBuilder<DatabaseEvent>(
       stream: _controller.ref
           .child("live/${_controller.liveId}/leaderboard")
@@ -1282,22 +1377,20 @@ class _LivePage extends State<LiveDharamScreen>
         _controller.getLatestLeaderboard(snapshot.data?.snapshot);
         bool isEngaged = _controller.isHost
             ? _controller.currentCaller.isEngaded
-            : _controller
-            .engagedCoHostWithAstro()
-            .isEngaded;
+            : _controller.engagedCoHostWithAstro().isEngaded;
         return AnimatedOpacity(
           opacity:
-          _controller.leaderboardModel.isEmpty || isEngaged ? 0.0 : 1.0,
+              _controller.leaderboardModel.isEmpty || isEngaged ? 0.0 : 1.0,
           duration: const Duration(seconds: 1),
           child: _controller.leaderboardModel.isEmpty || isEngaged
               ? const SizedBox()
               : LeaderBoardWidget(
-            avatar: _controller.leaderboardModel.first.avatar,
-            userName: _controller.leaderboardModel.first.userName,
-            fullGiftImage: "",
-            astrologerName: "Astrologer",
-            //
-          ),
+                  avatar: _controller.leaderboardModel.first.avatar,
+                  userName: _controller.leaderboardModel.first.userName,
+                  fullGiftImage: "",
+                  astrologerName: "Astrologer",
+                  //
+                ),
         );
       },
     );
@@ -1645,8 +1738,10 @@ class _LivePage extends State<LiveDharamScreen>
       height: Get.height * 0.30,
       child: StreamBuilder<List<ZegoInRoomMessage>>(
         stream: zegoController.message.stream(),
-        builder: (BuildContext context,
-            AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,) {
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,
+        ) {
           List<ZegoInRoomMessage> messages =
               snapshot.data ?? <ZegoInRoomMessage>[];
           messages = messages.reversed.toList();
@@ -1663,156 +1758,168 @@ class _LivePage extends State<LiveDharamScreen>
             itemBuilder: (BuildContext context, int index) {
               final ZegoInRoomMessage message = messages[index];
               final ZegoCustomMessage msg =
-              receiveMessageToZego(message.message);
+                  receiveMessageToZego(message.message);
               final bool isBlocked =
-              _controller.firebaseBlockUsersIds.contains(msg.userId);
+                  _controller.firebaseBlockUsersIds.contains(msg.userId);
               // final isLiveMonitoringTeam =
               //     msg.userName == "Live Monitoring Team";
               final isModerator = msg.isMod;
               return msg.type == 0
                   ? const SizedBox()
                   : Container(
-                padding: const EdgeInsets.symmetric(
-                    vertical: 4.0, horizontal: 5.0),
-                decoration: BoxDecoration(
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(10),
-                  ),
-                  border: Border.all(
-                    color: Colors.transparent,
-                  ),
-                  color: appColors.black.withOpacity(0.3),
-                ),
-                child: Row(
-                  children: <Widget>[
-                    Container(
-                      height: 25,
-                      width: 25,
-                      margin: const EdgeInsets.only(top: 3),
-                      alignment: Alignment.center,
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 4.0, horizontal: 5.0),
                       decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: appColors.guideColor,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(10),
+                        ),
+                        border: Border.all(
+                          color: Colors.transparent,
+                        ),
+                        color: msg.message.contains("Started following")
+                            ? appColors.yellow
+                            : msg.fullGiftImage.isNotEmpty
+                                ? appColors.white
+                                : appColors.black.withOpacity(0.3),
                       ),
-                      child: Text(msg.userName
-                          .split("")
-                          .first
-                          .toUpperCase(),
-                          style: TextStyle(
-                            color: appColors.whiteGuidedColor,
-                            fontSize: 12,
-                            fontFamily: "Metropolis",
-                            fontWeight: FontWeight.w500,
-                          )),
-                    ),
-                    const SizedBox(width: 4),
-                    Flexible(
                       child: Row(
-                        children: [
+                        children: <Widget>[
+                          Container(
+                            height: 25,
+                            width: 25,
+                            margin: const EdgeInsets.only(top: 3),
+                            alignment: Alignment.center,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: appColors.guideColor,
+                            ),
+                            child:
+                                Text(msg.userName.split("").first.toUpperCase(),
+                                    style: TextStyle(
+                                      color: appColors.whiteGuidedColor,
+                                      fontSize: 12,
+                                      fontFamily: "Metropolis",
+                                      fontWeight: FontWeight.w500,
+                                    )),
+                          ),
+                          const SizedBox(width: 4),
                           Flexible(
-                            child: Column(
-                              crossAxisAlignment:
-                              CrossAxisAlignment.start,
+                            child: Row(
                               children: [
-                                Text(
-                                  msg.userName ?? "",
-                                  // nameWithWithoutIDs(msg, isModerator),
-                                  style: TextStyle(
-                                    fontSize: 14,
-                                    color: isBlocked
-                                        ? Colors.red
-                                        : isModerator
-                                        ? appColors.guideColor
-                                        : Colors.white,
-                                    shadows: const [
-                                      Shadow(
-                                        color: Colors.black,
-                                        offset: Offset(1.0, 1.0),
-                                        blurRadius: 1.0,
+                                Flexible(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        msg.userName ?? "",
+                                        // nameWithWithoutIDs(msg, isModerator),
+                                        style: TextStyle(
+                                          fontSize: 14,
+                                          color: isBlocked
+                                              ? Colors.red
+                                              : isModerator
+                                                  ? appColors.guideColor
+                                                  : msg.fullGiftImage.isNotEmpty
+                                                      ? appColors.black
+                                                      : msg.message.contains(
+                                                              "Started following")
+                                                          ? appColors.black
+                                                          : Colors.white,
+                                          // shadows: const [
+                                          //   Shadow(
+                                          //     color: Colors.black,
+                                          //     offset: Offset(1.0, 1.0),
+                                          //     blurRadius: 1.0,
+                                          //   ),
+                                          // ],
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      Text(
+                                        msg.message ?? "",
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: isBlocked
+                                              ? Colors.red
+                                              : isModerator
+                                                  ? appColors.guideColor
+                                                  : msg.fullGiftImage.isNotEmpty
+                                                      ? appColors.black
+                                                      : msg.message.contains(
+                                                              "Started following")
+                                                          ? appColors.black
+                                                          : Colors.white,
+                                          // shadows: const [
+                                          //   Shadow(
+                                          //     color: Colors.black,
+                                          //     offset: Offset(1.0, 1.0),
+                                          //     blurRadius: 1.0,
+                                          //   ),
+                                          // ],
+                                        ),
+                                        // maxLines: 2,
+                                        // overflow: TextOverflow.ellipsis,
                                       ),
                                     ],
                                   ),
-                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                Text(
-                                  msg.message ?? "",
-                                  style: TextStyle(
-                                    fontSize: 13,
-                                    color: isBlocked
-                                        ? Colors.red
-                                        : isModerator
-                                        ? appColors.guideColor
-                                        : Colors.white,
-                                    shadows: const [
-                                      Shadow(
-                                        color: Colors.black,
-                                        offset: Offset(1.0, 1.0),
-                                        blurRadius: 1.0,
-                                      ),
-                                    ],
-                                  ),
-                                  // maxLines: 2,
-                                  // overflow: TextOverflow.ellipsis,
-                                ),
+                                // _controller.isHost &&
+                                //         !_controller.currentCaller.isEngaded &&
+                                //         !isLiveMonitoringTeam
+                                msg.fullGiftImage.isNotEmpty
+                                    ? Padding(
+                                        padding:
+                                            const EdgeInsets.only(left: 8.0),
+                                        child: CustomImageWidget(
+                                          imageUrl: msg.fullGiftImage,
+                                          rounded: true,
+                                          radius: 13,
+                                          typeEnum: TypeEnum.gift,
+                                        ),
+                                      )
+                                    : SizedBox(),
+                                moreOptionConditions(msg, isModerator)
+                                    ? SizedBox(
+                                        height: 24,
+                                        width: 24,
+                                        child: IconButton(
+                                          icon: Icon(
+                                            Icons.more_vert,
+                                            size: 16,
+                                            color: appColors.guideColor,
+                                          ),
+                                          onPressed: () async {
+                                            if (_controller.isHost) {
+                                              await moreOptionsPopup(
+                                                userId: msg.userId ?? "",
+                                                userName: msg.userName ?? "",
+                                                isBlocked:
+                                                    _controller.isBlocked(
+                                                  id: int.parse(
+                                                      msg.userId ?? ""),
+                                                ),
+                                              );
+                                            } else {
+                                              // await moreOptionsForModPopup(
+                                              //   userId: msg.userId ?? "",
+                                              //   userName: msg.userName ?? "",
+                                              //   isBlocked: _controller
+                                              //       .isCustomerBlockedBool(),
+                                              // );
+                                            }
+                                          },
+                                        ),
+                                      )
+                                    : const SizedBox(),
                               ],
                             ),
                           ),
-                          // _controller.isHost &&
-                          //         !_controller.currentCaller.isEngaded &&
-                          //         !isLiveMonitoringTeam
-                          msg.fullGiftImage.isNotEmpty
-                              ? Padding(
-                            padding: const EdgeInsets.only(left: 8.0),
-                            child: CustomImageWidget(
-                              imageUrl: msg.fullGiftImage,
-                              rounded: true,
-                              radius: 13,
-                              typeEnum: TypeEnum.gift,
-                            ),
-                          )
-                              : SizedBox(),
-                          moreOptionConditions(msg, isModerator)
-                              ? SizedBox(
-                            height: 24,
-                            width: 24,
-                            child: IconButton(
-                              icon: Icon(
-                                Icons.more_vert,
-                                size: 16,
-                                color: appColors.guideColor,
-                              ),
-                              onPressed: () async {
-                                if (_controller.isHost) {
-                                  await moreOptionsPopup(
-                                    userId: msg.userId ?? "",
-                                    userName: msg.userName ?? "",
-                                    isBlocked:
-                                    _controller.isBlocked(
-                                      id: int.parse(
-                                          msg.userId ?? ""),
-                                    ),
-                                  );
-                                } else {
-                                  // await moreOptionsForModPopup(
-                                  //   userId: msg.userId ?? "",
-                                  //   userName: msg.userName ?? "",
-                                  //   isBlocked: _controller
-                                  //       .isCustomerBlockedBool(),
-                                  // );
-                                }
-                              },
-                            ),
-                          )
-                              : const SizedBox(),
                         ],
                       ),
-                    ),
-                  ],
-                ),
-              );
+                    );
             },
-            separatorBuilder: (context, index) =>
-            const SizedBox(
+            separatorBuilder: (context, index) => const SizedBox(
               height: 10,
             ),
           );
@@ -1833,8 +1940,8 @@ class _LivePage extends State<LiveDharamScreen>
     return _controller.isHost
         ? cond1 && cond2 /*&& cond3*/
         : _controller.isMod
-        ? cond1 && cond2 && cond4
-        : false;
+            ? cond1 && cond2 && cond4
+            : false;
   }
 
   Widget inRoomMessageTop() {
@@ -1843,8 +1950,10 @@ class _LivePage extends State<LiveDharamScreen>
       width: Get.width / 1.5,
       child: StreamBuilder<List<ZegoInRoomMessage>>(
         stream: zegoController.message.stream(),
-        builder: (BuildContext context,
-            AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,) {
+        builder: (
+          BuildContext context,
+          AsyncSnapshot<List<ZegoInRoomMessage>> snapshot,
+        ) {
           List<ZegoInRoomMessage> messages =
               snapshot.data ?? <ZegoInRoomMessage>[];
           messages = messages.reversed.toList();
@@ -1859,26 +1968,26 @@ class _LivePage extends State<LiveDharamScreen>
             itemBuilder: (BuildContext context, int index) {
               final ZegoInRoomMessage message = messages[index];
               final ZegoCustomMessage msg =
-              receiveMessageToZego(message.message);
+                  receiveMessageToZego(message.message);
               return msg.type == 1
                   ? const SizedBox()
                   : Obx(
-                    () {
-                  //
-                  print("showTopBanner: ${_controller.showTopBanner}");
-                  //
-                  return AnimatedOpacity(
-                    opacity: !_controller.showTopBanner ? 0.0 : 1.0,
-                    duration: const Duration(seconds: 1),
-                    child: LeaderBoardWidget(
-                      avatar: msg.avatar ?? "",
-                      userName: "${msg.message}",
-                      fullGiftImage: msg.fullGiftImage ?? "",
-                      astrologerName: "",
-                    ),
-                  );
-                },
-              );
+                      () {
+                        //
+                        print("showTopBanner: ${_controller.showTopBanner}");
+                        //
+                        return AnimatedOpacity(
+                          opacity: !_controller.showTopBanner ? 0.0 : 1.0,
+                          duration: const Duration(seconds: 1),
+                          child: LeaderBoardWidget(
+                            avatar: msg.avatar ?? "",
+                            userName: "${msg.message}",
+                            fullGiftImage: msg.fullGiftImage ?? "",
+                            astrologerName: "",
+                          ),
+                        );
+                      },
+                    );
             },
           );
         },
@@ -2724,7 +2833,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> onInRoomCommandMessageReceived(
-      ZegoSignalingPluginInRoomCommandMessageReceivedEvent event,) async {
+      ZegoSignalingPluginInRoomCommandMessageReceivedEvent event) async {
     final List<ZegoSignalingPluginInRoomCommandMessage> msgs = event.messages;
     for (final ZegoSignalingPluginInRoomCommandMessage commandMessage in msgs) {
       final String senderUserID = commandMessage.senderUserID;
@@ -2753,7 +2862,7 @@ class _LivePage extends State<LiveDharamScreen>
       if (senderUserID != _controller.userId) {
         if (roomId == _controller.liveId) {
           if (type == "") {
-            await Future.delayed(const Duration(seconds: 3));
+            // await Future.delayed(const Duration(seconds: 3));
             if (mounted) {
               // animationsList.add(item["animation"]);
               // await Future.delayed(const Duration(seconds:2));
@@ -2825,17 +2934,17 @@ class _LivePage extends State<LiveDharamScreen>
                   final String tarotCard = singleton.getSingleTarotCard();
                   tarotCard.isEmpty
                       ? WidgetsBinding.instance.endOfFrame.then(
-                        (_) async {
-                      if (mounted) {
-                        successAndFailureCallBack(
-                          message: "Unable to load tarot card game.",
-                          isForSuccess: false,
-                          isForFailure: true,
-                        );
-                        await sendTaroCardClose();
-                      } else {}
-                    },
-                  )
+                          (_) async {
+                            if (mounted) {
+                              successAndFailureCallBack(
+                                message: "Unable to load tarot card game.",
+                                isForSuccess: false,
+                                isForFailure: true,
+                              );
+                              await sendTaroCardClose();
+                            } else {}
+                          },
+                        )
                       : await showCardDeckToUserPopup1();
                   break;
                 case 2:
@@ -2940,9 +3049,7 @@ class _LivePage extends State<LiveDharamScreen>
             Get.back();
             await sendTaroCardClose();
           },
-          totalTime: _controller
-              .engagedCoHostWithAstro()
-              .totalTime,
+          totalTime: _controller.engagedCoHostWithAstro().totalTime,
         );
       },
     );
@@ -2998,7 +3105,8 @@ class _LivePage extends State<LiveDharamScreen>
             );
             await sendTaroCard(item);
 
-            if (_controller.isHost) {} else {}
+            if (_controller.isHost) {
+            } else {}
           },
           numOfSelection: _controller.tarotGameModel.canPick ?? 0,
           userName: _controller.currentCaller.userName,
@@ -3011,7 +3119,8 @@ class _LivePage extends State<LiveDharamScreen>
 
     _endMsgTimerForTarotCardPopup();
 
-    if (hasSelected) {} else {
+    if (hasSelected) {
+    } else {
       await sendTaroCardClose();
     }
     return Future<void>.value();
@@ -3025,7 +3134,7 @@ class _LivePage extends State<LiveDharamScreen>
       builder: (BuildContext context) {
         final List<DeckCardModel> userPicked = [];
         for (UserPicked element
-        in _controller.tarotGameModel.userPicked ?? []) {
+            in _controller.tarotGameModel.userPicked ?? []) {
           userPicked.add(
             DeckCardModel(
               id: element.id,
@@ -3421,8 +3530,7 @@ class _LivePage extends State<LiveDharamScreen>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "${_controller.userName} with ${_controller
-                            .currentCaller.userName}",
+                        "${_controller.userName} with ${_controller.currentCaller.userName}",
                         style: const TextStyle(
                           color: Colors.white,
                         ),
@@ -3431,8 +3539,7 @@ class _LivePage extends State<LiveDharamScreen>
                       Row(
                         children: [
                           Text(
-                            "${_controller.currentCaller.callType.capitalize ??
-                                ""} Call:",
+                            "${_controller.currentCaller.callType.capitalize ?? ""} Call:",
                             style: const TextStyle(
                               fontSize: 12,
                               color: Colors.white,
@@ -3491,12 +3598,8 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Widget newTimerWidget() {
-    final String source = _controller
-        .engagedCoHostWithAstro()
-        .totalTime;
-    print(_controller
-        .engagedCoHostWithAstro()
-        .totalTime);
+    final String source = _controller.engagedCoHostWithAstro().totalTime;
+    print(_controller.engagedCoHostWithAstro().totalTime);
     print("_controller.engagedCoHostWithAstro().totalTime");
     final int epoch = int.parse(source.isEmpty ? "0" : source);
     final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
@@ -3788,36 +3891,36 @@ class _LivePage extends State<LiveDharamScreen>
           child: false
               ? const SizedBox()
               : Column(
-            children: [
-              InkWell(
-                onTap: exitFunc,
-                child: SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(50.0),
+                  children: [
+                    InkWell(
+                      onTap: exitFunc,
+                      child: SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(50.0),
+                            ),
+                            border: Border.all(
+                              color: appColors.guideColor,
+                            ),
+                            color: appColors.black.withOpacity(0.2),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(0.0),
+                            child: Image.asset(
+                              _controller.currentCaller.isEngaded
+                                  ? "assets/images/live_new_hang_up.png"
+                                  : "assets/images/live_exit_red.png",
+                            ),
+                          ),
+                        ),
                       ),
-                      border: Border.all(
-                        color: appColors.guideColor,
-                      ),
-                      color: appColors.black.withOpacity(0.2),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(0.0),
-                      child: Image.asset(
-                        _controller.currentCaller.isEngaded
-                            ? "assets/images/live_new_hang_up.png"
-                            : "assets/images/live_exit_red.png",
-                      ),
-                    ),
-                  ),
+                    const SizedBox(height: 8),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 8),
-            ],
-          ),
         ),
         AnimatedOpacity(
           opacity: !condForVideoCall ? 0.0 : 1.0,
@@ -3825,40 +3928,40 @@ class _LivePage extends State<LiveDharamScreen>
           child: !condForVideoCall
               ? const SizedBox()
               : Column(
-            children: [
-              InkWell(
-                onTap: () async {
-                  final ZegoUIKit instance = ZegoUIKit.instance;
-                  _controller.isFront = !_controller.isFront;
-                  instance.useFrontFacingCamera(_controller.isFront);
-                },
-                child: SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(50.0),
+                  children: [
+                    InkWell(
+                      onTap: () async {
+                        final ZegoUIKit instance = ZegoUIKit.instance;
+                        _controller.isFront = !_controller.isFront;
+                        instance.useFrontFacingCamera(_controller.isFront);
+                      },
+                      child: SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(50.0),
+                            ),
+                            border: Border.all(
+                              color: appColors.guideColor,
+                            ),
+                            color: appColors.black.withOpacity(0.2),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset(
+                              _controller.isFront
+                                  ? "assets/images/live_switch_cam_new.png"
+                                  : "assets/images/live_switch_cam_new.png",
+                            ),
+                          ),
+                        ),
                       ),
-                      border: Border.all(
-                        color: appColors.guideColor,
-                      ),
-                      color: appColors.black.withOpacity(0.2),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset(
-                        _controller.isFront
-                            ? "assets/images/live_switch_cam_new.png"
-                            : "assets/images/live_switch_cam_new.png",
-                      ),
-                    ),
-                  ),
+                    const SizedBox(height: 8),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 8),
-            ],
-          ),
         ),
         AnimatedOpacity(
           opacity: !condForVideoCall ? 0.0 : 1.0,
@@ -3866,40 +3969,40 @@ class _LivePage extends State<LiveDharamScreen>
           child: !condForVideoCall
               ? const SizedBox()
               : Column(
-            children: [
-              InkWell(
-                onTap: () async {
-                  final ZegoUIKit instance = ZegoUIKit.instance;
-                  _controller.isCamOn = !_controller.isCamOn;
-                  instance.turnCameraOn(_controller.isCamOn);
-                },
-                child: SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(50.0),
+                  children: [
+                    InkWell(
+                      onTap: () async {
+                        final ZegoUIKit instance = ZegoUIKit.instance;
+                        _controller.isCamOn = !_controller.isCamOn;
+                        instance.turnCameraOn(_controller.isCamOn);
+                      },
+                      child: SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(50.0),
+                            ),
+                            border: Border.all(
+                              color: appColors.guideColor,
+                            ),
+                            color: appColors.black.withOpacity(0.2),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset(
+                              _controller.isCamOn
+                                  ? "assets/images/live_cam_on.png"
+                                  : "assets/images/live_cam_off.png",
+                            ),
+                          ),
+                        ),
                       ),
-                      border: Border.all(
-                        color: appColors.guideColor,
-                      ),
-                      color: appColors.black.withOpacity(0.2),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset(
-                        _controller.isCamOn
-                            ? "assets/images/live_cam_on.png"
-                            : "assets/images/live_cam_off.png",
-                      ),
-                    ),
-                  ),
+                    const SizedBox(height: 8),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 8),
-            ],
-          ),
         ),
         AnimatedOpacity(
           opacity: !(condForVideoCall || condForAudioCall) ? 0.0 : 1.0,
@@ -3907,41 +4010,41 @@ class _LivePage extends State<LiveDharamScreen>
           child: !(condForVideoCall || condForAudioCall)
               ? const SizedBox()
               : Column(
-            children: [
-              InkWell(
-                onTap: () {
-                  final ZegoUIKit instance = ZegoUIKit.instance;
-                  _controller.isMicOn = !_controller.isMicOn;
-                  instance.turnMicrophoneOn(_controller.isMicOn,
-                      muteMode: true);
-                },
-                child: SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(50.0),
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        final ZegoUIKit instance = ZegoUIKit.instance;
+                        _controller.isMicOn = !_controller.isMicOn;
+                        instance.turnMicrophoneOn(_controller.isMicOn,
+                            muteMode: true);
+                      },
+                      child: SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(50.0),
+                            ),
+                            border: Border.all(
+                              color: appColors.guideColor,
+                            ),
+                            color: appColors.black.withOpacity(0.2),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset(
+                              _controller.isMicOn
+                                  ? "assets/images/live_mic_on.png"
+                                  : "assets/images/live_mic_off.png",
+                            ),
+                          ),
+                        ),
                       ),
-                      border: Border.all(
-                        color: appColors.guideColor,
-                      ),
-                      color: appColors.black.withOpacity(0.2),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset(
-                        _controller.isMicOn
-                            ? "assets/images/live_mic_on.png"
-                            : "assets/images/live_mic_off.png",
-                      ),
-                    ),
-                  ),
+                    const SizedBox(height: 0),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 0),
-            ],
-          ),
         ),
       ],
     );
@@ -3995,63 +4098,63 @@ class _LivePage extends State<LiveDharamScreen>
           builder: (context, snapshot) {
             return AnimatedOpacity(
               opacity:
-              _controller.isHost && !_controller.currentCaller.isEngaded
-                  ? 0.0
-                  : 1.0,
+                  _controller.isHost && !_controller.currentCaller.isEngaded
+                      ? 0.0
+                      : 1.0,
               duration: const Duration(seconds: 1),
               child: _controller.isHost && !_controller.currentCaller.isEngaded
                   ? const SizedBox()
                   : Column(
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      // await _controller.addOrUpdateCard();
-                      await showCardDeckToUserPopup();
-                    },
-                    child: SizedBox(
-                      height: 50,
-                      width: 50,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(50.0),
+                      children: [
+                        InkWell(
+                          onTap: () async {
+                            // await _controller.addOrUpdateCard();
+                            await showCardDeckToUserPopup();
+                          },
+                          child: SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(50.0),
+                                ),
+                                border: Border.all(
+                                  color: appColors.guideColor,
+                                ),
+                                color: appColors.black.withOpacity(0.2),
+                              ),
+                              // child: Padding(
+                              //   padding: const EdgeInsets.all(0.0),
+                              //   child: Icon(
+                              //     Icons.category,
+                              //     color: appColors.guideColor,
+                              //   ),
+                              // ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.asset(
+                                  "assets/images/live_tarot_new_icon.png",
+                                ),
+                              ),
+                            ),
                           ),
-                          border: Border.all(
-                            color: appColors.guideColor,
-                          ),
-                          color: appColors.black.withOpacity(0.2),
                         ),
-                        // child: Padding(
-                        //   padding: const EdgeInsets.all(0.0),
-                        //   child: Icon(
-                        //     Icons.category,
-                        //     color: appColors.guideColor,
-                        //   ),
-                        // ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Image.asset(
-                            "assets/images/live_tarot_new_icon.png",
-                          ),
+                        Text(
+                          "Ask User",
+                          style: TextStyle(fontSize: 8, color: appColors.white),
                         ),
-                      ),
+                        Text(
+                          "for tarot",
+                          style: TextStyle(fontSize: 8, color: appColors.white),
+                        ),
+                        Text(
+                          "reading",
+                          style: TextStyle(fontSize: 8, color: appColors.white),
+                        ),
+                        const SizedBox(height: 8),
+                      ],
                     ),
-                  ),
-                  Text(
-                    "Ask User",
-                    style: TextStyle(fontSize: 8, color: appColors.white),
-                  ),
-                  Text(
-                    "for tarot",
-                    style: TextStyle(fontSize: 8, color: appColors.white),
-                  ),
-                  Text(
-                    "reading",
-                    style: TextStyle(fontSize: 8, color: appColors.white),
-                  ),
-                  const SizedBox(height: 8),
-                ],
-              ),
             );
           },
         ),
@@ -4069,58 +4172,58 @@ class _LivePage extends State<LiveDharamScreen>
               child: _controller.waitListModel.isEmpty
                   ? const SizedBox()
                   : Column(
-                children: [
-                  InkWell(
-                    onTap: waitListPopup,
-                    child: SizedBox(
-                      height: 50,
-                      width: 50,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(50.0),
-                          ),
-                          border: Border.all(
-                            color: appColors.guideColor,
-                          ),
-                          color: appColors.black.withOpacity(0.2),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Stack(
-                            clipBehavior: Clip.none,
-                            children: [
-                              Image.asset(
-                                "assets/images/live_new_hourglass.png",
+                      children: [
+                        InkWell(
+                          onTap: waitListPopup,
+                          child: SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(50.0),
+                                ),
+                                border: Border.all(
+                                  color: appColors.guideColor,
+                                ),
+                                color: appColors.black.withOpacity(0.2),
                               ),
-                              _controller.waitListModel.isEmpty
-                                  ? const Positioned(child: SizedBox())
-                                  : Positioned(
-                                top: -10,
-                                right: -10,
-                                child: SizedBox(
-                                  height: 20,
-                                  width: 20,
-                                  child: CircleAvatar(
-                                    backgroundColor:
-                                    appColors.guideColor,
-                                    child: Text(
-                                      _controller
-                                          .waitListModel.length
-                                          .toString(),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Stack(
+                                  clipBehavior: Clip.none,
+                                  children: [
+                                    Image.asset(
+                                      "assets/images/live_new_hourglass.png",
                                     ),
-                                  ),
+                                    _controller.waitListModel.isEmpty
+                                        ? const Positioned(child: SizedBox())
+                                        : Positioned(
+                                            top: -10,
+                                            right: -10,
+                                            child: SizedBox(
+                                              height: 20,
+                                              width: 20,
+                                              child: CircleAvatar(
+                                                backgroundColor:
+                                                    appColors.guideColor,
+                                                child: Text(
+                                                  _controller
+                                                      .waitListModel.length
+                                                      .toString(),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                  ],
                                 ),
                               ),
-                            ],
+                            ),
                           ),
                         ),
-                      ),
+                        const SizedBox(height: 8),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                ],
-              ),
             );
           },
         ),
@@ -4137,34 +4240,34 @@ class _LivePage extends State<LiveDharamScreen>
               child: _controller.leaderboardModel.isEmpty
                   ? const SizedBox()
                   : Column(
-                children: [
-                  InkWell(
-                    onTap: leaderboardPopup,
-                    child: SizedBox(
-                      height: 50,
-                      width: 50,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(50.0),
+                      children: [
+                        InkWell(
+                          onTap: leaderboardPopup,
+                          child: SizedBox(
+                            height: 50,
+                            width: 50,
+                            child: DecoratedBox(
+                              decoration: BoxDecoration(
+                                borderRadius: const BorderRadius.all(
+                                  Radius.circular(50.0),
+                                ),
+                                border: Border.all(
+                                  color: appColors.guideColor,
+                                ),
+                                color: appColors.black.withOpacity(0.2),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.all(8.0),
+                                child: Image.asset(
+                                  "assets/images/live_new_podium.png",
+                                ),
+                              ),
+                            ),
                           ),
-                          border: Border.all(
-                            color: appColors.guideColor,
-                          ),
-                          color: appColors.black.withOpacity(0.2),
                         ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Image.asset(
-                            "assets/images/live_new_podium.png",
-                          ),
-                        ),
-                      ),
+                        const SizedBox(height: 8),
+                      ],
                     ),
-                  ),
-                  const SizedBox(height: 8),
-                ],
-              ),
             );
           },
         ),
@@ -4184,131 +4287,134 @@ class _LivePage extends State<LiveDharamScreen>
                   height: 50,
                   width: 50,
                 ),
-                Text("Beautify", style: TextStyle(
-                    fontFamily: "Metropolis", color: Colors.white),),
+                Text(
+                  "Beautify",
+                  style:
+                      TextStyle(fontFamily: "Metropolis", color: Colors.white),
+                ),
               ],
             ),
           ),
         ),
         _controller.isHost
             ? StreamBuilder<Object>(
-          stream: null,
-          builder: (context, snapshot) {
-            return Obx(() {
-              return AnimatedOpacity(
-                opacity: !_controller.isHost || isLiveCall.value == 0
-                    ? 0.0
-                    : 1.0,
-                duration: const Duration(seconds: 1),
-                child: !_controller.isHost || isLiveCall.value == 0
-                    ? const SizedBox()
-                    : Column(
-                  children: [
-                    InkWell(
-                      onTap: () async {
-                        _controller.isHostAvailable =
-                        !_controller.isHostAvailable;
-                        await _controller.updateHostAvailability();
-                      },
-                      child: SizedBox(
-                        height: 84 - 50,
-                        width: 84,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(50.0),
+                stream: null,
+                builder: (context, snapshot) {
+                  return Obx(() {
+                    return AnimatedOpacity(
+                      opacity: !_controller.isHost || isLiveCall.value == 0
+                          ? 0.0
+                          : 1.0,
+                      duration: const Duration(seconds: 1),
+                      child: !_controller.isHost || isLiveCall.value == 0
+                          ? const SizedBox()
+                          : Column(
+                              children: [
+                                InkWell(
+                                  onTap: () async {
+                                    _controller.isHostAvailable =
+                                        !_controller.isHostAvailable;
+                                    await _controller.updateHostAvailability();
+                                  },
+                                  child: SizedBox(
+                                    height: 84 - 50,
+                                    width: 84,
+                                    child: DecoratedBox(
+                                      decoration: BoxDecoration(
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(50.0),
+                                        ),
+                                        border: Border.all(
+                                          color: appColors.guideColor,
+                                        ),
+                                        color: appColors.black.withOpacity(0.2),
+                                      ),
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(0.0),
+                                        child: Image.asset(
+                                          _controller.isHostAvailable
+                                              ? "assets/images/live_calls_on_new.png"
+                                              : "assets/images/live_calls_off_new.png",
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 0),
+                              ],
                             ),
-                            border: Border.all(
-                              color: appColors.guideColor,
-                            ),
-                            color: appColors.black.withOpacity(0.2),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(0.0),
-                            child: Image.asset(
-                              _controller.isHostAvailable
-                                  ? "assets/images/live_calls_on_new.png"
-                                  : "assets/images/live_calls_off_new.png",
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 0),
-                  ],
-                ),
-              );
-            });
-          },
-        )
+                    );
+                  });
+                },
+              )
             : StreamBuilder<Object>(
-          stream: null,
-          builder: (context, snapshot) {
-            return AnimatedOpacity(
-              opacity:
-              (!_controller.isHost && !_controller.isHostAvailable) ||
-                  isLiveCall.value == 0
-                  ? 0.0
-                  : 1.0,
-              //
-              //
-              //
-              duration: const Duration(seconds: 1),
-              child:
-              (!_controller.isHost && !_controller.isHostAvailable) ||
-                  isLiveCall.value == 0
-              //
-              //
-              //
-                  ? const SizedBox()
-                  : Column(
-                children: [
-                  InkWell(
-                    onTap: () async {
-                      // _controller.isCustBlocked.data
-                      //             ?.isCustomerBlocked ==
-                      //         1
-                      //     ? await youAreBlocked()
-                      //     : await callAstrologerPopup();
-                    },
-                    child: SizedBox(
-                      height: 84,
-                      width: 84 - 20,
-                      child: DecoratedBox(
-                        decoration: BoxDecoration(
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(50.0),
-                          ),
-                          border: Border.all(
-                            color: Colors.transparent,
-                          ),
-                          color: Colors.transparent,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.all(0.0),
-                          child: Stack(
-                            alignment: Alignment.center,
-                            children: [
-                              Image.asset(
-                                "assets/images/live_call_btn.png",
+                stream: null,
+                builder: (context, snapshot) {
+                  return AnimatedOpacity(
+                    opacity:
+                        (!_controller.isHost && !_controller.isHostAvailable) ||
+                                isLiveCall.value == 0
+                            ? 0.0
+                            : 1.0,
+                    //
+                    //
+                    //
+                    duration: const Duration(seconds: 1),
+                    child:
+                        (!_controller.isHost && !_controller.isHostAvailable) ||
+                                isLiveCall.value == 0
+                            //
+                            //
+                            //
+                            ? const SizedBox()
+                            : Column(
+                                children: [
+                                  InkWell(
+                                    onTap: () async {
+                                      // _controller.isCustBlocked.data
+                                      //             ?.isCustomerBlocked ==
+                                      //         1
+                                      //     ? await youAreBlocked()
+                                      //     : await callAstrologerPopup();
+                                    },
+                                    child: SizedBox(
+                                      height: 84,
+                                      width: 84 - 20,
+                                      child: DecoratedBox(
+                                        decoration: BoxDecoration(
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(50.0),
+                                          ),
+                                          border: Border.all(
+                                            color: Colors.transparent,
+                                          ),
+                                          color: Colors.transparent,
+                                        ),
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(0.0),
+                                          child: Stack(
+                                            alignment: Alignment.center,
+                                            children: [
+                                              Image.asset(
+                                                "assets/images/live_call_btn.png",
+                                              ),
+                                              const Positioned(
+                                                top: 46,
+                                                child: SizedBox(),
+                                                // child: Text(_controller.testingVar.toString()),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 0),
+                                ],
                               ),
-                              const Positioned(
-                                top: 46,
-                                child: SizedBox(),
-                                // child: Text(_controller.testingVar.toString()),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 0),
-                ],
+                  );
+                },
               ),
-            );
-          },
-        ),
       ],
     );
   }
@@ -4606,6 +4712,16 @@ class _LivePage extends State<LiveDharamScreen>
         onUpdated: (duration) {},
       ),
       coHost: ZegoLiveStreamingCoHostEvents(
+
+        coHost: ZegoLiveStreamingCoHostCoHostEvents(
+          onLocalDisconnected: () {
+            Fluttertoast.showToast(msg: "user left");
+          },
+          onLocalConnectStateUpdated: (ZegoLiveStreamingAudienceConnectState connectState) {
+            print(connectState);
+            print("connectState");
+          },
+        ),
         host: ZegoLiveStreamingCoHostHostEvents(
           onRequestReceived: (ZegoUIKitUser user) async {
             showNotifOverlay(user: user, msg: "onCoHostRequestReceived");
@@ -4828,7 +4944,8 @@ class _LivePage extends State<LiveDharamScreen>
           isHost: _controller.isHost,
           onTimeout: () {
             Get.back();
-            if (_controller.isHost) {} else {
+            if (_controller.isHost) {
+            } else {
               onDeclineButton();
             }
           },
@@ -4950,8 +5067,8 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> reInitCoHostFunction() async {
-    bool cond1 = _controller.currentCaller.isEngaded;
-    bool cond2 = _controller.userId == _controller.currentCaller.id;
+    // bool cond1 = _controller.currentCaller.isEngaded;
+    // bool cond2 = _controller.userId == _controller.currentCaller.id;
 
     // SnackBar snackBar = SnackBar(
     //   content: Column(
@@ -4964,34 +5081,38 @@ class _LivePage extends State<LiveDharamScreen>
     // );
     // ScaffoldMessenger.of(context).showSnackBar(snackBar);
 
-    if (cond1 && cond2) {
-      await Future<void>.delayed(const Duration(seconds: 1));
-      turnOff();
-      await Future<void>.delayed(const Duration(seconds: 1));
-      turnOn();
-    } else {}
+    // if (cond1 && cond2) {
+    //   await Future<void>.delayed(const Duration(seconds: 1));
+    //   turnOff();
+    //   await Future<void>.delayed(const Duration(seconds: 1));
+    //   turnOn();
+    // } else {}
     return Future<void>.value();
   }
 
   void turnOff() {
-    _controller.isFront = false;
-    _controller.isCamOn = false;
-    _controller.isMicOn = false;
-
-    ZegoUIKit.instance.useFrontFacingCamera(_controller.isFront);
-    ZegoUIKit.instance.turnCameraOn(_controller.isCamOn);
-    ZegoUIKit.instance.turnMicrophoneOn(_controller.isMicOn, muteMode: true);
+    // _controller.isFront = false;
+    // _controller.isCamOn = false;
+    // _controller.isMicOn = false;
+    //
+    // ZegoUIKit.instance.useFrontFacingCamera(_controller.isFront);
+    // ZegoUIKit.instance.turnCameraOn(_controller.isCamOn);
+    // ZegoUIKit.instance.turnMicrophoneOn(_controller.isMicOn, muteMode: true);
     return;
   }
 
   void turnOn() {
-    _controller.isFront = true;
-    _controller.isCamOn = true;
-    _controller.isMicOn = true;
-
-    ZegoUIKit.instance.useFrontFacingCamera(_controller.isFront);
-    ZegoUIKit.instance.turnCameraOn(_controller.isCamOn);
-    ZegoUIKit.instance.turnMicrophoneOn(_controller.isMicOn, muteMode: true);
+    // _controller.isFront = true;
+    // _controller.isCamOn = true;
+    // _controller.isMicOn = true;
+    //
+    // ZegoUIKit.instance.useFrontFacingCamera(_controller.isFront);
+    // ZegoUIKit.instance.turnCameraOn(_controller.isCamOn);
+    // ZegoUIKit.instance.turnMicrophoneOn(_controller.isMicOn, muteMode: true);
     return;
   }
+
+  @override
+  // TODO: implement wantKeepAlive
+  bool get wantKeepAlive => true;
 }

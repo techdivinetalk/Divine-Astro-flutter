@@ -7,7 +7,7 @@ final appColors = Get.find<AppColors>();
 class AppColors extends GetxController {
   Color bannerTitleColor = const Color(0xFF2D2D2D);
   Color timeBackgroundColor = const Color(0xFF0DAA65);
-
+  Color yellow = Color(0xFFFDD48E);
   Color green = const Color(0xFF35BA80);
   Color white = const Color(0xFFFFFFFF);
   Color darkBlue = const Color(0xFF0E2339);

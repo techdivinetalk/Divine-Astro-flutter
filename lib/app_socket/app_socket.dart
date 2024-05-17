@@ -1,5 +1,3 @@
-
-
 import 'package:dio/dio.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
@@ -38,22 +36,22 @@ class AppSocket {
         ..connect();
     }
     socket?.onConnect(
-          (_) async {
+      (_) async {
         await socketAPI();
       },
     );
     socket?.onReconnect(
-          (_) async {
+      (_) async {
         await socketAPI();
       },
     );
   }
 
-  void emitForAstrologerEnterChatAssist(
-      String? customerId, String? userId) {
+  void emitForAstrologerEnterChatAssist(String? customerId, String? userId) {
     socket?.emit(ApiProvider().enterChatAssist,
         {"receiver_id": customerId, "sender_id": userId});
   }
+
   void listenForAstrologerEnterChatAssist(void Function(dynamic) callback) {
     print("called inside socket");
     socket?.on(ApiProvider().enterChatAssist, callback);
@@ -99,15 +97,22 @@ class AppSocket {
   Future<void> socketAPI() async {
     try {
       final SharedPreferenceService pref = Get.put(SharedPreferenceService());
-
-      final response = await Dio().post(
-        "https://list.divinetalk.live/api/v3/removeLiveData",
-        data: {
-          "astroId": pref.getUserDetail()?.id ?? 0,
-          "clientId": socket?.id ?? "",
-        },
-      );
-      print("socketAPI(): ${response.data}");
+      await pref.getUserDetail();
+      print({
+        "astroId": pref.getUserDetail()?.id ?? 0,
+        "clientId": socket?.id ?? "",
+      });
+      print("objectobjectobjectobject");
+      if (pref.getUserDetail() != null) {
+        final response = await Dio().post(
+          "https://list.divinetalk.live/api/v3/removeLiveData",
+          data: {
+            "astroId": pref.getUserDetail()?.id ?? 0,
+            "clientId": socket?.id ?? "",
+          },
+        );
+        print("socketAPI(): ${response.data}");
+      }
     } on Exception catch (error, stack) {
       debugPrint("socketAPI(): Exception caught: error: $error");
       debugPrint("socketAPI(): Exception caught: stack: $stack");
@@ -155,7 +160,8 @@ class AppSocket {
   void sendMessageListenerSocket(void Function(dynamic) callback) {
     socket?.on(ApiProvider().messageSent, callback);
   }
-void astrologerJoinedPrivateChat(void Function(dynamic) callback) {
+
+  void astrologerJoinedPrivateChat(void Function(dynamic) callback) {
     socket?.on(ApiProvider().astrologerJoinedPrivateChat, callback);
   }
 
@@ -231,5 +237,5 @@ void astrologerJoinedPrivateChat(void Function(dynamic) callback) {
     );
     return;
   }
-  //
+//
 }
