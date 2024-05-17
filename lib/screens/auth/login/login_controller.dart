@@ -169,26 +169,29 @@ class LoginController extends GetxController {
       print("test_simNumbers: ${simNumbers.toString()}");
     }
 
+    // Added + sign before country code
+    if (simNumbers.isNotEmpty) {
+      for (int i = 0; i < simNumbers.length; i++) {
+        String no = simNumbers[i];
+
+        if (no.isNotEmpty && !no.startsWith("+")) {
+          no = "+$no";
+          simNumbers[i] = no;
+        }
+      }
+    }
+
     showSimNumbersPopup();
   }
 
-  // Function to split the number into country code and phone number
   Map<String, String> splitNumber(String number) {
-    final match = RegExp(r'^\+(\d{1,3})(.*)').firstMatch(number);
-    if (match != null) {
-      String countryCode = "+91";
-      if (match.group(1) != null && match.group(1)!.isNotEmpty) {
-        if (match.group(1)!.startsWith("+")) {
-          countryCode = match.group(1).toString();
-        } else {
-          countryCode = "+${match.group(1)}";
-        }
-      }
-      return {'countryCode': countryCode, 'phoneNumber': match.group(2) ?? ''};
-    } else {
-      // Handle cases where the number does not have a country code
-      return {'countryCode': '', 'phoneNumber': number};
+    if (number.startsWith('+')) {
+      number = number.substring(1);
     }
+    if (number.length > 10) {
+      number = number.substring(number.length - 10);
+    }
+    return {'countryCode': '+91', 'phoneNumber': number};
   }
 
   void showSimNumbersPopup() {
