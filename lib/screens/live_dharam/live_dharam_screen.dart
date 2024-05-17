@@ -299,9 +299,8 @@ class _LivePage extends State<LiveDharamScreen>
   Future<void> _loadRandomAnimation() async {
     _showOverlay();
     const SVGAParser parser = SVGAParser();
-    Map<String, dynamic> giftInfo = svgaUrls.entries.first.value;
-    print(giftInfo["giftUrl"]);
-    await parser.decodeFromURL(giftInfo["giftUrl"]).then((videoItem) {
+    String giftInfo = svgaUrls.entries.first.value;
+    await parser.decodeFromURL(giftInfo).then((videoItem) {
       _svgController.videoItem = videoItem;
       _svgController.forward();
     });
@@ -1342,12 +1341,19 @@ class _LivePage extends State<LiveDharamScreen>
               event.snapshot.value; // Get the new value of the changed child
           print("onChildAdded1 $key");
           print("onChildAdded2 $value");
-          svgaUrls[key.toString()] =
-          {"astroId": "11764", "giftUrl": value.toString()};
+          svgaUrls[key.toString()] = value.toString();
           print(svgaUrls.length);
           if (svgaUrls.length == 1) {
             _loadRandomAnimation();
           }
+          Future.delayed(const Duration(seconds: 1)).then((value) async {
+            FirebaseDatabase.instance
+                .ref()
+                .child("live")
+                .child(_controller.liveId)
+                .child("realTime")
+                .child("gift").child(value.toString()).remove();
+          });
         }
       });
     }
