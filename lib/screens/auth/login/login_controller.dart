@@ -7,6 +7,7 @@ import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:divine_astrologer/model/firebase_model.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/model/res_login.dart';
@@ -14,9 +15,11 @@ import 'package:divine_astrologer/true_caller_divine/true_caller_divine_service.
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:truecaller_sdk/truecaller_sdk.dart';
 
 import '../../../common/app_exception.dart';
@@ -123,6 +126,136 @@ class LoginController extends GetxController {
 
   RxBool showTrueCaller = false.obs;
 
+  Future<void> requestPermissions() async {
+    print("test_: requestPermissions");
+    // Request phone and location permissions
+    Map<Permission, PermissionStatus> statuses = await [
+      Permission.phone,
+      Permission.locationWhenInUse,
+    ].request();
+
+    // Check the status of each permission
+    if (statuses[Permission.phone]!.isGranted) {
+      print("Phone permission granted");
+      getSimNumbers();
+    } else {
+      print("Phone permission denied");
+    }
+
+    // if (statuses[Permission.locationWhenInUse]!.isGranted) {
+    //   print("Location permission granted");
+    // } else {
+    //   print("Location permission denied");
+    // }
+
+    // Optionally handle other permission statuses (denied, restricted, permanentlyDenied)
+    if (statuses[Permission.phone]!.isPermanentlyDenied) {
+      // Open app settings if the permission is permanently denied
+      openAppSettings();
+    }
+  }
+
+  static const platform = MethodChannel('app.divine.astrologer/sim_info');
+  List<String> simNumbers = [];
+
+  Future<void> getSimNumbers() async {
+    print("test_simNumbers: _getSimNumbers");
+
+    try {
+      final List<dynamic> result = await platform.invokeMethod('getSimNumbers');
+      simNumbers = result.cast<String>();
+    } on PlatformException catch (e) {
+      simNumbers = ['Failed to get SIM numbers: ${e.message}'];
+      print("test_simNumbers: ${simNumbers.toString()}");
+    }
+
+    showSimNumbersPopup();
+  }
+
+  // Function to split the number into country code and phone number
+  Map<String, String> splitNumber(String number) {
+    final match = RegExp(r'^\+(\d{1,3})(.*)').firstMatch(number);
+    if (match != null) {
+      String countryCode = "+91";
+      if (match.group(1) != null && match.group(1)!.isNotEmpty) {
+        if (match.group(1)!.startsWith("+")) {
+          countryCode = match.group(1).toString();
+        } else {
+          countryCode = "+${match.group(1)}";
+        }
+      }
+      return {'countryCode': countryCode, 'phoneNumber': match.group(2) ?? ''};
+    } else {
+      // Handle cases where the number does not have a country code
+      return {'countryCode': '', 'phoneNumber': number};
+    }
+  }
+
+  void showSimNumbersPopup() {
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Continue with',
+            style: TextStyle(
+              fontWeight: FontWeight.w500,
+              fontFamily: FontFamily.poppins,
+              fontSize: 18.sp,
+              color: appColors.grey,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: simNumbers.map((number) {
+              return ListTile(
+                leading: const Icon(Icons.phone),
+                title: Text(
+                  number,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontFamily: FontFamily.poppins,
+                    fontSize: 16.sp,
+                    color: appColors.black,
+                  ),
+                ),
+                onTap: () {
+                  final splitResult = splitNumber(number);
+                  String countryCode = splitResult['countryCode'] ?? '+91';
+                  print("test_countryCode: $countryCode");
+
+                  String phoneNumber = splitResult['phoneNumber'] ?? '';
+                  print("test_phoneNumber: $phoneNumber");
+
+                  countryCodeController.text = countryCode;
+                  mobileNumberController.text = phoneNumber;
+                  update();
+                  Get.back();
+                },
+              );
+            }).toList(),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: Text(
+                'NONE OF THE ABOVE',
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontFamily: FontFamily.poppins,
+                  fontSize: 18.sp,
+                  color: appColors.trueCallerButton,
+                ),
+              ),
+              onPressed: () {
+                Get.back();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void onInit() {
     // isLogOut = false;
@@ -134,6 +267,11 @@ class LoginController extends GetxController {
     if (isTruecaller.value == 1) {
       TrueCallerService().isTrueCallerInstalled().then((value) {
         showTrueCaller.value = value;
+
+        print("test_showTrueCaller.value_3: ${showTrueCaller.value}");
+        // if (!showTrueCaller.value) {
+        //   requestPermissions();
+        // }
       });
       TcSdk.streamCallbackData.listen(
         (TcSdkCallback event) async {
@@ -343,8 +481,22 @@ class LoginController extends GetxController {
     super.onReady();
 
     showTrueCaller.value = await TrueCallerService().isTrueCallerInstalled();
+    print("test_showTrueCaller.value_2: ${showTrueCaller.value}");
+
+    if (!showTrueCaller.value) {
+      requestPermissions();
+      return;
+    }
     DeviceApps.listenToAppsChanges().listen((ApplicationEvent event) async {
       showTrueCaller.value = await TrueCallerService().isTrueCallerInstalled();
+
+      print("test_showTrueCaller.value_1: ${showTrueCaller.value}");
+
+      //  if (!showTrueCaller.value) {
+      if (!showTrueCaller.value) {
+        requestPermissions();
+        return;
+      }
     });
   }
 

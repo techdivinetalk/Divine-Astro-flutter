@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart';
 import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
@@ -43,6 +44,7 @@ class ZegoService {
   RxBool isInCallScreen = true.obs;
 
   Future<void> zegoLogin() async {
+    print("test_call_zego_service: zegoLogin");
     await ZegoUIKitPrebuiltCallInvitationService().init(
       appID: appID,
       appSign: appSign,
@@ -578,25 +580,30 @@ class ZegoService {
   }
 
   Future<void> canInit() async {
+    print("test_call_zego_service: canInit");
     final bool value = await AppPermissionService.instance.hasAllPermissions();
+
+    print("test_call_zego_service: hasAllPermissions: $value");
+
     if (value) {
       await zegoLogin();
-    } else {}
-    //await addUpdatePermission();
+    }else{}
+    await addUpdatePermission();
     Future<void>.value();
   }
 
-  // Future<void> addUpdatePermission() async {
-  //   final bool value = await AppPermissionService.instance.hasAllPermissions();
-  //   final int orderId = AppFirebaseService().orderData.value["orderId"] ?? 0;
-  //   if (orderId != 0) {
-  //     final DatabaseReference ref = FirebaseDatabase.instance.ref();
-  //     await ref.child("order/$orderId").update(
-  //       {"astrologer_permission": value},
-  //     );
-  //   } else {}
-  //   return Future<void>.value();
-  // }
+  Future<void> addUpdatePermission() async {
+    print("test_call_zego_service: addUpdatePermission");
+    final bool value = await AppPermissionService.instance.hasAllPermissions();
+    final int orderId = AppFirebaseService().orderData.value["orderId"] ?? 0;
+    if (orderId != 0) {
+      final DatabaseReference ref = FirebaseDatabase.instance.ref();
+      await ref.child("order/$orderId").update(
+        {"astrologer_permission": value},
+      );
+    } else {}
+    return Future<void>.value();
+  }
 
   Future<bool> checkOppositeSidePermission() async {
     bool hasPermission =

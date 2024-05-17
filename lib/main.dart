@@ -12,6 +12,7 @@ import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_resp
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/remote_config/remote_config_helper.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
+import 'package:divine_astrologer/screens/auth/login/login_controller.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -69,7 +70,7 @@ Future<void> main() async {
   remoteConfigHelper.updateGlobalConstantWithFirebaseData();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   await GetStorage.init();
-  if(!kDebugMode){
+  if (!kDebugMode) {
     InAppUpdate.checkForUpdate().then((updateInfo) {
       if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
         if (updateInfo.immediateUpdateAllowed) {
@@ -129,23 +130,25 @@ Future<void> main() async {
     //   return;
     // }
     if (message.data["type"].toString() == "1") {
-      if(MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI) {
+      if (MiddleWare.instance.currentPage !=
+          RouteName.chatMessageWithSocketUI) {
         print("messageReceive21 ${MiddleWare.instance.currentPage}");
         showNotification(message.data["title"], message.data["message"],
             message.data['type'], message.data);
       }
-        HashMap<String, dynamic> updateData = HashMap();
-        updateData[message.data["chatId"]] = 1;
-        print('Message data-:-users ${message.data}');
-        FirebaseDatabase.instance
-            .ref("user")
-            .child(
-            "${message.data['sender_id']}/realTime/deliveredMsg/${message
-                .data["userid"]}")
-            .update(updateData);
-        sendBroadcast(BroadcastMessage(name: "messageReceive", data: message.data));
+      HashMap<String, dynamic> updateData = HashMap();
+      updateData[message.data["chatId"]] = 1;
+      print('Message data-:-users ${message.data}');
 
+      print("test_notification: Enable fullscreen incoming call notification");
 
+      FirebaseDatabase.instance
+          .ref("user")
+          .child(
+              "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
+          .update(updateData);
+      sendBroadcast(
+          BroadcastMessage(name: "messageReceive", data: message.data));
     } else if (message.data["type"] == "8") {
       print(
           "inside page for realtime notification ${message.data} ${MiddleWare.instance.currentPage}");
@@ -219,7 +222,8 @@ Future<void> main() async {
           message.data['type'], message.data);
     }
     if (message.notification != null) {
-      print('Message also contained a notification: ${message.notification?.title}');
+      print(
+          'Message also contained a notification: ${message.notification?.title}');
     }
   });
   await initServices();
@@ -234,15 +238,18 @@ Future<void> main() async {
     );
     runApp(MyApp());
   });
-  Permission.notification.isDenied.then((value) {
+  Permission.notification.isDenied.then((value) async {
     if (value) {
-      Permission.notification.request();
+      await Permission.notification.request();
+
+      if (Get.isRegistered<LoginController>()) {
+        Get.find<LoginController>().onReady();
+      }
     }
   });
-  if(!kDebugMode){
+  if (!kDebugMode) {
     AppFirebaseService().masterData("masters");
   }
-
 }
 
 Future<bool> saveLanguage(String? lang) async {
@@ -409,7 +416,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   initialRoute: preferenceService.getUserDetail()?.id == null
                       ? RouteName.login
                       : RouteName.dashboard,
-                   getPages: Routes.routes,
+                  getPages: Routes.routes,
                   // home: ZegoLoginScreen(),
                   locale: getLanStrToLocale(
                       GetStorages.get(GetStorageKeys.language) ?? ""),

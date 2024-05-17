@@ -641,6 +641,7 @@ class ChatMessageWithSocketController extends GetxController
     super.onReady();
     Future.delayed(const Duration(milliseconds: 200)).then((value) async {
       scrollToBottomFunc();
+
       await ZegoService().canInit();
     });
   }

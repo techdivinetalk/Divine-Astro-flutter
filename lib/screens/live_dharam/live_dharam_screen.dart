@@ -82,6 +82,7 @@ const int appID = 696414715;
 const String appSign =
     "bf7174a98b7d6fb6e2dc7ae60f6ed932d6a9794dad8a5cae22e29ad8abfac1aa";
 const String serverSecret = "89ceddc6c59909af326ddb7209cb1c16";
+
 final ZegoUIKitPrebuiltLiveStreamingController zegoController =
 ZegoUIKitPrebuiltLiveStreamingController();
 
