@@ -40,6 +40,7 @@ import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widge
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_astro_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
+
 // import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
@@ -49,6 +50,7 @@ import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import "package:flutter_svg/svg.dart";
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
+import "package:fluttertoast/fluttertoast.dart";
 import "package:get/get.dart";
 import "package:intl/intl.dart";
 import 'package:random_name_generator/random_name_generator.dart';
@@ -58,22 +60,6 @@ import "package:svgaplayer_flutter/player.dart";
 import "package:zego_uikit_beauty_plugin/zego_uikit_beauty_plugin.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
-
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 const int appID = 696414715;
 const String appSign =
@@ -90,7 +76,11 @@ class LiveDharamScreen extends StatefulWidget {
 }
 
 class _LivePage extends State<LiveDharamScreen>
-    with WidgetsBindingObserver, AfterLayoutMixin<LiveDharamScreen> , SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+    with
+        WidgetsBindingObserver,
+        AfterLayoutMixin<LiveDharamScreen>,
+        SingleTickerProviderStateMixin,
+        AutomaticKeepAliveClientMixin {
   final LiveDharamController _controller = Get.find();
 
   final ScrollController _scrollControllerForTop = ScrollController();
@@ -266,34 +256,43 @@ class _LivePage extends State<LiveDharamScreen>
       if (status == AnimationStatus.completed) {
         _svgController.reset();
         svgaUrls.remove(svgaUrls.entries.first.key);
-        if(svgaUrls.isNotEmpty){
+        if (svgaUrls.isNotEmpty) {
           _loadRandomAnimation();
         }
-        if(svgaUrls.isEmpty){
+        if (svgaUrls.isEmpty) {
           print("Animation -removed");
           _removeOverlay();
         }
       }
     });
   }
+
   Future<void> _showOverlay() async {
-    if(_overlayEntry == null) {
+    if (_overlayEntry == null) {
       _overlayEntry = _createOverlayEntry();
       Overlay.of(context)?.insert(_overlayEntry!);
     }
   }
+
   OverlayEntry _createOverlayEntry() {
     return OverlayEntry(
-      builder: (context) => Positioned(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        child: Material(
-          color: Colors.transparent,
-          child: Center(
-            child: SVGAImage(_svgController),
+      builder: (context) =>
+          Positioned(
+            width: MediaQuery
+                .of(context)
+                .size
+                .width,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height,
+            child: Material(
+              color: Colors.transparent,
+              child: Center(
+                child: SVGAImage(_svgController),
+              ),
+            ),
           ),
-        ),
-      ),
     );
   }
 
@@ -307,6 +306,7 @@ class _LivePage extends State<LiveDharamScreen>
       _svgController.forward();
     });
   }
+
   void successAndFailureCallBack({
     required String message,
     required bool isForSuccess,
@@ -701,6 +701,7 @@ class _LivePage extends State<LiveDharamScreen>
 
     super.dispose();
   }
+
   void _removeOverlay() {
     if (_overlayEntry != null) {
       _overlayEntry!.remove();
@@ -708,6 +709,7 @@ class _LivePage extends State<LiveDharamScreen>
       _overlayEntry = null; // Clear the reference
     }
   }
+
   Future<void> onAudienceLocalConnectStateChanged() async {
     final audienceConnectState =
         zegoController.coHost.audienceLocalConnectStateNotifier.value;
@@ -923,7 +925,7 @@ class _LivePage extends State<LiveDharamScreen>
                 ..duration.isVisible = false,
               events: events,
             );
-          },
+            },
         ),
       ),
       // ),
@@ -1318,16 +1320,19 @@ class _LivePage extends State<LiveDharamScreen>
       ),
     );
   }
+
   OverlayEntry? _overlayEntry;
   StreamSubscription<DatabaseEvent>? _subscription;
   Map<String, dynamic> svgaUrls = {};
+
   Widget newLeaderboard() {
-    if(_subscription == null) {
+    if (_subscription == null) {
       print("Animation -url ${_controller.liveId}");
       _subscription = FirebaseDatabase.instance
           .ref()
           .child("live")
-          .child(_controller.liveId).child("realTime")
+          .child(_controller.liveId)
+          .child("realTime")
           .child("gift")
           .onChildAdded
           .listen((event) {
@@ -4825,7 +4830,8 @@ class _LivePage extends State<LiveDharamScreen>
         // } else {}
         print("calling accept button");
         final connectInvite = zegoController.coHost;
-        await connectInvite.hostSendCoHostInvitationToAudience(user);
+        await connectInvite.hostSendCoHostInvitationToAudience(
+            user, timeoutSecond: 10);
       },
       onDeclineButton: () {},
       user: user,
