@@ -77,19 +77,17 @@ class HomeUI extends GetView<HomeController> {
                   ),
                 ),
                 actions: [
-                   /*GestureDetector(
+                  GestureDetector(
                     onTap: () {
-                      Get.to(()=>const NewLiveCallScreen());
+                      Get.to(() => const NewLiveScreen());
                     },
                     child: Container(
                       height: 50,
                       width: 50,
                       color: Colors.redAccent,
-                    ),  
+                    ),
                   ),
-                  const SizedBox(
-                    width: 20
-                  ),*/
+                  const SizedBox(width: 20),
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -133,7 +131,8 @@ class HomeUI extends GetView<HomeController> {
                                 Get.toNamed(RouteName.profileUi);
                               },
                             ),
-                      Text("profile".tr,
+                      Text(
+                        "profile".tr,
                         style: AppTextStyle.textStyle13(
                             fontWeight: FontWeight.w400,
                             fontColor: appColors.textColor),
@@ -327,7 +326,7 @@ class HomeUI extends GetView<HomeController> {
                             children: [
                               Expanded(
                                   child: RetentionWidget(
-                                    isEligible: true,
+                                isEligible: true,
                                 title:
                                     "${"bonusWallet".tr} \n ₹${abbreviateNumber(controller.homeData?.bonusWallet)}",
                                 subTitle:
@@ -423,12 +422,16 @@ class HomeUI extends GetView<HomeController> {
                             alignment: Alignment.centerLeft,
                             child: CustomText(
                               (controller.homeData!.retention! <
-                                  controller.homeData!.minimumRetention!) ? "notEligibleBonus".tr : "eligibleBonus".tr,
+                                      controller.homeData!.minimumRetention!)
+                                  ? "notEligibleBonus".tr
+                                  : "eligibleBonus".tr,
                               fontWeight: FontWeight.w400,
                               textAlign: TextAlign.start,
                               fontSize: 14,
                               fontColor: !(controller.homeData!.retention! <
-                                  controller.homeData!.minimumRetention!)! ? appColors.green :appColors.red,
+                                      controller.homeData!.minimumRetention!)!
+                                  ? appColors.green
+                                  : appColors.red,
                             ),
                           ),
                           SizedBox(height: 10.h),
@@ -520,7 +523,7 @@ class HomeUI extends GetView<HomeController> {
                               ? const SizedBox()
                               : Column(
                                   children: [
-                                     GestureDetector(
+                                    GestureDetector(
                                       onTap: () {
                                         Get.toNamed(RouteName.noticeBoard);
                                       },
@@ -555,82 +558,89 @@ class HomeUI extends GetView<HomeController> {
                           SizedBox(height: 10.h),
                           Obx(
                             () {
-                              return isLive.value == 1  ? controller.isLiveEnable.value
-                                  ? Column(
-                                      children: [
-                                        SizedBox(height: 10.h),
-                                        GestureDetector(
-                                          onTap: () async {
-                                            bool hasOpenOrder = false;
-                                            // hasOpenOrder = await controller.hasOpenOrder();
-                                            if (hasOpenOrder) {
-                                              // divineSnackBar(
-                                              //   data:
-                                              //       "Unable to Go Live due to your active order.",
-                                              //   color: appColors.guideColor,
-                                              //   duration: const Duration(seconds: 6),
-                                              // );
-                                            } else {
-                                              bool isChatOn = chatSwitch.value;
-                                              bool isAudioCallOn =
-                                                  callSwitch.value;
-                                              bool isVideoCallOn =
-                                                  videoSwitch.value;
-                                              if (isChatOn == false &&
-                                                  isAudioCallOn == false &&
-                                                  isVideoCallOn == false) {
-                                                await Get.toNamed(
-                                                    RouteName.liveTipsUI);
-                                              } else {
-                                                divineSnackBar(
-                                                  data:
-                                                      "Please turn off all session types in order to go live.",
+                              return isLive.value == 1
+                                  ? controller.isLiveEnable.value
+                                      ? Column(
+                                          children: [
+                                            SizedBox(height: 10.h),
+                                            GestureDetector(
+                                              onTap: () async {
+                                                bool hasOpenOrder = false;
+                                                // hasOpenOrder = await controller.hasOpenOrder();
+                                                if (hasOpenOrder) {
+                                                  // divineSnackBar(
+                                                  //   data:
+                                                  //       "Unable to Go Live due to your active order.",
+                                                  //   color: appColors.guideColor,
+                                                  //   duration: const Duration(seconds: 6),
+                                                  // );
+                                                } else {
+                                                  bool isChatOn =
+                                                      chatSwitch.value;
+                                                  bool isAudioCallOn =
+                                                      callSwitch.value;
+                                                  bool isVideoCallOn =
+                                                      videoSwitch.value;
+                                                  if (isChatOn == false &&
+                                                      isAudioCallOn == false &&
+                                                      isVideoCallOn == false) {
+                                                    await Get.toNamed(
+                                                        RouteName.liveTipsUI);
+                                                  } else {
+                                                    divineSnackBar(
+                                                      data:
+                                                          "Please turn off all session types in order to go live.",
+                                                      color:
+                                                          appColors.guideColor,
+                                                      duration: const Duration(
+                                                          seconds: 6),
+                                                    );
+                                                  }
+                                                }
+                                              },
+                                              child: Container(
+                                                height: 60,
+                                                decoration: BoxDecoration(
                                                   color: appColors.guideColor,
-                                                  duration: const Duration(
-                                                      seconds: 6),
-                                                );
-                                              }
-                                            }
-                                          },
-                                          child: Container(
-                                            height: 60,
-                                            decoration: BoxDecoration(
-                                              color: appColors.guideColor,
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: Colors.black
-                                                      .withOpacity(0.2),
-                                                  blurRadius: 1.0,
-                                                  offset:
-                                                      const Offset(0.0, 3.0),
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color: Colors.black
+                                                          .withOpacity(0.2),
+                                                      blurRadius: 1.0,
+                                                      offset: const Offset(
+                                                          0.0, 3.0),
+                                                    ),
+                                                  ],
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          10.0),
                                                 ),
-                                              ],
-                                              borderRadius:
-                                                  BorderRadius.circular(10.0),
-                                            ),
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Assets.images.icGoLive
-                                                    .svg(color: Colors.white),
-                                                const SizedBox(width: 15),
-                                                Text(
-                                                  "goLive".tr,
-                                                  style:
-                                                      AppTextStyle.textStyle20(
-                                                    fontWeight: FontWeight.w700,
-                                                    fontColor: appColors.white,
-                                                  ),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Assets.images.icGoLive.svg(
+                                                        color: Colors.white),
+                                                    const SizedBox(width: 15),
+                                                    Text(
+                                                      "goLive".tr,
+                                                      style: AppTextStyle
+                                                          .textStyle20(
+                                                        fontWeight:
+                                                            FontWeight.w700,
+                                                        fontColor:
+                                                            appColors.white,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ],
+                                              ),
                                             ),
-                                          ),
-                                        ),
-                                        SizedBox(height: 10.h),
-                                      ],
-                                    )
-                                  : const SizedBox():const SizedBox();
+                                            SizedBox(height: 10.h),
+                                          ],
+                                        )
+                                      : const SizedBox()
+                                  : const SizedBox();
                             },
                           ),
                           SizedBox(height: 10.h),
@@ -898,7 +908,6 @@ class HomeUI extends GetView<HomeController> {
     });
   }
 
-
   Widget noticeBoardWidget({HomeController? controller}) {
     return controller!.homeData != null
         ? ClipRRect(
@@ -990,7 +999,8 @@ class HomeUI extends GetView<HomeController> {
                   ),
                 ),*/
                       ExpandableHtml(
-                        htmlData: controller.homeData?.noticeBoard?.description ?? "",
+                        htmlData:
+                            controller.homeData?.noticeBoard?.description ?? "",
                         trimLength: 100,
                       ),
                     ],
@@ -1196,7 +1206,6 @@ class HomeUI extends GetView<HomeController> {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-
                   children: [
                     CustomText(
                       "nextOnlineTiming".tr,
@@ -1223,106 +1232,101 @@ class HomeUI extends GetView<HomeController> {
                 SizedBox(height: 15.h),
                 cond2
                     ? Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: Column(
-                    children: [
-                      Obx(() => controller
-                          .selectedChatTime.value.isEmpty
-                          ? InkWell(
-                        onTap:
-                        controller.selectDateTimePopupForChat,
-                        child: Container(
-                          // width: 128.w,
-                          height: 31.h,
-                          decoration: BoxDecoration(
-                            color: appColors.guideColor,
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(20)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "scheduleNow".tr,
-                              style: AppTextStyle.textStyle10(
-                                  fontColor: appColors.white,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ).pSymmetric(h: 16),
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: Column(
+                          children: [
+                            Obx(() => controller.selectedChatTime.value.isEmpty
+                                ? InkWell(
+                                    onTap:
+                                        controller.selectDateTimePopupForChat,
+                                    child: Container(
+                                      // width: 128.w,
+                                      height: 31.h,
+                                      decoration: BoxDecoration(
+                                        color: appColors.guideColor,
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(20)),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "scheduleNow".tr,
+                                          style: AppTextStyle.textStyle10(
+                                              fontColor: appColors.white,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ).pSymmetric(h: 16),
+                                    ),
+                                  )
+                                : SelectedTimeForChat(controller: controller)),
+                          ],
                         ),
                       )
-                          : SelectedTimeForChat(
-                          controller: controller)),
-                    ],
-                  ),
-                )
                     : const SizedBox(),
                 cond1
                     ? Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: Column(
-                    children: [
-                      Obx(() => controller
-                          .selectedCallTime.value.isEmpty
-                          ? InkWell(
-                        onTap:
-                        controller.selectDateTimePopupForCall,
-                        child: Container(
-                          // width: 128.w,
-                          height: 31.h,
-                          decoration: BoxDecoration(
-                            color: appColors.guideColor,
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(20)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "scheduleNow".tr,
-                              style: AppTextStyle.textStyle10(
-                                  fontColor: appColors.white,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ).pSymmetric(h: 16),
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: Column(
+                          children: [
+                            Obx(() => controller.selectedCallTime.value.isEmpty
+                                ? InkWell(
+                                    onTap:
+                                        controller.selectDateTimePopupForCall,
+                                    child: Container(
+                                      // width: 128.w,
+                                      height: 31.h,
+                                      decoration: BoxDecoration(
+                                        color: appColors.guideColor,
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(20)),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "scheduleNow".tr,
+                                          style: AppTextStyle.textStyle10(
+                                              fontColor: appColors.white,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ).pSymmetric(h: 16),
+                                    ),
+                                  )
+                                : SelectedTimeForCall(controller: controller)),
+                          ],
                         ),
                       )
-                          : SelectedTimeForCall(
-                          controller: controller)),
-                    ],
-                  ),
-                )
                     : const SizedBox(),
                 cond3
                     ? Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 4.0),
-                  child: Column(
-                    children: [
-                      Obx(() => controller
-                          .selectedVideoTime.value.isEmpty
-                          ? InkWell(
-                        onTap: controller
-                            .selectDateTimePopupForVideo,
-                        child: Container(
-                          // width: 128.w,
-                          height: 31.h,
-                          decoration: BoxDecoration(
-                            color: appColors.guideColor,
-                            borderRadius: const BorderRadius.all(
-                                Radius.circular(20)),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "scheduleNow".tr,
-                              style: AppTextStyle.textStyle10(
-                                fontColor: appColors.white,
-                                fontWeight: FontWeight.w400,
-                              ),
-                            ),
-                          ).pSymmetric(h: 16),
+                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                        child: Column(
+                          children: [
+                            Obx(() => controller.selectedVideoTime.value.isEmpty
+                                ? InkWell(
+                                    onTap:
+                                        controller.selectDateTimePopupForVideo,
+                                    child: Container(
+                                      // width: 128.w,
+                                      height: 31.h,
+                                      decoration: BoxDecoration(
+                                        color: appColors.guideColor,
+                                        borderRadius: const BorderRadius.all(
+                                            Radius.circular(20)),
+                                      ),
+                                      child: Center(
+                                        child: Text(
+                                          "scheduleNow".tr,
+                                          style: AppTextStyle.textStyle10(
+                                            fontColor: appColors.white,
+                                            fontWeight: FontWeight.w400,
+                                          ),
+                                        ),
+                                      ).pSymmetric(h: 16),
+                                    ),
+                                  )
+                                : SelectedTimeForVideoCall(
+                                    controller: controller)),
+                          ],
                         ),
                       )
-                          : SelectedTimeForVideoCall(
-                          controller: controller)),
-                    ],
-                  ),
-                )
                     : const SizedBox(),
               ],
             ),
@@ -2458,18 +2462,20 @@ class PerformanceDialog extends StatelessWidget {
                                             : const SizedBox(),
                                         SizedBox(height: 5.h),
                                         controller.performanceScoreList
-                                            .asMap()
-                                            .containsKey(
-                                            controller.scoreIndex)?
-                                        Text(
-                                          'Out of ${controller.performanceScoreList[controller.scoreIndex]?.performance?.totalMarks ?? 0}',
-                                          // item?.performance?.isNotEmpty ?? false
-                                          //     ? 'Out of ${item?.performance?[0].valueOutOff ?? 0}'
-                                          //     : "Out of 0",
-                                          // "Out of 100",
-                                          style: AppTextStyle.textStyle10(
-                                              fontColor: appColors.darkBlue),
-                                        ) : const SizedBox(),
+                                                .asMap()
+                                                .containsKey(
+                                                    controller.scoreIndex)
+                                            ? Text(
+                                                'Out of ${controller.performanceScoreList[controller.scoreIndex]?.performance?.totalMarks ?? 0}',
+                                                // item?.performance?.isNotEmpty ?? false
+                                                //     ? 'Out of ${item?.performance?[0].valueOutOff ?? 0}'
+                                                //     : "Out of 0",
+                                                // "Out of 100",
+                                                style: AppTextStyle.textStyle10(
+                                                    fontColor:
+                                                        appColors.darkBlue),
+                                              )
+                                            : const SizedBox(),
                                       ],
                                     ),
                                   ),
@@ -2563,9 +2569,13 @@ class PerformanceDialog extends StatelessWidget {
                           )
                         : GestureDetector(
                             onTap: () {
-                              if (controller.performanceScoreList.last.performance?.totalMarks ==
-                                  (controller.performanceScoreList[
-                                      controller.scoreIndex].performance?.totalMarks)) {
+                              if (controller.performanceScoreList.last
+                                      .performance?.totalMarks ==
+                                  (controller
+                                      .performanceScoreList[
+                                          controller.scoreIndex]
+                                      .performance
+                                      ?.totalMarks)) {
                                 // Get.put(DashboardController(
                                 //         Get.put(PreDefineRepository())))
                                 //     .selectedIndex
@@ -2578,9 +2588,13 @@ class PerformanceDialog extends StatelessWidget {
                             },
                             child: Container(
                               decoration: BoxDecoration(
-                                  color: controller.performanceScoreList.last.performance?.totalMarks ==
-                                          controller.performanceScoreList[
-                                              controller.scoreIndex].performance?.totalMarks
+                                  color: controller.performanceScoreList.last
+                                              .performance?.totalMarks ==
+                                          controller
+                                              .performanceScoreList[
+                                                  controller.scoreIndex]
+                                              .performance
+                                              ?.totalMarks
                                       ? appColors.guideColor
                                       : appColors.lightGrey.withOpacity(0.4),
                                   borderRadius: BorderRadius.circular(10)),

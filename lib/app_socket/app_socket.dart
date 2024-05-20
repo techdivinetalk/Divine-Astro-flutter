@@ -224,7 +224,7 @@ class AppSocket {
   }
 
   // Added By: divine-dharam
-  void joinLive({
+   joinLive({
     required String userType,
     required int userId,
   }) {

@@ -1,4 +1,5 @@
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:flutter/material.dart';
 
 class CommonButton extends StatelessWidget {
@@ -27,7 +28,7 @@ class CommonButton extends StatelessWidget {
           ),
         ),
         onPressed: buttonCallback,
-        child: Text(buttonText, style:  TextStyle(color: appColors.black)),
+        child: Text(buttonText, style:  TextStyle(color: appColors.whiteGuidedColor,fontFamily: FontFamily.metropolis,fontWeight: FontWeight.w500)),
       ),
     );
   }

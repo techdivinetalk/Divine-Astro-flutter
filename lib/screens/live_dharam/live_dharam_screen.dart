@@ -98,7 +98,7 @@ class _LivePage extends State<LiveDharamScreen>
     names: <String>["LiveDharamScreen_eventListner"],
   );
 
-  List<String> indianGreetingsFunction() {
+  /*List<String> indianGreetingsFunction() {
     List<String> temp = <String>[
       "Hi",
       "Hello",
@@ -159,7 +159,7 @@ class _LivePage extends State<LiveDharamScreen>
       return 'शुभ दोपहर';
     }
     return 'शुभ संध्या';
-  }
+  }*/
 
   @override
   void initState() {
@@ -608,7 +608,7 @@ class _LivePage extends State<LiveDharamScreen>
     return;
   }
 
-  Future<void> manMessage() async {
+  /*Future<void> manMessage() async {
     var num = math.Random.secure().nextInt(30);
     var url = "https://xsgames.co/randomusers/assets/avatars/male/$num.jpg";
     final String fullName = RandomNames(Zone.india).manFullName();
@@ -650,7 +650,7 @@ class _LivePage extends State<LiveDharamScreen>
     );
     await sendMessageToZego(model);
     return Future<void>.value();
-  }
+  }*/
 
   Future<void> onUserJoin(ZegoUIKitUser zegoUIKitUser) async {
     final bool cond1 = _controller.isHost;
@@ -3874,180 +3874,7 @@ class _LivePage extends State<LiveDharamScreen>
     return;
   }
 
-  Widget settingsColForCust() {
-    final bool isEngaded = _controller.currentCaller.isEngaded;
-    final String type = _controller.currentCaller.callType;
-    final bool condForVideoCall = isEngaded && type == "video";
-    final bool condForAudioCall =
-        isEngaded && (type == "private" || type == "audio");
 
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.end,
-      children: [
-        AnimatedOpacity(
-          opacity: false ? 0.0 : 1.0,
-          duration: const Duration(seconds: 1),
-          child: false
-              ? const SizedBox()
-              : Column(
-                  children: [
-                    InkWell(
-                      onTap: exitFunc,
-                      child: SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(50.0),
-                            ),
-                            border: Border.all(
-                              color: appColors.guideColor,
-                            ),
-                            color: appColors.black.withOpacity(0.2),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(0.0),
-                            child: Image.asset(
-                              _controller.currentCaller.isEngaded
-                                  ? "assets/images/live_new_hang_up.png"
-                                  : "assets/images/live_exit_red.png",
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                  ],
-                ),
-        ),
-        AnimatedOpacity(
-          opacity: !condForVideoCall ? 0.0 : 1.0,
-          duration: const Duration(seconds: 1),
-          child: !condForVideoCall
-              ? const SizedBox()
-              : Column(
-                  children: [
-                    InkWell(
-                      onTap: () async {
-                        final ZegoUIKit instance = ZegoUIKit.instance;
-                        _controller.isFront = !_controller.isFront;
-                        instance.useFrontFacingCamera(_controller.isFront);
-                      },
-                      child: SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(50.0),
-                            ),
-                            border: Border.all(
-                              color: appColors.guideColor,
-                            ),
-                            color: appColors.black.withOpacity(0.2),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.asset(
-                              _controller.isFront
-                                  ? "assets/images/live_switch_cam_new.png"
-                                  : "assets/images/live_switch_cam_new.png",
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                  ],
-                ),
-        ),
-        AnimatedOpacity(
-          opacity: !condForVideoCall ? 0.0 : 1.0,
-          duration: const Duration(seconds: 1),
-          child: !condForVideoCall
-              ? const SizedBox()
-              : Column(
-                  children: [
-                    InkWell(
-                      onTap: () async {
-                        final ZegoUIKit instance = ZegoUIKit.instance;
-                        _controller.isCamOn = !_controller.isCamOn;
-                        instance.turnCameraOn(_controller.isCamOn);
-                      },
-                      child: SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(50.0),
-                            ),
-                            border: Border.all(
-                              color: appColors.guideColor,
-                            ),
-                            color: appColors.black.withOpacity(0.2),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.asset(
-                              _controller.isCamOn
-                                  ? "assets/images/live_cam_on.png"
-                                  : "assets/images/live_cam_off.png",
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 8),
-                  ],
-                ),
-        ),
-        AnimatedOpacity(
-          opacity: !(condForVideoCall || condForAudioCall) ? 0.0 : 1.0,
-          duration: const Duration(seconds: 1),
-          child: !(condForVideoCall || condForAudioCall)
-              ? const SizedBox()
-              : Column(
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        final ZegoUIKit instance = ZegoUIKit.instance;
-                        _controller.isMicOn = !_controller.isMicOn;
-                        instance.turnMicrophoneOn(_controller.isMicOn,
-                            muteMode: true);
-                      },
-                      child: SizedBox(
-                        height: 50,
-                        width: 50,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(50.0),
-                            ),
-                            border: Border.all(
-                              color: appColors.guideColor,
-                            ),
-                            color: appColors.black.withOpacity(0.2),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Image.asset(
-                              _controller.isMicOn
-                                  ? "assets/images/live_mic_on.png"
-                                  : "assets/images/live_mic_off.png",
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 0),
-                  ],
-                ),
-        ),
-      ],
-    );
-  }
 
   Widget verticalDefault() {
     return Column(
@@ -4502,17 +4329,6 @@ class _LivePage extends State<LiveDharamScreen>
         },
       );
     }
-    // else if (hasMyIdInWaitList) {
-    //   await exitWaitListPopup(
-    //     noDisconnect: () {},
-    //     yesDisconnect: () async {
-    //       if (!_controller.isHost) {
-    //         await _controller.removeFromWaitList();
-    //       } else {}
-    //     },
-    //   );
-    //   return Future<void>.value();
-    // }
     else {
       if (_controller.isHost) {
         await endLiveSession(

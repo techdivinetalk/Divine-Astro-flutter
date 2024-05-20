@@ -155,6 +155,8 @@ class LiveDharamController extends GetxController {
     isHost = true;
     isHostAvailable = true;
     hostSpeciality = getSpeciality();
+    print(hostSpeciality);
+    print("hostSpecialityhostSpecialityhostSpecialityhostSpeciality");
     // currentIndex = 0;
     currentIndex = currentIndex == 0 ? 0 : currentIndex;
     data = <dynamic, dynamic>{};
@@ -207,7 +209,7 @@ class LiveDharamController extends GetxController {
     hasFollowPopupOpen = false;
     // hasCallAcceptRejectPopupOpen = false;
     // openAceeptRejectDialogForId = "";
-    clearRequest();
+
     isProcessing = false;
     extendTimeWidgetVisible = false;
     hasReInitCoHost = false;
@@ -401,9 +403,7 @@ class LiveDharamController extends GetxController {
   // set openAceeptRejectDialogForId(String value) =>
   //     _openAceeptRejectDialogForId(value);
 
-  RequestClass get requestClass => _requestClass.value;
 
-  set requestClass(RequestClass value) => _requestClass(value);
 
   bool get isProcessing => _isProcessing.value;
 
@@ -1590,24 +1590,7 @@ print("datadatadatadatadatadata");
     return Future<void>.value();
   }
 
-  void clearRequest() {
-    requestClass = RequestClass(
-      type: "",
-      giftData: GiftData(
-        id: 0,
-        giftName: "",
-        giftImage: "",
-        giftPrice: 0,
-        giftStatus: 0,
-        createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
-        fullGiftImage: "",
-        animation: "",
-      ),
-      giftCount: 0,
-    );
-    return;
-  }
+
 
   void tarotCardInit() {
     NewTarotCardModel newTarotCardModel = NewTarotCardModel();
