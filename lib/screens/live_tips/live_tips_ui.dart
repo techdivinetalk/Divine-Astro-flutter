@@ -227,7 +227,6 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                     userType : customer/astrologer
                     userId : id of customer or astrologer as per userType
                     */
-
     // final int id = controller.pref.getUserDetail()?.id ?? 0;
     // if (id == 0) {
     //   divineSnackBar(data: "Unknown Error Occurred");

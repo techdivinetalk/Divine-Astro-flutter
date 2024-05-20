@@ -54,23 +54,23 @@ class NewLiveScreen extends GetView<NewLiveController> {
                 config: controller.streamingConfig
                   ..slideSurfaceToHide = false
                   ..duration.isVisible = false
-                  ..preview.beautyEffectIcon = SvgPicture.asset(
-                    "assets/svg/beauty_icon.svg",
-                    height: 50,
-                    width: 50,
-                  )
-                  ..preview.startLiveButtonBuilder =
-                      (BuildContext context, VoidCallback startLive) {
-                    return Expanded(
-                      child: CommonButton(
-                        buttonText: "startLive".tr,
-                        buttonCallback: () async {
-                          startLive();
-                          await controller.furtherProcedure();
-                        },
-                      ),
-                    );
-                  }
+                  // ..preview.beautyEffectIcon = SvgPicture.asset(
+                  //   "assets/svg/beauty_icon.svg",
+                  //   height: 50,
+                  //   width: 50,
+                  // )
+                  // ..preview.startLiveButtonBuilder =
+                  //     (BuildContext context, VoidCallback startLive) {
+                  //   return Expanded(
+                  //     child: CommonButton(
+                  //       buttonText: "startLive".tr,
+                  //       buttonCallback: () async {
+                  //         startLive();
+                  //         await controller.furtherProcedure();
+                  //       },
+                  //     ),
+                  //   );
+                  // }
                   ..audioVideoView = ZegoLiveStreamingAudioVideoViewConfig(
                     showUserNameOnView: false,
                     showAvatarInAudioMode: true,
@@ -97,6 +97,7 @@ class NewLiveScreen extends GetView<NewLiveController> {
                   )
                   ..video = ZegoUIKitVideoConfig.preset1080P()
                   ..coHost.maxCoHostCount = 1
+                  ..preview.showPreviewForHost = false
                   ..bottomMenuBar = ZegoLiveStreamingBottomMenuBarConfig(
                     showInRoomMessageButton: false,
                     hostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
@@ -115,18 +116,6 @@ class NewLiveScreen extends GetView<NewLiveController> {
                     },
                   )
                   ..foreground = foregroundWidget(controller: controller)
-                // ..foreground = ValueListenableBuilder<ZegoLiveStreamingState>(
-                //     valueListenable: controller.liveStateNotifier,
-                //     builder: (context, liveState, _) {
-                //       if (ZegoLiveStreamingState.ended == liveState) {
-                //         return Container();
-                //       }
-                //       if (ZegoLiveStreamingState.idle == liveState) {
-                //         return ;
-                //       }
-                //
-                //       return Container();
-                //     }),
                 ));
       },
     );

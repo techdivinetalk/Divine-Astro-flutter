@@ -6,6 +6,7 @@ import 'package:camera/camera.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/main.dart';
 import 'package:divine_astrologer/model/live/blocked_customer_list_res.dart';
+import 'package:divine_astrologer/new_live/new_live_call.dart';
 import 'package:divine_astrologer/repository/astrologer_profile_repository.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_global_singleton.dart';
@@ -132,7 +133,7 @@ class LiveTipsController extends GetxController {
     final String image = pref.getUserDetail()?.image ?? "";
     final String avatar = isValidImageURL(imageURL: "$awsURL/$image");
     final List<String> blockedCustomerList = await callBlockedCustomerListRes();
-    await database.ref().child("live/$userId").update(
+    await database.ref().child("liveTest/$userId").update(
       {
         "id": userId,
         "name": userName,
@@ -145,14 +146,14 @@ class LiveTipsController extends GetxController {
     await database.ref().child("astro-live-list/$userId").set(1);
 
     LiveGlobalSingleton().isInLiveScreen = true;
-    await Get.toNamed(RouteName.liveDharamScreen, arguments: userId);
+    await Get.off(()=>const NewLiveScreen());
     LiveGlobalSingleton().isInLiveScreen = false;
 
-    await database.ref().child("live/$userId").remove();
+    await database.ref().child("liveTest/$userId").remove();
     await database.ref().child("astro-live-list/$userId").remove();
 
-    Get.back();
-    Get.back();
+    // Get.back();
+    // Get.back();
 
     // unawaited(database.ref().child("live/$userId").remove());
     // unawaited(database.ref().child("astro-live-list/$userId").remove());

@@ -78,8 +78,10 @@ class HomeUI extends GetView<HomeController> {
                 ),
                 actions: [
                   GestureDetector(
-                    onTap: () {
-                      Get.to(() => const NewLiveScreen());
+                    onTap: () async {
+                      // Get.to(() => const NewLiveScreen());
+                      await Get.toNamed(
+                          RouteName.liveTipsUI);
                     },
                     child: Container(
                       height: 50,
