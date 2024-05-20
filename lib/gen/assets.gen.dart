@@ -148,7 +148,7 @@ class $AssetsImagesGen {
   /// File path: assets/images/chat_video_call_mic_off.png
   AssetGenImage get chatVideoCallMicOff {
     // return const AssetGenImage('assets/images/chat_video_call_mic_off.png');
-    return const AssetGenImage('assets/images/chat_voice_call_mic_on.png');
+    return const AssetGenImage('assets/images/chat_voice_call_mic_off.png');
   }
 
   /// File path: assets/images/chat_video_call_mic_on.png

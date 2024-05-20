@@ -99,7 +99,7 @@ class ZegoService {
 
         isFront.value = true;
         isCamOn.value = true;
-        isMicOn.value = true;
+        isMicOn.value = false;
 
         final Map map = json.decode(data.customData);
         // final String astrId = map["astr_id"];
@@ -443,11 +443,11 @@ class ZegoService {
                       // ),
                       child: isMicOn.value
                           ? Image.asset(
-                              color: appColors.white,
-                              "assets/images/chat_voice_call_mic_off.png",
+                              "assets/images/chat_voice_call_mic_on.png",
                             )
                           : Image.asset(
-                              "assets/images/chat_voice_call_mic_on.png",
+                        color: appColors.white,
+                              "assets/images/chat_voice_call_mic_off.png",
                             ),
                     ),
                   ),
