@@ -17,6 +17,7 @@ import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 import '../firebase_service/firebase_service.dart';
+
 //
 //
 
@@ -94,6 +95,12 @@ class ZegoService {
       //   },
       // ),
       requireConfig: (ZegoCallInvitationData data) {
+        print("test_isCamOn.value: ${isCamOn.value}");
+
+        isFront.value = true;
+        isCamOn.value = true;
+        isMicOn.value = true;
+
         final Map map = json.decode(data.customData);
         // final String astrId = map["astr_id"];
         // final String astrName = map["astr_name"];
@@ -436,12 +443,12 @@ class ZegoService {
                       // ),
                       child: isMicOn.value
                           ? Image.asset(
-                        "assets/images/chat_voice_call_mic_on.png",
-                      )
+                              color: appColors.white,
+                              "assets/images/chat_voice_call_mic_off.png",
+                            )
                           : Image.asset(
-                        color: appColors.white,
-                        "assets/images/chat_voice_call_mic_off.png",
-                      ),
+                              "assets/images/chat_voice_call_mic_on.png",
+                            ),
                     ),
                   ),
                   InkWell(
@@ -595,7 +602,7 @@ class ZegoService {
 
     if (value) {
       await zegoLogin();
-    }else{}
+    } else {}
     await addUpdatePermission();
     Future<void>.value();
   }

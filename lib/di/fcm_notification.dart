@@ -243,6 +243,7 @@ Future<void> showNotificationWithActions(
     "DivineAstrologer",
     "AstrologerNotification",
     importance: Importance.high,
+    icon: "divine_logo_tran",
   );
   const NotificationDetails notificationDetails =
       NotificationDetails(android: androidNotificationDetails);
