@@ -20,7 +20,7 @@ import 'package:divine_astrologer/screens/live_dharam/widgets/disconnect_call_wi
 import 'package:divine_astrologer/screens/live_dharam/widgets/end_session_widget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
+
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get_connect/http/src/status/http_status.dart';
@@ -47,6 +47,7 @@ class NewLiveController extends GetxController {
   @override
   void onInit() {
     preferanceAstrologerData();
+    getLiveAstrologerData();
     super.onInit();
   }
 
@@ -60,6 +61,9 @@ class NewLiveController extends GetxController {
   RxBool isCamOn = false.obs;
   RxBool extendTimeWidgetVisible = false.obs;
   RxBool isMicOn = false.obs;
+  RxBool isHostAvailable = true.obs;
+  RxBool showCardDeckToUserPopupTimeoutHappening = false.obs;
+  RxBool waitingForUserToSelectCardsPopupVisible = false.obs;
 
   List<LeaderboardModel> leaderboardModel = [];
   List<WaitListModel> waitList = [];
@@ -235,6 +239,17 @@ class NewLiveController extends GetxController {
     return;
   }
 
+  String _twoDigits(int n) {
+    return n >= 10 ? '$n' : '0$n';
+  }
+
+  String formatDuration(Duration duration) {
+    int hours = duration.inHours;
+    int minutes = duration.inMinutes % 60;
+    int seconds = duration.inSeconds % 60;
+    return '$hours:${_twoDigits(minutes)}:${_twoDigits(seconds)}';
+  }
+
   // ------------------------ All Live Api Calls ------------------------- ///
   UserRepository userRepository = UserRepository();
   AstrologerProfileRepository liveRepository = AstrologerProfileRepository();
@@ -340,8 +355,6 @@ class NewLiveController extends GetxController {
 
   /// Ask for Audio Video Privet Call and Gift Api
   Future<void> sendGiftAPI({
-
-
     required Map<String, dynamic> data,
   }) async {
     try {
@@ -355,7 +368,7 @@ class NewLiveController extends GetxController {
             "app_id": appID,
             "server_secret": serverSecret,
             "room_id": liveId.value,
-            "user_id": astroId.value, 
+            "user_id": astroId.value,
             "user_name": astroName.value,
             "gift_type": data,
             "gift_count": 1,
@@ -370,6 +383,20 @@ class NewLiveController extends GetxController {
     } on Exception catch (error) {
       liveSnackBar(msg: "[ERROR], Send Gift Fail: ${error}");
     }
+    return Future<void>.value();
+  }
+
+  /// Tarot card close
+  Future<void> sendTaroCardClose() async {
+    var data = {
+      "room_id": liveId.value,
+      "user_id": astroId.value,
+      "user_name": astroName.value,
+      "item": {},
+      "type": "Tarot Card Close",
+    };
+    await sendGiftAPI(data: data);
+    update();
     return Future<void>.value();
   }
 
@@ -541,6 +568,7 @@ class NewLiveController extends GetxController {
   /// -------------------- Firebase logic -------------------- ///
   final DatabaseReference reference = FirebaseDatabase.instance.ref();
 
+  /// update block list on firebase
   Future<void> updateBlockListToFirebase() async {
     final List<dynamic> temp = [];
     blockedCustomerListRes!.data?.forEach(
@@ -552,5 +580,160 @@ class NewLiveController extends GetxController {
       <String, Object?>{"blockList": temp ?? []},
     );
     return Future<void>.value();
+  }
+
+  /// get all total time from waitlist
+  String getTotalWaitTime() {
+    String time = "";
+    int totalMinutes = 0;
+    final List<String> tempList = <String>[];
+    for (final WaitListModel element in waitList) {
+      tempList.add(element.totalTime);
+    }
+    if (tempList.isEmpty) {
+      time = "00:00:00";
+    } else {
+      for (String time in tempList) {
+        totalMinutes += int.parse(time);
+      }
+      Duration duration = Duration(minutes: totalMinutes);
+      String formattedTime = formatDuration(duration);
+      time = formattedTime;
+    }
+    return time;
+  }
+
+  /// get wait list data from login astrologer
+  void getLatestWaitList(DataSnapshot? dataSnapshot) {
+    if (dataSnapshot != null) {
+      if (dataSnapshot.exists) {
+        if (dataSnapshot.value is Map<dynamic, dynamic>) {
+          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+              as Map<dynamic, dynamic>;
+          final List<WaitListModel> tempList = <WaitListModel>[];
+          map.forEach(
+            // ignore: always_specify_types
+            (key, value) {
+              tempList.add(
+                WaitListModel(
+                  // ignore:  avoid_dynamic_calls
+                  isRequest: value["isRequest"] ?? false,
+                  // ignore:  avoid_dynamic_calls
+                  isEngaded: value["isEngaded"] ?? false,
+                  // ignore:  avoid_dynamic_calls
+                  callType: value["callType"] ?? "",
+                  // ignore:  avoid_dynamic_calls
+                  totalTime: value["totalTime"] ?? "",
+                  totalMin: value["totalMin"] ?? 0,
+                  // ignore:  avoid_dynamic_calls
+                  avatar: value["avatar"] ?? "",
+                  // ignore:  avoid_dynamic_calls
+                  userName: value["userName"] ?? "",
+                  // ignore:  avoid_dynamic_calls
+                  id: value["id"] ?? "",
+                  // ignore:  avoid_dynamic_calls
+                  generatedOrderId: value["generatedOrderId"] ?? 0,
+                  // ignore:  avoid_dynamic_calls
+                  offerId: value["offerId"] ?? 0,
+                  // ignore:  avoid_dynamic_calls
+                  callStatus: value["callStatus"] ?? 0,
+                ),
+              );
+            },
+          );
+          waitList
+            ..clear()
+            ..addAll(tempList);
+          // waitListModel = tempList;
+        } else {}
+      } else {
+        waitList.clear();
+      }
+    } else {
+      waitList.clear();
+    }
+    return;
+  }
+
+  getLiveAstrologerData() async {
+    var liveData = await reference.child("liveTest/${liveId}").get();
+    reference.child("liveTest/${liveId}/realTime").onChildAdded.listen((event) {
+      final key = event.snapshot.key;
+      final value = event.snapshot.value;
+      getAllDataAndUpdatingFromFirebase(
+          value: value as Map<dynamic, dynamic>, key: key);
+      update();
+    });
+
+    reference
+        .child("liveTest/${liveId}/realTime")
+        .onChildChanged
+        .listen((event) {
+      final key = event.snapshot.key;
+      final value = event.snapshot.value;
+      getAllDataAndUpdatingFromFirebase(
+          value: value as Map<dynamic, dynamic>, key: key);
+    });
+
+    reference
+        .child("liveTest/${liveId}/realTime")
+        .onChildRemoved
+        .listen((event) {
+      final key = event.snapshot.key;
+      if (key == "leaderboard") {}
+      if (key == "waitList") {}
+      if (key == "gift") {}
+      if (key == "order") {}
+      if (key == "tarotCard") {}
+    });
+  }
+
+  getAllDataAndUpdatingFromFirebase(
+      {String? key, Map<dynamic, dynamic>? value}) {
+    if (key == "leaderboard") {
+      leaderboardModel.clear();
+      value!.forEach((key, leaderBoardData) {
+        leaderboardModel.add(LeaderboardModel(
+          amount: leaderBoardData!["amount"] ?? 0,
+          avatar: leaderBoardData["avatar"] ?? "",
+          userName: leaderBoardData["userName"] ?? "",
+          id: leaderBoardData["id"] ?? "",
+        ));
+      });
+      update();
+      leaderboardModel.sort(
+        (LeaderboardModel a, LeaderboardModel b) {
+          return b.amount.compareTo(a.amount);
+        },
+      );
+      update();
+    }
+    if (key == "waitList") {
+      waitList.clear();
+      value!.forEach(
+        (key, value) {
+          waitList.add(
+            WaitListModel(
+              isRequest: value["isRequest"] ?? false,
+              isEngaded: value["isEngaded"] ?? false,
+              callType: value["callType"] ?? "",
+              totalTime: value["totalTime"] ?? "",
+              totalMin: value["totalMin"] ?? 0,
+              avatar: value["avatar"] ?? "",
+              userName: value["userName"] ?? "",
+              id: value["id"] ?? "",
+              generatedOrderId: value["generatedOrderId"] ?? 0,
+              offerId: value["offerId"] ?? 0,
+              callStatus: value["callStatus"] ?? 0,
+            ),
+          );
+          update();
+        },
+      );
+    }
+    if (key == "gift") {}
+    if (key == "order") {}
+    if (key == "tarotCard") {}
   }
 }

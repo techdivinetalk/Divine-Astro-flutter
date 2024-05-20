@@ -403,8 +403,6 @@ class LiveDharamController extends GetxController {
   // set openAceeptRejectDialogForId(String value) =>
   //     _openAceeptRejectDialogForId(value);
 
-
-
   bool get isProcessing => _isProcessing.value;
 
   set isProcessing(bool value) => _isProcessing(value);
@@ -640,22 +638,19 @@ class LiveDharamController extends GetxController {
       callStatus: 0,
     );
 
+    if (data[userId] != null) {
+      print(data);
+      print("datadatadatadatadatadata");
+      // var liveId = data.keys.toList()[pref.getUserDetail()!.id!];
 
-
-      if (data[userId] != null) {
-print(data);
-print("datadatadatadatadatadata");
-        // var liveId = data.keys.toList()[pref.getUserDetail()!.id!];
-
-        var liveIdNode = data[userId];
-        if (liveIdNode != null) {
-          var orderNode = liveIdNode["order"];
-          print(orderNode);
-          print("orderNodeorderNodeorderNodeorderNodeorderNode");
-          temp = getOrderModelGeneric(orderNode, forMe: false);
-        } else {}
+      var liveIdNode = data[userId];
+      if (liveIdNode != null) {
+        var orderNode = liveIdNode["order"];
+        print(orderNode);
+        print("orderNodeorderNodeorderNodeorderNodeorderNode");
+        temp = getOrderModelGeneric(orderNode, forMe: false);
       } else {}
-
+    } else {}
 
     return temp;
   }
@@ -1589,8 +1584,6 @@ print("datadatadatadatadatadata");
         : NoticeBoardRes.fromJson(NoticeBoardRes().toJson());
     return Future<void>.value();
   }
-
-
 
   void tarotCardInit() {
     NewTarotCardModel newTarotCardModel = NewTarotCardModel();

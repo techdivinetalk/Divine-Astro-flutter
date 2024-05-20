@@ -2990,8 +2990,8 @@ class _LivePage extends State<LiveDharamScreen>
     return Future<void>.value();
   }
 
-  bool waitingForUserToSelectCardsPopupVisible = false;
   bool showCardDeckToUserPopupTimeoutHappening = false;
+  bool waitingForUserToSelectCardsPopupVisible = false;
 
   Future<void> waitingForUserToSelectCardsPopup() async {
     waitingForUserToSelectCardsPopupVisible = true;
