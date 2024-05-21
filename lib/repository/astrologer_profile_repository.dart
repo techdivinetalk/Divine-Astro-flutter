@@ -103,8 +103,8 @@ class AstrologerProfileRepository extends ApiProvider {
   }
 
   Future<NoticeBoardRes> noticeBoardAPI({
-    required Function(String message) successCallBack,
-    required Function(String message) failureCallBack,
+     Function(String message)? successCallBack,
+     Function(String message)? failureCallBack,
   }) async {
     NoticeBoardRes data = NoticeBoardRes();
     try {
@@ -113,20 +113,23 @@ class AstrologerProfileRepository extends ApiProvider {
       if (response.statusCode == HttpStatus.ok) {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = NoticeBoardRes.fromJson(responseBody);
-          successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
+          if(successCallBack != null){
+            successCallBack!(responseBody["message"] ?? "Unknown Error Occurred");
+          }
+
         } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
           await preferenceService.erase();
           await Get.offAllNamed(RouteName.login);
         } else {
-          failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
+          failureCallBack!(responseBody["message"] ?? "Unknown Error Occurred");
         }
       } else {
-        failureCallBack(response.reasonPhrase ?? "Unknown Error Occurred");
+        failureCallBack!(response.reasonPhrase ?? "Unknown Error Occurred");
       }
     } on Exception catch (error, stack) {
       debugPrint("noticeBoardAPI(): Exception caught: error: $error");
       debugPrint("noticeBoardAPI(): Exception caught: stack: $stack");
-      failureCallBack("Unknown Error Occurred");
+      failureCallBack!("Unknown Error Occurred");
     }
     return Future<NoticeBoardRes>.value(data);
   }

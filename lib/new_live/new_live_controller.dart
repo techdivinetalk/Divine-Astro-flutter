@@ -48,6 +48,8 @@ class NewLiveController extends GetxController {
   void onInit() {
     preferanceAstrologerData();
     getLiveAstrologerData();
+    noticeBoard();
+    startTimer();
     super.onInit();
   }
 
@@ -119,7 +121,6 @@ class NewLiveController extends GetxController {
       callStatus: 0,
     );
     blockedCustomerListRes = BlockedCustomerListRes();
-    noticeBoardRes = NoticeBoardRes();
     deckCardModelList = [];
     tarotGameModel = TarotGameModel();
     extendTimeWidgetVisible(false);
@@ -250,88 +251,67 @@ class NewLiveController extends GetxController {
     return '$hours:${_twoDigits(minutes)}:${_twoDigits(seconds)}';
   }
 
+  /// Timer logic every some second
+  void startTimer() {
+    WidgetsBinding.instance.endOfFrame.then(
+          (_) async {
+        if (Get.context!.mounted) {
+          const duration = Duration(seconds: 1);
+          timer = Timer.periodic(
+            duration,
+                (Timer timer) async {
+              if (timer.tick % 30 == 0) {
+                timerCurrentIndex.value++;
+                if (timerCurrentIndex >
+                    (noticeBoardRes!.data?.length ?? 0)) {
+                  timerCurrentIndex.value = 1;
+                } else {}
+              } else {}
+
+              if (timer.tick % 300 == 0) {
+                final ZegoCustomMessage model = ZegoCustomMessage(
+                  type: 1,
+                  liveId: liveId.value,
+                  userId: "0",
+                  userName: "Live Monitoring Team",
+                  avatar:
+                  "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
+                  message: "Live Monitoring Team Joined",
+                  timeStamp: DateTime.now().toString(),
+                  fullGiftImage: "",
+                  isBlockedCustomer: false,
+                  isMod: true,
+                );
+                await sendMessageToZego(model);
+              } else {}
+
+              if (timer.tick % 600 == 0) {
+                final ZegoCustomMessage model = ZegoCustomMessage(
+                  type: 1,
+                  liveId: liveId.value,
+                  userId: "0",
+                  userName: "Quality Team",
+                  avatar:
+                  "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
+                  message: "Quality Team Joined",
+                  timeStamp: DateTime.now().toString(),
+                  fullGiftImage: "",
+                  isBlockedCustomer: false,
+                  isMod: true,
+                );
+                await sendMessageToZego(model);
+              } else {}
+            },
+          );
+        } else {}
+      },
+    );
+  }
+
+
   // ------------------------ All Live Api Calls ------------------------- ///
   UserRepository userRepository = UserRepository();
   AstrologerProfileRepository liveRepository = AstrologerProfileRepository();
-
-  Future<void> astroOnlineAPI({
-    required bool entering,
-    required Function(String message) successCallBack,
-    required Function(String message) failureCallBack,
-  }) async {
-    Map<String, dynamic> param = {
-      "type": 3,
-      "role_id": 7,
-      "device_token": pref.getDeviceToken() ?? "",
-    };
-    entering == true ? param["check_in"] = 1 : param["check_out"] = 1;
-    await userRepository.astroOnlineAPIForLive(
-      params: param,
-      successCallBack: successCallBack,
-      failureCallBack: failureCallBack,
-    );
-    return Future<void>.value();
-  }
-
-  Future<void> furtherProcedure() async {
-    final bool hasAllPermission = await permissionCheck();
-    if (hasAllPermission) {
-      final bool hasAllData = astroName.isNotEmpty && astroId.isNotEmpty;
-      if (hasAllData) {
-        final (bool, String) can1 = await canEnterExit(entering: true);
-        if (can1.$1 == true && can1.$2 == "") {
-          await AppSocket().joinLive(
-              userType: "astrologer", userId: int.parse(astroId.value));
-          await startLiveUpdateFirebase();
-          final (bool, String) can2 = await canEnterExit(entering: false);
-          if (can2.$1 == true && can2.$2 == "") {
-          } else {
-            divineSnackBar(data: can2.$2);
-          }
-        } else {
-          divineSnackBar(data: can1.$2);
-        }
-      } else {
-        divineSnackBar(data: "Insufficient data, Please try to Re-login");
-      }
-    } else {
-      divineSnackBar(data: "Insufficient Permissions, allow all Permissions");
-    }
-
-    return Future<void>.value();
-  }
-
-  Future<void> startLiveUpdateFirebase() async {
-    final List<String> blockedCustomerList = await callBlockedCustomerListRes();
-    await database.ref().child("liveTest/${astroId.value}").update(
-      {
-        "id": astroId.value,
-        "name": astroName.value,
-        "image": astroAvatar.value,
-        "isAvailable": true,
-        "isEngaged": 0,
-        "blockList": blockedCustomerList,
-      },
-    );
-    return Future<void>.value();
-  }
-
-  Future<(bool, String)> canEnterExit({bool? entering}) async {
-    bool returnBool = false;
-    String returnString = "";
-    await astroOnlineAPI(
-      entering: entering!,
-      successCallBack: (message) {
-        returnBool = true;
-        returnString = "";
-      },
-      failureCallBack: (message) {
-        returnBool = false;
-        returnString = message;
-      },
-    );
-    return Future<(bool, String)>.value((returnBool, returnString));
-  }
 
   Future<List<String>> callBlockedCustomerListRes() async {
     final List<String> blockedCustomerList = [];
@@ -351,6 +331,20 @@ class NewLiveController extends GetxController {
       },
     );
     return Future<List<String>>.value(blockedCustomerList);
+  }
+
+  /// Get notice board
+  noticeBoard() async {
+    NoticeBoardRes res = NoticeBoardRes();
+    res = await liveRepository.noticeBoardAPI(
+      failureCallBack: (message) {
+        liveSnackBar(msg: message);
+      },
+    );
+    noticeBoardRes = res.statusCode == HttpStatus.ok
+        ? NoticeBoardRes.fromJson(res.toJson())
+        : NoticeBoardRes.fromJson(NoticeBoardRes().toJson());
+    update();
   }
 
   /// Ask for Audio Video Privet Call and Gift Api

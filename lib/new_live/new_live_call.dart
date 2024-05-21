@@ -46,96 +46,103 @@ class NewLiveScreen extends GetView<NewLiveController> {
       assignId: true,
       init: NewLiveController(),
       builder: (controller) {
-        return Scaffold(
-            extendBodyBehindAppBar: true,
-            resizeToAvoidBottomInset: false,
-            floatingActionButton:
-                astrologerSettingButton(controller: controller),
-            appBar: PreferredSize(
-                preferredSize: const Size(double.infinity, 150),
-                child: appBarWidget(controller: controller)),
-            body: ZegoUIKitPrebuiltLiveStreaming(
-                appID: controller.appID,
-                appSign: controller.appSign,
-                userID: "3878",
-                userName: 'user_3878',
-                liveID: "3878",
-                config: controller.streamingConfig
-                  ..slideSurfaceToHide = false
-                  ..duration.isVisible = false
+        return WillPopScope(
+          onWillPop: () async {
+            await controller.exitFunc();
+            return Future<bool>.value(false);
+          },
+          child: Scaffold(
+              extendBodyBehindAppBar: true,
+              resizeToAvoidBottomInset: false,
+              floatingActionButton:
+                  astrologerSettingButton(controller: controller),
+              appBar: PreferredSize(
+                  preferredSize: const Size(double.infinity, 150),
+                  child: appBarWidget(controller: controller)),
+              body: ZegoUIKitPrebuiltLiveStreaming(
+                  appID: controller.appID,
+                  appSign: controller.appSign,
+                  userID: controller.astroId.value,
+                  userName: 'user_${controller.astroId.value}',
+                  liveID: controller.astroId.value,
+                  config: controller.streamingConfig
+                    ..slideSurfaceToHide = false
+                    ..duration.isVisible = false
 
-                  /// Live before Preview
-                  // ..preview.beautyEffectIcon = SvgPicture.asset(
-                  //   "assets/svg/beauty_icon.svg",
-                  //   height: 50,
-                  //   width: 50,
-                  // )
-                  // ..preview.startLiveButtonBuilder =
-                  //     (BuildContext context, VoidCallback startLive) {
-                  //   return Expanded(
-                  //     child: CommonButton(
-                  //       buttonText: "startLive".tr,
-                  //       buttonCallback: () async {
-                  //         startLive();
-                  //         await controller.furtherProcedure();
-                  //       },
-                  //     ),
-                  //   );
-                  // }
-                  ..audioVideoView = ZegoLiveStreamingAudioVideoViewConfig(
-                    showUserNameOnView: false,
-                    showAvatarInAudioMode: true,
-                    isVideoMirror: false,
-                    useVideoViewAspectFill: true,
-                    showSoundWavesInAudioMode: true,
-                    visible: (
-                      ZegoUIKitUser localUser,
-                      ZegoLiveStreamingRole localRole,
-                      ZegoUIKitUser targetUser,
-                      ZegoLiveStreamingRole targetUserRole,
-                    ) {
-                      return true;
-                    },
-                  )
-                  ..beautyConfig = ZegoBeautyPluginConfig(
-                    effectsTypes: ZegoBeautyPluginConfig.beautifyEffectsTypes(
-                          enableBasic: true,
-                          enableAdvanced: true,
-                          enableMakeup: true,
-                          enableStyle: true,
-                        ) +
-                        ZegoBeautyPluginConfig.filterEffectsTypes(),
-                  )
-                  ..video = ZegoUIKitVideoConfig.preset1080P()
-                  ..coHost.maxCoHostCount = 1
-                  ..preview.showPreviewForHost = false
-                  ..bottomMenuBar = ZegoLiveStreamingBottomMenuBarConfig(
-                    showInRoomMessageButton: false,
-                    hostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
-                    coHostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
-                  )
-                  ..topMenuBar = ZegoLiveStreamingTopMenuBarConfig(
-                    hostAvatarBuilder: (ZegoUIKitUser host) {
-                      return const SizedBox();
-                    },
-                    showCloseButton: false,
-                  )
-                  ..memberButton = ZegoLiveStreamingMemberButtonConfig(
-                    icon: const Icon(Icons.remove_red_eye_outlined),
-                    builder: (int memberCount) {
-                      return const SizedBox();
-                    },
-                  )
-                  ..foreground = foregroundWidget(controller: controller)
-                  ..inRoomMessage = ZegoLiveStreamingInRoomMessageConfig(
-                    itemBuilder: (
-                      BuildContext context,
-                      ZegoInRoomMessage message,
-                      Map<String, dynamic> extraInfo,
-                    ) {
-                      return const SizedBox();
-                    },
-                  )));
+                    /// Live before Preview
+                    // ..preview.beautyEffectIcon = SvgPicture.asset(
+                    //   "assets/svg/beauty_icon.svg",
+                    //   height: 50,
+                    //   width: 50,
+                    // )
+                    // ..preview.startLiveButtonBuilder =
+                    //     (BuildContext context, VoidCallback startLive) {
+                    //   return Expanded(
+                    //     child: CommonButton(
+                    //       buttonText: "startLive".tr,
+                    //       buttonCallback: () async {
+                    //         startLive();
+                    //         await controller.furtherProcedure();
+                    //       },
+                    //     ),
+                    //   );
+                    // }
+                    ..audioVideoView = ZegoLiveStreamingAudioVideoViewConfig(
+                      showUserNameOnView: false,
+                      showAvatarInAudioMode: true,
+                      isVideoMirror: false,
+                      useVideoViewAspectFill: true,
+                      showSoundWavesInAudioMode: true,
+                      visible: (
+                        ZegoUIKitUser localUser,
+                        ZegoLiveStreamingRole localRole,
+                        ZegoUIKitUser targetUser,
+                        ZegoLiveStreamingRole targetUserRole,
+                      ) {
+                        return true;
+                      },
+                    )
+                    ..beautyConfig = ZegoBeautyPluginConfig(
+                      effectsTypes: ZegoBeautyPluginConfig.beautifyEffectsTypes(
+                            enableBasic: true,
+                            enableAdvanced: true,
+                            enableMakeup: true,
+                            enableStyle: true,
+                          ) +
+                          ZegoBeautyPluginConfig.filterEffectsTypes(),
+                    )
+                    ..video = ZegoUIKitVideoConfig.preset1080P()
+                    ..coHost.maxCoHostCount = 1
+                    ..preview.showPreviewForHost = false
+                    ..bottomMenuBar = ZegoLiveStreamingBottomMenuBarConfig(
+                      showInRoomMessageButton: false,
+                      hostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
+                      coHostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
+                    )
+                    ..topMenuBar = ZegoLiveStreamingTopMenuBarConfig(
+                      hostAvatarBuilder: (ZegoUIKitUser host) {
+                        return const SizedBox();
+                      },
+                      showCloseButton: false,
+                    )
+                    ..memberButton = ZegoLiveStreamingMemberButtonConfig(
+                      icon: const Icon(Icons.remove_red_eye_outlined),
+                      builder: (int memberCount) {
+                        return const SizedBox();
+                      },
+                    )
+                    ..foreground = foregroundWidget(
+                        controller: controller, context: context)
+                    ..inRoomMessage = ZegoLiveStreamingInRoomMessageConfig(
+                      itemBuilder: (
+                        BuildContext context,
+                        ZegoInRoomMessage message,
+                        Map<String, dynamic> extraInfo,
+                      ) {
+                        return const SizedBox();
+                      },
+                    ))),
+        );
       },
     );
   }
@@ -293,7 +300,8 @@ class NewLiveScreen extends GetView<NewLiveController> {
   }
 
   /// --------------------- bottom bar for chat ----------------------- ///
-  Widget foregroundWidget({NewLiveController? controller}) {
+  Widget foregroundWidget(
+      {NewLiveController? controller, BuildContext? context}) {
     return Padding(
       padding: const EdgeInsets.only(top: kToolbarHeight - 16.0),
       child: Column(
@@ -310,20 +318,13 @@ class NewLiveScreen extends GetView<NewLiveController> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      noticeBoard(controller: controller),
-                      SizedBox(
-                          height:
-                              (controller!.noticeBoardRes!.data ?? []).isEmpty
-                                  ? 0.0
-                                  : 4.0),
+                      noticeBoard(controller: controller, context: context),
+                      const SizedBox(height: 4),
                       LiveMessageUpdateToZego(controller: controller),
                     ],
                   ),
                 ),
                 const SizedBox(width: 8),
-                //
-                // verticalDefault(),
-                //
                 const SizedBox(width: 8),
               ],
             ),
@@ -546,80 +547,68 @@ class NewLiveScreen extends GetView<NewLiveController> {
   }
 
   /// ------------------ Notice board ------------------ ///
-  Widget noticeBoard({NewLiveController? controller}) {
+  Widget noticeBoard({NewLiveController? controller, BuildContext? context}) {
     // do not remove
-    print("timerCurrentIndex: ${controller!.timerCurrentIndex - 1}");
+    // print("timerCurrentIndex: ${controller!.timerCurrentIndex - 1}");
     //
-    return AnimatedOpacity(
-      opacity: (controller.noticeBoardRes!.data ?? []).isEmpty ? 0.0 : 1.0,
-      duration: const Duration(seconds: 1),
-      child: (controller.noticeBoardRes!.data ?? []).isEmpty
-          ? const SizedBox()
-          : SizedBox(
-              width: Get.width / 2,
-              child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: 1,
-                padding: EdgeInsets.zero,
-                itemBuilder: (BuildContext context, int index) {
-                  final int timerCurrentIndex =
-                      controller.timerCurrentIndex.value - 1;
-                  final NoticeBoardResData noticeBoardResData =
-                      controller.noticeBoardRes!.data?[timerCurrentIndex] ??
-                          NoticeBoardResData();
-                  final String title = noticeBoardResData.title ?? "";
-                  final String description =
-                      noticeBoardResData.description ?? "";
-                  // final String createdAt =
-                  //     noticeBoardResData.createdAt ?? DateTime.now().toString();
-                  // final DateTime tzDateTime = DateTime.parse(createdAt).toUtc();
-                  // final String formattedDate = formatDate(tzDateTime);
-                  return DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(10.0),
+    if (controller!.noticeBoardRes != null) {
+      final int timerCurrentIndex = controller.timerCurrentIndex.value - 1;
+      final NoticeBoardResData noticeBoardResData =
+          controller.noticeBoardRes!.data![timerCurrentIndex] ??
+              NoticeBoardResData();
+      final String title = noticeBoardResData.title ?? "";
+      final String description = noticeBoardResData.description ?? "";
+      return AnimatedOpacity(
+        opacity: (controller!.noticeBoardRes!.data ?? []).isEmpty ? 0.0 : 1.0,
+        duration: const Duration(seconds: 1),
+        child: (controller.noticeBoardRes!.data ?? []).isEmpty
+            ? const SizedBox()
+            : Container(
+                width: Get.width / 2,
+                decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(10.0)),
+                  border: Border.all(
+                    color: appColors.guideColor,
+                  ),
+                  color: appColors.black.withOpacity(0.2),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 8),
+                      Text(
+                        title,
+                        style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                        maxLines: 5,
+                        overflow: TextOverflow.ellipsis,
                       ),
-                      border: Border.all(
-                        color: appColors.guideColor,
+                      const SizedBox(height: 8),
+                      RichText(
+                        textAlign: TextAlign.center,
+                        text: HTML.toTextSpan(context!, description ?? "",
+                            defaultTextStyle: AppTextStyle.textStyle14(
+                              fontColor: appColors.white,
+
+                            )),
+                        maxLines: 5,
                       ),
-                      color: appColors.black.withOpacity(0.2),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const SizedBox(height: 8),
-                          Text(
-                            title,
-                            style: const TextStyle(
-                              fontSize: 10,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                            maxLines: 5,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                          const SizedBox(height: 8),
-                          RichText(
-                            textAlign: TextAlign.center,
-                            text: HTML.toTextSpan(context, description ?? "",
-                                defaultTextStyle: AppTextStyle.textStyle14(
-                                  fontColor: appColors.white,
-                                )),
-                            maxLines: 5,
-                          ),
-                          // Text(
-                          //   description,
-                          //   style: const TextStyle(
-                          //     fontSize: 10,
-                          //     color: Colors.white,
-                          //   ),
-                          //   maxLines: 5,
-                          //   overflow: TextOverflow.ellipsis,
-                          // ),
-                          /*const SizedBox(height: 8),
+                      // Text(
+                      //   description,
+                      //   style: const TextStyle(
+                      //     fontSize: 10,
+                      //     color: Colors.white,
+                      //   ),
+                      //   maxLines: 5,
+                      //   overflow: TextOverflow.ellipsis,
+                      // ),
+                      /*const SizedBox(height: 8),
                           Text(
                             formattedDate,
                             style: const TextStyle(
@@ -630,15 +619,15 @@ class NewLiveScreen extends GetView<NewLiveController> {
                             maxLines: 5,
                             overflow: TextOverflow.ellipsis,
                           ),*/
-                          const SizedBox(height: 8),
-                        ],
-                      ),
-                    ),
-                  );
-                },
+                      const SizedBox(height: 8),
+                    ],
+                  ),
+                ),
               ),
-            ),
-    );
+      );
+    } else {
+      return SizedBox();
+    }
   }
 
   /// ------------------ Live Zego msg ---------------- ///
@@ -668,9 +657,10 @@ class NewLiveScreen extends GetView<NewLiveController> {
               final bool isBlocked =
                   controller.firebaseBlockUsersIds.contains(msg.userId);
               final isModerator = msg.isMod;
-              return msg.type == 0
-                  ? const SizedBox()
-                  : Row(
+              if (msg.type == 0) {
+                return const SizedBox();
+              } else {
+                return Row(
                       children: [
                         Container(
                           padding: const EdgeInsets.symmetric(
@@ -726,24 +716,27 @@ class NewLiveScreen extends GetView<NewLiveController> {
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  Text(
-                                    msg.message ?? "",
-                                    maxLines: 2,
-                                    style: TextStyle(
-                                      fontSize: 13,
-                                      color: isBlocked
-                                          ? Colors.red
-                                          : isModerator
-                                              ? appColors.guideColor
-                                              : msg.fullGiftImage.isNotEmpty
-                                                  ? appColors.black
-                                                  : msg.message.contains(
-                                                          "Started following")
-                                                      ? appColors.black
-                                                      : Colors.white,
+                                  SizedBox(
+                                    width:msg.message.length > 30 ? Get.width /2:null,
+                                    child: Text(
+                                      msg.message ?? "",
+                                      maxLines: 2,
+                                      style: TextStyle(  
+                                        fontSize: 13,
+                                        color: isBlocked
+                                            ? Colors.red
+                                            : isModerator
+                                                ? appColors.guideColor
+                                                : msg.fullGiftImage.isNotEmpty
+                                                    ? appColors.black
+                                                    : msg.message.contains(
+                                                            "Started following")
+                                                        ? appColors.black
+                                                        : Colors.white,
+                                      ),
+                                      // maxLines: 2,
+                                      // overflow: TextOverflow.ellipsis,
                                     ),
-                                    // maxLines: 2,
-                                    // overflow: TextOverflow.ellipsis,
                                   ),
                                 ],
                               ),
@@ -758,7 +751,9 @@ class NewLiveScreen extends GetView<NewLiveController> {
                                       ),
                                     )
                                   : const SizedBox(),
-                              SizedBox(
+                              msg.userId == controller.astroId.value ||  msg.userId == "0"
+
+                                  ? const SizedBox():SizedBox(
                                 height: 24,
                                 width: 24,
                                 child: IconButton(
@@ -784,6 +779,7 @@ class NewLiveScreen extends GetView<NewLiveController> {
                         ),
                       ],
                     );
+              }
             },
             separatorBuilder: (context, index) => const SizedBox(
               height: 10,

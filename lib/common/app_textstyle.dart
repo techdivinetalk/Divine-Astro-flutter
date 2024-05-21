@@ -42,6 +42,7 @@ class AppTextStyle {
         fontSize: 14.sp,
         fontWeight: fontWeight ?? FontWeight.w400,
         color: fontColor ?? appColors.textColor,
+      decoration: TextDecoration.none
         );
   }
 
