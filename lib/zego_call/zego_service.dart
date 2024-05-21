@@ -431,6 +431,7 @@ class ZegoService {
                     onTap: () {
                       final ZegoUIKit instance = ZegoUIKit.instance;
                       isMicOn(!isMicOn.value);
+                      debugPrint("isMicOn: ${isMicOn.value.toString()}");
                       instance.turnMicrophoneOn(isMicOn.value, muteMode: true);
                     },
                     child: SizedBox(
@@ -446,7 +447,7 @@ class ZegoService {
                               "assets/images/chat_voice_call_mic_on.png",
                             )
                           : Image.asset(
-                        color: appColors.white,
+                              color: appColors.white,
                               "assets/images/chat_voice_call_mic_off.png",
                             ),
                     ),
@@ -552,6 +553,7 @@ class ZegoService {
         height: 32,
         width: 32,
         child: Image.asset(
+          color: appColors.white,
           isVideoCall
               ? isAccepting
                   ? "assets/images/chat_video_call_icon.png"

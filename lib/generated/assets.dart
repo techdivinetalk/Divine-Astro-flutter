@@ -18,7 +18,7 @@ class Assets {
   static const String imagesAudioEnableLive = 'assets/images/audio_enable_live.svg';
   static const String imagesAvatar = 'assets/images/avatar.svg';
   static const String imagesBgChatUserPro = 'assets/images/bg_chatUserPro.png';
-  static const String imagesBgChatWallpaper = 'assets/images/bg_chat_wallpaper.png';
+  static const String imagesBgChatWallpaper = 'assets/images/bg_chat_wallpaper_2.png';
   static const String imagesBgDasha = 'assets/images/bg_dasha.svg';
   static const String imagesBgDeleteAccount = 'assets/images/bg_delete_account.svg';
   static const String imagesBgHeart = 'assets/images/bg_heart.png';

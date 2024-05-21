@@ -19,6 +19,7 @@ import "package:divine_astrologer/model/chat_offline_model.dart";
 import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/repository/message_template_repository.dart";
 import "package:divine_astrologer/repository/user_repository.dart";
+import "package:divine_astrologer/screens/chat_message_with_socket/custom_puja/saved_remedies.dart";
 import "package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_list_model.dart";
 import "package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_model.dart";
 import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
@@ -63,6 +64,7 @@ import "../../model/save_remedies_response.dart";
 import "../../model/tarot_response.dart";
 import "../../repository/chat_repository.dart";
 import "../../repository/notice_repository.dart";
+import "../../tarotCard/FlutterCarousel.dart";
 import "../../utils/enum.dart";
 import "../chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/get_single_pooja_response.dart";
 import "../live_dharam/gifts_singleton.dart";
@@ -305,6 +307,59 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   List<String> chatIdList = []; // Initial list
+
+  void openShowDeck(
+      BuildContext context, ChatMessageWithSocketController controller) {
+    isCardBotOpen.value = true;
+    showCardChoiceBottomSheet(context, controller);
+  }
+
+  Future<void> openRemedies() async {
+    var result = await Get.toNamed(RouteName.chatSuggestRemedy);
+    if (result != null) {
+      final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+      addNewMessage(
+        time,
+        MsgType.remedies,
+        messageText: result.toString(),
+      );
+    }
+  }
+
+  Future<void> openProduct(ChatMessageWithSocketController controller) async {
+    var result = await Get.toNamed(
+        RouteName.chatAssistProductPage,
+        arguments: {
+          'customerId': int.parse(AppFirebaseService()
+              .orderData
+              .value["userId"]
+              .toString())
+        });
+    if (result != null) {
+      final String time =
+          "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+      controller.addNewMessage(
+        time,
+        MsgType.product,
+        data: {
+          'data': result,
+        },
+        messageText: 'Product',
+      );
+    }
+  }
+
+  void openCustomShop(ChatMessageWithSocketController controller){
+    print(customProductData);
+    print("controller.customProductData");
+    Get.bottomSheet(
+      SavedRemediesBottomSheet(
+        controller: controller,
+        customProductData: controller.customProductData,
+      ),
+    );
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -392,10 +447,10 @@ class ChatMessageWithSocketController extends GetxController
     // leavePrivateChat();
     customerLeavedPrivateChatListenerSocket();
     astrologerJoinedPrivateChat();
-      socket.startAstroCustumerSocketEvent(
-        orderId: AppFirebaseService().orderData.value["orderId"].toString(),
-        userId: AppFirebaseService().orderData.value["userId"],
-      );
+    socket.startAstroCustumerSocketEvent(
+      orderId: AppFirebaseService().orderData.value["orderId"].toString(),
+      userId: AppFirebaseService().orderData.value["userId"],
+    );
 
     //  if (Get.arguments is ResAstroChatListener) {
     sendReadMessageStatus = true;

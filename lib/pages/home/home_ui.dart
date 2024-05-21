@@ -29,16 +29,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
+import '../../common/constants.dart';
 import '../../model/feedback_response.dart';
 import '../../new_live/new_live_call.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'home_controller.dart';
 import 'widgets/common_info_sheet.dart';
 import 'widgets/retention_widget.dart';
-
 
 class HomeUI extends GetView<HomeController> {
   const HomeUI({Key? key}) : super(key: key);
@@ -75,7 +76,7 @@ class HomeUI extends GetView<HomeController> {
                   ),
                 ),
                 actions: [
-                   /*GestureDetector(
+                  /*GestureDetector(
                     onTap: () {
                       Get.to(()=>const NewLiveCallScreen());
                     },
@@ -83,7 +84,7 @@ class HomeUI extends GetView<HomeController> {
                       height: 50,
                       width: 50,
                       color: Colors.redAccent,
-                    ),  
+                    ),
                   ),
                   const SizedBox(
                     width: 20
@@ -128,8 +129,7 @@ class HomeUI extends GetView<HomeController> {
                               placeHolder: Assets.images.defaultProfile.path,
                               radius: BorderRadius.circular(100.h),
                               onTap: () async {
-                                  Get.toNamed(RouteName.profileUi);
-
+                                Get.toNamed(RouteName.profileUi);
                               },
                             ),
                       Text(
@@ -553,6 +553,8 @@ class HomeUI extends GetView<HomeController> {
                                 ),
                           // SizedBox(height: 10.h),
                           // noticeBoardWidget(),
+                          SizedBox(height: 15.h),
+                          scheduledTrainingWidgetUpdated(),
                           SizedBox(height: 10.h),
                           // viewKundliWidget(),
                           viewKundliWidgetUpdated(),
@@ -1011,6 +1013,128 @@ class HomeUI extends GetView<HomeController> {
             ),
           )
         : const SizedBox();
+  }
+
+  Widget scheduledTrainingWidgetUpdated() {
+    return Constants.isTestingMode?Container(
+      width: ScreenUtil().screenWidth,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: appColors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.3),
+            blurRadius: 3.0,
+            offset: const Offset(0, 3.0),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Scheduled Training',
+              style: AppTextStyle.textStyle16(
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                Text(
+                  'Training Purpose -',
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    'Quality',
+                    style:
+                        AppTextStyle.textStyle14(fontWeight: FontWeight.w500),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                Text(
+                  'Date & Time -',
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    '9:31 AM 22/05/2024',
+                    style:
+                        AppTextStyle.textStyle14(fontWeight: FontWeight.w500),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                Text(
+                  'Training Duration -',
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
+                const SizedBox(width: 4),
+                Expanded(
+                  child: Text(
+                    '2 Hours',
+                    style:
+                        AppTextStyle.textStyle14(fontWeight: FontWeight.w500),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 4),
+            Row(
+              children: [
+                const Expanded(
+                  child: SizedBox(),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    String meetingLink =
+                        "https://meet.google.com/your-meeting-id";
+                    openZoomMeeting(meetingLink);
+                  },
+                  child: Container(
+                    width: 80.w,
+                    height: 31.h,
+                    decoration: BoxDecoration(
+                      color: appColors.guideColor,
+                      borderRadius: const BorderRadius.all(Radius.circular(20)),
+                    ),
+                    // alignment: Alignment.center,
+                    child: Center(
+                      child: Text(
+                        "Join",
+                        style: AppTextStyle.textStyle14(
+                            fontColor: appColors.whiteGuidedColor,
+                            fontWeight: FontWeight.w500),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    ):const SizedBox();
+  }
+
+  void openZoomMeeting(String meetingUrl) async {
+    if (await canLaunch(meetingUrl)) {
+      await launch(meetingUrl);
+    } else {
+      throw 'Could not launch $meetingUrl';
+    }
   }
 
   Widget sessionTypeWidget({HomeController? controller}) {

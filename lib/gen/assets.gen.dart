@@ -15,6 +15,18 @@ import 'package:lottie/lottie.dart';
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
+  /// File path: assets/images/chat_custom_shop.svg
+  SvgGenImage get chatCustomShop =>
+      const SvgGenImage('assets/images/chat_custom_shop.svg');
+
+  /// File path: assets/images/chat_product.svg
+  SvgGenImage get chatProduct =>
+      const SvgGenImage('assets/images/chat_product.svg');
+
+  /// File path: assets/images/chat_tarot_cards.svg
+  SvgGenImage get chatTarotCards =>
+      const SvgGenImage('assets/images/chat_tarot_cards.svg');
+
   /// File path: assets/images/Group.svg
   SvgGenImage get group => const SvgGenImage('assets/images/Group.svg');
 
@@ -45,9 +57,9 @@ class $AssetsImagesGen {
   AssetGenImage get bgChatUserPro =>
       const AssetGenImage('assets/images/bg_chatUserPro.png');
 
-  /// File path: assets/images/bg_chat_wallpaper.png
+  /// File path: assets/images/bg_chat_wallpaper_2.png
   AssetGenImage get bgChatWallpaper =>
-      const AssetGenImage('assets/images/bg_chat_wallpaper.png');
+      const AssetGenImage('assets/images/bg_chat_wallpaper_2.png');
 
   /// File path: assets/images/bg_dasha.svg
   SvgGenImage get bgDasha => const SvgGenImage('assets/images/bg_dasha.svg');
@@ -142,8 +154,6 @@ class $AssetsImagesGen {
   /// File path: assets/images/chat_video_call_lock.png
   AssetGenImage get chatVideoCallLock =>
       const AssetGenImage('assets/images/chat_video_call_lock.png');
-
-
 
   /// File path: assets/images/chat_video_call_mic_off.png
   AssetGenImage get chatVideoCallMicOff {
@@ -254,9 +264,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_bankDetailNew.svg
   SvgGenImage get icBankDetailNew =>
       const SvgGenImage('assets/images/ic_bankDetailNew.svg');
+
   /// File path: assets/images/ic_bankDetailNew.svg
-  SvgGenImage get updateSvg =>
-      const SvgGenImage('assets/svg/update.svg');
+  SvgGenImage get updateSvg => const SvgGenImage('assets/svg/update.svg');
 
   /// File path: assets/images/ic_birthTIme.svg
   SvgGenImage get icBirthTIme =>
