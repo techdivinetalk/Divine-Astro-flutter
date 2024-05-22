@@ -306,7 +306,7 @@ class AppFirebaseService {
         isEcom(int.parse(dataSnapshot.value.toString()));
         break;
       case "isLiveCall":
-        isRemidies(int.parse(dataSnapshot.value.toString()));
+        isLiveCall(int.parse(dataSnapshot.value.toString()));
         break;
       case "kundli":
         isKundli(int.parse(dataSnapshot.value.toString()));
@@ -317,9 +317,9 @@ class AppFirebaseService {
       case "queue":
         isQueue(int.parse(dataSnapshot.value.toString()));
         break;
-      case "tarrotCard":
-        isRemidies(int.parse(dataSnapshot.value.toString()));
-        break;
+      // case "tarrotCard":
+      //   isRemidies(int.parse(dataSnapshot.value.toString()));
+      //   break;
       case "templates":
         isTemplates(int.parse(dataSnapshot.value.toString()));
         break;
@@ -327,7 +327,7 @@ class AppFirebaseService {
         isTruecaller(int.parse(dataSnapshot.value.toString()));
         break;
       case "voip":
-        isRemidies(int.parse(dataSnapshot.value.toString()));
+        isVOIP(int.parse(dataSnapshot.value.toString()));
         break;
     }
   }
