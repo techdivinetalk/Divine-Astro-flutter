@@ -207,7 +207,6 @@ class AppFirebaseService {
     } catch (e) {
       debugPrint("Error reading data from the database: $e");
     }
-    masterData("masters");
     if (!kDebugMode) {
       masterData("masters");
     }
