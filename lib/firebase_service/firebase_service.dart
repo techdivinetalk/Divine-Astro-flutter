@@ -31,6 +31,7 @@ RxString giftImageUpdate = "".obs;
 RxInt isCall = 1.obs;
 RxInt isRemidies = 1.obs;
 RxInt isEcom = 1.obs;
+RxInt isVOIP = 0.obs;
 RxInt isChatAssistance = 1.obs;
 RxInt isChat = 1.obs;
 RxInt isKundli = 1.obs;
@@ -206,6 +207,7 @@ class AppFirebaseService {
     } catch (e) {
       debugPrint("Error reading data from the database: $e");
     }
+    masterData("masters");
     if (!kDebugMode) {
       masterData("masters");
     }
@@ -298,6 +300,8 @@ class AppFirebaseService {
           isRemidies(realTimeData["remidies"]);
           print("isRemidies-----on ?? ${isRemidies}");
           isEcom(realTimeData["ecom"]);
+          print("isRemidies-----on ?? ${isVOIP}");
+          isVOIP(realTimeData["voip"]);
           print("isEcom-----on ?? ${isEcom}");
           isChatAssistance(realTimeData["chat_assistance"]);
           print("isChatAssistance-----on ?? ${isChatAssistance}");

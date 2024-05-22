@@ -1464,7 +1464,7 @@ class AstrologerChatAppBar extends StatelessWidget {
 
                             print("test_appendedCustImage: $appendedAstrImage");
 
-                            return false
+                            return isVOIP.toString() == "0"
                                 ? const SizedBox()
                                 : ZegoService().buttonUI(
                                     isVideoCall: false,
@@ -1519,7 +1519,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                             String appendedCustImage =
                                 "${controller.preference.getAmazonUrl()}/$custImage";
 
-                            return false
+                            return isVOIP.toString() == "0"
                                 ? const SizedBox()
                                 : ZegoService().buttonUI(
                                     isVideoCall: true,
