@@ -73,28 +73,28 @@ class AppFirebaseService {
   String tableName = "";
 
   // int x = 0;
-  checkFirebaseConnection() {
-    final connectedRef = FirebaseDatabase.instance.ref(".info/connected");
-    connectedRef.onValue.listen((event) async {
-      final connected = event.snapshot.value as bool? ?? false;
-      if (!connected) {
-        print("trying to reconnect in 4 seconds");
-        // await Future.delayed(const Duration(seconds: 4));
-        // String path = "";
-        // if (preferenceService.getUserDetail() != null) {
-        //   path = 'astrologer/${preferenceService.getUserDetail()!.id}/realTime';
-        // }
-        // const masterPath = 'masters';
-        // readData(path);
-        // masterData(masterPath);
-      } else {
-        print("disconnected");
-      }
-    });
-  }
+  // checkFirebaseConnection() {
+  //   final connectedRef = FirebaseDatabase.instance.ref(".info/connected");
+  //   connectedRef.onValue.listen((event) async {
+  //     final connected = event.snapshot.value as bool? ?? false;
+  //     if (!connected) {
+  //       print("trying to reconnect in 4 seconds");
+  //       // await Future.delayed(const Duration(seconds: 4));
+  //       // String path = "";
+  //       // if (preferenceService.getUserDetail() != null) {
+  //       //   path = 'astrologer/${preferenceService.getUserDetail()!.id}/realTime';
+  //       // }
+  //       // const masterPath = 'masters';
+  //       // readData(path);
+  //       // masterData(masterPath);
+  //     } else {
+  //       print("disconnected");
+  //     }
+  //   });
+  // }
 
   Future<DatabaseEvent?> readData(String path) async {
-    checkFirebaseConnection();
+    // checkFirebaseConnection();
     try {
       database.child(path).onValue.listen((event) async {
         debugPrint("real time $path ---> ${event.snapshot.value}");
@@ -207,9 +207,6 @@ class AppFirebaseService {
     } catch (e) {
       debugPrint("Error reading data from the database: $e");
     }
-    if (!kDebugMode) {
-      masterData("masters");
-    }
 
     watcher.nameStream.listen(
       (value) {
@@ -284,45 +281,67 @@ class AppFirebaseService {
     );
   }
 
-  Future<DatabaseEvent?> masterData(String path) async {
-    try {
-      database.child(path).onValue.listen((event) async {
-        database.child(path).keepSynced(true);
-        debugPrint("master database access $path ---> ${event.snapshot.value}");
-        if (event.snapshot.value is Map<Object?, Object?>) {
-          Map<String, dynamic>? realTimeData = Map<String, dynamic>.from(
-              event.snapshot.value! as Map<Object?, Object?>);
+  saveMasterData(DataSnapshot dataSnapshot) {
+    print("dataSnapshot-Value ${dataSnapshot.value}");
+    switch (dataSnapshot.key) {
+      case "call":
+        isCall(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "camera":
+        isCamera(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "chat":
+        isChat(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "chat_assistance":
+        isChatAssistance(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "gifts":
+        isGifts(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "remidies":
+        isRemidies(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "ecom":
+        isEcom(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isLiveCall":
+        isRemidies(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "kundli":
+        isKundli(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "live":
+        isLiveCall(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "queue":
+        isQueue(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "tarrotCard":
+        isRemidies(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "templates":
+        isTemplates(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "truecaller":
+        isTruecaller(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "voip":
+        isRemidies(int.parse(dataSnapshot.value.toString()));
+        break;
+    }
+  }
 
-          /// {call: 1, remidies: 1, ecom: 1, chat_assistance: 1, chat: 1, kundli: 1, templates: 1, camera: 1, live: 1, queue: 1, gifts: 1}
-          isCall(realTimeData["call"]);
-          print("isCall-----on ?? ${isCall}");
-          isRemidies(realTimeData["remidies"]);
-          print("isRemidies-----on ?? ${isRemidies}");
-          isEcom(realTimeData["ecom"]);
-          print("isRemidies-----on ?? ${isVOIP}");
-          isVOIP(realTimeData["voip"]);
-          print("isEcom-----on ?? ${isEcom}");
-          isChatAssistance(realTimeData["chat_assistance"]);
-          print("isChatAssistance-----on ?? ${isChatAssistance}");
-          isChat(realTimeData["chat"]);
-          print("isChat-----on ?? ${isChat}");
-          isKundli(realTimeData["kundli"]);
-          print("isKundli-----on ?? ${isKundli}");
-          isTemplates(realTimeData["templates"]);
-          print("isTemplates-----on ?? ${isTemplates}");
-          isCamera(realTimeData["camera"]);
-          print("isCamera-----on ?? ${isCamera}");
-          isLive(realTimeData["live"]);
-          print("isLive-----on ?? ${isLive}");
-          isQueue(realTimeData["queue"]);
-          print("isQueue-----on ?? ${isQueue}");
-          isGifts(realTimeData["gifts"]);
-          print("isGifts-----on ?? ${isGifts}");
-          isTruecaller(realTimeData["truecaller"]);
-          print("isTruecaller-----on ?? ${isTruecaller}");
-          isLiveCall(realTimeData["isLiveCall"]);
-          print("isLiveCall-----on ?? ${isLiveCall}");
-        }
+  Future<DatabaseEvent?> masterData(String path) async {
+    print("dataSnapshot-1");
+    try {
+      database.child(path).onChildAdded.listen((event) {
+        print("dataSnapshot-Key ${event.snapshot.key}");
+        saveMasterData(event.snapshot);
+      });
+      database.child(path).onChildChanged.listen((event) {
+        print("dataSnapshot-Key ${event.snapshot.key}");
+        saveMasterData(event.snapshot);
       });
     } catch (e) {
       debugPrint("Error reading data from the database: $e");
