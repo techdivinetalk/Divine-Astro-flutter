@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -16,22 +16,19 @@ import 'package:divine_astrologer/screens/live_dharam/live_tarot_game/show_card_
 import 'package:divine_astrologer/screens/live_dharam/live_tarot_game/waiting_for_user_to_select_cards.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/astro_wait_list_widget.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/block_unlock_widget.dart';
-import 'package:divine_astrologer/screens/live_dharam/widgets/common_button.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/gift_widget.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
+
 
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:hive/hive.dart';
+
 import 'package:simple_html_css/simple_html_css.dart';
 import 'package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart';
 
@@ -65,10 +62,11 @@ class NewLiveScreen extends GetView<NewLiveController> {
                   userID: controller.astroId.value,
                   userName: 'user_${controller.astroId.value}',
                   liveID: controller.astroId.value,
+                  events: controller.events,
                   config: controller.streamingConfig
+
                     ..slideSurfaceToHide = false
                     ..duration.isVisible = false
-
                     /// Live before Preview
                     // ..preview.beautyEffectIcon = SvgPicture.asset(
                     //   "assets/svg/beauty_icon.svg",
@@ -87,6 +85,7 @@ class NewLiveScreen extends GetView<NewLiveController> {
                     //     ),
                     //   );
                     // }
+                    ..layout = controller.galleryLayout()
                     ..audioVideoView = ZegoLiveStreamingAudioVideoViewConfig(
                       showUserNameOnView: false,
                       showAvatarInAudioMode: true,
@@ -828,7 +827,7 @@ class NewLiveScreen extends GetView<NewLiveController> {
             Get.back();
             if (userId != "0") {
               var data = {
-                "room_id": controller!.liveId,
+                "room_id": controller!.liveId.value,
                 "user_id": userId,
                 "user_name": userName,
                 "item": item.toJson(),
@@ -844,7 +843,7 @@ class NewLiveScreen extends GetView<NewLiveController> {
             Get.back();
             if (userId != "0") {
               var data = {
-                "room_id": controller!.liveId,
+                "room_id": controller!.liveId.value,
                 "user_id": userId,
                 "user_name": userName,
                 "item": item.toJson(),
@@ -860,7 +859,7 @@ class NewLiveScreen extends GetView<NewLiveController> {
             Get.back();
             if (userId != "0") {
               var data = {
-                "room_id": controller!.liveId,
+                "room_id": controller!.liveId.value,
                 "user_id": userId,
                 "user_name": userName,
                 "item": item.toJson(),
@@ -882,7 +881,7 @@ class NewLiveScreen extends GetView<NewLiveController> {
                     id: int.parse(userId),
                   );
                   var data = {
-                    "room_id": controller.liveId,
+                    "room_id": controller.liveId.value,
                     "user_id": userId,
                     "user_name": userName,
                     "item": item.toJson(),
@@ -970,64 +969,59 @@ class NewLiveScreen extends GetView<NewLiveController> {
         mainAxisAlignment: MainAxisAlignment.end,
         crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          StreamBuilder<Object>(
-            stream: null,
-            builder: (context, snapshot) {
-              return AnimatedOpacity(
-                opacity: !controller!.currentCaller!.isEngaded ? 0.0 : 1.0,
-                duration: const Duration(seconds: 1),
-                child: !controller.currentCaller!.isEngaded
-                    ? const SizedBox()
-                    : Column(
-                        children: [
-                          InkWell(
-                            onTap: () async {
-                              // await controller.addOrUpdateCard();
-                              await showCardDeckToUserPopup();
-                            },
-                            child: Container(
-                              height: 50,
-                              width: 50,
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(
-                                    Radius.circular(50.0)),
-                                border: Border.all(
-                                  color: appColors.guideColor,
-                                ),
-                                color: appColors.black.withOpacity(0.2),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.asset(
-                                  "assets/images/live_tarot_new_icon.png",
-                                ),
-                              ),
-                            ),
-                          ),
-                          Text(
-                            "Ask User",
-                            style:
-                                TextStyle(fontSize: 8, color: appColors.white),
-                          ),
-                          Text(
-                            "for tarot",
-                            style:
-                                TextStyle(fontSize: 8, color: appColors.white),
-                          ),
-                          Text(
-                            "reading",
-                            style:
-                                TextStyle(fontSize: 8, color: appColors.white),
-                          ),
-                          const SizedBox(height: 8),
-                        ],
-                      ),
-              );
-            },
-          ),
-          //
           AnimatedOpacity(
-            opacity: controller!.waitList.isEmpty ? 0.0 : 1.0,
+            opacity: !controller!.currentCaller!.isEngaded ? 0.0 : 1.0,
+            duration: const Duration(seconds: 1),
+            child: !controller.currentCaller!.isEngaded
+                ? const SizedBox()
+                : Column(
+              children: [
+                InkWell(
+                  onTap: () async {
+                    // await controller.addOrUpdateCard();
+                    await controller.showCardDeckToUserPopup();
+                  },
+                  child: Container(
+                    height: 50,
+                    width: 50,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                          Radius.circular(50.0)),
+                      border: Border.all(
+                        color: appColors.guideColor,
+                      ),
+                      color: appColors.black.withOpacity(0.2),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.asset(
+                        "assets/images/live_tarot_new_icon.png",
+                      ),
+                    ),
+                  ),
+                ),
+                Text(
+                  "Ask User",
+                  style:
+                  TextStyle(fontSize: 8, color: appColors.white),
+                ),
+                Text(
+                  "for tarot",
+                  style:
+                  TextStyle(fontSize: 8, color: appColors.white),
+                ),
+                Text(
+                  "reading",
+                  style:
+                  TextStyle(fontSize: 8, color: appColors.white),
+                ),
+                const SizedBox(height: 8),
+              ],
+            ),
+          ),
+
+          AnimatedOpacity(
+            opacity: controller.waitList.isEmpty ? 0.0 : 1.0,
             duration: const Duration(seconds: 1),
             child: controller.waitList.isEmpty
                 ? const SizedBox()
@@ -1158,129 +1152,56 @@ class NewLiveScreen extends GetView<NewLiveController> {
               ),
             ),
           ),
-          /*controller.isHost
-              ?*/
-          StreamBuilder<Object>(
-            stream: null,
-            builder: (context, snapshot) {
-              return Obx(() {
-                return AnimatedOpacity(
-                  opacity: isLiveCall.value == 0 ? 0.0 : 1.0,
-                  duration: const Duration(seconds: 1),
-                  child: isLiveCall.value == 0
-                      ? const SizedBox()
-                      : Column(
-                          children: [
-                            InkWell(
-                              onTap: () async {
-                                controller.isHostAvailable.value =
-                                    !controller.isHostAvailable.value;
 
-                                controller.reference
-                                    .child(
-                                        "liveTest/${controller.liveId.value}")
-                                    .update({
-                                  "isAvailable":
-                                      controller.isHostAvailable.value,
-                                });
-                              },
-                              child: SizedBox(
-                                height: 84 - 50,
-                                width: 84,
-                                child: DecoratedBox(
-                                  decoration: BoxDecoration(
-                                    borderRadius: const BorderRadius.all(
-                                        Radius.circular(50.0)),
-                                    border:
-                                        Border.all(color: appColors.guideColor),
-                                    color: appColors.black.withOpacity(0.2),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(0.0),
-                                    child: Image.asset(
-                                      controller.isHostAvailable.value
-                                          ? "assets/images/live_calls_on_new.png"
-                                          : "assets/images/live_calls_off_new.png",
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: 0),
-                          ],
+          Obx(() {
+            return AnimatedOpacity(
+              opacity: isLiveCall.value == 0 ? 0.0 : 1.0,
+              duration: const Duration(seconds: 1),
+              child: isLiveCall.value == 0
+                  ? const SizedBox()
+                  : Column(
+                children: [
+                  InkWell(
+                    onTap: () async {
+                      controller.isHostAvailable.value =
+                      !controller.isHostAvailable.value;
+
+                      controller.reference
+                          .child(
+                          "liveTest/${controller.liveId.value}")
+                          .update({
+                        "isAvailable":
+                        controller.isHostAvailable.value,
+                      });
+                    },
+                    child: SizedBox(
+                      height: 84 - 50,
+                      width: 84,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          borderRadius: const BorderRadius.all(
+                              Radius.circular(50.0)),
+                          border:
+                          Border.all(color: appColors.guideColor),
+                          color: appColors.black.withOpacity(0.2),
                         ),
-                );
-              });
-            },
-          )
-          /*: StreamBuilder<Object>(
-            stream: null,
-            builder: (context, snapshot) {
-              return AnimatedOpacity(
-                opacity:
-                (!controller.isHost && !controller.isHostAvailable) ||
-                    isLiveCall.value == 0
-                    ? 0.0
-                    : 1.0,
-                //
-                //
-                //
-                duration: const Duration(seconds: 1),
-                child:
-                (!controller.isHost && !controller.isHostAvailable) ||
-                    isLiveCall.value == 0
-                //
-                //
-                //
-                    ? const SizedBox()
-                    : Column(
-                  children: [
-                    InkWell(
-                      onTap: () async {
-                        // controller.isCustBlocked.data
-                        //             ?.isCustomerBlocked ==
-                        //         1
-                        //     ? await youAreBlocked()
-                        //     : await callAstrologerPopup();
-                      },
-                      child: SizedBox(
-                        height: 84,
-                        width: 84 - 20,
-                        child: DecoratedBox(
-                          decoration: BoxDecoration(
-                            borderRadius: const BorderRadius.all(
-                              Radius.circular(50.0),
-                            ),
-                            border: Border.all(
-                              color: Colors.transparent,
-                            ),
-                            color: Colors.transparent,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(0.0),
-                            child: Stack(
-                              alignment: Alignment.center,
-                              children: [
-                                Image.asset(
-                                  "assets/images/live_call_btn.png",
-                                ),
-                                const Positioned(
-                                  top: 46,
-                                  child: SizedBox(),
-                                  // child: Text(controller.testingVar.toString()),
-                                ),
-                              ],
-                            ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(0.0),
+                          child: Image.asset(
+                            controller.isHostAvailable.value
+                                ? "assets/images/live_calls_on_new.png"
+                                : "assets/images/live_calls_off_new.png",
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(height: 0),
-                  ],
-                ),
-              );
-            },
-          ),*/
+                  ),
+                  const SizedBox(height: 0),
+                ],
+              ),
+            );
+          })
+
         ],
       ),
     );
@@ -1316,7 +1237,6 @@ class NewLiveScreen extends GetView<NewLiveController> {
             Get.back();
             final String id = controller.waitList.first.id;
             final String name = controller.waitList.first.userName;
-            final String avatar = controller.waitList.first.avatar;
             final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
             final connectInvite = controller.zegoController.coHost;
             await connectInvite.hostSendCoHostInvitationToAudience(user);
@@ -1330,66 +1250,5 @@ class NewLiveScreen extends GetView<NewLiveController> {
     return Future<void>.value();
   }
 
-  Future<void> showCardDeckToUserPopup({NewLiveController? controller}) async {
-    LiveGlobalSingleton().isShowCardDeckToUserPopupOpen = true;
-    await showCupertinoModalPopup(
-      context: Get.context!,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return ShowCardDeckToUser(
-          onClose: Get.back,
-          onSelect: (int value) async {
-            Get.back();
-            var item = TarotGameModel(
-              currentStep: 1,
-              canPick: value,
-              userPicked: [],
-              senderId: controller!.astroId.value,
-              receiverId: controller.currentCaller!.id,
-            );
-            Future.delayed(const Duration(milliseconds: 200));
-            var data = {
-              "room_id": controller.liveId.value,
-              "user_id": controller.astroId.value,
-              "user_name": controller.astroName.value,
-              "item": item.toJson(),
-              "type": "Tarot Card",
-            };
-            await controller.sendGiftAPI(data: data);
 
-            controller.waitingForUserToSelectCardsPopupVisible.value = true;
-            LiveGlobalSingleton().isWaitingForUserToSelectCardsPopupOpen = true;
-            await showCupertinoModalPopup(
-              context: Get.context!,
-              builder: (BuildContext context) {
-                return WaitingForUserToSelectCards(
-                  onClose: Get.back,
-                  userName: controller.currentCaller!.userName,
-                  onTimeout: () async {
-                    Get.back();
-                    liveSnackBar(
-                      msg: "Card Selection Timeout",
-                    );
-                    // await sendTaroCardClose();
-                  },
-                );
-              },
-            );
-            controller.waitingForUserToSelectCardsPopupVisible.value = false;
-            LiveGlobalSingleton().isWaitingForUserToSelectCardsPopupOpen =
-                false;
-            controller.update();
-          },
-          userName: controller!.currentCaller!.userName,
-          onTimeout: () async {
-            Get.back();
-            await controller.sendTaroCardClose();
-          },
-          totalTime: /*controller.engagedCoHostWithAstro().totalTime*/ "0",
-        );
-      },
-    );
-    LiveGlobalSingleton().isShowCardDeckToUserPopupOpen = false;
-    return Future<void>.value();
-  }
 }

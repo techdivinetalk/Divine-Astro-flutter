@@ -133,6 +133,8 @@ class LiveTipsController extends GetxController {
     final String image = pref.getUserDetail()?.image ?? "";
     final String avatar = isValidImageURL(imageURL: "$awsURL/$image");
     final List<String> blockedCustomerList = await callBlockedCustomerListRes();
+print(userId);
+print("userIduserIduserIduserIduserId");
     await database.ref().child("liveTest/$userId").update(
       {
         "id": userId,
