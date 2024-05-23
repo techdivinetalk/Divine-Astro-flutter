@@ -15,6 +15,7 @@ import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/repository/astrologer_profile_repository.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart";
 import "package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart";
+import "package:divine_astrologer/screens/live_page/constant.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
@@ -1124,7 +1125,7 @@ print("datadatadatadatadatadata");
   }) async {
     String previousType = callType != "" ? callType : "";
     final DataSnapshot dataSnapshot =
-        await ref.child("live/$liveId/waitList/$userId").get();
+        await ref.child("$livePath/$liveId/realTime/waitList/$userId").get();
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
@@ -1156,7 +1157,7 @@ print("datadatadatadatadatadata");
             "callStatus": callStatus,
           };
     //
-    await ref.child("live/$liveId/waitList/$userId").update(moOrderDetails);
+    await ref.child("$livePath/$liveId/realTime/waitList/$userId").update(moOrderDetails);
     //
     if (callStatus == 2) {
       await addUpdateOrder(ogOrderDetails);
@@ -1168,7 +1169,7 @@ print("datadatadatadatadatadata");
   Future<void> addUpdateOrder(Map<String, dynamic> orderDetails) async {
     print(orderDetails);
     print("updating entry orderDetails");
-    await ref.child("live/$liveId/order").update(orderDetails);
+    await ref.child("$livePath/$liveId/realTime/order").update(orderDetails);
     return Future<void>.value();
   }
 
@@ -1251,12 +1252,12 @@ print("datadatadatadatadatadata");
   }
 
   Future<void> removeFromWaitList() async {
-    await ref.child("live/$liveId/waitList/$userId").remove();
+    await ref.child("$livePath/$liveId/realTime/waitList/$userId").remove();
     return Future<void>.value();
   }
 
   Future<void> removeFromOrder() async {
-    await ref.child("live/$liveId/order").remove();
+    await ref.child("$livePath/$liveId/realTime/order").remove();
     return Future<void>.value();
   }
 
@@ -1275,7 +1276,7 @@ print("datadatadatadatadatadata");
 
   Future<void> updateHostAvailability() async {
     Map<String, dynamic> temp = <String, dynamic>{};
-    final DataSnapshot dataSnapshot = await ref.child("live/$liveId").get();
+    final DataSnapshot dataSnapshot = await ref.child("$livePath/$liveId").get();
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
@@ -1287,7 +1288,7 @@ print("datadatadatadatadatadata");
       } else {}
     } else {}
     temp["isAvailable"] = isHostAvailable;
-    await ref.child("live/$liveId").update(temp);
+    await ref.child("$livePath/$liveId").update(temp);
     return Future<void>.value();
   }
 
@@ -1339,7 +1340,7 @@ print("datadatadatadatadatadata");
         temp.add((element.customerId ?? 0).toString());
       },
     );
-    await ref.child("live/$liveId").update(
+    await ref.child("$livePath/$liveId").update(
       <String, Object?>{"blockList": temp ?? []},
     );
     return Future<void>.value();
@@ -1394,7 +1395,7 @@ print("datadatadatadatadatadata");
     required Function(String message) failureCallBack,
   }) async {
     bool isExist = false;
-    final String path = "live/$liveId/order";
+    final String path = "$livePath/$liveId/realTime/order";
     final DataSnapshot dataSnapshot = await ref.child(path).get();
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
@@ -1491,7 +1492,7 @@ print("datadatadatadatadatadata");
   }
 
   Future<void> removeMyNode() async {
-    await ref.child("live/$liveId").remove();
+    await ref.child("$livePath/$liveId").remove();
     update();
     return Future<void>.value();
   }
@@ -1561,7 +1562,7 @@ print("datadatadatadatadatadata");
   Future<bool> shouldOpenBottom() async {
     bool isRequest = false;
     final DataSnapshot dataSnapshot =
-        await ref.child("live/$liveId/waitList/$userId").get();
+        await ref.child("$livePath/$liveId/realTime/waitList/$userId").get();
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {

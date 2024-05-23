@@ -40,6 +40,7 @@ import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widge
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_astro_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
+import "package:divine_astrologer/screens/live_page/constant.dart";
 
 // import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:firebase_database/firebase_database.dart";
@@ -180,7 +181,7 @@ class _LivePage extends State<LiveDharamScreen>
         .addListener(onAudienceLocalConnectStateChanged);
 
     _controller.ref
-        .child("live")
+        .child(livePath)
         .onValue
         .listen(
           (event) async {
@@ -228,7 +229,7 @@ class _LivePage extends State<LiveDharamScreen>
     receiver.messages.listen(
           (event) async {
         final DataSnapshot dataSnapshot =
-        await _controller.ref.child("live").get();
+        await _controller.ref.child(livePath).get();
         await _controller.eventListner(
           snapshot: dataSnapshot,
           zeroAstro: zeroAstro,
@@ -1337,7 +1338,7 @@ class _LivePage extends State<LiveDharamScreen>
       print("Animation -url ${_controller.liveId}");
       _subscription = FirebaseDatabase.instance
           .ref()
-          .child("live")
+          .child(livePath)
           .child(_controller.liveId)
           .child("realTime")
           .child("gift")
@@ -1357,7 +1358,7 @@ class _LivePage extends State<LiveDharamScreen>
           Future.delayed(const Duration(seconds: 1)).then((value) async {
             FirebaseDatabase.instance
                 .ref()
-                .child("live")
+                .child(livePath)
                 .child(_controller.liveId)
                 .child("realTime")
                 .child("gift").child(key.toString()).remove();
@@ -1367,7 +1368,7 @@ class _LivePage extends State<LiveDharamScreen>
     }
     return StreamBuilder<DatabaseEvent>(
       stream: _controller.ref
-          .child("live/${_controller.liveId}/leaderboard")
+          .child("$livePath/${_controller.liveId}/realTime/leaderboard")
           .onValue
           .asBroadcastStream(),
       builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
@@ -4158,7 +4159,7 @@ class _LivePage extends State<LiveDharamScreen>
         //
         StreamBuilder<DatabaseEvent>(
           stream: _controller.ref
-              .child("live/${_controller.liveId}/waitList")
+              .child("$livePath/${_controller.liveId}/realTime/waitList")
               .onValue
               .asBroadcastStream(),
           builder: (context, snapshot) {
@@ -4226,7 +4227,7 @@ class _LivePage extends State<LiveDharamScreen>
         ),
         StreamBuilder<DatabaseEvent>(
           stream: _controller.ref
-              .child("live/${_controller.liveId}/leaderboard")
+              .child("$livePath/${_controller.liveId}/realTime/leaderboard")
               .onValue
               .asBroadcastStream(),
           builder: (context, snapshot) {
