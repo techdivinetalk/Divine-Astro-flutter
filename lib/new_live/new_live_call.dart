@@ -64,7 +64,6 @@ class NewLiveScreen extends GetView<NewLiveController> {
                   liveID: controller.astroId.value,
                   events: controller.events,
                   config: controller.streamingConfig
-
                     ..slideSurfaceToHide = false
                     ..duration.isVisible = false
                     /// Live before Preview
@@ -124,6 +123,39 @@ class NewLiveScreen extends GetView<NewLiveController> {
                       },
                       showCloseButton: false,
                     )
+                    ..audioVideoView.playCoHostAudio = (
+                        ZegoUIKitUser localUser,
+                        ZegoLiveStreamingRole localRole,
+                        ZegoUIKitUser coHost,
+                        ) {
+                      // if (_controller.isHost) {
+                      // } else {
+                      //   callJoinConfiguration();
+                      // }
+                      final callType = controller.currentCaller!.callType;
+                      //
+                      if (callType == "private") {
+                        if (ZegoLiveStreamingRole.host == localRole ||
+                            ZegoLiveStreamingRole.coHost == localRole) {
+                          return true;
+                        }
+                        return false;
+                      }
+                      return true;
+                    }
+                    ..audioVideoView.playCoHostVideo = (
+                        ZegoUIKitUser localUser,
+                        ZegoLiveStreamingRole localRole,
+                        ZegoUIKitUser coHost,
+                        ) {
+
+                      final callType = controller.currentCaller!.callType;
+                      //
+                      if (callType == "private" || callType == "audio") {
+                        return false;
+                      }
+                      return true;
+                    }
                     ..memberButton = ZegoLiveStreamingMemberButtonConfig(
                       icon: const Icon(Icons.remove_red_eye_outlined),
                       builder: (int memberCount) {
