@@ -40,7 +40,7 @@ RxInt isCamera = 1.obs;
 RxInt isLive = 1.obs;
 RxInt isQueue = 1.obs;
 RxInt isGifts = 1.obs;
-RxInt isTruecaller = 1.obs;
+// RxInt isTruecaller = 1.obs;
 RxInt isLiveCall = 1.obs;
 RxMap<dynamic, dynamic> callKunadliUpdated = {}.obs;
 
@@ -323,9 +323,9 @@ class AppFirebaseService {
       case "templates":
         isTemplates(int.parse(dataSnapshot.value.toString()));
         break;
-      case "truecaller":
-        isTruecaller(int.parse(dataSnapshot.value.toString()));
-        break;
+      // case "truecaller":
+      //   isTruecaller(int.parse(dataSnapshot.value.toString()));
+      //   break;
       case "voip":
         isVOIP(int.parse(dataSnapshot.value.toString()));
         break;

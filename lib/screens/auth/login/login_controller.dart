@@ -1,26 +1,18 @@
-import 'dart:collection';
-import 'dart:developer';
 
-import 'package:device_apps/device_apps.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/gen/fonts.gen.dart';
-import 'package:divine_astrologer/model/firebase_model.dart';
 import 'package:divine_astrologer/model/login_images.dart';
-import 'package:divine_astrologer/model/res_login.dart';
-import 'package:divine_astrologer/true_caller_divine/true_caller_divine_service.dart';
-import 'package:firebase_database/firebase_database.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:truecaller_sdk/truecaller_sdk.dart';
+// import 'package:truecaller_sdk/truecaller_sdk.dart';
 
 import '../../../common/app_exception.dart';
 import '../../../common/routes.dart';
@@ -127,7 +119,7 @@ class LoginController extends GetxController {
   RxBool showTrueCaller = false.obs;
 
   Future<void> requestPermissions() async {
-    print("test_: requestPermissions");
+    debugPrint("test_: requestPermissions");
     // Request phone and location permissions
     Map<Permission, PermissionStatus> statuses = await [
       Permission.phone,
@@ -136,16 +128,16 @@ class LoginController extends GetxController {
 
     // Check the status of each permission
     if (statuses[Permission.phone]!.isGranted) {
-      print("Phone permission granted");
+      debugPrint("Phone permission granted");
       getSimNumbers();
     } else {
-      print("Phone permission denied");
+      debugPrint("Phone permission denied");
     }
 
     // if (statuses[Permission.locationWhenInUse]!.isGranted) {
-    //   print("Location permission granted");
+    //   debugPrint("Location permission granted");
     // } else {
-    //   print("Location permission denied");
+    //   debugPrint("Location permission denied");
     // }
 
     // Optionally handle other permission statuses (denied, restricted, permanentlyDenied)
@@ -158,30 +150,40 @@ class LoginController extends GetxController {
   static const platform = MethodChannel('app.divine.astrologer/sim_info');
   List<String> simNumbers = [];
 
+
+
   Future<void> getSimNumbers() async {
-    print("test_simNumbers: _getSimNumbers");
+    debugPrint("test_simNumbers: _getSimNumbers");
 
     try {
       final List<dynamic> result = await platform.invokeMethod('getSimNumbers');
-      simNumbers = result.cast<String>();
-    } on PlatformException catch (e) {
-      simNumbers = ['Failed to get SIM numbers: ${e.message}'];
-      print("test_simNumbers: ${simNumbers.toString()}");
-    }
 
-    // Added + sign before country code
-    if (simNumbers.isNotEmpty) {
-      for (int i = 0; i < simNumbers.length; i++) {
-        String no = simNumbers[i];
+      List<String> simNoLst = [];
+      simNoLst = result.cast<String>();
 
-        if (no.isNotEmpty && !no.startsWith("+")) {
-          no = "+$no";
-          simNumbers[i] = no;
+      if (simNoLst.isNotEmpty) {
+        for (int i = 0; i < simNoLst.length; i++) {
+          String no = simNoLst[i];
+
+          // empty no removed
+          if (no.isNotEmpty) {
+            // Added + sign before country code
+            if (!no.startsWith("+")) {
+              no = "+$no";
+              simNumbers.add(no);
+            } else {
+              simNumbers.add(no);
+            }
+          }
         }
-      }
-    }
 
-    showSimNumbersPopup();
+        showSimNumbersPopup();
+      }
+
+      debugPrint("test_simNumbers: ${simNumbers.length}");
+    } on PlatformException catch (e) {
+      debugPrint("test_simNumbers: ${e.message.toString()}");
+    }
   }
 
   Map<String, String> splitNumber(String number) {
@@ -225,10 +227,10 @@ class LoginController extends GetxController {
                 onTap: () {
                   final splitResult = splitNumber(number);
                   String countryCode = splitResult['countryCode'] ?? '+91';
-                  print("test_countryCode: $countryCode");
+                  debugPrint("test_countryCode: $countryCode");
 
                   String phoneNumber = splitResult['phoneNumber'] ?? '';
-                  print("test_phoneNumber: $phoneNumber");
+                  debugPrint("test_phoneNumber: $phoneNumber");
 
                   countryCodeController.text = countryCode;
                   mobileNumberController.text = phoneNumber;
@@ -267,135 +269,135 @@ class LoginController extends GetxController {
     countryCodeController = TextEditingController(text: "+91");
     mobileNumberController = TextEditingController(text: "");
 
-    if (isTruecaller.value == 1) {
-      TrueCallerService().isTrueCallerInstalled().then((value) {
-        showTrueCaller.value = value;
-
-        print("test_showTrueCaller.value_3: ${showTrueCaller.value}");
-        // if (!showTrueCaller.value) {
-        //   requestPermissions();
-        // }
-      });
-      TcSdk.streamCallbackData.listen(
-        (TcSdkCallback event) async {
-          switch (event.result) {
-            case TcSdkCallbackResult.success:
-              TcOAuthData oAuth = event.tcOAuthData ?? TcOAuthData.fromJson({});
-              String authCode = oAuth.authorizationCode;
-              String stateReceivedFromServer = oAuth.state;
-              List<dynamic> scopesGranted = oAuth.scopesGranted;
-              log("TrueCallerService: event: result: success");
-              log("TrueCallerService: event: OAuth: $oAuth");
-              log("TrueCallerService: event: authCode: $authCode");
-              log("TrueCallerService: event: state: $stateReceivedFromServer");
-              log("TrueCallerService: event: scopes: $scopesGranted");
-
-              await onSuccess(authCode: authCode);
-              break;
-
-            case TcSdkCallbackResult.failure:
-              int errorCode = event.error?.code ?? 0;
-              String errorMessage = event.error?.message ?? "";
-              log("TrueCallerService: event: result: failure");
-              log("TrueCallerService: event: errorCode: $errorCode");
-              log("TrueCallerService: event: errorMessage: $errorMessage");
-              break;
-
-            case TcSdkCallbackResult.verification:
-              int errorCode = event.error?.code ?? 0;
-              String errorMessage = event.error?.message ?? "";
-              log("TrueCallerService: event: result: verification");
-              log("TrueCallerService: event: errorCode: $errorCode");
-              log("TrueCallerService: event: errorMessage: $errorMessage");
-              break;
-
-            case TcSdkCallbackResult.missedCallInitiated:
-              String ttl = event.ttl ?? "";
-              String requestNonce = event.requestNonce ?? "";
-              log("TrueCallerService: event: result: missedCallInitiated");
-              log("TrueCallerService: event: ttl: $ttl");
-              log("TrueCallerService: event: requestNonce: $requestNonce");
-              break;
-
-            case TcSdkCallbackResult.missedCallReceived:
-              log("TrueCallerService: event: result: missedCallReceived");
-              break;
-
-            case TcSdkCallbackResult.otpInitiated:
-              String ttl = event.ttl ?? "";
-              String requestNonce = event.requestNonce ?? "";
-              log("TrueCallerService: event: result: otpInitiated");
-              log("TrueCallerService: event: ttl: $ttl");
-              log("TrueCallerService: event: requestNonce: $requestNonce");
-              break;
-
-            case TcSdkCallbackResult.otpReceived:
-              String otp = event.otp ?? "";
-              log("TrueCallerService: event: result: otpReceived");
-              log("TrueCallerService: event: otp: $otp");
-              break;
-
-            case TcSdkCallbackResult.verifiedBefore:
-              String firstName = event.profile?.firstName ?? "";
-              String lastName = event.profile?.lastName ?? "";
-              String phNo = event.profile?.phoneNumber ?? "";
-              String token = event.profile?.accessToken ?? "";
-              String requestNonce = event.requestNonce ?? "";
-              log("TrueCallerService: event: result: verifiedBefore");
-              log("TrueCallerService: event: firstName: $firstName");
-              log("TrueCallerService: event: lastName: $lastName");
-              log("TrueCallerService: event: phNo: $phNo");
-              log("TrueCallerService: event: token: $token");
-              log("TrueCallerService: event: requestNonce: $requestNonce");
-              break;
-
-            case TcSdkCallbackResult.verificationComplete:
-              String accessToken = event.accessToken ?? "";
-              String requestNonce = event.requestNonce ?? "";
-              log("TrueCallerService: event: result: verificationComplete");
-              log("TrueCallerService: event: accessToken: $accessToken");
-              log("TrueCallerService: event: requestNonce: $requestNonce");
-              break;
-
-            case TcSdkCallbackResult.exception:
-              int exceptionCode = event.exception?.code ?? 0;
-              String exceptionMsg = event.exception?.message ?? "";
-              log("TrueCallerService: event: result: exception");
-              log("TrueCallerService: event: exceptionCode: $exceptionCode");
-              log("TrueCallerService: event: exceptionMsg: $exceptionMsg");
-              break;
-
-            default:
-              log("TrueCallerService: event: result: default");
-              break;
-          }
-        },
-      );
-    }
+    // if (isTruecaller.value == 1) {
+    //   TrueCallerService().isTrueCallerInstalled().then((value) {
+    //     showTrueCaller.value = value;
+    //
+    //     debugPrint("test_showTrueCaller.value_3: ${showTrueCaller.value}");
+    //     // if (!showTrueCaller.value) {
+    //     //   requestPermissions();
+    //     // }
+    //   });
+    //   TcSdk.streamCallbackData.listen(
+    //     (TcSdkCallback event) async {
+    //       switch (event.result) {
+    //         case TcSdkCallbackResult.success:
+    //           TcOAuthData oAuth = event.tcOAuthData ?? TcOAuthData.fromJson({});
+    //           String authCode = oAuth.authorizationCode;
+    //           String stateReceivedFromServer = oAuth.state;
+    //           List<dynamic> scopesGranted = oAuth.scopesGranted;
+    //           log("TrueCallerService: event: result: success");
+    //           log("TrueCallerService: event: OAuth: $oAuth");
+    //           log("TrueCallerService: event: authCode: $authCode");
+    //           log("TrueCallerService: event: state: $stateReceivedFromServer");
+    //           log("TrueCallerService: event: scopes: $scopesGranted");
+    //
+    //           await onSuccess(authCode: authCode);
+    //           break;
+    //
+    //         case TcSdkCallbackResult.failure:
+    //           int errorCode = event.error?.code ?? 0;
+    //           String errorMessage = event.error?.message ?? "";
+    //           log("TrueCallerService: event: result: failure");
+    //           log("TrueCallerService: event: errorCode: $errorCode");
+    //           log("TrueCallerService: event: errorMessage: $errorMessage");
+    //           break;
+    //
+    //         case TcSdkCallbackResult.verification:
+    //           int errorCode = event.error?.code ?? 0;
+    //           String errorMessage = event.error?.message ?? "";
+    //           log("TrueCallerService: event: result: verification");
+    //           log("TrueCallerService: event: errorCode: $errorCode");
+    //           log("TrueCallerService: event: errorMessage: $errorMessage");
+    //           break;
+    //
+    //         case TcSdkCallbackResult.missedCallInitiated:
+    //           String ttl = event.ttl ?? "";
+    //           String requestNonce = event.requestNonce ?? "";
+    //           log("TrueCallerService: event: result: missedCallInitiated");
+    //           log("TrueCallerService: event: ttl: $ttl");
+    //           log("TrueCallerService: event: requestNonce: $requestNonce");
+    //           break;
+    //
+    //         case TcSdkCallbackResult.missedCallReceived:
+    //           log("TrueCallerService: event: result: missedCallReceived");
+    //           break;
+    //
+    //         case TcSdkCallbackResult.otpInitiated:
+    //           String ttl = event.ttl ?? "";
+    //           String requestNonce = event.requestNonce ?? "";
+    //           log("TrueCallerService: event: result: otpInitiated");
+    //           log("TrueCallerService: event: ttl: $ttl");
+    //           log("TrueCallerService: event: requestNonce: $requestNonce");
+    //           break;
+    //
+    //         case TcSdkCallbackResult.otpReceived:
+    //           String otp = event.otp ?? "";
+    //           log("TrueCallerService: event: result: otpReceived");
+    //           log("TrueCallerService: event: otp: $otp");
+    //           break;
+    //
+    //         case TcSdkCallbackResult.verifiedBefore:
+    //           String firstName = event.profile?.firstName ?? "";
+    //           String lastName = event.profile?.lastName ?? "";
+    //           String phNo = event.profile?.phoneNumber ?? "";
+    //           String token = event.profile?.accessToken ?? "";
+    //           String requestNonce = event.requestNonce ?? "";
+    //           log("TrueCallerService: event: result: verifiedBefore");
+    //           log("TrueCallerService: event: firstName: $firstName");
+    //           log("TrueCallerService: event: lastName: $lastName");
+    //           log("TrueCallerService: event: phNo: $phNo");
+    //           log("TrueCallerService: event: token: $token");
+    //           log("TrueCallerService: event: requestNonce: $requestNonce");
+    //           break;
+    //
+    //         case TcSdkCallbackResult.verificationComplete:
+    //           String accessToken = event.accessToken ?? "";
+    //           String requestNonce = event.requestNonce ?? "";
+    //           log("TrueCallerService: event: result: verificationComplete");
+    //           log("TrueCallerService: event: accessToken: $accessToken");
+    //           log("TrueCallerService: event: requestNonce: $requestNonce");
+    //           break;
+    //
+    //         case TcSdkCallbackResult.exception:
+    //           int exceptionCode = event.exception?.code ?? 0;
+    //           String exceptionMsg = event.exception?.message ?? "";
+    //           log("TrueCallerService: event: result: exception");
+    //           log("TrueCallerService: event: exceptionCode: $exceptionCode");
+    //           log("TrueCallerService: event: exceptionMsg: $exceptionMsg");
+    //           break;
+    //
+    //         default:
+    //           log("TrueCallerService: event: result: default");
+    //           break;
+    //       }
+    //     },
+    //   );
+    // }
   }
 
-  String advertisingId = "";
-  String token = "";
+  // String advertisingId = "";
+  // String token = "";
 
-  Future<void> onSuccess({required String authCode}) async {
-    log("TrueCallerService: onSuccess(): authCode: $authCode");
-
-    String accessToken = "";
-    Map<String, dynamic> profile = {};
-
-    accessToken = await TrueCallerService().getToken(authCode: authCode);
-    log("TrueCallerService: onSuccess(): accessToken: $accessToken");
-
-    profile = await TrueCallerService().getProfile(accessToken: accessToken);
-    log("TrueCallerService: onSuccess(): profile: $profile");
-
-    if (profile.isEmpty) {
-      //
-    } else {
-      await customerLoginWithTrueCaller(profile);
-    }
-    return Future<void>.value();
-  }
+  // Future<void> onSuccess({required String authCode}) async {
+  //   log("TrueCallerService: onSuccess(): authCode: $authCode");
+  //
+  //   String accessToken = "";
+  //   Map<String, dynamic> profile = {};
+  //
+  //   accessToken = await TrueCallerService().getToken(authCode: authCode);
+  //   log("TrueCallerService: onSuccess(): accessToken: $accessToken");
+  //
+  //   profile = await TrueCallerService().getProfile(accessToken: accessToken);
+  //   log("TrueCallerService: onSuccess(): profile: $profile");
+  //
+  //   if (profile.isEmpty) {
+  //     //
+  //   } else {
+  //     await customerLoginWithTrueCaller(profile);
+  //   }
+  //   return Future<void>.value();
+  // }
 
   // Future<String> getAdvertisingId() async {
   //   final String advertisingId = await AdvertisingId.id(true) ?? "";
@@ -403,104 +405,106 @@ class LoginController extends GetxController {
   //   return Future<String>.value(advertisingId);
   // }
 
-  Future<String> getToken() async {
-    final String token = await FirebaseMessaging.instance.getToken() ?? "";
-    this.token = token;
-    return Future<String>.value(token);
-  }
+  // Future<String> getToken() async {
+  //   final String token = await FirebaseMessaging.instance.getToken() ?? "";
+  //   this.token = token;
+  //   return Future<String>.value(token);
+  // }
 
-  String getPhoneNumberFromTrueCaller(Map<String, dynamic> profile) {
-    String phoneNumber = "";
-    if (profile["phone_number"] != null) {
-      if (profile["phone_number"] != "") {
-        phoneNumber = profile["phone_number"];
-        if (phoneNumber.length > 10 && phoneNumber.startsWith("91")) {
-          phoneNumber = phoneNumber.substring(2);
-        } else {}
-      } else {}
-    } else {}
-    return phoneNumber;
-  }
+  // String getPhoneNumberFromTrueCaller(Map<String, dynamic> profile) {
+  //   String phoneNumber = "";
+  //   if (profile["phone_number"] != null) {
+  //     if (profile["phone_number"] != "") {
+  //       phoneNumber = profile["phone_number"];
+  //       if (phoneNumber.length > 10 && phoneNumber.startsWith("91")) {
+  //         phoneNumber = phoneNumber.substring(2);
+  //       } else {}
+  //     } else {}
+  //   } else {}
+  //   return phoneNumber;
+  // }
 
-  Future<void> customerLoginWithTrueCaller(Map<String, dynamic> profile) async {
-    final Map<String, dynamic> params = {
-      "mobile_no": getPhoneNumberFromTrueCaller(profile),
-      "device_token": await getToken(),
-      // "gaid": await getAdvertisingId(),
-      "verify_by": "TrueCaller",
-    };
-    ResLogin data = ResLogin();
-    data = await userRepository.astrologerLoginWithTrueCaller(params: params);
-    await updateLoginDataInFirebase(data);
-    return Future<void>.value();
-  }
+  // Future<void> customerLoginWithTrueCaller(Map<String, dynamic> profile) async {
+  //   final Map<String, dynamic> params = {
+  //     "mobile_no": getPhoneNumberFromTrueCaller(profile),
+  //     "device_token": await getToken(),
+  //     // "gaid": await getAdvertisingId(),
+  //     "verify_by": "TrueCaller",
+  //   };
+  //   ResLogin data = ResLogin();
+  //   data = await userRepository.astrologerLoginWithTrueCaller(params: params);
+  //   await updateLoginDataInFirebase(data);
+  //   return Future<void>.value();
+  // }
 
-  Future<void> updateLoginDataInFirebase(ResLogin data) async {
-    await FirebaseDatabase.instance.goOnline();
-    final String uniqueId = await getDeviceId() ?? '';
-    final String firebaseNodeUrl = 'astrologer/${data.data?.id}';
-    final FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
-    final DatabaseReference ref = firebaseDatabase.ref();
-    final DataSnapshot dataSnapshot = await ref.child(firebaseNodeUrl).get();
-    final HashMap<String, dynamic> realTime = HashMap();
-    realTime["uniqueId"] = uniqueId;
-    realTime["voiceCallStatus"] = (data.data?.callPreviousStatus ?? 0);
-    realTime["chatStatus"] = (data.data?.chatPreviousStatus ?? 0);
-    realTime["videoCallStatus"] = (data.data?.videoCallPreviousStatus ?? 0);
-    realTime["is_call_enable"] = (data.data?.isCall ?? 0) == 1;
-    realTime["is_chat_enable"] = (data.data?.isChat ?? 0) == 1;
-    realTime["is_video_call_enable"] = (data.data?.isVideo ?? 0) == 1;
-    realTime["is_live_enable"] = (data.data?.isLive ?? 0) == 1;
-    final HashMap<String, dynamic> deviceTokenNode = HashMap();
-    deviceTokenNode["deviceToken"] =
-        deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
-    firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
-    firebaseDatabase.ref().child("$firebaseNodeUrl/realTime").update(realTime);
-    // if (dataSnapshot.exists) {
-    //
-    // } else {
-    //   final FirebaseUserData userData = FirebaseUserData(
-    //     data.data?.name ?? "",
-    //     deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "",
-    //     data.data?.image ?? "",
-    //     RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
-    //   );
-    //   firebaseDatabase.ref().child(firebaseNodeUrl).set(userData.toJson());
-    // }
-    navigateToDashboard(data);
-    return Future<void>.value();
-  }
+  // Future<void> updateLoginDataInFirebase(ResLogin data) async {
+  //   await FirebaseDatabase.instance.goOnline();
+  //   final String uniqueId = await getDeviceId() ?? '';
+  //   final String firebaseNodeUrl = 'astrologer/${data.data?.id}';
+  //   final FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+  //   final DatabaseReference ref = firebaseDatabase.ref();
+  //   final DataSnapshot dataSnapshot = await ref.child(firebaseNodeUrl).get();
+  //   final HashMap<String, dynamic> realTime = HashMap();
+  //   realTime["uniqueId"] = uniqueId;
+  //   realTime["voiceCallStatus"] = (data.data?.callPreviousStatus ?? 0);
+  //   realTime["chatStatus"] = (data.data?.chatPreviousStatus ?? 0);
+  //   realTime["videoCallStatus"] = (data.data?.videoCallPreviousStatus ?? 0);
+  //   realTime["is_call_enable"] = (data.data?.isCall ?? 0) == 1;
+  //   realTime["is_chat_enable"] = (data.data?.isChat ?? 0) == 1;
+  //   realTime["is_video_call_enable"] = (data.data?.isVideo ?? 0) == 1;
+  //   realTime["is_live_enable"] = (data.data?.isLive ?? 0) == 1;
+  //   final HashMap<String, dynamic> deviceTokenNode = HashMap();
+  //   deviceTokenNode["deviceToken"] =
+  //       deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
+  //   firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
+  //   firebaseDatabase.ref().child("$firebaseNodeUrl/realTime").update(realTime);
+  //   // if (dataSnapshot.exists) {
+  //   //
+  //   // } else {
+  //   //   final FirebaseUserData userData = FirebaseUserData(
+  //   //     data.data?.name ?? "",
+  //   //     deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "",
+  //   //     data.data?.image ?? "",
+  //   //     RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
+  //   //   );
+  //   //   firebaseDatabase.ref().child(firebaseNodeUrl).set(userData.toJson());
+  //   // }
+  //   navigateToDashboard(data);
+  //   return Future<void>.value();
+  // }
 
-  void navigateToDashboard(ResLogin data) {
-    preferenceService.erase();
-    preferenceService.setUserDetail(data.data ?? UserData());
-    preferenceService.setToken(data.token ?? "");
-    preferenceService.setDeviceToken(deviceToken ?? "");
-    Get.offAllNamed(RouteName.dashboard);
-  }
+  // void navigateToDashboard(ResLogin data) {
+  //   preferenceService.erase();
+  //   preferenceService.setUserDetail(data.data ?? UserData());
+  //   preferenceService.setToken(data.token ?? "");
+  //   preferenceService.setDeviceToken(deviceToken ?? "");
+  //   Get.offAllNamed(RouteName.dashboard);
+  // }
 
   @override
   void onReady() async {
     super.onReady();
 
-    showTrueCaller.value = await TrueCallerService().isTrueCallerInstalled();
-    print("test_showTrueCaller.value_2: ${showTrueCaller.value}");
+    // showTrueCaller.value = await TrueCallerService().isTrueCallerInstalled();
+    // debugPrint("test_showTrueCaller.value_2: ${showTrueCaller.value}");
+    //
+    // if (!showTrueCaller.value) {
+    //   requestPermissions();
+    //   return;
+    // }
+    // DeviceApps.listenToAppsChanges().listen((ApplicationEvent event) async {
+    //   showTrueCaller.value = await TrueCallerService().isTrueCallerInstalled();
+    //
+    //   debugPrint("test_showTrueCaller.value_1: ${showTrueCaller.value}");
+    //
+    //   //  if (!showTrueCaller.value) {
+    //   if (!showTrueCaller.value) {
+    //     requestPermissions();
+    //     return;
+    //   }
+    // });
 
-    if (!showTrueCaller.value) {
-      requestPermissions();
-      return;
-    }
-    DeviceApps.listenToAppsChanges().listen((ApplicationEvent event) async {
-      showTrueCaller.value = await TrueCallerService().isTrueCallerInstalled();
-
-      print("test_showTrueCaller.value_1: ${showTrueCaller.value}");
-
-      //  if (!showTrueCaller.value) {
-      if (!showTrueCaller.value) {
-        requestPermissions();
-        return;
-      }
-    });
+    requestPermissions();
   }
 
   @override
@@ -525,15 +529,15 @@ class LoginController extends GetxController {
     "You will get a call on the registered mobile number for verification."
   ];
 
-  void getLoginImages() async {
-    if (preferenceService.getLoginImages() != null) {
-      loginImages = preferenceService.getLoginImages()!;
-      update();
-    } else {
-      // loginImages = await getInitialLoginImages();
-      update();
-    }
-  }
+  // void getLoginImages() async {
+  //   if (preferenceService.getLoginImages() != null) {
+  //     loginImages = preferenceService.getLoginImages()!;
+  //     update();
+  //   } else {
+  //     // loginImages = await getInitialLoginImages();
+  //     update();
+  //   }
+  // }
 
 // Future<LoginImages> getInitialLoginImages() async {
 //   final response = await userRepository.getInitialLoginImages();
