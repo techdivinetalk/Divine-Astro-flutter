@@ -850,10 +850,7 @@ class _LivePage extends State<LiveDharamScreen>
                         ZegoLiveStreamingRole localRole,
                         ZegoUIKitUser coHost,
                       ) {
-                        if (_controller.isHost) {
-                        } else {
-                          callJoinConfiguration();
-                        }
+
                         final callType = _controller.currentCaller.callType;
                         //
                         if (callType == "private") {
