@@ -416,17 +416,14 @@ class LiveDharamController extends GetxController {
 
     if (dataSnapshot.exists) {
       if (dataSnapshot.value is Map<dynamic, dynamic>) {
-        Map<dynamic, dynamic> map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+        data = (dataSnapshot.value ?? <dynamic, dynamic>{})
             as Map<dynamic, dynamic>;
 
-        data.addAll(map);
         log(data.toString());
         log("data.toString()");
-        print("datadatadatadata");
         if (data.isNotEmpty) {
           liveId = userId;
           var liveIdNode = data;
-
           if (liveIdNode != null) {
             List<dynamic> blockListNode = liveIdNode["blockList"] ?? [];
             if (blockListNode.isEmpty) {
@@ -436,8 +433,10 @@ class LiveDharamController extends GetxController {
             }
 
             var orderNode = liveIdNode["order"];
+
             orderModel = getOrderModel(orderNode);
-            currentCaller = getOrderModelGeneric(orderNode, forMe: true);
+            currentCaller =
+                getOrderModelGeneric(orderNode, forMe: true, type: "fromevent");
             print(currentCaller.isEngaded);
             print("currentCaller.isEngaded");
             await Future.delayed(const Duration(seconds: 1));
@@ -589,7 +588,8 @@ class LiveDharamController extends GetxController {
         print(liveIdNode);
         print("engagedCoHostWithAstro---liveIdNodeliveIdNode");
         var orderNode = liveIdNode["order"];
-        temp = getOrderModelGeneric(orderNode, forMe: false);
+        temp = getOrderModelGeneric(orderNode,
+            forMe: false, type: "engagedCoHostWithAstro");
       }
     }
 
@@ -638,7 +638,8 @@ class LiveDharamController extends GetxController {
     );
   }
 
-  WaitListModel getOrderModelGeneric(Map? map, {required bool forMe}) {
+  WaitListModel getOrderModelGeneric(Map? map,
+      {required bool forMe, String? type}) {
     bool isRequest = false;
     bool isEngaged = false;
     String callType = "";
@@ -652,9 +653,12 @@ class LiveDharamController extends GetxController {
     int callStatus = 0;
     if (map != null) {
       if (map.isNotEmpty) {
+        print(
+            'orderId--${map["id"]}----userId---$userId------isEngaged--${map["isEngaded"]}---$type');
         final bool c1 = (map["id"] ?? "") == userId;
         final bool c2 = (map["isEngaded"] ?? false) == true;
-        isEngaged = forMe ? c1 && c2 : c2;
+        // isEngaged = forMe ? c1 && c2 : c2;
+        isEngaged = map["isEngaded"];
         isRequest = map["isRequest"] ?? false;
         callType = map["callType"] ?? "";
         totalTime = map["totalTime"] ?? "";
@@ -844,7 +848,6 @@ class LiveDharamController extends GetxController {
         );
     return pivotList.join(", ");
   }
-
 
   void getLatestLeaderboard(DataSnapshot? dataSnapshot) {
     if (dataSnapshot != null) {
