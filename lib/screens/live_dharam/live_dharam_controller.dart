@@ -443,7 +443,6 @@ class LiveDharamController extends GetxController {
 
             engaging(upcomingUser());
           } else {}
-
           update();
         } else {
           print("dataISEMPTRY");
