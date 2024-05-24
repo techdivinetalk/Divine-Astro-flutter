@@ -44,6 +44,7 @@ class MessageTemplateResponse {
 class MessageTemplates {
   int? id;
   String? message;
+  String? title;
   String? description;
   // DateTime? createdAt;
   int? astrologerId;
@@ -53,6 +54,7 @@ class MessageTemplates {
   MessageTemplates(
       {this.id,
       this.message,
+      this.title,
       this.description,
       // this.createdAt,
       this.astrologerId,
@@ -61,6 +63,7 @@ class MessageTemplates {
   MessageTemplates.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     message = json['message'];
+    title = json['title'];
     description = json['description'];
     // createdAt = DateTime.parse(json["created_at"]);
     astrologerId = json['astrologer_id'];
@@ -72,6 +75,7 @@ class MessageTemplates {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['message'] = this.message;
+    data['title'] = this.title;
     data['description'] = this.description;
     data['isOn'] = this.isOn;
     //data['created_at'] = this.createdAt;

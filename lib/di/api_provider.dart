@@ -71,6 +71,7 @@ class ApiProvider {
   final String getProductDetailsUrl = "getProductDetails";
   final String saveRemediesUrl = "saveRemedies";
   final String saveRemediesChatAssistUrl = "saveRemediesForChatAssist";
+  final String getMessageTemplateForChatAssist = "getMessageTemplateForChatAssist";
   final String constantDetails = "constantDetails";
   final String getOrderHistoryUrl = "getOrderHistory";
   final String reviewReplyUrl = "reviewReply";

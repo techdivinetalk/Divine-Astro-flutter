@@ -122,7 +122,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
       onPause: () {},
       onDetach: () {},
       onRestart: () {
-       // updateFirebaseToken();
+        // updateFirebaseToken();
         getBackGroundMessages();
       },
       onStateChange: (value) {
@@ -550,6 +550,34 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
     loading(false);
   }
 
+  getMessageTemplateForChatAssist() async {
+    // messageTemplates.clear();
+
+    try {
+      final response =
+          await chatAssistantRepository.doGetMessageTemplateForChatAssist();
+      print("getting message from assistant chat ${response?.toJson()}");
+
+      if (response != null && response.data != null) {
+        if (response.data!.isNotEmpty) {
+          for (int i = 0; i < response.data!.length; i++) {
+            MessageTemplates model = response.data![i];
+
+            if (model.title!.isNotEmpty && model.description!.isNotEmpty) {
+              model.message = model.title;
+              messageTemplates.add(model);
+            }
+          }
+          debugPrint("test_messageTemplates: ${messageTemplates.length}");
+        }
+      } else {
+        debugPrint("test_response: response or response.data null found");
+      }
+    } catch (e, s) {
+      debugPrint("Error fetching chat messages: $e $s");
+    }
+  }
+
   uploadAudioFile(File soundFile) async {
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
     final String uploadFile = await uploadImageToS3Bucket(soundFile, time);
@@ -735,14 +763,13 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
             productImage: data["image"],
             // msgStatus: MsgStatus.sent,
             productPrice: data["product_price"],
-            productId: data["product_id"].toString(), 
+            productId: data["product_id"].toString(),
             customerId: args?.id);
         print(msgData.msgType);
         print("msgData.msgType");
         appSocket.sendAssistantMessage(
           customerId: args!.id.toString(),
           msgData: msgData,
-          
           message: data["title"],
           astroId: preferenceService.getUserDetail()!.id.toString(),
         );

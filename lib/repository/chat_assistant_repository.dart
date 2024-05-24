@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:divine_astrologer/model/chat_assistant/CustomerDetailsResponse.dart';
+import 'package:divine_astrologer/model/message_template_response.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -96,6 +97,29 @@ class ChatAssistantRepository extends ApiProvider {
         }
       } else {
         throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<MessageTemplateResponse?> doGetMessageTemplateForChatAssist() async {
+    try {
+      final response = await post(getMessageTemplateForChatAssist);
+      if (response.statusCode == 200&&json.decode(response.body)!=null) {
+        print("test_body: ${response.body}");
+        print("test_body_decode: ${json.decode(response.body)}");
+
+        if (json.decode(response.body)["status_code"] == 200 &&
+            json.decode(response.body)["success"] == true &&
+            json.decode(response.body)["data"] != null) {
+          return MessageTemplateResponse.fromJson(json.decode(response.body));
+        } else {
+          return null;
+        }
+      } else {
+        return null;
       }
     } catch (e, s) {
       debugPrint("we got $e $s");

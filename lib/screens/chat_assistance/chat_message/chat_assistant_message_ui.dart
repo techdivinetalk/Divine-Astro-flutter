@@ -86,6 +86,8 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
       // controller.userjoinedChatSocket();
       // controller.listenjoinedChatSocket();
       // controller.userleftChatSocketListen();
+
+      controller.getMessageTemplateForChatAssist();
       controller.getMessageTemplatesLocally();
       controller.scrollToBottomFunc();
       timer = Timer.periodic(const Duration(minutes: 5), (timer) {
