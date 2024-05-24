@@ -2333,7 +2333,7 @@ class HomeUI extends GetView<HomeController> {
     await openBottomSheet(
       context,
       functionalityWidget: Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+        padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
         child: SizedBox(
           height: Get.height / 2,
           child: Column(
@@ -2349,6 +2349,7 @@ class HomeUI extends GetView<HomeController> {
               SizedBox(height: 10.h),
               Expanded(
                 child: ListView.builder(
+                  padding: EdgeInsets.zero,
                   itemCount: walletData.length,
                   itemBuilder: (context, index) {
                     return CustomInfoWidget(

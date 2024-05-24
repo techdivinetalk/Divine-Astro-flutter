@@ -20,6 +20,7 @@ class CustomInfoWidget extends StatelessWidget {
         alignment: Alignment.centerLeft,
         children: [
           Container(
+            margin: const EdgeInsets.symmetric(horizontal: 13),
             padding: EdgeInsets.symmetric(vertical: 15, horizontal: 32.sp),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -31,7 +32,8 @@ class CustomInfoWidget extends StatelessWidget {
                   child: Text(
                     text,
                     textAlign: TextAlign.start,
-                    maxLines: 3,
+                    // maxLines: 3,
+                    maxLines: 1000,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 14.sp,
@@ -42,23 +44,19 @@ class CustomInfoWidget extends StatelessWidget {
               ],
             ),
           ),
-          Positioned(
-            left: -10,
-
-            child: Container(
-              width: 30,
-              height: 30,
-              decoration: BoxDecoration(
-                color: appColors.extraLightGrey,
-                shape: BoxShape.circle,
-              ),
-              child: Center(
-                child: Text(
-                  badgeText,
-                  style: TextStyle(
-                    color: appColors.textColor,
-                    fontWeight: FontWeight.bold,
-                  ),
+          Container(
+            width: 30,
+            height: 30,
+            decoration: BoxDecoration(
+              color: appColors.extraLightGrey,
+              shape: BoxShape.circle,
+            ),
+            child: Center(
+              child: Text(
+                badgeText,
+                style: TextStyle(
+                  color: appColors.textColor,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
