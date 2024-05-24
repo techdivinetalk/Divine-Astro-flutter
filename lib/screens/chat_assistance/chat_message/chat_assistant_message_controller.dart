@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
-import 'package:divine_astrologer/main.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/model/res_product_detail.dart';
@@ -15,21 +14,15 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:intl/intl.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:velocity_x/velocity_x.dart';
 import '../../../app_socket/app_socket.dart';
 import '../../../common/colors.dart';
 import '../../../common/common_functions.dart';
-import '../../../common/permission_handler.dart';
 import '../../../common/show_permission_widget.dart';
 import '../../../di/shared_preference_service.dart';
 import '../../../model/chat_assistant/chat_assistant_astrologer_response.dart';
@@ -267,12 +260,13 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   //   }
   //   update();
   // }
-  getMessageTemplatesLocally() async {
-    final sharedPreferencesInstance = SharedPreferenceService();
-    final data = await sharedPreferencesInstance.getMessageTemplates();
-    messageTemplates(data);
-    update();
-  }
+
+  // getMessageTemplatesLocally() async {
+  //   final sharedPreferencesInstance = SharedPreferenceService();
+  //   final data = await sharedPreferencesInstance.getMessageTemplates();
+  //   messageTemplates(data);
+  //   update();
+  // }
 
   // getOurImage()async {
   //   final prefs = await SharedPreferences.getInstance();
@@ -280,9 +274,10 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   //   userProfileImage( "$baseAmazonUrl/${userData?.image}");
   // }
 
-  sendMsgTemplate(MessageTemplates msg) {
-    final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-    sendMsg(MsgType.text, {'text': msg.description});
+  sendMsgTemplate(MessageTemplates msg, bool isTemplateMsg) {
+    // final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+    print("test_isTemplateMsg: $isTemplateMsg");
+    sendMsg(MsgType.text, {'text': msg.description}, isTemplateMsg);
   }
 
   userEnterChatSocket() {
@@ -483,7 +478,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
         'base64Image': base64Image,
         'time': time,
       };
-      sendMsg(MsgType.image, data);
+      sendMsg(MsgType.image, data, false);
     }
   }
 
@@ -551,7 +546,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   }
 
   getMessageTemplateForChatAssist() async {
-    // messageTemplates.clear();
+    messageTemplates.clear();
 
     try {
       final response =
@@ -582,11 +577,13 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
     final String uploadFile = await uploadImageToS3Bucket(soundFile, time);
     if (uploadFile != "") {
-      sendMsg(MsgType.audio, {'audioUrl': uploadFile});
+      sendMsg(MsgType.audio, {'audioUrl': uploadFile}, false);
     }
   }
 
-  void sendMsg(MsgType msgType, Map data) {
+  void sendMsg(MsgType msgType, Map data, isTemplateMsg) {
+    print("test_isTemplateMsg: $isTemplateMsg");
+
     late AssistChatData msgData;
     switch (msgType) {
       case MsgType.text:
@@ -786,6 +783,11 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
           .toString());
     scrollToBottomFunc();
     messageController.clear();
+
+    print("test_isTemplateMsg: $isTemplateMsg");
+    if (isTemplateMsg) {
+      Get.back();
+    }
   }
 
   List<CustomProductData> customProductData = [];

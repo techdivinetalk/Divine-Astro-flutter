@@ -107,7 +107,7 @@ class SavedRemediesBottomSheet extends StatelessWidget {
                                       'image': data.image.toString(),
                                       'product_price': data.amount.toString(),
                                       'product_id': data.id,
-                                    });
+                                    },false);
                                   }
                                   Get.back();
                                 },

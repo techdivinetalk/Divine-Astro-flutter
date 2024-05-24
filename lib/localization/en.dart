@@ -460,5 +460,8 @@ Map<String, String> en() {
     'userData': "User's Data",
     'users': "Users",
     'search': "Search",
+    'sendMessage': "Send Message",
+    'selectMessageToSend': "Select Message to Send",
+    'noAnyTemplateFound': "No any template found",
   };
 }
