@@ -9,6 +9,7 @@ import 'package:divine_astrologer/model/live/blocked_customer_list_res.dart';
 import 'package:divine_astrologer/repository/astrologer_profile_repository.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_global_singleton.dart';
+import 'package:divine_astrologer/screens/live_page/constant.dart';
 
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -132,7 +133,7 @@ class LiveTipsController extends GetxController {
     final String image = pref.getUserDetail()?.image ?? "";
     final String avatar = isValidImageURL(imageURL: "$awsURL/$image");
     final List<String> blockedCustomerList = await callBlockedCustomerListRes();
-    await database.ref().child("live/$userId").update(
+    await database.ref().child("$livePath/$userId").update(
       {
         "id": userId,
         "name": userName,
@@ -148,7 +149,7 @@ class LiveTipsController extends GetxController {
     await Get.toNamed(RouteName.liveDharamScreen, arguments: userId);
     LiveGlobalSingleton().isInLiveScreen = false;
 
-    await database.ref().child("live/$userId").remove();
+    await database.ref().child("$livePath/$userId").remove();
     await database.ref().child("astro-live-list/$userId").remove();
 
     Get.back();

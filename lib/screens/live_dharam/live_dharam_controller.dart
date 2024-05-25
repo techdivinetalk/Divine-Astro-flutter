@@ -15,6 +15,7 @@ import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/repository/astrologer_profile_repository.dart";
 import "package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart";
 import "package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart";
+import "package:divine_astrologer/screens/live_page/constant.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
@@ -129,16 +130,6 @@ class LiveDharamController extends GetxController {
     super.onInit();
 
     initData();
-
-    if (!isHost) {
-      if (Get.arguments != null) {
-        final String targetLiveID = Get.arguments ?? "";
-        if (targetLiveID.isNotEmpty) {
-          liveId = targetLiveID;
-          zegoController.swiping.jumpTo(targetLiveID);
-        } else {}
-      } else {}
-    } else {}
   }
 
   void initData() {
@@ -155,11 +146,10 @@ class LiveDharamController extends GetxController {
     isHost = true;
     isHostAvailable = true;
     hostSpeciality = getSpeciality();
-    // currentIndex = 0;
-    currentIndex = currentIndex == 0 ? 0 : currentIndex;
+
+
     data = <dynamic, dynamic>{};
-    // details = GetAstroDetailsRes();
-    // isCustBlocked = IsCustomerBlockedRes();
+
     leaderboardModel = <LeaderboardModel>[];
     waitListModel = <WaitListModel>[];
     orderModel = WaitListModel(
@@ -294,10 +284,6 @@ class LiveDharamController extends GetxController {
 
   set hostSpeciality(String value) => _hostSpeciality(value);
 
-  int get currentIndex => _currentIndex.value;
-
-  set currentIndex(int value) => _currentIndex(value);
-
   Map<dynamic, dynamic> get data => _data.value;
 
   set data(Map<dynamic, dynamic> value) => _data(value);
@@ -423,90 +409,44 @@ class LiveDharamController extends GetxController {
 
   Future<void> eventListner({
     required DataSnapshot snapshot,
-    required Function() zeroAstro,
     required Function(WaitListModel currentCaller) engaging,
-    required Function() showFollowPopup,
-    required Function(String message) successCallBack,
-    required Function(String message) failureCallBack,
-    required Function() reInitCoHost,
   }) async {
     final DataSnapshot dataSnapshot = snapshot;
-    if (dataSnapshot != null) {
-      if (dataSnapshot.exists) {
-        if (dataSnapshot.value is Map<dynamic, dynamic>) {
-          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
-          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-              as Map<dynamic, dynamic>;
-          log(data.toString());
-          print("datadatadatadata");
-          data.addAll(map);
-          // data
-          //   ..clear()
-          //   ..addAll(map);
-          if (data.isEmpty) {
-          } else if (data.isNotEmpty) {
-            if (data.keys.toList().isEmpty) {
+
+    if (dataSnapshot.exists) {
+      if (dataSnapshot.value is Map<dynamic, dynamic>) {
+        data = (dataSnapshot.value ?? <dynamic, dynamic>{})
+            as Map<dynamic, dynamic>;
+
+        log(data.toString());
+        log("data.toString()");
+        if (data.isNotEmpty) {
+          liveId = userId;
+          var liveIdNode = data;
+          if (liveIdNode != null) {
+            List<dynamic> blockListNode = liveIdNode["blockList"] ?? [];
+            if (blockListNode.isEmpty) {
+              firebaseBlockUsersIds = [];
             } else {
-              if (data.keys.toList() != null &&
-                  data.keys.toList().length > currentIndex) {
-                if (data.keys.toList()[currentIndex] != null) {
-                  liveId = isHost ? liveId : data.keys.toList()[currentIndex];
-                  // isHostAvailable = checkIfAstrologerAvailable(map);
-
-                  var liveIdNode = data[liveId];
-
-                  if (liveIdNode != null) {
-                    List<dynamic> blockListNode = liveIdNode["blockList"] ?? [];
-                    if (blockListNode.isEmpty) {
-                      firebaseBlockUsersIds = [];
-                    } else {
-                      firebaseBlockUsersIds = blockListNode;
-                    }
-
-                    var orderNode = liveIdNode["order"];
-                    orderModel = getOrderModel(orderNode);
-                    currentCaller =
-                        getOrderModelGeneric(orderNode, forMe: false);
-
-                    // reInitCoHost();
-
-                    await Future.delayed(const Duration(seconds: 1));
-
-                    engaging(upcomingUser());
-
-                    // String astroIdFromNode = liveId;
-                    // String astroIdFromAPIs =
-                    //     (details.data?.id ?? "").toString();
-
-                    // if (astroIdFromNode == astroIdFromAPIs) {
-                    // } else {
-                    //   await getAstrologerDetails(
-                    //     successCallBack: successCallBack,
-                    //     failureCallBack: failureCallBack,
-                    //   );
-                    // }
-
-                    showFollowPopup();
-
-                    // if (astroIdFromNode == astroIdFromAPIs) {
-                    // } else {
-                    //   await isCustomerBlocked(
-                    //     successCallBack: successCallBack,
-                    //     failureCallBack: failureCallBack,
-                    //   );
-                    // }
-                  } else {}
-                } else {}
-              } else {}
-
-              update();
+              firebaseBlockUsersIds = blockListNode;
             }
+
+            var orderNode = liveIdNode["order"];
+
+            orderModel = getOrderModel(orderNode);
+            currentCaller =
+                getOrderModelGeneric(orderNode, forMe: true, type: "fromevent");
+            print(currentCaller.isEngaded);
+            print("currentCaller.isEngaded");
+            await Future.delayed(const Duration(seconds: 1));
+
+            engaging(upcomingUser());
           } else {}
-        } else {}
-      } else {
-        data.clear();
-        zeroAstro();
-      }
+          update();
+        } else {
+          print("dataISEMPTRY");
+        }
+      } else {}
     } else {
       data.clear();
     }
@@ -640,22 +580,16 @@ class LiveDharamController extends GetxController {
       callStatus: 0,
     );
 
-
-
-      if (data[userId] != null) {
-print(data);
-print("datadatadatadatadatadata");
-        // var liveId = data.keys.toList()[pref.getUserDetail()!.id!];
-
-        var liveIdNode = data[userId];
-        if (liveIdNode != null) {
-          var orderNode = liveIdNode["order"];
-          print(orderNode);
-          print("orderNodeorderNodeorderNodeorderNodeorderNode");
-          temp = getOrderModelGeneric(orderNode, forMe: false);
-        } else {}
-      } else {}
-
+    if (data != null) {
+      var liveIdNode = data;
+      if (liveIdNode != null) {
+        print(liveIdNode);
+        print("engagedCoHostWithAstro---liveIdNodeliveIdNode");
+        var orderNode = liveIdNode["order"];
+        temp = getOrderModelGeneric(orderNode,
+            forMe: false, type: "engagedCoHostWithAstro");
+      }
+    }
 
     return temp;
   }
@@ -702,7 +636,8 @@ print("datadatadatadatadatadata");
     );
   }
 
-  WaitListModel getOrderModelGeneric(Map? map, {required bool forMe}) {
+  WaitListModel getOrderModelGeneric(Map? map,
+      {required bool forMe, String? type}) {
     bool isRequest = false;
     bool isEngaged = false;
     String callType = "";
@@ -716,9 +651,12 @@ print("datadatadatadatadatadata");
     int callStatus = 0;
     if (map != null) {
       if (map.isNotEmpty) {
+        print(
+            'orderId--${map["id"]}----userId---$userId------isEngaged--${map["isEngaded"]}---$type');
         final bool c1 = (map["id"] ?? "") == userId;
         final bool c2 = (map["isEngaded"] ?? false) == true;
-        isEngaged = forMe ? c1 && c2 : c2;
+        // isEngaged = forMe ? c1 && c2 : c2;
+        isEngaged = map["isEngaded"];
         isRequest = map["isRequest"] ?? false;
         callType = map["callType"] ?? "";
         totalTime = map["totalTime"] ?? "";
@@ -729,6 +667,8 @@ print("datadatadatadatadatadata");
         offerId = map["offerId"] ?? 0;
         totalMin = map["totalMin"] ?? 0;
         callStatus = map["callStatus"] ?? 0;
+        print(isEngaged);
+        print(isEngaged);
       } else {}
     } else {}
     return WaitListModel(
@@ -907,168 +847,6 @@ print("datadatadatadatadatadata");
     return pivotList.join(", ");
   }
 
-  // Future<void> followOrUnfollowAstrologer({
-  //   required Function(String message) successCallBack,
-  //   required Function(String message) failureCallBack,
-  // }) async {
-  //   Map<String, dynamic> param = <String, dynamic>{};
-  //   param = <String, dynamic>{
-  //     "astrologer_id": int.parse(liveId),
-  //     "is_follow": details.data?.isFollow == 1 ? 0 : 1,
-  //     "role_id": 7,
-  //   };
-  //   AstrologerFollowingResponse followUnfollow = AstrologerFollowingResponse();
-  //   followUnfollow = await liveRepository.astrologerFollowApi(
-  //     params: param,
-  //     successCallBack: successCallBack,
-  //     failureCallBack: failureCallBack,
-  //   );
-  //   followRes = followUnfollow.statusCode == HttpStatus.ok
-  //       ? AstrologerFollowingResponse.fromJson(followUnfollow.toJson())
-  //       : AstrologerFollowingResponse.fromJson(
-  //           AstrologerFollowingResponse().toJson(),
-  //         );
-  //   return Future<void>.value();
-  // }
-
-  // Future<bool> hasBalanceForSendingGift({
-  //   required int giftId,
-  //   required String giftName,
-  //   required int giftQuantity,
-  //   required int giftAmount,
-  //   required Function(InsufficientBalModel balModel) needRecharge,
-  //   required Function(String message) successCallBack,
-  //   required Function(String message) failureCallBack,
-  // }) async {
-  //   final int totalGiftQuantity = giftQuantity;
-  //   final int totalGiftAmount = giftQuantity * giftAmount;
-  //   await checkWalletRechargeForSendingGift(
-  //     giftId: giftId,
-  //     giftName: giftName,
-  //     totalGiftQuantity: totalGiftQuantity,
-  //     totalGiftAmount: totalGiftAmount,
-  //     needRecharge: needRecharge,
-  //     successCallBack: successCallBack,
-  //     failureCallBack: failureCallBack,
-  //   );
-  //   final bool value = walletRecharge.statusCode == HttpStatus.ok;
-  //   return Future<bool>.value(value);
-  // }
-
-  // Future<void> checkWalletRechargeForSendingGift({
-  //   required int giftId,
-  //   required String giftName,
-  //   required int totalGiftQuantity,
-  //   required int totalGiftAmount,
-  //   required Function(InsufficientBalModel balModel) needRecharge,
-  //   required Function(String message) successCallBack,
-  //   required Function(String message) failureCallBack,
-  // }) async {
-  //   Map<String, dynamic> param = <String, dynamic>{};
-  //   param = <String, dynamic>{
-  //     "product_id": giftId,
-  //     "text": giftName,
-  //     "quantity": totalGiftQuantity,
-  //     "balance": totalGiftAmount.toString(),
-  //     "astrologer_id": liveId,
-  //     "type": 2,
-  //     "product_type": 2,
-  //     "role_id": 7,
-  //   };
-  //   WalletRecharge walletRechargeRes = WalletRecharge();
-  //   walletRechargeRes = await liveRepository.walletRechargeApi(
-  //     params: param,
-  //     needRecharge: needRecharge,
-  //     successCallBack: successCallBack,
-  //     failureCallBack: failureCallBack,
-  //   );
-  //   walletRecharge = walletRechargeRes.statusCode == HttpStatus.ok
-  //       ? WalletRecharge.fromJson(walletRechargeRes.toJson())
-  //       : WalletRecharge.fromJson(WalletRecharge().toJson());
-  //   return Future<void>.value();
-  // }
-
-  // Future<bool> canPlaceLiveOrder({
-  //   required String talkType,
-  //   required Function(InsufficientBalModel balModel) needRecharge,
-  //   required Function(String message) successCallBack,
-  //   required Function(String message) failureCallBack,
-  // }) async {
-  //   await liveOrderPlace(
-  //     talkType: talkType,
-  //     needRecharge: needRecharge,
-  //     successCallBack: successCallBack,
-  //     failureCallBack: failureCallBack,
-  //   );
-  //   final bool value = orderGenerate.statusCode == HttpStatus.ok;
-  //   return Future<bool>.value(value);
-  // }
-
-  // Future<void> liveOrderPlace({
-  //   required String talkType,
-  //   required Function(InsufficientBalModel balModel) needRecharge,
-  //   required Function(String message) successCallBack,
-  //   required Function(String message) failureCallBack,
-  // }) async {
-  //   final int intValue = talkType == "Video"
-  //       ? 3
-  //       : talkType == "Audio"
-  //           ? 4
-  //           : talkType == "Private"
-  //               ? 5
-  //               : 0;
-  //   Map<String, dynamic> param = <String, dynamic>{};
-  //   param = <String, dynamic>{
-  //     "astrologer_id": liveId,
-  //     "product_type": intValue,
-  //     "role_id": 7,
-  //   };
-  //   if (details.data?.offerDetails?.offerId != null) {
-  //     int offerId = details.data?.offerDetails?.offerId ?? 0;
-  //     param.addAll(<String, dynamic>{"offer_id": offerId});
-  //   } else {}
-  //   OrderGenerate orderGenerateRes = OrderGenerate();
-  //   orderGenerateRes = await liveRepository.orderGenerateApi(
-  //     params: param,
-  //     needRecharge: needRecharge,
-  //     successCallBack: successCallBack,
-  //     failureCallBack: failureCallBack,
-  //   );
-  //   orderGenerate = orderGenerateRes.statusCode == HttpStatus.ok
-  //       ? OrderGenerate.fromJson(orderGenerateRes.toJson())
-  //       : OrderGenerate.fromJson(OrderGenerate().toJson());
-  //   return Future<void>.value();
-  // }
-
-  // Future<void> addUpdateLeaderboard({
-  //   required num quantity,
-  //   required num amount,
-  // }) async {
-  //   num currentAmount = quantity * amount;
-  //   final DataSnapshot dataSnapshot =
-  //       await ref.child("live/$liveId/leaderboard/$userId").get();
-  //   if (dataSnapshot != null) {
-  //     if (dataSnapshot.exists) {
-  //       if (dataSnapshot.value is Map<dynamic, dynamic>) {
-  //         Map<dynamic, dynamic> map = <dynamic, dynamic>{};
-  //         map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-  //             as Map<dynamic, dynamic>;
-  //         final num previousAmount = map["amount"] ?? 0;
-  //         currentAmount = currentAmount + previousAmount;
-  //       } else {}
-  //     } else {}
-  //   } else {}
-  //   await ref.child("live/$liveId/leaderboard/$userId").update(
-  //     <String, dynamic>{
-  //       "amount": currentAmount,
-  //       "userName": userName,
-  //       "avatar": avatar,
-  //       "id": userId,
-  //     },
-  //   );
-  //   return Future<void>.value();
-  // }
-
   void getLatestLeaderboard(DataSnapshot? dataSnapshot) {
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
@@ -1078,17 +856,12 @@ print("datadatadatadatadatadata");
               as Map<dynamic, dynamic>;
           final List<LeaderboardModel> tempList = <LeaderboardModel>[];
           map.forEach(
-            // ignore: always_specify_types
             (key, value) {
               tempList.add(
                 LeaderboardModel(
-                  // ignore:  avoid_dynamic_calls
                   amount: value["amount"] ?? 0,
-                  // ignore:  avoid_dynamic_calls
                   avatar: value["avatar"] ?? "",
-                  // ignore:  avoid_dynamic_calls
                   userName: value["userName"] ?? "",
-                  // ignore:  avoid_dynamic_calls
                   id: value["id"] ?? "",
                 ),
               );
@@ -1097,7 +870,7 @@ print("datadatadatadatadatadata");
           leaderboardModel
             ..clear()
             ..addAll(tempList);
-          // leaderboardModel = tempList;
+
           leaderboardModel.sort(
             (LeaderboardModel a, LeaderboardModel b) {
               return b.amount.compareTo(a.amount);
@@ -1124,7 +897,7 @@ print("datadatadatadatadatadata");
   }) async {
     String previousType = callType != "" ? callType : "";
     final DataSnapshot dataSnapshot =
-        await ref.child("live/$liveId/waitList/$userId").get();
+        await ref.child("$livePath/$liveId/waitList/$userId").get();
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
@@ -1156,7 +929,9 @@ print("datadatadatadatadatadata");
             "callStatus": callStatus,
           };
     //
-    await ref.child("live/$liveId/waitList/$userId").update(moOrderDetails);
+    await ref
+        .child("$livePath/$liveId/waitList/$userId")
+        .update(moOrderDetails);
     //
     if (callStatus == 2) {
       await addUpdateOrder(ogOrderDetails);
@@ -1168,7 +943,7 @@ print("datadatadatadatadatadata");
   Future<void> addUpdateOrder(Map<String, dynamic> orderDetails) async {
     print(orderDetails);
     print("updating entry orderDetails");
-    await ref.child("live/$liveId/order").update(orderDetails);
+    await ref.child("$livePath/$liveId/order").update(orderDetails);
     return Future<void>.value();
   }
 
@@ -1251,12 +1026,12 @@ print("datadatadatadatadatadata");
   }
 
   Future<void> removeFromWaitList() async {
-    await ref.child("live/$liveId/waitList/$userId").remove();
+    await ref.child("$livePath/$liveId/waitList/$userId").remove();
     return Future<void>.value();
   }
 
   Future<void> removeFromOrder() async {
-    await ref.child("live/$liveId/order").remove();
+    await ref.child("$livePath/$liveId/order").remove();
     return Future<void>.value();
   }
 
@@ -1272,34 +1047,6 @@ print("datadatadatadatadatadata");
       }
     }
   }
-
-  Future<void> updateHostAvailability() async {
-    Map<String, dynamic> temp = <String, dynamic>{};
-    final DataSnapshot dataSnapshot = await ref.child("live/$liveId").get();
-    if (dataSnapshot != null) {
-      if (dataSnapshot.exists) {
-        if (dataSnapshot.value is Map<dynamic, dynamic>) {
-          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
-          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-              as Map<dynamic, dynamic>;
-          temp = Map<String, dynamic>.from(map);
-        } else {}
-      } else {}
-    } else {}
-    temp["isAvailable"] = isHostAvailable;
-    await ref.child("live/$liveId").update(temp);
-    return Future<void>.value();
-  }
-
-  // bool hasMyIdInWaitList() {
-  //   List<WaitListModel> tempList = <WaitListModel>[];
-  //   tempList = waitListModel.where(
-  //     (WaitListModel element) {
-  //       return element.id == userId;
-  //     },
-  //   ).toList();
-  //   return tempList.isNotEmpty;
-  // }
 
   String getTotalWaitTime() {
     String time = "";
@@ -1339,62 +1086,18 @@ print("datadatadatadatadatadata");
         temp.add((element.customerId ?? 0).toString());
       },
     );
-    await ref.child("live/$liveId").update(
+    await ref.child("$livePath/$liveId").update(
       <String, Object?>{"blockList": temp ?? []},
     );
     return Future<void>.value();
   }
-
-  // Future<void> deleteFromBlockList({required String userId}) async {
-  //   List<dynamic> blockList = <dynamic>[];
-  //   final DataSnapshot dataSnapshot =
-  //       await ref.child("live/$liveId/blockList").get();
-  //   if (dataSnapshot != null) {
-  //     if (dataSnapshot.exists) {
-  //       if (dataSnapshot.value is List<dynamic>) {
-  //         List<dynamic> list = <dynamic>[];
-  //         list = (dataSnapshot.value ?? <dynamic, dynamic>{}) as List<dynamic>;
-  //         if (list.contains(userId)) {
-  //           list = list.where((dynamic element) => element != userId).toList();
-  //         } else {}
-  //         blockList = list ?? <dynamic>[];
-  //         await ref.child("live/$liveId").update(
-  //           <String, Object?>{"blockList": blockList ?? <dynamic>[]},
-  //         );
-  //       } else {}
-  //     } else {
-  //       await ref.child("live/$liveId").update(
-  //         <String, Object?>{"blockList": <dynamic>[]},
-  //       );
-  //     }
-  //   } else {}
-  //   return Future<void>.value();
-  // }
-
-  // Future<void> makeAPICallForStartCall({
-  //   required bool hasAccepted,
-  //   required Function(String message) successCallBack,
-  //   required Function(String message) failureCallBack,
-  // }) async {
-  //   Map<String, dynamic> param = <String, dynamic>{};
-  //   param = <String, dynamic>{
-  //     "order_id": (orderGenerate.data?.generatedOrderId ?? 0).toString(),
-  //     "type": hasAccepted ? 1 : 0,
-  //   };
-  //   await liveRepository.startLiveApi(
-  //     params: param,
-  //     successCallBack: successCallBack,
-  //     failureCallBack: failureCallBack,
-  //   );
-  //   return Future<void>.value();
-  // }
 
   Future<void> makeAPICallForEndCall({
     required Function(String message) successCallBack,
     required Function(String message) failureCallBack,
   }) async {
     bool isExist = false;
-    final String path = "live/$liveId/order";
+    final String path = "$livePath/$liveId/order";
     final DataSnapshot dataSnapshot = await ref.child(path).get();
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
@@ -1491,7 +1194,7 @@ print("datadatadatadatadatadata");
   }
 
   Future<void> removeMyNode() async {
-    await ref.child("live/$liveId").remove();
+    await ref.child("$livePath/$liveId").remove();
     update();
     return Future<void>.value();
   }
@@ -1561,7 +1264,7 @@ print("datadatadatadatadatadata");
   Future<bool> shouldOpenBottom() async {
     bool isRequest = false;
     final DataSnapshot dataSnapshot =
-        await ref.child("live/$liveId/waitList/$userId").get();
+        await ref.child("$livePath/$liveId/waitList/$userId").get();
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {

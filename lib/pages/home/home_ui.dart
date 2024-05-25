@@ -36,7 +36,6 @@ import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../common/constants.dart';
 import '../../model/feedback_response.dart';
-import '../../new_live/new_live_call.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'home_controller.dart';
 import 'widgets/common_info_sheet.dart';
@@ -77,19 +76,6 @@ class HomeUI extends GetView<HomeController> {
                   ),
                 ),
                 actions: [
-                  /*GestureDetector(
-                    onTap: () {
-                      Get.to(()=>const NewLiveCallScreen());
-                    },
-                    child: Container(
-                      height: 50,
-                      width: 50,
-                      color: Colors.redAccent,
-                    ),
-                  ),
-                  const SizedBox(
-                    width: 20
-                  ),*/
                   Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
