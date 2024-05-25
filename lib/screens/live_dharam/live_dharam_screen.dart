@@ -6,6 +6,7 @@ import "dart:developer";
 import "dart:math" as math;
 
 import "package:after_layout/after_layout.dart";
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:divine_astrologer/common/app_textstyle.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/generic_loading_widget.dart";
@@ -3204,10 +3205,13 @@ class _LivePage extends State<LiveDharamScreen>
     } else {
       await endLiveSession(
         endLive: () async {
+
           if (mounted) {
+            FirebaseDatabase database = FirebaseDatabase.instance;
             _timer?.cancel();
             _msgTimerForFollowPopup?.cancel();
             _msgTimerForTarotCardPopup?.cancel();
+            await database.ref().child("$livePath/${_controller.userId}").remove();
             await zegoController.leave(context);
           } else {}
         },
