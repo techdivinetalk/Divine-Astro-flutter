@@ -1209,7 +1209,9 @@ class _LivePage extends State<LiveDharamScreen>
   Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
     if (state == ZegoLiveStreamingState.idle) {
       ZegoGiftPlayer().clear();
-    } else {}
+    } else {
+
+    }
 
     if (state == ZegoLiveStreamingState.ended) {
       ZegoGiftPlayer().clear();
@@ -1221,16 +1223,14 @@ class _LivePage extends State<LiveDharamScreen>
 
       _controller.initData();
       _controller.updateInfo();
-
-      final List<dynamic> list = await _controller.onLiveStreamingEnded();
-      print("onLiveStreamingEnded: $list");
-
-      if (list.isNotEmpty) {
-        zegoController.swiping.next();
-
-        _controller.initData();
-        _controller.updateInfo();
-      } else {}
+      // final List<dynamic> list = await _controller.onLiveStreamingEnded();
+      // print("onLiveStreamingEnded: $list");
+      // if (list.isNotEmpty) {
+      //   print("list.isNotEmptylist.isNotEmptylist.isNotEmpty");
+      //   zegoController.swiping.next();
+      //   _controller.initData();
+      //   _controller.updateInfo();
+      // } else {}
     } else {}
 
     return Future<void>.value();
