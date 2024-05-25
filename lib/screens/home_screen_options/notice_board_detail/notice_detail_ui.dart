@@ -29,7 +29,7 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
     }
     return Scaffold(
       appBar: commonDetailAppbar(
-        title: data.message.toString(),
+        title: data.title.toString(),
         trailingWidget: Container(
           margin: EdgeInsets.only(right: 20.sp),
           child: Text(

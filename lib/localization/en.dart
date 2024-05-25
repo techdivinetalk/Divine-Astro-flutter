@@ -463,5 +463,7 @@ Map<String, String> en() {
     'sendMessage': "Send Message",
     'selectMessageToSend': "Select Message to Send",
     'noAnyTemplateFound': "No any template found",
+    'liveLogs': "Live Logs",
+    'noAnyDataFound': "No any data found",
   };
 }

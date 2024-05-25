@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:divine_astrologer/common/constants.dart';
+import 'package:divine_astrologer/model/home_model/astrologer_live_data_response.dart';
 import 'package:divine_astrologer/model/home_model/training_video_model.dart';
 import 'package:divine_astrologer/model/live/new_tarot_card_model.dart';
 import 'package:divine_astrologer/model/wallet_deatils_response.dart';
@@ -177,5 +179,58 @@ class HomePageRepository extends ApiProvider {
       debugPrint("we got $e $s");
       rethrow;
     }
+  }
+
+  Future<AstrologerLiveDataResponse> doGetAstrologerLiveData() async {
+   if(Constants.isTestingMode){
+     try {
+       final response = await post(
+         getAstrologerLiveData,
+         endPoint: 'https://wakanda-api.divinetalk.live/api/astro/v7/',
+         headers: await getJsonHeaderURLDebugWakanda(),
+       );
+
+       debugPrint("test_response_body: ${response.body}");
+
+       if (response.statusCode == 200) {
+         if (json.decode(response.body)["status_code"] == 401) {
+           throw CustomException(json.decode(response.body)["error"]);
+         } else {
+           final feedbackResponse =
+           AstrologerLiveDataResponse.fromJson(json.decode(response.body));
+           return feedbackResponse;
+         }
+       } else {
+         throw CustomException(json.decode(response.body)["error"]);
+       }
+     } catch (e, s) {
+       debugPrint("we got $e $s");
+       rethrow;
+     }
+   }else{
+     try {
+       final response = await post(
+         getAstrologerLiveData,
+         headers: await getJsonHeaderURL(),
+       );
+
+       debugPrint("test_response_body: ${response.body}");
+
+       if (response.statusCode == 200) {
+         if (json.decode(response.body)["status_code"] == 401) {
+           throw CustomException(json.decode(response.body)["error"]);
+         } else {
+           final feedbackResponse =
+           AstrologerLiveDataResponse.fromJson(json.decode(response.body));
+           return feedbackResponse;
+         }
+       } else {
+         throw CustomException(json.decode(response.body)["error"]);
+       }
+     } catch (e, s) {
+       debugPrint("we got $e $s");
+       rethrow;
+     }
+   }
   }
 }

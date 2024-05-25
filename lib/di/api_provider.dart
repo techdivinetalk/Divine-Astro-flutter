@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/di/progress_service.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_global_singleton.dart';
 import 'package:divine_astrologer/screens/otp_verification/otp_verification_controller.dart';
@@ -16,18 +17,21 @@ import 'shared_preference_service.dart';
 
 class ApiProvider {
   static const String version = 'v7';
+
   // static const String socketUrl = "http://13.127.116.89:4000";
   static const String socketUrl = "https://list.divinetalk.live";
-  static String baseUrl =
-      "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+  static String baseUrl =  "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
 
-  static const String astOnlineOffline = "https://list.divinetalk.live/api/v3/updateAstroStatusV2?unique_no=";
+  static const String astOnlineOffline =
+      "https://list.divinetalk.live/api/v3/updateAstroStatusV2?unique_no=";
+
   //final String baseUrl = "http://13.235.46.27/admin/$version/";
 
   //Socket Event
   final String deleteSession = "deleteSession";
   final String deleteSessionResponse = "deleteSessionResponse";
-  static String playStoreLiveUrl = "https://play.google.com/store/apps/details?id=app.divine.astrologer";
+  static String playStoreLiveUrl =
+      "https://play.google.com/store/apps/details?id=app.divine.astrologer";
 
   final String initResponse = "initResponse";
   final String initLeaderBoardSession = "initLeaderBoardSession";
@@ -48,8 +52,10 @@ class ApiProvider {
   //
   final String generateOrderAPI = "wallet/recharge";
   final String getPooja = "getPooja";
+
   //final String getBookedPooja = "getBookedPooja";
   final String getSinglePooja = "getSinglPooja";
+
   //final String getPoojaAddOns = "addOns";
   final String getUserAddressForPooja = "getUserAddress";
   final String addUserAddressForPooja = "saveUserAddress";
@@ -71,7 +77,8 @@ class ApiProvider {
   final String getProductDetailsUrl = "getProductDetails";
   final String saveRemediesUrl = "saveRemedies";
   final String saveRemediesChatAssistUrl = "saveRemediesForChatAssist";
-  final String getMessageTemplateForChatAssist = "getMessageTemplateForChatAssist";
+  final String getMessageTemplateForChatAssist =
+      "getMessageTemplateForChatAssist";
   final String constantDetails = "constantDetails";
   final String getOrderHistoryUrl = "getOrderHistory";
   final String reviewReplyUrl = "reviewReply";
@@ -117,6 +124,7 @@ class ApiProvider {
   final String faq = "faq";
   final String getAllFeedbackFineDetail = "getAllFeedbackFineDetail";
   final String walletPayout = "payoutDetails";
+  final String getAstrologerLiveData = "getAstrologerLiveData";
 
   //Astro Internal API
   final String horoChartImageInt = "getChartImage/";
@@ -185,6 +193,7 @@ class ApiProvider {
 
   // Added By: divine-dharam
   final String joinLive = "join-live";
+
   //
 
   //privacy policy & terms
@@ -197,7 +206,7 @@ class ApiProvider {
   //Basic Auth
   final String username = "625170";
   final String password = "4eb3e540da68887ac72d4d45d7da9906";
- 
+
   ///ReferAn Astrologer Base
   final elasticDivineTalkBase = "https://crm-api.divinetalk.live/api/v1/";
 
@@ -212,10 +221,12 @@ class ApiProvider {
   final String blockCustomerlist = "blockCustomerlist";
   final String blockCustomer = "blockCustomer";
   final String getAstroAllNoticeType2 = "getAstroAllNotice?notice_type=2";
-  static const String getAstroAllNoticeType3 = "getAstroAllNotice?notice_type=3";
-  static const String getAstroAllNoticeType4 = "getAstroAllNotice?notice_type=4";
+  static const String getAstroAllNoticeType3 =
+      "getAstroAllNotice?notice_type=3";
+  static const String getAstroAllNoticeType4 =
+      "getAstroAllNotice?notice_type=4";
   static const String getCustomEcom = "getCustomEcom";
-  final  String customeEcommerce = "customeEcommerce";
+  final String customeEcommerce = "customeEcommerce";
   final String getTarotCard = "getTarotCard";
 
   //added by dev-chetan
@@ -241,6 +252,16 @@ class ApiProvider {
     var header = <String, String>{};
     header[jsonHeaderName] = jsonHeaderValue;
     header[jsonAuthenticationName] = 'Bearer $_token';
+    header[jsonCookieName] =
+        'XSRF-TOKEN=eyJpdiI6ImdlSWE2a2I0M2FIbHk0VGRHd3RubGc9PSIsInZhbHVlIjoiY1FwMjJYVUh1VnE5SHl4eDR1ZFhXWkFTTWlsMDU3S1Urcm9YWVRVeDBHQzc0OG42ZVMvbUNWZVBzNGZFOTVLOXQzYlk0bGdNNDNmRzJ0b0tJWU5SaU50Z2ZrWkpCbjFXc1plWHl1NFF4R1d0dGJDUnU2STNPVjltNTF6NXN3UVkiLCJtYWMiOiJmODY5MmE4MjI4ZWEyYTFhNzk3MmNiYzZmODkyNDJlYTUyZGE5MDNiN2EzNjA5MTY0NzMzZDc3MjMyNGEzODJmIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6Ikx4WGlYUVlPMWtXM2p6aVh3TEdtWkE9PSIsInZhbHVlIjoieThMZldWYUw3YzVBRGk4dDJNdGptOTAvRmkvS1hDM0NvL1YxZm1ZOVdPdEszTzhEU043aHRXLy9lWUE4d1ZSeE9meUtWUmhnVm0vZ2x2S21kNUw5R1NvWnBOc0g5UmFJTFg5TksyTXV1REoyQXluOEZsdFJSZGk3ZXkwOFdjSk0iLCJtYWMiOiI1YWRjYWRjOTAzMDNjNWEyZmQ4NTY4OWU5ZjI2YzFhODE4ZmQ1MjQzN2E3ZWZjMjEwODlhMThjYzdlZTg1MGMwIiwidGFnIjoiIn0%3D';
+    return header;
+  }
+
+  Future<Map<String, String>> getJsonHeaderURLDebugWakanda({int version = 6}) async {
+    // _token = await _getAuthToken();
+    var header = <String, String>{};
+    header[jsonHeaderName] = jsonHeaderValue;
+    header[jsonAuthenticationName] = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5IiwianRpIjoiYWIyNDEyZGViYTVmNjBkNzI4ODY1M2YxOTgzYjliM2I2NDljN2ZjNzBjN2RiN2I4YTNlZDVhN2ZiMmViNTI1ZjljMzY0NjFkYWUyZmVhMTciLCJpYXQiOjE3MTY2MTk4MjguMjUwNTE3LCJuYmYiOjE3MTY2MTk4MjguMjUwNTE5LCJleHAiOjE4NzQzODYyMjguMjQwMjY1LCJzdWIiOiIxOTMxIiwic2NvcGVzIjpbXX0.Ep_wW7Y0M9wma44BNlsr__ZBdLXru9DAY97ankHrKQwVR65Xr11_UhtUL3qM5B1QLyw3fHbiBcm6oG4izjpIracm40vQRbiJ9HGQzgWkor3kdEI38G3J8bSOlVShXqOp1woNfLEu5IapwB6CjFnvLC59e0SHAEJdlQ7AGjBN0jebvxbBHSCiHoCa-ApXLAOIOrJ7fOcblz8FAiAxEPixP12E2oNlkSkeKtAF-yvqCEz3mboZWydryRiABwawfx21CkcL_2OeRFq1nv2pS_TSBVdaGrqdtQf-jfMfDXIIucsejlsFmiaDGWpxtJXg_iSq5bFkANC2MgwT5RBFYTw-AxND4QZI4zb3YckXITFDUEks4afm-0Hx67lkC3AUtkgNzYISy2fVLGgWZj6q5yLlCSJyhF6CcJblVV8TZHMNPPrqr0mgzcy-uNrxAjkjpaYtvKMERREMDeDdjyb3lFjS648wP1Wf8WgR-0ad5gKSIzkwtgIC-BnBbCaboaImcdDV2oF0IS6HIaqYplgC2QuZ8mTd2Z46BuU1PzFBTffh1g1GSrJOY8VmR8oAjPNGYtbrk5md0otdaHkRc82VYvAtBG05PODgfgR6Bx7Xlue63S0a54CghCI_VYtqi7e7bCDtWNWUoqEZCFqhC5VAlyXFrGswUj09RRKydN0goOomBr8';
     header[jsonCookieName] =
         'XSRF-TOKEN=eyJpdiI6ImdlSWE2a2I0M2FIbHk0VGRHd3RubGc9PSIsInZhbHVlIjoiY1FwMjJYVUh1VnE5SHl4eDR1ZFhXWkFTTWlsMDU3S1Urcm9YWVRVeDBHQzc0OG42ZVMvbUNWZVBzNGZFOTVLOXQzYlk0bGdNNDNmRzJ0b0tJWU5SaU50Z2ZrWkpCbjFXc1plWHl1NFF4R1d0dGJDUnU2STNPVjltNTF6NXN3UVkiLCJtYWMiOiJmODY5MmE4MjI4ZWEyYTFhNzk3MmNiYzZmODkyNDJlYTUyZGE5MDNiN2EzNjA5MTY0NzMzZDc3MjMyNGEzODJmIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6Ikx4WGlYUVlPMWtXM2p6aVh3TEdtWkE9PSIsInZhbHVlIjoieThMZldWYUw3YzVBRGk4dDJNdGptOTAvRmkvS1hDM0NvL1YxZm1ZOVdPdEszTzhEU043aHRXLy9lWUE4d1ZSeE9meUtWUmhnVm0vZ2x2S21kNUw5R1NvWnBOc0g5UmFJTFg5TksyTXV1REoyQXluOEZsdFJSZGk3ZXkwOFdjSk0iLCJtYWMiOiI1YWRjYWRjOTAzMDNjNWEyZmQ4NTY4OWU5ZjI2YzFhODE4ZmQ1MjQzN2E3ZWZjMjEwODlhMThjYzdlZTg1MGMwIiwidGFnIjoiIn0%3D';
     return header;
@@ -502,7 +523,8 @@ class ApiProvider {
 
   Future<void> doLiveStreamPendingTasks(http.Response response) async {
     final bool cond1 = response.statusCode == HttpStatus.unauthorized;
-    final bool cond2 = json.decode(response.body)["status_code"] == HttpStatus.unauthorized;
+    final bool cond2 =
+        json.decode(response.body)["status_code"] == HttpStatus.unauthorized;
     print("LiveGlobalSingleton:: doLiveStreamPendingTasks():: cond1:: $cond1");
     print("LiveGlobalSingleton:: doLiveStreamPendingTasks():: cond2:: $cond2");
 

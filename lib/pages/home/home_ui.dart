@@ -8,6 +8,7 @@ import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/model/home_model/astrologer_live_data_response.dart';
 import 'package:divine_astrologer/model/home_page_model_class.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/model/wallet_deatils_response.dart';
@@ -559,6 +560,19 @@ class HomeUI extends GetView<HomeController> {
                           // viewKundliWidget(),
                           viewKundliWidgetUpdated(),
                           SizedBox(height: 10.h),
+                          if (Constants.isTestingMode)
+                            Obx(() {
+                              return Visibility(
+                                visible:
+                                    controller.isRewardAvailable.value == 1,
+                                child: Column(
+                                  children: [
+                                    liveWidgetUpdated(),
+                                    SizedBox(height: 10.h),
+                                  ],
+                                ),
+                              );
+                            }),
                           Obx(
                             () {
                               return isLive.value == 1
@@ -1016,7 +1030,127 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget scheduledTrainingWidgetUpdated() {
-    return Constants.isTestingMode?Container(
+    return Constants.isTestingMode
+        ? Container(
+            width: ScreenUtil().screenWidth,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: appColors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 3.0,
+                  offset: const Offset(0, 3.0),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Scheduled Training',
+                    style: AppTextStyle.textStyle16(
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text(
+                        'Training Purpose -',
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          'Quality',
+                          style: AppTextStyle.textStyle14(
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text(
+                        'Date & Time -',
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          '9:31 AM 22/05/2024',
+                          style: AppTextStyle.textStyle14(
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text(
+                        'Training Duration -',
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          '2 Hours',
+                          style: AppTextStyle.textStyle14(
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Expanded(
+                        child: SizedBox(),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          String meetingLink =
+                              "https://meet.google.com/your-meeting-id";
+                          openZoomMeeting(meetingLink);
+                        },
+                        child: Container(
+                          width: 80.w,
+                          height: 31.h,
+                          decoration: BoxDecoration(
+                            color: appColors.guideColor,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(20)),
+                          ),
+                          // alignment: Alignment.center,
+                          child: Center(
+                            child: Text(
+                              "Join",
+                              style: AppTextStyle.textStyle14(
+                                  fontColor: appColors.whiteGuidedColor,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          )
+        : const SizedBox();
+  }
+
+  Widget liveWidgetUpdated() {
+    return Container(
       width: ScreenUtil().screenWidth,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -1032,101 +1166,237 @@ class HomeUI extends GetView<HomeController> {
       child: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              'Scheduled Training',
-              style: AppTextStyle.textStyle16(
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-            const SizedBox(height: 8),
             Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisSize: MainAxisSize.max,
               children: [
                 Text(
-                  'Training Purpose -',
-                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
-                ),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: Text(
-                    'Quality',
-                    style:
-                        AppTextStyle.textStyle14(fontWeight: FontWeight.w500),
+                  'Daily Live Time Remaining -',
+                  style: AppTextStyle.textStyle13(
+                    fontWeight: FontWeight.w400,
+                    fontColor: appColors.black,
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Row(
-              children: [
+                SizedBox(width: 5.h),
                 Text(
-                  'Date & Time -',
-                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
-                ),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: Text(
-                    '9:31 AM 22/05/2024',
-                    style:
-                        AppTextStyle.textStyle14(fontWeight: FontWeight.w500),
+                  '${controller.todaysRemaining.value} Mins',
+                  style: AppTextStyle.textStyle13(
+                    fontWeight: FontWeight.w600,
+                    fontColor: appColors.red,
                   ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                Text(
-                  'Training Duration -',
-                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
-                ),
-                const SizedBox(width: 4),
-                Expanded(
-                  child: Text(
-                    '2 Hours',
-                    style:
-                        AppTextStyle.textStyle14(fontWeight: FontWeight.w500),
-                  ),
-                ),
-              ],
-            ),
-            const SizedBox(height: 4),
-            Row(
-              children: [
-                const Expanded(
-                  child: SizedBox(),
-                ),
+                SizedBox(width: 8.h),
                 GestureDetector(
                   onTap: () {
-                    String meetingLink =
-                        "https://meet.google.com/your-meeting-id";
-                    openZoomMeeting(meetingLink);
+                    Fluttertoast.showToast(msg: "No info for now!");
                   },
-                  child: Container(
-                    width: 80.w,
-                    height: 31.h,
-                    decoration: BoxDecoration(
-                      color: appColors.guideColor,
-                      borderRadius: const BorderRadius.all(Radius.circular(20)),
-                    ),
-                    // alignment: Alignment.center,
-                    child: Center(
-                      child: Text(
-                        "Join",
-                        style: AppTextStyle.textStyle14(
-                            fontColor: appColors.whiteGuidedColor,
-                            fontWeight: FontWeight.w500),
-                      ),
-                    ),
-                  ),
+                  child: Assets.images.icInfo.svg(width: 18, height: 18),
                 ),
+                const Expanded(child: SizedBox()),
+                Obx(() {
+                  return GestureDetector(
+                    onTap: () {
+                      controller.isOpenLivePayment.value =
+                          !controller.isOpenLivePayment.value;
+                    },
+                    child: controller.isOpenLivePayment.value
+                        ? Assets.images.icUpArrow.svg(width: 11, height: 11)
+                        : Assets.images.icDownArrow.svg(width: 11, height: 11),
+                  );
+                })
               ],
             ),
+            Obx(() {
+              return Visibility(
+                visible: controller.isOpenLivePayment.value,
+                child: Column(
+                  children: [
+                    SizedBox(height: 16),
+                    Container(
+                      width: double.infinity,
+                      height: 1.h,
+                      color: appColors.grey,
+                    ),
+                    SizedBox(height: 16),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'Date',
+                            textAlign: TextAlign.start,
+                            style: AppTextStyle.textStyle13(
+                              fontWeight: FontWeight.w600,
+                              fontColor: appColors.black,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 3.h),
+                        Text(
+                          'Remaining Minutes',
+                          style: AppTextStyle.textStyle13(
+                            fontWeight: FontWeight.w600,
+                            fontColor: appColors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    controller.weekLst.isEmpty
+                        ? Container(
+                            height: 100.h,
+                            alignment: AlignmentDirectional.center,
+                            child: Text(
+                              "noAnyDataFound".tr,
+                              textAlign: TextAlign.start,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: appColors.grey,
+                                fontSize: 18.sp,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          )
+                        : ListView.builder(
+                            padding: EdgeInsets.zero,
+                            physics: NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemCount: controller.weekLst.length,
+                            itemBuilder: (context, index) {
+                              Weeks model = controller.weekLst[index];
+
+                              return Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: Text(
+                                          '${controller.getWeeks((model.weekNo!))} Week’s Hours Remaining',
+                                          textAlign: TextAlign.start,
+                                          style: AppTextStyle.textStyle13(
+                                            fontWeight: FontWeight.w500,
+                                            fontColor: appColors.black,
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 3.h),
+                                      model.remainingLiveMinute == 0
+                                          ? Text(
+                                              'Done',
+                                              textAlign: TextAlign.start,
+                                              style: AppTextStyle.textStyle13(
+                                                fontWeight: FontWeight.w600,
+                                                fontColor: appColors.green,
+                                              ),
+                                            )
+                                          : Text(
+                                              '${model.remainingLiveMinute} Minutes',
+                                              textAlign: TextAlign.start,
+                                              style: AppTextStyle.textStyle13(
+                                                fontWeight: FontWeight.w600,
+                                                fontColor: appColors.red,
+                                              ),
+                                            ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 5),
+                                ],
+                              );
+                            },
+                          ),
+                    SizedBox(height: 10),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    'Compulsory Live Days -',
+                                    style: AppTextStyle.textStyle13(
+                                      fontWeight: FontWeight.w400,
+                                      fontColor: appColors.black,
+                                    ),
+                                  ),
+                                  SizedBox(width: 5.h),
+                                  Text(
+                                    '21',
+                                    style: AppTextStyle.textStyle13(
+                                      fontWeight: FontWeight.w600,
+                                      fontColor: appColors.red,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              SizedBox(
+                                  height:
+                                      controller.isRewardAvailable.value == 1
+                                          ? 5
+                                          : 0),
+                              Visibility(
+                                visible:
+                                    controller.isRewardAvailable.value == 1,
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      'Eligible Reward -',
+                                      style: AppTextStyle.textStyle13(
+                                        fontWeight: FontWeight.w400,
+                                        fontColor: appColors.black,
+                                      ),
+                                    ),
+                                    SizedBox(width: 5.h),
+                                    Text(
+                                      '₹${controller.rewardPoint.value}',
+                                      style: AppTextStyle.textStyle13(
+                                        fontWeight: FontWeight.w600,
+                                        fontColor: appColors.green,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 3.h),
+                        Container(
+                          width: 80.w,
+                          height: 31.h,
+                          decoration: BoxDecoration(
+                            color: appColors.guideColor,
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black.withOpacity(0.2),
+                                blurRadius: 1.0,
+                                offset: const Offset(0.0, 3.0),
+                              ),
+                            ],
+                            borderRadius: BorderRadius.circular(6.0),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "liveLogs".tr,
+                              style: AppTextStyle.textStyle14(
+                                  fontColor: appColors.whiteGuidedColor,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              );
+            })
           ],
         ),
       ),
-    ):const SizedBox();
+    );
   }
 
   void openZoomMeeting(String meetingUrl) async {

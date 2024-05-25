@@ -341,6 +341,10 @@ class $AssetsImagesGen {
   SvgGenImage get icDownArrow =>
       const SvgGenImage('assets/images/ic_down_arrow.svg');
 
+  /// File path: assets/images/ic_up_arrow.svg
+  SvgGenImage get icUpArrow =>
+      const SvgGenImage('assets/images/ic_up_arrow.svg');
+
   /// File path: assets/images/ic_ecommerce.svg
   SvgGenImage get icEcommerce =>
       const SvgGenImage('assets/images/ic_ecommerce.svg');

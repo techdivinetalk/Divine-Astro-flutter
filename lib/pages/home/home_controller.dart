@@ -9,12 +9,14 @@ import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/MiddleWare.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/common/constants.dart';
 
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/di/fcm_notification.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/model/feedback_response.dart';
+import 'package:divine_astrologer/model/home_model/astrologer_live_data_response.dart';
 import 'package:divine_astrologer/model/home_model/training_video_model.dart';
 import 'package:divine_astrologer/model/performance_response.dart';
 import 'package:divine_astrologer/model/update_offer_type_response.dart';
@@ -33,6 +35,9 @@ import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:get/get_rx/get_rx.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
+import 'package:get/state_manager.dart';
 import 'package:intl/intl.dart';
 import "package:permission_handler/permission_handler.dart";
 import 'package:url_launcher/url_launcher.dart';
@@ -58,7 +63,8 @@ import 'package:cron/cron.dart';
 
 import 'widgets/can_not_online.dart';
 
-class HomeController extends GetxController {
+class HomeController extends GetxController with WidgetsBindingObserver {
+  RxBool isOpenLivePayment = false.obs;
   bool isOpenBonusSheet = false;
   bool isOpenPaidSheet = false;
   bool isOpenECommerceSheet = false;
@@ -117,9 +123,73 @@ class HomeController extends GetxController {
 
   final cron = Cron();
 
+  RxList<Weeks> weekLst = <Weeks>[].obs;
+  RxInt todaysRemaining = 0.obs;
+  RxInt isRewardAvailable = 0.obs;
+  RxInt rewardPoint = 0.obs;
+  RxInt isLiveMonitor = 0.obs;
+
+  String getWeeks(int week) {
+    if (week == 1) {
+      return "${week}st";
+    } else if (week == 2) {
+      return "${week}nd";
+    } else if (week == 3) {
+      return "${week}rd";
+    } else {
+      return "${week}th";
+    }
+  }
+
+  getAstrologerLiveData() async {
+    if (Constants.isTestingMode) {
+      weekLst.clear();
+      todaysRemaining.value = 0;
+      isRewardAvailable.value = 0;
+      rewardPoint.value = 0;
+      isLiveMonitor.value = 0;
+
+      try {
+        var response = await homePageRepository.doGetAstrologerLiveData();
+
+        if (response.data != null) {
+          var data = response.data;
+          if (data!.todaysRemaining != null) {
+            todaysRemaining.value = data.todaysRemaining!;
+          }
+          if (data.isRewardAvailable != null) {
+            isRewardAvailable.value = data.isRewardAvailable!;
+            debugPrint("test_isRewardAvailable: $isRewardAvailable");
+          }
+          if (data.rewardPoint != null) {
+            rewardPoint.value = data.rewardPoint!;
+          }
+          if (data.isLiveMonitor != null) {
+            isLiveMonitor.value = data.isLiveMonitor!;
+          }
+
+          if (data.weeks!.isNotEmpty) {
+            weekLst.addAll(data.weeks!);
+          }
+        }
+      } catch (error) {
+        debugPrint("error $error");
+        if (error is AppException) {
+          error.onException();
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.redColor);
+        }
+      }
+    }
+  }
+
   @override
   void onInit() async {
     super.onInit();
+    WidgetsBinding.instance.addObserver(this);
+
+    getAstrologerLiveData();
+
     print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
@@ -625,8 +695,8 @@ class HomeController extends GetxController {
     ///Customer Offer data
     if (homeData?.offers?.customOffer != null &&
         homeData?.offers?.customOffer != []) {
-      for(int i =0;i<homeData!.offers!.customOffer!.length;i++){
-        if(homeData!.offers!.customOffer![i].toggle == 1){
+      for (int i = 0; i < homeData!.offers!.customOffer!.length; i++) {
+        if (homeData!.offers!.customOffer![i].toggle == 1) {
           homeData!.offers!.customOffer![i].isOn = true;
           update();
         }
@@ -640,11 +710,11 @@ class HomeController extends GetxController {
 
   astroOnlineOffline({String? status}) async {
     try {
-    final response = await dio
-        .get("${ApiProvider.astOnlineOffline}${userData.uniqueNo}&${status}");
-    log(response.data.toString());
-    print("response.data");
-    if (response.statusCode == 200) {}
+      final response = await dio
+          .get("${ApiProvider.astOnlineOffline}${userData.uniqueNo}&${status}");
+      log(response.data.toString());
+      print("response.data");
+      if (response.statusCode == 200) {}
     } catch (e) {
       print("getting error --- getAstroCustOfferData ${e}");
     }
@@ -1268,5 +1338,21 @@ class HomeController extends GetxController {
         );
       },
     );
+  }
+
+  @override
+  onClose() {
+    super.onClose();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+    debugPrint("test_state: $state");
+
+    if (state == AppLifecycleState.resumed) {
+      getAstrologerLiveData();
+    }
   }
 }
