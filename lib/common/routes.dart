@@ -37,6 +37,8 @@ import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/r
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_ui.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_dharam_binding.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart';
+import 'package:divine_astrologer/screens/live_logs/live_logs_binding.dart';
+import 'package:divine_astrologer/screens/live_logs/live_logs_ui.dart';
 import 'package:divine_astrologer/screens/live_tips/live_tips_binding.dart';
 import 'package:divine_astrologer/screens/live_tips/live_tips_ui.dart';
 import 'package:divine_astrologer/screens/message_template/message_template_bindings.dart';
@@ -195,6 +197,7 @@ class RouteName {
   static const String addPuja = "/addPujaScreen";
   static const String remediesDetail = "/RemediesDetailsView";
   static const String acceptChatRequestScreen = "/AcceptChatRequestScreen";
+  static const String liveLogsScreen = "/LiveLogsScreen";
 }
 
 final Set<String> validRoutes = {
@@ -390,17 +393,19 @@ class Routes {
     ),
 
     GetPage(
-      page: () =>  PrivacyPolicyUI(),
+      page: () => PrivacyPolicyUI(),
       name: RouteName.privacyPolicy,
-    ),   GetPage(
-      page: () =>  const RemediesScreen(),
+    ),
+    GetPage(
+      page: () => const RemediesScreen(),
       name: RouteName.remedies,
-        binding: RemediesBindings(),
+      binding: RemediesBindings(),
       // name: RouteName.remedies,
-    ), GetPage(
-      page: () =>  AddRemedies(),
+    ),
+    GetPage(
+      page: () => AddRemedies(),
       name: RouteName.addRemedies,
-        binding: AddRemediesBindings(),
+      binding: AddRemediesBindings(),
       // name: RouteName.remedies,
     ),
     GetPage(
@@ -495,6 +500,11 @@ class Routes {
       name: RouteName.addressAddUpdateScreen,
       page: AddressAddUpdateScreen.new,
       binding: AddressAddUpdateBinding(),
+    ),
+    GetPage<dynamic>(
+      name: RouteName.liveLogsScreen,
+      page: LiveLogsUI.new,
+      binding: LiveLogsBinding(),
     ),
   ];
 }

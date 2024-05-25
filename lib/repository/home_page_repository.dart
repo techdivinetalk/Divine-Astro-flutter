@@ -182,12 +182,13 @@ class HomePageRepository extends ApiProvider {
   }
 
   Future<AstrologerLiveDataResponse> doGetAstrologerLiveData() async {
-   if(Constants.isTestingMode){
+   if(Constants.isDebugMode){
      try {
        final response = await post(
          getAstrologerLiveData,
          endPoint: 'https://wakanda-api.divinetalk.live/api/astro/v7/',
-         headers: await getJsonHeaderURLDebugWakanda(),
+         // headers: await getJsonHeaderURLDebugWakanda(),
+         headers: await getJsonHeaderURL(),
        );
 
        debugPrint("test_response_body: ${response.body}");

@@ -560,19 +560,17 @@ class HomeUI extends GetView<HomeController> {
                           // viewKundliWidget(),
                           viewKundliWidgetUpdated(),
                           SizedBox(height: 10.h),
-                          if (Constants.isTestingMode)
-                            Obx(() {
-                              return Visibility(
-                                visible:
-                                    controller.isRewardAvailable.value == 1,
-                                child: Column(
-                                  children: [
-                                    liveWidgetUpdated(),
-                                    SizedBox(height: 10.h),
-                                  ],
-                                ),
-                              );
-                            }),
+                          Obx(() {
+                            return Visibility(
+                              visible: controller.isRewardAvailable.value == 1,
+                              child: Column(
+                                children: [
+                                  liveWidgetUpdated(),
+                                  SizedBox(height: 10.h),
+                                ],
+                              ),
+                            );
+                          }),
                           Obx(
                             () {
                               return isLive.value == 1
@@ -1313,30 +1311,30 @@ class HomeUI extends GetView<HomeController> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Row(
-                                children: [
-                                  Text(
-                                    'Compulsory Live Days -',
-                                    style: AppTextStyle.textStyle13(
-                                      fontWeight: FontWeight.w400,
-                                      fontColor: appColors.black,
-                                    ),
-                                  ),
-                                  SizedBox(width: 5.h),
-                                  Text(
-                                    '21',
-                                    style: AppTextStyle.textStyle13(
-                                      fontWeight: FontWeight.w600,
-                                      fontColor: appColors.red,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              SizedBox(
-                                  height:
-                                      controller.isRewardAvailable.value == 1
-                                          ? 5
-                                          : 0),
+                              // Row(
+                              //   children: [
+                              //     Text(
+                              //       'Compulsory Live Days -',
+                              //       style: AppTextStyle.textStyle13(
+                              //         fontWeight: FontWeight.w400,
+                              //         fontColor: appColors.black,
+                              //       ),
+                              //     ),
+                              //     SizedBox(width: 5.h),
+                              //     Text(
+                              //       '21',
+                              //       style: AppTextStyle.textStyle13(
+                              //         fontWeight: FontWeight.w600,
+                              //         fontColor: appColors.red,
+                              //       ),
+                              //     ),
+                              //   ],
+                              // ),
+                              // SizedBox(
+                              //     height:
+                              //         controller.isRewardAvailable.value == 1
+                              //             ? 5
+                              //             : 0),
                               Visibility(
                                 visible:
                                     controller.isRewardAvailable.value == 1,
@@ -1364,26 +1362,32 @@ class HomeUI extends GetView<HomeController> {
                           ),
                         ),
                         SizedBox(width: 3.h),
-                        Container(
-                          width: 80.w,
-                          height: 31.h,
-                          decoration: BoxDecoration(
-                            color: appColors.guideColor,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.2),
-                                blurRadius: 1.0,
-                                offset: const Offset(0.0, 3.0),
+                        GestureDetector(
+                          onTap: () {
+                            // Get.toNamed(
+                            //       RouteName.liveLogsScreen);
+                          },
+                          child: Container(
+                            width: 80.w,
+                            height: 31.h,
+                            decoration: BoxDecoration(
+                              color: appColors.guideColor,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 1.0,
+                                  offset: const Offset(0.0, 3.0),
+                                ),
+                              ],
+                              borderRadius: BorderRadius.circular(6.0),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "liveLogs".tr,
+                                style: AppTextStyle.textStyle14(
+                                    fontColor: appColors.whiteGuidedColor,
+                                    fontWeight: FontWeight.w500),
                               ),
-                            ],
-                            borderRadius: BorderRadius.circular(6.0),
-                          ),
-                          child: Center(
-                            child: Text(
-                              "liveLogs".tr,
-                              style: AppTextStyle.textStyle14(
-                                  fontColor: appColors.whiteGuidedColor,
-                                  fontWeight: FontWeight.w500),
                             ),
                           ),
                         ),

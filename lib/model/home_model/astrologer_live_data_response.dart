@@ -59,7 +59,7 @@ class Data {
 class Weeks {
   final String? start;
   final String? end;
-  final String? totalLiveMinutes;
+  dynamic totalLiveMinutes;
   final int? remainingLiveMinute;
   final int? weekNo;
 
@@ -74,7 +74,7 @@ class Weeks {
   Weeks.fromJson(Map<String, dynamic> json)
       : start = json['start'] as String?,
         end = json['end'] as String?,
-        totalLiveMinutes = json['total_live_minutes'] as String?,
+        totalLiveMinutes = json['total_live_minutes'] ??"",
         remainingLiveMinute = json['remaining_live_minute'] as int?,
         weekNo = json['week_no'] as int?;
 

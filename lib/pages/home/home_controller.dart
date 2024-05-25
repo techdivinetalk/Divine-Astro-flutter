@@ -142,7 +142,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   getAstrologerLiveData() async {
-    if (Constants.isTestingMode) {
+    if (Constants.isUploadMode) {
       weekLst.clear();
       todaysRemaining.value = 0;
       isRewardAvailable.value = 0;
