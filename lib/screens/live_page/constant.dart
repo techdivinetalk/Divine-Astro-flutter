@@ -1,5 +1,6 @@
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import '../../di/timer_duration_service.dart';
@@ -18,6 +19,7 @@ const yourAppSign =
 
 const yourServerSecret = '89ceddc6c59909af326ddb7209cb1c16';
 RxList assistChatNewMsg = [].obs;
+const livePath = kDebugMode  ? 'liveTest':"live";
 RxInt chatAssistantCurrentUserId = 0.obs;
 RxInt walletBalance = 0.obs;
 RxList<AssistChatData> assistChatUnreadMessages = <AssistChatData>[].obs;
