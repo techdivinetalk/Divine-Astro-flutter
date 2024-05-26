@@ -10,7 +10,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:overlay_support/overlay_support.dart';
 import 'package:permission_handler/permission_handler.dart';
 // import 'package:truecaller_sdk/truecaller_sdk.dart';
 
@@ -479,6 +481,17 @@ class LoginController extends GetxController {
   //   preferenceService.setToken(data.token ?? "");
   //   preferenceService.setDeviceToken(deviceToken ?? "");
   //   Get.offAllNamed(RouteName.dashboard);
+  // }
+  // void navigateToDashboard(ResLogin data) {
+  //   if (data.token == null) {
+  //     Fluttertoast.showToast(msg: "No authorized token found from Api");
+  //   } else{
+  //   preferenceService.erase();
+  //   preferenceService.setUserDetail(data.data ?? UserData());
+  //   preferenceService.setToken(data.token!);
+  //   preferenceService.setDeviceToken(deviceToken ?? "");
+  //   Get.offAllNamed(RouteName.dashboard);
+  // }
   // }
 
   @override
