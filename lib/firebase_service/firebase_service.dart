@@ -42,6 +42,7 @@ RxInt isQueue = 1.obs;
 RxInt isGifts = 1.obs;
 // RxInt isTruecaller = 1.obs;
 RxInt isLiveCall = 1.obs;
+RxInt homePage = 1.obs;
 RxMap<dynamic, dynamic> callKunadliUpdated = {}.obs;
 
 class AppFirebaseService {
@@ -453,6 +454,9 @@ class AppFirebaseService {
       //   break;
       case "voip":
         isVOIP(int.parse(dataSnapshot.value.toString()));
+        break;
+      default:
+        preferenceService.setStringPref(dataSnapshot.key.toString(), dataSnapshot.value.toString());
         break;
     }
   }

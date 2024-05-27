@@ -47,6 +47,7 @@ import '../../common/app_exception.dart';
 import '../../common/feedback_bottomsheet.dart';
 import "../../common/important_number_bottomsheet.dart";
 import '../../di/shared_preference_service.dart';
+import '../../firebase_service/firebase_service.dart';
 import '../../model/constant_details_model_class.dart';
 import '../../model/filter_performance_response.dart';
 import '../../model/home_page_model_class.dart';
@@ -142,6 +143,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   getAstrologerLiveData() async {
+    if(preferenceService.getString("homePage") == "0"){
+      return;
+    }
     if (Constants.isUploadMode) {
       weekLst.clear();
       todaysRemaining.value = 0;
@@ -187,9 +191,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   void onInit() async {
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
-
     getAstrologerLiveData();
-
     print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
