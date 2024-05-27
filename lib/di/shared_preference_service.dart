@@ -133,8 +133,14 @@ class SharedPreferenceService extends GetxService {
   Future<bool> setIntPrefs(String key, int value) async {
     return prefs!.setInt(key, value);
   }
+  Future<bool> setStringPref(String key, String value) async {
+    return prefs!.setString(key, value);
+  }
 
-  String? getToken() {
+  String? getString(String key) {
+    return prefs?.getString(key) ?? "0";
+  }
+ String? getToken() {
     return prefs!.getString(tokenKey);
   }
 

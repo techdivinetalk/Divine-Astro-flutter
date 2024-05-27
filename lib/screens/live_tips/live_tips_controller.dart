@@ -143,22 +143,11 @@ class LiveTipsController extends GetxController {
         "blockList": blockedCustomerList,
       },
     );
-    await database.ref().child("astro-live-list/$userId").set(1);
 
     LiveGlobalSingleton().isInLiveScreen = true;
-    await Get.toNamed(RouteName.liveDharamScreen, arguments: userId);
+    await Get.offNamed(RouteName.liveDharamScreen, arguments: userId);
     LiveGlobalSingleton().isInLiveScreen = false;
 
-    await database.ref().child("$livePath/$userId").remove();
-    await database.ref().child("astro-live-list/$userId").remove();
-
-    Get.back();
-    Get.back();
-
-    // unawaited(database.ref().child("live/$userId").remove());
-    // unawaited(database.ref().child("astro-live-list/$userId").remove());
-    // Get.back(closeOverlays: true);
-    // Get.back(closeOverlays: true);
 
     return Future<void>.value();
   }

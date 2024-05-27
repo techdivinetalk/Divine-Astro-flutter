@@ -6,6 +6,7 @@ import "dart:developer";
 import "dart:math" as math;
 
 import "package:after_layout/after_layout.dart";
+import "package:cloud_firestore/cloud_firestore.dart";
 import "package:divine_astrologer/common/app_textstyle.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/generic_loading_widget.dart";
@@ -1208,7 +1209,9 @@ class _LivePage extends State<LiveDharamScreen>
   Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
     if (state == ZegoLiveStreamingState.idle) {
       ZegoGiftPlayer().clear();
-    } else {}
+    } else {
+
+    }
 
     if (state == ZegoLiveStreamingState.ended) {
       ZegoGiftPlayer().clear();
@@ -1220,16 +1223,14 @@ class _LivePage extends State<LiveDharamScreen>
 
       _controller.initData();
       _controller.updateInfo();
-
-      final List<dynamic> list = await _controller.onLiveStreamingEnded();
-      print("onLiveStreamingEnded: $list");
-
-      if (list.isNotEmpty) {
-        zegoController.swiping.next();
-
-        _controller.initData();
-        _controller.updateInfo();
-      } else {}
+      // final List<dynamic> list = await _controller.onLiveStreamingEnded();
+      // print("onLiveStreamingEnded: $list");
+      // if (list.isNotEmpty) {
+      //   print("list.isNotEmptylist.isNotEmptylist.isNotEmpty");
+      //   zegoController.swiping.next();
+      //   _controller.initData();
+      //   _controller.updateInfo();
+      // } else {}
     } else {}
 
     return Future<void>.value();
@@ -3204,10 +3205,13 @@ class _LivePage extends State<LiveDharamScreen>
     } else {
       await endLiveSession(
         endLive: () async {
+
           if (mounted) {
+            FirebaseDatabase database = FirebaseDatabase.instance;
             _timer?.cancel();
             _msgTimerForFollowPopup?.cancel();
             _msgTimerForTarotCardPopup?.cancel();
+            await database.ref().child("$livePath/${_controller.userId}").remove();
             await zegoController.leave(context);
           } else {}
         },
