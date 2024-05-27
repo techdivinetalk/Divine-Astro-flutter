@@ -35,6 +35,7 @@ import "package:flutter_image_compress/flutter_image_compress.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:fluttertoast/fluttertoast.dart";
 import "package:get/get.dart";
+import "package:get/get_rx/get_rx.dart";
 import "package:http/http.dart" as http;
 import "package:image_cropper/image_cropper.dart";
 import "package:image_picker/image_picker.dart";
@@ -71,6 +72,7 @@ import "../live_dharam/gifts_singleton.dart";
 
 class ChatMessageWithSocketController extends GetxController
     with WidgetsBindingObserver {
+
   BuildContext? context;
 
   void setContext(BuildContext context) {
@@ -134,6 +136,10 @@ class ChatMessageWithSocketController extends GetxController
   Rx<bool> isCardBotOpen = false.obs;
   bool isGalleryOpen = false;
 
+  FocusNode focusNode = FocusNode();
+  RxBool isKeyboardVisible = false.obs;
+
+
   void startTimer() {
     int _start = 5;
     if (_timer2 != null) {
@@ -175,6 +181,9 @@ class ChatMessageWithSocketController extends GetxController
   @override
   void dispose() {
     // TODO: implement dispose
+
+    focusNode.dispose();
+
     _appLinkingStreamSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     ZegoGiftPlayer().clear();
@@ -363,6 +372,13 @@ class ChatMessageWithSocketController extends GetxController
   @override
   void onInit() {
     super.onInit();
+    focusNode.addListener(() {
+        isKeyboardVisible.value = focusNode.hasFocus;
+
+        if(isKeyboardVisible.value){
+          scrollToBottomFunc();
+        }
+    });
     getDir();
     initialiseControllers();
     noticeAPi();

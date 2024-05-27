@@ -340,165 +340,192 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 textAlign: TextAlign.center),
                           )),
                     ))),
-                Obx(
-                  () => Column(
-                    children: [
-                      messageTemplateRow(),
-                      SizedBox(height: 20.h),
-                    ],
-                  ),
-                ),
-                Row(
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        controller.openShowDeck(context, controller);
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(left: 18.h),
-                        width: 80.h,
-                        height: 90.h,
-                        padding: EdgeInsets.symmetric(
-                          vertical: 5.h,
-                        ),
-                        decoration: BoxDecoration(
-                          color: appColors.red,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(15),
-                          ),
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
+                // Obx(
+                //   () => Column(
+                //     children: [
+                //       messageTemplateRow(),
+                //       SizedBox(height: 15.h),
+                //     ],
+                //   ),
+                // ),
+                Obx(() {
+                  return Visibility(
+                    visible: !controller.isKeyboardVisible.value,
+                    child: Column(
+                      children: [
+                        messageTemplateRow(),
+                        SizedBox(height: 15.h),
+                        Row(
                           children: [
-                            SizedBox(
-                              width: 25.h,
-                              height: 25.h,
-                              child: Assets.images.chatTarotCards.svg(),
-                            ),
-                            SizedBox(height: 5.h),
-                            Text(
-                              'Tarot\nCards',
-                              maxLines: 2,
-                              style: AppTextStyle.textStyle12(
-                                  fontColor: appColors.white),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        height: 90.h,
-                        margin: EdgeInsets.only(
-                          left: 10.h,
-                          right: 18.h,
-                        ),
-                        padding: EdgeInsets.all(
-                          8.h,
-                        ),
-                        decoration: BoxDecoration(
-                          color: appColors.white,
-                          borderRadius: const BorderRadius.all(
-                            Radius.circular(15),
-                          ),
-                        ),
-                        child: Column(
-                          children: [
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      controller.openProduct(controller);
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 12, vertical: 8),
-                                      decoration: BoxDecoration(
-                                        color: appColors.red,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(18)),
-                                      ),
-                                      alignment: AlignmentDirectional.center,
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            width: 20.h,
-                                            height: 20.h,
-                                            child:
-                                                Assets.images.chatProduct.svg(),
-                                          ),
-                                          SizedBox(width: 5.h),
-                                          Text(
-                                            'Product',
-                                            style: AppTextStyle.textStyle10(
-                                                fontColor: appColors.white),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+                            GestureDetector(
+                              onTap: () {
+                                controller.openShowDeck(context, controller);
+                              },
+                              child: Container(
+                                margin: EdgeInsets.only(left: 18.h),
+                                width: 80.h,
+                                height: 90.h,
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 5.h,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: appColors.red,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(15),
                                   ),
                                 ),
-                                SizedBox(width: 10.h),
-                                Expanded(
-                                  child: GestureDetector(
-                                    onTap: () async {
-                                      controller.openCustomShop(controller);
-                                    },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 12, vertical: 8),
-                                      decoration: BoxDecoration(
-                                        color: appColors.red,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(18)),
-                                      ),
-                                      alignment: AlignmentDirectional.center,
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          SizedBox(
-                                            width: 20.h,
-                                            height: 20.h,
-                                            child: Assets.images.chatCustomShop
-                                                .svg(),
-                                          ),
-                                          SizedBox(width: 5.h),
-                                          Text(
-                                            'Custom Shop',
-                                            style: AppTextStyle.textStyle10(
-                                                fontColor: appColors.white),
-                                          ),
-                                        ],
-                                      ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    SizedBox(
+                                      width: 25.h,
+                                      height: 25.h,
+                                      child: Assets.images.chatTarotCards.svg(),
                                     ),
-                                  ),
+                                    SizedBox(height: 5.h),
+                                    Text(
+                                      'Tarot\nCards',
+                                      maxLines: 2,
+                                      style: AppTextStyle.textStyle12(
+                                          fontColor: appColors.white),
+                                    ),
+                                  ],
                                 ),
-                              ],
+                              ),
                             ),
-                            SizedBox(height: 5.h),
                             Expanded(
-                              child: Text(
-                                'Use these options to sell e-commerce products.',
-                                style: AppTextStyle.textStyle10(
-                                    fontColor: appColors.black),
+                              child: Container(
+                                height: 90.h,
+                                margin: EdgeInsets.only(
+                                  left: 10.h,
+                                  right: 18.h,
+                                ),
+                                padding: EdgeInsets.all(
+                                  8.h,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: appColors.white,
+                                  borderRadius: const BorderRadius.all(
+                                    Radius.circular(15),
+                                  ),
+                                ),
+                                child: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () async {
+                                              controller
+                                                  .openProduct(controller);
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 12,
+                                                      vertical: 8),
+                                              decoration: BoxDecoration(
+                                                color: appColors.red,
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(18)),
+                                              ),
+                                              alignment:
+                                                  AlignmentDirectional.center,
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 20.h,
+                                                    height: 20.h,
+                                                    child: Assets
+                                                        .images.chatProduct
+                                                        .svg(),
+                                                  ),
+                                                  SizedBox(width: 5.h),
+                                                  Text(
+                                                    'Product',
+                                                    style: AppTextStyle
+                                                        .textStyle10(
+                                                            fontColor: appColors
+                                                                .white),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        SizedBox(width: 10.h),
+                                        Expanded(
+                                          child: GestureDetector(
+                                            onTap: () async {
+                                              controller
+                                                  .openCustomShop(controller);
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 12,
+                                                      vertical: 8),
+                                              decoration: BoxDecoration(
+                                                color: appColors.red,
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                        Radius.circular(18)),
+                                              ),
+                                              alignment:
+                                                  AlignmentDirectional.center,
+                                              child: Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 20.h,
+                                                    height: 20.h,
+                                                    child: Assets
+                                                        .images.chatCustomShop
+                                                        .svg(),
+                                                  ),
+                                                  SizedBox(width: 5.h),
+                                                  Text(
+                                                    'Custom Shop',
+                                                    style: AppTextStyle
+                                                        .textStyle10(
+                                                            fontColor: appColors
+                                                                .white),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                    SizedBox(height: 5.h),
+                                    Expanded(
+                                      child: Text(
+                                        'Use these options to sell e-commerce products.',
+                                        style: AppTextStyle.textStyle10(
+                                            fontColor: appColors.black),
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ],
                         ),
-                      ),
+                        SizedBox(height: 15.h),
+                      ],
                     ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
+                  );
+                }),
                 chatBottomBar(context),
                 Obx(() => AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
@@ -839,6 +866,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                       ]),
                                   child: TextFormField(
                                     controller: controller.messageController,
+                                    focusNode: controller.focusNode,
                                     keyboardType: TextInputType.text,
                                     minLines: 1,
                                     maxLines: 3,
