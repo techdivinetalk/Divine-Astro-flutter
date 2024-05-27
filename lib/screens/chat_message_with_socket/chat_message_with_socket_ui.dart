@@ -903,7 +903,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                               .image(),
                                         ),
                                       ),
-                                      suffixIcon: InkWell(
+                                      suffixIcon:   !controller.hasMessage.value
+                                          ?InkWell(
                                         onTap: () async {
                                           showCurvedBottomSheet(context);
 
@@ -923,7 +924,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                           child:
                                               Assets.images.icAttechment.svg(),
                                         ),
-                                      ),
+                                      ):null,
                                       filled: true,
                                       enabledBorder: OutlineInputBorder(
                                           borderRadius:

@@ -1103,109 +1103,6 @@ class _LivePage extends State<LiveDharamScreen>
       ),
     );
   }
-
-  // Widget callStack() {
-  //   String singleColumn0 = "";
-  //   String doubleColumn1 = "";
-  //   String doubleColumn2 = "";
-  //   String doubleColumn3 = "";
-
-  //   final Data data = _controller.details.data ?? Data();
-  //   final OfferDetails offerDetails = data.offerDetails ?? OfferDetails();
-  //   final bool isOfferAvailable = offerDetails.offerId != null;
-
-  //   final int videoOriginal = data.videoCallAmount ?? 0;
-  //   final int audioOriginal = data.audioCallAmount ?? 0;
-  //   final int privateOriginal = data.anonymousCallAmount ?? 0;
-
-  //   final List<int> originalList = [
-  //     videoOriginal,
-  //     audioOriginal,
-  //     privateOriginal,
-  //   ];
-  //   originalList.sort(
-  //     (a, b) {
-  //       return a.compareTo(b);
-  //     },
-  //   );
-
-  //   if (isOfferAvailable) {
-  //     if (offerDetails.specialOfferText != null) {
-  //       doubleColumn1 = offerDetails.specialOfferText ?? "";
-  //       doubleColumn2 = offerDetails.offerText ?? "";
-  //       doubleColumn3 = originalList.first.toString();
-  //     } else {
-  //       doubleColumn1 = offerDetails.offerText ?? "";
-  //       doubleColumn2 = originalList.first.toString();
-  //     }
-  //   } else {
-  //     singleColumn0 = originalList.first.toString();
-  //   }
-
-  //   if (isOfferAvailable) {
-  //     if (offerDetails.specialOfferText != null) {
-  //       return Column(
-  //         children: <Widget>[
-  //           Text(
-  //             doubleColumn1,
-  //             style: const TextStyle(
-  //               fontSize: 8,
-  //               fontWeight: FontWeight.bold,
-  //               color: Colors.red,
-  //             ),
-  //           ),
-  //           Text(
-  //             doubleColumn2,
-  //             style: const TextStyle(
-  //               fontSize: 8,
-  //             ),
-  //           ),
-  //           Text(
-  //             "₹$doubleColumn3/Min",
-  //             style: const TextStyle(
-  //               fontSize: 8,
-  //               decoration: TextDecoration.lineThrough,
-  //               decorationColor: Colors.red,
-  //             ),
-  //           ),
-  //         ],
-  //       );
-  //     } else {
-  //       return Column(
-  //         children: <Widget>[
-  //           Text(
-  //             doubleColumn1,
-  //             style: const TextStyle(
-  //               fontSize: 8,
-  //               fontWeight: FontWeight.bold,
-  //             ),
-  //           ),
-  //           Text(
-  //             "₹$doubleColumn2/Min",
-  //             style: const TextStyle(
-  //               fontSize: 8,
-  //               decoration: TextDecoration.lineThrough,
-  //               decorationColor: Colors.red,
-  //             ),
-  //           ),
-  //         ],
-  //       );
-  //     }
-  //   } else {
-  //     return Column(
-  //       children: [
-  //         Text(
-  //           "₹$singleColumn0/Min",
-  //           style: const TextStyle(
-  //             fontSize: 8,
-  //             fontWeight: FontWeight.bold,
-  //           ),
-  //         ),
-  //       ],
-  //     );
-  //   }
-  // }
-
   Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
     if (state == ZegoLiveStreamingState.idle) {
       ZegoGiftPlayer().clear();
@@ -1218,48 +1115,17 @@ class _LivePage extends State<LiveDharamScreen>
 
       getUntil();
 
-      await endOrderFirst();
+
       await Future<void>.delayed(const Duration(seconds: 2));
 
       _controller.initData();
       _controller.updateInfo();
-      // final List<dynamic> list = await _controller.onLiveStreamingEnded();
-      // print("onLiveStreamingEnded: $list");
-      // if (list.isNotEmpty) {
-      //   print("list.isNotEmptylist.isNotEmptylist.isNotEmpty");
-      //   zegoController.swiping.next();
-      //   _controller.initData();
-      //   _controller.updateInfo();
-      // } else {}
     } else {}
 
     return Future<void>.value();
   }
 
-  Future<void> endOrderFirst() async {
-    // await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
-    // final int id = _controller.orderGenerate.data?.generatedOrderId ?? 0;
-    // if (id == 0) {
-    // } else {
-    //   await _controller.makeAPICallForEndCallIndependent(
-    //     successCallBack: (String message) {
-    //       successAndFailureCallBack(
-    //         message: message,
-    //         isForSuccess: true,
-    //         isForFailure: false,
-    //       );
-    //     },
-    //     failureCallBack: (String message) {
-    //       successAndFailureCallBack(
-    //         message: message,
-    //         isForSuccess: false,
-    //         isForFailure: true,
-    //       );
-    //     },
-    //   );
-    // }
-    return Future<void>.value();
-  }
+
 
   Future<void> alreadyInWaitlistPopup() async {
     LiveGlobalSingleton().isAlreadyInWaitlistPopupOpen = true;
