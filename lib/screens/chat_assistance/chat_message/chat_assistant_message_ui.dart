@@ -80,7 +80,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
       // controller.userleftChatSocketListen();
 
       controller.getMessageTemplateForChatAssist();
-      // controller.getMessageTemplatesLocally();
+      controller.getMessageTemplatesLocally();
       controller.scrollToBottomFunc();
       timer = Timer.periodic(const Duration(minutes: 5), (timer) {
         controller.socketReconnect();
@@ -391,43 +391,43 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                   ),
                 );
               }),
-              // Obx(
-              //   () => Column(
-              //     children: [
-              //       messageTemplateRow(),
-              //       SizedBox(height: 20.h),
-              //     ],
-              //   ),
-              // ),
-              // SizedBox(height: 10.h),
-              // chatBottomBar(context),
-
-
-
-              Padding(
-                padding:
-                EdgeInsets.only(left: 20.h, right: 20.h, bottom: 20.h),
-                child: MaterialButton(
-                    height: 50,
-                    elevation: 0,
-                    minWidth: Get.width,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius:
-                      BorderRadius.all(Radius.circular(25.0)),
-                    ),
-                    onPressed: () {
-                      chatAssistantTemplateSendMessagePopup();
-                    },
-                    color: appColors.guideColor,
-                    child: Text(
-                      "sendMessage".tr,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 20.sp,
-                        color: appColors.white,
-                      ),
-                    )),
+              Obx(
+                () => Column(
+                  children: [
+                    messageTemplateRow(),
+                    SizedBox(height: 20.h),
+                  ],
+                ),
               ),
+              SizedBox(height: 10.h),
+              chatBottomBar(context),
+
+
+
+              // Padding(
+              //   padding:
+              //   EdgeInsets.only(left: 20.h, right: 20.h, bottom: 20.h),
+              //   child: MaterialButton(
+              //       height: 50,
+              //       elevation: 0,
+              //       minWidth: Get.width,
+              //       shape: const RoundedRectangleBorder(
+              //         borderRadius:
+              //         BorderRadius.all(Radius.circular(25.0)),
+              //       ),
+              //       onPressed: () {
+              //         chatAssistantTemplateSendMessagePopup();
+              //       },
+              //       color: appColors.guideColor,
+              //       child: Text(
+              //         "sendMessage".tr,
+              //         style: TextStyle(
+              //           fontWeight: FontWeight.w600,
+              //           fontSize: 20.sp,
+              //           color: appColors.white,
+              //         ),
+              //       )),
+              // ),
             ],
           ),
         ],
@@ -545,60 +545,60 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
     );
   }
 
-  // Widget messageTemplateRow() {
-  //   return SizedBox(
-  //     height: 35,
-  //     child: ListView.separated(
-  //       padding: const EdgeInsets.symmetric(horizontal: 20),
-  //       scrollDirection: Axis.horizontal,
-  //       itemCount: controller.messageTemplates.length + 1,
-  //       separatorBuilder: (_, index) => SizedBox(width: 10.w),
-  //       itemBuilder: (context, index) {
-  //         late final MessageTemplates msg;
-  //         return index == 0 || controller.messageTemplates.isEmpty
-  //             ? GestureDetector(
-  //                 onTap: () async {
-  //                   await Get.toNamed(RouteName.messageTemplate);
-  //                   controller.getMessageTemplatesLocally();
-  //                   controller.update();
-  //                 },
-  //                 child: Container(
-  //                   padding:
-  //                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-  //                   decoration: BoxDecoration(
-  //                     color: appColors.red,
-  //                     borderRadius: const BorderRadius.all(Radius.circular(18)),
-  //                   ),
-  //                   child: Text(
-  //                     '+ Add',
-  //                     style:
-  //                         AppTextStyle.textStyle12(fontColor: appColors.white),
-  //                   ),
-  //                 ),
-  //               )
-  //             : GestureDetector(
-  //                 onTap: () {
-  //                   controller.sendMsgTemplate(
-  //                       controller.messageTemplates[index - 1]);
-  //                 },
-  //                 child: Container(
-  //                   padding:
-  //                       const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-  //                   decoration: BoxDecoration(
-  //                     color: /*appColors.brownColour*/appColors.textColor,
-  //                     borderRadius: const BorderRadius.all(Radius.circular(18)),
-  //                   ),
-  //                   child: Text(
-  //                     '${controller.messageTemplates[index - 1].message}',
-  //                     style:
-  //                         AppTextStyle.textStyle12(fontColor: appColors.white),
-  //                   ),
-  //                 ),
-  //               );
-  //       },
-  //     ),
-  //   );
-  // }
+  Widget messageTemplateRow() {
+    return SizedBox(
+      height: 35,
+      child: ListView.separated(
+        padding: const EdgeInsets.symmetric(horizontal: 20),
+        scrollDirection: Axis.horizontal,
+        itemCount: controller.messageTemplates.length + 1,
+        separatorBuilder: (_, index) => SizedBox(width: 10.w),
+        itemBuilder: (context, index) {
+          late final MessageTemplates msg;
+          return index == 0 || controller.messageTemplates.isEmpty
+              ? GestureDetector(
+                  onTap: () async {
+                    await Get.toNamed(RouteName.messageTemplate);
+                    controller.getMessageTemplatesLocally();
+                    controller.update();
+                  },
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: appColors.red,
+                      borderRadius: const BorderRadius.all(Radius.circular(18)),
+                    ),
+                    child: Text(
+                      '+ Add',
+                      style:
+                          AppTextStyle.textStyle12(fontColor: appColors.white),
+                    ),
+                  ),
+                )
+              : GestureDetector(
+                  onTap: () {
+                    controller.sendMsgTemplate(
+                        controller.messageTemplates[index - 1],false);
+                  },
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: /*appColors.brownColour*/appColors.textColor,
+                      borderRadius: const BorderRadius.all(Radius.circular(18)),
+                    ),
+                    child: Text(
+                      '${controller.messageTemplates[index - 1].message}',
+                      style:
+                          AppTextStyle.textStyle12(fontColor: appColors.white),
+                    ),
+                  ),
+                );
+        },
+      ),
+    );
+  }
 
   Widget msgShimmerList() {
     return ListView.builder(

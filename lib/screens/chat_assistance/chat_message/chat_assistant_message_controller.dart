@@ -20,6 +20,7 @@ import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../../app_socket/app_socket.dart';
 import '../../../common/colors.dart';
 import '../../../common/common_functions.dart';
@@ -42,7 +43,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   RxList chatMessageList = [].obs;
   var preference = Get.find<SharedPreferenceService>();
 
-  // RxString userProfileImage = "".obs;
+  RxString userProfileImage = "".obs;
   RxList<AssistChatData> unreadMessageList = <AssistChatData>[].obs;
   RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
   final keyboardVisibilityController = KeyboardVisibilityController();
@@ -244,35 +245,35 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  //
-  // @override
-  // void onReady() {
-  //   super.onReady();
-  //   Future.delayed(const Duration(milliseconds: 600)).then((value) {
-  //     scrollToBottomFunc();
-  //   });
-  // }
 
-  // void readUnreadMessages() {
-  //   if (assistChatUnreadMessages.isNotEmpty) {
-  //     assistChatUnreadMessages
-  //         .removeWhere((element) => element.customerId == args?.id);
-  //   }
-  //   update();
-  // }
+  @override
+  void onReady() {
+    super.onReady();
+    Future.delayed(const Duration(milliseconds: 600)).then((value) {
+      scrollToBottomFunc();
+    });
+  }
 
-  // getMessageTemplatesLocally() async {
-  //   final sharedPreferencesInstance = SharedPreferenceService();
-  //   final data = await sharedPreferencesInstance.getMessageTemplates();
-  //   messageTemplates(data);
-  //   update();
-  // }
+  void readUnreadMessages() {
+    if (assistChatUnreadMessages.isNotEmpty) {
+      assistChatUnreadMessages
+          .removeWhere((element) => element.customerId == args?.id);
+    }
+    update();
+  }
 
-  // getOurImage()async {
-  //   final prefs = await SharedPreferences.getInstance();
-  //  final baseAmazonUrl = prefs.getString(SharedPreferenceService.baseImageUrl);
-  //   userProfileImage( "$baseAmazonUrl/${userData?.image}");
-  // }
+  getMessageTemplatesLocally() async {
+    final sharedPreferencesInstance = SharedPreferenceService();
+    final data = await sharedPreferencesInstance.getMessageTemplates();
+    messageTemplates(data);
+    update();
+  }
+
+  getOurImage()async {
+    final prefs = await SharedPreferences.getInstance();
+   final baseAmazonUrl = prefs.getString(SharedPreferenceService.baseImageUrl);
+    userProfileImage( "$baseAmazonUrl/${userData?.image}");
+  }
 
   sendMsgTemplate(MessageTemplates msg, bool isTemplateMsg) {
     // final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
@@ -293,43 +294,43 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
     );
   }
 
-  // userjoinedChatSocket() {
-  //   appSocket.emitForStartAstroCustChatAssist(
-  //       userData?.id.toString(), args?.id.toString(), 0);
-  // }
-  //
-  // userleftChatSocket() {
-  //   print("called user left chat socket");
-  //   appSocket.userLeftCustChatAssist(
-  //       userData?.id.toString(), args?.id.toString());
-  // }
-  //
-  // userleftChatSocketListen() {
-  //   appSocket.userLeftListenChatAssist(
-  //     (data) {
-  //       print("people in room data from left socket $data");
-  //       if (data['msg'] == 2) {
-  //         isCustomerOnline(true);
-  //       }
-  //       isCustomerOnline(false);
-  //       update();
-  //     },
-  //   );
-  // }
-  //
-  // listenjoinedChatSocket() {
-  //   print("listen joined chat socket called");
-  //   appSocket.listenUserJoinedSocket(
-  //     (data) {
-  //       print("people in room data from joined socket $data");
-  //       if (data['msg'] == 2) {
-  //         isCustomerOnline(true);
-  //       }
-  //       isCustomerOnline(false);
-  //       update();
-  //     },
-  //   );
-  // }
+  userjoinedChatSocket() {
+    appSocket.emitForStartAstroCustChatAssist(
+        userData?.id.toString(), args?.id.toString(), 0);
+  }
+
+  userleftChatSocket() {
+    print("called user left chat socket");
+    appSocket.userLeftCustChatAssist(
+        userData?.id.toString(), args?.id.toString());
+  }
+
+  userleftChatSocketListen() {
+    appSocket.userLeftListenChatAssist(
+      (data) {
+        print("people in room data from left socket $data");
+        if (data['msg'] == 2) {
+          isCustomerOnline(true);
+        }
+        isCustomerOnline(false);
+        update();
+      },
+    );
+  }
+
+  listenjoinedChatSocket() {
+    print("listen joined chat socket called");
+    appSocket.listenUserJoinedSocket(
+      (data) {
+        print("people in room data from joined socket $data");
+        if (data['msg'] == 2) {
+          isCustomerOnline(true);
+        }
+        isCustomerOnline(false);
+        update();
+      },
+    );
+  }
 
   void listenSocket() {
     appSocket.listenForAssistantChatMessage((chatData) {

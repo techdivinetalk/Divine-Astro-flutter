@@ -566,6 +566,12 @@ class HomeUI extends GetView<HomeController> {
                                             SizedBox(height: 10.h),
                                             GestureDetector(
                                               onTap: () async {
+                                                if (Constants.isTestingMode) {
+                                                  Get.toNamed(
+                                                      RouteName.liveLogsScreen);
+                                                  return;
+                                                }
+
                                                 bool hasOpenOrder = false;
                                                 // hasOpenOrder = await controller.hasOpenOrder();
                                                 if (hasOpenOrder) {
