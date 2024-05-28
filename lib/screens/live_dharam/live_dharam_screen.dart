@@ -122,6 +122,7 @@ class _LivePage extends State<LiveDharamScreen>
         await _controller.eventListner(
           snapshot: dataSnapshot,
           engaging: engaging,
+          timer: newTimerWidget(),
         );
       },
     );
@@ -2265,7 +2266,7 @@ class _LivePage extends State<LiveDharamScreen>
                         ),
                         const SizedBox(width: 8),
                         Expanded(child: Obx(() {
-                          newTimerWidget();
+                          // newTimerWidget();
                           return diff.value != ""
                               ? Text(
                                   diff.value,
@@ -2323,32 +2324,39 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-  RxString  diff = "".obs;
-   Timer? countDownTimer;
+  RxString diff = "".obs;
+  Timer? countDownTimer;
+
   newTimerWidget() {
     final String source = _controller.engagedCoHostWithAstro().totalTime;
     print(_controller.engagedCoHostWithAstro().totalTime);
     print("_controller.engagedCoHostWithAstro().totalTime");
     final int epoch = int.parse(source.isEmpty ? "0" : source);
     final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
-
+    if (epoch == 0 || diff.value == "") {
+      return;
+    }
     print(epoch);
     print("dateTime.second");
-    countDownTimer ??= Timer.periodic(const Duration(seconds: 1), (timer) async {
-            var timeDiff = epoch - DateTime
-                .now()
-                .millisecondsSinceEpoch;
-            print("diff.value");
-            print(diff.value);
-            Duration _duration = Duration(milliseconds: timeDiff);
-            diff.value = _formatDuration(_duration);
-            if (timeDiff > -5) {} else {
-              print("time is ending newTimerWidget");
-              await removeCoHostOrStopCoHost();
-              timer.cancel();
-              countDownTimer = null;
-            }
-          });
+    countDownTimer ??=
+        Timer.periodic(const Duration(seconds: 1), (timer) async {
+      var timeDiff = epoch - DateTime.now().millisecondsSinceEpoch;
+      print("diff.value");
+      print(diff.value);
+      Duration _duration = Duration(milliseconds: timeDiff);
+      diff.value = _formatDuration(_duration);
+      if (timeDiff > 10) {
+      } else {
+        print("time is ending newTimerWidget");
+        await removeCoHostOrStopCoHost();
+        timer.cancel();
+        diff.value = "";
+
+        countDownTimer = null;
+        setState(() {});
+        // settingsColForCust();
+      }
+    });
 
     /*return TimerCountdown(
       format: CountDownTimerFormat.hoursMinutesSeconds,
@@ -2364,6 +2372,7 @@ class _LivePage extends State<LiveDharamScreen>
       },
     );*/
   }
+
   String _formatDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
     final hours = twoDigits(duration.inHours);
@@ -2371,6 +2380,7 @@ class _LivePage extends State<LiveDharamScreen>
     final seconds = twoDigits(duration.inSeconds.remainder(60));
     return "$hours:$minutes:$seconds";
   }
+
   bool isLessThanOneMinute(Duration duration) {
     return duration < const Duration(minutes: 1);
   }
@@ -3321,9 +3331,10 @@ class _LivePage extends State<LiveDharamScreen>
 
     if (removed) {
       await _controller.makeAPICallForEndCall(
-        successCallBack: (String message) {
+        successCallBack: (String message) async {
           successAndFailureCallBack(
               message: message, isForSuccess: true, isForFailure: false);
+          await _controller.removeFromOrder();
         },
         failureCallBack: (String message) {
           successAndFailureCallBack(
@@ -3334,9 +3345,7 @@ class _LivePage extends State<LiveDharamScreen>
         },
       );
     }
-    if (removed) {
-      await _controller.removeFromOrder();
-    } else {}
+
     if (_controller.extendTimeWidgetVisible) {
       _controller.extendTimeWidgetVisible = false;
     } else {}

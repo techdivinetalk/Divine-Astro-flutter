@@ -17,6 +17,7 @@ import "package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart";
 import "package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
 import "package:firebase_database/firebase_database.dart";
+import "package:flutter/material.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 import "package:get/get_connect/http/src/status/http_status.dart";
@@ -410,6 +411,7 @@ class LiveDharamController extends GetxController {
   Future<void> eventListner({
     required DataSnapshot snapshot,
     required Function(WaitListModel currentCaller) engaging,
+    Widget? timer,
   }) async {
     final DataSnapshot dataSnapshot = snapshot;
 
@@ -436,6 +438,11 @@ class LiveDharamController extends GetxController {
             orderModel = getOrderModel(orderNode);
             currentCaller =
                 getOrderModelGeneric(orderNode, forMe: true, type: "fromevent");
+            if(liveIdNode["order"] != null){
+              timer;
+            }else{
+              timer = null;
+            }
             print(currentCaller.isEngaded);
             print("currentCaller.isEngaded");
             await Future.delayed(const Duration(seconds: 1));
@@ -1031,6 +1038,7 @@ class LiveDharamController extends GetxController {
   }
 
   Future<void> removeFromOrder() async {
+    print("remove order from firebase");
     await ref.child("$livePath/$liveId/order").remove();
     return Future<void>.value();
   }
@@ -1096,21 +1104,25 @@ class LiveDharamController extends GetxController {
     required Function(String message) successCallBack,
     required Function(String message) failureCallBack,
   }) async {
-    bool isExist = false;
-    final String path = "$livePath/$liveId/order";
-    final DataSnapshot dataSnapshot = await ref.child(path).get();
-    if (dataSnapshot != null) {
-      if (dataSnapshot.exists) {
-        if (dataSnapshot.value is Map<dynamic, dynamic>) {
-          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
-          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-              as Map<dynamic, dynamic>;
-          final String userId = map["id"] ?? "";
-          isExist = currentCaller.id == userId;
-        } else {}
-      } else {}
-    } else {}
-    if (isExist) {
+    // bool isExist = false;
+    // final String path = "$livePath/$liveId/order";
+    // final DataSnapshot dataSnapshot = await ref.child(path).get();
+    // if (dataSnapshot != null) {
+    //   if (dataSnapshot.exists) {
+    //     if (dataSnapshot.value is Map<dynamic, dynamic>) {
+    //       Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+    //       map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+    //           as Map<dynamic, dynamic>;
+    //       final String userId = map["id"] ?? "";
+    //       isExist = currentCaller.id == userId;
+    //     } else {}
+    //   } else {}
+    // } else {
+    //
+    // }
+    print(data);
+    print("datadatadatadatadatadatadata");
+    if (data["order"] != null) {
       Map<String, dynamic> param = <String, dynamic>{};
       param = <String, dynamic>{
         "order_id": getOrderId(),
@@ -1125,7 +1137,9 @@ class LiveDharamController extends GetxController {
         successCallBack: successCallBack,
         failureCallBack: failureCallBack,
       );
-    } else {}
+    } else {
+      print("order is empty");
+    }
     return Future<void>.value();
   }
 
