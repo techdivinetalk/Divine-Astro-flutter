@@ -2334,9 +2334,7 @@ class _LivePage extends State<LiveDharamScreen>
 
     print(epoch);
     print("dateTime.second");
-    if(countDownTimer != null) {
-      countDownTimer =
-          Timer.periodic(const Duration(seconds: 1), (timer) async {
+    countDownTimer ??= Timer.periodic(const Duration(seconds: 1), (timer) async {
             var timeDiff = epoch - DateTime
                 .now()
                 .millisecondsSinceEpoch;
@@ -2351,7 +2349,6 @@ class _LivePage extends State<LiveDharamScreen>
               countDownTimer = null;
             }
           });
-    }
 
     /*return TimerCountdown(
       format: CountDownTimerFormat.hoursMinutesSeconds,
