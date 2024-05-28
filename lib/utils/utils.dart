@@ -32,9 +32,22 @@ class Utils {
       ),
     );
   }
+
+  Future<void> handleStatusCodeUnauthorized() async {
+    /// responseBody["status_code"] == HttpStatus.unauthorized
+
+    // await preferenceService.erase();
+    // await Get.offAllNamed(RouteName.login);
+  }
+
+  void handleCatchPreferenceServiceErase() {
+    /// catch (e, s) { preferenceService.erase(); }
+
+    // preferenceService.erase();
+  }
 }
 
- /*checkInternetSpeed(bool checkDownloadSpeed, BuildContext context) async {
+/*checkInternetSpeed(bool checkDownloadSpeed, BuildContext context) async {
   final internetSpeedController =
       Get.put<InternetSpeedController>(InternetSpeedController());
   final speed = checkDownloadSpeed

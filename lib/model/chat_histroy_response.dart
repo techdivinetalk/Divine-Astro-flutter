@@ -5,8 +5,10 @@ import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/chat_model.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 
 class CallChatHistoryRepository extends ApiProvider {
 
@@ -18,9 +20,8 @@ class CallChatHistoryRepository extends ApiProvider {
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
 
-        if (responseData["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (responseData["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(responseData["error"]);
         } else {
           final assistantAstrologerChatList = ChatHistoryResponse.fromJson(responseData);

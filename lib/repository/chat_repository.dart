@@ -4,8 +4,10 @@ import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/astrologer_chat_list.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 
 import '../model/ResSaveKundli.dart';
 import '../model/chat/res_common_chat_success.dart';
@@ -19,9 +21,8 @@ class ChatRepository extends ApiProvider {
       print("place of birthjson:: ${jsonEncode(param).toString()}");
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final apiResponse =
@@ -51,9 +52,8 @@ class ChatRepository extends ApiProvider {
       );
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final astrologerChatList = astrologerChatListFromJson(response.body);
@@ -82,9 +82,8 @@ class ChatRepository extends ApiProvider {
       );
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final astrologerChatList =
@@ -114,9 +113,8 @@ class ChatRepository extends ApiProvider {
       );
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final astrologerChatList =

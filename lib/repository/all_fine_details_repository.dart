@@ -4,8 +4,10 @@ import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/all_fine_details_model.dart';
 import 'package:divine_astrologer/model/faq_response.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 
 class AllFineDetailsRepository extends ApiProvider {
 
@@ -14,9 +16,8 @@ class AllFineDetailsRepository extends ApiProvider {
       final response = await post(getAllFeedbackFineDetail);
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
-        if (jsonResponse["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (jsonResponse["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(jsonResponse["error"]);
         } else {
           final feedbackResponse = feedbackFineResponseFromJson(response.body);

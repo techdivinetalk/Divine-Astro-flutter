@@ -23,6 +23,7 @@ import 'package:divine_astrologer/screens/chat_message_with_socket/model/custom_
 import 'package:divine_astrologer/screens/puja/model/add_edit_puja_model.dart';
 import 'package:divine_astrologer/screens/puja/model/pooja_listing_model.dart';
 import 'package:divine_astrologer/screens/remedies/model/remedies_model.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide FormData;
@@ -57,16 +58,17 @@ class UserRepository extends ApiProvider {
       print(response.statusCode);
       print("response.statusCode");
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
         } else if (json.decode(response.body)["status_code"] == 400) {
           preferenceService.erase();
           divineSnackBar(
               data: "Astrologer Not registered, Contact Admin",
               color: appColors.redColor,
               duration: const Duration(milliseconds: 1000));
-         // Get.offNamed(RouteName.login);
-         //  throw CustomException(json.decode(response.body)["message"]);
+          // Get.offNamed(RouteName.login);
+          //  throw CustomException(json.decode(response.body)["message"]);
         } else {
           print(jsonDecode(response.body));
           SendOtpModel sendOtpModel =
@@ -117,9 +119,9 @@ class UserRepository extends ApiProvider {
       print("messResponse");
       print(json.decode(response.body)["message"]);
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final verifyOtpModel = verifyOtpModelFromJson(response.body);
@@ -149,7 +151,9 @@ class UserRepository extends ApiProvider {
           headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final blockedCustomerList =
@@ -172,7 +176,9 @@ class UserRepository extends ApiProvider {
           headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final blockedCustomerList =
@@ -244,8 +250,7 @@ class UserRepository extends ApiProvider {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = ResLogin.fromJson(responseBody);
         } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          await preferenceService.erase();
-          await Get.offAllNamed(RouteName.login);
+          Utils().handleStatusCodeUnauthorized();
         } else {}
       } else {}
     } on Exception catch (error, stack) {
@@ -265,9 +270,9 @@ class UserRepository extends ApiProvider {
           body: jsonEncode(param), headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final customerLoginModel =
@@ -291,7 +296,9 @@ class UserRepository extends ApiProvider {
           headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final blockedCustomerList =
@@ -314,7 +321,9 @@ class UserRepository extends ApiProvider {
           headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final pujaListModel =
@@ -337,7 +346,9 @@ class UserRepository extends ApiProvider {
           headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final pujaListModel =
@@ -361,7 +372,9 @@ class UserRepository extends ApiProvider {
           headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final blockedCustomerList =
@@ -384,7 +397,9 @@ class UserRepository extends ApiProvider {
           headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final resReviewReply =
@@ -408,7 +423,9 @@ class UserRepository extends ApiProvider {
           headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final blockedCustomerList =
@@ -437,7 +454,9 @@ class UserRepository extends ApiProvider {
           headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final blockedCustomerList =
@@ -504,7 +523,8 @@ class UserRepository extends ApiProvider {
       log(response.body);
       log("response.body");
       if (response.statusCode == 200) {
-        final constantDetailsModelClass = ConstantDetailsModelClass.fromJson(json.decode(response.body));
+        final constantDetailsModelClass =
+            ConstantDetailsModelClass.fromJson(json.decode(response.body));
         if (constantDetailsModelClass.statusCode == successResponse &&
             constantDetailsModelClass.success == true) {
           return constantDetailsModelClass;
@@ -515,12 +535,11 @@ class UserRepository extends ApiProvider {
         throw CustomException(json.decode(response.body)[0]["message"]);
       }
     } catch (e, s) {
-      preferenceService.erase();
+      Utils().handleCatchPreferenceServiceErase();
       debugPrint("we got $e $s");
       rethrow;
     }
   }
-
 
   Future<UpdateProfileResponse> updateProfile(
       Map<String, dynamic> param) async {
@@ -529,7 +548,9 @@ class UserRepository extends ApiProvider {
           body: jsonEncode(param), headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final editResponse = updateProfileResponseFromJson(response.body);
@@ -550,7 +571,9 @@ class UserRepository extends ApiProvider {
           body: jsonEncode(param), headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final editResponse =
@@ -572,7 +595,9 @@ class UserRepository extends ApiProvider {
           body: jsonEncode(param), headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final editResponse =
@@ -595,7 +620,9 @@ class UserRepository extends ApiProvider {
           queryParameters: param, headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final getCategoriesData =
@@ -618,7 +645,9 @@ class UserRepository extends ApiProvider {
           queryParameters: param, headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final getPujaNamesData =
@@ -644,7 +673,9 @@ class UserRepository extends ApiProvider {
       );
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final getCategoriesData =
@@ -668,7 +699,9 @@ class UserRepository extends ApiProvider {
       );
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final deletePujaResponse =
@@ -691,7 +724,9 @@ class UserRepository extends ApiProvider {
           body: jsonEncode(param), headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body));
         } else {
           final uploadStoryResponse =
@@ -714,9 +749,9 @@ class UserRepository extends ApiProvider {
           await post(deleteAccount, body: jsonEncode(param).toString());
       //progressService.showProgressDialog(false);
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final deleteProfile = customerDeleteFromJson(response.body);
@@ -742,9 +777,9 @@ class UserRepository extends ApiProvider {
       final response = await post(logout, headers: await getJsonHeaderURL());
       //progressService.showProgressDialog(false);
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final logOutResponse = logOutResponseFromJson(response.body);
@@ -796,7 +831,9 @@ class UserRepository extends ApiProvider {
           headers: await getJsonHeaderURL(version: 7));
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final updatedBankResponse = updateBankResponseFromJson(response.body);
@@ -817,9 +854,9 @@ class UserRepository extends ApiProvider {
       final response = await post(termsAndCondition);
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final termsConditionResponse =
@@ -835,7 +872,7 @@ class UserRepository extends ApiProvider {
         throw CustomException(json.decode(response.body)[0]["message"]);
       }
     } catch (e, s) {
-      preferenceService.erase();
+      Utils().handleCatchPreferenceServiceErase();
       debugPrint("we got $e $s");
       rethrow;
     }
@@ -847,9 +884,9 @@ class UserRepository extends ApiProvider {
       final response = await post(privacyPolicy);
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final privacyPolicyResponse =
@@ -865,7 +902,7 @@ class UserRepository extends ApiProvider {
         throw CustomException(json.decode(response.body)[0]["message"]);
       }
     } catch (e, s) {
-      preferenceService.erase();
+      Utils().handleCatchPreferenceServiceErase();
       debugPrint("we got $e $s");
       rethrow;
     }
@@ -882,9 +919,9 @@ class UserRepository extends ApiProvider {
       );
       //progressService.showProgressDialog(false);
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final uploadImageResponse =
@@ -910,7 +947,9 @@ class UserRepository extends ApiProvider {
     try {
       final response = await post(agoraCallEnd, body: jsonEncode(param));
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           return response.body;
@@ -931,9 +970,9 @@ class UserRepository extends ApiProvider {
           body: jsonEncode(params), headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final updateSessionTypeResponse =
@@ -963,9 +1002,9 @@ class UserRepository extends ApiProvider {
           body: jsonEncode(params), headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final updateOfferResponse =
@@ -1001,8 +1040,7 @@ class UserRepository extends ApiProvider {
           data = UpdateSessionTypeResponse.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          await preferenceService.erase();
-          await Get.offAllNamed(RouteName.login);
+          Utils().handleStatusCodeUnauthorized();
         } else {
           data = UpdateSessionTypeResponse.fromJson(responseBody);
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
@@ -1028,9 +1066,9 @@ class UserRepository extends ApiProvider {
       print("messResponse");
       print(json.decode(response.body)["message"]);
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           CustomProductModel savedRemediesData =

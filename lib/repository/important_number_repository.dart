@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:divine_astrologer/di/api_provider.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 
 import '../common/app_exception.dart';
 import '../common/routes.dart';
@@ -15,8 +17,8 @@ class ImportantNumberRepo extends ApiProvider {
           headers: await getJsonHeaderURL(version: 7));
 //log("data----> ${response.body.toString()}");
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
 
           throw CustomException(json.decode(response.body)["error"]);
         } else {

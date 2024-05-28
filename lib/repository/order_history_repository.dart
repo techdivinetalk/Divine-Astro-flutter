@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:divine_astrologer/model/order_history_model/feed_order_history.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 
 import '../common/app_exception.dart';
 import '../common/routes.dart';
@@ -21,9 +23,8 @@ class OrderHistoryRepository extends ApiProvider {
           body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final orderHistoryModel =
@@ -51,9 +52,8 @@ class OrderHistoryRepository extends ApiProvider {
           body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final orderHistoryModel =
@@ -81,9 +81,8 @@ class OrderHistoryRepository extends ApiProvider {
           body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final orderHistoryModel =
@@ -111,9 +110,8 @@ class OrderHistoryRepository extends ApiProvider {
           body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final orderFeedHistoryModel =
@@ -143,9 +141,8 @@ class OrderHistoryRepository extends ApiProvider {
       print("Body :: ${jsonEncode(param)}");
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final orderHistoryModel =
@@ -201,9 +198,8 @@ class OrderHistoryRepository extends ApiProvider {
 //     // print("-->"+ response.request.toString());
 //     // print("-->"+ response.body.toString());
 //     if (response.statusCode == 200) {
-//       if (json.decode(response.body)["status_code"] == 401) {
-//         preferenceService.erase();
-//         Get.offNamed(RouteName.login);
+//       if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+//           Utils().handleStatusCodeUnauthorized();
 //         throw CustomException(json.decode(response.body)["error"]);
 //       } else {
 //         final orderHistoryModel =

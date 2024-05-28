@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:get/route_manager.dart';
@@ -28,9 +29,8 @@ class PoojaRepository extends ApiProvider {
           'https://occultism-gleams.000webhostapp.com/pooja.php',
           endPoint: '');
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final apiResponse =
@@ -57,9 +57,8 @@ class PoojaRepository extends ApiProvider {
           endPoint: '');
       print("--------- pooja detail response ------------ ${json.encode(response.body)}");
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final apiResponse =
@@ -95,8 +94,7 @@ class PoojaRepository extends ApiProvider {
           data = GetPoojaResponse.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          await preferenceService.erase();
-          await Get.offAllNamed(RouteName.login);
+          Utils().handleStatusCodeUnauthorized();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         }
@@ -126,8 +124,7 @@ class PoojaRepository extends ApiProvider {
     //       data = GetBookedPoojaResponse.fromJson(responseBody);
     //       successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
     //     } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-    //       await preferenceService.erase();
-    //       await Get.offAllNamed(RouteName.login);
+    // Utils().handleStatusCodeUnauthorized();
     //     } else {
     //       failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
     //     }
@@ -157,8 +154,7 @@ class PoojaRepository extends ApiProvider {
           data = GetSinglePoojaResponse.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          await preferenceService.erase();
-          await Get.offAllNamed(RouteName.login);
+          Utils().handleStatusCodeUnauthorized();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         }
@@ -188,8 +184,7 @@ class PoojaRepository extends ApiProvider {
     //       data = GetPoojaAddOnesResponse.fromJson(responseBody);
     //       successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
     //     } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-    //       await preferenceService.erase();
-    //       await Get.offAllNamed(RouteName.login);
+    // Utils().handleStatusCodeUnauthorized();
     //     } else {
     //       failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
     //     }
@@ -219,8 +214,7 @@ class PoojaRepository extends ApiProvider {
           data = GetUserAddressResponse.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          await preferenceService.erase();
-          await Get.offAllNamed(RouteName.login);
+          Utils().handleStatusCodeUnauthorized();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         }
@@ -250,8 +244,7 @@ class PoojaRepository extends ApiProvider {
           data = AddUserAddressResponse.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          await preferenceService.erase();
-          await Get.offAllNamed(RouteName.login);
+          Utils().handleStatusCodeUnauthorized();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         }
@@ -281,8 +274,7 @@ class PoojaRepository extends ApiProvider {
           data = UpdateUserAddressResponse.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          await preferenceService.erase();
-          await Get.offAllNamed(RouteName.login);
+          Utils().handleStatusCodeUnauthorized();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         }
@@ -312,8 +304,7 @@ class PoojaRepository extends ApiProvider {
           data = DeleteUserAddressResponse.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          await preferenceService.erase();
-          await Get.offAllNamed(RouteName.login);
+          Utils().handleStatusCodeUnauthorized();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         }
@@ -350,8 +341,7 @@ class PoojaRepository extends ApiProvider {
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
           needRecharge(balModel);
         } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          await preferenceService.erase();
-          await Get.offAllNamed(RouteName.login);
+          Utils().handleStatusCodeUnauthorized();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         }

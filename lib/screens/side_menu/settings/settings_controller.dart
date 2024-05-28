@@ -15,7 +15,8 @@ import '../../../di/shared_preference_service.dart';
 import '../../../model/delete_customer_model_class.dart';
 
 class SettingsController extends GetxController {
-  SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
+  SharedPreferenceService preferenceService =
+      Get.find<SharedPreferenceService>();
   RxString currLanguage = "".obs;
 
   @override
@@ -42,7 +43,8 @@ class SettingsController extends GetxController {
   deleteUserAccounts() async {
     Map<String, dynamic> params = {};
     try {
-      DeleteAccountModelClass data = await userRepository.deleteUserAccount(params);
+      DeleteAccountModelClass data =
+          await userRepository.deleteUserAccount(params);
       var userData = data;
       log("DeleteUser==>${userData.message}");
       Get.offAllNamed(RouteName.login);
@@ -59,7 +61,6 @@ class SettingsController extends GetxController {
   void logOut() {
     userRepository.logOut().then(
       (value) async {
-
         if (value.statusCode == 200 && value.success == true) {
           preferenceService.erase().whenComplete(() async {
             // To disconnect

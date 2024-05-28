@@ -12,17 +12,19 @@ class AstrologerLiveDataResponse {
   });
 
   AstrologerLiveDataResponse.fromJson(Map<String, dynamic> json)
-      : data = (json['data'] as Map<String,dynamic>?) != null ? Data.fromJson(json['data'] as Map<String,dynamic>) : null,
+      : data = (json['data'] as Map<String, dynamic>?) != null
+            ? Data.fromJson(json['data'] as Map<String, dynamic>)
+            : null,
         success = json['success'] as bool?,
         statusCode = json['status_code'] as int?,
         message = json['message'] as String?;
 
   Map<String, dynamic> toJson() => {
-    'data' : data?.toJson(),
-    'success' : success,
-    'status_code' : statusCode,
-    'message' : message
-  };
+        'data': data?.toJson(),
+        'success': success,
+        'status_code': statusCode,
+        'message': message
+      };
 }
 
 class Data {
@@ -41,48 +43,54 @@ class Data {
   });
 
   Data.fromJson(Map<String, dynamic> json)
-      : weeks = (json['weeks'] as List?)?.map((dynamic e) => Weeks.fromJson(e as Map<String,dynamic>)).toList(),
+      : weeks = (json['weeks'] as List?)
+            ?.map((dynamic e) => Weeks.fromJson(e as Map<String, dynamic>))
+            .toList(),
         todaysRemaining = json['todays_remaining'] as int?,
         isRewardAvailable = json['is_reward_available'] as int?,
         rewardPoint = json['reward_point'] as int?,
         isLiveMonitor = json['is_live_monitor'] as int?;
 
   Map<String, dynamic> toJson() => {
-    'weeks' : weeks?.map((e) => e.toJson()).toList(),
-    'todays_remaining' : todaysRemaining,
-    'is_reward_available' : isRewardAvailable,
-    'reward_point' : rewardPoint,
-    'is_live_monitor' : isLiveMonitor
-  };
+        'weeks': weeks?.map((e) => e.toJson()).toList(),
+        'todays_remaining': todaysRemaining,
+        'is_reward_available': isRewardAvailable,
+        'reward_point': rewardPoint,
+        'is_live_monitor': isLiveMonitor
+      };
 }
 
 class Weeks {
   final String? start;
   final String? end;
-  dynamic totalLiveMinutes;
-  final int? remainingLiveMinute;
+  String totalLiveMinutes = "0";
+  String remainingLiveMinute = "0";
   final int? weekNo;
 
   Weeks({
     this.start,
     this.end,
-    this.totalLiveMinutes,
-    this.remainingLiveMinute,
+    this.totalLiveMinutes = "0",
+    this.remainingLiveMinute = "0",
     this.weekNo,
   });
 
   Weeks.fromJson(Map<String, dynamic> json)
       : start = json['start'] as String?,
         end = json['end'] as String?,
-        totalLiveMinutes = json['total_live_minutes'] ??"",
-        remainingLiveMinute = json['remaining_live_minute'] as int?,
+        totalLiveMinutes = json['total_live_minutes'] == null
+            ? "0"
+            : json['total_live_minutes'].toString(),
+        remainingLiveMinute = json['remaining_live_minute'] == null
+            ? "0"
+            : json['remaining_live_minute'].toString(),
         weekNo = json['week_no'] as int?;
 
   Map<String, dynamic> toJson() => {
-    'start' : start,
-    'end' : end,
-    'total_live_minutes' : totalLiveMinutes,
-    'remaining_live_minute' : remainingLiveMinute,
-    'week_no' : weekNo
-  };
+        'start': start,
+        'end': end,
+        'total_live_minutes': totalLiveMinutes.toString(),
+        'remaining_live_minute': remainingLiveMinute.toString(),
+        'week_no': weekNo
+      };
 }

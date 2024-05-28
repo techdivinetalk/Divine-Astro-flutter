@@ -1,8 +1,10 @@
 import 'dart:convert';
 
 import 'package:divine_astrologer/model/waiting_list_queue.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 
 import '../common/app_exception.dart';
 import '../common/routes.dart';
@@ -15,9 +17,8 @@ class WaitingListQueueRepo extends ApiProvider {
           headers: await getJsonHeaderURL(version: 7));
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final waitingListQueueModel =

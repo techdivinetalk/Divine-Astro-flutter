@@ -143,10 +143,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   getAstrologerLiveData() async {
-    if(preferenceService.getString("homePage") == "0"){
-      return;
-    }
-    if (Constants.isUploadMode) {
+    // if(preferenceService.getString("homePage") == "0"){
+    //   return;
+    // }
       weekLst.clear();
       todaysRemaining.value = 0;
       isRewardAvailable.value = 0;
@@ -184,7 +183,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           divineSnackBar(data: error.toString(), color: appColors.redColor);
         }
       }
-    }
   }
 
   @override

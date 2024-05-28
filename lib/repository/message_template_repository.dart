@@ -1,9 +1,11 @@
 import 'dart:convert';
 
 import 'package:divine_astrologer/model/message_template_response.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 
 import '../common/app_exception.dart';
 import '../common/routes.dart';
@@ -18,9 +20,8 @@ class MessageTemplateRepo extends ApiProvider {
       final response = await get(getMessageTemplate,
           headers: await getJsonHeaderURL(version: 7));
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final messageTemplates =
@@ -47,9 +48,8 @@ class MessageTemplateRepo extends ApiProvider {
           body: jsonEncode(param),
           headers: await getJsonHeaderURL(version: 7));
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final addMessageResponse =
@@ -77,9 +77,8 @@ class MessageTemplateRepo extends ApiProvider {
           body: jsonEncode(param),
           headers: await getJsonHeaderURL(version: 7));
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final updateMessageResponse =

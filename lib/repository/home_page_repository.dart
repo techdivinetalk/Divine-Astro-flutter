@@ -7,7 +7,9 @@ import 'package:divine_astrologer/model/home_model/training_video_model.dart';
 import 'package:divine_astrologer/model/live/new_tarot_card_model.dart';
 import 'package:divine_astrologer/model/wallet_deatils_response.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../common/app_exception.dart';
@@ -31,7 +33,8 @@ class HomePageRepository extends ApiProvider {
       log("Dashboard:: video_call_previous_status:: ${json.decode(response.body)["data"]["video_call_previous_status"]}");
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final performanceList =
@@ -56,7 +59,8 @@ class HomePageRepository extends ApiProvider {
       print("json.decode(response.body)");
       print(json.decode(response.body));
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final tarotResponse =
@@ -86,7 +90,8 @@ class HomePageRepository extends ApiProvider {
       );
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final walletDetailsResponse =
@@ -116,7 +121,8 @@ class HomePageRepository extends ApiProvider {
       );
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final feedbackResponse =
@@ -141,7 +147,8 @@ class HomePageRepository extends ApiProvider {
       );
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final feedbackResponse =
@@ -165,7 +172,8 @@ class HomePageRepository extends ApiProvider {
       );
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final feedbackResponse =
@@ -182,43 +190,45 @@ class HomePageRepository extends ApiProvider {
   }
 
   Future<AstrologerLiveDataResponse> doGetAstrologerLiveData() async {
-   if(Constants.isDebugMode){
+   // if(Constants.isDebugMode){
+   //   try {
+   //     final response = await post(
+   //       getAstrologerLiveData,
+   //       endPoint: 'https://wakanda-api.divinetalk.live/api/astro/v7/',
+   //       // headers: await getJsonHeaderURLDebugWakanda(),
+   //       headers: await getJsonHeaderURL(),
+   //     );
+   //
+   //     debugPrint("test_response_body: ${response.body}");
+   //
+   //     if (response.statusCode == 200) {
+   //       if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+   //         Utils().handleStatusCodeUnauthorized();
+   //         throw CustomException(json.decode(response.body)["error"]);
+   //       } else {
+   //         final feedbackResponse =
+   //         AstrologerLiveDataResponse.fromJson(json.decode(response.body));
+   //         return feedbackResponse;
+   //       }
+   //     } else {
+   //       throw CustomException(json.decode(response.body)["error"]);
+   //     }
+   //   } catch (e, s) {
+   //     debugPrint("we got $e $s");
+   //     rethrow;
+   //   }
+   // }else{
      try {
        final response = await post(
          getAstrologerLiveData,
-         endPoint: 'https://wakanda-api.divinetalk.live/api/astro/v7/',
-         // headers: await getJsonHeaderURLDebugWakanda(),
          headers: await getJsonHeaderURL(),
        );
 
        debugPrint("test_response_body: ${response.body}");
 
        if (response.statusCode == 200) {
-         if (json.decode(response.body)["status_code"] == 401) {
-           throw CustomException(json.decode(response.body)["error"]);
-         } else {
-           final feedbackResponse =
-           AstrologerLiveDataResponse.fromJson(json.decode(response.body));
-           return feedbackResponse;
-         }
-       } else {
-         throw CustomException(json.decode(response.body)["error"]);
-       }
-     } catch (e, s) {
-       debugPrint("we got $e $s");
-       rethrow;
-     }
-   }else{
-     try {
-       final response = await post(
-         getAstrologerLiveData,
-         headers: await getJsonHeaderURL(),
-       );
-
-       debugPrint("test_response_body: ${response.body}");
-
-       if (response.statusCode == 200) {
-         if (json.decode(response.body)["status_code"] == 401) {
+         if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+           Utils().handleStatusCodeUnauthorized();
            throw CustomException(json.decode(response.body)["error"]);
          } else {
            final feedbackResponse =
@@ -233,5 +243,5 @@ class HomePageRepository extends ApiProvider {
        rethrow;
      }
    }
-  }
+  // }
 }

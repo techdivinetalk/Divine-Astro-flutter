@@ -542,13 +542,11 @@ class HomeUI extends GetView<HomeController> {
                           // noticeBoardWidget(),
                           SizedBox(height: 15.h),
                           scheduledTrainingWidgetUpdated(),
-                          SizedBox(height: 10.h),
                           // viewKundliWidget(),
                           viewKundliWidgetUpdated(),
-                          SizedBox(height: 10.h),
                           Obx(() {
                             return Visibility(
-                              visible: controller.isRewardAvailable.value == 1,
+                              visible: controller.isLiveMonitor.value == 1,
                               child: Column(
                                 children: [
                                   liveWidgetUpdated(),
@@ -566,12 +564,6 @@ class HomeUI extends GetView<HomeController> {
                                             SizedBox(height: 10.h),
                                             GestureDetector(
                                               onTap: () async {
-                                                if (Constants.isTestingMode) {
-                                                  Get.toNamed(
-                                                      RouteName.liveLogsScreen);
-                                                  return;
-                                                }
-
                                                 bool hasOpenOrder = false;
                                                 // hasOpenOrder = await controller.hasOpenOrder();
                                                 if (hasOpenOrder) {
@@ -771,6 +763,7 @@ class HomeUI extends GetView<HomeController> {
 
       return !mapEquals(data, {})
           ? Container(
+              margin: EdgeInsets.only(bottom: 10.h),
               width: ScreenUtil().screenWidth,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
@@ -1022,6 +1015,7 @@ class HomeUI extends GetView<HomeController> {
   Widget scheduledTrainingWidgetUpdated() {
     return Constants.isTestingMode
         ? Container(
+            margin: EdgeInsets.only(bottom: 10.h),
             width: ScreenUtil().screenWidth,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
@@ -1141,6 +1135,7 @@ class HomeUI extends GetView<HomeController> {
 
   Widget liveWidgetUpdated() {
     return Container(
+      margin: EdgeInsets.only(top: 5.h),
       width: ScreenUtil().screenWidth,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -1271,7 +1266,7 @@ class HomeUI extends GetView<HomeController> {
                                         ),
                                       ),
                                       SizedBox(width: 3.h),
-                                      model.remainingLiveMinute == 0
+                                      model.remainingLiveMinute == "0"
                                           ? Text(
                                               'Done',
                                               textAlign: TextAlign.start,
@@ -1356,8 +1351,9 @@ class HomeUI extends GetView<HomeController> {
                         SizedBox(width: 3.h),
                         GestureDetector(
                           onTap: () {
-                            // Get.toNamed(
-                            //       RouteName.liveLogsScreen);
+                            if (Constants.isTestingMode) {
+                              Get.toNamed(RouteName.liveLogsScreen);
+                            }
                           },
                           child: Container(
                             width: 80.w,

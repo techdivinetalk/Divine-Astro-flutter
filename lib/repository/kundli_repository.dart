@@ -2,8 +2,10 @@ import 'dart:convert';
 
 import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 import '../common/routes.dart';
 import '../model/get_kundli_data.dart' as kundli_data;
 import '../model/internal/astro_details_model.dart';
@@ -126,9 +128,8 @@ class KundliRepository extends ApiProvider {
           headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final customerLoginModel =

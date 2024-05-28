@@ -3,8 +3,10 @@ import 'dart:developer';
 
 import 'package:divine_astrologer/model/chat_assistant/CustomerDetailsResponse.dart';
 import 'package:divine_astrologer/model/message_template_response.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 
 import '../common/app_exception.dart';
 import '../common/routes.dart';
@@ -19,9 +21,9 @@ class ChatAssistantRepository extends ApiProvider {
       final response = await get(getChatAssistAstrologers);
       log('response --- ${response.body}');
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final assistantAstrologerList =
@@ -48,10 +50,12 @@ class ChatAssistantRepository extends ApiProvider {
       final response = await get(getConsulationData);
       log('response --- ${response.body}');
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401 &&
-            json.decode(response.body)["status_code"] == 500) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
+          print("objectAssist ${json.decode(response.body)}");
+          throw CustomException(json.decode(response.body)["error"]);
+        } else if (json.decode(response.body)["status_code"] == 500) {
           print("objectAssist ${json.decode(response.body)}");
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -81,9 +85,9 @@ class ChatAssistantRepository extends ApiProvider {
           await post(getChatAssistCustomerData, body: jsonEncode(params));
       log('response --- ${response.body}');
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorized();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final assistantAstrologerChatList =
@@ -107,7 +111,7 @@ class ChatAssistantRepository extends ApiProvider {
   Future<MessageTemplateResponse?> doGetMessageTemplateForChatAssist() async {
     try {
       final response = await post(getMessageTemplateForChatAssist);
-      if (response.statusCode == 200&&json.decode(response.body)!=null) {
+      if (response.statusCode == 200 && json.decode(response.body) != null) {
         print("test_body: ${response.body}");
         print("test_body_decode: ${json.decode(response.body)}");
 
