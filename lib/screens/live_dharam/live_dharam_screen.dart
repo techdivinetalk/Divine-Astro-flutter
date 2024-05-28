@@ -2266,9 +2266,9 @@ class _LivePage extends State<LiveDharamScreen>
                         const SizedBox(width: 8),
                         Expanded(child: Obx(() {
                           newTimerWidget();
-                          return diff.value > 0
+                          return diff.value != ""
                               ? Text(
-                                  "${DateTime.fromMillisecondsSinceEpoch(diff.value).hour}:${DateTime.fromMillisecondsSinceEpoch(diff.value).minute}:${DateTime.fromMillisecondsSinceEpoch(diff.value).second}",
+                                  diff.value,
                                   style: AppTextStyle.textStyle14(
                                     fontColor: appColors.white,
                                   ),
@@ -2323,8 +2323,8 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-  RxInt diff = 0.obs;
-
+  RxString  diff = "".obs;
+   Timer? countDownTimer;
   newTimerWidget() {
     final String source = _controller.engagedCoHostWithAstro().totalTime;
     print(_controller.engagedCoHostWithAstro().totalTime);
@@ -2332,20 +2332,26 @@ class _LivePage extends State<LiveDharamScreen>
     final int epoch = int.parse(source.isEmpty ? "0" : source);
     final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
 
-    print(dateTime.second);
+    print(epoch);
     print("dateTime.second");
-    Timer _timer;
-
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
-      diff.value = epoch - DateTime.now().millisecondsSinceEpoch;
-      if (diff.value > -5) {
-      } else {
-        print("time is ending newTimerWidget");
-        await removeCoHostOrStopCoHost();
-
-        timer.cancel();
-      }
-    });
+    if(countDownTimer != null) {
+      countDownTimer =
+          Timer.periodic(const Duration(seconds: 1), (timer) async {
+            var timeDiff = epoch - DateTime
+                .now()
+                .millisecondsSinceEpoch;
+            print("diff.value");
+            print(diff.value);
+            Duration _duration = Duration(milliseconds: timeDiff);
+            diff.value = _formatDuration(_duration);
+            if (timeDiff > -5) {} else {
+              print("time is ending newTimerWidget");
+              await removeCoHostOrStopCoHost();
+              timer.cancel();
+              countDownTimer = null;
+            }
+          });
+    }
 
     /*return TimerCountdown(
       format: CountDownTimerFormat.hoursMinutesSeconds,
@@ -2361,7 +2367,13 @@ class _LivePage extends State<LiveDharamScreen>
       },
     );*/
   }
-
+  String _formatDuration(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+    final hours = twoDigits(duration.inHours);
+    final minutes = twoDigits(duration.inMinutes.remainder(60));
+    final seconds = twoDigits(duration.inSeconds.remainder(60));
+    return "$hours:$minutes:$seconds";
+  }
   bool isLessThanOneMinute(Duration duration) {
     return duration < const Duration(minutes: 1);
   }
