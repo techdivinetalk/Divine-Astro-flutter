@@ -97,7 +97,7 @@ class _LivePage extends State<LiveDharamScreen>
   Timer? _timer;
   Timer? _msgTimerForFollowPopup;
   Timer? _msgTimerForTarotCardPopup;
-
+  List<Map<dynamic, dynamic>> waitList = [];
   BroadcastReceiver receiver = BroadcastReceiver(
     names: <String>["LiveDharamScreen_eventListner"],
   );
@@ -126,6 +126,60 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    // var livePath = "live";
+    // if(kDebugMode){
+    //   livePath = "liveTest";
+    // }
+    // FirebaseDatabase.instance.ref()
+    //     .child(livePath)
+    //     .child(_controller.liveId)
+    //     .onChildChanged
+    //     .listen(
+    //       (event) async {
+    //     final DataSnapshot dataSnapshot = event.snapshot;
+    //     print("dataSnapshot-changed");
+    //     print(dataSnapshot.key);
+    //     print(dataSnapshot.value);
+    //     switch (dataSnapshot.key) {
+    //       case "blockList":
+    //         _controller.firebaseBlockUsersIds =
+    //         dataSnapshot.value as List<dynamic>;
+    //         break;
+    //       case "order":
+    //         print("order-1");
+    //         var orderNode = dataSnapshot.value as Map<dynamic, dynamic>;
+    //         _controller.orderModel = _controller.getOrderModel(orderNode);
+    //         print("order-2");
+    //         _controller.currentCaller =
+    //             _controller.getOrderModelGeneric(orderNode, forMe: true, type: "fromevent");
+    //         print("order-3");
+    //         newTimerWidget();
+    //         break;
+    //       case "waitList":
+    //         waitList.add(dataSnapshot.value as Map<dynamic, dynamic>);
+    //         print(waitList.toString());
+    //         engaging(_controller.upcomingUser(dataSnapshot.value as Map<dynamic, dynamic>));
+    //         break;
+    //     }
+    //   },
+    // );
+    // FirebaseDatabase.instance.ref()
+    //     .child(kDebugMode ? "liveTest" : livePath)
+    //     .child(_controller.liveId)
+    //     .onChildAdded
+    //     .listen(
+    //   (event) async {
+    //     final DataSnapshot dataSnapshot = event.snapshot;
+    //     print("dataSnapshot-added");
+    //     print(dataSnapshot.key);
+    //     // await _controller.eventListner(
+    //     //   snapshot: dataSnapshot,
+    //     //   engaging: engaging,
+    //     //   timer: newTimerWidget(),
+    //     // );
+    //   },
+    // );
+
 
     keyboardVisibilityController.onChange.listen(
       (bool visible) {
@@ -1263,6 +1317,9 @@ class _LivePage extends State<LiveDharamScreen>
           isHost: _controller.isHost,
           onAccept: () async {
             Get.back();
+            // final String id = waitList.first["id"];
+            // final String name = waitList.first["userName"];
+            // final String avatar = waitList.first["avatar"];
             final String id = _controller.waitListModel.first.id;
             final String name = _controller.waitListModel.first.userName;
             final String avatar = _controller.waitListModel.first.avatar;
@@ -2333,7 +2390,7 @@ class _LivePage extends State<LiveDharamScreen>
     print("_controller.engagedCoHostWithAstro().totalTime");
     final int epoch = int.parse(source.isEmpty ? "0" : source);
     final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
-    if (epoch == 0 || diff.value == "") {
+    if (epoch == 0) {
       return;
     }
     print(epoch);
@@ -2345,8 +2402,7 @@ class _LivePage extends State<LiveDharamScreen>
       print(diff.value);
       Duration _duration = Duration(milliseconds: timeDiff);
       diff.value = _formatDuration(_duration);
-      if (timeDiff > 10) {
-      } else {
+      if (timeDiff < 10) {
         print("time is ending newTimerWidget");
         await removeCoHostOrStopCoHost();
         timer.cancel();

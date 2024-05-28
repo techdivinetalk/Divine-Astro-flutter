@@ -49,6 +49,7 @@ class LiveDharamController extends GetxController {
   final RxString _hostSpeciality = "".obs;
   final RxInt _currentIndex = 0.obs;
   final RxMap<dynamic, dynamic> _data = <dynamic, dynamic>{}.obs;
+  var orderID = "";
 
   // final Rx<GetAstroDetailsRes> _details = GetAstroDetailsRes().obs;
   // final Rx<IsCustomerBlockedRes> _isCustBlocked = IsCustomerBlockedRes().obs;
@@ -147,7 +148,6 @@ class LiveDharamController extends GetxController {
     isHost = true;
     isHostAvailable = true;
     hostSpeciality = getSpeciality();
-
 
     data = <dynamic, dynamic>{};
 
@@ -438,9 +438,9 @@ class LiveDharamController extends GetxController {
             orderModel = getOrderModel(orderNode);
             currentCaller =
                 getOrderModelGeneric(orderNode, forMe: true, type: "fromevent");
-            if(liveIdNode["order"] != null){
+            if (liveIdNode["order"] != null) {
               timer;
-            }else{
+            } else {
               timer = null;
             }
             print(currentCaller.isEngaded);
@@ -466,6 +466,7 @@ class LiveDharamController extends GetxController {
   //   return temp;
   // }
 
+  // WaitListModel upcomingUser(Map<dynamic, dynamic> data) {
   WaitListModel upcomingUser() {
     WaitListModel temp = WaitListModel(
       isRequest: false,
@@ -1132,11 +1133,14 @@ class LiveDharamController extends GetxController {
       };
       final int offerId = getOfferId();
       param.addAll(<String, dynamic>{"offer_id": offerId});
-      await liveRepository.endLiveApi(
-        params: param,
-        successCallBack: successCallBack,
-        failureCallBack: failureCallBack,
-      );
+      if (orderID != getOrderId()) {
+        orderID = getOrderId();
+        await liveRepository.endLiveApi(
+          params: param,
+          successCallBack: successCallBack,
+          failureCallBack: failureCallBack,
+        );
+      }
     } else {
       print("order is empty");
     }
