@@ -470,5 +470,9 @@ Map<String, String> en() {
     'totalLiveTime': "Total Live Time",
     'liveStartTime': "Live Start Time",
     'liveEndTime': "Live End Time",
+    'tarotNCards': "Tarot\nCards",
+    'product': "Product",
+    'customShop': "Custom Shop",
+    'useTheseOptionsToSellECommerceProducts': "Use these options to sell e-commerce products.",
   };
 }

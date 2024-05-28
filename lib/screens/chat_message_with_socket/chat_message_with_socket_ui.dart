@@ -363,7 +363,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               },
                               child: Container(
                                 margin: EdgeInsets.only(left: 12.h),
-                                width: 65.h,
+                                width: 70.h,
                                 height: 90.h,
                                 padding: EdgeInsets.symmetric(
                                   vertical: 5.h,
@@ -385,7 +385,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                     ),
                                     SizedBox(height: 5.h),
                                     Text(
-                                      'Tarot\nCards',
+                                      'tarotNCards'.tr,
                                       maxLines: 2,
                                       style: AppTextStyle.textStyle12(
                                           fontColor: appColors.white),
@@ -403,7 +403,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 ),
                                 padding: EdgeInsets.symmetric(
                                   vertical: 8.h,
-                                  horizontal: 5.h,
+                                  horizontal: 8.h,
                                 ),
                                 decoration: BoxDecoration(
                                   color: appColors.white,
@@ -412,6 +412,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   ),
                                 ),
                                 child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Row(
                                       children: [
@@ -449,7 +452,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                   ),
                                                   SizedBox(width: 5.h),
                                                   Text(
-                                                    'Product',
+                                                    'product'.tr,
                                                     style: AppTextStyle
                                                         .textStyle10(
                                                             fontColor: appColors
@@ -495,7 +498,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                   ),
                                                   SizedBox(width: 5.h),
                                                   Text(
-                                                    'Custom Shop',
+                                                    'customShop'.tr,
                                                     maxLines: 2,
                                                     style: AppTextStyle
                                                         .textStyle10(
@@ -509,13 +512,12 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                         ),
                                       ],
                                     ),
-                                    SizedBox(height: 5.h),
-                                    Expanded(
-                                      child: Text(
-                                        'Use these options to sell e-commerce products.',
-                                        style: AppTextStyle.textStyle10(
-                                            fontColor: appColors.black),
-                                      ),
+                                    SizedBox(height: 8.h),
+                                    Text(
+                                      'useTheseOptionsToSellECommerceProducts'
+                                          .tr,
+                                      style: AppTextStyle.textStyle10(
+                                          fontColor: appColors.black),
                                     ),
                                   ],
                                 ),

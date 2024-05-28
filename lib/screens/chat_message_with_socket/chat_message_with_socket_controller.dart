@@ -1253,7 +1253,7 @@ class ChatMessageWithSocketController extends GetxController
     if (messgeScrollController.hasClients) {
       print("scrollToBottom");
       Timer(
-        const Duration(milliseconds: 500),
+        const Duration(seconds: 2),
         () => messgeScrollController.jumpTo(
           messgeScrollController.position.maxScrollExtent,
         ),
