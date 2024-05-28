@@ -72,7 +72,6 @@ import "../live_dharam/gifts_singleton.dart";
 
 class ChatMessageWithSocketController extends GetxController
     with WidgetsBindingObserver {
-
   BuildContext? context;
 
   void setContext(BuildContext context) {
@@ -138,7 +137,6 @@ class ChatMessageWithSocketController extends GetxController
 
   FocusNode focusNode = FocusNode();
   RxBool isKeyboardVisible = false.obs;
-
 
   void startTimer() {
     int _start = 5;
@@ -336,17 +334,12 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   Future<void> openProduct(ChatMessageWithSocketController controller) async {
-    var result = await Get.toNamed(
-        RouteName.chatAssistProductPage,
-        arguments: {
-          'customerId': int.parse(AppFirebaseService()
-              .orderData
-              .value["userId"]
-              .toString())
-        });
+    var result = await Get.toNamed(RouteName.chatAssistProductPage, arguments: {
+      'customerId':
+          int.parse(AppFirebaseService().orderData.value["userId"].toString())
+    });
     if (result != null) {
-      final String time =
-          "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+      final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       controller.addNewMessage(
         time,
         MsgType.product,
@@ -358,7 +351,7 @@ class ChatMessageWithSocketController extends GetxController
     }
   }
 
-  void openCustomShop(ChatMessageWithSocketController controller){
+  void openCustomShop(ChatMessageWithSocketController controller) {
     print(customProductData);
     print("controller.customProductData");
     Get.bottomSheet(
@@ -373,11 +366,11 @@ class ChatMessageWithSocketController extends GetxController
   void onInit() {
     super.onInit();
     focusNode.addListener(() {
-        isKeyboardVisible.value = focusNode.hasFocus;
+      isKeyboardVisible.value = focusNode.hasFocus;
 
-        if(isKeyboardVisible.value){
-          scrollToBottomFunc();
-        }
+      if (isKeyboardVisible.value) {
+        scrollToBottomFunc();
+      }
     });
     getDir();
     initialiseControllers();
@@ -1251,12 +1244,15 @@ class ChatMessageWithSocketController extends GetxController
 
   scrollToBottomFunc() {
     if (messgeScrollController.hasClients) {
-      print("scrollToBottom");
+      debugPrint("test_scrollToBottomFunc: call");
       Timer(
-        const Duration(milliseconds: 500),
-        () => messgeScrollController.jumpTo(
-          messgeScrollController.position.maxScrollExtent,
-        ),
+        const Duration(seconds: 2),
+        () {
+          debugPrint("test_scrollToBottomFunc: jumpTo last");
+          messgeScrollController.jumpTo(
+            messgeScrollController.position.maxScrollExtent,
+          );
+        },
       );
     }
     update();
