@@ -9,6 +9,7 @@ import "package:after_layout/after_layout.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:divine_astrologer/common/app_textstyle.dart";
 import "package:divine_astrologer/common/colors.dart";
+import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/generic_loading_widget.dart";
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
@@ -111,9 +112,6 @@ class _LivePage extends State<LiveDharamScreen>
         .getSignalingPlugin()
         .getInRoomCommandMessageReceivedEventStream()
         .listen(onInRoomCommandMessageReceived);
-    zegoController.coHost.hostNotifier.addListener(() {
-      print("zegoController.coHost.hostNotifier.addListener");
-    });
 
     zegoController.coHost.audienceLocalConnectStateNotifier
         .addListener(onAudienceLocalConnectStateChanged);
@@ -1103,18 +1101,16 @@ class _LivePage extends State<LiveDharamScreen>
       ),
     );
   }
+
   Future<void> onLiveStreamingStateUpdate(ZegoLiveStreamingState state) async {
     if (state == ZegoLiveStreamingState.idle) {
       ZegoGiftPlayer().clear();
-    } else {
-
-    }
+    } else {}
 
     if (state == ZegoLiveStreamingState.ended) {
       ZegoGiftPlayer().clear();
 
       getUntil();
-
 
       await Future<void>.delayed(const Duration(seconds: 2));
 
@@ -1124,8 +1120,6 @@ class _LivePage extends State<LiveDharamScreen>
 
     return Future<void>.value();
   }
-
-
 
   Future<void> alreadyInWaitlistPopup() async {
     LiveGlobalSingleton().isAlreadyInWaitlistPopupOpen = true;
@@ -2270,7 +2264,17 @@ class _LivePage extends State<LiveDharamScreen>
                           overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(width: 8),
-                        Expanded(child: newTimerWidget()),
+                        Expanded(child: Obx(() {
+                          newTimerWidget();
+                          return diff.value > 0
+                              ? Text(
+                                  "${DateTime.fromMillisecondsSinceEpoch(diff.value).hour}:${DateTime.fromMillisecondsSinceEpoch(diff.value).minute}:${DateTime.fromMillisecondsSinceEpoch(diff.value).second}",
+                                  style: AppTextStyle.textStyle14(
+                                    fontColor: appColors.white,
+                                  ),
+                                )
+                              : Text("");
+                        })),
                       ],
                     ),
                   ],
@@ -2319,34 +2323,43 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-  Widget newTimerWidget() {
+  RxInt diff = 0.obs;
+
+  newTimerWidget() {
     final String source = _controller.engagedCoHostWithAstro().totalTime;
     print(_controller.engagedCoHostWithAstro().totalTime);
     print("_controller.engagedCoHostWithAstro().totalTime");
     final int epoch = int.parse(source.isEmpty ? "0" : source);
     final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
-    return TimerCountdown(
+
+    print(dateTime.second);
+    print("dateTime.second");
+    Timer _timer;
+
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) async {
+      diff.value = epoch - DateTime.now().millisecondsSinceEpoch;
+      if (diff.value > -5) {
+      } else {
+        print("time is ending newTimerWidget");
+        await removeCoHostOrStopCoHost();
+
+        timer.cancel();
+      }
+    });
+
+    /*return TimerCountdown(
       format: CountDownTimerFormat.hoursMinutesSeconds,
       enableDescriptions: false,
       spacerWidth: 4,
       colonsTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
       timeTextStyle: const TextStyle(fontSize: 12, color: Colors.white),
-      onTick: (Duration duration) async {
-        // final bool cond1 = isLessThanOneMinute(duration);
-        // final bool cond2 = !_controller.extendTimeWidgetVisible;
-        // final bool cond3 = _controller.currentCaller.id == _controller.userId;
-
-        // if (cond1 && cond2 && cond3) {
-        //   _controller.extendTimeWidgetVisible = true;
-        //   await extendTimeWidgetPopup();
-        // } else {}
-      },
+      onTick: (Duration duration) async {},
       endTime: dateTime,
       onEnd: () async {
         print("time is ending newTimerWidget");
         await removeCoHostOrStopCoHost();
       },
-    );
+    );*/
   }
 
   bool isLessThanOneMinute(Duration duration) {
@@ -2533,55 +2546,6 @@ class _LivePage extends State<LiveDharamScreen>
         const SizedBox(width: 8),
       ],
     );
-  }
-
-  void callJoinConfiguration() {
-    // turnOff();
-    // turnOn();
-
-    final bool isEngaded = _controller.currentCaller.isEngaded;
-    final String type = _controller.currentCaller.callType;
-    final bool condForVideoCall = isEngaded && type == "video";
-    final bool condForAudioCall =
-        isEngaded && (type == "private" || type == "audio");
-
-    final ZegoUIKit instance = ZegoUIKit.instance;
-
-    if (condForVideoCall) {
-      // if (_controller.isFront == false) {
-      //   _controller.isFront = true;
-      //   instance.useFrontFacingCamera(true);
-      // } else {}
-      // if (_controller.isCamOn == false) {
-      //   _controller.isCamOn = true;
-      //   instance.turnCameraOn(true);
-      // } else {}
-      // if (_controller.isMicOn == false) {
-      //   _controller.isMicOn = true;
-      //   instance.turnMicrophoneOn(true, muteMode: true);
-      // } else {}
-
-      _controller.isFront = true;
-      instance.useFrontFacingCamera(true);
-
-      _controller.isCamOn = true;
-      instance.turnCameraOn(true);
-
-      _controller.isMicOn = true;
-      instance.turnMicrophoneOn(true, muteMode: true);
-    } else {}
-
-    if (condForAudioCall) {
-      _controller.isFront = false;
-      instance.useFrontFacingCamera(false);
-
-      _controller.isCamOn = false;
-      instance.turnCameraOn(false);
-
-      _controller.isMicOn = true;
-      instance.turnMicrophoneOn(true, muteMode: true);
-    } else {}
-    return;
   }
 
   Widget settingsColForCust() {
@@ -3071,13 +3035,15 @@ class _LivePage extends State<LiveDharamScreen>
     } else {
       await endLiveSession(
         endLive: () async {
-
           if (mounted) {
             FirebaseDatabase database = FirebaseDatabase.instance;
             _timer?.cancel();
             _msgTimerForFollowPopup?.cancel();
             _msgTimerForTarotCardPopup?.cancel();
-            await database.ref().child("$livePath/${_controller.userId}").remove();
+            await database
+                .ref()
+                .child("$livePath/${_controller.userId}")
+                .remove();
             await zegoController.leave(context);
           } else {}
         },
@@ -3277,6 +3243,15 @@ class _LivePage extends State<LiveDharamScreen>
         ),
       ),
       onEnded: (ZegoLiveStreamingEndEvent event, VoidCallback defaultAction) {},
+      room: ZegoLiveStreamingRoomEvents(
+        onStateChanged: (value) {
+          if (kDebugMode) {
+            divineSnackBar(
+                data: "ZegoLiveStreamingRoomEvents----${value.reason}");
+            print("ZegoLiveStreamingRoomEvents----${value.reason}");
+          }
+        },
+      ),
       user: ZegoLiveStreamingUserEvents(
         onEnter: (ZegoUIKitUser zegoUIKitUser) async {
           // await onUserJoin(zegoUIKitUser);
@@ -3328,17 +3303,18 @@ class _LivePage extends State<LiveDharamScreen>
       name: _controller.currentCaller.userName,
     );
     final connect = zegoController.coHost;
-    final bool removed =  await connect.removeCoHost(user)
-        ;
+    final bool removed = await connect.removeCoHost(user);
+    if (kDebugMode) {
+      divineSnackBar(data: "remove co-host from astrologer side ${removed}");
+      print(removed);
+      print("removing-co-host");
+    }
 
     if (removed) {
       await _controller.makeAPICallForEndCall(
         successCallBack: (String message) {
           successAndFailureCallBack(
-            message: message,
-            isForSuccess: true,
-            isForFailure: false,
-          );
+              message: message, isForSuccess: true, isForFailure: false);
         },
         failureCallBack: (String message) {
           successAndFailureCallBack(
@@ -3348,7 +3324,7 @@ class _LivePage extends State<LiveDharamScreen>
           );
         },
       );
-    } else {}
+    }
     if (removed) {
       await _controller.removeFromOrder();
     } else {}

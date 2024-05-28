@@ -2,6 +2,7 @@ import "dart:ui";
 
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:get/get.dart";
 
@@ -117,7 +118,7 @@ class _MoreOptionsWidgetState extends State<MoreOptionsWidget> {
                   buttonImage: "assets/images/live_call_audio.png",
                 )
               : const SizedBox(),
-          isLiveCall.value == 1
+        isLiveCall.value == 1
               ? moreOptionsButton(
                   buttonText: "Ask For Private Call",
                   buttonCallback: widget.onTapAskForPrivateCall,

@@ -19,7 +19,7 @@ const yourAppSign =
 
 const yourServerSecret = '89ceddc6c59909af326ddb7209cb1c16';
 RxList assistChatNewMsg = [].obs;
-const livePath = kDebugMode  ? 'liveTest':"live";
+const livePath =/* kDebugMode  ? 'liveTest':*/"live";
 const liveCountPath = kDebugMode ? "liveTest_count" : "live-Count";
 RxInt chatAssistantCurrentUserId = 0.obs;
 RxInt walletBalance = 0.obs;
