@@ -38,6 +38,7 @@ class AppColors extends GetxController {
   Color trueCallerButton = const Color(0xFF0087FF);
   Color greyColor2 = const Color(0xFFB0B0B0);
   Color greyColor3 = const Color(0xFFEEEEEE);
+  Color marqueeBgColor = const Color(0xFFFEB3B8);
 
   /// Order Status Color
   Color initiateColor = const Color(0xFF000000);

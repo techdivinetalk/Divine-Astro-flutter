@@ -35,6 +35,7 @@ dependencies:
   flutter_expanded_tile: ^0.3.7
   flutter_holo_date_picker: ^1.1.0
   flutter_html: ^3.0.0-beta.2
+  flutter_widget_from_html: ^0.15.0
   flutter_image_compress: ^2.0.4
   flutter_local_notifications: ^15.1.0+1
   flutter_screenutil: ^5.8.4

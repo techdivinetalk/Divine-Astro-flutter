@@ -19,6 +19,7 @@ import 'package:divine_astrologer/model/feedback_response.dart';
 import 'package:divine_astrologer/model/home_model/astrologer_live_data_response.dart';
 import 'package:divine_astrologer/model/home_model/training_video_model.dart';
 import 'package:divine_astrologer/model/performance_response.dart';
+import 'package:divine_astrologer/model/sample_text_response.dart';
 import 'package:divine_astrologer/model/update_offer_type_response.dart';
 import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/model/wallet_deatils_response.dart';
@@ -189,6 +190,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   void onInit() async {
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
+    getSampleText();
     getAstrologerLiveData();
     print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
     broadcastReceiver.start();
@@ -785,6 +787,30 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         error.onException();
       } else {
         divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+
+  RxList marqueeTextLst = [].obs;
+  void getSampleText() async {
+    marqueeTextLst.clear();
+    debugPrint("test_marqueeText: ${marqueeTextLst.length}");
+    try {
+      SampleTextResponse? response = await homePageRepository.doGetSampleText();
+
+      if (response != null && response.statusCode == 200) {
+        if (response.data != null && response.data!.text.isNotEmpty) {
+          marqueeTextLst.add("&nbsp;&nbsp;");
+          marqueeTextLst.add(response.data!.text);
+          marqueeTextLst.add("&nbsp;&nbsp;");
+          debugPrint("test_marqueeText_api: ${marqueeTextLst.length}");
+        }
+      }
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
       }
     }
   }

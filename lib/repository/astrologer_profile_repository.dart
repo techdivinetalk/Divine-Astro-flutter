@@ -24,9 +24,7 @@ class AstrologerProfileRepository extends ApiProvider {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = GiftResponse.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
@@ -58,9 +56,7 @@ class AstrologerProfileRepository extends ApiProvider {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = BlockedCustomerListRes.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
@@ -92,9 +88,7 @@ class AstrologerProfileRepository extends ApiProvider {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = BlockedCustomerRes.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
@@ -122,9 +116,7 @@ class AstrologerProfileRepository extends ApiProvider {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = NoticeBoardRes.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
@@ -156,9 +148,7 @@ class AstrologerProfileRepository extends ApiProvider {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = "";
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
@@ -186,9 +176,7 @@ class AstrologerProfileRepository extends ApiProvider {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = NewTarotCardModel.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");

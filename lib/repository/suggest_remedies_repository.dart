@@ -20,9 +20,7 @@ class ChatRemediesRepository extends ApiProvider {
       final response = await get(getChatSuggestRemedies);
       log('response --- ${response.body}');
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -49,9 +47,7 @@ class ChatRemediesRepository extends ApiProvider {
           queryParameters: {'page': page.toString(), 'master_remedy_id': masterRemedyId.toString()});
       log('response --- ${response.body}');
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {

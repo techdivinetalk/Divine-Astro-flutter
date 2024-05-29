@@ -23,8 +23,7 @@ class CallChatHistoryRepository extends ApiProvider {
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
 
-        if (responseData["status_code"]  == HttpStatus.unauthorized || json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        if (responseData["status_code"]  == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(responseData["error"]);
         } else {

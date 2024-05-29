@@ -22,9 +22,7 @@ class ChatAssistantRepository extends ApiProvider {
       log('response --- ${response.body}');
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-            HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+            HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -53,9 +51,7 @@ class ChatAssistantRepository extends ApiProvider {
       log('response --- ${response.body}');
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-            HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+            HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           print("objectAssist ${json.decode(response.body)}");
           throw CustomException(json.decode(response.body)["error"]);
@@ -92,9 +88,7 @@ class ChatAssistantRepository extends ApiProvider {
       log('response --- ${response.body}');
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-            HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+            HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {

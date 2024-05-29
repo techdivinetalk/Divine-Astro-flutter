@@ -3,6 +3,7 @@ import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
+import 'package:divine_astrologer/common/custom_widget_marquee.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 
 import 'package:divine_astrologer/common/switch_component.dart';
@@ -27,6 +28,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -541,6 +543,36 @@ class HomeUI extends GetView<HomeController> {
                           // SizedBox(height: 10.h),
                           // noticeBoardWidget(),
                           SizedBox(height: 15.h),
+
+                          /// marquree
+                          Obx(() {
+                            return Visibility(
+                              visible: controller.marqueeTextLst.isNotEmpty,
+                              child: Container(
+                                margin: EdgeInsets.only(bottom: 5.h),
+                                height: 45.h,
+                                color: appColors.marqueeBgColor,
+                                child: CustomWidgetMarquee(
+                                  child: ListView(
+                                    padding: EdgeInsets.zero,
+                                    scrollDirection: Axis.horizontal,
+                                    shrinkWrap: true,
+                                    children: List.generate(
+                                      controller.marqueeTextLst.length,
+                                      (index) {
+                                        return Container(
+                                            alignment:
+                                                AlignmentDirectional.center,
+                                            child: HtmlWidget(
+                                              controller.marqueeTextLst[index],
+                                            ));
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          }),
                           scheduledTrainingWidgetUpdated(),
                           // viewKundliWidget(),
                           viewKundliWidgetUpdated(),

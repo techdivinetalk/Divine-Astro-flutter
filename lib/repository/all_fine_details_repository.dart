@@ -18,9 +18,7 @@ class AllFineDetailsRepository extends ApiProvider {
       }
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
-        if (jsonResponse["status_code"]  == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        if (jsonResponse["status_code"]  == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(jsonResponse["error"]);
         } else {

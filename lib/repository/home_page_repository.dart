@@ -5,6 +5,7 @@ import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/model/home_model/astrologer_live_data_response.dart';
 import 'package:divine_astrologer/model/home_model/training_video_model.dart';
 import 'package:divine_astrologer/model/live/new_tarot_card_model.dart';
+import 'package:divine_astrologer/model/sample_text_response.dart';
 import 'package:divine_astrologer/model/wallet_deatils_response.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
 import 'package:divine_astrologer/utils/utils.dart';
@@ -35,9 +36,8 @@ class HomePageRepository extends ApiProvider {
       log("Dashboard:: video_call_previous_status:: ${json.decode(response.body)["data"]["video_call_previous_status"]}");
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        if (json.decode(response.body)["status_code"] ==
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -63,9 +63,8 @@ class HomePageRepository extends ApiProvider {
       print("json.decode(response.body)");
       print(json.decode(response.body));
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        if (json.decode(response.body)["status_code"] ==
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -96,9 +95,8 @@ class HomePageRepository extends ApiProvider {
       );
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        if (json.decode(response.body)["status_code"] ==
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -129,9 +127,8 @@ class HomePageRepository extends ApiProvider {
       );
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        if (json.decode(response.body)["status_code"] ==
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -159,9 +156,8 @@ class HomePageRepository extends ApiProvider {
         Utils().handleStatusCodeUnauthorizedServer();
       }
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        if (json.decode(response.body)["status_code"] ==
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -186,9 +182,8 @@ class HomePageRepository extends ApiProvider {
       );
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        if (json.decode(response.body)["status_code"] ==
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -206,63 +201,93 @@ class HomePageRepository extends ApiProvider {
   }
 
   Future<AstrologerLiveDataResponse> doGetAstrologerLiveData() async {
-   // if(Constants.isDebugMode){
-   //   try {
-   //     final response = await post(
-   //       getAstrologerLiveData,
-   //       endPoint: 'https://wakanda-api.divinetalk.live/api/astro/v7/',
-   //       // headers: await getJsonHeaderURLDebugWakanda(),
-   //       headers: await getJsonHeaderURL(),
-   //     );
-   //
-   //     debugPrint("test_response_body: ${response.body}");
-   //
-   //     if (response.statusCode == 200) {
-   //       if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized || json.decode(response.body)["status_code"] ==
-   //              HttpStatus.badRequest) {
-   //         Utils().handleStatusCodeUnauthorized();
-   //         throw CustomException(json.decode(response.body)["error"]);
-   //       } else {
-   //         final feedbackResponse =
-   //         AstrologerLiveDataResponse.fromJson(json.decode(response.body));
-   //         return feedbackResponse;
-   //       }
-   //     } else {
-   //       throw CustomException(json.decode(response.body)["error"]);
-   //     }
-   //   } catch (e, s) {
-   //     debugPrint("we got $e $s");
-   //     rethrow;
-   //   }
-   // }else{
-     try {
-       final response = await post(
-         getAstrologerLiveData,
-         headers: await getJsonHeaderURL(),
-       );
-       if (response.statusCode == HttpStatus.unauthorized) {
-         Utils().handleStatusCodeUnauthorizedServer();
-       }
-       debugPrint("test_response_body: ${response.body}");
+    // if(Constants.isDebugMode){
+    //   try {
+    //     final response = await post(
+    //       getAstrologerLiveData,
+    //       endPoint: 'https://wakanda-api.divinetalk.live/api/astro/v7/',
+    //       // headers: await getJsonHeaderURLDebugWakanda(),
+    //       headers: await getJsonHeaderURL(),
+    //     );
+    //
+    //     debugPrint("test_response_body: ${response.body}");
+    //
+    //     if (response.statusCode == 200) {
+    //       if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized || json.decode(response.body)["status_code"] ==
+    //              HttpStatus.badRequest) {
+    //         Utils().handleStatusCodeUnauthorized();
+    //         throw CustomException(json.decode(response.body)["error"]);
+    //       } else {
+    //         final feedbackResponse =
+    //         AstrologerLiveDataResponse.fromJson(json.decode(response.body));
+    //         return feedbackResponse;
+    //       }
+    //     } else {
+    //       throw CustomException(json.decode(response.body)["error"]);
+    //     }
+    //   } catch (e, s) {
+    //     debugPrint("we got $e $s");
+    //     rethrow;
+    //   }
+    // }else{
+    try {
+      final response = await post(
+        getAstrologerLiveData,
+        headers: await getJsonHeaderURL(),
+      );
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
+      debugPrint("test_response_body: ${response.body}");
 
-       if (response.statusCode == 200) {
-         if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
-             json.decode(response.body)["status_code"] ==
-                 HttpStatus.badRequest) {
-           Utils().handleStatusCodeUnauthorizedBackend();
-           throw CustomException(json.decode(response.body)["error"]);
-         } else {
-           final feedbackResponse =
-           AstrologerLiveDataResponse.fromJson(json.decode(response.body));
-           return feedbackResponse;
-         }
-       } else {
-         throw CustomException(json.decode(response.body)["error"]);
-       }
-     } catch (e, s) {
-       debugPrint("we got $e $s");
-       rethrow;
-     }
-   }
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+                HttpStatus.unauthorized ) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final feedbackResponse =
+              AstrologerLiveDataResponse.fromJson(json.decode(response.body));
+          return feedbackResponse;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
   // }
+
+  Future<SampleTextResponse?> doGetSampleText() async {
+    try {
+      final response = await post(getSampleText);
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
+      if (response.statusCode == 200 && json.decode(response.body) != null) {
+        print("test_body: ${response.body}");
+        print("test_body_decode: ${json.decode(response.body)}");
+
+        if (json.decode(response.body)["status_code"] ==
+                HttpStatus.unauthorized ) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else if (json.decode(response.body)["status_code"] == 200 &&
+            json.decode(response.body)["success"] == true &&
+            json.decode(response.body)["data"] != null) {
+          return SampleTextResponse.fromJson(json.decode(response.body));
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
 }

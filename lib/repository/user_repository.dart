@@ -62,9 +62,7 @@ class UserRepository extends ApiProvider {
       print("response.statusCode");
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
         } else if (json.decode(response.body)["status_code"] == 400) {
           preferenceService.erase();
@@ -128,9 +126,7 @@ class UserRepository extends ApiProvider {
       print(json.decode(response.body)["message"]);
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -165,9 +161,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -195,9 +189,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -275,9 +267,7 @@ class UserRepository extends ApiProvider {
       if (response.statusCode == HttpStatus.ok) {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = ResLogin.fromJson(responseBody);
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
         } else {}
       } else {}
@@ -302,9 +292,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -333,9 +321,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -363,9 +349,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -393,9 +377,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -424,9 +406,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -454,9 +434,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -485,9 +463,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -521,9 +497,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -623,9 +597,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -651,9 +623,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -680,9 +650,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -707,9 +675,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -734,9 +700,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -764,9 +728,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -792,9 +754,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -822,9 +782,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body));
         } else {
@@ -852,9 +810,7 @@ class UserRepository extends ApiProvider {
       //progressService.showProgressDialog(false);
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -885,9 +841,7 @@ class UserRepository extends ApiProvider {
       //progressService.showProgressDialog(false);
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -947,9 +901,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -975,9 +927,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -1010,9 +960,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -1050,9 +998,7 @@ class UserRepository extends ApiProvider {
       //progressService.showProgressDialog(false);
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -1083,9 +1029,7 @@ class UserRepository extends ApiProvider {
       }
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -1111,9 +1055,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -1148,9 +1090,7 @@ class UserRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -1189,9 +1129,7 @@ class UserRepository extends ApiProvider {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = UpdateSessionTypeResponse.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           data = UpdateSessionTypeResponse.fromJson(responseBody);
@@ -1219,9 +1157,7 @@ class UserRepository extends ApiProvider {
       print(json.decode(response.body)["message"]);
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+                HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {

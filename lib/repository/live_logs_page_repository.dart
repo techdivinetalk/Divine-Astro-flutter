@@ -19,11 +19,12 @@ class LiveLogsPageRepository extends ApiProvider {
       );
 
       debugPrint("test_response_body: ${response.body}");
-
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-            HttpStatus.unauthorized || json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+            HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {

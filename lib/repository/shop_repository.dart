@@ -53,9 +53,7 @@ class ShopRepository extends ApiProvider {
       }
       //progressService.showProgressDialog(false);
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -86,9 +84,7 @@ class ShopRepository extends ApiProvider {
       }
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -117,9 +113,7 @@ class ShopRepository extends ApiProvider {
         Utils().handleStatusCodeUnauthorizedServer();
       }
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -148,9 +142,7 @@ class ShopRepository extends ApiProvider {
         Utils().handleStatusCodeUnauthorizedServer();
       }
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -180,9 +172,7 @@ class ShopRepository extends ApiProvider {
         Utils().handleStatusCodeUnauthorizedServer();
       }
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -212,9 +202,7 @@ class ShopRepository extends ApiProvider {
         Utils().handleStatusCodeUnauthorizedServer();
       }
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
-            json.decode(response.body)["status_code"] ==
-                HttpStatus.badRequest) {
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
