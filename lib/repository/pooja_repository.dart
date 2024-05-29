@@ -28,9 +28,14 @@ class PoojaRepository extends ApiProvider {
       final response = await post(
           'https://occultism-gleams.000webhostapp.com/pooja.php',
           endPoint: '');
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final apiResponse =
@@ -55,10 +60,15 @@ class PoojaRepository extends ApiProvider {
       final response = await post(
           'https://occultism-gleams.000webhostapp.com/poojadetail',
           endPoint: '');
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
       print("--------- pooja detail response ------------ ${json.encode(response.body)}");
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final apiResponse =
@@ -93,8 +103,10 @@ class PoojaRepository extends ApiProvider {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = GetPoojaResponse.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         }
@@ -123,7 +135,8 @@ class PoojaRepository extends ApiProvider {
     //     if (responseBody["status_code"] == HttpStatus.ok) {
     //       data = GetBookedPoojaResponse.fromJson(responseBody);
     //       successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-    //     } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
+    //     } else if (responseBody["status_code"] == HttpStatus.unauthorized || json.decode(response.body)["status_code"] ==
+    //             HttpStatus.badRequest) {
     // Utils().handleStatusCodeUnauthorized();
     //     } else {
     //       failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
@@ -148,13 +161,18 @@ class PoojaRepository extends ApiProvider {
     try {
       final String requestBody = jsonEncode(params);
       final response = await post(getSinglePooja, body: requestBody);
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
       final Map<String, dynamic> responseBody = json.decode(response.body);
       if (response.statusCode == HttpStatus.ok) {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = GetSinglePoojaResponse.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         }
@@ -183,7 +201,8 @@ class PoojaRepository extends ApiProvider {
     //     if (responseBody["status_code"] == HttpStatus.ok) {
     //       data = GetPoojaAddOnesResponse.fromJson(responseBody);
     //       successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-    //     } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
+    //     } else if (responseBody["status_code"] == HttpStatus.unauthorized || json.decode(response.body)["status_code"] ==
+    //             HttpStatus.badRequest) {
     // Utils().handleStatusCodeUnauthorized();
     //     } else {
     //       failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
@@ -208,13 +227,18 @@ class PoojaRepository extends ApiProvider {
     try {
       final String requestBody = jsonEncode(params);
       final response = await post(getUserAddressForPooja, body: requestBody);
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
       final Map<String, dynamic> responseBody = json.decode(response.body);
       if (response.statusCode == HttpStatus.ok) {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = GetUserAddressResponse.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         }
@@ -238,13 +262,18 @@ class PoojaRepository extends ApiProvider {
     try {
       final String requestBody = jsonEncode(params);
       final response = await post(addUserAddressForPooja, body: requestBody);
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
       final Map<String, dynamic> responseBody = json.decode(response.body);
       if (response.statusCode == HttpStatus.ok) {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = AddUserAddressResponse.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         }
@@ -268,13 +297,18 @@ class PoojaRepository extends ApiProvider {
     try {
       final String requestBody = jsonEncode(params);
       final response = await post(updateUserAddressForPooja, body: requestBody);
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
       final Map<String, dynamic> responseBody = json.decode(response.body);
       if (response.statusCode == HttpStatus.ok) {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = UpdateUserAddressResponse.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         }
@@ -298,13 +332,18 @@ class PoojaRepository extends ApiProvider {
     try {
       final String requestBody = jsonEncode(params);
       final response = await post(deleteUserAddressForPooja, body: requestBody);
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
       final Map<String, dynamic> responseBody = json.decode(response.body);
       if (response.statusCode == HttpStatus.ok) {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = DeleteUserAddressResponse.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         }
@@ -330,6 +369,9 @@ class PoojaRepository extends ApiProvider {
       final String requestBody = jsonEncode(params);
       print("$params");
       final response = await post(generateOrderAPI, body: requestBody);
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
       final Map<String, dynamic> responseBody = json.decode(response.body);
       if (response.statusCode == HttpStatus.ok) {
         if (responseBody["status_code"] == HttpStatus.ok) {
@@ -340,8 +382,10 @@ class PoojaRepository extends ApiProvider {
           balModel = InsufficientBalModel.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
           needRecharge(balModel);
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
         }

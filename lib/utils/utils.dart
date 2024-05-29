@@ -1,3 +1,5 @@
+import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/common/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -33,14 +35,28 @@ class Utils {
     );
   }
 
-  Future<void> handleStatusCodeUnauthorized() async {
-    /// responseBody["status_code"] == HttpStatus.unauthorized
+  Future<void> handleStatusCodeUnauthorizedBackend() async {
+    debugPrint("test_handleStatusCodeUnauthorized: Backend");
+
+    /// responseBody["status_code"] == HttpStatus.unauthorized || responseBody["status_code"] == HttpStatus.badRequest
+    // status code 400 / 401
+
+    await preferenceService.erase();
+    await Get.offAllNamed(RouteName.login);
+  }
+
+  Future<void> handleStatusCodeUnauthorizedServer() async {
+    debugPrint("test_handleStatusCodeUnauthorized: Server");
+
+    /// response.statusCode == HttpStatus.unauthorized
 
     // await preferenceService.erase();
-    // await Get.offAllNamed(RouteName.login);
+    // await Get.offAllNamed(RouteName.loginPage);
   }
 
   void handleCatchPreferenceServiceErase() {
+    debugPrint("test_handleStatusCodeUnauthorized: Erase");
+
     /// catch (e, s) { preferenceService.erase(); }
 
     // preferenceService.erase();

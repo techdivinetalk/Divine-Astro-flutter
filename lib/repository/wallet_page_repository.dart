@@ -14,10 +14,14 @@ class WalletListRepo extends ApiProvider {
   Future<PayoutDetails> walletPayOutDetails(Map<String, dynamic> param) async {
     try {
       final response = await post(walletPayout,body: jsonEncode(param));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized || json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final walletPayoutList =

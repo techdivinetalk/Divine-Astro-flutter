@@ -17,11 +17,15 @@ class CallChatHistoryRepository extends ApiProvider {
       final response = await post(viewChatHistory, body: json.encode({"customer_id" : customerId, "partner_id" : partnerId}));
       log('response --- ${response.body}');
 
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
 
-        if (responseData["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (responseData["status_code"]  == HttpStatus.unauthorized || json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(responseData["error"]);
         } else {
           final assistantAstrologerChatList = ChatHistoryResponse.fromJson(responseData);

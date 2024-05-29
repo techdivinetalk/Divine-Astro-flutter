@@ -20,8 +20,10 @@ class MessageTemplateRepo extends ApiProvider {
       final response = await get(getMessageTemplate,
           headers: await getJsonHeaderURL(version: 7));
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final messageTemplates =
@@ -47,9 +49,14 @@ class MessageTemplateRepo extends ApiProvider {
       final response = await post(addMessageTemplate,
           body: jsonEncode(param),
           headers: await getJsonHeaderURL(version: 7));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final addMessageResponse =
@@ -76,9 +83,14 @@ class MessageTemplateRepo extends ApiProvider {
       final response = await post(editMessageTemplate,
           body: jsonEncode(param),
           headers: await getJsonHeaderURL(version: 7));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final updateMessageResponse =

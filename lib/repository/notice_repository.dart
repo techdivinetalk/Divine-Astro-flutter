@@ -3,7 +3,9 @@ import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 
 class NoticeRepository extends ApiProvider {
   Future<NoticeResponse> noticeAPi() async {
@@ -36,6 +38,9 @@ class NoticeRepository extends ApiProvider {
         headers: await getJsonHeaderURL(),
         body: jsonEncode(param),
       );
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
 
       if (response.statusCode == 200) {
         final astroScheduleResponse =

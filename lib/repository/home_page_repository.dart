@@ -27,14 +27,18 @@ class HomePageRepository extends ApiProvider {
         body: jsonEncode(param).toString(),
         headers: await getJsonHeaderURL(),
       );
-
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
       log("Dashboard:: chat_previous_status:: ${json.decode(response.body)["data"]["chat_previous_status"]}");
       log("Dashboard:: call_previous_status:: ${json.decode(response.body)["data"]["call_previous_status"]}");
       log("Dashboard:: video_call_previous_status:: ${json.decode(response.body)["data"]["video_call_previous_status"]}");
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final performanceList =
@@ -59,8 +63,10 @@ class HomePageRepository extends ApiProvider {
       print("json.decode(response.body)");
       print(json.decode(response.body));
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final tarotResponse =
@@ -90,8 +96,10 @@ class HomePageRepository extends ApiProvider {
       );
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final walletDetailsResponse =
@@ -121,8 +129,10 @@ class HomePageRepository extends ApiProvider {
       );
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final feedbackResponse =
@@ -145,10 +155,14 @@ class HomePageRepository extends ApiProvider {
         getTrainingVideo,
         headers: await getJsonHeaderURL(),
       );
-
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final feedbackResponse =
@@ -172,8 +186,10 @@ class HomePageRepository extends ApiProvider {
       );
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final feedbackResponse =
@@ -202,7 +218,8 @@ class HomePageRepository extends ApiProvider {
    //     debugPrint("test_response_body: ${response.body}");
    //
    //     if (response.statusCode == 200) {
-   //       if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+   //       if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized || json.decode(response.body)["status_code"] ==
+   //              HttpStatus.badRequest) {
    //         Utils().handleStatusCodeUnauthorized();
    //         throw CustomException(json.decode(response.body)["error"]);
    //       } else {
@@ -223,12 +240,16 @@ class HomePageRepository extends ApiProvider {
          getAstrologerLiveData,
          headers: await getJsonHeaderURL(),
        );
-
+       if (response.statusCode == HttpStatus.unauthorized) {
+         Utils().handleStatusCodeUnauthorizedServer();
+       }
        debugPrint("test_response_body: ${response.body}");
 
        if (response.statusCode == 200) {
-         if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-           Utils().handleStatusCodeUnauthorized();
+         if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+             json.decode(response.body)["status_code"] ==
+                 HttpStatus.badRequest) {
+           Utils().handleStatusCodeUnauthorizedBackend();
            throw CustomException(json.decode(response.body)["error"]);
          } else {
            final feedbackResponse =

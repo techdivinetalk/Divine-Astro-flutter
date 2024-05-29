@@ -21,10 +21,15 @@ class OrderHistoryRepository extends ApiProvider {
     try {
       final response = await post(getOrderHistoryUrl,
           body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final orderHistoryModel =
@@ -50,10 +55,15 @@ class OrderHistoryRepository extends ApiProvider {
     try {
       final response = await post(getOrderHistoryUrl,
           body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final orderHistoryModel =
@@ -79,10 +89,15 @@ class OrderHistoryRepository extends ApiProvider {
     try {
       final response = await post(getOrderHistoryUrl,
           body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final orderHistoryModel =
@@ -108,10 +123,15 @@ class OrderHistoryRepository extends ApiProvider {
     try {
       final response = await post(getOrderHistoryUrl,
           body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final orderFeedHistoryModel =
@@ -137,12 +157,17 @@ class OrderHistoryRepository extends ApiProvider {
     try {
       final response = await post(getOrderHistoryUrl,
           body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
 
       print("Body :: ${jsonEncode(param)}");
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final orderHistoryModel =
@@ -169,6 +194,9 @@ class OrderHistoryRepository extends ApiProvider {
     try {
       final response = await post(getOrderHistoryUrl,
           body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
 
       debugPrint('Response: ${response.request}');
       if (response.statusCode == 200) {
@@ -198,7 +226,8 @@ class OrderHistoryRepository extends ApiProvider {
 //     // print("-->"+ response.request.toString());
 //     // print("-->"+ response.body.toString());
 //     if (response.statusCode == 200) {
-//       if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
+//       if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized || json.decode(response.body)["status_code"] ==
+//                 HttpStatus.badRequest) {
 //           Utils().handleStatusCodeUnauthorized();
 //         throw CustomException(json.decode(response.body)["error"]);
 //       } else {

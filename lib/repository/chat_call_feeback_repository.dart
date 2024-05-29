@@ -21,12 +21,16 @@ class CallChatFeedBackRepository extends ApiProvider {
         body: json.encode({'order_id': orderId}),
         headers: await getJsonHeaderURL(),
       );
-
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
 
-        if (jsonResponse["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (jsonResponse["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(jsonResponse["error"]);
         } else {
           final data = jsonResponse["data"];
@@ -53,12 +57,16 @@ class CallChatFeedBackRepository extends ApiProvider {
     try {
       final response = await post(getChatHistory, body: json.encode({'order_id': orderId}));
       log('response --- ${response.body}');
-
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
 
-        if (responseData["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (responseData["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(responseData["error"]);
         } else {
           final assistantAstrologerChatList = ChatHistoryResponse.fromJson(responseData);
@@ -82,10 +90,14 @@ class CallChatFeedBackRepository extends ApiProvider {
   Future<ChatHistoryResponse> getAstrologerCall(int orderId) async {
     try {
       final response = await post(getOrderCallHistory, body: json.encode({'order_id': orderId}));
-      log('response --- ${response.body}');
+      log('response --- ${response.body}'); if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final assistantAstrologerChatList = ChatHistoryResponse.fromJson(json.decode(response.body));

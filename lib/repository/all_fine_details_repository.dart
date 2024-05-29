@@ -13,11 +13,15 @@ class AllFineDetailsRepository extends ApiProvider {
 
   Future<FeedbackFineResponse> getFeedBackDetails() async {
     try {
-      final response = await post(getAllFeedbackFineDetail);
+      final response = await post(getAllFeedbackFineDetail); if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
-        if (jsonResponse["status_code"]  == HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorized();
+        if (jsonResponse["status_code"]  == HttpStatus.unauthorized ||
+            json.decode(response.body)["status_code"] ==
+                HttpStatus.badRequest) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(jsonResponse["error"]);
         } else {
           final feedbackResponse = feedbackFineResponseFromJson(response.body);

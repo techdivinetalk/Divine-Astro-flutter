@@ -22,8 +22,10 @@ class DiscountOfferRepository extends ApiProvider{
      );
 
      if (response.statusCode == 200) {
-       if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized) {
-         Utils().handleStatusCodeUnauthorized();
+       if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ||
+           json.decode(response.body)["status_code"] ==
+               HttpStatus.badRequest) {
+         Utils().handleStatusCodeUnauthorizedBackend();
          throw CustomException(json.decode(response.body)["error"]);
        } else {
          print("response body is ${response.body}");
