@@ -37,7 +37,7 @@ class HomePageRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ) {
+            HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -64,7 +64,7 @@ class HomePageRepository extends ApiProvider {
       print(json.decode(response.body));
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ) {
+            HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -96,7 +96,7 @@ class HomePageRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ) {
+            HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -128,7 +128,7 @@ class HomePageRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ) {
+            HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -157,7 +157,7 @@ class HomePageRepository extends ApiProvider {
       }
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ) {
+            HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -183,7 +183,7 @@ class HomePageRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ) {
+            HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -242,7 +242,7 @@ class HomePageRepository extends ApiProvider {
 
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ) {
+            HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -272,7 +272,37 @@ class HomePageRepository extends ApiProvider {
         print("test_body_decode: ${json.decode(response.body)}");
 
         if (json.decode(response.body)["status_code"] ==
-                HttpStatus.unauthorized ) {
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else if (json.decode(response.body)["status_code"] == 200 &&
+            json.decode(response.body)["success"] == true &&
+            json.decode(response.body)["data"] != null) {
+          return SampleTextResponse.fromJson(json.decode(response.body));
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<SampleTextResponse?> doGetAstrologerTrainingSession() async {
+    try {
+      final response = await post(getAstrologerTrainingSession);
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      }
+      if (response.statusCode == 200 && json.decode(response.body) != null) {
+        print("test_body: ${response.body}");
+        print("test_body_decode: ${json.decode(response.body)}");
+
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else if (json.decode(response.body)["status_code"] == 200 &&

@@ -147,43 +147,43 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     // if(preferenceService.getString("homePage") == "0"){
     //   return;
     // }
-      weekLst.clear();
-      todaysRemaining.value = 0;
-      isRewardAvailable.value = 0;
-      rewardPoint.value = 0;
-      isLiveMonitor.value = 0;
+    weekLst.clear();
+    todaysRemaining.value = 0;
+    isRewardAvailable.value = 0;
+    rewardPoint.value = 0;
+    isLiveMonitor.value = 0;
 
-      try {
-        var response = await homePageRepository.doGetAstrologerLiveData();
+    try {
+      var response = await homePageRepository.doGetAstrologerLiveData();
 
-        if (response.data != null) {
-          var data = response.data;
-          if (data!.todaysRemaining != null) {
-            todaysRemaining.value = data.todaysRemaining!;
-          }
-          if (data.isRewardAvailable != null) {
-            isRewardAvailable.value = data.isRewardAvailable!;
-            debugPrint("test_isRewardAvailable: $isRewardAvailable");
-          }
-          if (data.rewardPoint != null) {
-            rewardPoint.value = data.rewardPoint!;
-          }
-          if (data.isLiveMonitor != null) {
-            isLiveMonitor.value = data.isLiveMonitor!;
-          }
-
-          if (data.weeks!.isNotEmpty) {
-            weekLst.addAll(data.weeks!);
-          }
+      if (response.data != null) {
+        var data = response.data;
+        if (data!.todaysRemaining != null) {
+          todaysRemaining.value = data.todaysRemaining!;
         }
-      } catch (error) {
-        debugPrint("error $error");
-        if (error is AppException) {
-          error.onException();
-        } else {
-          divineSnackBar(data: error.toString(), color: appColors.redColor);
+        if (data.isRewardAvailable != null) {
+          isRewardAvailable.value = data.isRewardAvailable!;
+          debugPrint("test_isRewardAvailable: $isRewardAvailable");
+        }
+        if (data.rewardPoint != null) {
+          rewardPoint.value = data.rewardPoint!;
+        }
+        if (data.isLiveMonitor != null) {
+          isLiveMonitor.value = data.isLiveMonitor!;
+        }
+
+        if (data.weeks!.isNotEmpty) {
+          weekLst.addAll(data.weeks!);
         }
       }
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
   }
 
   @override
@@ -191,6 +191,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
     getSampleText();
+    getAstrologerTrainingSession();
     getAstrologerLiveData();
     print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
     broadcastReceiver.start();
@@ -791,8 +792,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-
   RxList marqueeTextLst = [].obs;
+
   void getSampleText() async {
     marqueeTextLst.clear();
     debugPrint("test_marqueeText: ${marqueeTextLst.length}");
@@ -806,6 +807,27 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           marqueeTextLst.add("&nbsp;&nbsp;");
           debugPrint("test_marqueeText_api: ${marqueeTextLst.length}");
         }
+      }
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      }
+    }
+  }
+
+  // RxList marqueeTextLst = [].obs;
+
+  void getAstrologerTrainingSession() async {
+    marqueeTextLst.clear();
+    debugPrint("test_marqueeText: ${marqueeTextLst.length}");
+
+    try {
+      SampleTextResponse? response =
+          await homePageRepository.doGetAstrologerTrainingSession();
+
+      if (response != null && response.statusCode == 200) {
+        if (response.data != null && response.data!.text.isNotEmpty) {}
       }
     } catch (error) {
       debugPrint("error $error");

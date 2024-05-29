@@ -128,6 +128,7 @@ class ApiProvider {
   final String getAstrologerLiveData = "getAstrologerLiveData";
   final String astrologerLiveLog = "astrologerLiveLog";
   final String getSampleText = "getMarqueeForAstrologer";
+  final String getAstrologerTrainingSession = "getAstrologerTrainingSession";
 
   //Astro Internal API
   final String horoChartImageInt = "getChartImage/";
