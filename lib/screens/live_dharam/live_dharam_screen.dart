@@ -2867,7 +2867,7 @@ class _LivePage extends State<LiveDharamScreen>
         //
         StreamBuilder<DatabaseEvent>(
           stream: _controller.ref
-              .child("$livePath/${_controller.liveId}/waitList")
+              .child("$livePath/${_controller.liveId}/realTime/waitList")
               .onValue
               .asBroadcastStream(),
           builder: (context, snapshot) {

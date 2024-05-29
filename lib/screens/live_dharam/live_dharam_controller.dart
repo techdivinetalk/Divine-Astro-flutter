@@ -484,7 +484,7 @@ class LiveDharamController extends GetxController {
 
     var liveIdNode = data[liveId];
     if (liveIdNode != null) {
-      var waitListNode = data[liveId]["waitList"];
+      var waitListNode = data[liveId]["realTime"]["waitList"];
       temp = isEngadedNew(waitListNode, forMe: false);
     } else {}
 
@@ -938,7 +938,7 @@ class LiveDharamController extends GetxController {
           };
     //
     await ref
-        .child("$livePath/$liveId/waitList/$userId")
+        .child("$livePath/$liveId/realTime/waitList/$userId")
         .update(moOrderDetails);
     //
     if (callStatus == 2) {
