@@ -411,7 +411,7 @@ class LiveDharamController extends GetxController {
   Future<void> eventListner({
     required DataSnapshot snapshot,
     required Function(WaitListModel currentCaller) engaging,
-    Widget? timer,
+    // Widget? timer,
   }) async {
     final DataSnapshot dataSnapshot = snapshot;
 
@@ -438,11 +438,11 @@ class LiveDharamController extends GetxController {
             orderModel = getOrderModel(orderNode);
             currentCaller =
                 getOrderModelGeneric(orderNode, forMe: true, type: "fromevent");
-            if (liveIdNode["order"] != null) {
-              timer;
-            } else {
-              timer = null;
-            }
+            // if (liveIdNode["order"] != null) {
+            //   timer;
+            // } else {
+            //   timer = null;
+            // }
             print(currentCaller.isEngaded);
             print("currentCaller.isEngaded");
             await Future.delayed(const Duration(seconds: 1));

@@ -122,7 +122,7 @@ class _LivePage extends State<LiveDharamScreen>
         await _controller.eventListner(
           snapshot: dataSnapshot,
           engaging: engaging,
-          timer: newTimerWidget(),
+          // timer: newTimerWidget(),
         );
       },
     );
@@ -179,7 +179,6 @@ class _LivePage extends State<LiveDharamScreen>
     //     // );
     //   },
     // );
-
 
     keyboardVisibilityController.onChange.listen(
       (bool visible) {
@@ -2322,7 +2321,8 @@ class _LivePage extends State<LiveDharamScreen>
                           overflow: TextOverflow.ellipsis,
                         ),
                         const SizedBox(width: 8),
-                        Expanded(child: Obx(() {
+                        Expanded(child: newTimerWidget()),
+                        /*Expanded(child: Obx(() {
                           // newTimerWidget();
                           return diff.value != ""
                               ? Text(
@@ -2332,7 +2332,7 @@ class _LivePage extends State<LiveDharamScreen>
                                   ),
                                 )
                               : Text("");
-                        })),
+                        })),*/
                       ],
                     ),
                   ],
@@ -2383,23 +2383,28 @@ class _LivePage extends State<LiveDharamScreen>
 
   RxString diff = "".obs;
   Timer? countDownTimer;
+  // int epoch = 0;
 
   newTimerWidget() {
     final String source = _controller.engagedCoHostWithAstro().totalTime;
     print(_controller.engagedCoHostWithAstro().totalTime);
     print("_controller.engagedCoHostWithAstro().totalTime");
-    final int epoch = int.parse(source.isEmpty ? "0" : source);
+    int epoch = int.parse(source.isEmpty ? "0" : source);
     final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
+/*    countDownTimer = null;
+    setState(() {});
     if (epoch == 0) {
       return;
     }
     print(epoch);
     print("dateTime.second");
-    countDownTimer ??=
-        Timer.periodic(const Duration(seconds: 1), (timer) async {
+
+    countDownTimer = Timer.periodic(const Duration(seconds: 1), (timer) async {
       var timeDiff = epoch - DateTime.now().millisecondsSinceEpoch;
       print("diff.value");
+      print(epoch);
       print(diff.value);
+
       Duration _duration = Duration(milliseconds: timeDiff);
       diff.value = _formatDuration(_duration);
       if (timeDiff < 10) {
@@ -2407,14 +2412,13 @@ class _LivePage extends State<LiveDharamScreen>
         await removeCoHostOrStopCoHost();
         timer.cancel();
         diff.value = "";
-
         countDownTimer = null;
         setState(() {});
         // settingsColForCust();
       }
-    });
+    });*/
 
-    /*return TimerCountdown(
+    return TimerCountdown(
       format: CountDownTimerFormat.hoursMinutesSeconds,
       enableDescriptions: false,
       spacerWidth: 4,
@@ -2426,7 +2430,7 @@ class _LivePage extends State<LiveDharamScreen>
         print("time is ending newTimerWidget");
         await removeCoHostOrStopCoHost();
       },
-    );*/
+    );
   }
 
   String _formatDuration(Duration duration) {
@@ -3319,13 +3323,7 @@ class _LivePage extends State<LiveDharamScreen>
       ),
       onEnded: (ZegoLiveStreamingEndEvent event, VoidCallback defaultAction) {},
       room: ZegoLiveStreamingRoomEvents(
-        onStateChanged: (value) {
-          if (kDebugMode) {
-            divineSnackBar(
-                data: "ZegoLiveStreamingRoomEvents----${value.reason}");
-            print("ZegoLiveStreamingRoomEvents----${value.reason}");
-          }
-        },
+        onStateChanged: (value) {},
       ),
       user: ZegoLiveStreamingUserEvents(
         onEnter: (ZegoUIKitUser zegoUIKitUser) async {
@@ -3388,6 +3386,7 @@ class _LivePage extends State<LiveDharamScreen>
     if (removed) {
       await _controller.makeAPICallForEndCall(
         successCallBack: (String message) async {
+          setState(() { });
           successAndFailureCallBack(
               message: message, isForSuccess: true, isForFailure: false);
           await _controller.removeFromOrder();
