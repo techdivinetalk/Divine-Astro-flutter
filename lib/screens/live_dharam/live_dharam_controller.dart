@@ -905,7 +905,7 @@ class LiveDharamController extends GetxController {
   }) async {
     String previousType = callType != "" ? callType : "";
     final DataSnapshot dataSnapshot =
-        await ref.child("$livePath/$liveId/waitList/$userId").get();
+        await ref.child("$livePath/$liveId/realTime/waitList/$userId").get();
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
@@ -1034,7 +1034,7 @@ class LiveDharamController extends GetxController {
   }
 
   Future<void> removeFromWaitList() async {
-    await ref.child("$livePath/$liveId/waitList/$userId").remove();
+    await ref.child("$livePath/$liveId/realTime/waitList/$userId").remove();
     return Future<void>.value();
   }
 
@@ -1282,7 +1282,7 @@ class LiveDharamController extends GetxController {
   Future<bool> shouldOpenBottom() async {
     bool isRequest = false;
     final DataSnapshot dataSnapshot =
-        await ref.child("$livePath/$liveId/waitList/$userId").get();
+        await ref.child("$livePath/$liveId/realTime/waitList/$userId").get();
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
