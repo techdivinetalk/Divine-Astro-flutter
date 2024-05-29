@@ -426,18 +426,41 @@ class LiveDharamController extends GetxController {
           liveId = userId;
           var liveIdNode = data;
           if (liveIdNode != null) {
-            List<dynamic> blockListNode = liveIdNode["realTime"]["blockList"] ?? [];
-            if (blockListNode.isEmpty) {
-              firebaseBlockUsersIds = [];
-            } else {
-              firebaseBlockUsersIds = blockListNode;
+            if(liveIdNode["realTime"] != null && liveIdNode["realTime"]["blockList"] != null ){
+              List<dynamic> blockListNode = liveIdNode["realTime"]["blockList"] ?? [];
+              if (blockListNode.isEmpty) {
+                firebaseBlockUsersIds = [];
+              } else {
+                firebaseBlockUsersIds = blockListNode;
+              }
             }
 
-            var orderNode = liveIdNode["order"];
+            if(liveIdNode["realTime"] != null && liveIdNode["realTime"]["order"] != null ){
+              var orderNode = liveIdNode["realTime"]["order"];
 
-            orderModel = getOrderModel(orderNode);
-            currentCaller =
-                getOrderModelGeneric(orderNode, forMe: true, type: "fromevent");
+              orderModel = getOrderModel(orderNode);
+              currentCaller =
+                  getOrderModelGeneric(orderNode, forMe: true, type: "fromevent");
+            }else{
+              WaitListModel temp = WaitListModel(
+                isRequest: false,
+                isEngaded: false,
+                callType: "",
+                totalTime: "",
+                avatar: "",
+                userName: "",
+                id: "",
+                generatedOrderId: 0,
+                totalMin: 0,
+                offerId: 0,
+                callStatus: 0,
+              );
+              orderModel = temp;
+              currentCaller = temp;
+              update();
+            }
+
+
             // if (liveIdNode["order"] != null) {
             //   timer;
             // } else {
@@ -593,9 +616,12 @@ class LiveDharamController extends GetxController {
       if (liveIdNode != null) {
         print(liveIdNode);
         print("engagedCoHostWithAstro---liveIdNodeliveIdNode");
-        var orderNode = liveIdNode["order"];
-        temp = getOrderModelGeneric(orderNode,
-            forMe: false, type: "engagedCoHostWithAstro");
+        if(liveIdNode["realTime"] != null && liveIdNode["realTime"]["order"] != null ){
+          var orderNode = liveIdNode["realTime"]["order"];
+          temp = getOrderModelGeneric(orderNode,
+              forMe: false, type: "engagedCoHostWithAstro");
+        }
+
       }
     }
 
@@ -904,6 +930,8 @@ class LiveDharamController extends GetxController {
     required bool isForAdd,
   }) async {
     String previousType = callType != "" ? callType : "";
+    print(previousType);
+    print("previousTypepreviousTypepreviousType");
     final DataSnapshot dataSnapshot =
         await ref.child("$livePath/$liveId/realTime/waitList/$userId").get();
     if (dataSnapshot != null) {
@@ -1040,7 +1068,7 @@ class LiveDharamController extends GetxController {
 
   Future<void> removeFromOrder() async {
     print("remove order from firebase");
-    await ref.child("$livePath/$liveId/order").remove();
+    await ref.child("$livePath/$liveId/realTime/order").remove();
     return Future<void>.value();
   }
 
@@ -1123,7 +1151,7 @@ class LiveDharamController extends GetxController {
     // }
     print(data);
     print("datadatadatadatadatadatadata");
-    if (data["order"] != null) {
+    if (data["realTime"] != null && data["realTime"]["order"] != null) {
       Map<String, dynamic> param = <String, dynamic>{};
       param = <String, dynamic>{
         "order_id": getOrderId(),

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 
 import 'package:camera/camera.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/main.dart';
@@ -12,6 +13,7 @@ import 'package:divine_astrologer/screens/live_dharam/live_global_singleton.dart
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -35,8 +37,8 @@ class LiveTipsController extends GetxController {
   final AstrologerProfileRepository liveRepository =
       AstrologerProfileRepository();
 
-
-  final StreamController<bool> streamController = StreamController<bool>.broadcast()..add(false);
+  final StreamController<bool> streamController =
+      StreamController<bool>.broadcast()..add(false);
 
   final UserRepository _userRepository = Get.put(UserRepository());
 
@@ -46,7 +48,7 @@ class LiveTipsController extends GetxController {
   void onInit() {
     controller = CameraController(
       cameras!.firstWhere((description) =>
-      description.lensDirection == CameraLensDirection.front),
+          description.lensDirection == CameraLensDirection.front),
       ResolutionPreset.max,
     );
     controller!.initialize().then((_) {
@@ -133,6 +135,37 @@ class LiveTipsController extends GetxController {
     final String image = pref.getUserDetail()?.image ?? "";
     final String avatar = isValidImageURL(imageURL: "$awsURL/$image");
     final List<String> blockedCustomerList = await callBlockedCustomerListRes();
+    //
+    // if(kDebugMode){
+    //   CollectionReference live = FirebaseFirestore.instance.collection(livePath);
+    //
+    //   await live.doc(userId).set(
+    //     {
+    //       "id": userId,
+    //       "name": userName,
+    //       "image": avatar,
+    //       "isAvailable": true,
+    //       "isEngaged": 0,
+    //       "blockList": blockedCustomerList,
+    //     },
+    //   ).then((value) {
+    //     print("Node Added");
+    //   }).catchError((error) {
+    //     print("Failed to add node: $error");
+    //   });
+    // }else{
+    //   await database.ref().child("$livePath/$userId").update(
+    //     {
+    //       "id": userId,
+    //       "name": userName,
+    //       "image": avatar,
+    //       "isAvailable": true,
+    //       "isEngaged": 0,
+    //       "blockList": blockedCustomerList,
+    //     },
+    //   );
+    // }
+
     await database.ref().child("$livePath/$userId").update(
       {
         "id": userId,
@@ -140,14 +173,15 @@ class LiveTipsController extends GetxController {
         "image": avatar,
         "isAvailable": true,
         "isEngaged": 0,
-        "blockList": blockedCustomerList,
       },
     );
-
+    await database.ref().child("$livePath/$userId/realTime").update(
+      {"blockList": blockedCustomerList},
+    ); 
+ 
     LiveGlobalSingleton().isInLiveScreen = true;
     await Get.offNamed(RouteName.liveDharamScreen, arguments: userId);
     LiveGlobalSingleton().isInLiveScreen = false;
-
 
     return Future<void>.value();
   }
