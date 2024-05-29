@@ -191,7 +191,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
     getSampleText();
-    getAstrologerTrainingSession();
+    // getAstrologerTrainingSession();
     getAstrologerLiveData();
     print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
     broadcastReceiver.start();
@@ -812,6 +812,16 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       debugPrint("error $error");
       if (error is AppException) {
         error.onException();
+      }
+    }
+
+    if (Constants.isTestingMode) {
+      String text =
+          "●Now You can Connect to Multiple Astrologers With Multiple Que Feature●";
+      for (int i = 0; i < ((text.length > 10) ? 1 : 12); i++) {
+        marqueeTextLst.add("&nbsp;&nbsp;");
+        marqueeTextLst.add(text);
+        marqueeTextLst.add("&nbsp;&nbsp;");
       }
     }
   }
