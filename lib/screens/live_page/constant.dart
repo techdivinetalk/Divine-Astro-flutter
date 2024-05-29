@@ -20,7 +20,8 @@ const yourAppSign =
 const yourServerSecret = '89ceddc6c59909af326ddb7209cb1c16';
 RxList assistChatNewMsg = [].obs;
 const livePath = kDebugMode  ? 'liveTest':"live";
-const liveCountPath = kDebugMode ? "liveTest_count" : "live-Count";
+const liveCountPath = kDebugMode ? "liveTestCount" : "liveCount";
+
 RxInt chatAssistantCurrentUserId = 0.obs;
 RxInt walletBalance = 0.obs;
 RxList<AssistChatData> assistChatUnreadMessages = <AssistChatData>[].obs;
@@ -28,7 +29,6 @@ RxBool chatSwitch = false.obs;
 RxBool callSwitch = false.obs;
 RxBool videoSwitch = false.obs;
 RxString userImage = ''.obs;
-
 
 RxInt isEngagedStatus = 0.obs;
 RxInt dasboardCurrentIndex = 0.obs;

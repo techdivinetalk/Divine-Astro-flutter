@@ -97,10 +97,7 @@ class _LivePage extends State<LiveDharamScreen>
   Timer? _timer;
   Timer? _msgTimerForFollowPopup;
   Timer? _msgTimerForTarotCardPopup;
-  List<Map<dynamic, dynamic>> waitList = [];
-  BroadcastReceiver receiver = BroadcastReceiver(
-    names: <String>["LiveDharamScreen_eventListner"],
-  );
+
 
   @override
   void initState() {
@@ -115,70 +112,36 @@ class _LivePage extends State<LiveDharamScreen>
 
     zegoController.coHost.audienceLocalConnectStateNotifier
         .addListener(onAudienceLocalConnectStateChanged);
+    _controller.liveStore.doc(_controller.userId).snapshots().listen(
+        (snapshot) async {
+      if (snapshot.exists) {
+        var realTime = snapshot.get("realTime");
+        print(realTime);
+        print("realTimerealTimerealTime");
+        Map<dynamic, dynamic> data = {
 
-    _controller.ref.child(livePath).child(_controller.liveId).onValue.listen(
-      (event) async {
-        final DataSnapshot dataSnapshot = event.snapshot;
+
+
+            "isAvailable": realTime["isAvailable"],
+            "blockList": realTime["blockList"],
+            "order": realTime["order"],
+            "waitList": realTime["waitList"],
+            "leaderBoard": realTime["leaderBoard"],
+            "gift": realTime["gift"],
+
+        };
+        print(data);
+        print("retrie data from firestore");
         await _controller.eventListner(
-          snapshot: dataSnapshot,
+          snapshot: data,
           engaging: engaging,
-          // timer: newTimerWidget(),
         );
-      },
-    );
-    // var livePath = "live";
-    // if(kDebugMode){
-    //   livePath = "liveTest";
-    // }
-    // FirebaseDatabase.instance.ref()
-    //     .child(livePath)
-    //     .child(_controller.liveId)
-    //     .onChildChanged
-    //     .listen(
-    //       (event) async {
-    //     final DataSnapshot dataSnapshot = event.snapshot;
-    //     print("dataSnapshot-changed");
-    //     print(dataSnapshot.key);
-    //     print(dataSnapshot.value);
-    //     switch (dataSnapshot.key) {
-    //       case "blockList":
-    //         _controller.firebaseBlockUsersIds =
-    //         dataSnapshot.value as List<dynamic>;
-    //         break;
-    //       case "order":
-    //         print("order-1");
-    //         var orderNode = dataSnapshot.value as Map<dynamic, dynamic>;
-    //         _controller.orderModel = _controller.getOrderModel(orderNode);
-    //         print("order-2");
-    //         _controller.currentCaller =
-    //             _controller.getOrderModelGeneric(orderNode, forMe: true, type: "fromevent");
-    //         print("order-3");
-    //         newTimerWidget();
-    //         break;
-    //       case "waitList":
-    //         waitList.add(dataSnapshot.value as Map<dynamic, dynamic>);
-    //         print(waitList.toString());
-    //         engaging(_controller.upcomingUser(dataSnapshot.value as Map<dynamic, dynamic>));
-    //         break;
-    //     }
-    //   },
-    // );
-    // FirebaseDatabase.instance.ref()
-    //     .child(kDebugMode ? "liveTest" : livePath)
-    //     .child(_controller.liveId)
-    //     .onChildAdded
-    //     .listen(
-    //   (event) async {
-    //     final DataSnapshot dataSnapshot = event.snapshot;
-    //     print("dataSnapshot-added");
-    //     print(dataSnapshot.key);
-    //     // await _controller.eventListner(
-    //     //   snapshot: dataSnapshot,
-    //     //   engaging: engaging,
-    //     //   timer: newTimerWidget(),
-    //     // );
-    //   },
-    // );
+      } else {
+        print('Document does not exist');
+      }
+    }, onError: (error) {
+      print("Error listening to snapshots: $error");
+    });
 
     keyboardVisibilityController.onChange.listen(
       (bool visible) {
@@ -190,19 +153,6 @@ class _LivePage extends State<LiveDharamScreen>
 
     _startTimer();
 
-    // receiver.start();
-    // receiver.messages.listen(
-    //   (event) async {
-    //     final DataSnapshot dataSnapshot = await _controller.ref
-    //         .child(livePath)
-    //         .child(_controller.liveId)
-    //         .get();
-    //     await _controller.eventListner(
-    //       snapshot: dataSnapshot,
-    //       engaging: engaging,
-    //     );
-    //   },
-    // );
     _svgController = SVGAAnimationController(vsync: this);
     _svgController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
@@ -897,31 +847,19 @@ class _LivePage extends State<LiveDharamScreen>
         }
       });
     }
-    return StreamBuilder<DatabaseEvent>(
-      stream: _controller.ref
-          .child("$livePath/${_controller.liveId}/realTime/leaderboard")
-          .onValue
-          .asBroadcastStream(),
-      builder: (BuildContext context, AsyncSnapshot<DatabaseEvent> snapshot) {
-        _controller.getLatestLeaderboard(snapshot.data?.snapshot);
-        bool isEngaged = _controller.isHost
-            ? _controller.currentCaller.isEngaded
-            : _controller.engagedCoHostWithAstro().isEngaded;
-        return AnimatedOpacity(
-          opacity:
-              _controller.leaderboardModel.isEmpty || isEngaged ? 0.0 : 1.0,
-          duration: const Duration(seconds: 1),
-          child: _controller.leaderboardModel.isEmpty || isEngaged
-              ? const SizedBox()
-              : LeaderBoardWidget(
-                  avatar: _controller.leaderboardModel.first.avatar,
-                  userName: _controller.leaderboardModel.first.userName,
-                  fullGiftImage: "",
-                  astrologerName: "Astrologer",
-                  //
-                ),
-        );
-      },
+    return AnimatedOpacity( 
+      opacity:
+      _controller.leaderboardModel.isEmpty || _controller.currentCaller.isEngaded ? 0.0 : 1.0,
+      duration: const Duration(seconds: 1),
+      child: _controller.leaderboardModel.isEmpty || _controller.currentCaller.isEngaded
+          ? const SizedBox()
+          : LeaderBoardWidget(
+        avatar: _controller.leaderboardModel.first.avatar,
+        userName: _controller.leaderboardModel.first.userName,
+        fullGiftImage: "",
+        astrologerName: "Astrologer",
+        //
+      ),
     );
   }
 
@@ -2383,6 +2321,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   RxString diff = "".obs;
   Timer? countDownTimer;
+
   // int epoch = 0;
 
   newTimerWidget() {
@@ -2865,117 +2804,99 @@ class _LivePage extends State<LiveDharamScreen>
                 ),
         ),
         //
-        StreamBuilder<DatabaseEvent>(
-          stream: _controller.ref
-              .child("$livePath/${_controller.liveId}/realTime/waitList")
-              .onValue
-              .asBroadcastStream(),
-          builder: (context, snapshot) {
-            _controller.getLatestWaitList(snapshot.data?.snapshot);
-            return AnimatedOpacity(
-              opacity: _controller.waitListModel.isEmpty ? 0.0 : 1.0,
-              duration: const Duration(seconds: 1),
-              child: _controller.waitListModel.isEmpty
-                  ? const SizedBox()
-                  : Column(
-                      children: [
-                        InkWell(
-                          onTap: waitListPopup,
-                          child: SizedBox(
-                            height: 50,
-                            width: 50,
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(50.0),
-                                ),
-                                border: Border.all(
-                                  color: appColors.guideColor,
-                                ),
-                                color: appColors.black.withOpacity(0.2),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Stack(
-                                  clipBehavior: Clip.none,
-                                  children: [
-                                    Image.asset(
-                                      "assets/images/live_new_hourglass.png",
-                                    ),
-                                    _controller.waitListModel.isEmpty
-                                        ? const Positioned(child: SizedBox())
-                                        : Positioned(
-                                            top: -10,
-                                            right: -10,
-                                            child: SizedBox(
-                                              height: 20,
-                                              width: 20,
-                                              child: CircleAvatar(
-                                                backgroundColor:
-                                                    appColors.guideColor,
-                                                child: Text(
-                                                  _controller
-                                                      .waitListModel.length
-                                                      .toString(),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                  ],
+        AnimatedOpacity(
+          opacity: _controller.waitListModel.isEmpty ? 0.0 : 1.0,
+          duration: const Duration(seconds: 1),
+          child: _controller.waitListModel.isEmpty
+              ? const SizedBox()
+              : Column(
+            children: [
+              InkWell(
+                onTap: waitListPopup,
+                child: SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(50.0),
+                      ),
+                      border: Border.all(
+                        color: appColors.guideColor,
+                      ),
+                      color: appColors.black.withOpacity(0.2),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Stack(
+                        clipBehavior: Clip.none,
+                        children: [
+                          Image.asset(
+                            "assets/images/live_new_hourglass.png",
+                          ),
+                          _controller.waitListModel.isEmpty
+                              ? const Positioned(child: SizedBox())
+                              : Positioned(
+                            top: -10,
+                            right: -10,
+                            child: SizedBox(
+                              height: 20,
+                              width: 20,
+                              child: CircleAvatar(
+                                backgroundColor:
+                                appColors.guideColor,
+                                child: Text(
+                                  _controller
+                                      .waitListModel.length
+                                      .toString(),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 8),
-                      ],
+                        ],
+                      ),
                     ),
-            );
-          },
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
         ),
-        StreamBuilder<DatabaseEvent>(
-          stream: _controller.ref
-              .child("$livePath/${_controller.liveId}/realTime/leaderboard")
-              .onValue
-              .asBroadcastStream(),
-          builder: (context, snapshot) {
-            _controller.getLatestLeaderboard(snapshot.data?.snapshot);
-            return AnimatedOpacity(
-              opacity: _controller.leaderboardModel.isEmpty ? 0.0 : 1.0,
-              duration: const Duration(seconds: 1),
-              child: _controller.leaderboardModel.isEmpty
-                  ? const SizedBox()
-                  : Column(
-                      children: [
-                        InkWell(
-                          onTap: leaderboardPopup,
-                          child: SizedBox(
-                            height: 50,
-                            width: 50,
-                            child: DecoratedBox(
-                              decoration: BoxDecoration(
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(50.0),
-                                ),
-                                border: Border.all(
-                                  color: appColors.guideColor,
-                                ),
-                                color: appColors.black.withOpacity(0.2),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: Image.asset(
-                                  "assets/images/live_new_podium.png",
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                      ],
+        AnimatedOpacity(
+          opacity: _controller.leaderboardModel.isEmpty ? 0.0 : 1.0,
+          duration: const Duration(seconds: 1),
+          child: _controller.leaderboardModel.isEmpty
+              ? const SizedBox()
+              : Column(
+            children: [
+              InkWell(
+                onTap: leaderboardPopup,
+                child: SizedBox(
+                  height: 50,
+                  width: 50,
+                  child: DecoratedBox(
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(50.0),
+                      ),
+                      border: Border.all(
+                        color: appColors.guideColor,
+                      ),
+                      color: appColors.black.withOpacity(0.2),
                     ),
-            );
-          },
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Image.asset(
+                        "assets/images/live_new_podium.png",
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 8),
+            ],
+          ),
         ),
         GestureDetector(
           onTap: () {
@@ -3014,10 +2935,13 @@ class _LivePage extends State<LiveDharamScreen>
                         onTap: () async {
                           _controller.isHostAvailable =
                               !_controller.isHostAvailable;
-                          await _controller.ref
-                              .child("$livePath/${_controller.liveId}")
+                          await _controller.liveStore
+                              .doc(_controller.liveId)
                               .update(
-                                  {"isAvailable": _controller.isHostAvailable});
+                            {
+                              "isAvailable": _controller.isHostAvailable,
+                            },
+                          );
                         },
                         child: SizedBox(
                           height: 84 - 50,
@@ -3115,14 +3039,11 @@ class _LivePage extends State<LiveDharamScreen>
       await endLiveSession(
         endLive: () async {
           if (mounted) {
-            FirebaseDatabase database = FirebaseDatabase.instance;
             _timer?.cancel();
             _msgTimerForFollowPopup?.cancel();
             _msgTimerForTarotCardPopup?.cancel();
-            await database
-                .ref()
-                .child("$livePath/${_controller.userId}")
-                .remove();
+            await _controller.liveStore.doc(_controller.userId).delete();
+            await _controller.liveCount.doc(_controller.userId).delete();
             await zegoController.leave(context);
           } else {}
         },
@@ -3253,12 +3174,12 @@ class _LivePage extends State<LiveDharamScreen>
           onInvitationSent: (ZegoUIKitUser user) async {
             showNotifOverlay(user: user, msg: "onCoHostInvitationSent");
             await _controller.addUpdateToWaitList(
-              userId: user.id,
+              customerId: user.id,
               callType: "",
               isEngaded: false,
               isRequest: false,
               callStatus: 1,
-              isForAdd: false,
+
             );
           },
           onInvitationTimeout: (ZegoUIKitUser user) {
@@ -3386,7 +3307,7 @@ class _LivePage extends State<LiveDharamScreen>
     if (removed) {
       await _controller.makeAPICallForEndCall(
         successCallBack: (String message) async {
-          setState(() { });
+          setState(() {});
           successAndFailureCallBack(
               message: message, isForSuccess: true, isForFailure: false);
           await _controller.removeFromOrder();

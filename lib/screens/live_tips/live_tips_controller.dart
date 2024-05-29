@@ -135,53 +135,29 @@ class LiveTipsController extends GetxController {
     final String image = pref.getUserDetail()?.image ?? "";
     final String avatar = isValidImageURL(imageURL: "$awsURL/$image");
     final List<String> blockedCustomerList = await callBlockedCustomerListRes();
-    //
-    // if(kDebugMode){
-    //   CollectionReference live = FirebaseFirestore.instance.collection(livePath);
-    //
-    //   await live.doc(userId).set(
-    //     {
-    //       "id": userId,
-    //       "name": userName,
-    //       "image": avatar,
-    //       "isAvailable": true,
-    //       "isEngaged": 0,
-    //       "blockList": blockedCustomerList,
-    //     },
-    //   ).then((value) {
-    //     print("Node Added");
-    //   }).catchError((error) {
-    //     print("Failed to add node: $error");
-    //   });
-    // }else{
-    //   await database.ref().child("$livePath/$userId").update(
-    //     {
-    //       "id": userId,
-    //       "name": userName,
-    //       "image": avatar,
-    //       "isAvailable": true,
-    //       "isEngaged": 0,
-    //       "blockList": blockedCustomerList,
-    //     },
-    //   );
-    // }
+    CollectionReference live = FirebaseFirestore.instance.collection(livePath);
+    CollectionReference liveCount =
+        FirebaseFirestore.instance.collection(liveCountPath);
 
-    await database.ref().child("$livePath/$userId").update(
+    await live.doc(userId).set(
       {
-        "id": userId,
-        "name": userName,
-        "image": avatar,
         "isAvailable": true,
-        "isEngaged": 0,
+        "blockList": blockedCustomerList,
       },
-    );
-    await database.ref().child("$livePath/$userId/realTime").update(
-      {"blockList": blockedCustomerList},
-    ); 
- 
-    LiveGlobalSingleton().isInLiveScreen = true;
-    await Get.offNamed(RouteName.liveDharamScreen, arguments: userId);
-    LiveGlobalSingleton().isInLiveScreen = false;
+    ).then((value) async {
+      print("Astrologer node added");
+      // await liveCount.doc(userId).set({}).then((value) async {
+      //   print("successfully added");
+      //   LiveGlobalSingleton().isInLiveScreen = true;
+      //   await Get.offNamed(RouteName.liveDharamScreen, arguments: userId);
+      //   LiveGlobalSingleton().isInLiveScreen = false;
+      // });
+      LiveGlobalSingleton().isInLiveScreen = true;
+      await Get.offNamed(RouteName.liveDharamScreen, arguments: userId);
+      LiveGlobalSingleton().isInLiveScreen = false;
+    }).catchError((error) {
+      print("Failed to add node: $error");
+    });
 
     return Future<void>.value();
   }
