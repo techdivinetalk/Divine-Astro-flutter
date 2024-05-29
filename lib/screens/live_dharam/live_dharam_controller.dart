@@ -426,7 +426,7 @@ class LiveDharamController extends GetxController {
           liveId = userId;
           var liveIdNode = data;
           if (liveIdNode != null) {
-            List<dynamic> blockListNode = liveIdNode["blockList"] ?? [];
+            List<dynamic> blockListNode = liveIdNode["realTime"]["blockList"] ?? [];
             if (blockListNode.isEmpty) {
               firebaseBlockUsersIds = [];
             } else {
@@ -951,7 +951,7 @@ class LiveDharamController extends GetxController {
   Future<void> addUpdateOrder(Map<String, dynamic> orderDetails) async {
     print(orderDetails);
     print("updating entry orderDetails");
-    await ref.child("$livePath/$liveId/order").update(orderDetails);
+    await ref.child("$livePath/$liveId/realTime/order").update(orderDetails);
     return Future<void>.value();
   }
 
@@ -1095,7 +1095,7 @@ class LiveDharamController extends GetxController {
         temp.add((element.customerId ?? 0).toString());
       },
     );
-    await ref.child("$livePath/$liveId").update(
+    await ref.child("$livePath/$liveId/realTime").update(
       <String, Object?>{"blockList": temp ?? []},
     );
     return Future<void>.value();
