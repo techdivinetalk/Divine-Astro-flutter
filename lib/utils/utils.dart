@@ -38,8 +38,8 @@ class Utils {
   Future<void> handleStatusCodeUnauthorizedBackend() async {
     debugPrint("test_handleStatusCodeUnauthorized: Backend");
 
-    /// responseBody["status_code"] == HttpStatus.unauthorized || responseBody["status_code"] == HttpStatus.badRequest
-    // status code 400 / 401
+    /// responseBody["status_code"] == HttpStatus.unauthorized
+    // status code 401
 
     await preferenceService.erase();
     await Get.offAllNamed(RouteName.login);
