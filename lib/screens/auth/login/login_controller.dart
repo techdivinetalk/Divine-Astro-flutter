@@ -163,6 +163,10 @@ class LoginController extends GetxController {
       List<String> simNoLst = [];
       simNoLst = result.cast<String>();
 
+
+
+      debugPrint("test_simNumbers: simNoLst.isNotEmpty: ${simNoLst.isNotEmpty}");
+
       if (simNoLst.isNotEmpty) {
         for (int i = 0; i < simNoLst.length; i++) {
           String no = simNoLst[i];

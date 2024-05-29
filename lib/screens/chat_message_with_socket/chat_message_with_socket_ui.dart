@@ -362,8 +362,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 controller.openShowDeck(context, controller);
                               },
                               child: Container(
-                                margin: EdgeInsets.only(left: 18.h),
-                                width: 80.h,
+                                margin: EdgeInsets.only(left: 12.h),
+                                width: 70.h,
                                 height: 90.h,
                                 padding: EdgeInsets.symmetric(
                                   vertical: 5.h,
@@ -385,7 +385,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                     ),
                                     SizedBox(height: 5.h),
                                     Text(
-                                      'Tarot\nCards',
+                                      'tarotNCards'.tr,
                                       maxLines: 2,
                                       style: AppTextStyle.textStyle12(
                                           fontColor: appColors.white),
@@ -399,10 +399,11 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 height: 90.h,
                                 margin: EdgeInsets.only(
                                   left: 10.h,
-                                  right: 18.h,
+                                  right: 12.h,
                                 ),
-                                padding: EdgeInsets.all(
-                                  8.h,
+                                padding: EdgeInsets.symmetric(
+                                  vertical: 8.h,
+                                  horizontal: 8.h,
                                 ),
                                 decoration: BoxDecoration(
                                   color: appColors.white,
@@ -411,6 +412,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   ),
                                 ),
                                 child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
                                   children: [
                                     Row(
                                       children: [
@@ -448,7 +452,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                   ),
                                                   SizedBox(width: 5.h),
                                                   Text(
-                                                    'Product',
+                                                    'product'.tr,
                                                     style: AppTextStyle
                                                         .textStyle10(
                                                             fontColor: appColors
@@ -486,15 +490,16 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                     MainAxisAlignment.center,
                                                 children: [
                                                   SizedBox(
-                                                    width: 20.h,
-                                                    height: 20.h,
+                                                    width: 18.h,
+                                                    height: 18.h,
                                                     child: Assets
                                                         .images.chatCustomShop
                                                         .svg(),
                                                   ),
                                                   SizedBox(width: 5.h),
                                                   Text(
-                                                    'Custom Shop',
+                                                    'customShop'.tr,
+                                                    maxLines: 2,
                                                     style: AppTextStyle
                                                         .textStyle10(
                                                             fontColor: appColors
@@ -507,13 +512,12 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                         ),
                                       ],
                                     ),
-                                    SizedBox(height: 5.h),
-                                    Expanded(
-                                      child: Text(
-                                        'Use these options to sell e-commerce products.',
-                                        style: AppTextStyle.textStyle10(
-                                            fontColor: appColors.black),
-                                      ),
+                                    SizedBox(height: 8.h),
+                                    Text(
+                                      'useTheseOptionsToSellECommerceProducts'
+                                          .tr,
+                                      style: AppTextStyle.textStyle10(
+                                          fontColor: appColors.black),
                                     ),
                                   ],
                                 ),
@@ -719,7 +723,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
     return SizedBox(
       height: 35,
       child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
         scrollDirection: Axis.horizontal,
         itemCount: controller.messageTemplates.length + 1,
         separatorBuilder: (_, index) => SizedBox(width: 10.w),
@@ -903,28 +907,30 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                               .image(),
                                         ),
                                       ),
-                                      suffixIcon:   !controller.hasMessage.value
-                                          ?InkWell(
-                                        onTap: () async {
-                                          showCurvedBottomSheet(context);
+                                      suffixIcon: !controller.hasMessage.value
+                                          ? InkWell(
+                                              onTap: () async {
+                                                showCurvedBottomSheet(context);
 
-                                          // Move focus to an invisible focus node to dismiss the keyboard
-                                          FocusScope.of(context)
-                                              .requestFocus(FocusNode());
-                                          // if (controller.isOngoingChat.value) {
+                                                // Move focus to an invisible focus node to dismiss the keyboard
+                                                FocusScope.of(context)
+                                                    .requestFocus(FocusNode());
+                                                // if (controller.isOngoingChat.value) {
 
-                                          //   } else {
-                                          //     divineSnackBar(
-                                          //         data: "${'chatEnded'.tr}.", color: appColors.appYellowColour);
-                                          //   }
-                                        },
-                                        child: Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                              0.w, 9.h, 10.w, 10.h),
-                                          child:
-                                              Assets.images.icAttechment.svg(),
-                                        ),
-                                      ):null,
+                                                //   } else {
+                                                //     divineSnackBar(
+                                                //         data: "${'chatEnded'.tr}.", color: appColors.appYellowColour);
+                                                //   }
+                                              },
+                                              child: Padding(
+                                                padding: EdgeInsets.fromLTRB(
+                                                    0.w, 9.h, 10.w, 10.h),
+                                                child: Assets
+                                                    .images.icAttechment
+                                                    .svg(),
+                                              ),
+                                            )
+                                          : null,
                                       filled: true,
                                       enabledBorder: OutlineInputBorder(
                                           borderRadius:

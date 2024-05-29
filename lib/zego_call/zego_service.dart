@@ -44,6 +44,17 @@ class ZegoService {
   RxBool isAstrologer = true.obs;
   RxBool isInCallScreen = true.obs;
 
+  void micTurnOnOff(){
+    final ZegoUIKit instance = ZegoUIKit.instance;
+    isMicOn(!isMicOn.value);
+    debugPrint("isMicOn: ${isMicOn.value.toString()}");
+    instance.turnMicrophoneOn(
+      isMicOn.value,
+      muteMode: true,
+      userID: (_pref.getUserDetail()?.id ?? "").toString(),
+    );
+  }
+
   Future<void> zegoLogin() async {
     print("test_call_zego_service: zegoLogin");
     await ZegoUIKitPrebuiltCallInvitationService().init(
@@ -99,7 +110,25 @@ class ZegoService {
 
         isFront.value = true;
         isCamOn.value = true;
-        isMicOn.value = false;
+        isMicOn.value = true;
+
+        if (Constants.isUploadMode) {
+          // ZegoUIKitPrebuiltCallController().audioVideo.microphone.turnOn(bool isOn, {String? userID});
+
+          Future.delayed(
+            const Duration(milliseconds: 500),
+            () {
+              micTurnOnOff();
+
+              Future.delayed(
+                const Duration(milliseconds: 500),
+                () {
+                  micTurnOnOff();
+                },
+              );
+            },
+          );
+        }
 
         final Map map = json.decode(data.customData);
         // final String astrId = map["astr_id"];
@@ -391,6 +420,8 @@ class ZegoService {
   Widget settingsColForCust(ZegoCallType type) {
     return Obx(
       () {
+        debugPrint("test_isMicOn.value: ${isMicOn.value}");
+
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: type == ZegoCallType.videoCall
@@ -429,10 +460,15 @@ class ZegoService {
                   ),
                   InkWell(
                     onTap: () {
-                      final ZegoUIKit instance = ZegoUIKit.instance;
-                      isMicOn(!isMicOn.value);
-                      debugPrint("isMicOn: ${isMicOn.value.toString()}");
-                      instance.turnMicrophoneOn(isMicOn.value, muteMode: true);
+                      if (Constants.isUploadMode) {
+                        micTurnOnOff();
+                      } else {
+                        final ZegoUIKit instance = ZegoUIKit.instance;
+                        isMicOn(!isMicOn.value);
+                        debugPrint("isMicOn: ${isMicOn.value.toString()}");
+                        instance.turnMicrophoneOn(isMicOn.value,
+                            muteMode: true);
+                      }
                     },
                     child: SizedBox(
                       height: 64,
@@ -442,7 +478,7 @@ class ZegoService {
                       //       ? "assets/images/chat_video_call_mic_on.png"
                       //       : "assets/images/chat_video_call_mic_off.png",
                       // ),
-                      child: isMicOn.value
+                      child: !isMicOn.value
                           ? Image.asset(
                               "assets/images/chat_voice_call_mic_on.png",
                             )
@@ -469,10 +505,14 @@ class ZegoService {
                   ? [
                       InkWell(
                         onTap: () {
-                          final ZegoUIKit instance = ZegoUIKit.instance;
-                          isMicOn(!isMicOn.value);
-                          instance.turnMicrophoneOn(isMicOn.value,
-                              muteMode: true);
+                          if (Constants.isUploadMode) {
+                            micTurnOnOff();
+                          } else {
+                            final ZegoUIKit instance = ZegoUIKit.instance;
+                            isMicOn(!isMicOn.value);
+                            instance.turnMicrophoneOn(isMicOn.value,
+                                muteMode: true);
+                          }
                         },
                         child: SizedBox(
                           height: 64,
