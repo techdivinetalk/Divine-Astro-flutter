@@ -470,5 +470,11 @@ Map<String, String> en() {
     'totalLiveTime': "Total Live Time",
     'liveStartTime': "Live Start Time",
     'liveEndTime': "Live End Time",
+    'dailyLiveTimeRemaining_': "Daily Live Time Remaining -",
+    'remainingMinutes': "Remaining Minutes",
+    'weeksHoursRemaining': "Week’s Hours Remaining",
+    'done': "Done",
+    'minutes': "Minutes",
+    'eligibleReward_': "Eligible Reward -",
   };
 }

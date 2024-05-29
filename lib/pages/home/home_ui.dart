@@ -1135,7 +1135,7 @@ class HomeUI extends GetView<HomeController> {
 
   Widget liveWidgetUpdated() {
     return Container(
-      margin: EdgeInsets.only(top: 5.h),
+      margin: EdgeInsets.only(top: 10.h),
       width: ScreenUtil().screenWidth,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -1158,7 +1158,7 @@ class HomeUI extends GetView<HomeController> {
               mainAxisSize: MainAxisSize.max,
               children: [
                 Text(
-                  'Daily Live Time Remaining -',
+                  'dailyLiveTimeRemaining_'.tr,
                   style: AppTextStyle.textStyle13(
                     fontWeight: FontWeight.w400,
                     fontColor: appColors.black,
@@ -1209,7 +1209,7 @@ class HomeUI extends GetView<HomeController> {
                       children: [
                         Expanded(
                           child: Text(
-                            'Date',
+                            'date'.tr,
                             textAlign: TextAlign.start,
                             style: AppTextStyle.textStyle13(
                               fontWeight: FontWeight.w600,
@@ -1219,7 +1219,7 @@ class HomeUI extends GetView<HomeController> {
                         ),
                         SizedBox(width: 3.h),
                         Text(
-                          'Remaining Minutes',
+                          'remainingMinutes'.tr,
                           style: AppTextStyle.textStyle13(
                             fontWeight: FontWeight.w600,
                             fontColor: appColors.black,
@@ -1257,7 +1257,7 @@ class HomeUI extends GetView<HomeController> {
                                     children: [
                                       Expanded(
                                         child: Text(
-                                          '${controller.getWeeks((model.weekNo!))} Week’s Hours Remaining',
+                                          '${controller.getWeeks((model.weekNo!))} ${'weeksHoursRemaining'.tr}',
                                           textAlign: TextAlign.start,
                                           style: AppTextStyle.textStyle13(
                                             fontWeight: FontWeight.w500,
@@ -1268,7 +1268,7 @@ class HomeUI extends GetView<HomeController> {
                                       SizedBox(width: 3.h),
                                       model.remainingLiveMinute == "0"
                                           ? Text(
-                                              'Done',
+                                              'done'.tr,
                                               textAlign: TextAlign.start,
                                               style: AppTextStyle.textStyle13(
                                                 fontWeight: FontWeight.w600,
@@ -1276,7 +1276,7 @@ class HomeUI extends GetView<HomeController> {
                                               ),
                                             )
                                           : Text(
-                                              '${model.remainingLiveMinute} Minutes',
+                                              '${model.remainingLiveMinute} ${'minutes'.tr}',
                                               textAlign: TextAlign.start,
                                               style: AppTextStyle.textStyle13(
                                                 fontWeight: FontWeight.w600,
@@ -1328,7 +1328,7 @@ class HomeUI extends GetView<HomeController> {
                                 child: Row(
                                   children: [
                                     Text(
-                                      'Eligible Reward -',
+                                      'eligibleReward_'.tr,
                                       style: AppTextStyle.textStyle13(
                                         fontWeight: FontWeight.w400,
                                         fontColor: appColors.black,
@@ -1351,9 +1351,7 @@ class HomeUI extends GetView<HomeController> {
                         SizedBox(width: 3.h),
                         GestureDetector(
                           onTap: () {
-                            if (Constants.isTestingMode) {
-                              Get.toNamed(RouteName.liveLogsScreen);
-                            }
+                            Get.toNamed(RouteName.liveLogsScreen);
                           },
                           child: Container(
                             width: 80.w,

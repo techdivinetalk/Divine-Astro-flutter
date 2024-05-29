@@ -199,68 +199,70 @@ class LoginController extends GetxController {
   }
 
   void showSimNumbersPopup() {
-    showDialog(
-      context: Get.context!,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text(
-            'Continue with',
-            style: TextStyle(
-              fontWeight: FontWeight.w500,
-              fontFamily: FontFamily.poppins,
-              fontSize: 18.sp,
-              color: appColors.grey,
+    if(simNumbers.isNotEmpty) {
+      showDialog(
+        context: Get.context!,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(
+              'Continue with',
+              style: TextStyle(
+                fontWeight: FontWeight.w500,
+                fontFamily: FontFamily.poppins,
+                fontSize: 18.sp,
+                color: appColors.grey,
+              ),
             ),
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: simNumbers.map((number) {
-              return ListTile(
-                leading: const Icon(Icons.phone),
-                title: Text(
-                  number,
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: simNumbers.map((number) {
+                return ListTile(
+                  leading: const Icon(Icons.phone),
+                  title: Text(
+                    number,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontFamily: FontFamily.poppins,
+                      fontSize: 16.sp,
+                      color: appColors.black,
+                    ),
+                  ),
+                  onTap: () {
+                    final splitResult = splitNumber(number);
+                    String countryCode = splitResult['countryCode'] ?? '+91';
+                    debugPrint("test_countryCode: $countryCode");
+
+                    String phoneNumber = splitResult['phoneNumber'] ?? '';
+                    debugPrint("test_phoneNumber: $phoneNumber");
+
+                    countryCodeController.text = countryCode;
+                    mobileNumberController.text = phoneNumber;
+                    update();
+                    Get.back();
+                  },
+                );
+              }).toList(),
+            ),
+            actions: <Widget>[
+              TextButton(
+                child: Text(
+                  'NONE OF THE ABOVE',
                   style: TextStyle(
-                    fontWeight: FontWeight.w400,
+                    fontWeight: FontWeight.w500,
                     fontFamily: FontFamily.poppins,
-                    fontSize: 16.sp,
-                    color: appColors.black,
+                    fontSize: 18.sp,
+                    color: appColors.trueCallerButton,
                   ),
                 ),
-                onTap: () {
-                  final splitResult = splitNumber(number);
-                  String countryCode = splitResult['countryCode'] ?? '+91';
-                  debugPrint("test_countryCode: $countryCode");
-
-                  String phoneNumber = splitResult['phoneNumber'] ?? '';
-                  debugPrint("test_phoneNumber: $phoneNumber");
-
-                  countryCodeController.text = countryCode;
-                  mobileNumberController.text = phoneNumber;
-                  update();
+                onPressed: () {
                   Get.back();
                 },
-              );
-            }).toList(),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: Text(
-                'NONE OF THE ABOVE',
-                style: TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontFamily: FontFamily.poppins,
-                  fontSize: 18.sp,
-                  color: appColors.trueCallerButton,
-                ),
               ),
-              onPressed: () {
-                Get.back();
-              },
-            ),
-          ],
-        );
-      },
-    );
+            ],
+          );
+        },
+      );
+    }
   }
 
   @override

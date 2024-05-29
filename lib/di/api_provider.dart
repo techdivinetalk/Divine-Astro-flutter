@@ -20,7 +20,8 @@ class ApiProvider {
 
   // static const String socketUrl = "http://13.127.116.89:4000";
   static const String socketUrl = "https://list.divinetalk.live";
-  static String baseUrl =  "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+  static String baseUrl =
+      "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
 
   static const String astOnlineOffline =
       "https://list.divinetalk.live/api/v3/updateAstroStatusV2?unique_no=";
@@ -125,6 +126,7 @@ class ApiProvider {
   final String getAllFeedbackFineDetail = "getAllFeedbackFineDetail";
   final String walletPayout = "payoutDetails";
   final String getAstrologerLiveData = "getAstrologerLiveData";
+  final String astrologerLiveLog = "astrologerLiveLog";
 
   //Astro Internal API
   final String horoChartImageInt = "getChartImage/";
@@ -249,6 +251,8 @@ class ApiProvider {
 
   Future<Map<String, String>> getJsonHeaderURL({int version = 6}) async {
     _token = await _getAuthToken();
+    debugPrint("test_token: $_token");
+
     var header = <String, String>{};
     header[jsonHeaderName] = jsonHeaderValue;
     header[jsonAuthenticationName] = 'Bearer $_token';
