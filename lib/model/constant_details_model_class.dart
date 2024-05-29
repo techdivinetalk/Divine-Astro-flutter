@@ -72,6 +72,7 @@ class Data {
   String? firebaseAuthPassword;
   String? appVersion;
   int? isForceTraningVideo;
+  num? currentTime;
 
   Data({
     required this.leaderboardRankImage,
@@ -93,6 +94,7 @@ class Data {
     this.appVersion,
     this.firebaseAuthEmail,
     this.firebaseAuthPassword,
+    this.currentTime,
   });
 
   Data copyWith({
@@ -115,6 +117,7 @@ class Data {
     String? firebaseAuthEmail,
     String? firebaseAuthPassword,
     int? isForceTraningVideo,
+    num? currentTime,
   }) =>
       Data(
         leaderboardRankImage: leaderboardRankImage ?? this.leaderboardRankImage,
@@ -135,6 +138,7 @@ class Data {
         notificationType: notificationType ?? this.notificationType,
         awsCredentails: awsCredentails,
         whatsappNo: whatsappNo ?? this.whatsappNo,
+        currentTime: currentTime ?? this.currentTime,
         taroCard: taroCard ?? this.taroCard,
       );
 
@@ -166,6 +170,7 @@ class Data {
         awsCredentails: AwsCredential.fromJson(json["aws_credential"]),
         whatsappNo: json["whatsappNo"],
         taroCard: json['taro_card'],
+    currentTime: json['current_time'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -191,6 +196,7 @@ class Data {
         'taro_card': taroCard,
         'firebase_auth_email': firebaseAuthEmail,
         'firebase_auth_password': firebaseAuthPassword,
+        'current_time': currentTime,
       };
 }
 

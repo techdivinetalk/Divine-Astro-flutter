@@ -411,7 +411,7 @@ class LiveDharamController extends GetxController {
   Future<void> eventListner({
     required DataSnapshot snapshot,
     required Function(WaitListModel currentCaller) engaging,
-    Widget? timer,
+    // Widget? timer,
   }) async {
     final DataSnapshot dataSnapshot = snapshot;
 
@@ -438,11 +438,11 @@ class LiveDharamController extends GetxController {
             orderModel = getOrderModel(orderNode);
             currentCaller =
                 getOrderModelGeneric(orderNode, forMe: true, type: "fromevent");
-            if (liveIdNode["order"] != null) {
-              timer;
-            } else {
-              timer = null;
-            }
+            // if (liveIdNode["order"] != null) {
+            //   timer;
+            // } else {
+            //   timer = null;
+            // }
             print(currentCaller.isEngaded);
             print("currentCaller.isEngaded");
             await Future.delayed(const Duration(seconds: 1));
@@ -484,7 +484,7 @@ class LiveDharamController extends GetxController {
 
     var liveIdNode = data[liveId];
     if (liveIdNode != null) {
-      var waitListNode = data[liveId]["waitList"];
+      var waitListNode = data[liveId]["realTime"]["waitList"];
       temp = isEngadedNew(waitListNode, forMe: false);
     } else {}
 
@@ -905,7 +905,7 @@ class LiveDharamController extends GetxController {
   }) async {
     String previousType = callType != "" ? callType : "";
     final DataSnapshot dataSnapshot =
-        await ref.child("$livePath/$liveId/waitList/$userId").get();
+        await ref.child("$livePath/$liveId/realTime/waitList/$userId").get();
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
@@ -938,7 +938,7 @@ class LiveDharamController extends GetxController {
           };
     //
     await ref
-        .child("$livePath/$liveId/waitList/$userId")
+        .child("$livePath/$liveId/realTime/waitList/$userId")
         .update(moOrderDetails);
     //
     if (callStatus == 2) {
@@ -1034,7 +1034,7 @@ class LiveDharamController extends GetxController {
   }
 
   Future<void> removeFromWaitList() async {
-    await ref.child("$livePath/$liveId/waitList/$userId").remove();
+    await ref.child("$livePath/$liveId/realTime/waitList/$userId").remove();
     return Future<void>.value();
   }
 
@@ -1282,7 +1282,7 @@ class LiveDharamController extends GetxController {
   Future<bool> shouldOpenBottom() async {
     bool isRequest = false;
     final DataSnapshot dataSnapshot =
-        await ref.child("$livePath/$liveId/waitList/$userId").get();
+        await ref.child("$livePath/$liveId/realTime/waitList/$userId").get();
     if (dataSnapshot != null) {
       if (dataSnapshot.exists) {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
