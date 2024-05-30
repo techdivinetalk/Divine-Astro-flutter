@@ -146,12 +146,16 @@ class LiveTipsController extends GetxController {
       },
     ).then((value) async {
       print("Astrologer node added");
-      // await liveCount.doc(userId).set({}).then((value) async {
-      //   print("successfully added");
-      //   LiveGlobalSingleton().isInLiveScreen = true;
-      //   await Get.offNamed(RouteName.liveDharamScreen, arguments: userId);
-      //   LiveGlobalSingleton().isInLiveScreen = false;
-      // });
+      await liveCount.doc(userId).set({
+        "astroId":userId,
+        "astroName":userName,
+        "astroAvtar":avatar,
+      }).then((value) async {
+        print("successfully added");
+        LiveGlobalSingleton().isInLiveScreen = true;
+        await Get.offNamed(RouteName.liveDharamScreen, arguments: userId);
+        LiveGlobalSingleton().isInLiveScreen = false;
+      });
       LiveGlobalSingleton().isInLiveScreen = true;
       await Get.offNamed(RouteName.liveDharamScreen, arguments: userId);
       LiveGlobalSingleton().isInLiveScreen = false;

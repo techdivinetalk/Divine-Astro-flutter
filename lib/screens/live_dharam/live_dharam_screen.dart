@@ -98,7 +98,6 @@ class _LivePage extends State<LiveDharamScreen>
   Timer? _msgTimerForFollowPopup;
   Timer? _msgTimerForTarotCardPopup;
 
-
   @override
   void initState() {
     super.initState();
@@ -113,29 +112,37 @@ class _LivePage extends State<LiveDharamScreen>
     zegoController.coHost.audienceLocalConnectStateNotifier
         .addListener(onAudienceLocalConnectStateChanged);
     _controller.liveStore.doc(_controller.userId).snapshots().listen(
-        (snapshot) async {
+        (DocumentSnapshot snapshot) async {
       if (snapshot.exists) {
-        var realTime = snapshot.get("realTime");
-        print(realTime);
-        print("realTimerealTimerealTime");
-        Map<dynamic, dynamic> data = {
+        Map<dynamic, dynamic> data = {};
 
-
-
-            "isAvailable": realTime["isAvailable"],
-            "blockList": realTime["blockList"],
-            "order": realTime["order"],
-            "waitList": realTime["waitList"],
-            "leaderBoard": realTime["leaderBoard"],
-            "gift": realTime["gift"],
-
-        };
+        var snapshotData = snapshot.data() as Map<String, dynamic>?;
+        if (snapshotData != null) {
+          data["isAvailable"] = snapshotData["isAvailable"];
+          data["blockList"] = snapshotData["blockList"];
+          data["order"] = snapshotData["order"];
+          data["waitList"] = snapshotData["waitList"];
+          data["leaderBoard"] = snapshotData["leaderBoard"];
+          data["gift"] = snapshotData["gift"];
+        } else {
+          print("Snapshot data is null");
+        }
         print(data);
         print("retrie data from firestore");
         await _controller.eventListner(
           snapshot: data,
           engaging: engaging,
         );
+        List<dynamic> giftList = data['gift'];
+        for (var gift in giftList) {
+          gift.forEach((key, value) {
+            print(value);
+            svgaUrls[key.toString()] = value.toString();
+            if (svgaUrls.length == 1) {
+              _loadRandomAnimation(gifts: svgaUrls, giftList: giftList);
+            }
+          });
+        }
       } else {
         print('Document does not exist');
       }
@@ -194,7 +201,9 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-  Future<void> _loadRandomAnimation() async {
+  Future<void> _loadRandomAnimation(
+      {Map<String, dynamic>? gifts, List? giftList}) async {
+    print("load animation");
     _showOverlay();
     const SVGAParser parser = SVGAParser();
     String giftInfo = svgaUrls.entries.first.value;
@@ -202,6 +211,22 @@ class _LivePage extends State<LiveDharamScreen>
       _svgController.videoItem = videoItem;
       _svgController.forward();
     });
+    if (gifts != null && giftList != null) {
+
+      Future.delayed(
+        const Duration(seconds: 1),
+        () async {
+          print("gifts----  $gifts");
+          print("giftList---$giftList");
+          print("removing code of gift from firebase");
+          giftList.remove(gifts);
+          await _controller.liveStore.doc(_controller.userId).update({
+            "gift": FieldValue.arrayRemove([gifts])
+          });
+          setState(() {});
+        },
+      );
+    }
   }
 
   void successAndFailureCallBack({
@@ -322,7 +347,7 @@ class _LivePage extends State<LiveDharamScreen>
                   userName: "Live Monitoring Team",
                   avatar:
                       "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
-                  message: "Live Monitoring Team Joined",
+                  message: "Joined",
                   timeStamp: DateTime.now().toString(),
                   fullGiftImage: "",
                   isBlockedCustomer: false,
@@ -339,7 +364,7 @@ class _LivePage extends State<LiveDharamScreen>
                   userName: "Quality Team",
                   avatar:
                       "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
-                  message: "Quality Team Joined",
+                  message: "Joined",
                   timeStamp: DateTime.now().toString(),
                   fullGiftImage: "",
                   isBlockedCustomer: false,
@@ -813,53 +838,56 @@ class _LivePage extends State<LiveDharamScreen>
   Map<String, dynamic> svgaUrls = {};
 
   Widget newLeaderboard() {
-    if (_subscription == null) {
-      print("Animation -url ${_controller.liveId}");
-      _subscription = FirebaseDatabase.instance
-          .ref()
-          .child(livePath)
-          .child(_controller.liveId)
-          .child("realTime")
-          .child("gift")
-          .onChildAdded
-          .listen((event) {
-        if (event.snapshot.value != null) {
-          final key = event.snapshot.key; // Get the key of the changed child
-          final value =
-              event.snapshot.value; // Get the new value of the changed child
-          print("onChildAdded1 $key");
-          print("onChildAdded2 $value");
-          svgaUrls[key.toString()] = value.toString();
-          print(svgaUrls.length);
-          if (svgaUrls.length == 1) {
-            _loadRandomAnimation();
-          }
-          Future.delayed(const Duration(seconds: 1)).then((value) async {
-            FirebaseDatabase.instance
-                .ref()
-                .child(livePath)
-                .child(_controller.liveId)
-                .child("realTime")
-                .child("gift")
-                .child(key.toString())
-                .remove();
-          });
-        }
-      });
-    }
-    return AnimatedOpacity( 
-      opacity:
-      _controller.leaderboardModel.isEmpty || _controller.currentCaller.isEngaded ? 0.0 : 1.0,
+    // if (_subscription == null) {
+    //   print("Animation -url ${_controller.liveId}");
+    //   _subscription = FirebaseDatabase.instance
+    //       .ref()
+    //       .child(livePath)
+    //       .child(_controller.liveId)
+    //       .child("realTime")
+    //       .child("gift")
+    //       .onChildAdded
+    //       .listen((event) {
+    //     if (event.snapshot.value != null) {
+    //       final key = event.snapshot.key; // Get the key of the changed child
+    //       final value =
+    //           event.snapshot.value; // Get the new value of the changed child
+    //       print("onChildAdded1 $key");
+    //       print("onChildAdded2 $value");
+    //       svgaUrls[key.toString()] = value.toString();
+    //       print(svgaUrls.length);
+    //       if (svgaUrls.length == 1) {
+    //         _loadRandomAnimation();
+    //       }
+    //       Future.delayed(const Duration(seconds: 1)).then((value) async {
+    //         FirebaseDatabase.instance
+    //             .ref()
+    //             .child(livePath)
+    //             .child(_controller.liveId)
+    //             .child("realTime")
+    //             .child("gift")
+    //             .child(key.toString())
+    //             .remove();
+    //       });
+    //     }
+    //   });
+    // }
+    return AnimatedOpacity(
+      opacity: _controller.leaderboardModel.isEmpty ||
+              _controller.currentCaller.isEngaded
+          ? 0.0
+          : 1.0,
       duration: const Duration(seconds: 1),
-      child: _controller.leaderboardModel.isEmpty || _controller.currentCaller.isEngaded
+      child: _controller.leaderboardModel.isEmpty ||
+              _controller.currentCaller.isEngaded
           ? const SizedBox()
           : LeaderBoardWidget(
-        avatar: _controller.leaderboardModel.first.avatar,
-        userName: _controller.leaderboardModel.first.userName,
-        fullGiftImage: "",
-        astrologerName: "Astrologer",
-        //
-      ),
+              avatar: _controller.leaderboardModel.first.avatar,
+              userName: _controller.leaderboardModel.first.userName,
+              fullGiftImage: "",
+              astrologerName: "Astrologer",
+              //
+            ),
     );
   }
 
@@ -2810,58 +2838,57 @@ class _LivePage extends State<LiveDharamScreen>
           child: _controller.waitListModel.isEmpty
               ? const SizedBox()
               : Column(
-            children: [
-              InkWell(
-                onTap: waitListPopup,
-                child: SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(50.0),
-                      ),
-                      border: Border.all(
-                        color: appColors.guideColor,
-                      ),
-                      color: appColors.black.withOpacity(0.2),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Stack(
-                        clipBehavior: Clip.none,
-                        children: [
-                          Image.asset(
-                            "assets/images/live_new_hourglass.png",
+                  children: [
+                    InkWell(
+                      onTap: waitListPopup,
+                      child: SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(50.0),
+                            ),
+                            border: Border.all(
+                              color: appColors.guideColor,
+                            ),
+                            color: appColors.black.withOpacity(0.2),
                           ),
-                          _controller.waitListModel.isEmpty
-                              ? const Positioned(child: SizedBox())
-                              : Positioned(
-                            top: -10,
-                            right: -10,
-                            child: SizedBox(
-                              height: 20,
-                              width: 20,
-                              child: CircleAvatar(
-                                backgroundColor:
-                                appColors.guideColor,
-                                child: Text(
-                                  _controller
-                                      .waitListModel.length
-                                      .toString(),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Stack(
+                              clipBehavior: Clip.none,
+                              children: [
+                                Image.asset(
+                                  "assets/images/live_new_hourglass.png",
                                 ),
-                              ),
+                                _controller.waitListModel.isEmpty
+                                    ? const Positioned(child: SizedBox())
+                                    : Positioned(
+                                        top: -10,
+                                        right: -10,
+                                        child: SizedBox(
+                                          height: 20,
+                                          width: 20,
+                                          child: CircleAvatar(
+                                            backgroundColor:
+                                                appColors.guideColor,
+                                            child: Text(
+                                              _controller.waitListModel.length
+                                                  .toString(),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                              ],
                             ),
                           ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
+                    const SizedBox(height: 8),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 8),
-            ],
-          ),
         ),
         AnimatedOpacity(
           opacity: _controller.leaderboardModel.isEmpty ? 0.0 : 1.0,
@@ -2869,34 +2896,34 @@ class _LivePage extends State<LiveDharamScreen>
           child: _controller.leaderboardModel.isEmpty
               ? const SizedBox()
               : Column(
-            children: [
-              InkWell(
-                onTap: leaderboardPopup,
-                child: SizedBox(
-                  height: 50,
-                  width: 50,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(50.0),
+                  children: [
+                    InkWell(
+                      onTap: leaderboardPopup,
+                      child: SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(50.0),
+                            ),
+                            border: Border.all(
+                              color: appColors.guideColor,
+                            ),
+                            color: appColors.black.withOpacity(0.2),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Image.asset(
+                              "assets/images/live_new_podium.png",
+                            ),
+                          ),
+                        ),
                       ),
-                      border: Border.all(
-                        color: appColors.guideColor,
-                      ),
-                      color: appColors.black.withOpacity(0.2),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Image.asset(
-                        "assets/images/live_new_podium.png",
-                      ),
-                    ),
-                  ),
+                    const SizedBox(height: 8),
+                  ],
                 ),
-              ),
-              const SizedBox(height: 8),
-            ],
-          ),
         ),
         GestureDetector(
           onTap: () {
@@ -3179,7 +3206,6 @@ class _LivePage extends State<LiveDharamScreen>
               isEngaded: false,
               isRequest: false,
               callStatus: 1,
-
             );
           },
           onInvitationTimeout: (ZegoUIKitUser user) {

@@ -54,8 +54,8 @@ class LiveDharamController extends GetxController {
 
   // final Rx<GetAstroDetailsRes> _details = GetAstroDetailsRes().obs;
   // final Rx<IsCustomerBlockedRes> _isCustBlocked = IsCustomerBlockedRes().obs;
-  final RxList<LeaderboardModel> _leaderboardModel = <LeaderboardModel>[].obs;
-  final RxList<WaitListModel> _waitListModel = <WaitListModel>[].obs;
+   RxList<LeaderboardModel> leaderboardModel = <LeaderboardModel>[].obs;
+   RxList<WaitListModel> waitListModel = <WaitListModel>[].obs;
   final Rx<WaitListModel> _orderModel = WaitListModel(
     isRequest: false,
     isEngaded: false,
@@ -169,8 +169,8 @@ class LiveDharamController extends GetxController {
 
     astrologerData = <dynamic, dynamic>{};
 
-    leaderboardModel = <LeaderboardModel>[];
-    waitListModel = <WaitListModel>[];
+    leaderboardModel.value = [];
+    leaderboardModel.value = [];
     orderModel = WaitListModel(
       isRequest: false,
       isEngaded: false,
@@ -239,8 +239,8 @@ class LiveDharamController extends GetxController {
     _data.close();
     // _details.close();
     // _isCustBlocked.close();
-    _leaderboardModel.close();
-    _waitListModel.close();
+    leaderboardModel.close();
+    waitListModel.close();
     _orderModel.close();
     // _followRes.close();
     // _walletRecharge.close();
@@ -313,14 +313,8 @@ class LiveDharamController extends GetxController {
   // IsCustomerBlockedRes get isCustBlocked => _isCustBlocked.value;
   // set isCustBlocked(IsCustomerBlockedRes value) => _isCustBlocked(value);
 
-  List<LeaderboardModel> get leaderboardModel => _leaderboardModel.value;
 
-  set leaderboardModel(List<LeaderboardModel> value) =>
-      _leaderboardModel(value);
 
-  List<WaitListModel> get waitListModel => _waitListModel.value;
-
-  set waitListModel(List<WaitListModel> value) => _waitListModel(value);
 
   WaitListModel get orderModel => _orderModel.value;
 
@@ -438,7 +432,7 @@ class LiveDharamController extends GetxController {
         if (liveIdNode != null) {
           if (liveIdNode["blockList"] != null) {
             List<dynamic> blockListNode =
-                liveIdNode["realTime"]["blockList"] ?? [];
+                liveIdNode["blockList"] ?? [];
             if (blockListNode.isEmpty) {
               firebaseBlockUsersIds = [];
             } else {
@@ -447,20 +441,24 @@ class LiveDharamController extends GetxController {
           }
           if (liveIdNode["waitList"] != null) {
             List<dynamic> waitListData =
-                liveIdNode["realTime"]["waitList"] ?? [];
+                liveIdNode["waitList"] ?? [];
             if (waitListData.isNotEmpty) {
               addToWaitListFunction(waitListData: waitListData);
+            }else{
+              waitListModel.clear();
             }
           }
           if (liveIdNode["leaderBoard"] != null) {
             List<dynamic> leaderBoard =
-                liveIdNode["realTime"]["leaderBoard"] ?? [];
+                liveIdNode["leaderBoard"] ?? [];
             if (leaderBoard.isNotEmpty) {
               addToLeaderBoardFunction(leaderBoard: leaderBoard);
+            }else{
+              leaderboardModel.clear();
             }
           }
           if (liveIdNode["order"] != null) {
-            var orderNode = liveIdNode["realTime"]["order"];
+            var orderNode = liveIdNode["order"];
             orderModel = getOrderModel(orderNode);
             currentCaller =
                 getOrderModelGeneric(orderNode, forMe: true, type: "fromevent");
@@ -487,9 +485,9 @@ class LiveDharamController extends GetxController {
 
   /// add to waitList function
   addToWaitListFunction({List? waitListData}) {
-    _waitListModel.clear();
+    waitListModel.clear();
     for (int i = 0; i < waitListData!.length; i++) {
-      _waitListModel.add(
+      waitListModel.add(
         WaitListModel(
           isRequest: waitListData[i]["isRequest"],
           isEngaded: waitListData[i]["isEngaded"],
@@ -510,9 +508,9 @@ class LiveDharamController extends GetxController {
 
   /// add to leader board function
   addToLeaderBoardFunction({List? leaderBoard}) {
-    _leaderboardModel.clear();
+    leaderboardModel.clear();
     for (int i = 0; i < leaderBoard!.length; i++) {
-      _leaderboardModel.add(
+      leaderboardModel.add(
         LeaderboardModel(
           userName: leaderBoard[i]["userName"],
           avatar: leaderBoard[i]["avatar"],
@@ -980,7 +978,7 @@ class LiveDharamController extends GetxController {
     //   // "offerId": (details.data?.offerDetails?.offerId ?? 0)
     //   "callStatus": callStatus,
     // };
-    int index = waitListModel.indexWhere((item) => item!.id == customerId);
+    int index = waitListModel.indexWhere((item) => item.id == customerId);
     if (index != -1) {
       waitListModel[index].callStatus = callStatus;
 
