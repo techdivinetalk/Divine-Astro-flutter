@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:divine_astrologer/common/constants.dart';
+import 'package:divine_astrologer/model/astrologer_training_session_response.dart';
 import 'package:divine_astrologer/model/home_model/astrologer_live_data_response.dart';
 import 'package:divine_astrologer/model/home_model/training_video_model.dart';
 import 'package:divine_astrologer/model/live/new_tarot_card_model.dart';
@@ -291,7 +292,8 @@ class HomePageRepository extends ApiProvider {
     }
   }
 
-  Future<SampleTextResponse?> doGetAstrologerTrainingSession() async {
+  Future<AstrologerTrainingSessionResponse?>
+      doGetAstrologerTrainingSession() async {
     try {
       final response = await post(getAstrologerTrainingSession);
       if (response.statusCode == HttpStatus.unauthorized) {
@@ -308,7 +310,8 @@ class HomePageRepository extends ApiProvider {
         } else if (json.decode(response.body)["status_code"] == 200 &&
             json.decode(response.body)["success"] == true &&
             json.decode(response.body)["data"] != null) {
-          return SampleTextResponse.fromJson(json.decode(response.body));
+          return AstrologerTrainingSessionResponse.fromJson(
+              json.decode(response.body));
         } else {
           return null;
         }

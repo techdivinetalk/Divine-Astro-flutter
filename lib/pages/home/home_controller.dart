@@ -15,6 +15,7 @@ import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/di/fcm_notification.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
+import 'package:divine_astrologer/model/astrologer_training_session_response.dart';
 import 'package:divine_astrologer/model/feedback_response.dart';
 import 'package:divine_astrologer/model/home_model/astrologer_live_data_response.dart';
 import 'package:divine_astrologer/model/home_model/training_video_model.dart';
@@ -191,7 +192,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
     getSampleText();
-    // getAstrologerTrainingSession();
+    getAstrologerTrainingSession();
     getAstrologerLiveData();
     print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
     broadcastReceiver.start();
@@ -713,6 +714,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   astroOnlineOffline({String? status}) async {
     try {
+      // Configure the default headers for all requests
+      dio.options.headers = {
+        'Connection': 'keep-alive',
+        'Keep-Alive': 'timeout=5, max=1000',
+      };
       final response = await dio
           .get("${ApiProvider.astOnlineOffline}${userData.uniqueNo}&${status}");
       log(response.data.toString());
@@ -826,18 +832,20 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  // RxList marqueeTextLst = [].obs;
+  RxList<AstrologerTrainingSessionModel> astrologerTrainingSessionLst =
+      <AstrologerTrainingSessionModel>[].obs;
 
   void getAstrologerTrainingSession() async {
-    marqueeTextLst.clear();
-    debugPrint("test_marqueeText: ${marqueeTextLst.length}");
+    astrologerTrainingSessionLst.clear();
 
     try {
-      SampleTextResponse? response =
+      AstrologerTrainingSessionResponse? response =
           await homePageRepository.doGetAstrologerTrainingSession();
 
       if (response != null && response.statusCode == 200) {
-        if (response.data != null && response.data!.text.isNotEmpty) {}
+        if (response.data != null && response.data!.isNotEmpty) {
+          astrologerTrainingSessionLst.addAll(response.data!);
+        }
       }
     } catch (error) {
       debugPrint("error $error");
@@ -1411,6 +1419,18 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
     if (state == AppLifecycleState.resumed) {
       getAstrologerLiveData();
+    }
+  }
+
+  String getHoursFromDuration(String hours) {
+    if (hours.isEmpty || int.parse(hours) <= 0) {
+      return "0 Hour";
+    }
+
+    if (int.parse(hours) > 1) {
+      return "$hours Hours";
+    } else {
+      return "$hours Hour";
     }
   }
 }

@@ -7,4 +7,6 @@ class Constants {
       true; // TODO: Nikunj: Please check this condition before live the app.
   static bool isDebugMode =
       false; // TODO: Nikunj: Please check this condition before live the app.
+  static bool isTeamTestingMode =
+      false; // TODO: Nikunj: Please check this condition before live the app.
 }
