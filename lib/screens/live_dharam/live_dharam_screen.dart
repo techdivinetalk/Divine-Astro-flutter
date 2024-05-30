@@ -2383,6 +2383,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   RxString diff = "".obs;
   Timer? countDownTimer;
+
   // int epoch = 0;
 
   newTimerWidget() {
@@ -3015,9 +3016,10 @@ class _LivePage extends State<LiveDharamScreen>
                           _controller.isHostAvailable =
                               !_controller.isHostAvailable;
                           await _controller.ref
-                              .child("$livePath/${_controller.liveId}")
-                              .update(
-                                  {"isAvailable": _controller.isHostAvailable});
+                              .child("$livePath/${_controller.liveId}/realTime")
+                              .update({
+                            "isAvailable": _controller.isHostAvailable,
+                          });
                         },
                         child: SizedBox(
                           height: 84 - 50,
@@ -3116,6 +3118,8 @@ class _LivePage extends State<LiveDharamScreen>
         endLive: () async {
           if (mounted) {
             FirebaseDatabase database = FirebaseDatabase.instance;
+            CollectionReference liveCount =
+                FirebaseFirestore.instance.collection(liveCountPath);
             _timer?.cancel();
             _msgTimerForFollowPopup?.cancel();
             _msgTimerForTarotCardPopup?.cancel();
@@ -3123,6 +3127,7 @@ class _LivePage extends State<LiveDharamScreen>
                 .ref()
                 .child("$livePath/${_controller.userId}")
                 .remove();
+            await liveCount.doc(_controller.userId).delete();
             await zegoController.leave(context);
           } else {}
         },
@@ -3386,7 +3391,7 @@ class _LivePage extends State<LiveDharamScreen>
     if (removed) {
       await _controller.makeAPICallForEndCall(
         successCallBack: (String message) async {
-          setState(() { });
+          setState(() {});
           successAndFailureCallBack(
               message: message, isForSuccess: true, isForFailure: false);
           await _controller.removeFromOrder();
