@@ -8,6 +8,7 @@ import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/model/master_data_response.dart';
 import 'package:divine_astrologer/pages/home/home_controller.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart';
@@ -57,13 +58,15 @@ class AppSocket {
       ApiProvider().masterDataSocket,
       (data) {
         if (data != null) {
-          String jsonResponse = data.toString();
-          debugPrint("test_socket: $jsonResponse");
+          if(!kDebugMode){
+            String jsonResponse = data.toString();
+            debugPrint("test_socket: $jsonResponse");
 
-          MasterDataResponse response = MasterDataResponse.fromJson(data);
+            MasterDataResponse response = MasterDataResponse.fromJson(data);
 
-          if (response.data != null) {
-            saveMasterData(response.data!);
+            if (response.data != null) {
+              saveMasterData(response.data!);
+            }
           }
         }
       },
