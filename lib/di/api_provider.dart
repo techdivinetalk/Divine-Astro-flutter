@@ -240,6 +240,9 @@ class ApiProvider {
   final String sendOtpNumberChange = "sendOtpForNumberChange";
   final String verifyOtpNumberChange = "verifyOtpForNumberChange";
 
+  // socket
+  final String masterDataSocket = "master-Data";
+
   //
   final NetworkService networkManager = Get.find<NetworkService>();
   final ProgressService progressService = Get.find<ProgressService>();

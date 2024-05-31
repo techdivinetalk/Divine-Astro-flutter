@@ -1,9 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
+import 'package:divine_astrologer/model/master_data_response.dart';
 import 'package:divine_astrologer/pages/home/home_controller.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:flutter/material.dart';
@@ -45,6 +47,48 @@ class AppSocket {
         await socketAPI();
       },
     );
+    // call socket master-Data
+    debugPrint("test_socket: call master-Data");
+
+    socket?.emit(ApiProvider().masterDataSocket, {});
+    debugPrint("test_socket: called emit");
+
+    socket?.on(
+      ApiProvider().masterDataSocket,
+      (data) {
+        if (data != null) {
+          String jsonResponse = data.toString();
+          debugPrint("test_socket: $jsonResponse");
+
+          MasterDataResponse response = MasterDataResponse.fromJson(data);
+
+          if (response.data != null) {
+            saveMasterData(response.data!);
+          }
+        }
+      },
+    );
+    debugPrint("test_socket: called on");
+  }
+
+  saveMasterData(MasterData masterData) {
+    isCall(int.parse(masterData.call.toString()));
+    isCamera(int.parse(masterData.camera.toString()));
+    isChat(int.parse(masterData.chat.toString()));
+    isChatAssistance(int.parse(masterData.chatAssistance.toString()));
+    isGifts(int.parse(masterData.gifts.toString()));
+    isRemidies(int.parse(masterData.remidies.toString()));
+    isEcom(int.parse(masterData.ecom.toString()));
+    isLiveCall(int.parse(masterData.isLiveCall.toString()));
+    isKundli(int.parse(masterData.kundli.toString()));
+    isLive(int.parse(masterData.live.toString()));
+    isQueue(int.parse(masterData.queue.toString()));
+    // isRemidies(int.parse(masterData.tarrotCard.toString()));
+    isTemplates(int.parse(masterData.templates.toString()));
+    // isTruecaller(int.parse(masterData.truecaller.toString()));
+    isVOIP(int.parse(masterData.voip.toString()));
+
+    debugPrint("test_masterData.voip: ${masterData.voip}");
   }
 
   void emitForAstrologerEnterChatAssist(String? customerId, String? userId) {

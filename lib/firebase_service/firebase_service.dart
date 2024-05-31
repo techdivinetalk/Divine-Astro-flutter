@@ -407,73 +407,73 @@ class AppFirebaseService {
     );
   }
 
-  saveMasterData(DataSnapshot dataSnapshot) {
-    print("dataSnapshot-Value ${dataSnapshot.value}");
-    switch (dataSnapshot.key) {
-      case "call":
-        isCall(int.parse(dataSnapshot.value.toString()));
-        break;
-      case "camera":
-        isCamera(int.parse(dataSnapshot.value.toString()));
-        break;
-      case "chat":
-        isChat(int.parse(dataSnapshot.value.toString()));
-        break;
-      case "chat_assistance":
-        isChatAssistance(int.parse(dataSnapshot.value.toString()));
-        break;
-      case "gifts":
-        isGifts(int.parse(dataSnapshot.value.toString()));
-        break;
-      case "remidies":
-        isRemidies(int.parse(dataSnapshot.value.toString()));
-        break;
-      case "ecom":
-        isEcom(int.parse(dataSnapshot.value.toString()));
-        break;
-      case "isLiveCall":
-        isLiveCall(int.parse(dataSnapshot.value.toString()));
-        break;
-      case "kundli":
-        isKundli(int.parse(dataSnapshot.value.toString()));
-        break;
-      case "live":
-        isLive(int.parse(dataSnapshot.value.toString()));
-        break;
-      case "queue":
-        isQueue(int.parse(dataSnapshot.value.toString()));
-        break;
-      // case "tarrotCard":
-      //   isRemidies(int.parse(dataSnapshot.value.toString()));
-      //   break;
-      case "templates":
-        isTemplates(int.parse(dataSnapshot.value.toString()));
-        break;
-      // case "truecaller":
-      //   isTruecaller(int.parse(dataSnapshot.value.toString()));
-      //   break;
-      case "voip":
-        isVOIP(int.parse(dataSnapshot.value.toString()));
-        break;
-      default:
-        preferenceService.setStringPref(dataSnapshot.key.toString(), dataSnapshot.value.toString());
-        break;
-    }
-  }
+  // saveMasterData(DataSnapshot dataSnapshot) {
+  //   print("dataSnapshot-Value ${dataSnapshot.value}");
+  //   switch (dataSnapshot.key) {
+  //     case "call":
+  //       isCall(int.parse(dataSnapshot.value.toString()));
+  //       break;
+  //     case "camera":
+  //       isCamera(int.parse(dataSnapshot.value.toString()));
+  //       break;
+  //     case "chat":
+  //       isChat(int.parse(dataSnapshot.value.toString()));
+  //       break;
+  //     case "chat_assistance":
+  //       isChatAssistance(int.parse(dataSnapshot.value.toString()));
+  //       break;
+  //     case "gifts":
+  //       isGifts(int.parse(dataSnapshot.value.toString()));
+  //       break;
+  //     case "remidies":
+  //       isRemidies(int.parse(dataSnapshot.value.toString()));
+  //       break;
+  //     case "ecom":
+  //       isEcom(int.parse(dataSnapshot.value.toString()));
+  //       break;
+  //     case "isLiveCall":
+  //       isLiveCall(int.parse(dataSnapshot.value.toString()));
+  //       break;
+  //     case "kundli":
+  //       isKundli(int.parse(dataSnapshot.value.toString()));
+  //       break;
+  //     case "live":
+  //       isLive(int.parse(dataSnapshot.value.toString()));
+  //       break;
+  //     case "queue":
+  //       isQueue(int.parse(dataSnapshot.value.toString()));
+  //       break;
+  //     // case "tarrotCard":
+  //     //   isRemidies(int.parse(dataSnapshot.value.toString()));
+  //     //   break;
+  //     case "templates":
+  //       isTemplates(int.parse(dataSnapshot.value.toString()));
+  //       break;
+  //     // case "truecaller":
+  //     //   isTruecaller(int.parse(dataSnapshot.value.toString()));
+  //     //   break;
+  //     case "voip":
+  //       isVOIP(int.parse(dataSnapshot.value.toString()));
+  //       break;
+  //     default:
+  //       preferenceService.setStringPref(dataSnapshot.key.toString(), dataSnapshot.value.toString());
+  //       break;
+  //   }
+  // }
 
-  Future<DatabaseEvent?> masterData(String path) async {
-    print("dataSnapshot-1");
-    try {
-      database.child(path).onChildAdded.listen((event) {
-        print("dataSnapshot-Key ${event.snapshot.key}");
-        saveMasterData(event.snapshot);
-      });
-      database.child(path).onChildChanged.listen((event) {
-        print("dataSnapshot-Key ${event.snapshot.key}");
-        saveMasterData(event.snapshot);
-      });
-    } catch (e) {
-      debugPrint("Error reading data from the database: $e");
-    }
-  }
+  // Future<DatabaseEvent?> masterData(String path) async {
+  //   print("dataSnapshot-1");
+  //   try {
+  //     database.child(path).onChildAdded.listen((event) {
+  //       print("dataSnapshot-Key ${event.snapshot.key}");
+  //       saveMasterData(event.snapshot);
+  //     });
+  //     database.child(path).onChildChanged.listen((event) {
+  //       print("dataSnapshot-Key ${event.snapshot.key}");
+  //       saveMasterData(event.snapshot);
+  //     });
+  //   } catch (e) {
+  //     debugPrint("Error reading data from the database: $e");
+  //   }
+  // }
 }
