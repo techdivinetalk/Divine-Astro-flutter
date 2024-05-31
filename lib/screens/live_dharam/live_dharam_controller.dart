@@ -208,7 +208,6 @@ class LiveDharamController extends GetxController {
     extendTimeWidgetVisible = false;
     hasReInitCoHost = false;
 
-
     return;
   }
 
@@ -385,8 +384,6 @@ class LiveDharamController extends GetxController {
 
   set hasReInitCoHost(bool value) => _hasReInitCoHost(value);
 
-
-
   Future<void> eventListner({
     required Map<dynamic, dynamic> snapshot,
     required Function(WaitListModel currentCaller) engaging,
@@ -399,29 +396,31 @@ class LiveDharamController extends GetxController {
       if (astrologerData.isNotEmpty) {
         var liveIdNode = astrologerData;
         if (liveIdNode != null) {
-          if (liveIdNode["blockList"] != null) {
-            List<dynamic> blockListNode = liveIdNode["blockList"] ?? [];
-            if (blockListNode.isEmpty) {
-              firebaseBlockUsersIds = [];
-            } else {
-              firebaseBlockUsersIds = blockListNode;
-            }
+          isHostAvailable.value = liveIdNode["isAvailable"] ?? false;
+          List<dynamic> blockListNode = liveIdNode["blockList"] ?? [];
+          List<dynamic> waitListData = liveIdNode["waitList"] ?? [];
+          List<dynamic> leaderBoard = liveIdNode["leaderBoard"] ?? [];
+          if (blockListNode.isNotEmpty) {
+            firebaseBlockUsersIds = blockListNode;
+          } else {
+            firebaseBlockUsersIds.clear();
           }
-          if (liveIdNode["waitList"] != null) {
-            List<dynamic> waitListData = liveIdNode["waitList"] ?? [];
-            if (waitListData.isNotEmpty) {
-              addToWaitListFunction(waitListData: waitListData);
-            } else {
-              waitListModel.clear();
-            }
+          if (waitListData.isNotEmpty) {
+            print(waitListData);
+            print(waitListData.isNotEmpty);
+            print("waitListData");
+            addToWaitListFunction(waitListData: waitListData);
+          } else {
+            print("cleancleancleanclean");
+            waitListModel.value.clear();
+            update();
           }
-          if (liveIdNode["leaderBoard"] != null) {
-            List<dynamic> leaderBoard = liveIdNode["leaderBoard"] ?? [];
-            if (leaderBoard.isNotEmpty) {
-              addToLeaderBoardFunction(leaderBoard: leaderBoard);
-            } else {
-              leaderboardModel.clear();
-            }
+
+          if (leaderBoard != null) {
+            addToLeaderBoardFunction(leaderBoard: leaderBoard);
+          } else {
+            leaderboardModel.value.clear();
+            update();
           }
           if (liveIdNode["order"] != null) {
             var orderNode = liveIdNode["order"];
@@ -440,8 +439,9 @@ class LiveDharamController extends GetxController {
           print(currentCaller.isEngaded);
           print("currentCaller.isEngaded");
           await Future.delayed(const Duration(seconds: 1));
-
-          engaging(upcomingUser());
+          if (waitListModel.isNotEmpty) {
+            engaging(waitListModel.first);
+          }
         } else {}
         update();
       } else {
@@ -454,7 +454,7 @@ class LiveDharamController extends GetxController {
 
   /// add to waitList function
   addToWaitListFunction({List? waitListData}) {
-    waitListModel.clear();
+    waitListModel.value.clear();
     for (int i = 0; i < waitListData!.length; i++) {
       waitListModel.add(
         WaitListModel(
@@ -477,7 +477,7 @@ class LiveDharamController extends GetxController {
 
   /// add to leader board function
   addToLeaderBoardFunction({List? leaderBoard}) {
-    leaderboardModel.clear();
+    leaderboardModel.value.clear();
     for (int i = 0; i < leaderBoard!.length; i++) {
       leaderboardModel.add(
         LeaderboardModel(
@@ -492,7 +492,7 @@ class LiveDharamController extends GetxController {
   }
 
   // WaitListModel upcomingUser(Map<dynamic, dynamic> data) {
-  WaitListModel upcomingUser() {
+  WaitListModel upcomingUser({List? waitList}) {
     WaitListModel temp = WaitListModel(
       isRequest: false,
       isEngaded: false,
@@ -507,19 +507,16 @@ class LiveDharamController extends GetxController {
       callStatus: 0,
     );
 
-
-    if (astrologerData["waitList"] != null) {
-      var waitListNode = astrologerData["waitList"];
-      temp = isEngadedNew(waitListNode, forMe: false);
+    if (waitList != null) {
+      temp = isEngadedNew(waitList);
     } else {}
 
     return temp;
   }
 
   WaitListModel isEngadedNew(
-    Map? map, {
-    required bool forMe,
-  }) {
+    List? map,
+  ) {
     bool isRequest = false;
     bool isEngaged = false;
     String callType = "";
@@ -533,26 +530,26 @@ class LiveDharamController extends GetxController {
     int totalMin = 0;
 
     if (map != null) {
-      if (map.isNotEmpty) {
-        map.forEach(
-          // ignore: always_specify_types
-          (key, value) {
-            final bool c1 = (value["id"] ?? "") == userId;
-            final bool c2 = (value["isEngaded"] ?? false) == true;
-            isEngaged = forMe ? c1 && c2 : c2;
-            isRequest = value["isRequest"] ?? false;
-            callType = value["callType"] ?? "";
-            totalTime = value["totalTime"] ?? "";
-            avatar = value["avatar"] ?? "";
-            userName = value["userName"] ?? "";
-            id = value["id"] ?? "";
-            generatedOrderId = value["generatedOrderId"] ?? 0;
-            offerId = value["offerId"] ?? 0;
-            totalMin = value["totalMin"] ?? 0;
-            callStatus = value["callStatus"] ?? 0;
-          },
-        );
-      } else {}
+      // if (map.isNotEmpty) {
+      //   map.forEach(
+      //     // ignore: always_specify_types
+      //     (key, value) {
+      //       final bool c1 = (value["id"] ?? "") == userId;
+      //       final bool c2 = (value["isEngaded"] ?? false) == true;
+      //       isEngaged = forMe ? c1 && c2 : c2;
+      //       isRequest = value["isRequest"] ?? false;
+      //       callType = value["callType"] ?? "";
+      //       totalTime = value["totalTime"] ?? "";
+      //       avatar = value["avatar"] ?? "";
+      //       userName = value["userName"] ?? "";
+      //       id = value["id"] ?? "";
+      //       generatedOrderId = value["generatedOrderId"] ?? 0;
+      //       offerId = value["offerId"] ?? 0;
+      //       totalMin = value["totalMin"] ?? 0;
+      //       callStatus = value["callStatus"] ?? 0;
+      //     },
+      //   );
+      // } else {}
     } else {}
     return WaitListModel(
       isRequest: isRequest,
@@ -910,8 +907,7 @@ class LiveDharamController extends GetxController {
     required int callStatus,
     // required int totalMin,
   }) async {
-    String previousType = callType != "" ? callType : "";
-    print(previousType);
+    print(callType);
     print("previousTypepreviousTypepreviousType");
     // final DataSnapshot dataSnapshot =
     //     await ref.child("$livePath/$liveId/realTime/waitList/$userId").get();
@@ -1052,10 +1048,10 @@ class LiveDharamController extends GetxController {
           // waitListModel = tempList;
         } else {}
       } else {
-        waitListModel.clear();
+        waitListModel.value.clear();
       }
     } else {
-      waitListModel.clear();
+      waitListModel.value.clear();
     }
     return;
   }
@@ -1150,8 +1146,7 @@ class LiveDharamController extends GetxController {
     // }
     print(astrologerData);
     print("datadatadatadatadatadatadata");
-    if (astrologerData["realTime"] != null &&
-        astrologerData["realTime"]["order"] != null) {
+    if (astrologerData != null && astrologerData["order"] != null) {
       Map<String, dynamic> param = <String, dynamic>{};
       param = <String, dynamic>{
         "order_id": getOrderId(),
