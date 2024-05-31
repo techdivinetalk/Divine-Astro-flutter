@@ -46,7 +46,7 @@ class LiveDharamController extends GetxController {
   final RxBool _isMod = false.obs;
   final RxString _liveId = "".obs;
   final RxBool _isHost = true.obs;
-  final RxBool _isHostAvailable = true.obs;
+  RxBool isHostAvailable = true.obs;
   final RxString _hostSpeciality = "".obs;
   final RxInt _currentIndex = 0.obs;
   final RxMap<dynamic, dynamic> _data = <dynamic, dynamic>{}.obs;
@@ -54,9 +54,9 @@ class LiveDharamController extends GetxController {
 
   // final Rx<GetAstroDetailsRes> _details = GetAstroDetailsRes().obs;
   // final Rx<IsCustomerBlockedRes> _isCustBlocked = IsCustomerBlockedRes().obs;
-   RxList<LeaderboardModel> leaderboardModel = <LeaderboardModel>[].obs;
-   RxList<WaitListModel> waitListModel = <WaitListModel>[].obs;
-  final Rx<WaitListModel> _orderModel = WaitListModel(
+  RxList<LeaderboardModel> leaderboardModel = <LeaderboardModel>[].obs;
+  RxList<WaitListModel> waitListModel = <WaitListModel>[].obs;
+  Rx<WaitListModel> orderModel = WaitListModel(
     isRequest: false,
     isEngaded: false,
     callType: "",
@@ -162,28 +162,15 @@ class LiveDharamController extends GetxController {
     final String image = pref.getUserDetail()?.image ?? "";
     avatar = isValidImageURL(imageURL: "$awsURL/$image");
     isMod = false;
-    liveId = (Get.arguments ?? "").toString();
     isHost = true;
-    isHostAvailable = true;
+    isHostAvailable.value = true;
     hostSpeciality = getSpeciality();
 
     astrologerData = <dynamic, dynamic>{};
 
     leaderboardModel.value = [];
     leaderboardModel.value = [];
-    orderModel = WaitListModel(
-      isRequest: false,
-      isEngaded: false,
-      callType: "",
-      totalTime: "",
-      avatar: "",
-      userName: "",
-      id: "",
-      generatedOrderId: 0,
-      totalMin: 0,
-      offerId: 0,
-      callStatus: 0,
-    );
+    orderModel.value = usingForNullableWaiListModel;
     // followRes = AstrologerFollowingResponse();
     // walletRecharge = WalletRecharge();
     // orderGenerate = OrderGenerate();
@@ -220,7 +207,7 @@ class LiveDharamController extends GetxController {
     isProcessing = false;
     extendTimeWidgetVisible = false;
     hasReInitCoHost = false;
-    testingVar = 0;
+
 
     return;
   }
@@ -233,7 +220,7 @@ class LiveDharamController extends GetxController {
     _isMod.close();
     _liveId.close();
     _isHost.close();
-    _isHostAvailable.close();
+
     _hostSpeciality.close();
     _currentIndex.close();
     _data.close();
@@ -241,7 +228,7 @@ class LiveDharamController extends GetxController {
     // _isCustBlocked.close();
     leaderboardModel.close();
     waitListModel.close();
-    _orderModel.close();
+
     // _followRes.close();
     // _walletRecharge.close();
     // _orderGenerate.close();
@@ -287,17 +274,9 @@ class LiveDharamController extends GetxController {
 
   set isMod(bool value) => _isMod(value);
 
-  String get liveId => _liveId.value;
-
-  set liveId(String value) => _liveId(value);
-
   bool get isHost => _isHost.value;
 
   set isHost(bool value) => _isHost(value);
-
-  bool get isHostAvailable => _isHostAvailable.value;
-
-  set isHostAvailable(bool value) => _isHostAvailable(value);
 
   String get hostSpeciality => _hostSpeciality.value;
 
@@ -312,13 +291,6 @@ class LiveDharamController extends GetxController {
 
   // IsCustomerBlockedRes get isCustBlocked => _isCustBlocked.value;
   // set isCustBlocked(IsCustomerBlockedRes value) => _isCustBlocked(value);
-
-
-
-
-  WaitListModel get orderModel => _orderModel.value;
-
-  set orderModel(WaitListModel value) => _orderModel(value);
 
   // AstrologerFollowingResponse get followRes => _followRes.value;
   // set followRes(AstrologerFollowingResponse value) => _followRes(value);
@@ -413,9 +385,7 @@ class LiveDharamController extends GetxController {
 
   set hasReInitCoHost(bool value) => _hasReInitCoHost(value);
 
-  int get testingVar => _testingVar.value;
 
-  set testingVar(int value) => _testingVar(value);
 
   Future<void> eventListner({
     required Map<dynamic, dynamic> snapshot,
@@ -427,12 +397,10 @@ class LiveDharamController extends GetxController {
       log(astrologerData.toString());
       log("data.toString()");
       if (astrologerData.isNotEmpty) {
-        liveId = userId;
         var liveIdNode = astrologerData;
         if (liveIdNode != null) {
           if (liveIdNode["blockList"] != null) {
-            List<dynamic> blockListNode =
-                liveIdNode["blockList"] ?? [];
+            List<dynamic> blockListNode = liveIdNode["blockList"] ?? [];
             if (blockListNode.isEmpty) {
               firebaseBlockUsersIds = [];
             } else {
@@ -440,32 +408,33 @@ class LiveDharamController extends GetxController {
             }
           }
           if (liveIdNode["waitList"] != null) {
-            List<dynamic> waitListData =
-                liveIdNode["waitList"] ?? [];
+            List<dynamic> waitListData = liveIdNode["waitList"] ?? [];
             if (waitListData.isNotEmpty) {
               addToWaitListFunction(waitListData: waitListData);
-            }else{
+            } else {
               waitListModel.clear();
             }
           }
           if (liveIdNode["leaderBoard"] != null) {
-            List<dynamic> leaderBoard =
-                liveIdNode["leaderBoard"] ?? [];
+            List<dynamic> leaderBoard = liveIdNode["leaderBoard"] ?? [];
             if (leaderBoard.isNotEmpty) {
               addToLeaderBoardFunction(leaderBoard: leaderBoard);
-            }else{
+            } else {
               leaderboardModel.clear();
             }
           }
           if (liveIdNode["order"] != null) {
             var orderNode = liveIdNode["order"];
-            orderModel = getOrderModel(orderNode);
+            orderModel.value = getOrderModel(orderNode);
             currentCaller =
                 getOrderModelGeneric(orderNode, forMe: true, type: "fromevent");
           } else {
-            orderModel = usingForNullableWaiListModel;
+            orderModel.value = usingForNullableWaiListModel;
             currentCaller = usingForNullableWaiListModel;
             update();
+          }
+          if (liveIdNode["isAvailable"] != null) {
+            isHostAvailable.value = liveIdNode["isAvailable"];
           }
 
           print(currentCaller.isEngaded);
@@ -538,9 +507,9 @@ class LiveDharamController extends GetxController {
       callStatus: 0,
     );
 
-    var liveIdNode = astrologerData;
-    if (liveIdNode != null) {
-      var waitListNode = liveIdNode["waitList"];
+
+    if (astrologerData["waitList"] != null) {
+      var waitListNode = astrologerData["waitList"];
       temp = isEngadedNew(waitListNode, forMe: false);
     } else {}
 
@@ -806,7 +775,7 @@ class LiveDharamController extends GetxController {
     return <String, dynamic>{
       "app_id": appID,
       "server_secret": serverSecret,
-      "room_id": liveId,
+      "room_id": userId,
       "user_id": userId,
       "user_name": userName,
       "gift_type": data,
@@ -940,7 +909,6 @@ class LiveDharamController extends GetxController {
     required bool isRequest,
     required int callStatus,
     // required int totalMin,
-
   }) async {
     String previousType = callType != "" ? callType : "";
     print(previousType);
@@ -989,9 +957,9 @@ class LiveDharamController extends GetxController {
         'waitList': jsonEncode(waitListModel),
       });
     }
-      final Map<String, dynamic> moOrderDetails =  <String, dynamic>{
-            "callStatus": callStatus,
-          };
+    final Map<String, dynamic> moOrderDetails = <String, dynamic>{
+      "callStatus": callStatus,
+    };
     //
     // await ref
     //     .child("$livePath/$liveId/realTime/waitList/$userId")
@@ -1007,7 +975,10 @@ class LiveDharamController extends GetxController {
   Future<void> addUpdateOrder(Map<String, dynamic> orderDetails) async {
     print(orderDetails);
     print("updating entry orderDetails");
-    await ref.child("$livePath/$liveId/realTime/order").update(orderDetails);
+    // await ref.child("$livePath/$liveId/realTime/order").update(orderDetails);
+    await liveStore.doc(userId).update({
+      'order': orderDetails,
+    });
     return Future<void>.value();
   }
 
@@ -1089,14 +1060,12 @@ class LiveDharamController extends GetxController {
     return;
   }
 
-  Future<void> removeFromWaitList() async {
-    await ref.child("$livePath/$liveId/realTime/waitList/$userId").remove();
-    return Future<void>.value();
-  }
-
   Future<void> removeFromOrder() async {
     print("remove order from firebase");
-    await ref.child("$livePath/$liveId/realTime/order").remove();
+    // await ref.child("$livePath/$liveId/realTime/order").remove();
+    await liveStore.doc(userId).update({
+      'order': FieldValue.delete(),
+    });
     return Future<void>.value();
   }
 
@@ -1254,7 +1223,7 @@ class LiveDharamController extends GetxController {
     if (temp != 0) {
       return temp.toString();
     } else {
-      temp = orderModel.generatedOrderId;
+      temp = orderModel.value.generatedOrderId;
       return temp.toString();
     }
   }
@@ -1265,13 +1234,16 @@ class LiveDharamController extends GetxController {
     if (temp != 0) {
       return temp;
     } else {
-      temp = orderModel.offerId;
+      temp = orderModel.value.offerId;
+      update();
       return temp;
     }
   }
 
   Future<void> removeMyNode() async {
-    await ref.child("$livePath/$liveId").remove();
+    // await ref.child("$livePath/$liveId").remove();
+    await liveStore.doc(userId).delete();
+    await liveCount.doc(userId).delete();
     update();
     return Future<void>.value();
   }
@@ -1290,16 +1262,18 @@ class LiveDharamController extends GetxController {
     );
     blockedCustomerList = (blockedCustListRes.statusCode == HttpStatus.ok
         ? BlockedCustomerListRes.fromJson(blockedCustListRes.toJson()).data
-        : BlockedCustomerListRes.fromJson(BlockedCustomerListRes().toJson()).data)!;
+        : BlockedCustomerListRes.fromJson(BlockedCustomerListRes().toJson())
+            .data)!;
     print(blockedCustomerList);
-    print("blockedCustomerListblockedCustomerListblockedCustomerListblockedCustomerList");
+    print(
+        "blockedCustomerListblockedCustomerListblockedCustomerListblockedCustomerList");
     return Future<void>.value();
   }
 
   Future<void> callblockCustomer({
     required int id,
     required Function(String message) successCallBack,
-    required Function(String message) failureCallBack ,
+    required Function(String message) failureCallBack,
   }) async {
     Map<String, dynamic> param = <String, dynamic>{};
     param = <String, dynamic>{
@@ -1338,23 +1312,6 @@ class LiveDharamController extends GetxController {
       orElse: () => BlockedCustomerListResData(),
     );
     return (data?.isBlock ?? 0);
-  }
-
-  Future<bool> shouldOpenBottom() async {
-    bool isRequest = false;
-    final DataSnapshot dataSnapshot =
-        await ref.child("$livePath/$liveId/realTime/waitList/$userId").get();
-    if (dataSnapshot != null) {
-      if (dataSnapshot.exists) {
-        if (dataSnapshot.value is Map<dynamic, dynamic>) {
-          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
-          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-              as Map<dynamic, dynamic>;
-          isRequest = map["isRequest"] ?? false;
-        } else {}
-      } else {}
-    } else {}
-    return Future<bool>.value(isRequest);
   }
 
   Future<void> noticeBoard({
@@ -1512,7 +1469,7 @@ class WaitListModel {
   final String id;
   final int generatedOrderId;
   final int offerId;
-   int callStatus;
+  int callStatus;
   final int totalMin;
 }
 

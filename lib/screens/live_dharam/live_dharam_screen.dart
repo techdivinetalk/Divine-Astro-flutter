@@ -212,7 +212,6 @@ class _LivePage extends State<LiveDharamScreen>
       _svgController.forward();
     });
     if (gifts != null && giftList != null) {
-
       Future.delayed(
         const Duration(seconds: 1),
         () async {
@@ -291,7 +290,7 @@ class _LivePage extends State<LiveDharamScreen>
         if (mounted) {
           final bool cond1 = _controller.isHost;
           final bool cond2 = _controller.waitListModel.isNotEmpty;
-          final bool cond3 = _controller.orderModel.id.isEmpty;
+          final bool cond3 = _controller.orderModel.value.id.isEmpty;
           final bool cond4 = !isAcceptPopupOpen;
 
           bool cond5 = true;
@@ -342,7 +341,7 @@ class _LivePage extends State<LiveDharamScreen>
               if (timer.tick % 300 == 0) {
                 final ZegoCustomMessage model = ZegoCustomMessage(
                   type: 1,
-                  liveId: _controller.liveId,
+                  liveId: _controller.userId,
                   userId: "0",
                   userName: "Live Monitoring Team",
                   avatar:
@@ -359,7 +358,7 @@ class _LivePage extends State<LiveDharamScreen>
               if (timer.tick % 600 == 0) {
                 final ZegoCustomMessage model = ZegoCustomMessage(
                   type: 1,
-                  liveId: _controller.liveId,
+                  liveId: _controller.userId,
                   userId: "0",
                   userName: "Quality Team",
                   avatar:
@@ -421,7 +420,7 @@ class _LivePage extends State<LiveDharamScreen>
     final bool cond1 = _controller.isHost;
     final bool cond2 = _controller.currentCaller.isEngaded;
     final bool cond3 = _controller.currentCaller.id == zegoUIKitUser.id;
-    final bool cond4 = zegoUIKitUser.id != _controller.liveId;
+    final bool cond4 = zegoUIKitUser.id != _controller.userId;
     if (cond1 && cond2 && cond3 && cond4) {
       print("on user leave");
       await removeCoHostOrStopCoHost();
@@ -483,14 +482,14 @@ class _LivePage extends State<LiveDharamScreen>
         resizeToAvoidBottomInset: false,
         body: Obx(
           () {
-            return _controller.liveId == ""
+            return _controller.userId == ""
                 ? const Center(child: GenericLoadingWidget())
                 : ZegoUIKitPrebuiltLiveStreaming(
                     appID: appID,
                     appSign: appSign,
                     userID: _controller.userId,
                     userName: _controller.userName,
-                    liveID: _controller.liveId,
+                    liveID: _controller.userId,
                     config: streamingConfig
                       ..beautyConfig = ZegoBeautyPluginConfig(
                         effectsTypes:
@@ -839,11 +838,11 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget newLeaderboard() {
     // if (_subscription == null) {
-    //   print("Animation -url ${_controller.liveId}");
+    //   print("Animation -url ${_controller.userId}");
     //   _subscription = FirebaseDatabase.instance
     //       .ref()
     //       .child(livePath)
-    //       .child(_controller.liveId)
+    //       .child(_controller.userId)
     //       .child("realTime")
     //       .child("gift")
     //       .onChildAdded
@@ -863,7 +862,7 @@ class _LivePage extends State<LiveDharamScreen>
     //         FirebaseDatabase.instance
     //             .ref()
     //             .child(livePath)
-    //             .child(_controller.liveId)
+    //             .child(_controller.userId)
     //             .child("realTime")
     //             .child("gift")
     //             .child(key.toString())
@@ -1061,9 +1060,8 @@ class _LivePage extends State<LiveDharamScreen>
 
   bool moreOptionConditions(ZegoCustomMessage msg, bool isModerator) {
     final bool cond1 = msg.userId != _controller.userId;
-    final bool cond2 = !(_controller.orderModel.id == (msg.userId ?? ""));
-
-    final bool cond4 = msg.userId != _controller.liveId;
+    final bool cond2 = !(_controller.orderModel.value.id == (msg.userId ?? ""));
+    final bool cond4 = msg.userId != _controller.userId;
     return _controller.isHost
         ? cond1 && cond2
         : _controller.isMod
@@ -1218,7 +1216,7 @@ class _LivePage extends State<LiveDharamScreen>
   }) async {
     if (userId != "0") {
       var data = {
-        "room_id": _controller.liveId,
+        "room_id": _controller.userId,
         "user_id": userId,
         "user_name": userName,
         "item": item.toJson(),
@@ -1242,7 +1240,7 @@ class _LivePage extends State<LiveDharamScreen>
       builder: (BuildContext context) {
         return LeaderboardWidget(
           onClose: Get.back,
-          liveId: _controller.liveId,
+          liveId: _controller.userId,
           leaderboardModel: _controller.leaderboardModel,
         );
       },
@@ -1266,15 +1264,6 @@ class _LivePage extends State<LiveDharamScreen>
           hasMyIdInWaitList: false,
           onExitWaitList: () async {
             Get.back();
-            await exitWaitListPopup(
-              noDisconnect: () {},
-              yesDisconnect: () async {
-                if (!_controller.isHost) {
-                  await _controller.removeFromWaitList();
-                  await notifyAstroForExitWaitList();
-                } else {}
-              },
-            );
           },
           astologerName: _controller.userName,
           astologerImage: _controller.avatar,
@@ -1282,9 +1271,7 @@ class _LivePage extends State<LiveDharamScreen>
           isHost: _controller.isHost,
           onAccept: () async {
             Get.back();
-            // final String id = waitList.first["id"];
-            // final String name = waitList.first["userName"];
-            // final String avatar = waitList.first["avatar"];
+
             final String id = _controller.waitListModel.first.id;
             final String name = _controller.waitListModel.first.userName;
             final String avatar = _controller.waitListModel.first.avatar;
@@ -1303,7 +1290,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> notifyAstroForExitWaitList() async {
     var data = {
-      "room_id": _controller.liveId,
+      "room_id": _controller.userId,
       "user_id": _controller.userId,
       "user_name": _controller.userName,
       "item": {},
@@ -1431,7 +1418,7 @@ class _LivePage extends State<LiveDharamScreen>
             Get.back();
             if (userId != "0") {
               var data = {
-                "room_id": _controller.liveId,
+                "room_id": _controller.userId,
                 "user_id": userId,
                 "user_name": userName,
                 "item": item.toJson(),
@@ -1451,7 +1438,7 @@ class _LivePage extends State<LiveDharamScreen>
             Get.back();
             if (userId != "0") {
               var data = {
-                "room_id": _controller.liveId,
+                "room_id": _controller.userId,
                 "user_id": userId,
                 "user_name": userName,
                 "item": item.toJson(),
@@ -1471,7 +1458,7 @@ class _LivePage extends State<LiveDharamScreen>
             Get.back();
             if (userId != "0") {
               var data = {
-                "room_id": _controller.liveId,
+                "room_id": _controller.userId,
                 "user_id": userId,
                 "user_name": userName,
                 "item": item.toJson(),
@@ -1511,7 +1498,7 @@ class _LivePage extends State<LiveDharamScreen>
                     },
                   );
                   var data = {
-                    "room_id": _controller.liveId,
+                    "room_id": _controller.userId,
                     "user_id": userId,
                     "user_name": userName,
                     "item": item.toJson(),
@@ -1608,7 +1595,7 @@ class _LivePage extends State<LiveDharamScreen>
           askForGift || askForVideo || askForVoice || askForPrivate;
 
       if (senderUserID != _controller.userId) {
-        if (roomId == _controller.liveId) {
+        if (roomId == _controller.userId) {
           if (type == "") {
             // await Future.delayed(const Duration(seconds: 3));
             if (mounted) {
@@ -1905,7 +1892,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> sendTaroCard(item) async {
     var data = {
-      "room_id": _controller.liveId,
+      "room_id": _controller.userId,
       "user_id": _controller.userId,
       "user_name": _controller.userName,
       "item": item.toJson(),
@@ -1923,7 +1910,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> sendTaroCardClose() async {
     var data = {
-      "room_id": _controller.liveId,
+      "room_id": _controller.userId,
       "user_id": _controller.userId,
       "user_name": _controller.userName,
       "item": {},
@@ -2960,13 +2947,13 @@ class _LivePage extends State<LiveDharamScreen>
                     children: [
                       InkWell(
                         onTap: () async {
-                          _controller.isHostAvailable =
-                              !_controller.isHostAvailable;
+                          _controller.isHostAvailable.value =
+                              !_controller.isHostAvailable.value;
                           await _controller.liveStore
-                              .doc(_controller.liveId)
+                              .doc(_controller.userId)
                               .update(
                             {
-                              "isAvailable": _controller.isHostAvailable,
+                              "isAvailable": _controller.isHostAvailable.value,
                             },
                           );
                         },
@@ -2986,7 +2973,7 @@ class _LivePage extends State<LiveDharamScreen>
                             child: Padding(
                               padding: const EdgeInsets.all(0.0),
                               child: Image.asset(
-                                _controller.isHostAvailable
+                                _controller.isHostAvailable.value
                                     ? "assets/images/live_calls_on_new.png"
                                     : "assets/images/live_calls_off_new.png",
                               ),
@@ -3065,7 +3052,7 @@ class _LivePage extends State<LiveDharamScreen>
     } else {
       await endLiveSession(
         endLive: () async {
-          if (mounted) {
+          if (mounted) { 
             _timer?.cancel();
             _msgTimerForFollowPopup?.cancel();
             _msgTimerForTarotCardPopup?.cancel();
@@ -3114,7 +3101,7 @@ class _LivePage extends State<LiveDharamScreen>
     } else {
       final ZegoCustomMessage model = ZegoCustomMessage(
         type: 1,
-        liveId: _controller.liveId,
+        liveId: _controller.userId,
         userId: _controller.userId,
         userName: _controller.userName,
         avatar: _controller.avatar,
