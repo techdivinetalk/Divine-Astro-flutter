@@ -1068,7 +1068,7 @@ class HomeUI extends GetView<HomeController> {
                                       title: "noticeBoard".tr,
                                       subTitle: "noticeBoardDes".tr,
                                       argument:
-                                          controller!.homeData?.noticeBoard,
+                                          controller.homeData?.noticeBoard,
                                     ));
                                   },
                                   child: Assets.images.icInfo
@@ -1117,142 +1117,172 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget scheduledTrainingWidgetUpdated() {
-    return Constants.isTestingMode
-        ? Visibility(
-            visible: controller.astrologerTrainingSessionLst.isNotEmpty,
-            child: ListView.builder(
-              itemCount: controller.astrologerTrainingSessionLst.length,
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemBuilder: (context, index) {
-                AstrologerTrainingSessionModel model =
-                    controller.astrologerTrainingSessionLst[index];
+    return Visibility(
+      visible: controller.astrologerTrainingSessionLst.isNotEmpty,
+      child: ListView.builder(
+        itemCount: controller.astrologerTrainingSessionLst.length,
+        shrinkWrap: true,
+        physics: const NeverScrollableScrollPhysics(),
+        itemBuilder: (context, index) {
+          AstrologerTrainingSessionModel model =
+              controller.astrologerTrainingSessionLst[index];
 
-                return Container(
-                  margin: EdgeInsets.only(
-                    bottom: 10.h,
-                    left: 20.w,
-                    right: 20.w,
-                  ),
-                  width: ScreenUtil().screenWidth,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    color: appColors.white,
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black.withOpacity(0.3),
-                        blurRadius: 3.0,
-                        offset: const Offset(0, 3.0),
-                      ),
-                    ],
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
+          return Container(
+            margin: EdgeInsets.only(
+              bottom: 15.h,
+              left: 20.w,
+              right: 20.w,
+            ),
+            width: ScreenUtil().screenWidth,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(10),
+              color: appColors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 3.0,
+                  offset: const Offset(0, 3.0),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: Text(
                           'Scheduled Training',
                           style: AppTextStyle.textStyle16(
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        Row(
-                          children: [
-                            Text(
-                              'Training Purpose -',
-                              style: AppTextStyle.textStyle14(
-                                  fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(width: 4),
+                      Visibility(
+                        visible: model.isStart == "1",
+                        child: Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            border:
+                                Border.all(color: appColors.green, width: 1.5),
+                          ),
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 4,
+                            vertical: 2,
+                          ),
+                          child: Text(
+                            'Started',
+                            style: AppTextStyle.textStyle14(
+                              fontWeight: FontWeight.w600,
+                              fontColor: appColors.green,
                             ),
-                            const SizedBox(width: 4),
-                            Expanded(
-                              child: Text(
-                                model.trainingPurpose,
-                                style: AppTextStyle.textStyle14(
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Text(
-                              'Date & Time -',
-                              style: AppTextStyle.textStyle14(
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            const SizedBox(width: 4),
-                            Expanded(
-                              child: Text(
-                                // '9:31 AM 22/05/2024',
-                                model.meetingDate,
-                                style: AppTextStyle.textStyle14(
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            Text(
-                              'Training Duration -',
-                              style: AppTextStyle.textStyle14(
-                                  fontWeight: FontWeight.w400),
-                            ),
-                            const SizedBox(width: 4),
-                            Expanded(
-                              child: Text(
-                                // '2 Hours',
-                                controller.getHoursFromDuration(model.duration),
-                                style: AppTextStyle.textStyle14(
-                                    fontWeight: FontWeight.w500),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          children: [
-                            const Expanded(
-                              child: SizedBox(),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                String meetingLink = model.link;
-                                openZoomMeeting(meetingLink);
-                              },
-                              child: Container(
-                                width: 80.w,
-                                height: 31.h,
-                                decoration: BoxDecoration(
-                                  color: appColors.guideColor,
-                                  borderRadius: const BorderRadius.all(
-                                      Radius.circular(20)),
-                                ),
-                                // alignment: Alignment.center,
-                                child: Center(
-                                  child: Text(
-                                    "Join",
-                                    style: AppTextStyle.textStyle14(
-                                        fontColor: appColors.whiteGuidedColor,
-                                        fontWeight: FontWeight.w500),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                );
-              },
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Text(
+                        'Training Purpose -',
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          model.trainingPurpose,
+                          maxLines: 5,
+                          style: AppTextStyle.textStyle14(
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text(
+                        'Date & Time -',
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          controller.convertCustomDateTime(model.meetingDate,
+                              "yyyy-MM-dd HH:mm:ss", "dd-MM-yyyy, hh:mm a"),
+                          style: AppTextStyle.textStyle14(
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      Text(
+                        'Training Duration -',
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(width: 4),
+                      Expanded(
+                        child: Text(
+                          // '2 Hours',
+                          controller.getHoursFromDuration(model.duration),
+                          style: AppTextStyle.textStyle14(
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    children: [
+                      const Expanded(
+                        child: SizedBox(),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          String meetingLink = model.link;
+                          openZoomMeeting(meetingLink);
+                        },
+                        child: Container(
+                          width: 80.w,
+                          height: 31.h,
+                          decoration: BoxDecoration(
+                            color: appColors.guideColor,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(20)),
+                          ),
+                          // alignment: Alignment.center,
+                          child: Center(
+                            child: Text(
+                              "Join",
+                              style: AppTextStyle.textStyle14(
+                                  fontColor: appColors.whiteGuidedColor,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          )
-        : const SizedBox();
+          );
+        },
+      ),
+    );
   }
 
   Widget liveWidgetUpdated() {
@@ -1515,11 +1545,13 @@ class HomeUI extends GetView<HomeController> {
     );
   }
 
-  void openZoomMeeting(String meetingUrl) async {
-    if (await canLaunch(meetingUrl)) {
-      await launch(meetingUrl);
+  void openZoomMeeting(String url) async {
+    debugPrint("test_url: $url");
+
+    if (await canLaunch(url)) {
+      await launch(url);
     } else {
-      throw 'Could not launch $meetingUrl';
+      throw 'Could not launch $url';
     }
   }
 

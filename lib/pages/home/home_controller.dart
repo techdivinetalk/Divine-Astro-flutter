@@ -820,16 +820,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         error.onException();
       }
     }
-
-    if (Constants.isTestingMode) {
-      String text =
-          "●Now You can Connect to Multiple Astrologers With Multiple Que Feature●";
-      for (int i = 0; i < ((text.length > 10) ? 1 : 12); i++) {
-        marqueeTextLst.add("&nbsp;&nbsp;");
-        marqueeTextLst.add(text);
-        marqueeTextLst.add("&nbsp;&nbsp;");
-      }
-    }
   }
 
   RxList<AstrologerTrainingSessionModel> astrologerTrainingSessionLst =
@@ -1432,5 +1422,16 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     } else {
       return "$hours Hour";
     }
+  }
+
+  String convertCustomDateTime(
+      String inputDate, String inputFormat, String outputFormat) {
+    // Parse the input date string
+    DateTime parsedDate = DateFormat(inputFormat).parse(inputDate);
+
+    // Format the date to the desired output format
+    String formattedDate = DateFormat(outputFormat).format(parsedDate);
+
+    return formattedDate;
   }
 }
