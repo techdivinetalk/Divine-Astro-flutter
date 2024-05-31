@@ -133,7 +133,7 @@ class _LivePage extends State<LiveDharamScreen>
           snapshot: data,
           engaging: engaging,
         );
-        List<dynamic> giftList = data['gift'];
+        List<dynamic> giftList = data['gift'] ?? [];
         for (var gift in giftList) {
           gift.forEach((key, value) {
             print(value);

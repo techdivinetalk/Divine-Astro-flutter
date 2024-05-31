@@ -141,6 +141,7 @@ class LiveTipsController extends GetxController {
 
     await live.doc(userId).set(
       {
+        "id": userId,
         "isAvailable": true,
         "blockList": blockedCustomerList,
       },
@@ -156,9 +157,9 @@ class LiveTipsController extends GetxController {
         await Get.offNamed(RouteName.liveDharamScreen, arguments: userId);
         LiveGlobalSingleton().isInLiveScreen = false;
       });
-      LiveGlobalSingleton().isInLiveScreen = true;
-      await Get.offNamed(RouteName.liveDharamScreen, arguments: userId);
-      LiveGlobalSingleton().isInLiveScreen = false;
+      // LiveGlobalSingleton().isInLiveScreen = true;
+      // await Get.offNamed(RouteName.liveDharamScreen, arguments: userId);
+      // LiveGlobalSingleton().isInLiveScreen = false;
     }).catchError((error) {
       print("Failed to add node: $error");
     });
