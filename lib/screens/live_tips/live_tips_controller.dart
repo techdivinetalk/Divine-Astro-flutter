@@ -171,14 +171,32 @@ class LiveTipsController extends GetxController {
         "id": userId,
         "name": userName,
         "image": avatar,
-        "isAvailable": true,
         "isEngaged": 0,
       },
     );
+
     await database.ref().child("$livePath/$userId/realTime").update(
-      {"blockList": blockedCustomerList},
-    ); 
- 
+      {
+        "blockList": blockedCustomerList,
+        "isAvailable": true,
+      },
+    );
+
+    CollectionReference liveCount =
+        FirebaseFirestore.instance.collection(liveCountPath);
+
+    await liveCount.doc(userId).set(
+      {
+        "id": userId,
+        "astroName": userName,
+        "astroAvatar": avatar,
+      },
+    ).then((value) {
+      print("Node Added");
+    }).catchError((error) {
+      print("Failed to add node: $error");
+    });
+    //
     LiveGlobalSingleton().isInLiveScreen = true;
     await Get.offNamed(RouteName.liveDharamScreen, arguments: userId);
     LiveGlobalSingleton().isInLiveScreen = false;
