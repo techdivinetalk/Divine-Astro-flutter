@@ -841,40 +841,7 @@ class _LivePage extends State<LiveDharamScreen>
   Map<String, dynamic> svgaUrls = {};
 
   Widget newLeaderboard() {
-    // if (_subscription == null) {
-    //   print("Animation -url ${_controller.userId}");
-    //   _subscription = FirebaseDatabase.instance
-    //       .ref()
-    //       .child(livePath)
-    //       .child(_controller.userId)
-    //       .child("realTime")
-    //       .child("gift")
-    //       .onChildAdded
-    //       .listen((event) {
-    //     if (event.snapshot.value != null) {
-    //       final key = event.snapshot.key; // Get the key of the changed child
-    //       final value =
-    //           event.snapshot.value; // Get the new value of the changed child
-    //       print("onChildAdded1 $key");
-    //       print("onChildAdded2 $value");
-    //       svgaUrls[key.toString()] = value.toString();
-    //       print(svgaUrls.length);
-    //       if (svgaUrls.length == 1) {
-    //         _loadRandomAnimation();
-    //       }
-    //       Future.delayed(const Duration(seconds: 1)).then((value) async {
-    //         FirebaseDatabase.instance
-    //             .ref()
-    //             .child(livePath)
-    //             .child(_controller.userId)
-    //             .child("realTime")
-    //             .child("gift")
-    //             .child(key.toString())
-    //             .remove();
-    //       });
-    //     }
-    //   });
-    // }
+
     return AnimatedOpacity(
       opacity: _controller.leaderboardModel.isEmpty ||
               _controller.currentCaller.isEngaded

@@ -170,7 +170,7 @@ class LiveDharamController extends GetxController {
     astrologerData = <dynamic, dynamic>{};
 
     leaderboardModel.value = [];
-    leaderboardModel.value = [];
+
     orderModel.value = usingForNullableWaiListModel;
     // followRes = AstrologerFollowingResponse();
     // walletRecharge = WalletRecharge();
@@ -385,6 +385,8 @@ class LiveDharamController extends GetxController {
 
   set hasReInitCoHost(bool value) => _hasReInitCoHost(value);
 
+  bool isFirstTime = false;
+
   Future<void> eventListner({
     required Map<dynamic, dynamic> snapshot,
     required Function(WaitListModel currentCaller) engaging,
@@ -413,11 +415,12 @@ class LiveDharamController extends GetxController {
             addToWaitListFunction(waitListData: waitListData);
           } else {
             print("cleancleancleanclean");
+            isFirstTime = false;
             waitListModel.value.clear();
             update();
           }
 
-          if (leaderBoard != null) {
+          if (leaderBoard.isNotEmpty) {
             addToLeaderBoardFunction(leaderBoard: leaderBoard);
           } else {
             leaderboardModel.value.clear();
@@ -440,9 +443,10 @@ class LiveDharamController extends GetxController {
           print(currentCaller.isEngaded);
           print("currentCaller.isEngaded");
           await Future.delayed(const Duration(seconds: 1));
-          if (waitListModel.isNotEmpty) {
+          if (waitListModel.isNotEmpty && waitListModel.length <= 1) {
             engaging(waitListModel.first);
           }
+          update();
         } else {}
         update();
       } else {
@@ -860,46 +864,6 @@ class LiveDharamController extends GetxController {
     return pivotList.join(", ");
   }
 
-  /// old realTime data base of leader board
-  // void getLatestLeaderboard(DataSnapshot? dataSnapshot) {
-  //   if (dataSnapshot != null) {
-  //     if (dataSnapshot.exists) {
-  //       if (dataSnapshot.value is Map<dynamic, dynamic>) {
-  //         Map<dynamic, dynamic> map = <dynamic, dynamic>{};
-  //         map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-  //             as Map<dynamic, dynamic>;
-  //         final List<LeaderboardModel> tempList = <LeaderboardModel>[];
-  //         map.forEach(
-  //           (key, value) {
-  //             tempList.add(
-  //               LeaderboardModel(
-  //                 amount: value["amount"] ?? 0,
-  //                 avatar: value["avatar"] ?? "",
-  //                 userName: value["userName"] ?? "",
-  //                 id: value["id"] ?? "",
-  //               ),
-  //             );
-  //           },
-  //         );
-  //         leaderboardModel
-  //           ..clear()
-  //           ..addAll(tempList);
-  //
-  //         leaderboardModel.sort(
-  //           (LeaderboardModel a, LeaderboardModel b) {
-  //             return b.amount.compareTo(a.amount);
-  //           },
-  //         );
-  //       } else {}
-  //     } else {
-  //       leaderboardModel.clear();
-  //     }
-  //   } else {
-  //     leaderboardModel.clear();
-  //   }
-  //   return;
-  // }
-
   Future<void> addUpdateToWaitList({
     required String customerId,
     required String callType,
@@ -970,7 +934,6 @@ class LiveDharamController extends GetxController {
   Future<void> addUpdateOrder(Map<String, dynamic> orderDetails) async {
     print(orderDetails);
     print("updating entry orderDetails");
-    // await ref.child("$livePath/$liveId/realTime/order").update(orderDetails);
     await liveStore.doc(userId).update({
       'order': orderDetails,
     });
@@ -1001,63 +964,9 @@ class LiveDharamController extends GetxController {
   //   await addUpdateOrder(orderDetails);
   // }
 
-  void getLatestWaitList(
-    DataSnapshot? dataSnapshot,
-  ) {
-    if (dataSnapshot != null) {
-      if (dataSnapshot.exists) {
-        if (dataSnapshot.value is Map<dynamic, dynamic>) {
-          Map<dynamic, dynamic> map = <dynamic, dynamic>{};
-          map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-              as Map<dynamic, dynamic>;
-          final List<WaitListModel> tempList = <WaitListModel>[];
-          map.forEach(
-            // ignore: always_specify_types
-            (key, value) {
-              tempList.add(
-                WaitListModel(
-                  // ignore:  avoid_dynamic_calls
-                  isRequest: value["isRequest"] ?? false,
-                  // ignore:  avoid_dynamic_calls
-                  isEngaded: value["isEngaded"] ?? false,
-                  // ignore:  avoid_dynamic_calls
-                  callType: value["callType"] ?? "",
-                  // ignore:  avoid_dynamic_calls
-                  totalTime: value["totalTime"] ?? "",
-                  totalMin: value["totalMin"] ?? 0,
-                  // ignore:  avoid_dynamic_calls
-                  avatar: value["avatar"] ?? "",
-                  // ignore:  avoid_dynamic_calls
-                  userName: value["userName"] ?? "",
-                  // ignore:  avoid_dynamic_calls
-                  id: value["id"] ?? "",
-                  // ignore:  avoid_dynamic_calls
-                  generatedOrderId: value["generatedOrderId"] ?? 0,
-                  // ignore:  avoid_dynamic_calls
-                  offerId: value["offerId"] ?? 0,
-                  // ignore:  avoid_dynamic_calls
-                  callStatus: value["callStatus"] ?? 0,
-                ),
-              );
-            },
-          );
-          waitListModel
-            ..clear()
-            ..addAll(tempList);
-          // waitListModel = tempList;
-        } else {}
-      } else {
-        waitListModel.value.clear();
-      }
-    } else {
-      waitListModel.value.clear();
-    }
-    return;
-  }
-
   Future<void> removeFromOrder() async {
     print("remove order from firebase");
-    // await ref.child("$livePath/$liveId/realTime/order").remove();
+
     await liveStore.doc(userId).update({
       'order': FieldValue.delete(),
     });
