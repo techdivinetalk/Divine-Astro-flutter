@@ -1104,7 +1104,6 @@ class _LivePage extends State<LiveDharamScreen>
       await Future<void>.delayed(const Duration(seconds: 2));
 
       _controller.initData();
-      _controller.updateInfo();
     } else {}
 
     return Future<void>.value();
