@@ -218,7 +218,7 @@ class _LivePage extends State<LiveDharamScreen>
         const Duration(seconds: 1),
         () async {
           print("gifts----  $gifts");
-          print("giftList---$giftList");
+          print("giftList--- $giftList");
           print("removing code of gift from firebase");
           giftList.remove(gifts);
           await _controller.liveStore.doc(_controller.userId).update({

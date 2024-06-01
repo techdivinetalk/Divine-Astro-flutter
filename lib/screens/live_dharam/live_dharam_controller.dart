@@ -948,8 +948,6 @@ class LiveDharamController extends GetxController {
       waitListModel[index].callStatus = callStatus;
 
       // Update the document with the modified blockList
-      print(jsonEncode(waitListModel));
-      print("jsonEncode(waitListModel)");
       await liveStore.doc(userId).update({
         'waitList': jsonEncode(waitListModel),
       });
