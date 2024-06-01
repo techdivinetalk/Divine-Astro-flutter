@@ -3316,7 +3316,7 @@ class _LivePage extends State<LiveDharamScreen>
     final connect = zegoController.coHost;
     final bool removed = await connect.removeCoHost(user);
     if (kDebugMode) {
-      divineSnackBar(data: "remove co-host from astrologer side ${removed}");
+      divineSnackBar(data: "Call disconnected");
       print(removed);
       print("removing-co-host");
     }
