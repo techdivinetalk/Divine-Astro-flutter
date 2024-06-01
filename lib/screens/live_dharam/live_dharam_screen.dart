@@ -133,15 +133,17 @@ class _LivePage extends State<LiveDharamScreen>
           snapshot: data,
           engaging: engaging,
         );
-        List<dynamic> giftList = data['gift'] ?? [];
-        for (var gift in giftList) {
-          gift.forEach((key, value) {
-            print(value);
-            svgaUrls[key.toString()] = value.toString();
-            if (svgaUrls.length == 1) {
-              _loadRandomAnimation(gifts: svgaUrls, giftList: giftList);
-            }
-          });
+        if(data['gift'] != null){
+          List<dynamic> giftList = data['gift'] ?? [];
+          for (var gift in giftList) {
+            gift.forEach((key, value) {
+              print(value);
+              svgaUrls[key.toString()] = value.toString();
+              if (svgaUrls.length == 1) {
+                _loadRandomAnimation(gifts: svgaUrls, giftList: giftList);
+              }
+            });
+          }
         }
       } else {
         print('Document does not exist');
@@ -221,8 +223,10 @@ class _LivePage extends State<LiveDharamScreen>
           giftList.remove(gifts);
           await _controller.liveStore.doc(_controller.userId).update({
             "gift": FieldValue.arrayRemove([gifts])
+          }).then((value){
+            print("removing gift from firebase");
           });
-          setState(() {});
+          // setState(() {});
         },
       );
     }

@@ -6,6 +6,7 @@ import "dart:developer";
 
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
+import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/model/live/blocked_customer_list_res.dart";
 import "package:divine_astrologer/model/live/blocked_customer_res.dart";
@@ -1279,16 +1280,29 @@ class LiveDharamController extends GetxController {
     BlockedCustomerRes blockedCustListRes = BlockedCustomerRes();
     blockedCustListRes = await liveRepository.blockedCustomerAPI(
       params: param,
-      successCallBack: successCallBack,
+      successCallBack: (message) {
+        if (getBlockedInInt(id: id) == 0) {
+          AppFirebaseService().writeData("user/${id}/realTime", {
+            "block": _userId.value,
+          });
+        } else {
+          FirebaseDatabase.instance
+              .ref()
+              .child("user/${id}/realTime/block")
+              .remove();
+        }
+        update();
+      },
       failureCallBack: failureCallBack,
     );
     blockedCustListRes = blockedCustListRes.statusCode == HttpStatus.ok
         ? BlockedCustomerRes.fromJson(blockedCustListRes.toJson())
         : BlockedCustomerRes.fromJson(BlockedCustomerRes().toJson());
     await callBlockedCustomerListRes(
-      successCallBack: successCallBack,
+      successCallBack: (message) {},
       failureCallBack: failureCallBack,
     );
+
     await addUpdateToBlockList();
     return Future<void>.value();
   }
