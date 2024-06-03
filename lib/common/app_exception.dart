@@ -22,6 +22,7 @@ class NoInternetException extends AppException {
   String message;
 
   NoInternetException(this.message);
+
   @override
   void onException(
       {Function()? onButtonClick,
@@ -47,7 +48,7 @@ class CustomException extends AppException {
       String? dismissButtonText,
       shouldShowFlushBar = true}) {
     if (shouldShowFlushBar) {
-     // divineSnackBar(data: message, color: appColors.redColor);
+      // divineSnackBar(data: message, color: appColors.redColor);
     } else {
       debugPrint(message);
     }
@@ -65,9 +66,9 @@ class OtpInvalidTimerException implements Exception {
   }
 }
 
-
 class ManyTimeExException extends StatelessWidget {
   final String? message;
+
   const ManyTimeExException({super.key, this.message});
 
   @override
@@ -80,21 +81,26 @@ class ManyTimeExException extends StatelessWidget {
           Container(
             width: double.maxFinite,
             padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
-            decoration:  BoxDecoration(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(50.0)),
+            decoration: BoxDecoration(
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(50.0)),
               color: appColors.white,
             ),
             child: Column(
               children: [
                 SizedBox(height: 20.h),
-               SvgPicture.asset("assets/svg/caution.svg",height: 64.h,width: 64.w,),
+                SvgPicture.asset(
+                  "assets/svg/caution.svg",
+                  height: 64.h,
+                  width: 64.w,
+                ),
                 SizedBox(height: 20.h),
                 CustomText("${message!.split(".").first}!",
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
                     fontColor: appColors.appRedColour),
                 SizedBox(height: 10.h),
-               /* Text(
+                /* Text(
                   "${message!.split(".").last}",
                   textAlign: TextAlign.center,
                   style: AppTextStyle.textStyle16(fontWeight: FontWeight.w400),
@@ -132,4 +138,3 @@ class ManyTimeExException extends StatelessWidget {
     );
   }
 }
-

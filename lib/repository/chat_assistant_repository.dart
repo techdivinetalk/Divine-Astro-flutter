@@ -84,6 +84,8 @@ class ChatAssistantRepository extends ApiProvider {
       final response =
           await post(getChatAssistCustomerData, body: jsonEncode(params)); if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       log('response --- ${response.body}');
       if (response.statusCode == 200) {
@@ -114,6 +116,8 @@ class ChatAssistantRepository extends ApiProvider {
     try {
       final response = await post(getMessageTemplateForChatAssist); if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200 && json.decode(response.body) != null) {
         print("test_body: ${response.body}");

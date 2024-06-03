@@ -23,6 +23,8 @@ class OrderHistoryRepository extends ApiProvider {
           body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
 
       if (response.statusCode == 200) {
@@ -55,6 +57,8 @@ class OrderHistoryRepository extends ApiProvider {
           body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
 
       if (response.statusCode == 200) {
@@ -87,6 +91,8 @@ class OrderHistoryRepository extends ApiProvider {
           body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
 
       if (response.statusCode == 200) {
@@ -119,6 +125,8 @@ class OrderHistoryRepository extends ApiProvider {
           body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
 
       if (response.statusCode == 200) {
@@ -151,6 +159,8 @@ class OrderHistoryRepository extends ApiProvider {
           body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
 
       print("Body :: ${jsonEncode(param)}");
@@ -186,6 +196,8 @@ class OrderHistoryRepository extends ApiProvider {
           body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
 
       debugPrint('Response: ${response.request}');

@@ -16,6 +16,8 @@ class WalletListRepo extends ApiProvider {
       final response = await post(walletPayout,body: jsonEncode(param));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
 
       if (response.statusCode == 200) {

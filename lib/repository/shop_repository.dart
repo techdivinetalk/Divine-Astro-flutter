@@ -50,6 +50,8 @@ class ShopRepository extends ApiProvider {
       final response = await post(getShopUrl, body: jsonEncode(param).toString());
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       //progressService.showProgressDialog(false);
       if (response.statusCode == 200) {
@@ -81,6 +83,8 @@ class ShopRepository extends ApiProvider {
           headers: await getJsonHeaderURL());
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
 
       if (response.statusCode == 200) {
@@ -111,6 +115,8 @@ class ShopRepository extends ApiProvider {
           headers: await getJsonHeaderURL());
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
@@ -140,6 +146,8 @@ class ShopRepository extends ApiProvider {
           headers: await getJsonHeaderURL());
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
@@ -170,6 +178,8 @@ class ShopRepository extends ApiProvider {
           headers: await getJsonHeaderURL());
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
@@ -200,6 +210,8 @@ class ShopRepository extends ApiProvider {
           headers: await getJsonHeaderURL());
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {

@@ -21,6 +21,8 @@ class LiveLogsPageRepository extends ApiProvider {
       debugPrint("test_response_body: ${response.body}");
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==

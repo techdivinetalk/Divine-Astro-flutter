@@ -6,6 +6,7 @@ import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/di/progress_service.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_global_singleton.dart';
 import 'package:divine_astrologer/screens/otp_verification/otp_verification_controller.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -433,6 +434,7 @@ class ApiProvider {
       bool closeDialogOnTimeout = true}) async {
     endPoint ??= baseUrl;
     headers ??= await getAuthorisedHeader();
+
     if (await networkManager.isConnected() ?? false) {
       log('url: $endPoint$url');
       log('body: $body');
@@ -451,6 +453,13 @@ class ApiProvider {
         //print("urlFound ${url} ${response}");
         throw CustomException(AppString.timeoutMessage);
       });
+
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
       if (url != constantDetails) {
         log('response: ${response.body}');
       }

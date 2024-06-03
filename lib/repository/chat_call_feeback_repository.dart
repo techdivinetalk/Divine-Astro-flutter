@@ -23,6 +23,8 @@ class CallChatFeedBackRepository extends ApiProvider {
       );
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);
@@ -57,6 +59,8 @@ class CallChatFeedBackRepository extends ApiProvider {
       log('response --- ${response.body}');
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         final responseData = json.decode(response.body);
@@ -88,6 +92,8 @@ class CallChatFeedBackRepository extends ApiProvider {
       final response = await post(getOrderCallHistory, body: json.encode({'order_id': orderId}));
       log('response --- ${response.body}'); if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {

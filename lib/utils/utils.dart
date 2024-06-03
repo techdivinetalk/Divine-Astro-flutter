@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../common/colors.dart';
 import '../common/date_time_picker.dart';
 
 class Utils {
@@ -33,6 +34,14 @@ class Utils {
         looping: looping,
       ),
     );
+  }
+
+  Future<void> handleStatusCode400(String message) async {
+    debugPrint("test_handleStatusCode400: call");
+
+    /// response.statusCode == HttpStatus.badRequest
+
+    divineSnackBar(data: message, color: appColors.redColor);
   }
 
   Future<void> handleStatusCodeUnauthorizedBackend() async {

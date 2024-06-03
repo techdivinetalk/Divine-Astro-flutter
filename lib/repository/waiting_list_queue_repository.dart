@@ -17,6 +17,8 @@ class WaitingListQueueRepo extends ApiProvider {
           headers: await getJsonHeaderURL(version: 7));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
 
       if (response.statusCode == 200) {
@@ -51,6 +53,8 @@ class WaitingListQueueRepo extends ApiProvider {
       );
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
 
       if (response.statusCode == 200) {

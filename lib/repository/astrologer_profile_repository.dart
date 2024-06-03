@@ -50,6 +50,8 @@ class AstrologerProfileRepository extends ApiProvider {
       final String requestBody = jsonEncode(params);
       final response = await post(blockCustomerlist, body: requestBody); if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       final Map<String, dynamic> responseBody = json.decode(response.body);
       if (response.statusCode == HttpStatus.ok) {
@@ -82,6 +84,8 @@ class AstrologerProfileRepository extends ApiProvider {
       final String requestBody = jsonEncode(params);
       final response = await post(blockCustomer, body: requestBody); if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       final Map<String, dynamic> responseBody = json.decode(response.body);
       if (response.statusCode == HttpStatus.ok) {
@@ -142,6 +146,8 @@ class AstrologerProfileRepository extends ApiProvider {
       final String requestBody = jsonEncode(params);
       final response = await post(agoraCallEnd, body: requestBody); if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       final Map<String, dynamic> responseBody = json.decode(response.body);
       if (response.statusCode == HttpStatus.ok) {

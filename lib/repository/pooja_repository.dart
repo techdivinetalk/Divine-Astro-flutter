@@ -30,6 +30,8 @@ class PoojaRepository extends ApiProvider {
           endPoint: '');
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
@@ -60,6 +62,8 @@ class PoojaRepository extends ApiProvider {
           endPoint: '');
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       print("--------- pooja detail response ------------ ${json.encode(response.body)}");
       if (response.statusCode == 200) {
@@ -157,6 +161,8 @@ class PoojaRepository extends ApiProvider {
       final response = await post(getSinglePooja, body: requestBody);
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       final Map<String, dynamic> responseBody = json.decode(response.body);
       if (response.statusCode == HttpStatus.ok) {
@@ -221,6 +227,8 @@ class PoojaRepository extends ApiProvider {
       final response = await post(getUserAddressForPooja, body: requestBody);
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       final Map<String, dynamic> responseBody = json.decode(response.body);
       if (response.statusCode == HttpStatus.ok) {
@@ -254,6 +262,8 @@ class PoojaRepository extends ApiProvider {
       final response = await post(addUserAddressForPooja, body: requestBody);
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       final Map<String, dynamic> responseBody = json.decode(response.body);
       if (response.statusCode == HttpStatus.ok) {
@@ -287,6 +297,8 @@ class PoojaRepository extends ApiProvider {
       final response = await post(updateUserAddressForPooja, body: requestBody);
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       final Map<String, dynamic> responseBody = json.decode(response.body);
       if (response.statusCode == HttpStatus.ok) {
@@ -320,6 +332,8 @@ class PoojaRepository extends ApiProvider {
       final response = await post(deleteUserAddressForPooja, body: requestBody);
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       final Map<String, dynamic> responseBody = json.decode(response.body);
       if (response.statusCode == HttpStatus.ok) {
@@ -355,6 +369,8 @@ class PoojaRepository extends ApiProvider {
       final response = await post(generateOrderAPI, body: requestBody);
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       final Map<String, dynamic> responseBody = json.decode(response.body);
       if (response.statusCode == HttpStatus.ok) {

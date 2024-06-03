@@ -15,6 +15,8 @@ class AllFineDetailsRepository extends ApiProvider {
     try {
       final response = await post(getAllFeedbackFineDetail); if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         final jsonResponse = json.decode(response.body);

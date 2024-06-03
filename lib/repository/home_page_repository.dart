@@ -31,6 +31,8 @@ class HomePageRepository extends ApiProvider {
       );
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       log("Dashboard:: chat_previous_status:: ${json.decode(response.body)["data"]["chat_previous_status"]}");
       log("Dashboard:: call_previous_status:: ${json.decode(response.body)["data"]["call_previous_status"]}");
@@ -155,6 +157,8 @@ class HomePageRepository extends ApiProvider {
       );
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
@@ -238,6 +242,8 @@ class HomePageRepository extends ApiProvider {
       );
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       debugPrint("test_response_body: ${response.body}");
 
@@ -267,6 +273,8 @@ class HomePageRepository extends ApiProvider {
       final response = await post(getSampleText);
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200 && json.decode(response.body) != null) {
         print("test_body: ${response.body}");
@@ -298,6 +306,8 @@ class HomePageRepository extends ApiProvider {
       final response = await post(getAstrologerTrainingSession);
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200 && json.decode(response.body) != null) {
         print("test_body: ${response.body}");

@@ -29,6 +29,8 @@ class KundliRepository extends ApiProvider {
           body: jsonEncode(params).toString());
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         final astroDetails = astroDetailsModelFromJson(response.body);
@@ -51,6 +53,8 @@ class KundliRepository extends ApiProvider {
           body: jsonEncode(params));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         final birthDetails = birthDetailsModelFromJson(response.body);
@@ -74,6 +78,8 @@ class KundliRepository extends ApiProvider {
           body: jsonEncode(params));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         final manglikDosh = manglikDoshModelFromJson(response.body);
@@ -96,6 +102,8 @@ class KundliRepository extends ApiProvider {
           headers: await getJsonHeaderURL(), body: jsonEncode(params));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         final horoChart = horoChartModelFromJson(response.body);
@@ -119,6 +127,8 @@ class KundliRepository extends ApiProvider {
           body: jsonEncode(params));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         final kundliPrediction = kundliPredictionModelFromJson(response.body);
@@ -143,6 +153,8 @@ class KundliRepository extends ApiProvider {
           headers: await getJsonHeaderURL());
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
 
       if (response.statusCode == 200) {
@@ -174,6 +186,8 @@ class KundliRepository extends ApiProvider {
           body: jsonEncode(params));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         final kpData = kpDataModelFromJson(response.body);
@@ -197,6 +211,8 @@ class KundliRepository extends ApiProvider {
           body: jsonEncode(params));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         final planetData = planetlDetailModelFromJson(response.body);
@@ -220,6 +236,8 @@ class KundliRepository extends ApiProvider {
           body: jsonEncode(params));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         final kpData = dashaChartDataModelFromJson(response.body);
@@ -243,6 +261,8 @@ class KundliRepository extends ApiProvider {
           body: jsonEncode(params));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         final planetData = getPratyantarDashaModelFromJson(response.body);
@@ -271,6 +291,8 @@ class KundliRepository extends ApiProvider {
               body: jsonEncode(params));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         final planetData = sookshmaDashaModelFromJson(response.body);
@@ -300,6 +322,8 @@ class KundliRepository extends ApiProvider {
           body: jsonEncode(params));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
       }
       if (response.statusCode == 200) {
         final planetData = pranDashaModelFromJson(response.body);
