@@ -384,9 +384,10 @@ class LiveDharamController extends GetxController {
           } else {
             print("cleancleancleanclean");
             isFirstTime = false;
-            waitListModel.value.clear();
+            waitListModel.value = <WaitListModel>[];
+            waitListModel.value.clear(); 
             update();
-          }
+          } 
 
           if (leaderBoard.isNotEmpty) {
             addToLeaderBoardFunction(leaderBoard: leaderBoard);
