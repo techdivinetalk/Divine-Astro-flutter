@@ -840,13 +840,11 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget newLeaderboard() {
     return AnimatedOpacity(
-      opacity: _controller.leaderboardModel.isEmpty ||
-          _controller.currentCaller.isEngaded!
+      opacity: _controller.leaderboardModel.isEmpty
           ? 0.0
           : 1.0,
       duration: const Duration(seconds: 1),
-      child: _controller.leaderboardModel.isEmpty ||
-          _controller.currentCaller.isEngaded!
+      child: _controller.leaderboardModel.isEmpty
           ? const SizedBox()
           : LeaderBoardWidget(
         avatar: _controller.leaderboardModel.first.avatar,
