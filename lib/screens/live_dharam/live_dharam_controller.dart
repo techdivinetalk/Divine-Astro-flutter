@@ -385,14 +385,13 @@ class LiveDharamController extends GetxController {
             print("cleancleancleanclean");
             isFirstTime = false;
             waitListModel.value = <WaitListModel>[];
-            waitListModel.value.clear(); 
             update();
-          } 
+          }
 
           if (leaderBoard.isNotEmpty) {
             addToLeaderBoardFunction(leaderBoard: leaderBoard);
           } else {
-            leaderboardModel.value.clear();
+            leaderboardModel.value = <LeaderboardModel>[];
             update();
           }
           if (liveIdNode["order"] != null) {
