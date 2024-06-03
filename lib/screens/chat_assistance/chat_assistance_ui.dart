@@ -68,7 +68,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                                   ),
                                 ),
                               ),
-                              child:  Center(
+                              child: Center(
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
@@ -108,7 +108,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                                   ),
                                 ),
                               ),
-                              child:  Center(
+                              child: Center(
                                 child: Row(
                                   mainAxisSize: MainAxisSize.min,
                                   children: <Widget>[
@@ -143,23 +143,25 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                     return HelpersWidget().emptyChatWidget();
                   } else {
                     return Expanded(
-                        child: /*NotificationListener<ScrollNotification>(
+                        child: NotificationListener<ScrollNotification>(
                       onNotification: (ScrollNotification scrollInfo) {
-                        if (!controller.isLoadingMore.value &&
-                            scrollInfo.metrics.pixels ==
-                                scrollInfo.metrics.maxScrollExtent) {
-                          controller.loadMoreData();
+                        if (scrollInfo.metrics.pixels ==
+                            scrollInfo.metrics.maxScrollExtent) {
+                          controller.getAssistantAstrologerList();
                           return true;
                         }
                         return false;
                       },
-                      child:*/ ListView.builder(
+                      child: ListView.builder(
                         padding: EdgeInsets.symmetric(vertical: 10.h),
                         itemCount: (controller.searchData).isNotEmpty ||
                                 controller.searchController.text.isNotEmpty
                             ? controller.searchData.length
-                            : /*controller.chatDataList.length*/ controller.chatAssistantAstrologerListResponse!
-                            .data!.data!.length,
+                            : /*controller.chatDataList.length*/ controller
+                                .chatAssistantAstrologerListResponse!
+                                .data!
+                                .data!
+                                .length,
                         shrinkWrap: true,
                         itemBuilder: (context, index) {
                           return ChatAssistanceTile(
@@ -167,12 +169,14 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                             data: (controller.searchData).isNotEmpty ||
                                     controller.searchController.text.isNotEmpty
                                 ? controller.searchData[index]
-                                : /*controller.chatDataList[index]*/ controller.chatAssistantAstrologerListResponse!
-                                .data!.data![index],
+                                : /*controller.chatDataList[index]*/ controller
+                                    .chatAssistantAstrologerListResponse!
+                                    .data!
+                                    .data![index],
                           );
                         },
                       ),
-                    )/*)*/;
+                    ));
                   }
                 } else {
                   if (controller.customerDetailsResponse == null ||
@@ -180,6 +184,15 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                     return HelpersWidget().emptyChatWidget();
                   } else {
                     return Expanded(
+                        child: NotificationListener<ScrollNotification>(
+                      onNotification: (ScrollNotification scrollInfo) {
+                        if (scrollInfo.metrics.pixels ==
+                            scrollInfo.metrics.maxScrollExtent) {
+                          controller.getConsulation();
+                          return true;
+                        }
+                        return false;
+                      },
                       child: ListView.builder(
                         shrinkWrap: true,
                         padding: EdgeInsets.symmetric(vertical: 10.h),
@@ -198,7 +211,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                           );
                         },
                       ),
-                    );
+                    ));
                   }
                 }
               }),

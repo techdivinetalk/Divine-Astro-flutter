@@ -15,16 +15,24 @@ import '../model/chat_assistant/chat_assistant_astrologer_response.dart';
 import '../model/chat_assistant/chat_assistant_chats_response.dart';
 
 class ChatAssistantRepository extends ApiProvider {
-  Future<ChatAssistantAstrologerListResponse>
-      getChatAssistantAstrologerList() async {
+  Future<ChatAssistantAstrologerListResponse> getChatAssistantAstrologerList(
+      int page) async {
     try {
-      final response = await get(getChatAssistAstrologers);
-      log('response --- ${response.body}');
+      final response = await get(getChatAssistAstrologers, queryParameters: {
+        'page': page.toString(),
+      });
+      debugPrint('test_response --- ${response.body}');
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-            HttpStatus.unauthorized ) {
+            HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
+        } else if (json.decode(response.body)["status_code"] ==
+            HttpStatus.notFound) {
+          final assistantAstrologerList =
+              ChatAssistantAstrologerListResponse.fromJson(
+                  json.decode(response.body));
+          return assistantAstrologerList;
         } else {
           final assistantAstrologerList =
               ChatAssistantAstrologerListResponse.fromJson(
@@ -45,13 +53,15 @@ class ChatAssistantRepository extends ApiProvider {
     }
   }
 
-  Future<CustomerDetailsResponse> getConsulation() async {
+  Future<CustomerDetailsResponse> getConsulation(int page) async {
     try {
-      final response = await get(getConsulationData);
+      final response = await get(getConsulationData, queryParameters: {
+        'page': page.toString(),
+      });
       log('response --- ${response.body}');
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-            HttpStatus.unauthorized ) {
+            HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
           print("objectAssist ${json.decode(response.body)}");
           throw CustomException(json.decode(response.body)["error"]);
@@ -82,7 +92,8 @@ class ChatAssistantRepository extends ApiProvider {
       Map<String, dynamic> params) async {
     try {
       final response =
-          await post(getChatAssistCustomerData, body: jsonEncode(params)); if (response.statusCode == HttpStatus.unauthorized) {
+          await post(getChatAssistCustomerData, body: jsonEncode(params));
+      if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
       } else if (response.statusCode == HttpStatus.badRequest) {
         Utils().handleStatusCode400(response.body);
@@ -90,7 +101,7 @@ class ChatAssistantRepository extends ApiProvider {
       log('response --- ${response.body}');
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
-            HttpStatus.unauthorized ) {
+            HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
@@ -114,7 +125,8 @@ class ChatAssistantRepository extends ApiProvider {
 
   Future<MessageTemplateResponse?> doGetMessageTemplateForChatAssist() async {
     try {
-      final response = await post(getMessageTemplateForChatAssist); if (response.statusCode == HttpStatus.unauthorized) {
+      final response = await post(getMessageTemplateForChatAssist);
+      if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
       } else if (response.statusCode == HttpStatus.badRequest) {
         Utils().handleStatusCode400(response.body);

@@ -1,4 +1,3 @@
-
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
@@ -15,15 +14,19 @@ class ChatAssistanceController extends GetxController {
   final chatAssistantRepository = ChatAssistantRepository();
   ChatAssistantAstrologerListResponse? chatAssistantAstrologerListResponse;
   CustomerDetailsResponse? customerDetailsResponse;
+
   //ScrollController scrollController = ScrollController();
- // RxList<DataList> chatDataList = <DataList>[].obs;
+  // RxList<DataList> chatDataList = <DataList>[].obs;
   Loading loading = Loading.initial;
+  int page = 1;
+  int pageUsersData = 1;
   RxList searchData = [].obs;
   RxList filteredUserData = [].obs;
   final appSocket = AppSocket();
- // RxBool isLoadingMore = false.obs;
- // int _currentPage = 1;
- // bool _hasMoreData = true;
+
+  // RxBool isLoadingMore = false.obs;
+  // int _currentPage = 1;
+  // bool _hasMoreData = true;
 
   RxBool isSearchEnable = RxBool(false);
   RxBool keyboardActive = false.obs;
@@ -34,7 +37,7 @@ class ChatAssistanceController extends GetxController {
     super.onInit();
 
     getAssistantAstrologerList();
-   /* scrollController.addListener(() {
+    /* scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {
         if (_hasMoreData && !isLoadingMore.value) {
@@ -52,8 +55,6 @@ class ChatAssistanceController extends GetxController {
     super.onReady();
   }
 
-
-
   // void listenSocket() {
   //   appSocket.listenForAssistantChatMessage((chatData) {
   //     print('socket called');
@@ -61,7 +62,7 @@ class ChatAssistanceController extends GetxController {
   //   });
   // }
 
- /* void getUnreadMessage() async {
+  /* void getUnreadMessage() async {
     final localDataList =
     await SharedPreferenceService().getChatAssistUnreadMessage();
     if (localDataList.isEmpty) {
@@ -86,14 +87,29 @@ class ChatAssistanceController extends GetxController {
 
   Future<void> getAssistantAstrologerList() async {
     try {
+      if (loading == Loading.loading) return;
+
       loading = Loading.loading;
-      chatAssistantAstrologerListResponse = await chatAssistantRepository.getChatAssistantAstrologerList();
+      ChatAssistantAstrologerListResponse? response =
+          await chatAssistantRepository.getChatAssistantAstrologerList(page);
+      if (response.data != null && response.data!.data!.isNotEmpty) {
+        if (page != 1 &&
+            chatAssistantAstrologerListResponse != null &&
+            chatAssistantAstrologerListResponse!.data!.data!.isNotEmpty) {
+          chatAssistantAstrologerListResponse!.data!.data!
+              .addAll(response.data!.data!);
+        } else {
+          chatAssistantAstrologerListResponse = response;
+        }
+        page++;
+      }
       loading = Loading.loaded;
     } catch (err) {
       loading = Loading.error;
     }
     update();
   }
+
   /*Future<void> getAssistantAstrologerList() async {
     try {
       if (_currentPage == 1) {
@@ -129,10 +145,22 @@ class ChatAssistanceController extends GetxController {
     update();
   }*/
 
-Future<void> getConsulation() async {
+  Future<void> getConsulation() async {
     try {
+      if (loading == Loading.loading) return;
       loading = Loading.loading;
-      customerDetailsResponse = await chatAssistantRepository.getConsulation();
+      CustomerDetailsResponse response =
+          await chatAssistantRepository.getConsulation(pageUsersData);
+      if (response.data.isNotEmpty) {
+        if (pageUsersData != 1 &&
+            customerDetailsResponse != null &&
+            customerDetailsResponse!.data.isNotEmpty) {
+          customerDetailsResponse!.data.addAll(response.data);
+        } else {
+          customerDetailsResponse = response;
+        }
+        pageUsersData++;
+      }
       loading = Loading.loaded;
     } catch (err) {
       loading = Loading.error;
@@ -140,7 +168,7 @@ Future<void> getConsulation() async {
     update();
   }
 
- /* Future<void> loadMoreData() async {
+  /* Future<void> loadMoreData() async {
     try {
       isLoadingMore.value = true;
       _currentPage++;
@@ -162,18 +190,19 @@ Future<void> getConsulation() async {
         chatAssistantAstrologerListResponse!.data != null ||
         chatAssistantAstrologerListResponse!.data!.data!.isNotEmpty) {
       for (var userDetail in chatAssistantAstrologerListResponse!.data!.data!) {
-
         if (userDetail.name!.toLowerCase().contains(value.toLowerCase())) {
           searchData.add(userDetail);
         }
       }
-      for (var userDetail in customerDetailsResponse?.data??<ConsultationData>[]) {
-        if (userDetail.customerName.toLowerCase().contains(value.toLowerCase())) {
+      for (var userDetail
+          in customerDetailsResponse?.data ?? <ConsultationData>[]) {
+        if (userDetail.customerName
+            .toLowerCase()
+            .contains(value.toLowerCase())) {
           filteredUserData.add(userDetail);
         }
       }
     }
     update();
   }
-
 }

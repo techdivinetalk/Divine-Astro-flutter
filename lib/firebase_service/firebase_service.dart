@@ -93,104 +93,101 @@ class AppFirebaseService {
   //     }
   //   });
   // }
-  Future<void> userRealTime(String key,dynamic value,String path) async {
-    switch(key){
-      case"order_id":
+  Future<void> userRealTime(String key, dynamic value, String path) async {
+    debugPrint("test_userRealTime: value: $value");
+
+    switch (key) {
+      case "order_id":
         watcher.strValue = value.toString();
         break;
-     case"isEngagedStatus":
-       isEngagedStatus(value);
+      case "isEngagedStatus":
+        isEngagedStatus(value);
         break;
-     case"callKundli":
-       Map<String, dynamic>? callKundli = Map<String, dynamic>.from(
-           value as Map<Object?, Object?>);
-       print(callKundli);
-       print("realTimeData['callKundli']");
-       callKunadliUpdated(callKundli);
-       sendBroadcast(
-           BroadcastMessage(name: "callKundli", data: callKundli));
+      case "callKundli":
+        Map<String, dynamic>? callKundli =
+            Map<String, dynamic>.from(value as Map<Object?, Object?>);
+        print(callKundli);
+        print("realTimeData['callKundli']");
+        callKunadliUpdated(callKundli);
+        sendBroadcast(BroadcastMessage(name: "callKundli", data: callKundli));
         break;
-     case"giftCount":
-       giftCountUpdate(value["giftCount"]);
-       giftImageUpdate(value["giftImage"]);
-       print(
-           "gift broadcase called ${value["giftCount"]} ${value["giftImage"]}");
-       sendBroadcast(
-         BroadcastMessage(
-           name: "giftCount",
-           data: {
-             'giftCount': value["giftCount"],
-             "giftImage": value["giftImage"],
-           },
-         ),
-       );
-       FirebaseDatabase.instance.ref("$path/giftCount").remove();
-       FirebaseDatabase.instance.ref("$path/giftImage").remove();
+      case "giftCount":
+        giftCountUpdate(value["giftCount"]);
+        giftImageUpdate(value["giftImage"]);
+        print(
+            "gift broadcase called ${value["giftCount"]} ${value["giftImage"]}");
+        sendBroadcast(
+          BroadcastMessage(
+            name: "giftCount",
+            data: {
+              'giftCount': value["giftCount"],
+              "giftImage": value["giftImage"],
+            },
+          ),
+        );
+        FirebaseDatabase.instance.ref("$path/giftCount").remove();
+        FirebaseDatabase.instance.ref("$path/giftImage").remove();
         break;
-    case"voiceCallStatus":
-       callSwitch(value > 0);
+      case "voiceCallStatus":
+        callSwitch(value > 0);
         break;
-     case"chatStatus":
-       chatSwitch(value > 0);
+      case "chatStatus":
+        chatSwitch(value > 0);
         break;
-     case"videoCallStatus":
-       callSwitch(value > 0);
+      case "videoCallStatus":
+        callSwitch(value > 0);
         break;
-    case"totalGift":
-       callSwitch(value > 0);
+      case "totalGift":
+        callSwitch(value > 0);
         break;
-    case"deliveredMsg":
-      sendBroadcast(BroadcastMessage(
-          name: "deliveredMsg",
-          data: {'deliveredMsgList': value}));
+      case "deliveredMsg":
+        sendBroadcast(BroadcastMessage(
+            name: "deliveredMsg", data: {'deliveredMsgList': value}));
         break;
-     case"uniqueId":
-       String uniqueId = await getDeviceId() ?? "";
-       debugPrint(
-         'check uniqueId ${value.toString()}\ngetDeviceId ${uniqueId.toString()}',
-       );
-       if (value.toString() != uniqueId) {
-         print("logout --- start");
-         await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
-         print("logout --- end");
-         Get.put(SettingsController()).logOut();
-       }
+      case "uniqueId":
+        String uniqueId = await getDeviceId() ?? "";
+        debugPrint(
+          'check uniqueId ${value.toString()}\ngetDeviceId ${uniqueId.toString()}',
+        );
+        if (value.toString() != uniqueId) {
+          print("logout --- start");
+          await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
+          print("logout --- end");
+          Get.put(SettingsController()).logOut();
+        }
         break;
-     case"profilePhoto":
-       UserData? userData =
-       Get.find<SharedPreferenceService>().getUserDetail();
-       userData!.image =  value.toString();
-       String? baseAmazonUrl =
-       Get.find<SharedPreferenceService>().getBaseImageURL();
-       Get.find<SharedPreferenceService>().setUserDetail(userData);
-       Get.put(DashboardController(Get.put(PreDefineRepository())))
-           .userProfileImage
-           .value = "$baseAmazonUrl/${userData.image!}";
-       Get.put(ProfilePageController(Get.put(UserRepository())))
-           .userProfileImage
-           .value = "$baseAmazonUrl/${userData.image!}";
-       Get.put(DashboardController(Get.put(PreDefineRepository())))
-           .update();
-       Get.put(ProfilePageController(Get.put(UserRepository()))).update();
+      case "profilePhoto":
+        UserData? userData =
+            Get.find<SharedPreferenceService>().getUserDetail();
+        userData!.image = value.toString();
+        String? baseAmazonUrl =
+            Get.find<SharedPreferenceService>().getBaseImageURL();
+        Get.find<SharedPreferenceService>().setUserDetail(userData);
+        Get.put(DashboardController(Get.put(PreDefineRepository())))
+            .userProfileImage
+            .value = "$baseAmazonUrl/${userData.image!}";
+        Get.put(ProfilePageController(Get.put(UserRepository())))
+            .userProfileImage
+            .value = "$baseAmazonUrl/${userData.image!}";
+        Get.put(DashboardController(Get.put(PreDefineRepository()))).update();
+        Get.put(ProfilePageController(Get.put(UserRepository()))).update();
         break;
-      case"totalGift":
-       sendBroadcast(
-         BroadcastMessage(
-           name: "totalGift",
-           data: {'totalGift': value},
-         ),
-       );
-       break;
+      case "totalGift":
+        sendBroadcast(
+          BroadcastMessage(
+            name: "totalGift",
+            data: {'totalGift': value},
+          ),
+        );
+        break;
     }
   }
-   readData(String path) async {
-   print("readData $path");
+
+  readData(String path) async {
+    print("readData $path");
     try {
-      if(kDebugMode) {
-        database
-            .child(path)
-            .onChildChanged
-            .listen((event) {
+      if (kDebugMode) {
+        database.child(path).onChildChanged.listen((event) {
           final key = event.snapshot.key; // Get the key of the changed child
           final value =
               event.snapshot.value; // Get the new value of the changed child
@@ -200,10 +197,7 @@ class AppFirebaseService {
             userRealTime(key!, value, path);
           }
         });
-        database
-            .child(path)
-            .onChildAdded
-            .listen((event) {
+        database.child(path).onChildAdded.listen((event) {
           final key = event.snapshot.key; // Get the key of the changed child
           final value =
               event.snapshot.value; // Get the new value of the changed child
@@ -213,11 +207,8 @@ class AppFirebaseService {
             userRealTime(key!, value, path);
           }
         });
-      }else {
-        database
-            .child(path)
-            .onValue
-            .listen((event) async {
+      } else {
+        database.child(path).onValue.listen((event) async {
           debugPrint("real time $path ---> ${event.snapshot.value}");
           if (preferenceService.getToken() == null ||
               preferenceService.getToken() == "") {
@@ -245,8 +236,7 @@ class AppFirebaseService {
 
               String uniqueId = await getDeviceId() ?? "";
               debugPrint(
-                'check uniqueId ${realTimeData['uniqueId']}\ngetDeviceId ${uniqueId
-                    .toString()}',
+                'check uniqueId ${realTimeData['uniqueId']}\ngetDeviceId ${uniqueId.toString()}',
               );
               if (realTimeData["uniqueId"] != uniqueId) {
                 print("logout --- start");
@@ -259,17 +249,15 @@ class AppFirebaseService {
             if (realTimeData["profilePhoto"] != null) {
               print("beforeGoing 0 - first");
               UserData? userData =
-              Get.find<SharedPreferenceService>().getUserDetail();
+                  Get.find<SharedPreferenceService>().getUserDetail();
               userData!.image = realTimeData["profilePhoto"];
               String? baseAmazonUrl =
-              Get.find<SharedPreferenceService>().getBaseImageURL();
+                  Get.find<SharedPreferenceService>().getBaseImageURL();
               Get.find<SharedPreferenceService>().setUserDetail(userData);
-              Get
-                  .put(DashboardController(Get.put(PreDefineRepository())))
+              Get.put(DashboardController(Get.put(PreDefineRepository())))
                   .userProfileImage
                   .value = "$baseAmazonUrl/${userData.image!}";
-              Get
-                  .put(ProfilePageController(Get.put(UserRepository())))
+              Get.put(ProfilePageController(Get.put(UserRepository())))
                   .userProfileImage
                   .value = "$baseAmazonUrl/${userData.image!}";
               Get.put(DashboardController(Get.put(PreDefineRepository())))
@@ -456,7 +444,8 @@ class AppFirebaseService {
         isVOIP(int.parse(dataSnapshot.value.toString()));
         break;
       default:
-        preferenceService.setStringPref(dataSnapshot.key.toString(), dataSnapshot.value.toString());
+        preferenceService.setStringPref(
+            dataSnapshot.key.toString(), dataSnapshot.value.toString());
         break;
     }
   }
