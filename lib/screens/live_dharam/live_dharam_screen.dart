@@ -228,7 +228,7 @@ class _LivePage extends State<LiveDharamScreen>
           print("giftList--- $giftList");
           print("gifts.keys.first ${gifts.keys.first}");
           print("removing code of gift from firebase");
-          giftList.remove(gifts);
+          // giftList.remove(gifts);
           giftList.removeWhere((element) =>
               element.containsKey(gifts.keys.first));
           await _controller.liveStore.doc(_controller.userId).update({
@@ -3170,11 +3170,15 @@ class _LivePage extends State<LiveDharamScreen>
           },
           onInvitationTimeout: (ZegoUIKitUser user) {
             showNotifOverlay(user: user, msg: "onCoHostInvitationTimeout");
-
+print(user.id);
+print("user.id");
             if (isAcceptPopupOpen) {
               Get.back();
-            } else {}
-            _controller.removeFromWaitList(customerId:user.id);
+              print("if timeout");
+            } else {
+              print("else timeout");
+            }
+            // _controller.removeFromWaitList(customerId:user.id);
             successAndFailureCallBack(
               message: "${user.name} timeout to take the call",
               isForSuccess: false,
