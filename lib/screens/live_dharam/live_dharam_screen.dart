@@ -3174,7 +3174,7 @@ class _LivePage extends State<LiveDharamScreen>
             if (isAcceptPopupOpen) {
               Get.back();
             } else {}
-
+            _controller.removeFromWaitList(customerId:user.id);
             successAndFailureCallBack(
               message: "${user.name} timeout to take the call",
               isForSuccess: false,

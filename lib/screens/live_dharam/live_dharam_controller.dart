@@ -690,6 +690,39 @@ class LiveDharamController extends GetxController {
     return Future<void>.value();
   }
 
+
+  Future<void> removeFromWaitList({String? customerId}) async {
+    // await ref.child("$livePath/$liveId/realTime/waitList/$userId").remove();
+    Map<String, dynamic> myWaitListData = {};
+    for (int i = 0; i < waitListModel.length; i++) {
+      if (waitListModel[i].id == customerId) {
+        myWaitListData["isRequest"] = waitListModel[i].isRequest;
+        myWaitListData["isEngaded"] = waitListModel[i].isEngaded;
+        myWaitListData["callType"] = waitListModel[i].callType;
+        myWaitListData["totalTime"] = waitListModel[i].totalTime;
+        myWaitListData["totalMin"] = waitListModel[i].totalMin;
+        myWaitListData["userName"] = waitListModel[i].userName;
+        myWaitListData["avatar"] = waitListModel[i].avatar;
+        myWaitListData["id"] = waitListModel[i].id;
+        myWaitListData["generatedOrderId"] = waitListModel[i].generatedOrderId;
+        myWaitListData["offerId"] = waitListModel[i].offerId;
+        myWaitListData["callStatus"] = waitListModel[i].callStatus;
+        waitListModel.remove(i);
+        update();
+        print(myWaitListData);
+        print("waitListModel[i]");
+        break;
+      }
+    }
+    await liveStore.doc(userId).update({
+      'waitList': FieldValue.arrayRemove([myWaitListData])
+    }).then((value) {
+      print("removed from waitList successfully");
+    });
+    return Future<void>.value();
+  }
+
+
   String isValidImageURL({required String imageURL}) {
     if (GetUtils.isURL(imageURL)) {
       return imageURL;
