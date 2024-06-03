@@ -3341,7 +3341,6 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-  List joinedAstrologerList = [];
 
   Future<void> onCoHostRequest({
     required ZegoUIKitUser user,
@@ -3359,7 +3358,9 @@ class _LivePage extends State<LiveDharamScreen>
         // if (_controller.openAceeptRejectDialogForId == userId) {
         //   final connectInvite = _zegoController.coHost;
         //   await connectInvite.hostSendCoHostInvitationToAudience(user);
-        // } else {}
+        // } else {
+        //
+        // }
         print("calling accept button");
         final connectInvite = zegoController.coHost;
         await connectInvite.hostSendCoHostInvitationToAudience(user);
@@ -3392,6 +3393,7 @@ class _LivePage extends State<LiveDharamScreen>
       await _controller.makeAPICallForEndCall(
         successCallBack: (String message) async {
           setState(() {});
+          divineSnackBar(data: "Call disconnected");
           successAndFailureCallBack(
               message: message, isForSuccess: true, isForFailure: false);
           await _controller.removeFromOrder();
