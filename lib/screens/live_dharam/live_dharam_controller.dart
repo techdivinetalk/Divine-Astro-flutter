@@ -662,7 +662,7 @@ class LiveDharamController extends GetxController {
       print(json.encode(waitListModel));
       print("waitListModel.toJson()");
       await liveStore.doc(userId).update({
-        'waitList': json.encode(waitListModel),
+        'waitList': jsonDecode(jsonEncode(waitListModel)),
       }).then((value) {
         print("update waitList");
       });
