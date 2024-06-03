@@ -188,16 +188,16 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
           height: 50,
           width: 50,
           child: CustomImageWidget(
-            imageUrl: item.avatar,
+            imageUrl: item.avatar ?? "",
             rounded: true,
             typeEnum: TypeEnum.user,
           ),
         ),
-        title: Text(item.userName),
+        title: Text(item.userName ?? ""),
         trailing: Row(
           mainAxisSize: MainAxisSize.min,
           children: <Widget>[
-            callTypeIcon(callType: item.callType),
+            callTypeIcon(callType: item.callType ?? ""),
             const SizedBox(width: 16),
             Text(
               getTotalWaitTime(item),
@@ -227,7 +227,7 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
   }
 
   Widget exitWidget() {
-    return widget.model.isEngaded && widget.model.id == widget.myUserId
+    return widget.model.isEngaded! && widget.model.id == widget.myUserId
         ? const SizedBox()
         : widget.isHost
         ? !widget.isInCall! ? CommonButton(
@@ -256,7 +256,7 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
     // final String formattedTime =
     //     "${dateTime.hour}:${dateTime.minute}:${dateTime.second}";
     // return formattedTime;
-    return item.totalMin > 1 ? "${item.totalMin} mins" : "${item.totalMin} min";
+    return item.totalMin! > 1 ? "${item.totalMin} mins" : "${item.totalMin} min";
   }
 
 // Widget newTimerWidget(WaitListModel item) {

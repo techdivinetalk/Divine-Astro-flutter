@@ -19,17 +19,12 @@ import "package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart";
 import "package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
 import "package:firebase_database/firebase_database.dart";
-import "package:flutter/material.dart";
-import "package:flutter_broadcasts/flutter_broadcasts.dart";
+
 import "package:get/get.dart";
 import "package:get/get_connect/http/src/status/http_status.dart";
 import "package:http/http.dart" as http;
 
-//
-//
-//
-//
-//
+
 
 class LiveDharamController extends GetxController {
   final SharedPreferenceService pref = Get.put(SharedPreferenceService());
@@ -53,8 +48,6 @@ class LiveDharamController extends GetxController {
   final RxMap<dynamic, dynamic> _data = <dynamic, dynamic>{}.obs;
   var orderID = "";
 
-  // final Rx<GetAstroDetailsRes> _details = GetAstroDetailsRes().obs;
-  // final Rx<IsCustomerBlockedRes> _isCustBlocked = IsCustomerBlockedRes().obs;
   RxList<LeaderboardModel> leaderboardModel = <LeaderboardModel>[].obs;
   RxList<WaitListModel> waitListModel = <WaitListModel>[].obs;
   Rx<WaitListModel> orderModel = WaitListModel(
@@ -106,8 +99,6 @@ class LiveDharamController extends GetxController {
   ).obs;
   final RxBool _showTopBanner = false.obs;
 
-  // final Rx<InsufficientBalModel> _insufficientBalModel =
-  //     InsufficientBalModel().obs;
   final Rx<BlockedCustomerListRes> _blockedCustomerList =
       BlockedCustomerListRes().obs;
   final Rx<NoticeBoardRes> _noticeBoardRes = NoticeBoardRes().obs;
@@ -120,8 +111,7 @@ class LiveDharamController extends GetxController {
   final Rx<TarotGameModel> _tarotGameModel = TarotGameModel().obs;
   final RxBool _hasFollowPopupOpen = false.obs;
 
-  // final RxBool _hasCallAcceptRejectPopupOpen = false.obs;
-  // final RxString _openAceeptRejectDialogForId = "".obs;
+
   final Rx<RequestClass> _requestClass = RequestClass(
     type: "",
     giftData: GiftData(
@@ -158,7 +148,7 @@ class LiveDharamController extends GetxController {
     print(userId);
     print("userIduserIduserIduserId");
     userName = pref.getUserDetail()?.name ?? "";
-    // avatar = _pref.getUserDetail()?.avatar ?? "";
+
     final String awsURL = pref.getAmazonUrl() ?? "";
     final String image = pref.getUserDetail()?.image ?? "";
     avatar = isValidImageURL(imageURL: "$awsURL/$image");
@@ -172,9 +162,7 @@ class LiveDharamController extends GetxController {
     leaderboardModel.value = [];
 
     orderModel.value = usingForNullableWaiListModel;
-    // followRes = AstrologerFollowingResponse();
-    // walletRecharge = WalletRecharge();
-    // orderGenerate = OrderGenerate();
+
     isFront = true;
     isCamOn = true;
     isMicOn = true;
@@ -192,18 +180,16 @@ class LiveDharamController extends GetxController {
       callStatus: 0,
     );
     showTopBanner = false;
-    // insufficientBalModel = InsufficientBalModel();
     blockedCustomerList = [];
     noticeBoardRes = NoticeBoardRes();
     timerCurrentIndex = 1;
-    // astroFollowPopup = [];
+
     isWaitingForCallAstrologerPopupRes = false;
     firebaseBlockUsersIds = [];
     deckCardModelList = [];
     tarotGameModel = TarotGameModel();
     hasFollowPopupOpen = false;
-    // hasCallAcceptRejectPopupOpen = false;
-    // openAceeptRejectDialogForId = "";
+
     clearRequest();
     isProcessing = false;
     extendTimeWidgetVisible = false;
@@ -224,14 +210,11 @@ class LiveDharamController extends GetxController {
     _hostSpeciality.close();
     _currentIndex.close();
     _data.close();
-    // _details.close();
-    // _isCustBlocked.close();
+
     leaderboardModel.close();
     waitListModel.close();
 
-    // _followRes.close();
-    // _walletRecharge.close();
-    // _orderGenerate.close();
+
     _isFront.close();
     _isCamOn.close();
     _isMicOn.close();
@@ -247,8 +230,7 @@ class LiveDharamController extends GetxController {
     _deckCardModelList.close();
     _tarotGameModel.close();
     _hasFollowPopupOpen.close();
-    // _hasCallAcceptRejectPopupOpen.close();
-    // _openAceeptRejectDialogForId.close();
+
     _requestClass.close();
     _isProcessing.close();
     _extendTimeWidgetVisible.close();
@@ -286,20 +268,6 @@ class LiveDharamController extends GetxController {
 
   set astrologerData(Map<dynamic, dynamic> value) => _data(value);
 
-  // GetAstroDetailsRes get details => _details.value;
-  // set details(GetAstroDetailsRes value) => _details(value);
-
-  // IsCustomerBlockedRes get isCustBlocked => _isCustBlocked.value;
-  // set isCustBlocked(IsCustomerBlockedRes value) => _isCustBlocked(value);
-
-  // AstrologerFollowingResponse get followRes => _followRes.value;
-  // set followRes(AstrologerFollowingResponse value) => _followRes(value);
-
-  // WalletRecharge get walletRecharge => _walletRecharge.value;
-  // set walletRecharge(WalletRecharge value) => _walletRecharge(value);
-
-  // OrderGenerate get orderGenerate => _orderGenerate.value;
-  // set orderGenerate(OrderGenerate value) => _orderGenerate(value);
 
   bool get isFront => _isFront.value;
 
@@ -619,70 +587,7 @@ class LiveDharamController extends GetxController {
     );
   }
 
-  // bool checkIfAstrologerAvailable(Map<dynamic, dynamic> map) {
-  //   bool isAvailable = false;
-  //   if (map.isEmpty) {
-  //     return isAvailable;
-  //   } else {
-  //     final Map<dynamic, dynamic> currentHostId = map[liveId] ?? {};
-  //     isAvailable = currentHostId["isAvailable"] ?? false;
-  //     return isAvailable;
-  //   }
-  // }
 
-  // String requirePreviousLiveID({
-  //   required Function() acknowledgement,
-  //   required Function() stillProcessing,
-  // }) {
-  //   final processing = isProcessing;
-  //   final bool has = hasMyIdInWaitList() || isWaitingForCallAstrologerPopupRes;
-  //   if (processing) {
-  //     stillProcessing();
-  //     return "";
-  //   } else if (has) {
-  //     acknowledgement();
-  //     return "";
-  //   } else {
-  //     currentIndex = currentIndex - 1;
-  //     if (currentIndex < 0) {
-  //       currentIndex = data.keys.toList().length - 1;
-  //     } else {}
-  //     if (data.keys.toList()[currentIndex] != null) {
-  //       liveId = data.keys.toList()[currentIndex];
-  //       updateInfo();
-  //       return liveId;
-  //     } else {
-  //       return "";
-  //     }
-  //   }
-  // }
-
-  // String requireNextLiveID({
-  //   required Function() acknowledgement,
-  //   required Function() stillProcessing,
-  // }) {
-  //   final processing = isProcessing;
-  //   final bool has = hasMyIdInWaitList() || isWaitingForCallAstrologerPopupRes;
-  //   if (processing) {
-  //     stillProcessing();
-  //     return "";
-  //   } else if (has) {
-  //     acknowledgement();
-  //     return "";
-  //   } else {
-  //     currentIndex = currentIndex + 1;
-  //     if (currentIndex > data.keys.toList().length - 1) {
-  //       currentIndex = 0;
-  //     } else {}
-  //     if (data.keys.toList()[currentIndex] != null) {
-  //       liveId = data.keys.toList()[currentIndex];
-  //       updateInfo();
-  //       return liveId;
-  //     } else {
-  //       return "";
-  //     }
-  //   }
-  // }
 
   Map<String, dynamic> createGift({
     required num count,
@@ -728,46 +633,6 @@ class LiveDharamController extends GetxController {
     return Future<void>.value();
   }
 
-  // Future<void> getAstrologerDetails({
-  //   required Function(String message) successCallBack,
-  //   required Function(String message) failureCallBack,
-  // }) async {
-  //   Map<String, dynamic> param = <String, dynamic>{};
-  //   param = <String, dynamic>{"astrologer_id": int.parse(liveId)};
-  //   GetAstroDetailsRes getAstroDetailsRes = GetAstroDetailsRes();
-  //   getAstroDetailsRes = await liveRepository.getAstroDetailsAPI(
-  //     params: param,
-  //     successCallBack: successCallBack,
-  //     failureCallBack: failureCallBack,
-  //   );
-  //   details = getAstroDetailsRes.statusCode == HttpStatus.ok
-  //       ? GetAstroDetailsRes.fromJson(getAstroDetailsRes.toJson())
-  //       : GetAstroDetailsRes.fromJson(GetAstroDetailsRes().toJson());
-  //   details.data?.image = isValidImageURL(imageURL: details.data?.image ?? "");
-  //   details.data?.speciality = getSpeciality();
-  //   //
-  //   testingVar = testingVar + 1;
-  //   return Future<void>.value();
-  // }
-
-  // Future<void> isCustomerBlocked({
-  //   required Function(String message) successCallBack,
-  //   required Function(String message) failureCallBack,
-  // }) async {
-  //   Map<String, dynamic> params = <String, dynamic>{};
-  //   params = <String, dynamic>{"member_id": liveId};
-  //   IsCustomerBlockedRes isCustomerBlockedRes = IsCustomerBlockedRes();
-  //   isCustomerBlockedRes = await liveRepository.isCustomerBlockedAPI(
-  //     params: params,
-  //     successCallBack: successCallBack,
-  //     failureCallBack: failureCallBack,
-  //   );
-  //   isCustBlocked = isCustomerBlockedRes.statusCode == HttpStatus.ok
-  //       ? IsCustomerBlockedRes.fromJson(isCustomerBlockedRes.toJson())
-  //       : IsCustomerBlockedRes.fromJson(IsCustomerBlockedRes().toJson());
-  //   return Future<void>.value();
-  // }
-
   bool isCustomerBlockedBool() {
     return false;
   }
@@ -789,61 +654,20 @@ class LiveDharamController extends GetxController {
     // required int totalMin,
   }) async {
     print(callType);
-    print("previousTypepreviousTypepreviousType");
-    // final DataSnapshot dataSnapshot =
-    //     await ref.child("$livePath/$liveId/realTime/waitList/$userId").get();
-    // if (dataSnapshot != null) {
-    //   if (dataSnapshot.exists) {
-    //     if (dataSnapshot.value is Map<dynamic, dynamic>) {
-    //       Map<dynamic, dynamic> map = <dynamic, dynamic>{};
-    //       map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-    //           as Map<dynamic, dynamic>;
-    //       final String type = map["callType"] ?? "";
-    //       previousType = type;
-    //     } else {}
-    //   } else {}
-    // } else {}
-    // for (int i = 0; i < _waitListModel.length; i++) {
-    //   if (waitListModel[i].id == userId) {
-    //     previousType = waitListModel[i].callType ?? "";
-    //     break;
-    //   }
-    // }
-    // update to order but no need longer
-    // final ogOrderDetails = <String, dynamic>{
-    //   "isRequest": isRequest,
-    //   "isEngaded": isEngaded,
-    //   "callType": previousType.toLowerCase(),
-    //   // "totalTime": "2",
-    //   "userName": userName,
-    //   "avatar": avatar,
-    //   // "totalMin": totalMin,
-    //   "id": userId,
-    //   // "generatedOrderId": (orderGenerate.data?.generatedOrderId ?? 0),
-    //   // "offerId": (details.data?.offerDetails?.offerId ?? 0)
-    //   "callStatus": callStatus,
-    // };
     int index = waitListModel.indexWhere((item) => item.id == customerId);
     if (index != -1) {
       waitListModel[index].callStatus = callStatus;
 
-      // Update the document with the modified blockList
+      print(waitListModel.toJson());
+      print(json.encode(waitListModel));
+      print("waitListModel.toJson()");
       await liveStore.doc(userId).update({
-        'waitList': jsonEncode(waitListModel),
+        'waitList': json.encode(waitListModel),
+      }).then((value) {
+        print("update waitList");
       });
     }
-    final Map<String, dynamic> moOrderDetails = <String, dynamic>{
-      "callStatus": callStatus,
-    };
-    //
-    // await ref
-    //     .child("$livePath/$liveId/realTime/waitList/$userId")
-    //     .update(moOrderDetails);
-    // old code in real Time no need to update
-    // if (callStatus == 2) {
-    //   await addUpdateOrder(ogOrderDetails);
-    //   await removeFromWaitList();
-    // } else {}
+
     return Future<void>.value();
   }
 
@@ -856,29 +680,6 @@ class LiveDharamController extends GetxController {
     return Future<void>.value();
   }
 
-  // String generateFutureTime() {
-  //   final DateTime current = DateTime.now();
-  //   final int min = (orderGenerate.data?.talktime ?? 0);
-  //   final DateTime addedTime = current.add(Duration(minutes: min));
-  //   final int millisecondsSinceEpoch = addedTime.millisecondsSinceEpoch;
-  //   return millisecondsSinceEpoch.toString();
-  // }
-
-  // Future<void> extendTime() async {
-  //   final Map<String, dynamic> orderDetails = {
-  //     "isRequest": orderModel.isRequest,
-  //     "isEngaded": orderModel.isEngaded,
-  //     "callType": orderModel.callType,
-  //     "totalTime": generateFutureTime(),
-  //     "userName": orderModel.userName,
-  //     "avatar": orderModel.avatar,
-  //     "id": orderModel.id,
-  //     "generatedOrderId": orderModel.generatedOrderId,
-  //     "offerId": orderModel.offerId,
-  //     "callStatus": orderModel.callStatus,
-  //   };
-  //   await addUpdateOrder(orderDetails);
-  // }
 
   Future<void> removeFromOrder() async {
     print("remove order from firebase");
@@ -907,7 +708,7 @@ class LiveDharamController extends GetxController {
     int totalMinutes = 0;
     final List<String> tempList = <String>[];
     for (final WaitListModel element in waitListModel) {
-      tempList.add(element.totalTime);
+      tempList.add(element.totalTime!);
     }
     if (tempList.isEmpty) {
       time = "00:00:00";
@@ -952,22 +753,6 @@ class LiveDharamController extends GetxController {
     required Function(String message) successCallBack,
     required Function(String message) failureCallBack,
   }) async {
-    // bool isExist = false;
-    // final String path = "$livePath/$liveId/order";
-    // final DataSnapshot dataSnapshot = await ref.child(path).get();
-    // if (dataSnapshot != null) {
-    //   if (dataSnapshot.exists) {
-    //     if (dataSnapshot.value is Map<dynamic, dynamic>) {
-    //       Map<dynamic, dynamic> map = <dynamic, dynamic>{};
-    //       map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-    //           as Map<dynamic, dynamic>;
-    //       final String userId = map["id"] ?? "";
-    //       isExist = currentCaller.id == userId;
-    //     } else {}
-    //   } else {}
-    // } else {
-    //
-    // }
     print(astrologerData);
     print("datadatadatadatadatadatadata");
     if (astrologerData != null && astrologerData["order"] != null) {
@@ -1016,25 +801,6 @@ class LiveDharamController extends GetxController {
     return Future<void>.value();
   }
 
-  // String getOrderId() {
-  //   String generatedOrderId = "";
-  //   int temp = 0;
-  //   if (temp == 0) {
-  //     temp = currentCaller.generatedOrderId;
-  //     generatedOrderId = temp.toString();
-  //   } else {}
-  //   return generatedOrderId;
-  // }
-
-  // int getOfferId() {
-  //   int offerId = 0;
-  //   int temp = 0;
-  //   if (temp == 0) {
-  //     temp = currentCaller.offerId;
-  //     offerId = temp;
-  //   } else {}
-  //   return offerId;
-  // }
 
   String getOrderId() {
     // int temp = orderGenerate.data?.generatedOrderId ?? 0;
@@ -1042,7 +808,7 @@ class LiveDharamController extends GetxController {
     if (temp != 0) {
       return temp.toString();
     } else {
-      temp = orderModel.value.generatedOrderId;
+      temp = orderModel.value.generatedOrderId!;
       return temp.toString();
     }
   }
@@ -1053,7 +819,7 @@ class LiveDharamController extends GetxController {
     if (temp != 0) {
       return temp;
     } else {
-      temp = orderModel.value.offerId;
+      temp = orderModel.value.offerId!;
       update();
       return temp;
     }
@@ -1226,23 +992,6 @@ class LiveDharamController extends GetxController {
     return data.isEmpty ? "" : data.join(", ");
   }
 
-// Future<void> callblockCustomerByMod({
-//   required int id,
-//   required Function(String message) successCallBack,
-//   required Function(String message) failureCallBack,
-// }) async {
-//   Map<String, dynamic> param = <String, dynamic>{};
-//   param = <String, dynamic>{
-//     "customer_id": id,
-//     // "unblock": 0,
-//   };
-//   await liveRepository.blockedCustomerFromModAPI(
-//     params: param,
-//     successCallBack: successCallBack,
-//     failureCallBack: failureCallBack,
-//   );
-//   return Future<void>.value();
-// }
 }
 
 class CustomGiftModel {
@@ -1278,31 +1027,58 @@ class LeaderboardModel {
 }
 
 class WaitListModel {
+  final bool? isRequest;
+  final bool? isEngaded;
+  final String? callType;
+  final String? totalTime;
+  final String? userName;
+  final String? avatar;
+  final int? totalMin;
+  final String? id;
+  final int? generatedOrderId;
+  final int? offerId;
+   int? callStatus;
+
   WaitListModel({
-    required this.isRequest,
-    required this.isEngaded,
-    required this.callType,
-    required this.totalTime,
-    required this.avatar,
-    required this.userName,
-    required this.id,
-    required this.generatedOrderId,
-    required this.offerId,
-    required this.totalMin,
-    required this.callStatus,
+    this.isRequest,
+    this.isEngaded,
+    this.callType,
+    this.totalTime,
+    this.userName,
+    this.avatar,
+    this.totalMin,
+    this.id,
+    this.generatedOrderId,
+    this.offerId,
+    this.callStatus,
   });
 
-  final bool isRequest;
-  final bool isEngaded;
-  final String callType;
-  final String totalTime;
-  final String avatar;
-  final String userName;
-  final String id;
-  final int generatedOrderId;
-  final int offerId;
-  int callStatus;
-  final int totalMin;
+  WaitListModel.fromJson(Map<String, dynamic> json)
+      : isRequest = json['isRequest'] ?? false,
+        isEngaded = json['isEngaded'] ?? false,
+        callType = json['callType']  ?? "",
+        totalTime = json['totalTime']  ?? "",
+        userName = json['userName']  ?? "",
+        avatar = json['avatar']  ?? "",
+        totalMin = json['totalMin'] ?? 0,
+        id = json['id'] ?? "",
+        generatedOrderId = json['generatedOrderId'] ?? 0,
+        offerId = json['offerId'] ?? 0,
+        callStatus = json['callStatus'] ?? 0;
+
+  Map<String, dynamic> toJson() => {
+    'isRequest' : isRequest,
+    'isEngaded' : isEngaded,
+    'callType' : callType,
+    'totalTime' : totalTime,
+    'userName' : userName,
+    'avatar' : avatar,
+    'totalMin' : totalMin,
+    'id' : id,
+    'generatedOrderId' : generatedOrderId,
+    'offerId' : offerId,
+    'callStatus' : callStatus
+  };
 }
 
 class ZegoCustomMessage {

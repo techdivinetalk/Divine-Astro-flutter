@@ -133,7 +133,7 @@ class _LivePage extends State<LiveDharamScreen>
           snapshot: data,
           engaging: engaging,
         );
-        if(data['gift'] != null){
+        if (data['gift'] != null) {
           List<dynamic> giftList = data['gift'] ?? [];
           for (var gift in giftList) {
             gift.forEach((key, value) {
@@ -219,11 +219,13 @@ class _LivePage extends State<LiveDharamScreen>
         () async {
           print("gifts----  $gifts");
           print("giftList--- $giftList");
+          print("gifts.keys.first ${gifts.keys.first}");
           print("removing code of gift from firebase");
           giftList.remove(gifts);
+          giftList.removeWhere((element) => element.containsKey(gifts.keys.first));
           await _controller.liveStore.doc(_controller.userId).update({
-            "gift": FieldValue.arrayRemove([gifts])
-          }).then((value){
+            "gift": giftList,
+          }).then((value) {
             print("removing gift from firebase");
           });
           // setState(() {});
@@ -294,7 +296,7 @@ class _LivePage extends State<LiveDharamScreen>
         if (mounted) {
           final bool cond1 = _controller.isHost;
           final bool cond2 = _controller.waitListModel.isNotEmpty;
-          final bool cond3 = _controller.orderModel.value.id.isEmpty;
+          final bool cond3 = _controller.orderModel.value.id!.isEmpty;
           final bool cond4 = !isAcceptPopupOpen;
 
           bool cond5 = true;
@@ -304,13 +306,14 @@ class _LivePage extends State<LiveDharamScreen>
 
           bool cond6 = false;
           for (var e in _controller.waitListModel) {
-            if (e.callStatus == 0 && !e.isEngaded && !e.isRequest) cond6 = true;
+            if (e.callStatus == 0 && !e.isEngaded! && !e.isRequest!)
+              cond6 = true;
           }
 
           if (cond1 && cond2 && cond3 && cond4 && cond5 && cond6) {
-            final String id = _controller.waitListModel.first.id;
-            final String name = _controller.waitListModel.first.userName;
-            final String avatar = _controller.waitListModel.first.avatar;
+            final String id = _controller.waitListModel.first.id!;
+            final String name = _controller.waitListModel.first.userName!;
+            final String avatar = _controller.waitListModel.first.avatar!;
             final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
 
             await onCoHostRequest(
@@ -422,8 +425,8 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> onUserLeave(ZegoUIKitUser zegoUIKitUser) async {
     final bool cond1 = _controller.isHost;
-    final bool cond2 = _controller.currentCaller.isEngaded;
-    final bool cond3 = _controller.currentCaller.id == zegoUIKitUser.id;
+    final bool cond2 = _controller.currentCaller.isEngaded!;
+    final bool cond3 = _controller.currentCaller.id! == zegoUIKitUser.id;
     final bool cond4 = zegoUIKitUser.id != _controller.userId;
     if (cond1 && cond2 && cond3 && cond4) {
       print("on user leave");
@@ -527,7 +530,7 @@ class _LivePage extends State<LiveDharamScreen>
                         },
                       )
                       ..coHost.turnOnCameraWhenCohosted = () {
-                        final callType = _controller.currentCaller.callType;
+                        final callType = _controller.currentCaller.callType!;
                         //
                         if (callType == "video") {
                           return true;
@@ -542,7 +545,7 @@ class _LivePage extends State<LiveDharamScreen>
                         ZegoLiveStreamingRole localRole,
                         ZegoUIKitUser coHost,
                       ) {
-                        final callType = _controller.currentCaller.callType;
+                        final callType = _controller.currentCaller.callType!;
                         //
                         if (callType == "private") {
                           if (ZegoLiveStreamingRole.host == localRole ||
@@ -562,7 +565,7 @@ class _LivePage extends State<LiveDharamScreen>
                         // } else {
                         //   callJoinConfiguration();
                         // }
-                        final callType = _controller.currentCaller.callType;
+                        final callType = _controller.currentCaller.callType!;
                         //
                         if (callType == "private" || callType == "audio") {
                           return false;
@@ -654,8 +657,8 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   ZegoLayout galleryLayout() {
-    final bool isEngaged = _controller.currentCaller.isEngaded;
-    final String callType = _controller.currentCaller.callType;
+    final bool isEngaged = _controller.currentCaller.isEngaded!;
+    final String callType = _controller.currentCaller.callType!;
     return isEngaged == true && callType == "video"
         ? ZegoLayout.gallery()
         : ZegoLayout.pictureInPicture(smallViewSize: const Size(0, 0));
@@ -841,15 +844,14 @@ class _LivePage extends State<LiveDharamScreen>
   Map<String, dynamic> svgaUrls = {};
 
   Widget newLeaderboard() {
-
     return AnimatedOpacity(
       opacity: _controller.leaderboardModel.isEmpty ||
-              _controller.currentCaller.isEngaded
+              _controller.currentCaller.isEngaded!
           ? 0.0
           : 1.0,
       duration: const Duration(seconds: 1),
       child: _controller.leaderboardModel.isEmpty ||
-              _controller.currentCaller.isEngaded
+              _controller.currentCaller.isEngaded!
           ? const SizedBox()
           : LeaderBoardWidget(
               avatar: _controller.leaderboardModel.first.avatar,
@@ -1227,7 +1229,7 @@ class _LivePage extends State<LiveDharamScreen>
         // return WaitListWidget(
         return AstroWaitListWidget(
           onClose: Get.back,
-          isInCall: _controller.currentCaller.isEngaded,
+          isInCall: _controller.currentCaller.isEngaded!,
           waitTime: _controller.getTotalWaitTime(),
           myUserId: _controller.userId,
           list: _controller.waitListModel,
@@ -1242,9 +1244,9 @@ class _LivePage extends State<LiveDharamScreen>
           onAccept: () async {
             Get.back();
 
-            final String id = _controller.waitListModel.first.id;
-            final String name = _controller.waitListModel.first.userName;
-            final String avatar = _controller.waitListModel.first.avatar;
+            final String id = _controller.waitListModel.first.id!;
+            final String name = _controller.waitListModel.first.userName!;
+            final String avatar = _controller.waitListModel.first.avatar!;
             final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
             final connectInvite = zegoController.coHost;
             await connectInvite.hostSendCoHostInvitationToAudience(user);
@@ -1298,8 +1300,8 @@ class _LivePage extends State<LiveDharamScreen>
           isAstro: _controller.isHost,
           astroAvatar: _controller.avatar,
           astroUserName: _controller.userName,
-          custoAvatar: _controller.currentCaller.avatar,
-          custoUserName: _controller.currentCaller.userName,
+          custoAvatar: _controller.currentCaller.avatar!,
+          custoUserName: _controller.currentCaller.userName!,
         );
       },
     );
@@ -1328,8 +1330,8 @@ class _LivePage extends State<LiveDharamScreen>
           isAstro: _controller.isHost,
           astroAvatar: _controller.avatar,
           astroUserName: _controller.userName,
-          custoAvatar: _controller.currentCaller.avatar,
-          custoUserName: _controller.currentCaller.userName,
+          custoAvatar: _controller.currentCaller.avatar!,
+          custoUserName: _controller.currentCaller.userName!,
         );
       },
     );
@@ -1707,7 +1709,7 @@ class _LivePage extends State<LiveDharamScreen>
       builder: (BuildContext context) {
         return WaitingForUserToSelectCards(
           onClose: Get.back,
-          userName: _controller.currentCaller.userName,
+          userName: _controller.currentCaller.userName!,
           onTimeout: () async {
             Get.back();
             successAndFailureCallBack(
@@ -1741,7 +1743,7 @@ class _LivePage extends State<LiveDharamScreen>
               canPick: value,
               userPicked: [],
               senderId: _controller.userId,
-              receiverId: _controller.currentCaller.id,
+              receiverId: _controller.currentCaller.id!,
             );
             await sendTaroCard(item);
 
@@ -1749,12 +1751,12 @@ class _LivePage extends State<LiveDharamScreen>
               await waitingForUserToSelectCardsPopup();
             } else {}
           },
-          userName: _controller.currentCaller.userName,
+          userName: _controller.currentCaller.userName!,
           onTimeout: () async {
             Get.back();
             await sendTaroCardClose();
           },
-          totalTime: _controller.engagedCoHostWithAstro().totalTime,
+          totalTime: _controller.engagedCoHostWithAstro().totalTime!,
         );
       },
     );
@@ -1806,7 +1808,7 @@ class _LivePage extends State<LiveDharamScreen>
               canPick: _controller.tarotGameModel.canPick ?? 0,
               userPicked: userPicked,
               senderId: _controller.userId,
-              receiverId: _controller.currentCaller.id,
+              receiverId: _controller.currentCaller.id!,
             );
             await sendTaroCard(item);
 
@@ -1814,7 +1816,7 @@ class _LivePage extends State<LiveDharamScreen>
             } else {}
           },
           numOfSelection: _controller.tarotGameModel.canPick ?? 0,
-          userName: _controller.currentCaller.userName,
+          userName: _controller.currentCaller.userName!,
         );
       },
     );
@@ -1852,7 +1854,7 @@ class _LivePage extends State<LiveDharamScreen>
         return ChosenCards(
           onClose: Get.back,
           userChosenCards: userPicked,
-          userName: _controller.currentCaller.userName ?? "",
+          userName: _controller.currentCaller.userName! ?? "",
         );
       },
     );
@@ -2227,7 +2229,7 @@ class _LivePage extends State<LiveDharamScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "${_controller.userName} with ${_controller.currentCaller.userName}",
+                      "${_controller.userName} with ${_controller.currentCaller.userName!}",
                       style: const TextStyle(
                         color: Colors.white,
                       ),
@@ -2236,7 +2238,7 @@ class _LivePage extends State<LiveDharamScreen>
                     Row(
                       children: [
                         Text(
-                          "${_controller.currentCaller.callType.capitalize ?? ""} Call:",
+                          "${_controller.currentCaller.callType!.capitalize ?? ""} Call:",
                           style: const TextStyle(
                             fontSize: 12,
                             color: Colors.white,
@@ -2294,7 +2296,7 @@ class _LivePage extends State<LiveDharamScreen>
           child: Padding(
             padding: const EdgeInsets.all(0.0),
             child: Image.asset(
-              _controller.currentCaller.isEngaded
+              _controller.currentCaller.isEngaded!
                   ? "assets/images/live_new_hang_up.png"
                   : "assets/images/live_exit_red.png",
             ),
@@ -2310,7 +2312,7 @@ class _LivePage extends State<LiveDharamScreen>
   // int epoch = 0;
 
   newTimerWidget() {
-    final String source = _controller.engagedCoHostWithAstro().totalTime;
+    final String source = _controller.engagedCoHostWithAstro().totalTime!;
     print(_controller.engagedCoHostWithAstro().totalTime);
     print("_controller.engagedCoHostWithAstro().totalTime");
     int epoch = int.parse(source.isEmpty ? "0" : source);
@@ -2409,7 +2411,7 @@ class _LivePage extends State<LiveDharamScreen>
             height: 32,
             width: 32,
             child: CustomImageWidget(
-              imageUrl: _controller.currentCaller.avatar,
+              imageUrl: _controller.currentCaller.avatar!,
               rounded: true,
               typeEnum: TypeEnum.user,
             ),
@@ -2425,7 +2427,7 @@ class _LivePage extends State<LiveDharamScreen>
         const SizedBox(width: 8),
         newAppBarLeft(),
         const SizedBox(width: 8),
-        _controller.currentCaller.isEngaded
+        _controller.currentCaller.isEngaded!
             ? newAppBarCenterWithCall()
             : newAppBarCenter(),
         const SizedBox(width: 8),
@@ -2552,8 +2554,8 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Widget settingsColForCust() {
-    final bool isEngaded = _controller.currentCaller.isEngaded;
-    final String type = _controller.currentCaller.callType;
+    final bool isEngaded = _controller.currentCaller.isEngaded!;
+    final String type = _controller.currentCaller.callType!;
     final bool condForVideoCall = isEngaded && type == "video";
     final bool condForAudioCall =
         isEngaded && (type == "private" || type == "audio");
@@ -2586,7 +2588,7 @@ class _LivePage extends State<LiveDharamScreen>
                           child: Padding(
                             padding: const EdgeInsets.all(0.0),
                             child: Image.asset(
-                              _controller.currentCaller.isEngaded
+                              _controller.currentCaller.isEngaded!
                                   ? "assets/images/live_new_hang_up.png"
                                   : "assets/images/live_exit_red.png",
                             ),
@@ -2732,9 +2734,9 @@ class _LivePage extends State<LiveDharamScreen>
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
         AnimatedOpacity(
-          opacity: !_controller.currentCaller.isEngaded ? 0.0 : 1.0,
+          opacity: !_controller.currentCaller.isEngaded! ? 0.0 : 1.0,
           duration: const Duration(seconds: 1),
-          child: !_controller.currentCaller.isEngaded
+          child: !_controller.currentCaller.isEngaded!
               ? const SizedBox()
               : Column(
                   children: [
@@ -3009,7 +3011,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> exitFunc() async {
-    final bool isEngaded = _controller.currentCaller.isEngaded;
+    final bool isEngaded = _controller.currentCaller.isEngaded!;
     // final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
     if (isEngaded) {
       await disconnectPopup(
@@ -3022,7 +3024,7 @@ class _LivePage extends State<LiveDharamScreen>
     } else {
       await endLiveSession(
         endLive: () async {
-          if (mounted) { 
+          if (mounted) {
             _timer?.cancel();
             _msgTimerForFollowPopup?.cancel();
             _msgTimerForTarotCardPopup?.cancel();
@@ -3276,8 +3278,8 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> removeCoHostOrStopCoHost() async {
     final ZegoUIKitUser user = ZegoUIKitUser(
-      id: _controller.currentCaller.id,
-      name: _controller.currentCaller.userName,
+      id: _controller.currentCaller.id!,
+      name: _controller.currentCaller.userName!,
     );
     final connect = zegoController.coHost;
     final bool removed = await connect.removeCoHost(user);
