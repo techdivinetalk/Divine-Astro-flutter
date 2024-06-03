@@ -559,6 +559,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
               ? GestureDetector(
                   onTap: () async {
                     await Get.toNamed(RouteName.messageTemplate);
+                    controller.getMessageTemplateForChatAssist();
                     controller.getMessageTemplatesLocally();
                     controller.update();
                   },

@@ -245,7 +245,6 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-
   @override
   void onReady() {
     super.onReady();
@@ -269,10 +268,10 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
     update();
   }
 
-  getOurImage()async {
+  getOurImage() async {
     final prefs = await SharedPreferences.getInstance();
-   final baseAmazonUrl = prefs.getString(SharedPreferenceService.baseImageUrl);
-    userProfileImage( "$baseAmazonUrl/${userData?.image}");
+    final baseAmazonUrl = prefs.getString(SharedPreferenceService.baseImageUrl);
+    userProfileImage("$baseAmazonUrl/${userData?.image}");
   }
 
   sendMsgTemplate(MessageTemplates msg, bool isTemplateMsg) {

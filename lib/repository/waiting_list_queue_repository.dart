@@ -22,7 +22,8 @@ class WaitingListQueueRepo extends ApiProvider {
       }
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {

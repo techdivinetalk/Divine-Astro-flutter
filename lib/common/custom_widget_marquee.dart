@@ -21,7 +21,7 @@ class CustomWidgetMarquee extends StatelessWidget {
     this.textDirection = TextDirection.ltr,
     this.animationDuration = const Duration(seconds: 2),
     this.backDuration = const Duration(seconds: 10),
-    this.pauseDuration = const Duration(seconds: 0),
+    this.pauseDuration = const Duration(seconds: 1),
     this.directionOption = DirectionOption.oneDirection,
     this.forwardAnimation = Curves.linear,
     this.backwardAnimation = Curves.linear,

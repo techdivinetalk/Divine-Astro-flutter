@@ -67,7 +67,6 @@ class SharedPreferenceService extends GetxService {
     return prefs!.getInt(key) ?? 0;
   }
 
-
   // Future saveChatAssistUnreadMessage() async {
   //   final SharedPreferences sharedInstance =
   //       await SharedPreferences.getInstance();
@@ -133,6 +132,7 @@ class SharedPreferenceService extends GetxService {
   Future<bool> setIntPrefs(String key, int value) async {
     return prefs!.setInt(key, value);
   }
+
   Future<bool> setStringPref(String key, String value) async {
     return prefs!.setString(key, value);
   }
@@ -140,7 +140,8 @@ class SharedPreferenceService extends GetxService {
   String? getString(String key) {
     return prefs?.getString(key) ?? "0";
   }
- String? getToken() {
+
+  String? getToken() {
     return prefs!.getString(tokenKey);
   }
 
@@ -238,7 +239,6 @@ class SharedPreferenceService extends GetxService {
   //       .toList();
   // }
 
-
   String? getBaseImageURL() {
     return prefs!.getString(baseImageUrl);
   }
@@ -259,8 +259,8 @@ class SharedPreferenceService extends GetxService {
 
   Future<bool> setConstantDetails(
       ConstantDetailsModelClass constantDetails) async {
-    final List<String> values = List<String>.from(
-        constantDetails.data?.badWordsData ?? <String>[]);
+    final List<String> values =
+        List<String>.from(constantDetails.data?.badWordsData ?? <String>[]);
     await LiveSharedPreferencesSingleton().setBadWordsList(values: values);
     return await prefs!.setString(constantData, jsonEncode(constantDetails));
   }

@@ -58,16 +58,16 @@ class AppSocket {
       ApiProvider().masterDataSocket,
       (data) {
         if (data != null) {
-          if(!kDebugMode){
-            String jsonResponse = data.toString();
-            debugPrint("test_socket: $jsonResponse");
+          // if(!kDebugMode){
+          String jsonResponse = data.toString();
+          debugPrint("test_socket: $jsonResponse");
 
-            MasterDataResponse response = MasterDataResponse.fromJson(data);
+          MasterDataResponse response = MasterDataResponse.fromJson(data);
 
-            if (response.data != null) {
-              saveMasterData(response.data!);
-            }
+          if (response.data != null) {
+            saveMasterData(response.data!);
           }
+          // }
         }
       },
     );
@@ -151,6 +151,8 @@ class AppSocket {
       });
       print("objectobjectobjectobject");
       if (pref.getUserDetail() != null) {
+        debugPrint("test_socket_id: ${socket?.id}");
+
         final response = await Dio().post(
           "https://list.divinetalk.live/api/v3/removeLiveData",
           data: {

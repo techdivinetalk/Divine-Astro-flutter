@@ -466,7 +466,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   //   //     //         height: snapshot.data as bool
                   //   //     //             ? 0
                   //   //     //             : appTheme.getHeight(36),
-                  //   //     //         duration: Utils.animationDuration,
+                  //   //     //         duration: Utils.animationDurat
                   //   //     //         color: appTheme.redColor,
                   //   //     //         child: Material(
                   //   //     //           type: MaterialType.transparency,
