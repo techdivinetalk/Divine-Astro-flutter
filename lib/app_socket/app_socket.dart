@@ -48,30 +48,30 @@ class AppSocket {
         await socketAPI();
       },
     );
-    // call socket master-Data
-    debugPrint("test_socket: call master-Data");
-
-    socket?.emit(ApiProvider().masterDataSocket, {});
-    debugPrint("test_socket: called emit");
-
-    socket?.on(
-      ApiProvider().masterDataSocket,
-      (data) {
-        if (data != null) {
-          // if(!kDebugMode){
-          String jsonResponse = data.toString();
-          debugPrint("test_socket: $jsonResponse");
-
-          MasterDataResponse response = MasterDataResponse.fromJson(data);
-
-          if (response.data != null) {
-            saveMasterData(response.data!);
-          }
-          // }
-        }
-      },
-    );
-    debugPrint("test_socket: called on");
+    // // call socket master-Data
+    // debugPrint("test_socket: call master-Data");
+    //
+    // socket?.emit(ApiProvider().masterDataSocket, {});
+    // debugPrint("test_socket: called emit");
+    //
+    // socket?.on(
+    //   ApiProvider().masterDataSocket,
+    //   (data) {
+    //     if (data != null) {
+    //       // if(!kDebugMode){
+    //       String jsonResponse = data.toString();
+    //       debugPrint("test_socket: $jsonResponse");
+    //
+    //       MasterDataResponse response = MasterDataResponse.fromJson(data);
+    //
+    //       if (response.data != null) {
+    //         saveMasterData(response.data!);
+    //       }
+    //       // }
+    //     }
+    //   },
+    // );
+    // debugPrint("test_socket: called on");
   }
 
   saveMasterData(MasterData masterData) {

@@ -248,8 +248,8 @@ Future<void> main() async {
     }
   });
  // if (!kDebugMode) {
- //    AppFirebaseService().masterData("masters");
- //  }
+    AppFirebaseService().masterData("masters");
+  // }
 }
 
 Future<bool> saveLanguage(String? lang) async {
