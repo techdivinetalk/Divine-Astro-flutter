@@ -58,7 +58,8 @@ class WaitingListQueueRepo extends ApiProvider {
         Utils().handleStatusCode400(response.body);
       }
 
-      if (response.statusCode == 200) {
+      if (response.statusCode == 200 &&
+          json.decode(response.body)["status_code"] == 200) {
         return "success";
       } else {
         throw CustomException(json.decode(response.body)["message"]);
