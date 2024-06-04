@@ -1,4 +1,5 @@
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -6,9 +7,17 @@ import 'package:intl/intl.dart';
 
 import '../common/colors.dart';
 import '../common/date_time_picker.dart';
+import 'package:html/parser.dart';
 
 class Utils {
   static const animationDuration = Duration(milliseconds: 200);
+
+  String parseHtmlString(String htmlString) {
+    final document = parse(htmlString);
+    final String parsedString = parse(document.body?.text).documentElement!.text;
+
+    return parsedString;
+  }
 
   static String dateToString(DateTime now, {String format = 'dd MMMM yyyy'}) {
     return DateFormat(format).format(now);

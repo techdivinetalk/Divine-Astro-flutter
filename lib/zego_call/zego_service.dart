@@ -112,7 +112,7 @@ class ZegoService {
         isCamOn.value = true;
         isMicOn.value = true;
 
-        if (Constants.isUploadMode) {
+        // if (Constants.isUploadMode) {
           // ZegoUIKitPrebuiltCallController().audioVideo.microphone.turnOn(bool isOn, {String? userID});
 
           Future.delayed(
@@ -128,7 +128,7 @@ class ZegoService {
               );
             },
           );
-        }
+        // }
 
         final Map map = json.decode(data.customData);
         // final String astrId = map["astr_id"];
@@ -460,15 +460,15 @@ class ZegoService {
                   ),
                   InkWell(
                     onTap: () {
-                      if (Constants.isUploadMode) {
+                      // if (Constants.isUploadMode) {
                         micTurnOnOff();
-                      } else {
-                        final ZegoUIKit instance = ZegoUIKit.instance;
-                        isMicOn(!isMicOn.value);
-                        debugPrint("isMicOn: ${isMicOn.value.toString()}");
-                        instance.turnMicrophoneOn(isMicOn.value,
-                            muteMode: true);
-                      }
+                      // } else {
+                      //   final ZegoUIKit instance = ZegoUIKit.instance;
+                      //   isMicOn(!isMicOn.value);
+                      //   debugPrint("isMicOn: ${isMicOn.value.toString()}");
+                      //   instance.turnMicrophoneOn(isMicOn.value,
+                      //       muteMode: true);
+                      // }
                     },
                     child: SizedBox(
                       height: 64,
@@ -505,14 +505,14 @@ class ZegoService {
                   ? [
                       InkWell(
                         onTap: () {
-                          if (Constants.isUploadMode) {
+                          // if (Constants.isUploadMode) {
                             micTurnOnOff();
-                          } else {
-                            final ZegoUIKit instance = ZegoUIKit.instance;
-                            isMicOn(!isMicOn.value);
-                            instance.turnMicrophoneOn(isMicOn.value,
-                                muteMode: true);
-                          }
+                          // } else {
+                          //   final ZegoUIKit instance = ZegoUIKit.instance;
+                          //   isMicOn(!isMicOn.value);
+                          //   instance.turnMicrophoneOn(isMicOn.value,
+                          //       muteMode: true);
+                          // }
                         },
                         child: SizedBox(
                           height: 64,

@@ -798,20 +798,18 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  RxList marqueeTextLst = [].obs;
+  RxString marqueeText = "".obs;
 
   void getSampleText() async {
-    marqueeTextLst.clear();
-    debugPrint("test_marqueeText: ${marqueeTextLst.length}");
+    marqueeText.value = "";
+    debugPrint("test_marqueeText: ${marqueeText.value.length}");
     try {
       SampleTextResponse? response = await homePageRepository.doGetSampleText();
 
       if (response != null && response.statusCode == 200) {
         if (response.data != null && response.data!.text.isNotEmpty) {
-          marqueeTextLst.add("&nbsp;&nbsp;");
-          marqueeTextLst.add(response.data!.text);
-          marqueeTextLst.add("&nbsp;&nbsp;");
-          debugPrint("test_marqueeText_api: ${marqueeTextLst.length}");
+          marqueeText.value = response.data!.text;
+          debugPrint("test_marqueeText: ${marqueeText.value}");
         }
       }
     } catch (error) {
