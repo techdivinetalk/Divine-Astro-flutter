@@ -313,8 +313,9 @@ class _LivePage extends State<LiveDharamScreen>
 
           bool cond6 = false;
           for (var e in _controller.waitListModel) {
-            if (e.callStatus == 0 && !e.isEngaded! && !e.isRequest!)
+            if (e.callStatus == 0 && !e.isEngaded! && !e.isRequest!) {
               cond6 = true;
+            }
           }
 
           if (cond1 && cond2 && cond3 && cond4 && cond5 && cond6) {
