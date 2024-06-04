@@ -248,9 +248,12 @@ class _LivePage extends State<LiveDharamScreen>
     _showOverlay();
     const SVGAParser parser = SVGAParser();
     String giftInfo = svgaUrls.entries.first.value;
+    print(svgaUrls.length);
     await parser.decodeFromURL(giftInfo).then((videoItem) {
+      print("svgaUrls.videoItem");
       _svgController.videoItem = videoItem;
       _svgController.forward();
+      _removeOverlay();
     });
   }
 
