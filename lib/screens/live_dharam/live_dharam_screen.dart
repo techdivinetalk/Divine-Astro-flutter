@@ -1006,8 +1006,8 @@ class _LivePage extends State<LiveDharamScreen>
                                       fontSize: 14,
                                       color: isBlocked
                                           ? Colors.red
-                                          : isModerator
-                                              ? appColors.guideColor
+                                          // : isModerator
+                                          //     ? appColors.guideColor
                                               : msg.fullGiftImage.isNotEmpty
                                                   ? appColors.black
                                                   : msg.message.contains(
@@ -1028,8 +1028,8 @@ class _LivePage extends State<LiveDharamScreen>
                                         fontSize: 13,
                                         color: isBlocked
                                             ? Colors.red
-                                            : isModerator
-                                                ? appColors.guideColor
+                                            // : isModerator
+                                            //     ? appColors.guideColor
                                                 : msg.fullGiftImage.isNotEmpty
                                                     ? appColors.black
                                                     : msg.message.contains(
