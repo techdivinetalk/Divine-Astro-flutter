@@ -173,9 +173,12 @@ class ChatMessageWithSocketController extends GetxController
   void onClose() {
     ZegoGiftPlayer().clear();
     WidgetsBinding.instance.removeObserver(this);
+    if (broadcastReceiver.isListening) {
+      broadcastReceiver.stop();
+    }
     super.onClose();
   }
-
+ 
   @override
   void dispose() {
     // TODO: implement dispose
@@ -361,46 +364,57 @@ class ChatMessageWithSocketController extends GetxController
       ),
     );
   }
-  updateOrderInfo(String key,dynamic value,bool isRemoved){
-    switch(key){
+
+  updateOrderInfo(String key, dynamic value, bool isRemoved) {
+    switch (key) {
       case "":
         break;
     }
   }
+
   @override
   void onInit() {
     super.onInit();
     //print("AppFirebaseService().watcher.nameStream");
     //print(AppFirebaseService().watcher.currentName);
-    if(kDebugMode){
-      FirebaseDatabase.instance.ref().child("order/${AppFirebaseService().watcher.currentName}").onChildChanged.listen((event) {
+    if (kDebugMode) {
+      FirebaseDatabase.instance
+          .ref()
+          .child("order/${AppFirebaseService().watcher.currentName}")
+          .onChildChanged
+          .listen((event) {
         final key = event.snapshot.key; // Get the key of the changed child
-        final value =
-            event.snapshot.value;
+        final value = event.snapshot.value;
         if (event.snapshot.value != null) {
-            print("onChildChanged $key");
-            print("onChildChanged $value");
-            updateOrderInfo(key!, value,false);
-          }
+          print("onChildChanged $key");
+          print("onChildChanged $value");
+          updateOrderInfo(key!, value, false);
+        }
       });
-     FirebaseDatabase.instance.ref().child("order/${AppFirebaseService().watcher.currentName}").onChildAdded.listen((event) {
-       final key = event.snapshot.key; // Get the key of the changed child
-       final value =
-           event.snapshot.value;
-       if (event.snapshot.value != null) {
-            print("onChildAdded $key");
-            print("onChildAdded $value");
-            updateOrderInfo(key!, value,false);
-          }
+      FirebaseDatabase.instance
+          .ref()
+          .child("order/${AppFirebaseService().watcher.currentName}")
+          .onChildAdded
+          .listen((event) {
+        final key = event.snapshot.key; // Get the key of the changed child
+        final value = event.snapshot.value;
+        if (event.snapshot.value != null) {
+          print("onChildAdded $key");
+          print("onChildAdded $value");
+          updateOrderInfo(key!, value, false);
+        }
       });
-    FirebaseDatabase.instance.ref().child("order/${AppFirebaseService().watcher.currentName}").onChildRemoved.listen((event) {
-      final key = event.snapshot.key; // Get the key of the changed child
-      final value =
-          event.snapshot.value;
-      if (event.snapshot.value != null) {
+      FirebaseDatabase.instance
+          .ref()
+          .child("order/${AppFirebaseService().watcher.currentName}")
+          .onChildRemoved
+          .listen((event) {
+        final key = event.snapshot.key; // Get the key of the changed child
+        final value = event.snapshot.value;
+        if (event.snapshot.value != null) {
           print("onChildRemoved $key");
           print("onChildRemoved $value");
-          updateOrderInfo(key!, value,true);
+          updateOrderInfo(key!, value, true);
         }
       });
     }
@@ -539,7 +553,9 @@ class ChatMessageWithSocketController extends GetxController
   getMessageTemplatesLocally() async {
     final sharedPreferencesInstance = SharedPreferenceService();
     final data = await sharedPreferencesInstance.getMessageTemplates();
-    messageTemplates(data);
+    if (data.isNotEmpty) {
+      messageTemplates(data);
+    }
     update();
   }
 

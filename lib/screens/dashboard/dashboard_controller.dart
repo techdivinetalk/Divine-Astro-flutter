@@ -193,7 +193,8 @@ class DashboardController extends GetxController
     print(userProfileImage.value);
     print("userProfileImage.value");
     loadPreDefineData();
-    firebaseMessagingConfig(Get.context!);
+    initMessaging();
+    // firebaseMessagingConfig(Get.context!);
     getConstantDetailsData();
     print("currentTime");
   }
@@ -212,7 +213,10 @@ class DashboardController extends GetxController
     print("serverTimeMillis");
     // Check if the difference is less than 30 seconds (30000 milliseconds)
     if (difference > 30000) {
+      print("if difference");
       showTimeDIffBottomSheet(Get.context!);
+    }else {
+      print("else difference");
     }
   }
   void showTimeDIffBottomSheet(BuildContext context) {

@@ -34,7 +34,9 @@ class MessageTemplateController extends GetxController {
 
   getMessageTemplatesLocally() async {
     final data = await sharedPreferencesInstance.getMessageTemplates();
-    messageLocalTemplates = data;
+    if (data.isNotEmpty) {
+      messageLocalTemplates = data;
+    }
     print(
         "message Template locally called ${jsonEncode(messageLocalTemplates)}");
     update();
@@ -57,9 +59,7 @@ class MessageTemplateController extends GetxController {
     }
   }
 
-
   getMessageTemplates() async {
-
     try {
       final response = await repository.fetchTemplates();
       if (response.data != null) {
@@ -76,6 +76,4 @@ class MessageTemplateController extends GetxController {
       divineSnackBar(data: error.toString(), color: appColors.redColor);
     }
   }
-
-
 }

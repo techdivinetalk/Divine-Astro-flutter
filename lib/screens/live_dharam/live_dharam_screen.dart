@@ -1867,9 +1867,7 @@ class _LivePage extends State<LiveDharamScreen>
           onSelect: (List<DeckCardModel> selectedCards) async {
             Get.back();
             _endMsgTimerForTarotCardPopup();
-
             hasSelected = true;
-
             final List<UserPicked> userPicked = [];
             for (DeckCardModel element in selectedCards) {
               userPicked.add(
