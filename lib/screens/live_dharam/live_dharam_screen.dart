@@ -295,7 +295,7 @@ class _LivePage extends State<LiveDharamScreen>
    * to the next guy.
    *
    * total_hours_wasted_here = 1
-  */
+   */
 
   Future<void> engaging(WaitListModel currentCaller) async {
     WidgetsBinding.instance.endOfFrame.then(
@@ -303,7 +303,7 @@ class _LivePage extends State<LiveDharamScreen>
         if (mounted) {
           final bool cond1 = _controller.isHost;
           final bool cond2 = _controller.waitListModel.isNotEmpty;
-          final bool cond3 = _controller.orderModel.value.id!.isEmpty;
+          final bool cond3 = _controller.currentCaller.id!.isEmpty;
           final bool cond4 = !isAcceptPopupOpen;
 
           bool cond5 = true;
@@ -1029,7 +1029,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   bool moreOptionConditions(ZegoCustomMessage msg, bool isModerator) {
     final bool cond1 = msg.userId != _controller.userId;
-    final bool cond2 = !(_controller.orderModel.value.id == (msg.userId ?? ""));
+    final bool cond2 = !(_controller.currentCaller.id == (msg.userId ?? ""));
     final bool cond4 = msg.userId != _controller.userId;
     return _controller.isHost
         ? cond1 && cond2
@@ -1751,7 +1751,7 @@ class _LivePage extends State<LiveDharamScreen>
             await sendTaroCardClose();
           },
           totalTime: _controller
-              .engagedCoHostWithAstro()
+              .currentCaller
               .totalTime!,
         );
       },
@@ -2309,10 +2309,10 @@ class _LivePage extends State<LiveDharamScreen>
 
   newTimerWidget() {
     final String source = _controller
-        .engagedCoHostWithAstro()
+        .currentCaller
         .totalTime!;
     print(_controller
-        .engagedCoHostWithAstro()
+        .currentCaller
         .totalTime);
     print("_controller.engagedCoHostWithAstro().totalTime");
     int epoch = int.parse(source.isEmpty ? "0" : source);

@@ -24,8 +24,6 @@ import "package:get/get.dart";
 import "package:get/get_connect/http/src/status/http_status.dart";
 import "package:http/http.dart" as http;
 
-
-
 class LiveDharamController extends GetxController {
   final SharedPreferenceService pref = Get.put(SharedPreferenceService());
 
@@ -50,19 +48,20 @@ class LiveDharamController extends GetxController {
 
   RxList<LeaderboardModel> leaderboardModel = <LeaderboardModel>[].obs;
   RxList<WaitListModel> waitListModel = <WaitListModel>[].obs;
-  Rx<WaitListModel> orderModel = WaitListModel(
-    isRequest: false,
-    isEngaded: false,
-    callType: "",
-    totalTime: "",
-    avatar: "",
-    userName: "",
-    id: "",
-    generatedOrderId: 0,
-    totalMin: 0,
-    offerId: 0,
-    callStatus: 0,
-  ).obs;
+
+  // Rx<WaitListModel> orderModel = WaitListModel(
+  //   isRequest: false,
+  //   isEngaded: false,
+  //   callType: "",
+  //   totalTime: "",
+  //   avatar: "",
+  //   userName: "",
+  //   id: "",
+  //   generatedOrderId: 0,
+  //   totalMin: 0,
+  //   offerId: 0,
+  //   callStatus: 0,
+  // ).obs;
 
   // final Rx<AstrologerFollowingResponse> _followRes =
   //     AstrologerFollowingResponse().obs;
@@ -110,7 +109,6 @@ class LiveDharamController extends GetxController {
   final RxList<DeckCardModel> _deckCardModelList = <DeckCardModel>[].obs;
   final Rx<TarotGameModel> _tarotGameModel = TarotGameModel().obs;
   final RxBool _hasFollowPopupOpen = false.obs;
-
 
   final Rx<RequestClass> _requestClass = RequestClass(
     type: "",
@@ -160,8 +158,6 @@ class LiveDharamController extends GetxController {
     astrologerData = <dynamic, dynamic>{};
 
     leaderboardModel.value = [];
-
-    orderModel.value = usingForNullableWaiListModel;
 
     isFront = true;
     isCamOn = true;
@@ -213,7 +209,6 @@ class LiveDharamController extends GetxController {
 
     leaderboardModel.close();
     waitListModel.close();
-
 
     _isFront.close();
     _isCamOn.close();
@@ -267,7 +262,6 @@ class LiveDharamController extends GetxController {
   Map<dynamic, dynamic> get astrologerData => _data.value;
 
   set astrologerData(Map<dynamic, dynamic> value) => _data(value);
-
 
   bool get isFront => _isFront.value;
 
@@ -396,11 +390,9 @@ class LiveDharamController extends GetxController {
           }
           if (liveIdNode["order"] != null) {
             var orderNode = liveIdNode["order"];
-            orderModel.value = getOrderModel(orderNode);
-            currentCaller =
-                getOrderModelGeneric(orderNode, forMe: true, type: "fromevent");
+
+            currentCaller = getOrderModelGeneric(orderNode, forMe: true);
           } else {
-            orderModel.value = usingForNullableWaiListModel;
             currentCaller = usingForNullableWaiListModel;
             update();
           }
@@ -464,81 +456,7 @@ class LiveDharamController extends GetxController {
     update();
   }
 
-  WaitListModel engagedCoHostWithAstro() {
-    WaitListModel temp = WaitListModel(
-      isRequest: false,
-      isEngaded: false,
-      callType: "",
-      totalTime: "",
-      avatar: "",
-      userName: "",
-      id: "",
-      generatedOrderId: 0,
-      totalMin: 0,
-      offerId: 0,
-      callStatus: 0,
-    );
-
-    if (astrologerData != null) {
-      var liveIdNode = astrologerData;
-      if (liveIdNode != null) {
-        print(liveIdNode);
-        print("engagedCoHostWithAstro---liveIdNodeliveIdNode");
-        if (liveIdNode != null && liveIdNode["order"] != null) {
-          var orderNode = liveIdNode["order"];
-          temp = getOrderModelGeneric(orderNode,
-              forMe: false, type: "engagedCoHostWithAstro");
-        }
-      }
-    }
-
-    return temp;
-  }
-
-  WaitListModel getOrderModel(Map? map) {
-    bool isRequest = false;
-    bool isEngaged = false;
-    String callType = "";
-    String totalTime = "";
-    String avatar = "";
-    String userName = "";
-    String id = "";
-    int generatedOrderId = 0;
-    int offerId = 0;
-    int totalMin = 0;
-    int callStatus = 0;
-    if (map != null) {
-      if (map.isNotEmpty) {
-        isRequest = map["isRequest"] ?? false;
-        isEngaged = map["isEngaded"] ?? false;
-        callType = map["callType"] ?? "";
-        totalTime = map["totalTime"] ?? "";
-        avatar = map["avatar"] ?? "";
-        totalMin = map["totalMin"] ?? "";
-        userName = map["userName"] ?? "";
-        id = map["id"] ?? "";
-        generatedOrderId = map["generatedOrderId"] ?? 0;
-        offerId = map["offerId"] ?? 0;
-        callStatus = map["callStatus"] ?? 0;
-      } else {}
-    } else {}
-    return WaitListModel(
-      isRequest: isRequest,
-      isEngaded: isEngaged,
-      callType: callType,
-      totalTime: totalTime,
-      avatar: avatar,
-      totalMin: totalMin,
-      userName: userName,
-      id: id,
-      generatedOrderId: generatedOrderId,
-      offerId: offerId,
-      callStatus: callStatus,
-    );
-  }
-
-  WaitListModel getOrderModelGeneric(Map? map,
-      {required bool forMe, String? type}) {
+  WaitListModel getOrderModelGeneric(Map? map, {required bool forMe}) {
     bool isRequest = false;
     bool isEngaged = false;
     String callType = "";
@@ -553,7 +471,7 @@ class LiveDharamController extends GetxController {
     if (map != null) {
       if (map.isNotEmpty) {
         print(
-            'orderId--${map["id"]}----userId---$userId------isEngaged--${map["isEngaded"]}---$type');
+            'orderId--${map["id"]}----userId---$userId------isEngaged--${map["isEngaded"]}---');
         final bool c1 = (map["id"] ?? "") == userId;
         final bool c2 = (map["isEngaded"] ?? false) == true;
         // isEngaged = forMe ? c1 && c2 : c2;
@@ -586,8 +504,6 @@ class LiveDharamController extends GetxController {
       callStatus: callStatus,
     );
   }
-
-
 
   Map<String, dynamic> createGift({
     required num count,
@@ -680,7 +596,6 @@ class LiveDharamController extends GetxController {
     return Future<void>.value();
   }
 
-
   Future<void> removeFromOrder() async {
     print("remove order from firebase");
 
@@ -689,7 +604,6 @@ class LiveDharamController extends GetxController {
     });
     return Future<void>.value();
   }
-
 
   Future<void> removeFromWaitList({String? customerId}) async {
     // await ref.child("$livePath/$liveId/realTime/waitList/$userId").remove();
@@ -721,7 +635,6 @@ class LiveDharamController extends GetxController {
     });
     return Future<void>.value();
   }
-
 
   String isValidImageURL({required String imageURL}) {
     if (GetUtils.isURL(imageURL)) {
@@ -834,14 +747,13 @@ class LiveDharamController extends GetxController {
     return Future<void>.value();
   }
 
-
   String getOrderId() {
     // int temp = orderGenerate.data?.generatedOrderId ?? 0;
     int temp = 0;
     if (temp != 0) {
       return temp.toString();
     } else {
-      temp = orderModel.value.generatedOrderId!;
+      temp = currentCaller.generatedOrderId!;
       return temp.toString();
     }
   }
@@ -852,7 +764,7 @@ class LiveDharamController extends GetxController {
     if (temp != 0) {
       return temp;
     } else {
-      temp = orderModel.value.offerId!;
+      temp = currentCaller.offerId!;
       update();
       return temp;
     }
@@ -1024,7 +936,6 @@ class LiveDharamController extends GetxController {
     } else {}
     return data.isEmpty ? "" : data.join(", ");
   }
-
 }
 
 class CustomGiftModel {
@@ -1070,7 +981,7 @@ class WaitListModel {
   final String? id;
   final int? generatedOrderId;
   final int? offerId;
-   int? callStatus;
+  int? callStatus;
 
   WaitListModel({
     this.isRequest,
@@ -1089,10 +1000,10 @@ class WaitListModel {
   WaitListModel.fromJson(Map<String, dynamic> json)
       : isRequest = json['isRequest'] ?? false,
         isEngaded = json['isEngaded'] ?? false,
-        callType = json['callType']  ?? "",
-        totalTime = json['totalTime']  ?? "",
-        userName = json['userName']  ?? "",
-        avatar = json['avatar']  ?? "",
+        callType = json['callType'] ?? "",
+        totalTime = json['totalTime'] ?? "",
+        userName = json['userName'] ?? "",
+        avatar = json['avatar'] ?? "",
         totalMin = json['totalMin'] ?? 0,
         id = json['id'] ?? "",
         generatedOrderId = json['generatedOrderId'] ?? 0,
@@ -1100,18 +1011,18 @@ class WaitListModel {
         callStatus = json['callStatus'] ?? 0;
 
   Map<String, dynamic> toJson() => {
-    'isRequest' : isRequest,
-    'isEngaded' : isEngaded,
-    'callType' : callType,
-    'totalTime' : totalTime,
-    'userName' : userName,
-    'avatar' : avatar,
-    'totalMin' : totalMin,
-    'id' : id,
-    'generatedOrderId' : generatedOrderId,
-    'offerId' : offerId,
-    'callStatus' : callStatus
-  };
+        'isRequest': isRequest,
+        'isEngaded': isEngaded,
+        'callType': callType,
+        'totalTime': totalTime,
+        'userName': userName,
+        'avatar': avatar,
+        'totalMin': totalMin,
+        'id': id,
+        'generatedOrderId': generatedOrderId,
+        'offerId': offerId,
+        'callStatus': callStatus
+      };
 }
 
 class ZegoCustomMessage {

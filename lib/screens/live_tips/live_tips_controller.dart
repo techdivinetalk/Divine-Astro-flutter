@@ -72,25 +72,6 @@ class LiveTipsController extends GetxController {
     super.onInit();
   }
 
-  /*void toggleCameraLens() {
-    final lensDirection = controller!.description.lensDirection;
-    CameraDescription newDescription;
-    if (lensDirection == CameraLensDirection.front) {
-      newDescription = cameras!.firstWhere((description) =>
-          description.lensDirection == CameraLensDirection.back);
-    } else {
-      newDescription = cameras!.firstWhere((description) =>
-          description.lensDirection == CameraLensDirection.front);
-    }
-
-    // _initCamera(newDescription)
-    controller = CameraController(
-      newDescription,
-      ResolutionPreset.max,
-    );
-    update();
-  }*/
-
   @override
   void dispose() {
     streamController.close();
