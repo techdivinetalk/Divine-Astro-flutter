@@ -7,13 +7,14 @@ import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widge
 import "package:flutter/material.dart";
 import "package:flutter_timer_countdown/flutter_timer_countdown.dart";
 import "package:get/get.dart";
+import "package:velocity_x/velocity_x.dart";
 
 class AstroWaitListWidget extends StatefulWidget {
   const AstroWaitListWidget({
     required this.onClose,
     required this.waitTime,
     required this.myUserId,
-    required this.list,
+    required this.waitListModels,
     required this.hasMyIdInWaitList,
     required this.onExitWaitList,
     required this.astologerName,
@@ -30,7 +31,7 @@ class AstroWaitListWidget extends StatefulWidget {
   final void Function() onClose;
   final String waitTime;
   final String myUserId;
-  final List<WaitListModel> list;
+  final List<WaitListModel> waitListModels;
   final bool hasMyIdInWaitList;
   final void Function() onExitWaitList;
   final String astologerName;
@@ -47,8 +48,10 @@ class AstroWaitListWidget extends StatefulWidget {
 }
 
 class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
+  var list;
   @override
   Widget build(BuildContext context) {
+    list = widget.waitListModels.reversed.toList();
     return Material(
       color: appColors.transparent,
       child: Column(
@@ -109,7 +112,7 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
       child: Column(
         children: <Widget>[
           const SizedBox(height: 32),
-          (widget.list.length - 1) >= 3
+          (list.length - 1) >= 3
               ? SizedBox(height: Get.height / 3, child: listViewForWaitList())
               : listViewForWaitList(),
           const SizedBox(height: 16),
@@ -123,7 +126,7 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
   }
 
   Widget listViewForWaitList() {
-    return widget.list.length > 1
+    return list.length > 1
         ? Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -132,7 +135,7 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 16),
-        (widget.list.length - 1) >= 3
+        (list.length - 1) >= 3
             ? Expanded(child: commonListView())
             : commonListView(),
       ],
@@ -143,18 +146,18 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
   Widget commonListView() {
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: widget.list.length - 1,
+      itemCount: list.length - 1,
       physics: const ScrollPhysics(),
       padding: EdgeInsets.zero,
       itemBuilder: (BuildContext context, int index) {
-        final WaitListModel item = widget.list[index + 1];
+        final WaitListModel item = list[index + 1];
         return listTile(item: item);
       },
     );
   }
 
   Widget listViewForNextInLine() {
-    return widget.list.length > 0
+    return list.length > 0
         ? Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -169,7 +172,7 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
           physics: const ScrollPhysics(),
           padding: EdgeInsets.zero,
           itemBuilder: (BuildContext context, int index) {
-            final WaitListModel item = widget.list[index];
+            final WaitListModel item = list[index];
             return listTile(item: item);
           },
         ),
