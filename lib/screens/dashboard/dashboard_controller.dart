@@ -243,7 +243,7 @@ class DashboardController extends GetxController
                 },
                 child: GestureDetector(
                   onTap: () {
-                    final AndroidIntent intent = AndroidIntent(
+                    const AndroidIntent intent = AndroidIntent(
                       action: 'android.settings.DATE_SETTINGS',
                       flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
                     );
