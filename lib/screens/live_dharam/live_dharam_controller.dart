@@ -22,13 +22,6 @@ import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 import "package:get/get_connect/http/src/status/http_status.dart";
 import "package:http/http.dart" as http;
-
-//
-//
-//
-//
-//
-
 class LiveDharamController extends GetxController {
   final SharedPreferenceService pref = Get.put(SharedPreferenceService());
 

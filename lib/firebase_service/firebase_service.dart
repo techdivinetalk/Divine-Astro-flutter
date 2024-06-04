@@ -1,3 +1,4 @@
+import "dart:async";
 import "dart:convert";
 
 import "package:divine_astrologer/app_socket/app_socket.dart";
@@ -40,10 +41,12 @@ RxInt isCamera = 1.obs;
 RxInt isLive = 1.obs;
 RxInt isQueue = 1.obs;
 RxInt isGifts = 1.obs;
+RxInt isTime = 0.obs;
 // RxInt isTruecaller = 1.obs;
 RxInt isLiveCall = 1.obs;
 RxInt homePage = 1.obs;
 RxMap<dynamic, dynamic> callKunadliUpdated = {}.obs;
+StreamSubscription<DatabaseEvent>? _subscription;
 
 class AppFirebaseService {
   AppFirebaseService._privateConstructor();
@@ -204,6 +207,7 @@ class AppFirebaseService {
           if (event.snapshot.value != null) {
             print("onChildAdded $key");
             print("onChildAdded $value");
+            print("onChildAdded $value");
             userRealTime(key!, value, path);
           }
         });
@@ -325,6 +329,7 @@ class AppFirebaseService {
     watcher.nameStream.listen(
       (value) {
         if (value != "") {
+          print("object");
           database.child("order/$value").onValue.listen(
             (DatabaseEvent event) async {
               final DataSnapshot dataSnapshot = event.snapshot;
@@ -412,6 +417,9 @@ class AppFirebaseService {
         break;
       case "gifts":
         isGifts(int.parse(dataSnapshot.value.toString()));
+        break;
+     case "isTime":
+       isTime(int.parse(dataSnapshot.value.toString()));
         break;
       case "remidies":
         isRemidies(int.parse(dataSnapshot.value.toString()));

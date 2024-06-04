@@ -185,24 +185,24 @@ void onDidReceiveNotificationResponse(
 Future<void> chatInit(String requestId) async {
   try {
     final userDetail = preferenceService.getUserDetail();
-    if (userDetail != null) {
-      final notificationPath = 'user/$requestId/realTime/notification';
-      final int timestamp = DateTime.now().millisecondsSinceEpoch;
-      final notificationData = {
-        '$timestamp': {
-          'isActive': 1,
-          'message': '${userDetail.name} wants to chat with you',
-          'value': 'Click to chat',
-          'requestId': userDetail.id
-        },
-      };
-
-      final appFirebaseService = AppFirebaseService();
-      await appFirebaseService.writeData(notificationPath, notificationData);
-      debugPrint('Notification data written to the database');
-    } else {
-      debugPrint('Error: User details not available');
-    }
+    // if (userDetail != null) {
+    //   final notificationPath = 'user/$requestId/realTime/notification';
+    //   final int timestamp = DateTime.now().millisecondsSinceEpoch;
+    //   final notificationData = {
+    //     '$timestamp': {
+    //       'isActive': 1,
+    //       'message': '${userDetail.name} wants to chat with you',
+    //       'value': 'Click to chat',
+    //       'requestId': userDetail.id
+    //     },
+    //   };
+    //
+    //   final appFirebaseService = AppFirebaseService();
+    //   await appFirebaseService.writeData(notificationPath, notificationData);
+    //   debugPrint('Notification data written to the database');
+    // } else {
+    //   debugPrint('Error: User details not available');
+    // }
   } catch (e) {
     debugPrint('Error writing notification data to the database: $e');
   }

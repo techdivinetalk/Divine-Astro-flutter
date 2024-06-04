@@ -91,40 +91,6 @@ Future<String?> uploadImageFileToAws(
 
 void checkNotification(
     {required bool isFromNotification, Map? updatedData}) async {
-  Map notificationList;
-  if (isFromNotification) {
-    final snapshot = await FirebaseDatabase.instance
-        .ref()
-        .child("astrologer/${userData?.id}/realTime/notification")
-        .get();
-    notificationList = snapshot.value as Map;
-  } else {
-    notificationList = updatedData!;
-  }
-  if (notificationList.isNotEmpty) {
-    notificationList.forEach((key, value) async {
-      int senderId = 0;
-      if (value["sender_id"] is String) {
-        senderId = int.parse(value["sender_id"]);
-      } else {
-        senderId = value["sender_id"];
-      }
-      var newMessage = ChatMessage(
-          id: int.parse(key),
-          message: value["message"],
-          receiverId: value["receiver_id"],
-          senderId: value["sender_id"],
-          time: int.parse(key),
-          type: value["type"],
-          awsUrl: value["awsUrl"],
-          base64Image: value["base64Image"],
-          kundliId: value["kundli_id"],
-          kundliName: value["kundli_name"],
-          kundliDateTime: value["kundli_date_time"],
-          kundliPlace: value["kundli_place"],
-          downloadedPath: "",
-          msgType: value["msgType"]);
-
       // if (Get.currentRoute == RouteName.chatMessageUI) {
       //   var chatController = Get.find<ChatMessageController>();
       //   if (chatController.currentUserId.value == value["sender_id"] ||
@@ -149,9 +115,7 @@ void checkNotification(
       //
       //   setHiveDatabase("userKey_${userData?.id}_$senderId", newMessage);
       // }
-    });
     //  removeNotificationNode();
-  }
 }
 
 void setHiveDatabase(String userDataKey, ChatMessage newMessage) async {
@@ -207,14 +171,7 @@ void  updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   // removeNotificationNode(nodeId: "/${newMessage.time}");
 }
 
-removeNotificationNode({String? nodeId}) {
-  var userData = preferenceService.getUserDetail();
-  if (nodeId == null) {
-    FirebaseDatabase.instance.ref().child("astrologer/${userData?.id}/realTime/notification").remove();
-  } else {
-    FirebaseDatabase.instance.ref().child("astrologer/${userData?.id}/realTime/notification$nodeId").remove();
-  }
-}
+
 
 String messageDateTime(int datetime) {
   var millis = datetime;
