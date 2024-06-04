@@ -1,6 +1,8 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/repository/waiting_list_queue_repository.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../../di/shared_preference_service.dart';
@@ -44,16 +46,23 @@ class WaitListUIController extends GetxController {
         "order_id": orderId,
       };
       final response = await repository.acceptChatApi(body: data);
-      if (response.isNotEmpty) {
-        waitingPersons.removeAt(index!);
-        update(); // for (int i = 0; i < waitingPersons.length; i++) {
+      debugPrint("test_response: ${response.toString()}");
+
+      if (response.isNotEmpty &&
+          response == "success" &&
+          waitingPersons.isNotEmpty &&
+          waitingPersons.length > index!) {
+        waitingPersons.removeAt(index);
+        update();
+
+        // for (int i = 0; i < waitingPersons.length; i++) {
         //   if (waitingPersons[i].id.toString() == queueId.toString()) {
         //     waitingPersons.removeAt(i);
         //     break;
         //   }
       }
 
-      update();
+      // update();
     } catch (err) {
       divineSnackBar(data: err.toString(), color: appColors.redColor);
     }
