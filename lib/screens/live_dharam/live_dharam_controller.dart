@@ -935,7 +935,7 @@ class LiveDharamController extends GetxController {
   //   };
   //   await addUpdateOrder(orderDetails);
   // }
-
+  var currentWaitList = "";
   void getLatestWaitList(
     DataSnapshot? dataSnapshot,
   ) {
@@ -980,13 +980,14 @@ class LiveDharamController extends GetxController {
           waitListModel
             ..clear()
             ..addAll(tempList);
-
           // waitListModel = tempList;
         } else {}
       } else {
+        currentWaitList ="";
         waitListModel.clear();
       }
     } else {
+      currentWaitList ="";
       waitListModel.clear();
     }
     return;

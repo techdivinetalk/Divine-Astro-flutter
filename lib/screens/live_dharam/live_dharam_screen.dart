@@ -3244,8 +3244,13 @@ class _LivePage extends State<LiveDharamScreen>
     required String userName,
     required String avatar,
   }) async {
+    if(_controller.currentWaitList == _controller.waitListModel[0].id){
+      return;
+    }
+    _controller.currentWaitList = _controller.waitListModel[0].id;
     isAcceptPopupOpen = true;
     isAcceptPopupOpenFor = user;
+
     await hostingAndCoHostingPopup(
       onClose: () {},
       needAcceptButton: true,
