@@ -16,6 +16,7 @@ import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/model/wallet_deatils_response.dart';
 import 'package:divine_astrologer/pages/home/widgets/offer_bottom_widget.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
+import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_controller.dart';
 import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_ui.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/screens/order_feedback/widget/feedback_card_widget.dart';
@@ -995,20 +996,27 @@ class HomeUI extends GetView<HomeController> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            DateTime time =
-                                DateFormat('d MMMM yyyy').parse(data["dob"]);
+                            DateTime time = DateFormat('d MMMM yyyy h:mm a')
+                                .parse('${data["dob"]} ${data["tob"]}');
                             print(data);
                             print("datadatadatadatadata");
+                            Params params = Params(
+                              day: time.day,
+                              month: time.month,
+                              hour: time.hour,
+                              min: time.minute,
+                              lat: double.parse(data["latitude"] ?? "0.0"),
+                              long: double.parse(data["longitude"] ?? "0.0"),
+                              location: data["pob"],
+                              year: time.year,
+                              name: data["userName"],
+                            );
                             Get.toNamed(
                               RouteName.kundliDetail,
                               arguments: {
                                 "kundli_id": data["kundli_id"],
-                                "from_kundli": true,
-                                "birth_place": '${data["pob"]},${data["tob"]}',
-                                "gender": data["gender"],
-                                "name": data["userName"],
-                                "longitude": data["longitude"],
-                                "latitude": data["latitude"],
+                                "from_kundli": false,
+                                "params": params,
                               },
                             );
                           },

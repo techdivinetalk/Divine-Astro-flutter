@@ -1,8 +1,11 @@
 import 'dart:io';
 
 import 'package:aws_s3_upload/aws_s3_upload.dart';
+import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/upload_image_model.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../common/app_exception.dart';
 import 'package:path/path.dart' as p;
@@ -27,6 +30,26 @@ class UploadYourPhotosController extends GetxController {
     userData = preference.getUserDetail();
   }
 
+  Future<CroppedFile?> cropImage(File imageFile) async {
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: imageFile.path,
+      aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+      ],
+      uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: 'Crop Image',
+          toolbarColor: appColors.white,
+          toolbarWidgetColor: appColors.blackColor,
+          initAspectRatio: CropAspectRatioPreset.square,
+          lockAspectRatio: true,
+        ),
+      ],
+    );
+    return croppedFile;
+  }
+
   Future getImages() async {
     final pickedFile = await picker.pickMultiImage(
       imageQuality: 100,
@@ -37,10 +60,16 @@ class UploadYourPhotosController extends GetxController {
 
     if (xFilePick.isNotEmpty) {
       for (var i = 0; i < xFilePick.length; i++) {
-        if (selectedImages.any((element) => element.path == xFilePick[i].path)) {
+        if (selectedImages
+            .any((element) => element.path == xFilePick[i].path)) {
           divineSnackBar(data: "This image already selected.");
         } else {
-          selectedImages.add(File(xFilePick[i].path));
+          // selectedImages.add(File(xFilePick[i].path));
+
+          CroppedFile? croppedFile = await cropImage(File(xFilePick[i].path));
+          if (croppedFile != null) {
+            selectedImages.add(File(croppedFile.path));
+          }
         }
       }
       update();
@@ -50,7 +79,6 @@ class UploadYourPhotosController extends GetxController {
           .showSnackBar(const SnackBar(content: Text('Nothing is selected')));
     }*/
   }
-
 
   void removeImages(String value) {
     selectedImages.removeWhere((element) => element.path == value);
