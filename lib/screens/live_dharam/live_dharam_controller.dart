@@ -976,9 +976,11 @@ class LiveDharamController extends GetxController {
               );
             },
           );
+          tempList.sort((a, b) => a.generatedOrderId.compareTo(b.generatedOrderId));
           waitListModel
             ..clear()
             ..addAll(tempList);
+
           // waitListModel = tempList;
         } else {}
       } else {
