@@ -30,6 +30,7 @@ dependencies:
   firebase_core: ^2.15.0
   firebase_database: ^10.2.3
   firebase_messaging: ^14.6.5
+  android_intent_plus: ^2.0.2
   flutter:
     sdk: flutter
   flutter_expanded_tile: ^0.3.7

@@ -59,7 +59,7 @@ late List<CameraDescription>? cameras;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-  initMessaging();
+  // initMessaging();
   cameras = await availableCameras();
   Get.put(AppColors());
   // await RemoteConfigService.instance.initFirebaseRemoteConfig();
@@ -137,7 +137,7 @@ Future<void> main() async {
             message.data['type'], message.data);
       }
       HashMap<String, dynamic> updateData = HashMap();
-      updateData[message.data["chatId"]] = 1;
+      updateData[message.data["chatId"] ?? "0"] = 1;
       print('Message data-:-users ${message.data}');
 
       print("test_notification: Enable fullscreen incoming call notification");
@@ -247,9 +247,9 @@ Future<void> main() async {
       }
     }
   });
- // if (!kDebugMode) {
+  if (!kDebugMode) {
     AppFirebaseService().masterData("masters");
-  // }
+  }
 }
 
 Future<bool> saveLanguage(String? lang) async {
@@ -341,20 +341,20 @@ Future<void> showNotification(String title, String message, String type,
       payload: json.encode(data));
 }
 
-void initMessaging() async {
-  const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings("@mipmap/ic_launcher");
-  const DarwinInitializationSettings initializationSettingsDarwin =
-      DarwinInitializationSettings(
-    onDidReceiveLocalNotification: onDidReceiveLocalNotification,
-  );
-
-  const InitializationSettings initializationSettings = InitializationSettings(
-      android: initializationSettingsAndroid,
-      iOS: initializationSettingsDarwin);
-  flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
-}
+// void initMessaging() async {
+//   const AndroidInitializationSettings initializationSettingsAndroid =
+//       AndroidInitializationSettings("@mipmap/ic_launcher");
+//   const DarwinInitializationSettings initializationSettingsDarwin =
+//       DarwinInitializationSettings(
+//           onDidReceiveLocalNotification: onDidReceiveLocalNotification,
+//           );
+//
+//   const InitializationSettings initializationSettings = InitializationSettings(
+//       android: initializationSettingsAndroid,
+//       iOS: initializationSettingsDarwin);
+//   flutterLocalNotificationsPlugin.initialize(initializationSettings,
+//       onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
+// }
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});

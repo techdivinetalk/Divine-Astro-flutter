@@ -95,7 +95,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
 
       assistChatNewMsg.listen((newChatList) {
         if (newChatList.isNotEmpty) {
-          print("new chat list ${newChatList.length} ");
+          print("ˇˇ ${newChatList.length} ");
           for (int index = 0; index < newChatList.length; index++) {
             print("new chat list ${jsonEncode(newChatList[index])} ");
             var responseMsg = newChatList[index];

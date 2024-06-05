@@ -96,13 +96,64 @@ void initMessaging() async {
       AndroidInitializationSettings("@mipmap/ic_launcher");
   const DarwinInitializationSettings initializationSettingsDarwin =
       DarwinInitializationSettings(
-          onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+          // onDidReceiveLocalNotification: onDidReceiveLocalNotification,
+          );
 
   const InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsDarwin);
   flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
+      onDidReceiveNotificationResponse:
+          (NotificationResponse notificationResponse) async {
+    final String? payload = notificationResponse.payload;
+    print(payload);
+    print("payloadpayloadpayloadpayloadpayloadpayload");
+    if (payload != null) {
+      ///// redirect to bottom sheet of accept the request
+      print(notificationResponse.payload);
+      print("notificationResponse.payload");
+      final Map<String, dynamic> payloadMap =
+          jsonDecode(notificationResponse.payload!);
+      debugPrint('notification payload: -- ${payloadMap}');
+      //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
+      // // if(payloadMap["type"] == "2") {
+      if (payloadMap["type"] == "1") {
+        Get.toNamed(RouteName.chatMessageWithSocketUI);
+      } else if (payloadMap["type"] == "8") {
+        final senderId = payloadMap["sender_id"];
+        DataList dataList = DataList();
+        dataList.id = int.parse(senderId);
+        dataList.name = payloadMap["title"];
+        Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
+      }else if (payloadMap["type"] == "13") {
+        dasboardCurrentIndex(3);
+      } else {
+        if (!await launchUrl(Uri.parse(payloadMap["url"].toString()))) {
+          throw Exception('Could not launch ${payloadMap["url"]}');
+        }
+      }
+
+      AppFirebaseService().openChatUserId = payloadMap["userid"] ?? "";
+      // }
+      // Accessing individual values
+      // String requestId = payloadMap['receiver_id'].toString();
+      // String orderId = payloadMap['order_id'].toString();
+      //
+      // if (payloadMap['msgType'] == 'request') {
+      //   await AppFirebaseService().writeData('order/$orderId', {'status': '1'});
+      // }
+      //
+      // final notificationPath = 'astrologer/${preferenceService.getUserDetail()!.id}/realTime';
+      // final orderData = {'order_id': orderId};
+      // await AppFirebaseService().writeData(notificationPath, orderData);
+      // chatInit(requestId);
+
+      // acceptChatRequestBottomSheet(Get.context!, onPressed: () async {
+      //
+      //   // await Get.toNamed(RouteName.chatMessageWithSocketUI);
+      // }, orderId: orderId);
+    }
+  });
 }
 
 void onDidReceiveLocalNotification(
@@ -135,8 +186,12 @@ void onDidReceiveLocalNotification(
 void onDidReceiveNotificationResponse(
     NotificationResponse notificationResponse) async {
   final String? payload = notificationResponse.payload;
+  print(payload);
+  print("payloadpayloadpayloadpayloadpayloadpayload");
   if (notificationResponse.payload != null) {
     ///// redirect to bottom sheet of accept the request
+    print(notificationResponse.payload);
+    print("notificationResponse.payload");
     final Map<String, dynamic> payloadMap =
         jsonDecode(notificationResponse.payload!);
     debugPrint('notification payload: -- ${payloadMap}');
@@ -185,24 +240,24 @@ void onDidReceiveNotificationResponse(
 Future<void> chatInit(String requestId) async {
   try {
     final userDetail = preferenceService.getUserDetail();
-    if (userDetail != null) {
-      final notificationPath = 'user/$requestId/realTime/notification';
-      final int timestamp = DateTime.now().millisecondsSinceEpoch;
-      final notificationData = {
-        '$timestamp': {
-          'isActive': 1,
-          'message': '${userDetail.name} wants to chat with you',
-          'value': 'Click to chat',
-          'requestId': userDetail.id
-        },
-      };
-
-      final appFirebaseService = AppFirebaseService();
-      await appFirebaseService.writeData(notificationPath, notificationData);
-      debugPrint('Notification data written to the database');
-    } else {
-      debugPrint('Error: User details not available');
-    }
+    // if (userDetail != null) {
+    //   final notificationPath = 'user/$requestId/realTime/notification';
+    //   final int timestamp = DateTime.now().millisecondsSinceEpoch;
+    //   final notificationData = {
+    //     '$timestamp': {
+    //       'isActive': 1,
+    //       'message': '${userDetail.name} wants to chat with you',
+    //       'value': 'Click to chat',
+    //       'requestId': userDetail.id
+    //     },
+    //   };
+    //
+    //   final appFirebaseService = AppFirebaseService();
+    //   await appFirebaseService.writeData(notificationPath, notificationData);
+    //   debugPrint('Notification data written to the database');
+    // } else {
+    //   debugPrint('Error: User details not available');
+    // }
   } catch (e) {
     debugPrint('Error writing notification data to the database: $e');
   }
@@ -213,7 +268,7 @@ Future<void> showNotificationWithActions(
     required String message,
     dynamic payload,
     HiveServices? hiveServices}) async {
-  debugPrint("enter in showNotificationWithActions --> $payload");
+  debugPrint("enter in showNotificationWithActions --> $message");
   String? jsonEncodePayload;
   if (payload != null) {
     jsonEncodePayload = jsonEncode(payload);
@@ -248,6 +303,10 @@ Future<void> showNotificationWithActions(
   const NotificationDetails notificationDetails =
       NotificationDetails(android: androidNotificationDetails);
   await flutterLocalNotificationsPlugin.show(
-      math.Random().nextInt(10000), title, message, notificationDetails,
-      payload: jsonEncodePayload);
+    math.Random().nextInt(10000),
+    title,
+    message,
+    notificationDetails,
+    payload: jsonEncodePayload,
+  );
 }

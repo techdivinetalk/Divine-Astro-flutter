@@ -1243,29 +1243,29 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  Future<bool> hasOpenOrder() async {
-    bool hasOpenOrder = false;
-
-    final String id = (preferenceService.getUserDetail()?.id ?? "").toString();
-    final String realTimeNode = "astrologer/$id/realTime";
-
-    final DatabaseReference reference = FirebaseDatabase.instance.ref();
-    final DataSnapshot dataSnapshot = await reference.child(realTimeNode).get();
-
-    if (dataSnapshot.exists) {
-      if (dataSnapshot.value is Map<dynamic, dynamic>) {
-        Map<dynamic, dynamic> map = <dynamic, dynamic>{};
-        map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-            as Map<dynamic, dynamic>;
-
-        if (map.isEmpty) {
-        } else if (map.isNotEmpty) {
-          hasOpenOrder = map["order_id"] != null;
-        } else {}
-      } else {}
-    } else {}
-    return Future<bool>.value(hasOpenOrder);
-  }
+  // Future<bool> hasOpenOrder() async {
+  //   bool hasOpenOrder = false;
+  //
+  //   final String id = (preferenceService.getUserDetail()?.id ?? "").toString();
+  //   final String realTimeNode = "astrologer/$id/realTime";
+  //
+  //   final DatabaseReference reference = FirebaseDatabase.instance.ref();
+  //   final DataSnapshot dataSnapshot = await reference.child(realTimeNode).get();
+  //
+  //   if (dataSnapshot.exists) {
+  //     if (dataSnapshot.value is Map<dynamic, dynamic>) {
+  //       Map<dynamic, dynamic> map = <dynamic, dynamic>{};
+  //       map = (dataSnapshot.value ?? <dynamic, dynamic>{})
+  //           as Map<dynamic, dynamic>;
+  //
+  //       if (map.isEmpty) {
+  //       } else if (map.isNotEmpty) {
+  //         hasOpenOrder = map["order_id"] != null;
+  //       } else {}
+  //     } else {}
+  //   } else {}
+  //   return Future<bool>.value(hasOpenOrder);
+  // }
 
   String getLabel() {
     if (performanceScoreList.isNotEmpty &&

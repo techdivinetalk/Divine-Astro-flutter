@@ -248,9 +248,12 @@ class _LivePage extends State<LiveDharamScreen>
     _showOverlay();
     const SVGAParser parser = SVGAParser();
     String giftInfo = svgaUrls.entries.first.value;
+    print(svgaUrls.length);
     await parser.decodeFromURL(giftInfo).then((videoItem) {
+      print("svgaUrls.videoItem");
       _svgController.videoItem = videoItem;
       _svgController.forward();
+      _removeOverlay();
     });
   }
 
@@ -1003,8 +1006,8 @@ class _LivePage extends State<LiveDharamScreen>
                                       fontSize: 14,
                                       color: isBlocked
                                           ? Colors.red
-                                          : isModerator
-                                              ? appColors.guideColor
+                                          // : isModerator
+                                          //     ? appColors.guideColor
                                               : msg.fullGiftImage.isNotEmpty
                                                   ? appColors.black
                                                   : msg.message.contains(
@@ -1025,8 +1028,8 @@ class _LivePage extends State<LiveDharamScreen>
                                         fontSize: 13,
                                         color: isBlocked
                                             ? Colors.red
-                                            : isModerator
-                                                ? appColors.guideColor
+                                            // : isModerator
+                                            //     ? appColors.guideColor
                                                 : msg.fullGiftImage.isNotEmpty
                                                     ? appColors.black
                                                     : msg.message.contains(
@@ -1296,7 +1299,7 @@ class _LivePage extends State<LiveDharamScreen>
           isInCall: _controller.currentCaller.isEngaded,
           waitTime: _controller.getTotalWaitTime(),
           myUserId: _controller.userId,
-          list: _controller.waitListModel,
+          waitListModels: _controller.waitListModel,
           hasMyIdInWaitList: false,
           onExitWaitList: () async {
             Get.back();
@@ -1864,9 +1867,7 @@ class _LivePage extends State<LiveDharamScreen>
           onSelect: (List<DeckCardModel> selectedCards) async {
             Get.back();
             _endMsgTimerForTarotCardPopup();
-
             hasSelected = true;
-
             final List<UserPicked> userPicked = [];
             for (DeckCardModel element in selectedCards) {
               userPicked.add(
@@ -1979,111 +1980,6 @@ class _LivePage extends State<LiveDharamScreen>
     _controller.showTopBanner = false;
     return Future<void>.value();
   }
-
-  // Future<void> commonRequest({
-  //   required String type,
-  //   required Map<String, dynamic> item,
-  //   required num giftCount,
-  // }) async {
-  //   WidgetsBinding.instance.endOfFrame.then(
-  //     (_) async {
-  //       if (mounted) {
-  //         await requestPopup(
-  //           ctx: context,
-  //           type: type,
-  //           giftData: GiftData.fromJson(item),
-  //           giftCount: giftCount,
-  //         );
-  //       } else {}
-  //     },
-  //   );
-  //   return Future<void>.value();
-  // }
-
-  // Future<void> requestPopup({
-  //   required BuildContext ctx,
-  //   required String type,
-  //   required GiftData giftData,
-  //   required num giftCount,
-  // }) async {
-  //   LiveGlobalSingleton().isRequestPopupOpen = true;
-  //   await showCupertinoDialog(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return RequestPopupWidget(
-  //         onClose: Get.back,
-  //         details: _controller.details,
-  //         speciality: _controller.getSpeciality(),
-  //         type: type,
-  //         onTapAcceptForGifts: () async {
-  //           Get.back();
-  //           await sendGiftFunc(ctx: ctx, item: giftData, quantity: giftCount);
-  //         },
-  //         onTapAcceptForVideoCall: () async {
-  //           Get.back();
-  //           await requestCallFunction(type: "Video");
-  //         },
-  //         onTapAcceptForAudioCall: () async {
-  //           Get.back();
-  //           await requestCallFunction(type: "Audio");
-  //         },
-  //         onTapAcceptForPrivateCall: () async {
-  //           Get.back();
-  //           await requestCallFunction(type: "Private");
-  //         },
-  //         giftData: giftData,
-  //         giftCount: giftCount,
-  //       );
-  //     },
-  //   );
-  //   LiveGlobalSingleton().isRequestPopupOpen = false;
-  //   return Future<void>.value();
-  // }
-
-  // Future<void> requestCallFunction({required String type}) async {
-  //   bool hasAllPerm = false;
-  //   await AppPermissionService.instance.onPressedJoinButton(
-  //     type,
-  //     () async {
-  //       hasAllPerm = true;
-  //     },
-  //   );
-  //   if (hasAllPerm) {
-  //     await sendCallFunc(
-  //       type: type,
-  //       needRecharge: (bal.InsufficientBalModel balModel) async {
-  //         await lowBalancePopup(
-  //           balModel: balModel,
-  //           callbackBalModelData: (data) async {
-  //             final CommonOffer arg = CommonOffer(
-  //               extraAmount: data.extraAmount,
-  //               offerAmount: data.offerAmount,
-  //               percentage: data.percentage?.toInt(),
-  //               rechargeAmount: data.rechargeAmount,
-  //             );
-  //             await Get.toNamed(RouteName.paymentSummary, arguments: arg);
-  //           },
-  //         );
-  //       },
-  //     );
-  //   } else {}
-
-  //   return Future<void>.value();
-  // }
-
-  // Future<void> youAreBlocked() async {
-  //   LiveGlobalSingleton().isYouAreBlockedPopupOpen = true;
-  //   await showCupertinoModalPopup(
-  //     context: context,
-  //     builder: (BuildContext context) {
-  //       return YouAreBlockedWidget(
-  //         onClose: Get.back,
-  //       );
-  //     },
-  //   );
-  //   LiveGlobalSingleton().isYouAreBlockedPopupOpen = false;
-  //   return Future<void>.value();
-  // }
 
   void scrollDownForTop() {
     if (_scrollControllerForTop.hasClients) {

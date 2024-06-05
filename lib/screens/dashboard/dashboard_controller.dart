@@ -1,5 +1,7 @@
 import 'dart:async';
 
+import 'package:android_intent_plus/android_intent.dart';
+import 'package:android_intent_plus/flag.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -14,6 +16,7 @@ import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/force_update_sheet.dart';
 import 'package:divine_astrologer/zego_call/zego_service.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
@@ -53,10 +56,11 @@ class DashboardController extends GetxController
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
-
+  var commonConstants;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
+      print("checkPermissions");
       // Check permissions when app is resumed
       checkPermissions();
     }
@@ -118,6 +122,14 @@ class DashboardController extends GetxController
         isScrollControlled: true,
       );
     }
+    await Future.delayed(const Duration(seconds: 3));
+
+    if(isTime.toString() == "1") {
+      compareTimes(commonConstants.data!.currentTime!.toInt());
+      print(DateTime
+          .now()
+          .millisecondsSinceEpoch / 1000);
+    }
   }
 
   void requestPermissions() async {
@@ -164,7 +176,7 @@ class DashboardController extends GetxController
     } else {
       print("is logged out");
     }
-    var commonConstants = await userRepository.constantDetailsData();
+    commonConstants = await userRepository.constantDetailsData();
     preferenceService.setConstantDetails(commonConstants);
     preferenceService
         .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
@@ -181,8 +193,76 @@ class DashboardController extends GetxController
     print(userProfileImage.value);
     print("userProfileImage.value");
     loadPreDefineData();
-    firebaseMessagingConfig(Get.context!);
+    initMessaging();
+    // firebaseMessagingConfig(Get.context!);
     getConstantDetailsData();
+    print("currentTime");
+  }
+  void compareTimes(int serverTime) {
+    print("millisecondsSinceEpoch");
+    print(isTime.toString());
+    // Get the current local time in milliseconds since epoch
+    int localTime = DateTime.now().millisecondsSinceEpoch;
+
+    // Convert serverTime to milliseconds since epoch
+    int serverTimeMillis = serverTime * 1000;
+
+    // Calculate the absolute difference in milliseconds
+    int difference = serverTimeMillis > localTime ? (serverTimeMillis - localTime).abs() : (localTime - serverTimeMillis).abs();
+    print(serverTimeMillis);
+    print("serverTimeMillis");
+    // Check if the difference is less than 30 seconds (30000 milliseconds)
+    if (difference > 30000) {
+      print("if difference");
+      showTimeDIffBottomSheet(Get.context!);
+    }else {
+      print("else difference");
+    }
+  }
+  void showTimeDIffBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (BuildContext context) {
+        return Container(
+          color: Colors.white,
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              const Text(
+                'Mobile Time issue',
+                style: TextStyle(
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16.0),
+              const Text(
+                "Your mobile's time is incorrect. Please adjust it to proceed.",
+              ),
+              const SizedBox(height: 16.0),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                child: GestureDetector(
+                  onTap: () {
+                    const AndroidIntent intent = AndroidIntent(
+                      action: 'android.settings.DATE_SETTINGS',
+                      flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
+                    );
+                    intent.launch();
+                  },
+                    child: const Text('Change time')
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+      isDismissible: true, // allows tapping outside to dismiss
+      enableDrag: false,
+    );
   }
 
   @override
