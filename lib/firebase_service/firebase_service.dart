@@ -97,6 +97,7 @@ class AppFirebaseService {
   //   });
   // }
   Future<void> userRealTime(String key, dynamic value, String path) async {
+    debugPrint("test_callKunadliUpdated_4");
     debugPrint("test_userRealTime: value: $value");
 
     switch (key) {
@@ -111,6 +112,7 @@ class AppFirebaseService {
             Map<String, dynamic>.from(value as Map<Object?, Object?>);
         print(callKundli);
         print("realTimeData['callKundli']");
+        debugPrint("test_callKunadliUpdated_3");
         callKunadliUpdated(callKundli);
         sendBroadcast(BroadcastMessage(name: "callKundli", data: callKundli));
         break;
@@ -133,6 +135,11 @@ class AppFirebaseService {
         break;
       case "voiceCallStatus":
         callSwitch(value > 0);
+
+        if (value <= 1) {
+          debugPrint("test_callKunadliUpdated_6");
+          callKunadliUpdated({});
+        }
         break;
       case "chatStatus":
         chatSwitch(value > 0);
@@ -213,6 +220,7 @@ class AppFirebaseService {
         });
       } else {
         database.child(path).onValue.listen((event) async {
+          debugPrint("test_callKunadliUpdated_5");
           debugPrint("real time $path ---> ${event.snapshot.value}");
           if (preferenceService.getToken() == null ||
               preferenceService.getToken() == "") {
@@ -228,6 +236,11 @@ class AppFirebaseService {
 
             final isCallSwitchRes = realTimeData["voiceCallStatus"] ?? 0;
             callSwitch(isCallSwitchRes > 0);
+
+            if (isCallSwitchRes <= 1) {
+              debugPrint("test_callKunadliUpdated_7");
+              callKunadliUpdated({});
+            }
 
             final isChatSwitchRes = realTimeData["chatStatus"] ?? 0;
             chatSwitch(isChatSwitchRes > 0);
@@ -298,11 +311,13 @@ class AppFirebaseService {
                   realTimeData['callKundli'] as Map<Object?, Object?>);
               print(realTimeData['callKundli']);
               print("realTimeData['callKundli']");
+              debugPrint("test_callKunadliUpdated_2");
               callKunadliUpdated(realTimeData['callKundli']);
               sendBroadcast(
                   BroadcastMessage(name: "callKundli", data: callKundli));
               // FirebaseDatabase.instance.ref("$path/callKundli").remove();
             } else {
+              debugPrint("test_callKunadliUpdated_1");
               callKunadliUpdated({});
             }
             if (realTimeData["deliveredMsg"] != null) {
@@ -418,8 +433,8 @@ class AppFirebaseService {
       case "gifts":
         isGifts(int.parse(dataSnapshot.value.toString()));
         break;
-     case "isTime":
-       isTime(int.parse(dataSnapshot.value.toString()));
+      case "isTime":
+        isTime(int.parse(dataSnapshot.value.toString()));
         break;
       case "remidies":
         isRemidies(int.parse(dataSnapshot.value.toString()));
