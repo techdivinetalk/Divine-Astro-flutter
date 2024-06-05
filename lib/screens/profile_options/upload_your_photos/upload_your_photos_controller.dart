@@ -1,8 +1,11 @@
 import 'dart:io';
 
 import 'package:aws_s3_upload/aws_s3_upload.dart';
+import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/upload_image_model.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../../common/app_exception.dart';
 import 'package:path/path.dart' as p;
@@ -27,6 +30,30 @@ class UploadYourPhotosController extends GetxController {
     userData = preference.getUserDetail();
   }
 
+
+  Future<CroppedFile?> cropImage(File imageFile) async {
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: imageFile.path,
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+        CropAspectRatioPreset.ratio3x2,
+        CropAspectRatioPreset.original,
+        CropAspectRatioPreset.ratio4x3,
+        CropAspectRatioPreset.ratio16x9,
+      ],
+      uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: 'Crop Image',
+          toolbarColor: appColors.white,
+          toolbarWidgetColor: appColors.blackColor,
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: false,
+        ),
+      ],
+    );
+    return croppedFile;
+  }
+
   Future getImages() async {
     final pickedFile = await picker.pickMultiImage(
       imageQuality: 100,
@@ -40,7 +67,12 @@ class UploadYourPhotosController extends GetxController {
         if (selectedImages.any((element) => element.path == xFilePick[i].path)) {
           divineSnackBar(data: "This image already selected.");
         } else {
-          selectedImages.add(File(xFilePick[i].path));
+          // selectedImages.add(File(xFilePick[i].path));
+
+          CroppedFile? croppedFile = await cropImage(File(xFilePick[i].path));
+          if (croppedFile != null) {
+            selectedImages.add(File(croppedFile.path));
+          }
         }
       }
       update();
