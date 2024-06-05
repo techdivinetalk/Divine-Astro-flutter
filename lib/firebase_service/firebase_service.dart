@@ -97,7 +97,6 @@ class AppFirebaseService {
   //   });
   // }
   Future<void> userRealTime(String key, dynamic value, String path) async {
-    debugPrint("test_callKunadliUpdated_4");
     debugPrint("test_userRealTime: value: $value");
 
     switch (key) {
@@ -112,7 +111,6 @@ class AppFirebaseService {
             Map<String, dynamic>.from(value as Map<Object?, Object?>);
         print(callKundli);
         print("realTimeData['callKundli']");
-        debugPrint("test_callKunadliUpdated_3");
         callKunadliUpdated(callKundli);
         sendBroadcast(BroadcastMessage(name: "callKundli", data: callKundli));
         break;
@@ -135,11 +133,6 @@ class AppFirebaseService {
         break;
       case "voiceCallStatus":
         callSwitch(value > 0);
-
-        if (value <= 1) {
-          debugPrint("test_callKunadliUpdated_6");
-          callKunadliUpdated({});
-        }
         break;
       case "chatStatus":
         chatSwitch(value > 0);
@@ -196,147 +189,151 @@ class AppFirebaseService {
   readData(String path) async {
     print("readData $path");
     try {
-      if (kDebugMode) {
-        database.child(path).onChildChanged.listen((event) {
-          final key = event.snapshot.key; // Get the key of the changed child
-          final value =
-              event.snapshot.value; // Get the new value of the changed child
-          if (event.snapshot.value != null) {
-            print("onChildChanged $key");
-            print("onChildChanged $value");
-            userRealTime(key!, value, path);
+      // if (kDebugMode) {
+      //   database.child(path).onChildChanged.listen((event) {
+      //     final key = event.snapshot.key; // Get the key of the changed child
+      //     final value =
+      //         event.snapshot.value; // Get the new value of the changed child
+      //     if (event.snapshot.value != null) {
+      //       print("onChildChanged $key");
+      //       print("onChildChanged $value");
+      //       userRealTime(key!, value, path);
+      //     }
+      //   });
+      //   database.child(path).onChildAdded.listen((event) {
+      //     final key = event.snapshot.key; // Get the key of the changed child
+      //     final value =
+      //         event.snapshot.value; // Get the new value of the changed child
+      //     if (event.snapshot.value != null) {
+      //       print("onChildAdded $key");
+      //       print("onChildAdded $value");
+      //       print("onChildAdded $value");
+      //       userRealTime(key!, value, path);
+      //     }
+      //   });database.child(path).onChildRemoved.listen((event) {
+      //     final key = event.snapshot.key;
+      //     final value =
+      //         event.snapshot.value;
+      //     if (event.snapshot.value != null) {
+      //       print("onChildAdded $key");
+      //       print("onChildAdded $value");
+      //       print("onChildAdded $value");
+      //       userRealTime(key!, value, path);
+      //     }
+      //   });
+      // } else {
+      //
+      // }
+
+      database.child(path).onValue.listen((event) async {
+        debugPrint("real time $path ---> ${event.snapshot.value}");
+        if (preferenceService.getToken() == null ||
+            preferenceService.getToken() == "") {
+          return;
+        }
+
+        if (event.snapshot.value is Map<Object?, Object?>) {
+          Map<String, dynamic>? realTimeData = Map<String, dynamic>.from(
+              event.snapshot.value! as Map<Object?, Object?>);
+          if (realTimeData["order_id"] != null) {
+            watcher.strValue = realTimeData["order_id"].toString();
           }
-        });
-        database.child(path).onChildAdded.listen((event) {
-          final key = event.snapshot.key; // Get the key of the changed child
-          final value =
-              event.snapshot.value; // Get the new value of the changed child
-          if (event.snapshot.value != null) {
-            print("onChildAdded $key");
-            print("onChildAdded $value");
-            print("onChildAdded $value");
-            userRealTime(key!, value, path);
-          }
-        });
-      } else {
-        database.child(path).onValue.listen((event) async {
-          debugPrint("test_callKunadliUpdated_5");
-          debugPrint("real time $path ---> ${event.snapshot.value}");
-          if (preferenceService.getToken() == null ||
-              preferenceService.getToken() == "") {
-            return;
-          }
 
-          if (event.snapshot.value is Map<Object?, Object?>) {
-            Map<String, dynamic>? realTimeData = Map<String, dynamic>.from(
-                event.snapshot.value! as Map<Object?, Object?>);
-            if (realTimeData["order_id"] != null) {
-              watcher.strValue = realTimeData["order_id"].toString();
-            }
+          final isCallSwitchRes = realTimeData["voiceCallStatus"] ?? 0;
+          callSwitch(isCallSwitchRes > 0);
 
-            final isCallSwitchRes = realTimeData["voiceCallStatus"] ?? 0;
-            callSwitch(isCallSwitchRes > 0);
+          final isChatSwitchRes = realTimeData["chatStatus"] ?? 0;
+          chatSwitch(isChatSwitchRes > 0);
 
-            if (isCallSwitchRes <= 1) {
-              debugPrint("test_callKunadliUpdated_7");
-              callKunadliUpdated({});
-            }
+          final isVideoCallSwitchRes = realTimeData["videoCallStatus"] ?? 0;
+          videoSwitch(isVideoCallSwitchRes > 0);
 
-            final isChatSwitchRes = realTimeData["chatStatus"] ?? 0;
-            chatSwitch(isChatSwitchRes > 0);
+          if (realTimeData["uniqueId"] != null) {
+            print("uniqueId ---- uniqueId ${realTimeData["uniqueId"]}");
 
-            final isVideoCallSwitchRes = realTimeData["videoCallStatus"] ?? 0;
-            videoSwitch(isVideoCallSwitchRes > 0);
-
-            if (realTimeData["uniqueId"] != null) {
-              print("uniqueId ---- uniqueId ${realTimeData["uniqueId"]}");
-
-              String uniqueId = await getDeviceId() ?? "";
-              debugPrint(
-                'check uniqueId ${realTimeData['uniqueId']}\ngetDeviceId ${uniqueId.toString()}',
-              );
-              if (realTimeData["uniqueId"] != uniqueId) {
-                print("logout --- start");
-                await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
-                print("logout --- end");
-                Get.put(SettingsController()).logOut();
-              }
-            }
-
-            if (realTimeData["profilePhoto"] != null) {
-              print("beforeGoing 0 - first");
-              UserData? userData =
-                  Get.find<SharedPreferenceService>().getUserDetail();
-              userData!.image = realTimeData["profilePhoto"];
-              String? baseAmazonUrl =
-                  Get.find<SharedPreferenceService>().getBaseImageURL();
-              Get.find<SharedPreferenceService>().setUserDetail(userData);
-              Get.put(DashboardController(Get.put(PreDefineRepository())))
-                  .userProfileImage
-                  .value = "$baseAmazonUrl/${userData.image!}";
-              Get.put(ProfilePageController(Get.put(UserRepository())))
-                  .userProfileImage
-                  .value = "$baseAmazonUrl/${userData.image!}";
-              Get.put(DashboardController(Get.put(PreDefineRepository())))
-                  .update();
-              Get.put(ProfilePageController(Get.put(UserRepository())))
-                  .update();
-            }
-            if (realTimeData["isEngagedStatus"] != null) {
-              print(realTimeData["isEngagedStatus"]);
-              print('realTimeData["isEngagedStatus"]');
-              isEngagedStatus(realTimeData['isEngagedStatus']);
-            } else {
-              isEngagedStatus(0);
-            }
-            if (realTimeData['giftCount'] != null) {
-              giftCountUpdate(realTimeData["giftCount"]);
-              giftImageUpdate(realTimeData["giftImage"]);
-              print(
-                  "gift broadcase called ${realTimeData["giftCount"]} ${realTimeData["giftImage"]}");
-              sendBroadcast(
-                BroadcastMessage(
-                  name: "giftCount",
-                  data: {
-                    'giftCount': realTimeData["giftCount"],
-                    "giftImage": realTimeData["giftImage"],
-                  },
-                ),
-              );
-              FirebaseDatabase.instance.ref("$path/giftCount").remove();
-              FirebaseDatabase.instance.ref("$path/giftImage").remove();
-            }
-            if (realTimeData['callKundli'] != null) {
-              Map<String, dynamic>? callKundli = Map<String, dynamic>.from(
-                  realTimeData['callKundli'] as Map<Object?, Object?>);
-              print(realTimeData['callKundli']);
-              print("realTimeData['callKundli']");
-              debugPrint("test_callKunadliUpdated_2");
-              callKunadliUpdated(realTimeData['callKundli']);
-              sendBroadcast(
-                  BroadcastMessage(name: "callKundli", data: callKundli));
-              // FirebaseDatabase.instance.ref("$path/callKundli").remove();
-            } else {
-              debugPrint("test_callKunadliUpdated_1");
-              callKunadliUpdated({});
-            }
-            if (realTimeData["deliveredMsg"] != null) {
-              print("deliveredMsg rec");
-              sendBroadcast(BroadcastMessage(
-                  name: "deliveredMsg",
-                  data: {'deliveredMsgList': realTimeData["deliveredMsg"]}));
-            }
-            if (realTimeData["totalGift"] != null) {
-              sendBroadcast(
-                BroadcastMessage(
-                  name: "totalGift",
-                  data: {'totalGift': realTimeData["totalGift"]},
-                ),
-              );
+            String uniqueId = await getDeviceId() ?? "";
+            debugPrint(
+              'check uniqueId ${realTimeData['uniqueId']}\ngetDeviceId ${uniqueId.toString()}',
+            );
+            if (realTimeData["uniqueId"] != uniqueId) {
+              print("logout --- start");
+              await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
+              print("logout --- end");
+              Get.put(SettingsController()).logOut();
             }
           }
-        });
-      }
+
+          if (realTimeData["profilePhoto"] != null) {
+            print("beforeGoing 0 - first");
+            UserData? userData =
+            Get.find<SharedPreferenceService>().getUserDetail();
+            userData!.image = realTimeData["profilePhoto"];
+            String? baseAmazonUrl =
+            Get.find<SharedPreferenceService>().getBaseImageURL();
+            Get.find<SharedPreferenceService>().setUserDetail(userData);
+            Get.put(DashboardController(Get.put(PreDefineRepository())))
+                .userProfileImage
+                .value = "$baseAmazonUrl/${userData.image!}";
+            Get.put(ProfilePageController(Get.put(UserRepository())))
+                .userProfileImage
+                .value = "$baseAmazonUrl/${userData.image!}";
+            Get.put(DashboardController(Get.put(PreDefineRepository())))
+                .update();
+            Get.put(ProfilePageController(Get.put(UserRepository())))
+                .update();
+          }
+          if (realTimeData["isEngagedStatus"] != null) {
+            print(realTimeData["isEngagedStatus"]);
+            print('realTimeData["isEngagedStatus"]');
+            isEngagedStatus(realTimeData['isEngagedStatus']);
+          } else {
+            isEngagedStatus(0);
+          }
+          if (realTimeData['giftCount'] != null) {
+            giftCountUpdate(realTimeData["giftCount"]);
+            giftImageUpdate(realTimeData["giftImage"]);
+            print(
+                "gift broadcase called ${realTimeData["giftCount"]} ${realTimeData["giftImage"]}");
+            sendBroadcast(
+              BroadcastMessage(
+                name: "giftCount",
+                data: {
+                  'giftCount': realTimeData["giftCount"],
+                  "giftImage": realTimeData["giftImage"],
+                },
+              ),
+            );
+            FirebaseDatabase.instance.ref("$path/giftCount").remove();
+            FirebaseDatabase.instance.ref("$path/giftImage").remove();
+          }
+          if (realTimeData['callKundli'] != null) {
+            Map<String, dynamic>? callKundli = Map<String, dynamic>.from(
+                realTimeData['callKundli'] as Map<Object?, Object?>);
+            print(realTimeData['callKundli']);
+            print("realTimeData['callKundli']");
+            callKunadliUpdated(realTimeData['callKundli']);
+            sendBroadcast(
+                BroadcastMessage(name: "callKundli", data: callKundli));
+            // FirebaseDatabase.instance.ref("$path/callKundli").remove();
+          } else {
+            callKunadliUpdated({});
+          }
+          if (realTimeData["deliveredMsg"] != null) {
+            print("deliveredMsg rec");
+            sendBroadcast(BroadcastMessage(
+                name: "deliveredMsg",
+                data: {'deliveredMsgList': realTimeData["deliveredMsg"]}));
+          }
+          if (realTimeData["totalGift"] != null) {
+            sendBroadcast(
+              BroadcastMessage(
+                name: "totalGift",
+                data: {'totalGift': realTimeData["totalGift"]},
+              ),
+            );
+          }
+        }
+      });
     } catch (e) {
       debugPrint("Error reading data from the database: $e");
     }
@@ -433,8 +430,8 @@ class AppFirebaseService {
       case "gifts":
         isGifts(int.parse(dataSnapshot.value.toString()));
         break;
-      case "isTime":
-        isTime(int.parse(dataSnapshot.value.toString()));
+     case "isTime":
+       isTime(int.parse(dataSnapshot.value.toString()));
         break;
       case "remidies":
         isRemidies(int.parse(dataSnapshot.value.toString()));

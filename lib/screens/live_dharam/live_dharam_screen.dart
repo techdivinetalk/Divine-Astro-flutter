@@ -3251,12 +3251,6 @@ class _LivePage extends State<LiveDharamScreen>
       needAcceptButton: true,
       needDeclinetButton: false,
       onAcceptButton: () async {
-        // if (_controller.openAceeptRejectDialogForId == userId) {
-        //   final connectInvite = _zegoController.coHost;
-        //   await connectInvite.hostSendCoHostInvitationToAudience(user);
-        // } else {
-        //
-        // }
         print("calling accept button");
         final connectInvite = zegoController.coHost;
         await connectInvite.hostSendCoHostInvitationToAudience(user);
