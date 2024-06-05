@@ -80,7 +80,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
       // controller.userleftChatSocketListen();
 
       controller.getMessageTemplateForChatAssist();
-      controller.getMessageTemplatesLocally();
+      // controller.getMessageTemplatesLocally();
       controller.scrollToBottomFunc();
       timer = Timer.periodic(const Duration(minutes: 5), (timer) {
         controller.socketReconnect();
@@ -551,36 +551,39 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
       child: ListView.separated(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         scrollDirection: Axis.horizontal,
-        itemCount: controller.messageTemplates.length + 1,
+        // itemCount: controller.messageTemplates.length + 1,
+        itemCount: controller.messageTemplates.length ,
         separatorBuilder: (_, index) => SizedBox(width: 10.w),
         itemBuilder: (context, index) {
           late final MessageTemplates msg;
-          return index == 0 || controller.messageTemplates.isEmpty
-              ? GestureDetector(
-                  onTap: () async {
-                    await Get.toNamed(RouteName.messageTemplate);
-                    controller.getMessageTemplateForChatAssist();
-                    controller.getMessageTemplatesLocally();
-                    controller.update();
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: appColors.red,
-                      borderRadius: const BorderRadius.all(Radius.circular(18)),
-                    ),
-                    child: Text(
-                      '+ Add',
-                      style:
-                          AppTextStyle.textStyle12(fontColor: appColors.white),
-                    ),
-                  ),
-                )
-              : GestureDetector(
+          return
+            // index == 0 || controller.messageTemplates.isEmpty
+            //   ? GestureDetector(
+            //       onTap: () async {
+            //         await Get.toNamed(RouteName.messageTemplate);
+            //         controller.getMessageTemplateForChatAssist();
+            //         controller.getMessageTemplatesLocally();
+            //         controller.update();
+            //       },
+            //       child: Container(
+            //         padding:
+            //             const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            //         decoration: BoxDecoration(
+            //           color: appColors.red,
+            //           borderRadius: const BorderRadius.all(Radius.circular(18)),
+            //         ),
+            //         child: Text(
+            //           '+ Add',
+            //           style:
+            //               AppTextStyle.textStyle12(fontColor: appColors.white),
+            //         ),
+            //       ),
+            //     )
+            //   :
+          GestureDetector(
                   onTap: () {
                     controller.sendMsgTemplate(
-                        controller.messageTemplates[index - 1],false);
+                        controller.messageTemplates[/*index - 1*/index],false);
                   },
                   child: Container(
                     padding:
@@ -590,7 +593,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                       borderRadius: const BorderRadius.all(Radius.circular(18)),
                     ),
                     child: Text(
-                      '${controller.messageTemplates[index - 1].message}',
+                      '${controller.messageTemplates[/*index - 1*/index].message}',
                       style:
                           AppTextStyle.textStyle12(fontColor: appColors.white),
                     ),

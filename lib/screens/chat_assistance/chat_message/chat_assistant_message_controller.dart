@@ -261,12 +261,12 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
     update();
   }
 
-  getMessageTemplatesLocally() async {
-    final sharedPreferencesInstance = SharedPreferenceService();
-    final data = await sharedPreferencesInstance.getMessageTemplates();
-    messageTemplates(data);
-    update();
-  }
+  // getMessageTemplatesLocally() async {
+  //   final sharedPreferencesInstance = SharedPreferenceService();
+  //   final data = await sharedPreferencesInstance.getMessageTemplates();
+  //   messageTemplates(data);
+  //   update();
+  // }
 
   getOurImage() async {
     final prefs = await SharedPreferences.getInstance();
