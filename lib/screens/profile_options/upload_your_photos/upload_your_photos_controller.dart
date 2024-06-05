@@ -30,24 +30,20 @@ class UploadYourPhotosController extends GetxController {
     userData = preference.getUserDetail();
   }
 
-
   Future<CroppedFile?> cropImage(File imageFile) async {
     CroppedFile? croppedFile = await ImageCropper().cropImage(
       sourcePath: imageFile.path,
+      aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
       aspectRatioPresets: [
         CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9,
       ],
       uiSettings: [
         AndroidUiSettings(
           toolbarTitle: 'Crop Image',
           toolbarColor: appColors.white,
           toolbarWidgetColor: appColors.blackColor,
-          initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: false,
+          initAspectRatio: CropAspectRatioPreset.square,
+          lockAspectRatio: true,
         ),
       ],
     );
@@ -64,7 +60,8 @@ class UploadYourPhotosController extends GetxController {
 
     if (xFilePick.isNotEmpty) {
       for (var i = 0; i < xFilePick.length; i++) {
-        if (selectedImages.any((element) => element.path == xFilePick[i].path)) {
+        if (selectedImages
+            .any((element) => element.path == xFilePick[i].path)) {
           divineSnackBar(data: "This image already selected.");
         } else {
           // selectedImages.add(File(xFilePick[i].path));
@@ -82,7 +79,6 @@ class UploadYourPhotosController extends GetxController {
           .showSnackBar(const SnackBar(content: Text('Nothing is selected')));
     }*/
   }
-
 
   void removeImages(String value) {
     selectedImages.removeWhere((element) => element.path == value);
