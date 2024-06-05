@@ -1299,7 +1299,7 @@ class _LivePage extends State<LiveDharamScreen>
           isInCall: _controller.currentCaller.isEngaded,
           waitTime: _controller.getTotalWaitTime(),
           myUserId: _controller.userId,
-          waitListModels: _controller.waitListModel,
+          list: _controller.waitListModel,
           hasMyIdInWaitList: false,
           onExitWaitList: () async {
             Get.back();

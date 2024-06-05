@@ -522,6 +522,7 @@ class LiveDharamController extends GetxController {
     int offerId = 0;
     int callStatus = 0;
     int totalMin = 0;
+    int startTime = 0;
 
     if (map != null) {
       if (map.isNotEmpty) {
@@ -541,6 +542,7 @@ class LiveDharamController extends GetxController {
             offerId = value["offerId"] ?? 0;
             totalMin = value["totalMin"] ?? 0;
             callStatus = value["callStatus"] ?? 0;
+            startTime = value["startTime"] ?? 0;
           },
         );
       } else {}
@@ -557,6 +559,7 @@ class LiveDharamController extends GetxController {
       generatedOrderId: generatedOrderId,
       offerId: offerId,
       callStatus: callStatus,
+      startTime: startTime,
     );
   }
 
@@ -972,11 +975,12 @@ class LiveDharamController extends GetxController {
                   offerId: value["offerId"] ?? 0,
                   // ignore:  avoid_dynamic_calls
                   callStatus: value["callStatus"] ?? 0,
+                  startTime: value["startTime"] ?? 0,
                 ),
               );
             },
           );
-          tempList.sort((a, b) => a.generatedOrderId.compareTo(b.generatedOrderId));
+          tempList.sort((a, b) => a.startTime.compareTo(b.startTime));
           waitListModel
             ..clear()
             ..addAll(tempList);
@@ -1400,6 +1404,7 @@ class WaitListModel {
     required this.offerId,
     required this.totalMin,
     required this.callStatus,
+    this.startTime = 0,
   });
 
   final bool isRequest;
@@ -1413,6 +1418,7 @@ class WaitListModel {
   final int offerId;
   final int callStatus;
   final int totalMin;
+  final int startTime;
 }
 
 class ZegoCustomMessage {
