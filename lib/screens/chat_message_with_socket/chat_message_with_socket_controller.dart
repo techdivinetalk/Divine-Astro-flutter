@@ -586,12 +586,15 @@ class ChatMessageWithSocketController extends GetxController
           (difference.inSeconds == 0 &&
               difference.inMinutes == 0 &&
               difference.inHours == 0)) {
-        extraTimer?.cancel();
-        extraTalkTime.value = "0";
-        timer.cancel();
-        print("WentBack timeUp");
-        timeLeft = Duration.zero;
-        backFunction();
+        if (AppFirebaseService().orderData.value["orderId"] != null ||
+            AppFirebaseService().orderData.value["status"] == "4") {
+          extraTimer?.cancel();
+          extraTalkTime.value = "0";
+          timer.cancel();
+          print("WentBack timeUp");
+          timeLeft = Duration.zero;
+          backFunction();
+        }
       } else {
         timeLeft = difference;
         extraTalkTime.value =
