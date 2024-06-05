@@ -237,6 +237,11 @@ class AppFirebaseService {
             final isCallSwitchRes = realTimeData["voiceCallStatus"] ?? 0;
             callSwitch(isCallSwitchRes > 0);
 
+            if (isCallSwitchRes <= 1) {
+              debugPrint("test_callKunadliUpdated_7");
+              callKunadliUpdated({});
+            }
+
             final isChatSwitchRes = realTimeData["chatStatus"] ?? 0;
             chatSwitch(isChatSwitchRes > 0);
 
