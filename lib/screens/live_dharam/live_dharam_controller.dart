@@ -980,10 +980,11 @@ class LiveDharamController extends GetxController {
               );
             },
           );
-          tempList.sort((a, b) => a.startTime.compareTo(b.startTime));
-          waitListModel
+           waitListModel
             ..clear()
             ..addAll(tempList);
+          waitListModel.sort((a, b) => a.startTime.compareTo(b.startTime));
+
           // waitListModel = tempList;
         } else {}
       } else {

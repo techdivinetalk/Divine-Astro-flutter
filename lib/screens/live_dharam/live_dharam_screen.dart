@@ -1294,12 +1294,13 @@ class _LivePage extends State<LiveDharamScreen>
       context: context,
       builder: (BuildContext context) {
         // return WaitListWidget(
+        var newWaitListModel = _controller.waitListModel;
         return AstroWaitListWidget(
           onClose: Get.back,
           isInCall: _controller.currentCaller.isEngaded,
           waitTime: _controller.getTotalWaitTime(),
           myUserId: _controller.userId,
-          list: _controller.waitListModel,
+          list: newWaitListModel,
           hasMyIdInWaitList: false,
           onExitWaitList: () async {
             Get.back();

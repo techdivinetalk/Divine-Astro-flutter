@@ -48,15 +48,15 @@ class AstroWaitListWidget extends StatefulWidget {
 }
 
 class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
-  var waitListModels;
+  var newWaitListModels;
   @override
   Widget build(BuildContext context) {
     widget.list.sort((a, b) => a.startTime.compareTo(b.startTime));
-    waitListModels = widget.list;
-    print("waitListModels-1");
-    print(waitListModels[0].startTime);
-    print(waitListModels[1].startTime);
-    print(waitListModels[2].startTime);
+    newWaitListModels = widget.list;
+    for(int i =0;i < newWaitListModels.length;i++){
+      print("newWaitListModels");
+      print(newWaitListModels[i].startTime);
+    }
     return Material(
       color: appColors.transparent,
       child: Column(
@@ -117,7 +117,7 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
       child: Column(
         children: <Widget>[
           const SizedBox(height: 32),
-          (waitListModels.length - 1) >= 3
+          (newWaitListModels.length - 1) >= 3
               ? SizedBox(height: Get.height / 3, child: listViewForWaitList())
               : listViewForWaitList(),
           const SizedBox(height: 16),
@@ -131,7 +131,7 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
   }
 
   Widget listViewForWaitList() {
-    return waitListModels.length > 1
+    return newWaitListModels.length > 1
         ? Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -140,7 +140,7 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               const SizedBox(height: 16),
-              (waitListModels.length - 1) >= 3
+              (newWaitListModels.length - 1) >= 3
                   ? Expanded(child: commonListView())
                   : commonListView(),
             ],
@@ -151,18 +151,20 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
   Widget commonListView() {
     return ListView.builder(
       shrinkWrap: true,
-      itemCount: waitListModels.length - 1,
+      itemCount: newWaitListModels.length - 1,
       physics: const ScrollPhysics(),
       padding: EdgeInsets.zero,
       itemBuilder: (BuildContext context, int index) {
-        final WaitListModel item = waitListModels[index + 1];
+        final WaitListModel item = newWaitListModels[index + 1];
+        print("newWaitListModels1");
+        print(item.startTime);
         return listTile(item: item);
       },
     );
   }
 
   Widget listViewForNextInLine() {
-    return waitListModels.length > 0
+    return newWaitListModels.length > 0
         ? Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -177,7 +179,7 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
           physics: const ScrollPhysics(),
           padding: EdgeInsets.zero,
           itemBuilder: (BuildContext context, int index) {
-            final WaitListModel item = waitListModels[index];
+            final WaitListModel item = newWaitListModels[index];
             return listTile(item: item);
           },
         ),
