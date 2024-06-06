@@ -1294,12 +1294,13 @@ class _LivePage extends State<LiveDharamScreen>
       context: context,
       builder: (BuildContext context) {
         // return WaitListWidget(
+        var newWaitListModel = _controller.waitListModel;
         return AstroWaitListWidget(
           onClose: Get.back,
           isInCall: _controller.currentCaller.isEngaded,
           waitTime: _controller.getTotalWaitTime(),
           myUserId: _controller.userId,
-          waitListModels: _controller.waitListModel,
+          list: newWaitListModel,
           hasMyIdInWaitList: false,
           onExitWaitList: () async {
             Get.back();
@@ -3244,8 +3245,13 @@ class _LivePage extends State<LiveDharamScreen>
     required String userName,
     required String avatar,
   }) async {
+    if(_controller.currentWaitList == _controller.waitListModel[0].id){
+      return;
+    }
+    _controller.currentWaitList = _controller.waitListModel[0].id;
     isAcceptPopupOpen = true;
     isAcceptPopupOpenFor = user;
+
     await hostingAndCoHostingPopup(
       onClose: () {},
       needAcceptButton: true,
