@@ -117,11 +117,13 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
       child: Column(
         children: <Widget>[
           const SizedBox(height: 32),
+
+
+          listViewForNextInLine(),
+          const SizedBox(height: 16),
           (newWaitListModels.length - 1) >= 3
               ? SizedBox(height: Get.height / 3, child: listViewForWaitList())
               : listViewForWaitList(),
-          const SizedBox(height: 16),
-          listViewForNextInLine(),
           const SizedBox(height: 16),
           exitWidget(),
           const SizedBox(height: 16),
