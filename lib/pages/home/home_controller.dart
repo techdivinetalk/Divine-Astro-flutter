@@ -187,9 +187,14 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  bool isInit = false;
+
   @override
   void onInit() async {
     super.onInit();
+    debugPrint("test_onInit: call");
+    isInit = true;
+
     WidgetsBinding.instance.addObserver(this);
     getSampleText();
     getAstrologerTrainingSession();

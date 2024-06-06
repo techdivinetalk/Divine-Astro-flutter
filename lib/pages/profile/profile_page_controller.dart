@@ -103,8 +103,10 @@ class ProfilePageController extends GetxController {
           '/bankDetailsUI'),
       ProfileOptionModelClass("uploadStory".tr,
           Assets.images.icUploadStory.svg(width: 30.h, height: 30.h), ''),
-      ProfileOptionModelClass("uploadYourPhoto".tr,
-          Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h), '/uploadYourPhotosUi'),
+      ProfileOptionModelClass(
+          "uploadYourPhoto".tr,
+          Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h),
+          '/uploadYourPhotosUi'),
       ProfileOptionModelClass("customerSupport".tr,
           Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), ''),
       ProfileOptionModelClass(
@@ -152,7 +154,7 @@ class ProfilePageController extends GetxController {
         '/languagePopup'),
     ProfileOptionModelClass(
         "faq".tr, Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
-   /* ProfileOptionModelClass(
+    /* ProfileOptionModelClass(
         "priceChange".tr,
         Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
         '/priceHistoryUI'),*/
@@ -164,8 +166,8 @@ class ProfilePageController extends GetxController {
         "blockedUsers".tr,
         Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
         '/blockedUser'),
-    ProfileOptionModelClass(
-        "eCommerce".tr, Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja'),
+    ProfileOptionModelClass("eCommerce".tr,
+        Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja'),
     // ProfileOptionModelClass("Add Remedies",
     //     Assets.images.remedies.svg(width: 30.h, height: 30.h), ''),
   ].obs;
@@ -208,9 +210,18 @@ class ProfilePageController extends GetxController {
 
   String? baseAmazonUrl;
 
+  bool isInit = false;
+  @override
+  void onReady() {
+    isInit = false;
+    super.onReady();
+  }
+
   @override
   void onInit() {
     super.onInit();
+    debugPrint("test_onInit: call");
+    isInit = true;
     userData = preference.getUserDetail();
     baseAmazonUrl = preference.getBaseImageURL();
     userProfileImage.value = "$baseAmazonUrl/${userData?.image}";
@@ -518,8 +529,7 @@ class ProfilePageController extends GetxController {
   Future<void> uploadImage(File imageFile) async {
     var token = preferenceService.getToken();
     // Create a Uri from the URL string
-    var uri = Uri.parse(
-        "${ApiProvider.baseUrl}uploadAstroImage");
+    var uri = Uri.parse("${ApiProvider.baseUrl}uploadAstroImage");
 
     // Create a MultipartRequest
     var request = http.MultipartRequest('POST', uri);

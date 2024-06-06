@@ -62,17 +62,27 @@ class PerformanceController extends GetxController {
   }
 
   PerformanceResponse? performanceData;
- // PerformanceFilterResponse? performanceFilterResponse;
+
+  // PerformanceFilterResponse? performanceFilterResponse;
+
+  bool isInit = false;
+  @override
+  void onReady() {
+    isInit = false;
+    super.onReady();
+  }
 
   @override
   void onInit() {
     super.onInit();
+    debugPrint("test_onInit: call");
+    isInit = true;
     init();
   }
 
   init() async {
     await getPerformance();
-   // await getFilteredPerformance();
+    // await getFilteredPerformance();
   }
 
   RxList<dynamic> overAllScoreList = <dynamic?>[].obs;
@@ -107,7 +117,7 @@ class PerformanceController extends GetxController {
     loading.value = Loading.loaded;
   }
 
- /* getFilteredPerformance() async {
+/* getFilteredPerformance() async {
     loading.value = Loading.loading;
     update();
     try {

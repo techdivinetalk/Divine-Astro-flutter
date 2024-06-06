@@ -1,7 +1,12 @@
 import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
+import 'package:divine_astrologer/pages/home/home_controller.dart';
+import 'package:divine_astrologer/pages/performance/performance_controller.dart';
+import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
+import 'package:divine_astrologer/screens/chat_assistance/chat_assistance_controller.dart';
 import 'package:divine_astrologer/screens/dashboard/widgets/rejoin_widget.dart';
+import 'package:divine_astrologer/screens/side_menu/wait_list/wait_list_controller.dart';
 import 'package:divine_astrologer/screens/side_menu/wait_list/wait_list_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
@@ -44,13 +49,59 @@ class DashboardScreen extends GetView<DashboardController> {
                         backgroundColor: appColors.white,
                         key: controller.scaffoldkey,
                         body: Obx(
-                          () => AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 250),
-                            child: widgetOptions
-                                .elementAt(controller.selectedIndex.value),
-                            transitionBuilder: (child, anim) =>
-                                FadeTransition(opacity: anim, child: child),
-                          ),
+                          () {
+                            debugPrint(
+                                "test_selectedIndex: ${controller.selectedIndex.value}");
+
+                            if (controller.selectedIndex.value == 0) {
+                              debugPrint(
+                                  "test_selectedIndex_isRegistered: ${Get.isRegistered<HomeController>()}");
+                              if (Get.isRegistered<HomeController>() &&
+                                  !Get.find<HomeController>().isInit) {
+                                Get.find<HomeController>().onInit();
+                              }
+                            } else if (controller.selectedIndex.value == 1) {
+                              debugPrint(
+                                  "test_selectedIndex_isRegistered: ${Get.isRegistered<PerformanceController>()}");
+                              if (Get.isRegistered<PerformanceController>() &&
+                                  !Get.find<PerformanceController>().isInit) {
+                                Get.find<PerformanceController>().onInit();
+                              }
+                            } else if (controller.selectedIndex.value == 2) {
+                              debugPrint(
+                                  "test_selectedIndex_isRegistered: ${Get.isRegistered<ChatAssistanceController>()}");
+                              if (Get.isRegistered<
+                                      ChatAssistanceController>() &&
+                                  !Get.find<ChatAssistanceController>()
+                                      .isInit) {
+                                Get.find<ChatAssistanceController>().onInit();
+                              }
+                            } else if (controller.selectedIndex.value == 3) {
+                              debugPrint(
+                                  "test_selectedIndex_isRegistered: ${Get.isRegistered<WaitListUIController>()}");
+                              if (Get.isRegistered<WaitListUIController>() &&
+                                  !Get.find<WaitListUIController>().isInit) {
+                                Get.find<WaitListUIController>().onInit();
+                              }
+                            } else if (controller.selectedIndex.value == 4) {
+                              debugPrint(
+                                  "test_selectedIndex_isRegistered: ${Get.isRegistered<ProfilePageController>()}");
+                              if (Get.isRegistered<ProfilePageController>() &&
+                                  !Get.find<ProfilePageController>().isInit) {
+                                Get.find<ProfilePageController>().onInit();
+                              }
+                            }
+
+                            return AnimatedSwitcher(
+                              duration: const Duration(milliseconds: 250),
+                              child: widgetOptions
+                                  .elementAt(controller.selectedIndex.value),
+                              transitionBuilder: (child, anim) {
+                                return FadeTransition(
+                                    opacity: anim, child: child);
+                              },
+                            );
+                          },
                         ),
                         bottomNavigationBar: Obx(() => SafeArea(
                               child: Column(
@@ -153,33 +204,29 @@ class DashboardScreen extends GetView<DashboardController> {
                                       BottomNavigationBarItem(
                                         icon: Column(
                                           children: [
-
-                                            userImage.value
-                                                        .contains("null") ||
-                                                userImage
-                                                        .value.isEmpty ||
-                                                userImage
-                                                            .value ==
-                                                        ""
+                                            userImage.value.contains("null") ||
+                                                    userImage.value.isEmpty ||
+                                                    userImage.value == ""
                                                 ? SizedBox(
-                                              height: 30.h,
+                                                    height: 30.h,
                                                     width: 30.h,
-                                              child: ClipRRect(
-                                              borderRadius:  BorderRadius.circular(
-                                                    100.h),
-                                                child: Image.asset(Assets
-                                                    .images
-                                                    .defaultProfile
-                                                    .path),
-                                              ),
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              100.h),
+                                                      child: Image.asset(Assets
+                                                          .images
+                                                          .defaultProfile
+                                                          .path),
+                                                    ),
                                                   )
                                                 : CommonImageView(
-                                                    imagePath:userImage.value,
+                                                    imagePath: userImage.value,
                                                     fit: BoxFit.cover,
                                                     height: 30.h,
                                                     width: 30.h,
-                                                    placeHolder:
-                                                    Assets.images.defaultProfile.path,
+                                                    placeHolder: Assets.images
+                                                        .defaultProfile.path,
                                                     radius:
                                                         BorderRadius.circular(
                                                             100.h),
@@ -213,7 +260,6 @@ class DashboardScreen extends GetView<DashboardController> {
                                 ],
                               ),
                             ))),
-
                     rejoinVisibility(),
                   ],
                 );
@@ -226,7 +272,8 @@ class DashboardScreen extends GetView<DashboardController> {
   Widget rejoinVisibility() {
     return Obx(
       () {
-        final dynamic cond = AppFirebaseService().orderData.value["status"] ?? "0";
+        final dynamic cond =
+            AppFirebaseService().orderData.value["status"] ?? "0";
         print("order_Status $cond");
         return cond == "2" ||
                 cond == 2 ||

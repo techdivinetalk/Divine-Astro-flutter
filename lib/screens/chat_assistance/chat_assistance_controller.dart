@@ -32,9 +32,19 @@ class ChatAssistanceController extends GetxController {
   RxBool keyboardActive = false.obs;
   final searchController = TextEditingController();
 
+  bool isInit = false;
+
+  @override
+  void onReady() {
+    isInit = false;
+    super.onReady();
+  }
+
   @override
   Future<void> onInit() async {
     super.onInit();
+    debugPrint("test_onInit: call");
+    isInit = true;
 
     getAssistantAstrologerList();
     /* scrollController.addListener(() {
@@ -47,12 +57,6 @@ class ChatAssistanceController extends GetxController {
     });*/
 
     update();
-  }
-
-  @override
-  void onReady() {
-    // TODO: implement onReady
-    super.onReady();
   }
 
   // void listenSocket() {

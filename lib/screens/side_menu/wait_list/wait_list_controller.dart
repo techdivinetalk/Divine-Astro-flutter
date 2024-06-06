@@ -18,9 +18,18 @@ class WaitListUIController extends GetxController {
   Loading loading = Loading.initial;
   List<WaitingListQueueData> waitingPersons = <WaitingListQueueData>[];
 
+  bool isInit = false;
+  @override
+  void onReady() {
+    isInit = false;
+    super.onReady();
+  }
+
   @override
   void onInit() {
     super.onInit();
+    debugPrint("test_onInit: call");
+    isInit = true;
     getWaitingList();
   }
 
