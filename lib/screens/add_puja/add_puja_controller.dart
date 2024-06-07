@@ -249,10 +249,16 @@ class AddPujaController extends GetxController {
     Map<String, dynamic> param = {
       "pooja_name": selectedPujaName != null && selectedPujaName!.id == 0
           ? poojaName.text
-          : selectedPujaName!.name,
+          : selectedPujaName != null &&
+                  selectedPujaName!.name != null &&
+                  selectedPujaName!.name!.isNotEmpty
+              ? selectedPujaName!.name
+              : "",
       "pooja_img": poojaApiPath,
       "pooja_desc": poojaDes.text,
-      "pooja_name_id": selectedPujaName!.id,
+      "pooja_name_id": selectedPujaName != null && selectedPujaName!.id != null
+          ? selectedPujaName!.id
+          : "",
       "pooja_starting_price_inr": poojaPrice.text,
       "pooja_short_desc": poojaDes.text,
       "pooja_category_id": selectedCategory?.id,
@@ -272,9 +278,9 @@ class AddPujaController extends GetxController {
           isDismissible: false,
         ).then((value) {
           Get.back();
-          PujaController().getPujaList(); 
+          PujaController().getPujaList();
           PujaController().update();
-        }); 
+        });
       }
     } catch (error) {
       debugPrint("error $error");
@@ -390,11 +396,20 @@ class AddPujaController extends GetxController {
   }
 
   bool validation() {
-    if (poojaDes.text.length < 100) {
-      Fluttertoast.showToast(
-          msg: "Puja description must be more than 100 character.");
+    // if (poojaDes.text.length < 100) {
+    //   Fluttertoast.showToast(
+    //       msg: "Puja description must be more than 100 character.");
+    //   return false;
+    // }
+
+    if (selectedCategory == null || selectedCategory?.id == null) {
+      Fluttertoast.showToast(msg: "Please select category");
+      return false;
+    } else if (selectedTag.isEmpty) {
+      Fluttertoast.showToast(msg: "Please select tag");
       return false;
     }
+
     return true;
   }
 

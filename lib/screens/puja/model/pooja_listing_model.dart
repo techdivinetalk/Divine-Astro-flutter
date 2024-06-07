@@ -66,7 +66,7 @@ class PujaListingData {
       : id = json['id'] as int?,
         poojaName = json['pooja_name'] as String?,
         poojaImg = json['pooja_img'] as String?,
-        poojaDesc = json['pooja_desc'] as String?,
+        poojaDesc = json['pooja_desc']??"",
         poojaStartingPriceInr = json['pooja_starting_price_inr'],
         poojaStartingPriceUsd = json['pooja_starting_price_usd'] ,
         poojaShortDesc = json['pooja_short_desc'] as String?,
