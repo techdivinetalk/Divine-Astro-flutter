@@ -33,7 +33,7 @@ RxString giftImageUpdate = "".obs;
 RxInt isCall = 1.obs;
 RxInt isRemidies = 1.obs;
 RxInt isEcom = 1.obs;
-RxInt isVOIP =  0.obs;
+RxInt isVOIP = 1.obs;
 RxInt isChatAssistance = 1.obs;
 RxInt isChat = 1.obs;
 RxInt isKundli = 1.obs;
@@ -267,10 +267,10 @@ class AppFirebaseService {
           if (realTimeData["profilePhoto"] != null) {
             print("beforeGoing 0 - first");
             UserData? userData =
-                Get.find<SharedPreferenceService>().getUserDetail();
+            Get.find<SharedPreferenceService>().getUserDetail();
             userData!.image = realTimeData["profilePhoto"];
             String? baseAmazonUrl =
-                Get.find<SharedPreferenceService>().getBaseImageURL();
+            Get.find<SharedPreferenceService>().getBaseImageURL();
             Get.find<SharedPreferenceService>().setUserDetail(userData);
             Get.put(DashboardController(Get.put(PreDefineRepository())))
                 .userProfileImage
@@ -280,7 +280,8 @@ class AppFirebaseService {
                 .value = "$baseAmazonUrl/${userData.image!}";
             Get.put(DashboardController(Get.put(PreDefineRepository())))
                 .update();
-            Get.put(ProfilePageController(Get.put(UserRepository()))).update();
+            Get.put(ProfilePageController(Get.put(UserRepository())))
+                .update();
           }
           if (realTimeData["isEngagedStatus"] != null) {
             print(realTimeData["isEngagedStatus"]);
@@ -347,7 +348,6 @@ class AppFirebaseService {
               final DataSnapshot dataSnapshot = event.snapshot;
               if (dataSnapshot.exists) {
                 print("data from snapshot ${dataSnapshot.value}");
-
                 if (dataSnapshot.value is Map<dynamic, dynamic>) {
                   Map<dynamic, dynamic> map = <dynamic, dynamic>{};
                   map = (dataSnapshot.value ?? <dynamic, dynamic>{})
@@ -431,8 +431,8 @@ class AppFirebaseService {
       case "gifts":
         isGifts(int.parse(dataSnapshot.value.toString()));
         break;
-      case "isTime":
-        isTime(int.parse(dataSnapshot.value.toString()));
+     case "isTime":
+       isTime(int.parse(dataSnapshot.value.toString()));
         break;
       case "remidies":
         isRemidies(int.parse(dataSnapshot.value.toString()));

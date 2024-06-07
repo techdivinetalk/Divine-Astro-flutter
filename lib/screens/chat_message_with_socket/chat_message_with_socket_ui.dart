@@ -1425,7 +1425,6 @@ class AstrologerChatAppBar extends StatelessWidget {
                                 );
                               },
                             ),
-
                             SizedBox(width: 12.w),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
