@@ -670,8 +670,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     //     //   chat: chatSwitch.value ? "1" : "0",
     //     //   video: videoSwitch.value ? "1" : "0",
     //     // );
-    astroOnlineOffline(status: "chat_status=${chatSwitch.value ? "1" : "0"}");
-    astroOnlineOffline(status: "call_status=${callSwitch.value ? "1" : "0"}");
+
+    // if (Constants.isTestingMode) {
+    //   // astroOnlineOffline(status: "chat_status=${chatSwitch.value ? "1" : "0"}");
+    //   // astroOnlineOffline(status: "call_status=${callSwitch.value ? "1" : "0"}");
+    // }
 
     if (homeData?.sessionType?.chatSchedualAt != null &&
         homeData?.sessionType?.chatSchedualAt != '') {
@@ -724,9 +727,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         'Connection': 'keep-alive',
         'Keep-Alive': 'timeout=5, max=1000',
       };
-      final response = await dio
-          .get("${ApiProvider.astOnlineOffline}${userData.uniqueNo}&${status}");
+      final response = await dio.get(
+          /*Constants.isTestingMode?"http://15.206.23.215:8081/api/v3/updateAstroStatusV2?unique_no=${userData.uniqueNo}&${status}&android=android":*/
+          "${ApiProvider.astOnlineOffline}${userData.uniqueNo}&${status}");
       log(response.data.toString());
+
       print("response.data");
       if (response.statusCode == 200) {}
     } catch (e) {
@@ -1031,10 +1036,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       UpdateOfferResponse response =
           await userRepository.updateOfferTypeApi(params);
       if (response.statusCode == 200) {
-        homeData!.offers!.customOffer![index].isOn = value;
+          homeData!.offers!.customOffer![index].isOn = value;
+      } else {
+        homeData!.offers!.customOffer![index].isOn = !value;
       }
       update();
     } catch (error) {
+      homeData!.offers!.customOffer![index].isOn = !value;
       debugPrint("updateOfferType $error");
       if (error is AppException) {
         error.onException();
@@ -1061,12 +1069,14 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       UpdateOfferResponse response =
           await userRepository.updateOfferTypeApi(params);
       if (response.statusCode == 200) {
-        homeData!.offers!.orderOffer![index].isOn = value;
-        // homeData!.offers!.orderOffer![index].isOn = !homeData!.offers!.orderOffer![index].isOn!;
-        update();
+          homeData!.offers!.orderOffer![index].isOn = value;
+          // homeData!.offers!.orderOffer![index].isOn = !homeData!.offers!.orderOffer![index].isOn!;
+      } else {
+        homeData!.offers!.orderOffer![index].isOn = !value;
       }
       update();
     } catch (error) {
+      homeData!.offers!.orderOffer![index].isOn = !value;
       debugPrint("updateOfferType $error");
       if (error is AppException) {
         error.onException();

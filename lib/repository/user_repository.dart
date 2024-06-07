@@ -1152,6 +1152,10 @@ class UserRepository extends ApiProvider {
             HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
+        } else if (json.decode(response.body)["status_code"] ==
+            HttpStatus.badRequest) {
+          Utils().handleStatusCode400(json.decode(response.body)["message"]);
+          throw CustomException(json.decode(response.body)["message"]);
         } else {
           final updateOfferResponse =
               updateOfferResponseFromJson(response.body);
