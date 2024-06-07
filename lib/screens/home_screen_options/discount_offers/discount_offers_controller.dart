@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/repository/discount_offer_repository.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:flutter/material.dart';
@@ -61,6 +62,7 @@ class DiscountOffersController extends GetxController {
       }
       update();
     } catch (error) {
+      discountOffers[index].isOn = !value;
       debugPrint("updateOfferType $error");
       if (error is AppException) {
         error.onException();

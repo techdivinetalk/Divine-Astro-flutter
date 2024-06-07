@@ -1036,10 +1036,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       UpdateOfferResponse response =
           await userRepository.updateOfferTypeApi(params);
       if (response.statusCode == 200) {
-        homeData!.offers!.customOffer![index].isOn = value;
+          homeData!.offers!.customOffer![index].isOn = value;
+      } else {
+        homeData!.offers!.customOffer![index].isOn = !value;
       }
       update();
     } catch (error) {
+      homeData!.offers!.customOffer![index].isOn = !value;
       debugPrint("updateOfferType $error");
       if (error is AppException) {
         error.onException();
@@ -1066,12 +1069,14 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       UpdateOfferResponse response =
           await userRepository.updateOfferTypeApi(params);
       if (response.statusCode == 200) {
-        homeData!.offers!.orderOffer![index].isOn = value;
-        // homeData!.offers!.orderOffer![index].isOn = !homeData!.offers!.orderOffer![index].isOn!;
-        update();
+          homeData!.offers!.orderOffer![index].isOn = value;
+          // homeData!.offers!.orderOffer![index].isOn = !homeData!.offers!.orderOffer![index].isOn!;
+      } else {
+        homeData!.offers!.orderOffer![index].isOn = !value;
       }
       update();
     } catch (error) {
+      homeData!.offers!.orderOffer![index].isOn = !value;
       debugPrint("updateOfferType $error");
       if (error is AppException) {
         error.onException();
