@@ -4,6 +4,7 @@ import "dart:convert";
 import "package:divine_astrologer/app_socket/app_socket.dart";
 import "package:divine_astrologer/common/accept_chat_request_screen.dart";
 import "package:divine_astrologer/common/common_functions.dart";
+import "package:divine_astrologer/common/constants.dart";
 import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/di/hive_services.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
@@ -32,7 +33,7 @@ RxString giftImageUpdate = "".obs;
 RxInt isCall = 1.obs;
 RxInt isRemidies = 1.obs;
 RxInt isEcom = 1.obs;
-RxInt isVOIP = 0.obs;
+RxInt isVOIP =  0.obs;
 RxInt isChatAssistance = 1.obs;
 RxInt isChat = 1.obs;
 RxInt isKundli = 1.obs;
@@ -46,7 +47,7 @@ RxInt isTime = 0.obs;
 RxInt isLiveCall = 1.obs;
 RxInt homePage = 1.obs;
 RxMap<dynamic, dynamic> callKunadliUpdated = {}.obs;
-StreamSubscription<DatabaseEvent>? _subscription;
+StreamSubscription<DatabaseEvent>? subscription;
 
 class AppFirebaseService {
   AppFirebaseService._privateConstructor();
@@ -266,10 +267,10 @@ class AppFirebaseService {
           if (realTimeData["profilePhoto"] != null) {
             print("beforeGoing 0 - first");
             UserData? userData =
-            Get.find<SharedPreferenceService>().getUserDetail();
+                Get.find<SharedPreferenceService>().getUserDetail();
             userData!.image = realTimeData["profilePhoto"];
             String? baseAmazonUrl =
-            Get.find<SharedPreferenceService>().getBaseImageURL();
+                Get.find<SharedPreferenceService>().getBaseImageURL();
             Get.find<SharedPreferenceService>().setUserDetail(userData);
             Get.put(DashboardController(Get.put(PreDefineRepository())))
                 .userProfileImage
@@ -279,8 +280,7 @@ class AppFirebaseService {
                 .value = "$baseAmazonUrl/${userData.image!}";
             Get.put(DashboardController(Get.put(PreDefineRepository())))
                 .update();
-            Get.put(ProfilePageController(Get.put(UserRepository())))
-                .update();
+            Get.put(ProfilePageController(Get.put(UserRepository()))).update();
           }
           if (realTimeData["isEngagedStatus"] != null) {
             print(realTimeData["isEngagedStatus"]);
@@ -342,11 +342,12 @@ class AppFirebaseService {
       (value) {
         if (value != "") {
           print("object");
-          database.child("order/$value").onValue.listen(
+          subscription = database.child("order/$value").onValue.listen(
             (DatabaseEvent event) async {
               final DataSnapshot dataSnapshot = event.snapshot;
               if (dataSnapshot.exists) {
                 print("data from snapshot ${dataSnapshot.value}");
+
                 if (dataSnapshot.value is Map<dynamic, dynamic>) {
                   Map<dynamic, dynamic> map = <dynamic, dynamic>{};
                   map = (dataSnapshot.value ?? <dynamic, dynamic>{})
@@ -430,8 +431,8 @@ class AppFirebaseService {
       case "gifts":
         isGifts(int.parse(dataSnapshot.value.toString()));
         break;
-     case "isTime":
-       isTime(int.parse(dataSnapshot.value.toString()));
+      case "isTime":
+        isTime(int.parse(dataSnapshot.value.toString()));
         break;
       case "remidies":
         isRemidies(int.parse(dataSnapshot.value.toString()));
@@ -483,6 +484,14 @@ class AppFirebaseService {
       });
     } catch (e) {
       debugPrint("Error reading data from the database: $e");
+    }
+  }
+
+  void stopListening() {
+    if(Constants.isUploadMode) {
+      subscription?.cancel();
+      subscription = null; // Clear the subscription after cancelling
+      debugPrint("test_stopListening: called}");
     }
   }
 }

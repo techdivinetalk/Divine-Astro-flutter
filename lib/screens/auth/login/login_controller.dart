@@ -1,6 +1,7 @@
 
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 
 import 'package:divine_astrologer/gen/assets.gen.dart';
@@ -271,6 +272,10 @@ class LoginController extends GetxController {
 
   @override
   void onInit() {
+    if(Constants.isUploadMode) {
+      debugPrint("test_stopListening: call");
+      AppFirebaseService().stopListening();
+    }
     // isLogOut = false;
     super.onInit();
     // getLoginImages();

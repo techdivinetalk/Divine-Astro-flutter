@@ -862,13 +862,11 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   OverlayEntry? _overlayEntry;
-  StreamSubscription<DatabaseEvent>? _subscription;
   Map<String, dynamic> svgaUrls = {};
-
   Widget newLeaderboard() {
-    if (_subscription == null) {
+    if (_controller.subscription == null) {
       print("Animation -url ${_controller.liveId}");
-      _subscription = FirebaseDatabase.instance
+      _controller.subscription = FirebaseDatabase.instance
           .ref()
           .child(livePath)
           .child(_controller.liveId)

@@ -22,6 +22,7 @@ import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 import "package:get/get_connect/http/src/status/http_status.dart";
 import "package:http/http.dart" as http;
+
 class LiveDharamController extends GetxController {
   final SharedPreferenceService pref = Get.put(SharedPreferenceService());
 
@@ -126,6 +127,8 @@ class LiveDharamController extends GetxController {
 
     initData();
   }
+
+  StreamSubscription<DatabaseEvent>? subscription;
 
   void initData() {
     userId = (pref.getUserDetail()?.id ?? "").toString();
@@ -419,8 +422,10 @@ class LiveDharamController extends GetxController {
           liveId = userId;
           var liveIdNode = data;
           if (liveIdNode != null) {
-            if(liveIdNode["realTime"] != null && liveIdNode["realTime"]["blockList"] != null ){
-              List<dynamic> blockListNode = liveIdNode["realTime"]["blockList"] ?? [];
+            if (liveIdNode["realTime"] != null &&
+                liveIdNode["realTime"]["blockList"] != null) {
+              List<dynamic> blockListNode =
+                  liveIdNode["realTime"]["blockList"] ?? [];
               if (blockListNode.isEmpty) {
                 firebaseBlockUsersIds = [];
               } else {
@@ -428,13 +433,14 @@ class LiveDharamController extends GetxController {
               }
             }
 
-            if(liveIdNode["realTime"] != null && liveIdNode["realTime"]["order"] != null ){
+            if (liveIdNode["realTime"] != null &&
+                liveIdNode["realTime"]["order"] != null) {
               var orderNode = liveIdNode["realTime"]["order"];
 
               orderModel = getOrderModel(orderNode);
-              currentCaller =
-                  getOrderModelGeneric(orderNode, forMe: true, type: "fromevent");
-            }else{
+              currentCaller = getOrderModelGeneric(orderNode,
+                  forMe: true, type: "fromevent");
+            } else {
               WaitListModel temp = WaitListModel(
                 isRequest: false,
                 isEngaded: false,
@@ -452,7 +458,6 @@ class LiveDharamController extends GetxController {
               currentCaller = temp;
               update();
             }
-
 
             // if (liveIdNode["order"] != null) {
             //   timer;
@@ -612,12 +617,12 @@ class LiveDharamController extends GetxController {
       if (liveIdNode != null) {
         print(liveIdNode);
         print("engagedCoHostWithAstro---liveIdNodeliveIdNode");
-        if(liveIdNode["realTime"] != null && liveIdNode["realTime"]["order"] != null ){
+        if (liveIdNode["realTime"] != null &&
+            liveIdNode["realTime"]["order"] != null) {
           var orderNode = liveIdNode["realTime"]["order"];
           temp = getOrderModelGeneric(orderNode,
               forMe: false, type: "engagedCoHostWithAstro");
         }
-
       }
     }
 
@@ -715,7 +720,6 @@ class LiveDharamController extends GetxController {
       callStatus: callStatus,
     );
   }
-
 
   Map<String, dynamic> createGift({
     required num count,
@@ -939,6 +943,7 @@ class LiveDharamController extends GetxController {
   //   await addUpdateOrder(orderDetails);
   // }
   var currentWaitList = "";
+
   void getLatestWaitList(
     DataSnapshot? dataSnapshot,
   ) {
@@ -980,7 +985,7 @@ class LiveDharamController extends GetxController {
               );
             },
           );
-           waitListModel
+          waitListModel
             ..clear()
             ..addAll(tempList);
           waitListModel.sort((a, b) => a.startTime.compareTo(b.startTime));
@@ -988,11 +993,11 @@ class LiveDharamController extends GetxController {
           // waitListModel = tempList;
         } else {}
       } else {
-        currentWaitList ="";
+        currentWaitList = "";
         waitListModel.clear();
       }
     } else {
-      currentWaitList ="";
+      currentWaitList = "";
       waitListModel.clear();
     }
     return;

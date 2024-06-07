@@ -125,6 +125,7 @@ Future<void> main() async {
       print('msg ---- from notification');
       return;
     }
+
     // if (message.data["type"] == "1") {
     //   print('msg ---- from notification');
     //   return;

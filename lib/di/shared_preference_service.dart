@@ -1,9 +1,12 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:divine_astrologer/common/constants.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/model/message_template_response.dart';
 import 'package:divine_astrologer/model/update_bank_response.dart';
+import 'package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:flutter/cupertino.dart';
@@ -209,7 +212,7 @@ class SharedPreferenceService extends GetxService {
         await SharedPreferences.getInstance();
     String data = sharedInstance.getString(messageTemplate) ?? '';
     print("getMessageTemplates $data");
-    if(data.isNotEmpty){
+    if (data.isNotEmpty) {
       final list = (json.decode(data));
       return list
           .map<MessageTemplates>(

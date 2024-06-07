@@ -3,6 +3,11 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:divine_astrologer/common/constants.dart';
+import 'package:divine_astrologer/di/firebase_network_service.dart';
+import 'package:divine_astrologer/di/network_service.dart';
+import 'package:divine_astrologer/di/progress_service.dart';
+import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_authentication.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/screens/otp_verification/timer_controller.dart';
@@ -12,6 +17,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import '../../common/app_exception.dart';
 import '../../common/colors.dart';
 import '../../common/common_functions.dart';
@@ -280,6 +286,9 @@ class OtpVerificationController extends GetxController {
   navigateToDashboard(ResLogin data) async {
     print("beforeGoing ${preferenceService.getUserDetail()?.id}");
     //_counterSubscription.cancel();
+    if (Constants.isUploadMode) {
+      await initServices();
+    }
     Future.delayed(
       const Duration(seconds: 1),
       () => Get.offAllNamed(RouteName.dashboard),
@@ -293,6 +302,18 @@ class OtpVerificationController extends GetxController {
   }
 
   String? otpCode;
+
+  Future<void> initServices() async {
+    if (Constants.isUploadMode) {
+      debugPrint("test_initServices: call");
+      await Get.putAsync(() => ProgressService().init());
+      await Get.putAsync(() => SharedPreferenceService().init());
+      await Get.putAsync(() => NetworkService().init());
+      await Get.putAsync(() => FirebaseNetworkService().init());
+      await Hive.initFlutter();
+      debugPrint("test_initServices: called");
+    }
+  }
 
 // void codeUpdated() {
 //   otpCode = code!;
