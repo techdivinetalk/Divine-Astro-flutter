@@ -375,7 +375,7 @@ class _LivePage extends State<LiveDharamScreen>
                   userName: "Live Monitoring Team",
                   avatar:
                       "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
-                  message: "Live Monitoring Team Joined",
+                  message: "Joined",
                   timeStamp: DateTime.now().toString(),
                   fullGiftImage: "",
                   isBlockedCustomer: false,
@@ -392,7 +392,7 @@ class _LivePage extends State<LiveDharamScreen>
                   userName: "Quality Team",
                   avatar:
                       "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
-                  message: "Quality Team Joined",
+                  message: "Joined",
                   timeStamp: DateTime.now().toString(),
                   fullGiftImage: "",
                   isBlockedCustomer: false,
@@ -532,7 +532,6 @@ class _LivePage extends State<LiveDharamScreen>
                       )
                       ..video = ZegoUIKitVideoConfig.preset540P()
                       ..preview.showPreviewForHost = false
-                      // ..audioVideoView.isVideoMirror = false
                       ..coHost.maxCoHostCount = 1
                       ..confirmDialogInfo = null
                       ..coHost.disableCoHostInvitationReceivedDialog = true
