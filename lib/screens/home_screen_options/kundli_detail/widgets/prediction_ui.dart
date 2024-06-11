@@ -39,35 +39,31 @@ class PredictionUi extends StatelessWidget {
                 child: Column(
                   children: [
                     details(
-                        // title: "Professional Life",
-                        title: "Physical",
+                        title: "physical".tr,
                         details: controller
                                 .kundliPrediction.value.data?.physical?.first ??
                             ''),
                     // .join("\n")),
                     details(
-                        // title: "Luck",
-                        title: "Character",
+                        title: "character".tr,
                         details: controller
                                 .kundliPrediction.value.data?.character?.first ??
                             ''),
                     // .join("\n")),
                     details(
-                        title: "Health",
+                        title: "health".tr,
                         details: controller
                                 .kundliPrediction.value.data?.health?.first ??
                             ''),
                     // .join("\n")),
                     details(
-                        // title: "Profession",
-                        title: "Education",
+                        title: "education".tr,
                         details: controller
                                 .kundliPrediction.value.data?.education?.first ??
                             ''),
                     // .join("\n")),
                     details(
-                        // title: "Emotion",
-                        title: "Family",
+                        title: "family".tr,
                         details: controller
                                 .kundliPrediction.value.data?.family?.first ??
                             ''),
@@ -86,16 +82,16 @@ class PredictionUi extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title,
+        Text(title.tr,
             style: AppTextStyle.textStyle20(
                 fontWeight: FontWeight.w500,
-                fontColor: AppColors.appYellowColour)),
+                fontColor: appColors.textColor)),
         SizedBox(height: 5.h),
         Text(
           details,
           style: AppTextStyle.textStyle12(
               fontWeight: FontWeight.w500,
-              fontColor: AppColors.blackColor.withOpacity(.5)),
+              fontColor: appColors.blackColor.withOpacity(.5)),
         ),
         SizedBox(height: 16.h)
       ],

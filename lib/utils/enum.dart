@@ -1,1 +1,1 @@
-enum Loading { initial, loading, loaded }
+enum Loading { initial, loading, loaded, error }

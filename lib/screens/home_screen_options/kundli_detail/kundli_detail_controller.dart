@@ -25,7 +25,7 @@ import '../../../model/internal/sookshma_dasha_model.dart';
 class KundliDetailController extends GetxController {
   RxInt currentIndex = 0.obs;
   List<Widget> detailPageImage = [
-    Assets.images.icGirlKundli.svg(width: 87.w, height: 87.h),
+    Assets.images.icBoyKundli.svg(width: 87.w, height: 87.h),
     Assets.images.icWedding.svg(width: 87.w, height: 87.h),
     Assets.images.icMoon.svg(width: 87.w, height: 87.h),
     Assets.images.icSun.svg(width: 87.w, height: 87.h),
@@ -76,21 +76,7 @@ class KundliDetailController extends GetxController {
   String? kundaliId;
   Map<String, dynamic> kundaliIdParms = {};
 
-  List<List<String>> planetList = <List<String>>[
-    ["ME-RA", ''],
-    ["ME-RA", ''],
-    ["ME-RA", ''],
-  ];
-  List<List<String>> startDateList = <List<String>>[
-    ['Birth', ''],
-    ['12th-Apr', ''],
-    ['Birth', ''],
-  ];
-  List<List<String>> endDateList = <List<String>>[
-    ['12th-Apr', ''],
-    ['12th-Apr', ''],
-    ['12th-Apr', ''],
-  ];
+
 
   @override
   void onInit() {
@@ -123,7 +109,7 @@ class KundliDetailController extends GetxController {
       location: args["birth_place"].toString(),
     );
     log("Kundli===>$kundaliId");
-    getApiData(true);
+    getApiData(true,tab: 0);
   }
 
   getNewKundliData(dynamic args) async {
@@ -132,17 +118,17 @@ class KundliDetailController extends GetxController {
           Assets.images.icBoyKundli.svg(width: 87.w, height: 87.h);
     }
     kundliParams.value = Params(
-      name: args['params'].name,
-      day: args['params'].day,
-      month: args['params'].month,
-      year: args['params'].year,
-      hour: args['params'].hour,
-      min: args['params'].min,
-      lat: args['params'].lat,
-      long: args['params'].long,
-      tzone: 5.5,
+      name: args['params'].name ?? "",
+      day: args['params'].day ?? 0,
+      month: args['params'].month ?? 0 ,
+      year: args['params'].year ?? 0,
+      hour: args['params'].hour ?? 0,
+      min: args['params'].min ?? 0,
+      lat: args['params'].lat ?? 0.0,
+      long: args['params'].long ?? 0.0,
+      tzone:5.30,
       // tzone: args['params'].tzone,
-      location: args['params'].location,
+      location: args['params'].location ?? "",
     );
     params = {
       "day": args['params'].day,
@@ -152,13 +138,13 @@ class KundliDetailController extends GetxController {
       "min": args['params'].min,
       "lat": args['params'].lat,
       "lon": args['params'].long,
-      "tzone": 5.5,
+      "tzone": 5.30,
       // "tzone": args['params'].tzone,
     };
-    getApiData(false);
+    getApiData(false,tab: 0);
   }
 
-  getApiData(bool fromKundali) async {
+  /*getApiData(bool fromKundali) async {
     await Future.wait([
       astroDetailsApi(fromKundali),
       birthDetailsApi(fromKundali),
@@ -172,6 +158,67 @@ class KundliDetailController extends GetxController {
       getDashaTableDataListAPI(fromKundali),
       chalitChartApi(fromKundali),
     ]);
+  }*/
+  getApiData(bool fromKundali, {int tab = 0}) async {
+    switch (tab) {
+      case 0:
+        if (astroDetails.value.data == null) {
+          astroDetailsApi(fromKundali);
+        }
+        if (birthDetails.value.data == null) {
+          birthDetailsApi(fromKundali);
+        }
+        break;
+      case 1:
+        if (lagnaChart.value.data == null) {
+          lagnaChartApi(fromKundali);
+        }
+
+        break;
+      case 2:
+        if (moonChart.value.data == null) {
+          moonChartApi(fromKundali);
+        }
+        break;
+      case 3:
+        if (sunChart.value.data == null) {
+          sunChartApi(fromKundali);
+        }
+        break;
+      case 4:
+        if (navamashaChart.value.data == null) {
+          navamashaChartApi(fromKundali);
+        }
+        break;
+      case 5:
+        if (manglikDoshData.value.data == null) {
+          manglikDetails(fromKundali);
+        }
+        break;
+      case 6:
+        if (kpTableData.value.data == null) {
+          getKpTableDataListAPI(fromKundali);
+        }
+        break;
+      case 7:
+      // getKpTableDataListAPI(fromKundali);
+        if (dashaTableData.value.data == null) {
+          getDashaTableDataListAPI(fromKundali);
+        }
+
+        break;
+      case 8:
+        if (birthDetails.value.data == null) {
+          birthDetailsApi(fromKundali);
+        }
+
+        break;
+      case 9:
+        if (kundliPrediction.value.data == null) {
+          kundliPredictionApi(fromKundali);
+        }
+        break;
+    }
   }
 
   //Dasha table Data
@@ -188,7 +235,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     update();
@@ -196,9 +243,13 @@ class KundliDetailController extends GetxController {
 
   Future<void> getAntraDataApiList(String planetName) async {
     try {
-      PlanetlDetailModel response =
-          await kundliRepository.getPlanetDetailsAPI(params, planetName);
-      planetDataDetail.value = response;
+      PlanetlDetailModel response = await kundliRepository.getPlanetDetailsAPI(params, planetName);
+      if ((response.data ?? []).isNotEmpty) {
+        planetDataDetail.value = response;
+      } else {
+        subDashaLevel.value = 0;
+        divineSnackBar(data: "noDataAntarDasha".tr);
+      }
       log("planetDataDetail-->${jsonEncode(planetDataDetail.value.data)}");
       update();
     } catch (error) {
@@ -206,7 +257,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     update();
@@ -225,7 +276,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     update();
@@ -235,14 +286,14 @@ class KundliDetailController extends GetxController {
     try {
       ManglikDoshModel response = await kundliRepository
           .getManglikDoshDetails(fromKundali ? kundaliIdParms : params);
-      manglikDoshData.value = response;
-      log("manglikDoshData==>${jsonEncode(manglikDoshData.value)}");
+      manglikDosh.value = response;
+      log("manglikDoshData==>${jsonEncode(manglikDosh.value)}");
     } catch (error) {
       debugPrint("manglikDoshData==> $error");
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     update();
@@ -262,7 +313,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     update();
@@ -279,7 +330,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     update();
@@ -289,13 +340,13 @@ class KundliDetailController extends GetxController {
     try {
       BirthDetailsModel response = await kundliRepository
           .getBirthDetails(fromKundali ? kundaliIdParms : params);
-      birthDetails.value = response;
+        birthDetails.value = response;
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     update();
@@ -312,7 +363,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     update();
@@ -329,7 +380,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     update();
@@ -346,7 +397,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     update();
@@ -363,7 +414,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     update();
@@ -381,7 +432,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     update();
@@ -393,7 +444,12 @@ class KundliDetailController extends GetxController {
     try {
       PratyantarDashaModel response = await kundliRepository
           .getPratyantarDashaDetailsAPI(params, planetName, atraName);
-      pratyantarDataDetail.value = response;
+      if ((response.data ?? []).isNotEmpty) {
+        pratyantarDataDetail.value = response;
+      } else {
+        subDashaLevel.value = 1;
+        divineSnackBar(data: "noDataPratyantarDasha".tr);
+      }
       log("pratyantarDataDetail-->${jsonEncode(pratyantarDataDetail.value.data)}");
       update();
     } catch (error) {
@@ -401,7 +457,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     update();
@@ -414,7 +470,12 @@ class KundliDetailController extends GetxController {
       SookshmaDashaModel response =
           await kundliRepository.getSookshmaDashaDetailsAPI(
               params, planetName, atraName, pratyantarName);
-      sookshmaDataDetail.value = response;
+      if ((response.data ?? []).isNotEmpty) {
+        sookshmaDataDetail.value = response;
+      } else {
+        subDashaLevel.value = 2;
+        divineSnackBar(data: "noDataSookshmaDasha".tr);
+      }
       log("sookshmaDataDetail-->${jsonEncode(sookshmaDataDetail.value.data)}");
       update();
     } catch (error) {
@@ -422,7 +483,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     update();
@@ -434,7 +495,12 @@ class KundliDetailController extends GetxController {
     try {
       PranDashaModel response = await kundliRepository.getPranDashaDetailsAPI(
           params, planetName, atraName, pratyantarName, sookshmaName);
-      pranDataDetail.value = response;
+      if ((response.data ?? []).isNotEmpty) {
+        pranDataDetail.value = response;
+      } else {
+        subDashaLevel.value = 3;
+        divineSnackBar(data: "noDataPranDasha".tr);
+      }
       log("pranDataDetail-->${jsonEncode(sookshmaDataDetail.value.data)}");
       update();
     } catch (error) {
@@ -442,7 +508,7 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     update();

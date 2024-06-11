@@ -1,19 +1,60 @@
+import 'package:divine_astrologer/common/app_exception.dart';
+import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/model/wallet/wallet_model.dart';
+import 'package:divine_astrologer/repository/wallet_page_repository.dart';
+import 'package:divine_astrologer/utils/enum.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 class WalletController extends GetxController {
-  RxInt orderList = 7.obs;
+  final WalletListRepo walletRepository = Get.put(WalletListRepo());
+  Rx<PayoutDetails> walletListRepo = PayoutDetails().obs;
+  ScrollController scrollController = ScrollController();
+  Loading loading = Loading.initial;
+  var currentPage = 1.obs;
+  int pageSize = 10;
 
-  ScrollController orderScrollController = ScrollController();
-  ScrollController amountScrollController = ScrollController();
-  List<String> amountTypeList = [
-    "availableBalance".tr,
-    "pgCharges".tr,
-    "subTotal".tr,
-    "tds".tr,
-    "totalAmount".tr
-  ];
-  var durationOptions =
-      ['daily'.tr, 'weekly'.tr, 'monthly'.tr, 'custom'.tr].obs;
-  RxString selectedValue = "daily".tr.obs;
+  @override
+  void onInit() {
+    super.onInit();
+    getWalletDetailsApi();
+  }
+
+  getWalletDetailsApi() async {
+    if (loading == Loading.loading) return;
+
+    loading = Loading.loading;
+    update();
+
+    Map<String, dynamic> params = {
+      "page": currentPage.value,
+    };
+    try {
+      PayoutDetails response =
+      await walletRepository.walletPayOutDetails(params);
+      if (currentPage.value == 1) {
+        walletListRepo.value = response;
+      } else {
+        walletListRepo.update((val) {
+          val?.data?.paymentLog?.addAll(response.data?.paymentLog ?? []);
+        });
+      }
+      currentPage.value++;
+      loading = Loading.loaded;
+    } catch (error) {
+      debugPrint("error $error");
+      loading = Loading.loaded;
+    }
+    update();
+  }
+
+
+  void loadNextPage() {
+    currentPage.value++;
+    getWalletDetailsApi();
+  }
+
 }
+
+

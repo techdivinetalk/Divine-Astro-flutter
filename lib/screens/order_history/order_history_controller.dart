@@ -1,7 +1,12 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/model/order_history_model/feed_order_history.dart';
+import 'package:divine_astrologer/pages/performance/widget/date_selection_ui.dart';
+import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:video_trimmer/video_trimmer.dart';
 
 import '../../common/app_exception.dart';
 import '../../di/shared_preference_service.dart';
@@ -13,76 +18,92 @@ import '../../model/order_history_model/remedy_suggested_order_history.dart';
 import '../../repository/order_history_repository.dart';
 
 class OrderHistoryController extends GetxController {
+  int initialPage = 0;
+  Rx<DateTime> selectedChatDate = DateTime.now().obs;
   ScrollController orderScrollController = ScrollController();
   ScrollController orderAllScrollController = ScrollController();
   TabController? tabbarController;
 
-  var durationOptions = ['daily'.tr, 'weekly'.tr, 'monthly'.tr, 'custom'.tr].obs;
+  var durationOptions =
+      ['daily'.tr, 'weekly'.tr, 'monthly'.tr, 'custom'.tr].obs;
   RxString selectedValue = "daily".tr.obs;
 
-  var apiCalling = false.obs;
+  var allApiCalling = false.obs;
+  var callApiCalling = false.obs;
+  var chatApiCalling = false.obs;
+  var giftsApiCalling = false.obs;
+  var suggestApiCalling = false.obs;
+  var orderApiCalling = false.obs;
   var emptyMsg = "".obs;
 
   RxList<AllHistoryData> allHistoryList = <AllHistoryData>[].obs;
   RxList<CallHistoryData> callHistoryList = <CallHistoryData>[].obs;
   RxList<ChatDataList> chatHistoryList = <ChatDataList>[].obs;
+  RxList<FeedBackData> feedHistoryList = <FeedBackData>[].obs;
   RxList<GiftDataList> giftHistoryList = <GiftDataList>[].obs;
-  RxList<RemedySuggestedDataList> remedySuggestedHistoryList = <RemedySuggestedDataList>[].obs;
+  RxList<RemedySuggestedDataList> remedySuggestedHistoryList =
+      <RemedySuggestedDataList>[].obs;
+  final preferenceService = Get.find<SharedPreferenceService>();
 
   var allPageCount = 1;
   var chatPageCount = 1;
   var callPageCount = 1;
   var liveGiftPageCount = 1;
   var remedyPageCount = 1;
+  var feedBackPageCount = 1;
 
   @override
   void onInit() {
+    if (Get.arguments != null) {
+      initialPage = Get.arguments;
+      print(initialPage);
+
+     /* getOrderHistory(type: 3, page: liveGiftPageCount);
+      update();*/
+    }
     super.onInit();
-    fetchData();
+    getOrderHistory(type: 0, page: allPageCount);
   }
 
-  fetchData() async {
-    Future.wait([
-      getOrderHistory(0, allPageCount), //wallet
-      getOrderHistory(1, chatPageCount), //chat
-      getOrderHistory(2, callPageCount), //call
-      getOrderHistory(3, liveGiftPageCount), //liveGifts
-      getOrderHistory(4, remedyPageCount), //shop
-    ]);
-    update();
+  void selectChatDate(String value) {
+    selectedChatDate(value.toDate());
   }
+
+  String startDate = "";
+  String endDate = "";
+
+  // fetchData({String? startDate, endDate}) async {
+  //   Future.wait([
+  //     getOrderHistory(type: 0, page: allPageCount), //wallet
+  //     getOrderHistory(type: 1, page: chatPageCount), //chat
+  //     getOrderHistory(type: 2, page: callPageCount), //call
+  //     getOrderHistory(type: 3, page: liveGiftPageCount), //liveGifts
+  //     getOrderHistory(type: 4, page: remedyPageCount), //shop
+  //   ]);
+  //   update();
+  // }
 
   var preferences = Get.find<SharedPreferenceService>();
 
-  Future<dynamic> getOrderHistory(int type, int page) async {
-    var userData = preferences.getUserDetail();
-    // print("token-->${userData!.deviceToken}");
-
-    /* Map<String, dynamic> params = {
-      "role_id": 7,
-      "type": type,
-      "page": page,
-      "device_token": userData!.deviceToken,
-      "start_date": "2023-02-06",
-      "end_date": "2023-08-06"
-    };*/
+  Future<dynamic> getOrderHistory(
+      {int? type, int? page, String? startDate, endDate}) async {
+    // var userData = preferences.getUserDetail();
 
     Map<String, dynamic> params = {
+      /// role id should be 7 in whole project
       "role_id": 7,
-      "type": 4,
-      "page": 1,
-      "device_token": "asdasdsadasdsa12313",
-      "start_date": "2023-02-06",
-      "end_date": "2023-08-06"
-    };
 
-    /*Map<String, String> headers = {
-      "Authorization":
-          "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5IiwianRpIjoiYzZjMGM5MTc1NzY4MjkwZWY5MzJmYWRjNDFhMTlhYzdjNGRmY2ExYzcyNDc0Mzk2ZmFhZjU2Zjg2NTdiNTI2MGJmOTJhNWIzOGY5MDQ4ODkiLCJpYXQiOjE2OTI4OTI3MDMuMjU3MjgsIm5iZiI6MTY5Mjg5MjcwMy4yNTcyODIsImV4cCI6MTg1MDc0NTUwMy4yNTE0NjYsInN1YiI6IjU3MyIsInNjb3BlcyI6W119.uyNgoUiddFlTuc_Fkq26HhorNaZ_uZt1v89-7DYAyyGu4iXTTPudUNJuHsCbMw7OM4bUqm-7OQDtjOWulPfOMF1l-hZl2VK0KDqZtnnSzF0O8Tl4OsVd4ndMpd3iMNrEmKfrEaICO81gD_mXs03RBljn8v2OgYFusJ6WIzcoyGx9KS69RmDe3_CWqRd8Il310zxfe3_Q7wExYgUKj9qzPmebJ3RlVi6rCpas35HsolJOYPiywoV20k5zVXEwxjh_u0YJqQR640wohpHNf8bqjtYFHHtEOHOIeAw-vL1Onb3wfPy-XZdlIPbJp5TegMWHJ9PNwV9XoRV028L4PHvSy8HrkIiRHAqzCw45_UPp8CWZqRLFxfwkhVKopsm5UAmXMzAY9Z50GuCfPu5n72Gdmqx9njue4Fcf1d0jEIcFOM1s81MQlVFDj6B7nUSrWAtkNwDltVsp4nZVyTpNzX3AcYkCGf1B-Nhh3g01rKigeqUggos5VtP0nBjpotNB0K7a89CR97ywmQVZxJ4QNzBYhSckLEnKql4ux0dBASsqyx0PKOF7wSTr7VoycDVdLAoEwgEfyHLeOu_IRNxisq7dAzM8H_RPj9m2GsvA0lOwnvdhjyknlit4h5QnHa8iCX6A8Pxipw5GOcF7zZ3fTXJwxgd3FXJ6ba5PHQ2dp8REh18",
-      "Content-type": "application/json",
-      "Cookie":
-          "XSRF-TOKEN=eyJpdiI6InhaMncwZnBRSjhBMWs2Wm9sYjM4ZUE9PSIsInZhbHVlIjoiZVFDeTA2R29VbElhV3B5V2Z4N1dXQ0NidWwySzBFVFZaRENsdGJKMkk0azVXM3ZCcEdDblFIeEdYejhkcURqRi9wRHlxQnRPTEtYRGJYVVhTZGNHbGhZWGVKMjFndjZpQ2xOdEdGODl4TlY3dXdvZlA3M09YdHpZdm0rM21YYS8iLCJtYWMiOiIyYmVlOTk5M2IzMjIzMDRmYzRkN2ZhZTFkYjJjODNkNGUzMjhlNjJhOWQxZjhjMDA1YTAxNzVmMWE4MGJkNjAwIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6IjQ2d0NTSUdOcStUeHYyc29kSWFsVnc9PSIsInZhbHVlIjoiMTlnVitFQUtvdmw1U2lYaFRDcEpIdjR6N2dSbUd1VFRGQ1I3WGFaRk51Y1JVU3psczdVRXZCQWd4ZUl5VENaK2RJNlZ4ZmltZHFaajU3SXJydlN0QzhvVnlaczNvbkxsYVo4bnp0VU5HR0VmaFNNbUkwRklvUmJRUGZzV1NtdXAiLCJtYWMiOiI4OTk1MDUyMDMzZWU3NTA2MWJiNTM3M2JmZDdhMDk5NTI0NjA1NjE3MmI2NWMxMmM4YmEyYTk2MWFjN2U1MjU1IiwidGFnIjoiIn0%3D"
-    };*/
+      /// type 4 means suggest remedies
+      "type": type!,
+      "page": page!,
+      "device_token": preferenceService.getDeviceToken(),
+      //"flK0vjuwShCgrDVctAlgYb:APA91bHGpnRlw04TwyHThWnR0c7LFQYV5CfqVFQDsHhVZVyuKazeLwxxjwxcfRcicIKvrr2ZaQnLkXQvoFomKuS-TZ7n7sKfVyfJiT3Cv4MTSaKO-LCYMWvoVHY_txFAFWFmy7NEn4mf",
+      // "start_date": "2023-02-06",
+      // "end_date": "2023-08-06",
+      // "start_date":
+      //     startDate ?? DateFormat("yyyy-mm-dd").format(DateTime.now()),
+      // "end_date": endDate ?? DateFormat("yyyy-mm-dd").format(DateTime.now()),
+    };
 
     // 0: All,
     // 1:Call,
@@ -91,84 +112,179 @@ class OrderHistoryController extends GetxController {
     // 4:Remedy Suggested
 
     try {
-      apiCalling.value = true;
+
       if (type == 0) {
-        AllOrderHistoryModelClass data = await OrderHistoryRepository().getAllOrderHistory(params);
-        apiCalling.value = false;
+        allApiCalling.value = true;
+        update();
+        AllOrderHistoryModelClass data =
+            await OrderHistoryRepository().getAllOrderHistory(params);
+        allApiCalling.value = false;
         var history = data.data;
 
         if (history!.isNotEmpty && data.data != null) {
           emptyMsg.value = "";
           if (page == 1) allHistoryList.clear();
           allHistoryList.addAll(history);
-          // callPageCount++;
+          allPageCount++;
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
+        update(['allOrders']);
+
       } else if (type == 1) {
+        callApiCalling.value = true;
+        update();
         CallOrderHistoryModelClass data =
-            await OrderHistoryRepository().getCallOrderHistory(params);
-        apiCalling.value = false;
+        await OrderHistoryRepository().getCallOrderHistory(params);
+        callApiCalling.value = false;
         var history = data.data;
 
         if (history!.isNotEmpty && data.data != null) {
           emptyMsg.value = "";
           if (page == 1) callHistoryList.clear();
           callHistoryList.addAll(history);
-          // chatPageCount++;
+          callPageCount++;
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
+        update();
+
       } else if (type == 2) {
-        ChatOrderHistoryModelClass data = await OrderHistoryRepository().getChatOrderHistory(params);
-        apiCalling.value = false;
+        chatApiCalling.value = true;
+        update();
+        ChatOrderHistoryModelClass data =
+        await OrderHistoryRepository().getChatOrderHistory(params);
+        chatApiCalling.value = false;
         var history = data.data;
 
         if (history!.isNotEmpty && data.data != null) {
           emptyMsg.value = "";
           if (page == 1) chatHistoryList.clear();
           chatHistoryList.addAll(history);
-          // shopPageCount++;
+          chatPageCount++;
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
+        update();
       } else if (type == 3) {
+        giftsApiCalling.value = true;
+        update();
         GiftOrderHistoryModelClass data =
             await OrderHistoryRepository().getGiftOrderHistory(params);
-        apiCalling.value = false;
+        giftsApiCalling.value = false;
         var history = data.data;
 
         if (history!.isNotEmpty && data.data != null) {
           emptyMsg.value = "";
           if (page == 1) giftHistoryList.clear();
           giftHistoryList.addAll(history);
-          // liveGiftPageCount++;
+          liveGiftPageCount++;
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
       } else if (type == 4) {
+        suggestApiCalling.value = true;
+        update();
         RemedySuggestedOrderHistoryModelClass data =
-            await OrderHistoryRepository().getRemedySuggestedOrderHistory(params);
-        apiCalling.value = false;
+            await OrderHistoryRepository()
+                .getRemedySuggestedOrderHistory(params);
+        suggestApiCalling.value = false;
         var history = data.data;
 
         if (history!.isNotEmpty && data.data != null) {
           emptyMsg.value = "";
           if (page == 1) remedySuggestedHistoryList.clear();
           remedySuggestedHistoryList.addAll(history);
-          // liveGiftPageCount++;
+          remedyPageCount++;
+        } else {
+          emptyMsg.value = data.message ?? "No data found!";
+        }
+      } else if(type == 5){
+        orderApiCalling.value = true;
+        update();
+        FeedBackOrder data =
+        await OrderHistoryRepository().getFeedbackChatOrderHistory(params);
+        orderApiCalling.value = false;
+        var feedbackOrder = data.data;
+
+        if (feedbackOrder!.isNotEmpty && data.data != null) {
+          emptyMsg.value = "";
+          if (page == 1) feedHistoryList.clear();
+          feedHistoryList.addAll(feedbackOrder);
+          feedBackPageCount++;
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
       }
+      update();
     } catch (error) {
-      apiCalling.value = false;
+      if (type == 1) {
+        allApiCalling.value = false;
+      }else if (type == 1) {
+        callApiCalling.value = false;
+      }else if (type == 2) {
+        chatApiCalling.value = false;
+      }else if (type == 3) {
+        giftsApiCalling.value = false;
+      }else if (type == 3) {
+        suggestApiCalling.value = false;
+      }
       debugPrint("error $error");
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
   }
+
+  Widget paginationLoadingWidget() => Padding(
+    padding: const EdgeInsets.symmetric(vertical: 10),
+    child: CircularProgressIndicator(color: appColors.guideColor),
+  );
+
+  /*getFilterDate({String? type}) {
+    String startDate = "";
+    String endDate = "";
+    DateTime now = DateTime.now();
+
+    if ("daily".tr == type) {
+      fetchData(
+          endDate: DateFormat("yyyy-mm-dd").format(DateTime.now()),
+          startDate: DateFormat("yyyy-mm-dd").format(DateTime.now()));
+    } else if ('weekly'.tr == type) {
+      int currentDayOfWeek = now.weekday;
+
+      DateTime startOfWeek = now.subtract(Duration(days: currentDayOfWeek - 1));
+
+      DateTime endOfWeek =
+          now.add(Duration(days: DateTime.daysPerWeek - currentDayOfWeek));
+
+      startDate = DateFormat("yyyy-MM-dd").format(
+          DateTime(startOfWeek.year, startOfWeek.month, startOfWeek.day));
+      endDate = DateFormat("yyyy-MM-dd")
+          .format(DateTime(endOfWeek.year, endOfWeek.month, endOfWeek.day));
+      fetchData(endDate: endDate, startDate: startDate);
+      update();
+    } else if ('monthly'.tr == type) {
+      startDate =
+          DateFormat("yyyy-MM-dd").format(DateTime(now.year, now.month, 1));
+
+      DateTime firstDayOfNextMonth = (now.month < 12)
+          ? DateTime(now.year, now.month + 1, 1)
+          : DateTime(now.year + 1, 1, 1);
+      endDate = DateFormat("yyyy-MM-dd")
+          .format(firstDayOfNextMonth.subtract(const Duration(days: 1)));
+      fetchData(endDate: endDate, startDate: startDate);
+      update();
+    } else {
+      Get.bottomSheet(const DateSelection()).then((value) {
+        if (value != null) {
+          fetchData(endDate: value["end_date"], startDate: value["start_date"]);
+          durationOptions[4] = "${value["start_date"]} - ${value["end_date"]}";
+          update();
+        }
+      });
+    }
+  }*/
 }

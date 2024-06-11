@@ -21,12 +21,6 @@ class AllOptionController extends GetxController {
   List<OrderData>? orderHistoryData;
   RxBool allOrderHistorySync = false.obs;
 
-  @override
-  void onInit() {
-    super.onInit();
-    // getOrderHistory();
-  }
-
   showDetails({required int index}) {
     openBottomSheet(Get.context!,
         functionalityWidget: Padding(
@@ -136,7 +130,7 @@ class AllOptionController extends GetxController {
 
   String getDuration({required String duration}) {
     List time = duration.split(':').toList();
-    debugPrint("Time $time");
+    // debugPrint("Time $time");
     String returnString = "";
     if (time[0] != "00") {
       returnString = "${time[0]} hours ";

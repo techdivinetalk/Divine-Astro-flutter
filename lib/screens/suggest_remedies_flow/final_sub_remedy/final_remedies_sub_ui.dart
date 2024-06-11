@@ -1,5 +1,3 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -17,13 +15,16 @@ class FinalRemediesSubUI extends GetView<FinalRemediesSubController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.white,
+        backgroundColor: appColors.white,
         appBar: commonAppbar(
             title: "suggestRemedy".tr,
             trailingWidget: InkWell(
               child: Padding(
                   padding: EdgeInsets.only(right: 20.w),
-                  child: Assets.images.icSearch.svg(color: AppColors.darkBlue)),
+                  child: Assets.images.icSearch.svg(
+                    colorFilter:  ColorFilter.mode(
+                        appColors.darkBlue, BlendMode.srcIn),
+                  )),
             )),
         body: Column(
           children: [
@@ -67,7 +68,7 @@ class FinalRemediesSubUI extends GetView<FinalRemediesSubController> {
                                   style: TextStyle(
                                     fontWeight: FontWeight.w400,
                                     fontSize: 12.sp,
-                                    color: AppColors.blackColor,
+                                    color: appColors.blackColor,
                                   )),
                               SizedBox(height: 8.h),
                               Row(
@@ -79,7 +80,7 @@ class FinalRemediesSubUI extends GetView<FinalRemediesSubController> {
                                         fontSize: 12.sp,
                                         decoration: TextDecoration.lineThrough,
                                         decorationColor: Colors.red,
-                                        color: AppColors.darkBlue,
+                                        color: appColors.darkBlue,
                                       )),
                                   SizedBox(
                                     width: 8.w,
@@ -88,7 +89,7 @@ class FinalRemediesSubUI extends GetView<FinalRemediesSubController> {
                                       style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 12.sp,
-                                        color: AppColors.darkBlue,
+                                        color: appColors.darkBlue,
                                       )),
                                 ],
                               ),
@@ -104,7 +105,7 @@ class FinalRemediesSubUI extends GetView<FinalRemediesSubController> {
                                     width: MediaQuery.of(context).size.width,
                                     decoration: BoxDecoration(
                                         borderRadius: BorderRadius.circular(10),
-                                        color: AppColors.lightYellow),
+                                        color: appColors.guideColor),
                                     child: Center(
                                       child: Padding(
                                         padding: EdgeInsets.symmetric(
@@ -113,7 +114,7 @@ class FinalRemediesSubUI extends GetView<FinalRemediesSubController> {
                                             style: TextStyle(
                                               fontWeight: FontWeight.w500,
                                               fontSize: 12.sp,
-                                              color: AppColors.brownColour,
+                                              color: appColors.brownColour,
                                             )),
                                       ),
                                     ),

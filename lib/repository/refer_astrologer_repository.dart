@@ -1,14 +1,21 @@
 import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/refer_astrologer/refer_astrologer_response.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 
 class ReferAstrologerRepository extends ApiProvider {
   Future<ReferAstrologerResponse> referAstrologer(String json) async {
     //progressService.showProgressDialog(true);
     try {
       final response = await post(referAnAstrologer,
-          endPoint: elasticDivineTalkBase, body: json);
+          endPoint: "https://list.divinetalk.live/api/v3/", body: json);
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
       //progressService.showProgressDialog(false);
       if (response.statusCode == 200) {
         final apiResponse = referAstrologerResponseFromJson(response.body);

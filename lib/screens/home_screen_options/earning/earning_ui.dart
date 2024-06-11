@@ -62,7 +62,7 @@ class YourEarning extends GetView<YourEarningController> {
                 blurRadius: 3.0,
                 offset: const Offset(0.0, 3.0)),
           ],
-          color: AppColors.white,
+          color: appColors.white,
           borderRadius: const BorderRadius.all(Radius.circular(20))),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -70,7 +70,7 @@ class YourEarning extends GetView<YourEarningController> {
           Text(
             "lifeTimeEarning".tr,
             style: AppTextStyle.textStyle16(
-                fontWeight: FontWeight.w400, fontColor: AppColors.darkBlue),
+                fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
           ),
           Assets.images.icDownArrow.svg()
         ],

@@ -1,8 +1,9 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/repository/waiting_list_queue_repository.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../di/shared_preference_service.dart';
 import '../../../model/waiting_list_queue.dart';
@@ -15,14 +16,24 @@ class WaitListUIController extends GetxController {
   WaitListUIController(this.repository);
 
   Loading loading = Loading.initial;
-  List<WaitingPerson> waitingPersons = <WaitingPerson>[];
+  List<WaitingListQueueData> waitingPersons = <WaitingListQueueData>[];
+
+  bool isInit = false;
+  @override
+  void onReady() {
+    isInit = false;
+    super.onReady();
+  }
 
   @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
+    debugPrint("test_onInit: call");
+    isInit = true;
     getWaitingList();
   }
+
+  onAccept() {}
 
   getWaitingList() async {
     try {
@@ -33,7 +44,36 @@ class WaitListUIController extends GetxController {
       loading = Loading.loaded;
       update();
     } catch (err) {
-      divineSnackBar(data: err.toString(),color: AppColors.redColor);
+      divineSnackBar(data: err.toString(), color: appColors.redColor);
+    }
+  }
+
+  acceptChatButtonApi({String? queueId, orderId, int? index}) async {
+    try {
+      Map<String, dynamic> data = {
+        "queue_id": queueId,
+        "order_id": orderId,
+      };
+      final response = await repository.acceptChatApi(body: data);
+      debugPrint("test_response: ${response.toString()}");
+
+      if (response.isNotEmpty &&
+          response == "success" &&
+          waitingPersons.isNotEmpty &&
+          waitingPersons.length > index!) {
+        waitingPersons.removeAt(index);
+        update();
+
+        // for (int i = 0; i < waitingPersons.length; i++) {
+        //   if (waitingPersons[i].id.toString() == queueId.toString()) {
+        //     waitingPersons.removeAt(i);
+        //     break;
+        //   }
+      }
+
+      // update();
+    } catch (err) {
+      divineSnackBar(data: err.toString(), color: appColors.redColor);
     }
   }
 }

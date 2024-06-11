@@ -16,6 +16,7 @@ class ReferAstrologerRequest {
   String? skills;
   String? userId;
   String? isCustApp;
+  int? referBy;
 
   ReferAstrologerRequest({
     this.firstName,
@@ -27,6 +28,7 @@ class ReferAstrologerRequest {
     this.skills,
     this.userId,
     this.isCustApp,
+    this.referBy,
   });
 
   ReferAstrologerRequest copyWith({
@@ -50,6 +52,7 @@ class ReferAstrologerRequest {
         skills: skills ?? this.skills,
         userId: userId ?? this.userId,
         isCustApp: isCustApp ?? this.isCustApp,
+        referBy: referBy ?? this.referBy,
       );
 
   factory ReferAstrologerRequest.fromJson(Map<String, dynamic> json) =>
@@ -63,6 +66,7 @@ class ReferAstrologerRequest {
         skills: json["skills"],
         userId: json["userId"],
         isCustApp: json["isCustApp"],
+        referBy: json["referBy"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -75,6 +79,7 @@ class ReferAstrologerRequest {
         "skills": skills,
         "userId": userId,
         "isCustApp": isCustApp,
+        "referBy": referBy,
       };
 
   String toPrettyJson() => JsonEncoder.withIndent(" " * 4).convert(toJson());

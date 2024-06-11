@@ -12,21 +12,21 @@ class EndCoHost extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      backgroundColor: AppColors.white,
-      surfaceTintColor: AppColors.white,
+      backgroundColor: appColors.white,
+      surfaceTintColor: appColors.white,
       shape: OutlineInputBorder(
-        borderSide: const BorderSide(color: AppColors.appYellowColour),
+        borderSide:  BorderSide(color: appColors.guideColor),
         borderRadius: BorderRadius.circular(20),
       ),
       title: Text.rich(TextSpan(children: <InlineSpan>[
         TextSpan(
             text: "Are you sure you want to Disconnect the call with ",
-            style: TextStyle(fontSize: 16.sp, color: AppColors.darkBlue)),
+            style: TextStyle(fontSize: 16.sp, color: appColors.darkBlue)),
         TextSpan(
             text: name ?? "",
             style: TextStyle(
                 fontSize: 16.sp,
-                color: AppColors.darkBlue,
+                color: appColors.darkBlue,
                 fontWeight: FontWeight.bold))
       ])),
       actions: [
@@ -34,7 +34,7 @@ class EndCoHost extends StatelessWidget {
           child: Text("Yes",
               style: TextStyle(
                   fontSize: 16.sp,
-                  color: AppColors.darkBlue,
+                  color: appColors.darkBlue,
                   fontWeight: FontWeight.bold)),
           onPressed: () async {
             onYes!();
@@ -45,7 +45,7 @@ class EndCoHost extends StatelessWidget {
           child: Text("No",
               style: TextStyle(
                   fontSize: 16.sp,
-                  color: AppColors.darkBlue,
+                  color: appColors.darkBlue,
                   fontWeight: FontWeight.bold)),
           onPressed: () async {
             onNo!();

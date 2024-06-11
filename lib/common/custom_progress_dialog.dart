@@ -38,7 +38,7 @@ class LoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  const Column(
+    return   Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(width: double.maxFinite),
@@ -46,7 +46,7 @@ class LoadingWidget extends StatelessWidget {
           child: Padding(
             padding: EdgeInsets.all(8.0),
             child: CircularProgressIndicator(
-              color: AppColors.lightYellow,
+              color: appColors.guideColor,
             ),
           ),
         ),

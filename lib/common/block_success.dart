@@ -12,7 +12,7 @@ class BlockSuccess extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
@@ -24,11 +24,11 @@ class BlockSuccess extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(15.0),
               decoration: BoxDecoration(
-                border: Border.all(color: AppColors.white),
+                border: Border.all(color: appColors.white),
                 borderRadius: const BorderRadius.all(
                   Radius.circular(50.0),
                 ),
-                color: AppColors.white.withOpacity(0.2),
+                color: appColors.white.withOpacity(0.2),
               ),
               child: const Icon(
                 Icons.close,
@@ -37,10 +37,10 @@ class BlockSuccess extends StatelessWidget {
             ),
           ),
           AlertDialog(
-            backgroundColor: AppColors.white,
-            surfaceTintColor: AppColors.white,
+            backgroundColor: appColors.white,
+            surfaceTintColor: appColors.white,
             shape: OutlineInputBorder(
-              borderSide: BorderSide(color: AppColors.white),
+              borderSide:  BorderSide(color: appColors.white),
               borderRadius: BorderRadius.circular(20),
             ),
             title: Row(
@@ -49,7 +49,7 @@ class BlockSuccess extends StatelessWidget {
                 Container(
                   width: 32.w,
                   height: 32.h,
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     shape: BoxShape.circle,
                   ),
                   child: CachedNetworkPhoto(
@@ -65,7 +65,7 @@ class BlockSuccess extends StatelessWidget {
                     text ?? "",
                     maxLines: 2,
                     style:
-                        TextStyle(fontSize: 16.sp, color: AppColors.darkBlue),
+                        TextStyle(fontSize: 16.sp, color: appColors.darkBlue),
                   ),
                 ),
               ],

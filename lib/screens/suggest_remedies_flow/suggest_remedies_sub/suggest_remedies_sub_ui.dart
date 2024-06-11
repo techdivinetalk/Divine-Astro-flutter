@@ -1,8 +1,5 @@
-// ignore_for_file: deprecated_member_use_from_same_package
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/routes.dart';
-import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -19,13 +16,15 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: AppColors.white,
+        backgroundColor: appColors.white,
         appBar: commonAppbar(
             title: "suggestRemedy".tr,
             trailingWidget: InkWell(
               child: Padding(
                   padding: EdgeInsets.only(right: 20.w),
-                  child: Assets.images.icSearch.svg(color: AppColors.darkBlue)),
+                  child: Assets.images.icSearch.svg(
+                      colorFilter:  ColorFilter.mode(
+                          appColors.darkBlue, BlendMode.srcIn))),
             )),
         body: Column(
           children: [
@@ -43,17 +42,17 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
                                   SliverGridDelegateWithFixedCrossAxisCount(
                                       crossAxisCount: 2,
                                       crossAxisSpacing: 25.h,
-                                      childAspectRatio: 0.68,
+                                      childAspectRatio: 0.70,
                                       mainAxisSpacing: 30.h),
                               itemBuilder: (BuildContext context, int index) {
                                 var item =
                                     controller.productList?.products?[index];
                                 return InkWell(
                                   onTap: () {
-                                    Get.toNamed(RouteName.finalRemediesSubUI);
+                                    Get.toNamed(RouteName.categoryDetail, arguments: {"productId": item?.id, "orderId": controller.orderId});
                                   },
                                   child: Container(
-                                    width: 300,
+                                    // width: 300,
                                     decoration: BoxDecoration(
                                       boxShadow: [
                                         BoxShadow(
@@ -74,19 +73,25 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
                                                 BorderRadius.circular(20),
                                             child: CachedNetworkImage(
                                                 imageUrl:
-                                                    "${controller.preferenceService.getBaseImageURL()}/${item?.prodImage}")),
+                                                    "${controller.preferenceService.getBaseImageURL()}/${item?.prodImage}",
+                                              fit: BoxFit.fill,
+                                              errorWidget: (context, url, error) =>
+                                                  Assets.images.defaultProfile
+                                                      .image(),
+                                            ),
+                                        ),
                                         SizedBox(height: 12.h),
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               left: 8.0, right: 8.0),
                                           child: Text(item?.prodName ?? "",
-                                              maxLines: 2,
+                                              maxLines: 1,
                                               softWrap: true,
                                               overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                 fontWeight: FontWeight.w400,
                                                 fontSize: 12.sp,
-                                                color: AppColors.blackColor,
+                                                color: appColors.blackColor,
                                               )),
                                         ),
                                         SizedBox(height: 8.h),
@@ -94,7 +99,7 @@ class SuggestRemediesSubUI extends GetView<SuggestRemediesSubController> {
                                             style: TextStyle(
                                               fontWeight: FontWeight.w400,
                                               fontSize: 12.sp,
-                                              color: AppColors.lightGrey,
+                                              color: appColors.lightGrey,
                                             )),
                                       ],
                                     ),
