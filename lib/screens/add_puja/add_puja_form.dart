@@ -180,12 +180,12 @@ class AddPujaScreen extends GetView<AddPujaController> {
                   onChanged: (value) {
                     controller.update();
                   },
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return '${controller.selectedValue} Description is required';
-                    }
-                    return null;
-                  },
+                  // validator: (value) {
+                  //   if (value == null || value.isEmpty) {
+                  //     return '${controller.selectedValue} Description is required';
+                  //   }
+                  //   return null;
+                  // },
                 ),
                 SizedBox(height: 20.h),
                 PoojaRemedyTextFiled(
