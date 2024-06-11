@@ -126,60 +126,6 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
-    // var livePath = "live";
-    // if(kDebugMode){
-    //   livePath = "liveTest";
-    // }
-    // FirebaseDatabase.instance.ref()
-    //     .child(livePath)
-    //     .child(_controller.liveId)
-    //     .onChildChanged
-    //     .listen(
-    //       (event) async {
-    //     final DataSnapshot dataSnapshot = event.snapshot;
-    //     print("dataSnapshot-changed");
-    //     print(dataSnapshot.key);
-    //     print(dataSnapshot.value);
-    //     switch (dataSnapshot.key) {
-    //       case "blockList":
-    //         _controller.firebaseBlockUsersIds =
-    //         dataSnapshot.value as List<dynamic>;
-    //         break;
-    //       case "order":
-    //         print("order-1");
-    //         var orderNode = dataSnapshot.value as Map<dynamic, dynamic>;
-    //         _controller.orderModel = _controller.getOrderModel(orderNode);
-    //         print("order-2");
-    //         _controller.currentCaller =
-    //             _controller.getOrderModelGeneric(orderNode, forMe: true, type: "fromevent");
-    //         print("order-3");
-    //         newTimerWidget();
-    //         break;
-    //       case "waitList":
-    //         waitList.add(dataSnapshot.value as Map<dynamic, dynamic>);
-    //         print(waitList.toString());
-    //         engaging(_controller.upcomingUser(dataSnapshot.value as Map<dynamic, dynamic>));
-    //         break;
-    //     }
-    //   },
-    // );
-    // FirebaseDatabase.instance.ref()
-    //     .child(kDebugMode ? "liveTest" : livePath)
-    //     .child(_controller.liveId)
-    //     .onChildAdded
-    //     .listen(
-    //   (event) async {
-    //     final DataSnapshot dataSnapshot = event.snapshot;
-    //     print("dataSnapshot-added");
-    //     print(dataSnapshot.key);
-    //     // await _controller.eventListner(
-    //     //   snapshot: dataSnapshot,
-    //     //   engaging: engaging,
-    //     //   timer: newTimerWidget(),
-    //     // );
-    //   },
-    // );
-
     keyboardVisibilityController.onChange.listen(
       (bool visible) {
         if (visible == false && _isKeyboardSheetOpen == true) {
@@ -3169,7 +3115,7 @@ class _LivePage extends State<LiveDharamScreen>
             } else {}
 
             successAndFailureCallBack(
-              message: "${user.name} timeout to take the call",
+              message: "Removed from waitList",
               isForSuccess: false,
               isForFailure: true,
             );
@@ -3183,7 +3129,16 @@ class _LivePage extends State<LiveDharamScreen>
             if (isAcceptPopupOpen) {
               Get.back();
             } else {}
-
+            print("successAndFailureCallBack");
+            print(user.id);
+            FirebaseDatabase.instance
+                .ref()
+                .child(livePath)
+                .child(_controller.liveId)
+                .child("realTime")
+                .child("waitList")
+                .child(user.id)
+                .remove();
             successAndFailureCallBack(
               message: "${user.name} refused to take the call",
               isForSuccess: false,

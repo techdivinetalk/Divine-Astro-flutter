@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
+import 'package:divine_astrologer/model/ChatOrderResponse.dart';
 import 'package:divine_astrologer/model/log_out_response.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/model/pivacy_policy_model.dart';
@@ -568,7 +569,44 @@ class UserRepository extends ApiProvider {
     }
   }*/
 
-  Future<ConstantDetailsModelClass> constantDetailsData() async {
+  Future<dynamic> getChatOrderDetails() async {
+    try {
+      Map<String, dynamic> param = new Map();
+      final response = await post(
+        CurrentChatOrder,
+        headers: await getJsonHeaderURL(),
+        body: jsonEncode(param).toString(),
+      );
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
+      log(response.body);
+      log("CurrentChatOrder");
+      if (response.statusCode == 200) {
+        log("CurrentChatOrder-1");
+        final  chatOrderResponse =  ChatOrderResponse.fromJson(json.decode(response.body));
+        if (chatOrderResponse.statusCode == successResponse &&
+            chatOrderResponse.success == true) {
+          log("CurrentChatOrder-2");
+          return chatOrderResponse;
+        } else {
+          log("CurrentChatOrder-3");
+          throw CustomException(json.decode(response.body)["error"]);
+        }
+      } else {
+        log("CurrentChatOrder-4");
+        throw CustomException(json.decode(response.body)[0]["message"]);
+      }
+    } catch (e, s) {
+      Utils().handleCatchPreferenceServiceErase();
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+ Future<ConstantDetailsModelClass> constantDetailsData() async {
     try {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       String version = packageInfo.version;

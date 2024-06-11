@@ -63,6 +63,7 @@ class DashboardController extends GetxController
       print("checkPermissions");
       // Check permissions when app is resumed
       checkPermissions();
+      getOrderFromApi();
     }
   }
 
@@ -269,10 +270,19 @@ class DashboardController extends GetxController
   void onReady() {
     final socket = AppSocket();
     socket.socketConnect();
-
+    getOrderFromApi();
     super.onReady();
   }
 
+  getOrderFromApi() async {
+
+      final data = await userRepository.getChatOrderDetails();
+      if (data.data != null) {
+        print("data.data!");
+        print(data.data!);
+
+      }
+  }
   getConstantDetailsData() async {
     try {
       final data = await userRepository.constantDetailsData();

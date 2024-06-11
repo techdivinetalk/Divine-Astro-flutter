@@ -226,9 +226,10 @@ class AppFirebaseService {
       //
       // }
 
-      database.child(path).onValue.listen((event) async {
+      subscription = database.child(path).onValue.listen((event) async {
         debugPrint("real time $path ---> ${event.snapshot.value}");
         if (preferenceService.getToken() == null ||
+
             preferenceService.getToken() == "") {
           return;
         }
@@ -343,7 +344,7 @@ class AppFirebaseService {
       (value) {
         if (value != "") {
           print("object");
-          subscription = database.child("order/$value").onValue.listen(
+           database.child("order/$value").onValue.listen(
             (DatabaseEvent event) async {
               final DataSnapshot dataSnapshot = event.snapshot;
               if (dataSnapshot.exists) {
