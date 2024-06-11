@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -13,7 +12,7 @@ class DeleteAccountPopup extends GetView<SettingsController> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.transparent,
+      color: appColors.transparent,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -24,9 +23,9 @@ class DeleteAccountPopup extends GetView<SettingsController> {
             child: Container(
               padding: const EdgeInsets.all(15.0),
               decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.white, width: 1.5),
+                  border: Border.all(color: appColors.white, width: 1.5),
                   borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                  color: AppColors.white.withOpacity(0.1)),
+                  color: appColors.white.withOpacity(0.1)),
               child: const Icon(
                 Icons.close,
                 color: Colors.white,
@@ -39,7 +38,7 @@ class DeleteAccountPopup extends GetView<SettingsController> {
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-              color: AppColors.white,
+              color: appColors.white,
             ),
             child: Column(
               children: [
@@ -49,7 +48,7 @@ class DeleteAccountPopup extends GetView<SettingsController> {
                   "${'deleteAccount'.tr}?",
                   style: TextStyle(
                     fontSize: 24.sp,
-                    color: AppColors.redColor,
+                    color: appColors.redColor,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -68,10 +67,11 @@ class DeleteAccountPopup extends GetView<SettingsController> {
                     Expanded(
                       child: FilledButton(
                         onPressed: () {
-                          deleteAccountAlert(context);
+                          // deleteAccountAlert(context);
+                          controller.logOut();
                         },
                         style: FilledButton.styleFrom(
-                          backgroundColor: AppColors.lightYellow,
+                          backgroundColor: appColors.guideColor,
                           padding: EdgeInsets.symmetric(vertical: 16.h),
                           minimumSize: Size.zero,
                         ),
@@ -79,7 +79,7 @@ class DeleteAccountPopup extends GetView<SettingsController> {
                           'deleteAccount'.tr,
                           style: TextStyle(
                             fontSize: 16.sp,
-                            color: AppColors.brownColour,
+                            color: appColors.brownColour,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
@@ -124,7 +124,7 @@ class DeleteAccountPopup extends GetView<SettingsController> {
                             "deleteAccountMsg".tr,
                             style: AppTextStyle.textStyle16(
                                 fontWeight: FontWeight.w500,
-                                fontColor: AppColors.darkBlue),
+                                fontColor: appColors.darkBlue),
                           ),
                           SizedBox(
                             height: 35.h,
@@ -144,7 +144,7 @@ class DeleteAccountPopup extends GetView<SettingsController> {
                                     "no".tr.toUpperCase(),
                                     style: AppTextStyle.textStyle16(
                                         fontWeight: FontWeight.w500,
-                                        fontColor: AppColors.darkBlue),
+                                        fontColor: appColors.darkBlue),
                                   ),
                                 ),
                                 SizedBox(width: 30.w),
@@ -152,14 +152,12 @@ class DeleteAccountPopup extends GetView<SettingsController> {
                                   onTap: () {
                                     // controller.deleteUserAccounts();
                                     Get.back();
-
-
                                   },
                                   child: Text(
                                     "yes".tr.toUpperCase(),
                                     style: AppTextStyle.textStyle16(
                                         fontWeight: FontWeight.w500,
-                                        fontColor: AppColors.darkBlue),
+                                        fontColor: appColors.darkBlue),
                                   ),
                                 ),
                               ],

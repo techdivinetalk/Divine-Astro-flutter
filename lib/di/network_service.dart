@@ -1,13 +1,17 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:divine_astrologer/common/constants.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:overlay_support/overlay_support.dart';
 
 ///
 /// This class checks if device has internet connectivity or not
 ///
-class NetworkService extends GetxService{
-  final StreamController<bool?> _onInternetConnected = StreamController.broadcast();
+class NetworkService extends GetxService {
+  final StreamController<bool?> _onInternetConnected =
+      StreamController.broadcast();
 
   Stream<bool?> get internetConnectionStream => _onInternetConnected.stream;
 
@@ -19,6 +23,16 @@ class NetworkService extends GetxService{
     ConnectivityResult result = await connectivity.checkConnectivity();
     await _checkStatus(result);
     connectivity.onConnectivityChanged.listen((result) {
+      // if (Constants.isTestingMode) {
+      //   debugPrint("test_result: ${result.toString()}");
+      //
+      //   if (result == ConnectivityResult.wifi ||
+      //       result == ConnectivityResult.mobile) {
+      //     toast("ON");
+      //   } else {
+      //     toast("OFF");
+      //   }
+      // }
       _checkStatus(result);
     });
     return this;
@@ -50,13 +64,15 @@ class NetworkService extends GetxService{
       _isInternetConnected = isInternet;
       _onInternetConnected.sink.add(isInternet);
     }
+    debugPrint("test_isInternet: $isInternet");
     return isInternet;
   }
 
   Future<bool?> _updateConnectionStatus() async {
     bool? isConnected;
     try {
-      final List<InternetAddress> result = await InternetAddress.lookup('google.com');
+      final List<InternetAddress> result =
+          await InternetAddress.lookup('google.com');
       if (result.isNotEmpty && result[0].rawAddress.isNotEmpty) {
         isConnected = true;
       }

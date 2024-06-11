@@ -17,9 +17,13 @@ extension SearchCountry on List<Country> {
   List<Country> search(String? value) {
     if (value == null) return this;
     return where(
-      (element) =>
-          element.name.toLowerCase().startsWith(value.toLowerCase().trim()) ||
-          element.name.toLowerCase().contains(value.toLowerCase().trim()),
+          (element) =>
+      element.name.toLowerCase().startsWith(value.toLowerCase().trim()) ||
+          element.name.toLowerCase().contains(value.toLowerCase().trim()) ||
+          element.phoneCode
+              .toLowerCase()
+              .startsWith(value.toLowerCase().trim()) ||
+          element.phoneCode.toLowerCase().contains(value.toLowerCase().trim()),
     ).toList();
   }
 }
@@ -31,6 +35,9 @@ extension StringToDate on String {
   }
 }
 
+String msgTimeFormat(String? value) => DateFormat('hh:mm a').format(
+    DateTime.fromMillisecondsSinceEpoch(int.parse(value ?? '')));
+
 extension DateToString on DateTime {
   String toFormattedString() {
     final format = DateFormat("dd-MM-yyyy");
@@ -38,9 +45,10 @@ extension DateToString on DateTime {
   }
 
   String toCustomFormattedString({String locale = "en_US"}) {
-    final format = DateFormat("d\'\' MMM yyyy", locale);
+    final format = DateFormat("d'' MMM yyyy", locale);
     return format.format(this);
   }
+
 
   String toCustomFormat() {
     String day = this.day.toString();

@@ -53,7 +53,7 @@ class NoticeDatum {
   int? id;
   String? title;
   String? description;
-  DateTime? scheduleDate;
+  DateTime? createdAt;
   String? scheduleTime;
   int? status;
 
@@ -61,7 +61,7 @@ class NoticeDatum {
     this.id,
     this.title,
     this.description,
-    this.scheduleDate,
+    this.createdAt,
     this.scheduleTime,
     this.status,
   });
@@ -70,7 +70,7 @@ class NoticeDatum {
     int? id,
     String? title,
     String? description,
-    DateTime? scheduleDate,
+    DateTime? createdAt,
     String? scheduleTime,
     int? status,
   }) =>
@@ -78,7 +78,7 @@ class NoticeDatum {
         id: id ?? this.id,
         title: title ?? this.title,
         description: description ?? this.description,
-        scheduleDate: scheduleDate ?? this.scheduleDate,
+        createdAt: createdAt ?? this.createdAt,
         scheduleTime: scheduleTime ?? this.scheduleTime,
         status: status ?? this.status,
       );
@@ -87,7 +87,7 @@ class NoticeDatum {
         id: json["id"],
         title: json["title"],
         description: json["description"],
-        scheduleDate: DateTime.parse(json["schedule_date"]),
+        createdAt: DateTime.parse(json["created_at"]),
         scheduleTime: json["schedule_time"],
         status: json["status"],
       );
@@ -96,17 +96,18 @@ class NoticeDatum {
         "id": id,
         "title": title,
         "description": description,
-        "schedule_date":
-            "${scheduleDate?.year.toString().padLeft(4, '0')}-${scheduleDate?.month.toString().padLeft(2, '0')}-${scheduleDate?.day.toString().padLeft(2, '0')}",
+        "created_at":
+            "${createdAt?.year.toString().padLeft(4, '0')}-${createdAt?.month.toString().padLeft(2, '0')}-${createdAt?.day.toString().padLeft(2, '0')}",
         "schedule_time": scheduleTime,
         "status": status,
       };
 
-  String getTimeAndDate() => "${formatTime(scheduleTime!)} ${formatDateTime(scheduleDate!)}";
+  String getTimeAndDate() =>
+      "${formatTime(scheduleTime ?? '')} ${formatDateTime(createdAt!)}";
 }
 
-String formatDateTime(DateTime dateTime) {
-  final dateFormat = DateFormat('dd/MM/yyyy');
+String formatDateTime(DateTime dateTime, {String format = "dd/MM/yyyy"}) {
+  final dateFormat = DateFormat(format);
   String date = dateFormat.format(dateTime);
   return date;
 }

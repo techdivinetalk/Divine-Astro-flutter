@@ -3,13 +3,15 @@ import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 
 class NoticeRepository extends ApiProvider {
   Future<NoticeResponse> noticeAPi() async {
     try {
       final response =
-          await get(astroNoticeBoard, headers: await getJsonHeaderURL());
+          await get(getAstroAllNotice, headers: await getJsonHeaderURL());
 
       if (response.statusCode == 200) {
         final noticeResponse = noticeResponseFromJson(response.body);
@@ -36,6 +38,11 @@ class NoticeRepository extends ApiProvider {
         headers: await getJsonHeaderURL(),
         body: jsonEncode(param),
       );
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
 
       if (response.statusCode == 200) {
         final astroScheduleResponse =

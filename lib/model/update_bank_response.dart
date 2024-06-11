@@ -51,26 +51,32 @@ class UpdateBankResponse {
 }
 
 class BankData {
-  int id;
-  String accountNumber;
-  String bankName;
-  String name;
-  String ifscCode;
-  String accountHolderName;
-  String accountType;
-  String phoneNo;
-  String legalDocuments;
+  int? id;
+  String? accountNumber;
+  String? bankName;
+  String? name;
+  String? ifscCode;
+  String? status;
+  String? accountHolderName;
+  String? accountType;
+  String? phoneNo;
+  String? legalDocuments;
+  String? createdAt;
+  String? updatedAt;
 
   BankData({
-    required this.id,
-    required this.accountNumber,
-    required this.bankName,
-    required this.name,
-    required this.ifscCode,
-    required this.accountHolderName,
-    required this.accountType,
-    required this.phoneNo,
-    required this.legalDocuments,
+     this.id,
+     this.accountNumber,
+     this.bankName,
+     this.name,
+     this.status,
+     this.ifscCode,
+     this.accountHolderName,
+     this.accountType,
+     this.phoneNo,
+     this.legalDocuments,
+     this.createdAt,
+     this.updatedAt,
   });
 
   BankData copyWith({
@@ -80,19 +86,25 @@ class BankData {
     String? name,
     String? ifscCode,
     String? accountHolderName,
+    String? status,
     String? accountType,
     String? phoneNo,
     String? legalDocuments,
+    String? createdAt,
+    String? updatedAt,
   }) =>
       BankData(
         id: id ?? this.id,
         accountNumber: accountNumber ?? this.accountNumber,
         bankName: bankName ?? this.bankName,
         name: name ?? this.name,
+        status: status ?? this.status,
         ifscCode: ifscCode ?? this.ifscCode,
         accountHolderName: accountHolderName ?? this.accountHolderName,
         accountType: accountType ?? this.accountType,
         phoneNo: phoneNo ?? this.phoneNo,
+        createdAt: createdAt ?? this.createdAt,
+        updatedAt: updatedAt ?? this.updatedAt,
         legalDocuments: legalDocuments ?? this.legalDocuments,
       );
 
@@ -100,18 +112,24 @@ class BankData {
         id: json["id"],
         accountNumber: json["account_number"].toString(),
         bankName: json["bank_name"],
-        name: json["name"],
-        ifscCode: json["ifsc_code"],
+        name: json["name"] ?? "",
+    status: json["status"] ?? "",
+        ifscCode: json["ifsc_code"] ?? "",
         accountHolderName: json["account_holder_name"],
-        accountType: json["account_type"],
-        phoneNo: json["phone_no"] as String,
+        accountType: json["account_type"] ?? "",
+        phoneNo: json["phone_no"] ?? "",
         legalDocuments: json["legal_documents"],
+    createdAt: json["created_at"] ?? "",
+    updatedAt: json["updated_at"] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "account_number": accountNumber,
+        "updated_at": updatedAt ,
+        "created_at": createdAt ,
         "bank_name": bankName,
+        "status": status,
         "name": name,
         "ifsc_code": ifscCode,
         "account_holder_name": accountHolderName,

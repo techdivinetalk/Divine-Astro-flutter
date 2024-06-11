@@ -29,14 +29,14 @@ class _CustomRadioState<T> extends State<CustomRadio<T>> {
         height: 24.h,
         decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border: Border.all(width: 2, color: AppColors.darkBlue)),
+            border: Border.all(width: 2, color: appColors.darkBlue)),
         child: Center(
           child: selected
               ? Container(
                   width: 16.w,
                   height: 16.h,
-                  decoration: const BoxDecoration(
-                      shape: BoxShape.circle, color: AppColors.lightYellow),
+                  decoration:  BoxDecoration(
+                      shape: BoxShape.circle, color: appColors.guideColor),
                 )
               : const SizedBox(),
         ),

@@ -37,11 +37,11 @@ class SelectPlaceOfBirth extends StatelessWidget {
             child: Container(
               padding: const EdgeInsets.all(15.0),
               decoration: BoxDecoration(
-                border: Border.all(color: AppColors.white),
+                border: Border.all(color: appColors.white),
                 borderRadius: const BorderRadius.all(
                   Radius.circular(50.0),
                 ),
-                color: AppColors.white.withOpacity(0.2),
+                color: appColors.white.withOpacity(0.2),
               ),
               child: const Icon(
                 Icons.close,
@@ -53,9 +53,9 @@ class SelectPlaceOfBirth extends StatelessWidget {
           Container(
             width: context.width,
             height: context.height / 2,
-            decoration: const BoxDecoration(
-              borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
-              color: AppColors.white,
+            decoration:  BoxDecoration(
+              borderRadius:const BorderRadius.vertical(top: Radius.circular(50.0)),
+              color: appColors.white,
             ),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -69,14 +69,14 @@ class SelectPlaceOfBirth extends StatelessWidget {
                   ),
                 ),
                 Material(
-                  color: AppColors.transparent,
+                  color: appColors.transparent,
                   child: Text(
-                    "selectPlaceBirth".tr,
+                    "Select Place Of Birth".tr,
                     style: TextStyle(
                       fontWeight: FontWeight.w700,
-                      color: AppColors.darkBlue,
+                      color: appColors.darkBlue,
                       fontSize: 20.0.sp,
-                    ),
+                    ), 
                   ),
                 ),
                 SizedBox(height: 20.sp),
@@ -123,7 +123,7 @@ class _AllCitiesListState extends State<AllCitiesList> {
 
   OutlineInputBorder get border => OutlineInputBorder(
         borderSide: BorderSide(
-          color: AppColors.darkBlue.withOpacity(0.5),
+          color: appColors.darkBlue.withOpacity(0.5),
         ),
         borderRadius: BorderRadius.circular(10.sp),
       );
@@ -131,7 +131,7 @@ class _AllCitiesListState extends State<AllCitiesList> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.white,
+      color: appColors.white,
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -147,7 +147,7 @@ class _AllCitiesListState extends State<AllCitiesList> {
               autofocus: true,
               controller: controller,
               onChanged: (value) => setState(() {}),
-              cursorColor: AppColors.darkBlue.withOpacity(0.2),
+              cursorColor: appColors.darkBlue.withOpacity(0.2),
               decoration: InputDecoration(
                 prefixIcon: Container(
                   margin: EdgeInsets.symmetric(
@@ -157,7 +157,7 @@ class _AllCitiesListState extends State<AllCitiesList> {
                   child: Assets.images.createAccSearch.svg(),
                 ),
                 hintStyle: TextStyle(
-                  color: AppColors.darkBlue.withOpacity(0.2),
+                  color: appColors.darkBlue.withOpacity(0.2),
                   fontWeight: FontWeight.w400,
                   fontSize: 16.sp,
                 ),
@@ -190,7 +190,7 @@ class _AllCitiesListState extends State<AllCitiesList> {
                                   style: TextStyle(
                                     fontFamily: FontFamily.poppins,
                                     fontWeight: FontWeight.w400,
-                                    color: AppColors.darkBlue,
+                                    color: appColors.darkBlue,
                                     fontSize: 16.sp,
                                   ),
                                 ),
@@ -204,7 +204,7 @@ class _AllCitiesListState extends State<AllCitiesList> {
                 return Center(
                   child: CircularProgressIndicator.adaptive(
                     strokeWidth: 2.sp,
-                    valueColor: const AlwaysStoppedAnimation(AppColors.lightYellow),
+                    valueColor:  AlwaysStoppedAnimation(appColors.guideColor),
                   ),
                 );
               },

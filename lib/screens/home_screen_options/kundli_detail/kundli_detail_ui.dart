@@ -60,17 +60,17 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                                 )),
                           ],
                         )),
-                    surfaceTintColor: AppColors.white,
+                    surfaceTintColor: appColors.white,
                     expandedHeight: 280.h,
                     pinned: true,
                     title: Text("kundliText".tr,
                         style: AppTextStyle.textStyle16(
                             fontWeight: FontWeight.w400,
-                            fontColor: AppColors.darkBlue)),
+                            fontColor: appColors.darkBlue)),
                     bottom: PreferredSize(
                       preferredSize: const Size.fromHeight(kTextTabBarHeight),
                       child: Card(
-                        surfaceTintColor: AppColors.white,
+                        surfaceTintColor: appColors.white,
                         margin: EdgeInsets.zero,
                         shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.zero),
@@ -81,20 +81,21 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                             isScrollable: true,
                             dividerColor: Colors.transparent,
                             labelPadding: EdgeInsets.zero,
-                            labelColor: AppColors.brownColour,
-                            unselectedLabelColor: AppColors.blackColor,
+                            labelColor: appColors.whiteGuidedColor,
+                            unselectedLabelColor: appColors.blackColor,
                             splashBorderRadius: BorderRadius.circular(20),
                             padding: EdgeInsets.symmetric(
                                 vertical: 6.w, horizontal: 24.w),
                             labelStyle: AppTextStyle.textStyle14(
                                 fontWeight: FontWeight.w500,
-                                fontColor: AppColors.brownColour),
+                                fontColor: appColors.whiteGuidedColor),
                             indicator: BoxDecoration(
-                              color: AppColors.lightYellow,
+                              color: appColors.guideColor,
                               borderRadius: BorderRadius.circular(28),
                             ),
                             onTap: (value) {
                               controller.currentIndex.value = value;
+                              controller.getApiData(Get.arguments['from_kundli'], tab: value);
                             },
                             tabs: [
                               Padding(

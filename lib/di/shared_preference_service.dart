@@ -1,12 +1,19 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:divine_astrologer/common/zego_services.dart';
+import 'package:divine_astrologer/common/constants.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/login_images.dart';
+import 'package:divine_astrologer/model/message_template_response.dart';
 import 'package:divine_astrologer/model/update_bank_response.dart';
+import 'package:divine_astrologer/screens/live_dharam/live_dharam_controller.dart';
+import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
+import 'package:divine_astrologer/screens/live_page/constant.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../model/chat_assistant/chat_assistant_chats_response.dart';
 import '../model/constant_details_model_class.dart';
 import '../model/res_login.dart';
 
@@ -18,11 +25,14 @@ class SharedPreferenceService extends GetxService {
   static const specialAbility = "specialAbility";
   static const loginImages = "loginImages";
   static const baseAmazonUrl = "baseAmazonUrl";
+  static const assistChatUnreadkey = "chatAssistUnreadMessage";
 
   static const updatedBankDetails = "updatedBankDetails";
   static const baseImageUrl = "baseImageUrl";
   static const constantData = "constantData";
-
+  static const performanceDialog = "performanceDialog";
+  static const talkTime = "talkTime";
+  static const messageTemplate = "messageTemplate";
 
   Future<SharedPreferenceService> init() async {
     prefs = await SharedPreferences.getInstance();
@@ -50,7 +60,88 @@ class SharedPreferenceService extends GetxService {
   }
 
   Future<bool> setAmazonUrl(String url) async {
+    //added by: dev-dharam
+    print("setAmazonUrl:: $url");
+    //
     return await prefs!.setString(baseAmazonUrl, url);
+  }
+
+  Future<int> getIntPrefs(String key) async {
+    return prefs!.getInt(key) ?? 0;
+  }
+
+  // Future saveChatAssistUnreadMessage() async {
+  //   final SharedPreferences sharedInstance =
+  //       await SharedPreferences.getInstance();
+  //
+  //   final encodedChatAssistList =
+  //       assistChatUnreadMessages.map((e) => jsonEncode(e)).toList();
+  //   await sharedInstance.setStringList(
+  //   assistChatUnreadkey, encodedChatAssistList);
+  //   print("called save unread message ${encodedChatAssistList} ${assistChatUnreadMessages}");
+  // }
+  //
+  // Future getChatAssistUnreadMessage() async {
+  //   final SharedPreferences sharedInstance =
+  //       await SharedPreferences.getInstance();
+  //
+  //   final localData = sharedInstance.getStringList(assistChatUnreadkey);
+  //
+  //   if (localData != null) {
+  //     assistChatUnreadMessages.value = [];
+  //     assistChatUnreadMessages.addAll(localData
+  //         .map((e) => AssistChatData.fromJson(jsonDecode(e)))
+  //         .toList());
+  //   }
+  // }
+
+  // Future addChatAssistUnreadMessage(AssistChatData data) async {
+  //   final SharedPreferences sharedInstance =
+  //       await SharedPreferences.getInstance();
+  //
+  //   final List<AssistChatData> chatAssistUnreadMessageList =
+  //       await getChatAssistUnreadMessage();
+  //   chatAssistUnreadMessageList.add(data);
+  //   final encodedChatAssistList =
+  //       chatAssistUnreadMessageList.map((e) => jsonEncode(e)).toList();
+  //   await sharedInstance.setStringList(
+  //       assistChatUnreadMessages, encodedChatAssistList);
+  // }
+  //
+  // Future updateChatAssistUnreadMessage(List<AssistChatData> chatMessageList) async {
+  //   final SharedPreferences sharedInstance =
+  //   await SharedPreferences.getInstance();
+  //
+  //   final encodedChatAssistList =
+  //   chatMessageList.map((e) => jsonEncode(e)).toList();
+  //   await sharedInstance.setStringList(
+  //       assistChatUnreadMessages, encodedChatAssistList);
+  // }
+  //
+  // Future<List<AssistChatData>> getChatAssistUnreadMessage() async {
+  //   final SharedPreferences sharedInstance =
+  //       await SharedPreferences.getInstance();
+  //
+  //   final localData = sharedInstance.getStringList(assistChatUnreadMessages);
+  //
+  //   if (localData != null) {
+  //     return localData
+  //         .map((e) => AssistChatData.fromJson(jsonDecode(e)))
+  //         .toList();
+  //   }
+  //   return [];
+  // }
+
+  Future<bool> setIntPrefs(String key, int value) async {
+    return prefs!.setInt(key, value);
+  }
+
+  Future<bool> setStringPref(String key, String value) async {
+    return prefs!.setString(key, value);
+  }
+
+  String? getString(String key) {
+    return prefs?.getString(key) ?? "0";
   }
 
   String? getToken() {
@@ -74,7 +165,6 @@ class SharedPreferenceService extends GetxService {
   }
 
   Future erase() async {
-    await ZegoServices().unInitZegoInvitationServices();
     return prefs!.clear();
   }
 
@@ -92,7 +182,10 @@ class SharedPreferenceService extends GetxService {
 
   LoginImages? getLoginImages() {
     String? images = prefs!.getString(loginImages);
-    if (images != null) return loginImagesFromJson(images);
+    if (images != null) {
+      return loginImagesFromJson(images);
+    }
+
     return null;
   }
 
@@ -102,9 +195,55 @@ class SharedPreferenceService extends GetxService {
 
   UpdateBankResponse? getUpdatedBankDetails() {
     String? data = prefs!.getString(updatedBankDetails);
-    if (data != null) return updateBankResponseFromJson(data);
+    return updateBankResponseFromJson(data!);
     return null;
   }
+
+  Future<void> saveMessageTemplates(String json) async {
+    final SharedPreferences sharedInstance =
+        await SharedPreferences.getInstance();
+
+    // sharedInstance.remove(messageTemplate);
+    final result = await sharedInstance.setString(messageTemplate, json);
+  }
+
+  Future<List<MessageTemplates>> getMessageTemplates() async {
+    final SharedPreferences sharedInstance =
+        await SharedPreferences.getInstance();
+    String data = sharedInstance.getString(messageTemplate) ?? '';
+    print("getMessageTemplates $data");
+    if (data.isNotEmpty) {
+      final list = (json.decode(data));
+      return list
+          .map<MessageTemplates>(
+              (element) => MessageTemplates.fromJson(element))
+          .toList();
+    }
+    return [];
+  }
+
+  // Future<List<MessageTemplates>> getMessageTemplates() async {
+  //   final SharedPreferences sharedInstance =
+  //   await SharedPreferences.getInstance();
+  //
+  //   // Example: encoding a list of message templates to JSON
+  //   List<MessageTemplates> templates = []; // Replace with your actual list
+  //   String jsonData = json.encode(templates);
+  //
+  //   // Store the JSON string in SharedPreferences
+  //   sharedInstance.setString(messageTemplate, jsonData);
+  //
+  //   // Retrieve the JSON string from SharedPreferences
+  //   String storedData = sharedInstance.getString(messageTemplate) ?? '';
+  //
+  //   // Parse the stored JSON string
+  //   final list = json.decode(storedData);
+  //
+  //   // Map the decoded list to MessageTemplates objects
+  //   return list
+  //       .map<MessageTemplates>((element) => MessageTemplates.fromJson(element))
+  //       .toList();
+  // }
 
   String? getBaseImageURL() {
     return prefs!.getString(baseImageUrl);
@@ -126,7 +265,17 @@ class SharedPreferenceService extends GetxService {
 
   Future<bool> setConstantDetails(
       ConstantDetailsModelClass constantDetails) async {
+    final List<String> values =
+        List<String>.from(constantDetails.data?.badWordsData ?? <String>[]);
+    await LiveSharedPreferencesSingleton().setBadWordsList(values: values);
     return await prefs!.setString(constantData, jsonEncode(constantDetails));
   }
 
+  int getTalkTime() {
+    return prefs!.getInt(talkTime) ?? 0;
+  }
+
+  Future<bool> setTalkTime(int talkTimeValue) async {
+    return await prefs!.setInt(talkTime, talkTimeValue);
+  }
 }

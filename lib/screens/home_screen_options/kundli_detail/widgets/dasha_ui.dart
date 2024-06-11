@@ -51,10 +51,10 @@ class _DashaUIState extends State<DashaUI> {
                               border: Border.all(
                                   color: controller.isVimshottari.value
                                       ? Colors.white
-                                      : AppColors.blackColor),
+                                      : appColors.blackColor),
                               borderRadius: BorderRadius.circular(20),
                               color: controller.isVimshottari.value
-                                  ? AppColors.lightYellow
+                                  ? appColors.guideColor
                                   : Colors.white),
                           child: Padding(
                             padding: EdgeInsets.symmetric(
@@ -83,10 +83,10 @@ class _DashaUIState extends State<DashaUI> {
                               border: Border.all(
                                   color: controller.isYogini.value
                                       ? Colors.white
-                                      : AppColors.blackColor),
+                                      : appColors.blackColor),
                               color: controller.isYogini.value
-                                  ? AppColors.lightYellow
-                                  : AppColors.white),
+                                  ? appColors.guideColor
+                                  : appColors.white),
                           child: Padding(
                             padding: EdgeInsets.symmetric(
                                 horizontal: 15.w, vertical: 12.h),
@@ -140,7 +140,7 @@ class _DashaUIState extends State<DashaUI> {
               Text("mahadasha".tr,
                   style: AppTextStyle.textStyle16(
                       fontWeight: FontWeight.w500,
-                      fontColor: AppColors.appYellowColour)),
+                      fontColor: appColors.textColor)),
               const SizedBox(height: 24),
             ],
           ),
@@ -177,7 +177,7 @@ class _DashaUIState extends State<DashaUI> {
                             "planet".tr,
                             style: AppTextStyle.textStyle14(
                                 fontWeight: FontWeight.w500,
-                                fontColor: AppColors.brownColour),
+                                fontColor: appColors.brownColour),
                           ),
                         ),
                       ),
@@ -204,7 +204,7 @@ class _DashaUIState extends State<DashaUI> {
                             "startDate".tr,
                             style: AppTextStyle.textStyle14(
                                 fontWeight: FontWeight.w500,
-                                fontColor: AppColors.brownColour),
+                                fontColor: appColors.brownColour),
                           ),
                         ),
                       ),
@@ -231,7 +231,7 @@ class _DashaUIState extends State<DashaUI> {
                             "endDate".tr,
                             style: AppTextStyle.textStyle14(
                                 fontWeight: FontWeight.w500,
-                                fontColor: AppColors.brownColour),
+                                fontColor: appColors.brownColour),
                           ),
                         ),
                       ),
@@ -361,7 +361,7 @@ class _DashaUIState extends State<DashaUI> {
                       Text("mahadasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
-                              fontColor: AppColors.appYellowColour)),
+                              fontColor: appColors.textColor)),
                     ],
                   ),
                 ),
@@ -369,7 +369,7 @@ class _DashaUIState extends State<DashaUI> {
                 Text("antarDasha".tr,
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w500,
-                        fontColor: AppColors.appYellowColour)),
+                        fontColor: appColors.textColor)),
               ],
             ),
             SizedBox(
@@ -407,7 +407,7 @@ class _DashaUIState extends State<DashaUI> {
                               "planet".tr,
                               style: AppTextStyle.textStyle14(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.brownColour),
+                                  fontColor: appColors.brownColour),
                             ),
                           ),
                         ),
@@ -434,7 +434,7 @@ class _DashaUIState extends State<DashaUI> {
                               "startDate".tr,
                               style: AppTextStyle.textStyle14(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.brownColour),
+                                  fontColor: appColors.brownColour),
                             ),
                           ),
                         ),
@@ -461,7 +461,7 @@ class _DashaUIState extends State<DashaUI> {
                               "endDate".tr,
                               style: AppTextStyle.textStyle14(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.brownColour),
+                                  fontColor: appColors.brownColour),
                             ),
                           ),
                         ),
@@ -535,7 +535,7 @@ class _DashaUIState extends State<DashaUI> {
               child: Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                      color: AppColors.lightYellow,
+                      color: appColors.guideColor,
                       borderRadius: BorderRadius.circular(30)),
                   child: Padding(
                     padding: const EdgeInsets.all(14.0),
@@ -544,7 +544,7 @@ class _DashaUIState extends State<DashaUI> {
                       "levelUp".tr,
                       style: AppTextStyle.textStyle20(
                           fontWeight: FontWeight.w600,
-                          fontColor: AppColors.brownColour),
+                          fontColor: appColors.brownColour),
                     )),
                   )),
             ),
@@ -591,7 +591,7 @@ class _DashaUIState extends State<DashaUI> {
                           Text("mahadasha".tr,
                               style: AppTextStyle.textStyle16(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.appYellowColour)),
+                                  fontColor: appColors.textColor)),
                         ],
                       ),
                     ),
@@ -608,15 +608,15 @@ class _DashaUIState extends State<DashaUI> {
                       child: Text("antarDasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
-                              fontColor: AppColors.appYellowColour)),
+                              fontColor: appColors.textColor)),
                     ),
                     const Icon(Icons.chevron_right),
                   ],
                 ),
-                Text("Pratyantar Dasha",
+                Text("pratyantarDasha".tr,
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w500,
-                        fontColor: AppColors.appYellowColour)),
+                        fontColor: appColors.textColor)),
               ],
             ),
             SizedBox(height: 15.h),
@@ -652,7 +652,7 @@ class _DashaUIState extends State<DashaUI> {
                               "planet".tr,
                               style: AppTextStyle.textStyle14(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.brownColour),
+                                  fontColor: appColors.brownColour),
                             ),
                           ),
                         ),
@@ -679,7 +679,7 @@ class _DashaUIState extends State<DashaUI> {
                               "startDate".tr,
                               style: AppTextStyle.textStyle14(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.brownColour),
+                                  fontColor: appColors.brownColour),
                             ),
                           ),
                         ),
@@ -706,7 +706,7 @@ class _DashaUIState extends State<DashaUI> {
                               "endDate".tr,
                               style: AppTextStyle.textStyle14(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.brownColour),
+                                  fontColor: appColors.brownColour),
                             ),
                           ),
                         ),
@@ -717,7 +717,7 @@ class _DashaUIState extends State<DashaUI> {
                       controller.dashaTableData.value.data?.vimshottari?[index];
                   Datum? subModel =
                       controller.planetDataDetail.value.data?[index];
-                  pratyantarData? pratyantarModel =
+                  PratyantarData? pratyantarModel =
                       controller.pratyantarDataDetail.value.data?[index];
                   return TableRow(children: [
                     Padding(
@@ -778,7 +778,7 @@ class _DashaUIState extends State<DashaUI> {
               child: Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                      color: AppColors.lightYellow,
+                      color: appColors.guideColor,
                       borderRadius: BorderRadius.circular(30)),
                   child: Padding(
                     padding: const EdgeInsets.all(14.0),
@@ -787,7 +787,7 @@ class _DashaUIState extends State<DashaUI> {
                       "levelUp".tr,
                       style: AppTextStyle.textStyle20(
                           fontWeight: FontWeight.w600,
-                          fontColor: AppColors.brownColour),
+                          fontColor: appColors.brownColour),
                     )),
                   )),
             ),
@@ -832,7 +832,7 @@ class _DashaUIState extends State<DashaUI> {
                           Text("mahadasha".tr,
                               style: AppTextStyle.textStyle16(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.appYellowColour)),
+                                  fontColor: appColors.textColor)),
                         ],
                       ),
                     ),
@@ -849,7 +849,7 @@ class _DashaUIState extends State<DashaUI> {
                       child: Text("antarDasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
-                              fontColor: AppColors.appYellowColour)),
+                              fontColor: appColors.textColor)),
                     ),
                     const Icon(Icons.chevron_right),
                   ],
@@ -861,10 +861,10 @@ class _DashaUIState extends State<DashaUI> {
                       onTap: () {
                         controller.subDashaLevel.value = 2;
                       },
-                      child: Text("Pratyantar Dasha",
+                      child: Text("pratyantarDasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
-                              fontColor: AppColors.appYellowColour)),
+                              fontColor: appColors.textColor)),
                     ),
                     const Icon(Icons.chevron_right),
                   ],
@@ -872,7 +872,7 @@ class _DashaUIState extends State<DashaUI> {
                 Text("sookshmaDasha".tr,
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w500,
-                        fontColor: AppColors.appYellowColour)),
+                        fontColor: appColors.textColor)),
               ],
             ),
             SizedBox(
@@ -910,7 +910,7 @@ class _DashaUIState extends State<DashaUI> {
                               "planet".tr,
                               style: AppTextStyle.textStyle14(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.brownColour),
+                                  fontColor: appColors.brownColour),
                             ),
                           ),
                         ),
@@ -937,7 +937,7 @@ class _DashaUIState extends State<DashaUI> {
                               "startDate".tr,
                               style: AppTextStyle.textStyle14(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.brownColour),
+                                  fontColor: appColors.brownColour),
                             ),
                           ),
                         ),
@@ -964,7 +964,7 @@ class _DashaUIState extends State<DashaUI> {
                               "endDate".tr,
                               style: AppTextStyle.textStyle14(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.brownColour),
+                                  fontColor: appColors.brownColour),
                             ),
                           ),
                         ),
@@ -975,7 +975,7 @@ class _DashaUIState extends State<DashaUI> {
                       controller.dashaTableData.value.data?.vimshottari?[index];
                   Datum? subModel =
                       controller.planetDataDetail.value.data?[index];
-                  pratyantarData? pratyantarModel =
+                  PratyantarData? pratyantarModel =
                       controller.pratyantarDataDetail.value.data?[index];
                   SookshmaData? sookshmaData =
                       controller.sookshmaDataDetail.value.data?[index];
@@ -1039,7 +1039,7 @@ class _DashaUIState extends State<DashaUI> {
               child: Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                      color: AppColors.lightYellow,
+                      color: appColors.guideColor,
                       borderRadius: BorderRadius.circular(30)),
                   child: Padding(
                     padding: const EdgeInsets.all(14.0),
@@ -1048,7 +1048,7 @@ class _DashaUIState extends State<DashaUI> {
                       "levelUp".tr,
                       style: AppTextStyle.textStyle20(
                           fontWeight: FontWeight.w600,
-                          fontColor: AppColors.brownColour),
+                          fontColor: appColors.brownColour),
                     )),
                   )),
             ),
@@ -1095,7 +1095,7 @@ class _DashaUIState extends State<DashaUI> {
                           Text("mahadasha".tr,
                               style: AppTextStyle.textStyle16(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.appYellowColour)),
+                                  fontColor: appColors.textColor)),
                         ],
                       ),
                     ),
@@ -1112,7 +1112,7 @@ class _DashaUIState extends State<DashaUI> {
                       child: Text("antarDasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
-                              fontColor: AppColors.appYellowColour)),
+                              fontColor: appColors.textColor)),
                     ),
                     const Icon(Icons.chevron_right),
                   ],
@@ -1124,10 +1124,10 @@ class _DashaUIState extends State<DashaUI> {
                       onTap: () {
                         controller.subDashaLevel.value = 2;
                       },
-                      child: Text("Pratyantar Dasha",
+                      child: Text("pratyantarDasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
-                              fontColor: AppColors.appYellowColour)),
+                              fontColor: appColors.textColor)),
                     ),
                     const Icon(Icons.chevron_right),
                   ],
@@ -1142,7 +1142,7 @@ class _DashaUIState extends State<DashaUI> {
                       child: Text("sookshmaDasha".tr,
                           style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w500,
-                              fontColor: AppColors.appYellowColour)),
+                              fontColor: appColors.textColor)),
                     ),
                     const Icon(Icons.chevron_right),
                   ],
@@ -1150,7 +1150,7 @@ class _DashaUIState extends State<DashaUI> {
                 Text("pranDasha".tr,
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w500,
-                        fontColor: AppColors.appYellowColour)),
+                        fontColor: appColors.textColor)),
               ],
             ),
             SizedBox(
@@ -1188,7 +1188,7 @@ class _DashaUIState extends State<DashaUI> {
                               "planet".tr,
                               style: AppTextStyle.textStyle14(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.brownColour),
+                                  fontColor: appColors.brownColour),
                             ),
                           ),
                         ),
@@ -1215,7 +1215,7 @@ class _DashaUIState extends State<DashaUI> {
                               "startDate".tr,
                               style: AppTextStyle.textStyle14(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.brownColour),
+                                  fontColor: appColors.brownColour),
                             ),
                           ),
                         ),
@@ -1242,7 +1242,7 @@ class _DashaUIState extends State<DashaUI> {
                               "endDate".tr,
                               style: AppTextStyle.textStyle14(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.brownColour),
+                                  fontColor: appColors.brownColour),
                             ),
                           ),
                         ),
@@ -1295,7 +1295,7 @@ class _DashaUIState extends State<DashaUI> {
               child: Container(
                   width: MediaQuery.of(context).size.width,
                   decoration: BoxDecoration(
-                      color: AppColors.lightYellow,
+                      color: appColors.guideColor,
                       borderRadius: BorderRadius.circular(30)),
                   child: Padding(
                     padding: const EdgeInsets.all(14.0),
@@ -1304,7 +1304,7 @@ class _DashaUIState extends State<DashaUI> {
                       "levelUp".tr,
                       style: AppTextStyle.textStyle20(
                           fontWeight: FontWeight.w600,
-                          fontColor: AppColors.brownColour),
+                          fontColor: appColors.brownColour),
                     )),
                   )),
             ),
@@ -1340,7 +1340,7 @@ class _DashaUIState extends State<DashaUI> {
             Text("bhadrika".tr,
                 style: AppTextStyle.textStyle16(
                     fontWeight: FontWeight.w500,
-                    fontColor: AppColors.appYellowColour)),
+                    fontColor: appColors.textColor)),
             SizedBox(
               height: 15.h,
             ),
@@ -1376,7 +1376,7 @@ class _DashaUIState extends State<DashaUI> {
                               "planet".tr,
                               style: AppTextStyle.textStyle14(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.brownColour),
+                                  fontColor: appColors.brownColour),
                             ),
                           ),
                         ),
@@ -1403,7 +1403,7 @@ class _DashaUIState extends State<DashaUI> {
                               "startDate".tr,
                               style: AppTextStyle.textStyle14(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.brownColour),
+                                  fontColor: appColors.brownColour),
                             ),
                           ),
                         ),
@@ -1430,7 +1430,7 @@ class _DashaUIState extends State<DashaUI> {
                               "endDate".tr,
                               style: AppTextStyle.textStyle14(
                                   fontWeight: FontWeight.w500,
-                                  fontColor: AppColors.brownColour),
+                                  fontColor: appColors.brownColour),
                             ),
                           ),
                         ),
@@ -1472,10 +1472,10 @@ class _DashaUIState extends State<DashaUI> {
                                   getDashaFormattedDate(yoginiData?.endDate),
                                   style: AppTextStyle.textStyle12(),
                                 ),
-                                const Icon(
+                                /* const Icon(
                                   Icons.chevron_right,
                                   size: 12,
-                                )
+                                ) */
                               ],
                             ),
                           ),
@@ -1490,7 +1490,7 @@ class _DashaUIState extends State<DashaUI> {
             // Text(
             //   "rashiChart".tr,
             //   style:
-            //   AppTextStyle.textStyle16(fontColor: AppColors.appYellowColour),
+            //   AppTextStyle.textStyle16(fontColor: appColors.textColor),
             // ),
             // SizedBox(
             //   height: 15.h,

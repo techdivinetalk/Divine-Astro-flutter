@@ -7,8 +7,7 @@ class ResProductDetail {
   ResProductDetail({this.data, this.success, this.statusCode, this.message});
 
   ResProductDetail.fromJson(Map<String, dynamic> json) {
-    data =
-        json['data'] != null ? ProductDetailData.fromJson(json['data']) : null;
+    data = json['data'] != null ? ProductDetailData.fromJson(json['data']) : null;
     success = json['success'];
     statusCode = json['status_code'];
     message = json['message'];
@@ -60,8 +59,11 @@ class Products {
   int? productPriceUsd;
   int? productStatus;
   String? productLongDesc;
+  int? gst;
   String? productBannerImage;
   ProductShop? productShop;
+
+  List<ProductFaq>? productFaq;
   // Null? productCat;
 
   Products({
@@ -71,13 +73,14 @@ class Products {
     this.prodName,
     this.prodImage,
     this.prodDesc,
+    this.gst,
     this.productPriceInr,
     this.productPriceUsd,
     this.productStatus,
     this.productLongDesc,
     this.productBannerImage,
     this.productShop,
-    // this.productCat
+    this.productFaq,
   });
 
   Products.fromJson(Map<String, dynamic> json) {
@@ -87,14 +90,15 @@ class Products {
     prodName = json['prod_name'];
     prodImage = json['prod_image'];
     prodDesc = json['prod_desc'];
+    gst = json['gst'];
     productPriceInr = json['product_price_inr'];
     productPriceUsd = json['product_price_usd'];
     productStatus = json['product_status'];
     productLongDesc = json['product_long_desc'];
     productBannerImage = json['product_banner_image'];
-    productShop = json['product_shop'] != null
-        ? ProductShop.fromJson(json['product_shop'])
-        : null;
+    productShop = json['product_shop'] != null ? ProductShop.fromJson(json['product_shop']) : null;
+    productFaq = List<ProductFaq>.from(json["product_faq"].map((x) => ProductFaq.fromJson(x)));
+
     // productCat = json['product_cat'];
   }
 
@@ -103,6 +107,7 @@ class Products {
     data['id'] = id;
     data['prod_shop_id'] = prodShopId;
     data['prod_cat_id'] = prodCatId;
+    data['gst'] = gst;
     data['prod_name'] = prodName;
     data['prod_image'] = prodImage;
     data['prod_desc'] = prodDesc;
@@ -111,6 +116,7 @@ class Products {
     data['product_status'] = productStatus;
     data['product_long_desc'] = productLongDesc;
     data['product_banner_image'] = productBannerImage;
+    data["product_faq"] = List<ProductFaq>.from(productFaq!.map((x) => x.toJson()));
     if (productShop != null) {
       data['product_shop'] = productShop!.toJson();
     }
@@ -128,14 +134,7 @@ class ProductShop {
   int? shopStatus;
   int? masterCategorieId;
 
-  ProductShop(
-      {this.id,
-      this.shopName,
-      this.shopImage,
-      this.shopDesc,
-      this.shopRating,
-      this.shopStatus,
-      this.masterCategorieId});
+  ProductShop({this.id, this.shopName, this.shopImage, this.shopDesc, this.shopRating, this.shopStatus, this.masterCategorieId});
 
   ProductShop.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -158,4 +157,32 @@ class ProductShop {
     data['master_categorie_id'] = masterCategorieId;
     return data;
   }
+}
+
+class ProductFaq {
+  int? productId;
+  String? title;
+  String? description;
+  bool? isExpand;
+
+  ProductFaq({
+    this.productId,
+    this.title,
+    this.description,
+    this.isExpand,
+  });
+
+  factory ProductFaq.fromJson(Map<String, dynamic> json) => ProductFaq(
+        productId: json["product_id"],
+        title: json["title"],
+        description: json["description"],
+        isExpand: json["isExpand"] ?? false,
+      );
+
+  Map<String, dynamic> toJson() => {
+        "product_id": productId,
+        "title": title,
+        "description": description,
+        "isExpand": isExpand,
+      };
 }

@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 
 import '../../../common/appbar.dart';
 import '../../../common/colors.dart';
+import '../../../common/routes.dart';
 import '../../../common/text_field_custom.dart';
 import '../../../gen/assets.gen.dart';
 import 'donation_detail_controller.dart';
@@ -26,33 +27,38 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                 borderRadius: BorderRadius.all(Radius.circular(25.0)),
               ),
               onPressed: () {},
-              color: AppColors.lightYellow,
+              color: appColors.guideColor,
               child: Text(
-                "Donate Now",
+                "donateNow".tr,
                 style: TextStyle(
                   fontWeight: FontWeight.w600,
                   fontSize: 20.sp,
-                  color: AppColors.brownColour,
+                  color: appColors.brownColour,
                 ),
               )),
         ),
       ),
       appBar: commonDetailAppbar(
           title: "Donation For Cow",
-          trailingWidget: Container(
-            margin: EdgeInsets.only(right: 16.w),
-            width: 47.w,
-            height: 26.h,
-            decoration: BoxDecoration(
-                border: Border.all(color: AppColors.darkBlue, width: 1),
-                borderRadius: BorderRadius.circular(10)),
-            child: Center(
-              child: Text("₹500",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 12.sp,
-                    color: AppColors.darkBlue,
-                  )),
+          trailingWidget: GestureDetector(
+            onTap: () {
+              Get.toNamed(RouteName.walletScreenUI);
+            },
+            child: Container(
+              margin: EdgeInsets.only(right: 16.w),
+              width: 47.w,
+              height: 26.h,
+              decoration: BoxDecoration(
+                  border: Border.all(color: appColors.darkBlue, width: 1),
+                  borderRadius: BorderRadius.circular(10)),
+              child: Center(
+                child: Text("₹500",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 12.sp,
+                      color: appColors.darkBlue,
+                    )),
+              ),
             ),
           )),
       body: SingleChildScrollView(
@@ -68,61 +74,45 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 20.sp,
-                    color: AppColors.darkBlue,
+                    color: appColors.darkBlue,
                   )),
               SizedBox(height: 20.h),
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  MaterialButton(
-                      height: 68,
-                      minWidth: 108.w,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                      ),
-                      onPressed: () {},
-                      color: AppColors.white,
-                      child: Text(
-                        "₹100",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 24.sp,
-                          color: AppColors.darkBlue,
-                        ),
-                      )),
-                  MaterialButton(
-                      height: 68,
-                      minWidth: 108.w,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                      ),
-                      onPressed: () {},
-                      color: AppColors.white,
-                      child: Text(
-                        "₹200",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 24.sp,
-                          color: AppColors.darkBlue,
-                        ),
-                      )),
-                  MaterialButton(
-                      height: 68,
-                      minWidth: 108.w,
-                      shape: const RoundedRectangleBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15.0)),
-                      ),
-                      onPressed: () {},
-                      color: AppColors.white,
-                      child: Text(
-                        "₹500",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 24.sp,
-                          color: AppColors.darkBlue,
-                        ),
-                      )),
-                ],
+                children: List.generate(
+                  3,
+                  (index) => Expanded(
+                    child: GestureDetector(
+                      child: Container(
+                          margin: EdgeInsets.symmetric(horizontal: 5.w),
+                          alignment: Alignment.center,
+                          height: 68,
+                          decoration:  BoxDecoration(
+                              color: appColors.white,
+                              borderRadius: const BorderRadius.all(
+                                Radius.circular(15.0),
+                              ),
+                              boxShadow: [
+                                BoxShadow(
+                                  color: appColors.darkBlue.withOpacity(0.15),
+                                  offset: const Offset(0, 1),
+                                  blurRadius: 3,
+                                )
+                              ]),
+                          child: Text(
+                            index == 0
+                                ? "₹100"
+                                : index == 1
+                                    ? "200"
+                                    : "500",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 24.sp,
+                              color: appColors.darkBlue,
+                            ),
+                          )),
+                    ),
+                  ),
+                ),
               ),
               SizedBox(height: 20.h),
               Row(
@@ -132,7 +122,7 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                     child: Container(
                       height: 1.h,
                       width: Get.width,
-                      color: AppColors.darkBlue.withOpacity(.2),
+                      color: appColors.darkBlue.withOpacity(.2),
                     ),
                   ),
                   SizedBox(width: 16.w),
@@ -141,7 +131,7 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 24.sp,
-                      color: AppColors.darkBlue,
+                      color: appColors.darkBlue,
                     ),
                   ),
                   SizedBox(width: 16.w),
@@ -149,37 +139,37 @@ class DonationDetailUi extends GetView<DonationDetailController> {
                     child: Container(
                       height: 1.h,
                       width: Get.width,
-                      color: AppColors.darkBlue.withOpacity(.2),
+                      color: appColors.darkBlue.withOpacity(.2),
                     ),
                   ),
                 ],
               ),
               SizedBox(height: 20.h),
-              Text("Enter Custom Amount",
+              Text("enterCustomAmount".tr,
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
                     fontSize: 20.sp,
-                    color: AppColors.darkBlue,
+                    color: appColors.darkBlue,
                   )),
               SizedBox(height: 20.h),
               AppTextField(
                 textInputType: TextInputType.number,
-                hintText: "Enter Amount",
+                hintText: "enterAmount".tr,
                 prefixIcon: Text("₹",
                     style: TextStyle(
                       fontWeight: FontWeight.w500,
                       fontSize: 20.sp,
-                      color: AppColors.darkBlue,
+                      color: appColors.darkBlue,
                     )),
                 onTap: () {},
               ),
               SizedBox(height: 20.h),
               Text(
-                  "orem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
+                  "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged",
                   style: TextStyle(
                     fontWeight: FontWeight.w400,
                     fontSize: 14.sp,
-                    color: AppColors.darkBlue,
+                    color: appColors.darkBlue,
                   )),
               SizedBox(height: 20.h),
             ],
