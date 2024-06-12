@@ -3068,26 +3068,26 @@ class _LivePage extends State<LiveDharamScreen>
           },
         ),
         host: ZegoLiveStreamingCoHostHostEvents(
-          onRequestReceived: (ZegoUIKitUser user) async {
-            showNotifOverlay(user: user, msg: "onCoHostRequestReceived");
+          onRequestReceived: (ZegoLiveStreamingCoHostHostEventRequestReceivedData user) async {
+            showNotifOverlay(user: user.audience, msg: "onCoHostRequestReceived");
 
             if (_controller.extendTimeWidgetVisible) {
               _controller.extendTimeWidgetVisible = false;
             } else {}
 
             await onCoHostRequest(
-              user: user,
-              userId: user.id,
-              userName: user.name,
+              user: user.audience,
+              userId: user.audience.id,
+              userName: user.audience.name,
               avatar: "https://robohash.org/avatarWidget",
             );
           },
-          onRequestCanceled: (ZegoUIKitUser user) async {
-            showNotifOverlay(user: user, msg: "onCoHostRequestCanceled");
+          onRequestCanceled: (ZegoLiveStreamingCoHostHostEventRequestCanceledData user) async {
+            showNotifOverlay(user: user.audience, msg: "onCoHostRequestCanceled");
             // await onCoHostRequestCanceled(user);
           },
-          onRequestTimeout: (ZegoUIKitUser user) {
-            showNotifOverlay(user: user, msg: "onCoHostRequestTimeout");
+          onRequestTimeout: (ZegoLiveStreamingCoHostHostEventRequestTimeoutData user) {
+            showNotifOverlay(user: user.audience, msg: "onCoHostRequestTimeout");
           },
           onActionAcceptRequest: () {
             showNotifOverlay(user: null, msg: "onActionAcceptCoHostRequest");
@@ -3095,10 +3095,10 @@ class _LivePage extends State<LiveDharamScreen>
           onActionRefuseRequest: () {
             showNotifOverlay(user: null, msg: "onActionRefuseCoHostRequest");
           },
-          onInvitationSent: (ZegoUIKitUser user) async {
-            showNotifOverlay(user: user, msg: "onCoHostInvitationSent");
+          onInvitationSent: (ZegoLiveStreamingCoHostHostEventInvitationSentData user) async {
+            showNotifOverlay(user: user.audience, msg: "onCoHostInvitationSent");
             await _controller.addUpdateToWaitList(
-              userId: user.id,
+              userId: user.audience.id,
               callType: "",
               isEngaded: false,
               isRequest: false,
@@ -3106,8 +3106,8 @@ class _LivePage extends State<LiveDharamScreen>
               isForAdd: false,
             );
           },
-          onInvitationTimeout: (ZegoUIKitUser user) {
-            showNotifOverlay(user: user, msg: "onCoHostInvitationTimeout");
+          onInvitationTimeout: (ZegoLiveStreamingCoHostHostEventInvitationTimeoutData user) {
+            showNotifOverlay(user: user.audience, msg: "onCoHostInvitationTimeout");
 
             if (isAcceptPopupOpen) {
               Get.back();
@@ -3119,27 +3119,27 @@ class _LivePage extends State<LiveDharamScreen>
               isForFailure: true,
             );
           },
-          onInvitationAccepted: (ZegoUIKitUser user) {
-            showNotifOverlay(user: user, msg: "onCoHostInvitationAccepted");
+          onInvitationAccepted: (ZegoLiveStreamingCoHostHostEventInvitationAcceptedData user) {
+            showNotifOverlay(user: user.audience, msg: "onCoHostInvitationAccepted");
           },
-          onInvitationRefused: (ZegoUIKitUser user) {
-            showNotifOverlay(user: user, msg: "onCoHostInvitationRefused");
+          onInvitationRefused: (ZegoLiveStreamingCoHostHostEventInvitationRefusedData user) {
+            showNotifOverlay(user: user.audience, msg: "onCoHostInvitationRefused");
 
             if (isAcceptPopupOpen) {
               Get.back();
             } else {}
             print("successAndFailureCallBack");
-            print(user.id);
+            print(user.audience.id);
             FirebaseDatabase.instance
                 .ref()
                 .child(livePath)
                 .child(_controller.liveId)
                 .child("realTime")
                 .child("waitList")
-                .child(user.id)
+                .child(user.audience.id)
                 .remove();
             successAndFailureCallBack(
-              message: "${user.name} refused to take the call",
+              message: "${user.audience.name} refused to take the call",
               isForSuccess: false,
               isForFailure: true,
             );
@@ -3155,14 +3155,14 @@ class _LivePage extends State<LiveDharamScreen>
           onRequestTimeout: () {
             showNotifOverlay(user: null, msg: "onCoHostRequestTimeout");
           },
-          onRequestAccepted: () {
+          onRequestAccepted: (ZegoLiveStreamingCoHostAudienceEventRequestAcceptedData user) {
             showNotifOverlay(user: null, msg: "onCoHostRequestAccepted");
           },
-          onRequestRefused: () {
+          onRequestRefused: (ZegoLiveStreamingCoHostAudienceEventRequestRefusedData user) {
             showNotifOverlay(user: null, msg: "onCoHostRequestRefused");
           },
-          onInvitationReceived: (ZegoUIKitUser user) {
-            showNotifOverlay(user: user, msg: "onCoHostInvitationReceived");
+          onInvitationReceived: (ZegoLiveStreamingCoHostAudienceEventRequestReceivedData user) {
+            showNotifOverlay(user: user.host, msg: "onCoHostInvitationReceived");
           },
           onInvitationTimeout: () {
             showNotifOverlay(user: null, msg: "onCoHostInvitationTimeout");

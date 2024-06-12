@@ -1,11 +1,14 @@
 import 'package:divine_astrologer/common/common_image_view.dart';
+import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
+import 'package:divine_astrologer/model/ChatOrderResponse.dart';
 import 'package:divine_astrologer/pages/home/home_controller.dart';
 import 'package:divine_astrologer/pages/performance/performance_controller.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:divine_astrologer/screens/chat_assistance/chat_assistance_controller.dart';
 import 'package:divine_astrologer/screens/dashboard/widgets/rejoin_widget.dart';
+import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart';
 import 'package:divine_astrologer/screens/side_menu/wait_list/wait_list_controller.dart';
 import 'package:divine_astrologer/screens/side_menu/wait_list/wait_list_ui.dart';
 import 'package:flutter/material.dart';
@@ -260,6 +263,10 @@ class DashboardScreen extends GetView<DashboardController> {
                                 ],
                               ),
                             ))),
+                    controller.chatOrderData != null
+                        ? acceptBottomBar(
+                            chatOrderData: controller.chatOrderData)
+                        : SizedBox(),
                     rejoinVisibility(),
                   ],
                 );
@@ -289,6 +296,97 @@ class DashboardScreen extends GetView<DashboardController> {
               )
             : const SizedBox();
       },
+    );
+  }
+
+  Widget acceptBottomBar({ChatOrderData? chatOrderData}) {
+    return Positioned(
+      bottom: kToolbarHeight + 20.w,
+      left: 0,
+      right: 0,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.sp, vertical: 8.sp),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10.r),
+          color: appColors.white,
+          border: Border.all(
+            color: Colors.grey, // Choose your border color here
+            width: 2, // Adjust the width as needed
+          ),
+          boxShadow: [
+            BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 3.0,
+                offset: const Offset(3, 0)),
+          ],
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              flex: 6,
+              child: Wrap(direction: Axis.horizontal, children: [
+                CustomText('Your Customer ', fontSize: 10.sp),
+                CustomText(chatOrderData!.getCustomers.name,
+                    fontSize: 10.sp,
+                    fontColor: appColors.brown,
+                    fontWeight: FontWeight.w700),
+                CustomText(' already joined', fontSize: 10.sp),
+                SizedBox(width: 8.w),
+              ]),
+            ),
+            Card(
+              color: appColors.guideColor,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              elevation: 2,
+              child: InkWell(
+                onTap: () async {
+                  debugPrint('rejoinChatIcon');
+
+                  await acceptOrRejectChat(
+                    orderId: controller.chatOrderData?.orderId,
+                    queueId: controller.chatOrderData?.id,
+                  );
+                  await AppFirebaseService()
+                      .database
+                      .child("order/${controller.chatOrderData?.orderId}")
+                      .update({"status": "1"});
+                  await controller.getOrderFromApi();
+                  // Get.toNamed(RouteName.chatMessageWithSocketUI);
+                },
+                child: Padding(
+                  padding: EdgeInsets.all(10.0.sp), // Adjust padding as needed
+                  child: Row(
+                    children: [
+                      CustomText(
+                        "Accept Chat",
+                        fontSize: 12.sp,
+                        fontColor: appColors.white,
+                        fontWeight: FontWeight.w600,
+                        textAlign: TextAlign.center,
+                      ),
+                      SizedBox(width: 5.w),
+                      Assets.svg.rejoin.svg(height: 12.sp)
+                    ],
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(width: 20.w),
+            SizedBox(
+              height: 32,
+              width: 32,
+              child: CustomImageWidget(
+                imageUrl:
+                    "${preferenceService?.getAmazonUrl()}${chatOrderData!.getCustomers.avatar}",
+                rounded: true,
+                typeEnum: TypeEnum.user,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 

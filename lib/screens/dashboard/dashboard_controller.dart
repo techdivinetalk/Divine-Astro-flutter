@@ -9,6 +9,7 @@ import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
+import 'package:divine_astrologer/model/ChatOrderResponse.dart';
 import 'package:divine_astrologer/model/constant_model_class.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
@@ -50,13 +51,16 @@ class DashboardController extends GetxController
   // StreamSubscription<DatabaseEvent>? realTimeListener;
   // StreamSubscription<DatabaseEvent>? astroChatListener;
   // Socket? socket;
+  ChatOrderData? chatOrderData;
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
+
   var commonConstants;
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
@@ -125,11 +129,9 @@ class DashboardController extends GetxController
     }
     await Future.delayed(const Duration(seconds: 3));
 
-    if(isTime.toString() == "1") {
+    if (isTime.toString() == "1") {
       compareTimes(commonConstants.data!.currentTime!.toInt());
-      print(DateTime
-          .now()
-          .millisecondsSinceEpoch / 1000);
+      print(DateTime.now().millisecondsSinceEpoch / 1000);
     }
   }
 
@@ -139,9 +141,8 @@ class DashboardController extends GetxController
       Permission.microphone,
     ].request();
     Get.back(); // Close the bottom sheet after requesting permissions
-    if(await FlutterOverlayWindow.isPermissionGranted() == false) {
-      await FlutterOverlayWindow
-          .requestPermission();
+    if (await FlutterOverlayWindow.isPermissionGranted() == false) {
+      await FlutterOverlayWindow.requestPermission();
     }
   }
 
@@ -150,7 +151,7 @@ class DashboardController extends GetxController
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
     checkPermissions();
- //   print("microphone ${await FlutterOverlayWindow.isPermissionGranted()}");
+    //   print("microphone ${await FlutterOverlayWindow.isPermissionGranted()}");
     print("beforeGoing 2 - ${preferenceService.getUserDetail()?.id}");
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
@@ -199,6 +200,7 @@ class DashboardController extends GetxController
     getConstantDetailsData();
     print("currentTime");
   }
+
   void compareTimes(int serverTime) {
     print("millisecondsSinceEpoch");
     print(isTime.toString());
@@ -209,17 +211,22 @@ class DashboardController extends GetxController
     int serverTimeMillis = serverTime * 1000;
 
     // Calculate the absolute difference in milliseconds
-    int difference = serverTimeMillis > localTime ? (serverTimeMillis - localTime).abs() : (localTime - serverTimeMillis).abs();
+    int difference = serverTimeMillis > localTime
+        ? (serverTimeMillis - localTime).abs()
+        : (localTime - serverTimeMillis).abs();
     print(serverTimeMillis);
     print("serverTimeMillis");
     // Check if the difference is less than 30 seconds (30000 milliseconds)
     if (difference > 30000) {
       print("if difference");
       showTimeDIffBottomSheet(Get.context!);
-    }else {
+    } else {
       print("else difference");
     }
   }
+
+
+
   void showTimeDIffBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
@@ -247,15 +254,14 @@ class DashboardController extends GetxController
                   Navigator.pop(context);
                 },
                 child: GestureDetector(
-                  onTap: () {
-                    const AndroidIntent intent = AndroidIntent(
-                      action: 'android.settings.DATE_SETTINGS',
-                      flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
-                    );
-                    intent.launch();
-                  },
-                    child: const Text('Change time')
-                ),
+                    onTap: () {
+                      const AndroidIntent intent = AndroidIntent(
+                        action: 'android.settings.DATE_SETTINGS',
+                        flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
+                      );
+                      intent.launch();
+                    },
+                    child: const Text('Change time')),
               ),
             ],
           ),
@@ -266,6 +272,10 @@ class DashboardController extends GetxController
     );
   }
 
+
+
+
+
   @override
   void onReady() {
     final socket = AppSocket();
@@ -275,14 +285,19 @@ class DashboardController extends GetxController
   }
 
   getOrderFromApi() async {
-
-      final data = await userRepository.getChatOrderDetails();
+    try {
+      ChatOrderResponse data = await userRepository.getChatOrderDetails();
       if (data.data != null) {
-        print("data.data!");
-        print(data.data!);
-
+        chatOrderData = data.data!;
+      } else {
+        chatOrderData = null;
       }
+      update();
+    } catch (e) {
+      print("getting error ${e}");
+    }
   }
+
   getConstantDetailsData() async {
     try {
       final data = await userRepository.constantDetailsData();

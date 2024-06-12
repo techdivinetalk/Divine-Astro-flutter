@@ -44,7 +44,7 @@ class ZegoService {
   RxBool isAstrologer = true.obs;
   RxBool isInCallScreen = true.obs;
 
-  void micTurnOnOff(){
+  void micTurnOnOff() {
     final ZegoUIKit instance = ZegoUIKit.instance;
     isMicOn(!isMicOn.value);
     debugPrint("isMicOn: ${isMicOn.value.toString()}");
@@ -82,15 +82,17 @@ class ZegoService {
       ),
       uiConfig: ZegoCallInvitationUIConfig(
         prebuiltWithSafeArea: false,
-        callingBackgroundBuilder: (
-          BuildContext context,
-          Size size,
-          ZegoCallingBackgroundBuilderInfo info,
-        ) {
-          return info.callType == ZegoCallType.voiceCall
-              ? backgroundImage(needBlendedColor: true)
-              : null;
-        },
+        invitee: ZegoCallInvitationInviteeUIConfig(
+          backgroundBuilder: (
+            BuildContext context,
+            Size size,
+            ZegoCallingBuilderInfo info,
+          ) {
+            return info.callType == ZegoCallInvitationType.voiceCall
+                ? backgroundImage(needBlendedColor: true)
+                : null;
+          },
+        ),
       ),
       // events: ZegoUIKitPrebuiltCallEvents(
       //   onCallEnd: (
@@ -113,21 +115,21 @@ class ZegoService {
         isMicOn.value = true;
 
         // if (Constants.isUploadMode) {
-          // ZegoUIKitPrebuiltCallController().audioVideo.microphone.turnOn(bool isOn, {String? userID});
+        // ZegoUIKitPrebuiltCallController().audioVideo.microphone.turnOn(bool isOn, {String? userID});
 
-          Future.delayed(
-            const Duration(milliseconds: 500),
-            () {
-              micTurnOnOff();
+        Future.delayed(
+          const Duration(milliseconds: 500),
+          () {
+            micTurnOnOff();
 
-              Future.delayed(
-                const Duration(milliseconds: 500),
-                () {
-                  micTurnOnOff();
-                },
-              );
-            },
-          );
+            Future.delayed(
+              const Duration(milliseconds: 500),
+              () {
+                micTurnOnOff();
+              },
+            );
+          },
+        );
         // }
 
         final Map map = json.decode(data.customData);
@@ -461,7 +463,7 @@ class ZegoService {
                   InkWell(
                     onTap: () {
                       // if (Constants.isUploadMode) {
-                        micTurnOnOff();
+                      micTurnOnOff();
                       // } else {
                       //   final ZegoUIKit instance = ZegoUIKit.instance;
                       //   isMicOn(!isMicOn.value);
@@ -506,7 +508,7 @@ class ZegoService {
                       InkWell(
                         onTap: () {
                           // if (Constants.isUploadMode) {
-                            micTurnOnOff();
+                          micTurnOnOff();
                           // } else {
                           //   final ZegoUIKit instance = ZegoUIKit.instance;
                           //   isMicOn(!isMicOn.value);

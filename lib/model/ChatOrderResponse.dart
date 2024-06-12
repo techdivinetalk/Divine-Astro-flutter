@@ -1,51 +1,33 @@
 import 'dart:convert';
 
 class ChatOrderResponse {
-  Data? data;
-  bool? success;
-  int? statusCode;
-  String? message;
+  final ChatOrderData? data;
+  final bool? success;
+  final int? statusCode;
+  final String? message;
 
-  ChatOrderResponse({this.data, this.success, this.statusCode, this.message});
+  ChatOrderResponse({
+    this.data,
+    this.success,
+    this.statusCode,
+    this.message,
+  });
 
-  ChatOrderResponse copyWith({
-    Data? data,
-    bool? success,
-    int? statusCode,
-    String? message,
-  }) =>
-      ChatOrderResponse(
-        data: data ?? this.data,
-        success: success ?? this.success,
-        statusCode: statusCode ?? this.statusCode,
-        message: message ?? this.message,
-      );
-
-  factory ChatOrderResponse.fromRawJson(String str) =>
-      ChatOrderResponse.fromJson(json.decode(str));
-
-  String toRawJson() => json.encode(toJson());
-
-  factory ChatOrderResponse.fromJson(Map<String, dynamic>? json) {
-    return ChatOrderResponse(
-      data: (json?['data'] as Map<String, dynamic>?) != null
-          ? Data.fromJson(json?['data'] as Map<String, dynamic>)
-          : null,
-      success: json?["success"],
-      statusCode: json?["status_code"],
-      message: json?["message"],
-    );
-  }
+  ChatOrderResponse.fromJson(Map<String, dynamic> json)
+      : data =  (json['data'] as Map<String,dynamic>?) != null ? ChatOrderData.fromJson(json['data'] as Map<String,dynamic>) : null,
+        success = json['success'] as bool?,
+        statusCode = json['status_code'] as int?,
+        message = json['message'] as String?;
 
   Map<String, dynamic> toJson() => {
-        "data": data?.toJson(),
-        "success": success,
-        "status_code": statusCode,
-        "message": message,
+        'data':  data?.toJson(),
+        'success': success,
+        'status_code': statusCode,
+        'message': message
       };
 }
 
-class Data {
+class ChatOrderData {
   int id;
   int customerId;
   int sequence;
@@ -56,7 +38,7 @@ class Data {
   String status;
   Customer getCustomers;
 
-  Data({
+  ChatOrderData({
     required this.id,
     required this.customerId,
     required this.sequence,
@@ -68,8 +50,8 @@ class Data {
     required this.getCustomers,
   });
 
-  factory Data.fromJson(Map<String, dynamic> json) {
-    return Data(
+  factory ChatOrderData.fromJson(Map<String, dynamic> json) {
+    return ChatOrderData(
       id: json['id'],
       customerId: json['customer_id'],
       sequence: json['sequence'],
