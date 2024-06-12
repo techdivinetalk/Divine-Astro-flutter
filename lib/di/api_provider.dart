@@ -86,7 +86,7 @@ class ApiProvider {
   final String getMessageTemplateForChatAssist =
       "getMessageTemplateForChatAssist";
   final String constantDetails = "constantDetails";
-  final String CurrentChatOrder = "getCurrentChatOrder";
+  final String currentChatOrder = "getCurrentChatOrder";
   final String getOrderHistoryUrl = "getOrderHistory";
   final String reviewReplyUrl = "reviewReply";
   final String astroNoticeBoard = "astroNoticeBoard";

@@ -569,11 +569,11 @@ class UserRepository extends ApiProvider {
     }
   }*/
 
-  Future<dynamic> getChatOrderDetails() async {
+  Future<ChatOrderResponse> getChatOrderDetails() async {
     try {
       Map<String, dynamic> param = new Map();
       final response = await post(
-        CurrentChatOrder,
+        currentChatOrder,
         headers: await getJsonHeaderURL(),
         body: jsonEncode(param).toString(),
       );
@@ -587,7 +587,7 @@ class UserRepository extends ApiProvider {
       log("CurrentChatOrder");
       if (response.statusCode == 200) {
         log("CurrentChatOrder-1");
-        final  chatOrderResponse =  ChatOrderResponse.fromJson(json.decode(response.body));
+        ChatOrderResponse  chatOrderResponse =  ChatOrderResponse.fromJson(json.decode(response.body));
         if (chatOrderResponse.statusCode == successResponse &&
             chatOrderResponse.success == true) {
           log("CurrentChatOrder-2");
