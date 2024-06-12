@@ -516,7 +516,7 @@ class _LivePage extends State<LiveDharamScreen>
                   ) +
                       ZegoBeautyPluginConfig.filterEffectsTypes(),
                 )
-                ..video = ZegoUIKitVideoConfig.preset1080P()
+                ..video = ZegoUIKitVideoConfig.preset540P()
                 ..preview.showPreviewForHost = false
               // ..audioVideoView.isVideoMirror = false
                 ..coHost.maxCoHostCount = 1
