@@ -126,6 +126,60 @@ class _LivePage extends State<LiveDharamScreen>
         );
       },
     );
+    // var livePath = "live";
+    // if(kDebugMode){
+    //   livePath = "liveTest";
+    // }
+    // FirebaseDatabase.instance.ref()
+    //     .child(livePath)
+    //     .child(_controller.liveId)
+    //     .onChildChanged
+    //     .listen(
+    //       (event) async {
+    //     final DataSnapshot dataSnapshot = event.snapshot;
+    //     print("dataSnapshot-changed");
+    //     print(dataSnapshot.key);
+    //     print(dataSnapshot.value);
+    //     switch (dataSnapshot.key) {
+    //       case "blockList":
+    //         _controller.firebaseBlockUsersIds =
+    //         dataSnapshot.value as List<dynamic>;
+    //         break;
+    //       case "order":
+    //         print("order-1");
+    //         var orderNode = dataSnapshot.value as Map<dynamic, dynamic>;
+    //         _controller.orderModel = _controller.getOrderModel(orderNode);
+    //         print("order-2");
+    //         _controller.currentCaller =
+    //             _controller.getOrderModelGeneric(orderNode, forMe: true, type: "fromevent");
+    //         print("order-3");
+    //         newTimerWidget();
+    //         break;
+    //       case "waitList":
+    //         waitList.add(dataSnapshot.value as Map<dynamic, dynamic>);
+    //         print(waitList.toString());
+    //         engaging(_controller.upcomingUser(dataSnapshot.value as Map<dynamic, dynamic>));
+    //         break;
+    //     }
+    //   },
+    // );
+    // FirebaseDatabase.instance.ref()
+    //     .child(kDebugMode ? "liveTest" : livePath)
+    //     .child(_controller.liveId)
+    //     .onChildAdded
+    //     .listen(
+    //   (event) async {
+    //     final DataSnapshot dataSnapshot = event.snapshot;
+    //     print("dataSnapshot-added");
+    //     print(dataSnapshot.key);
+    //     // await _controller.eventListner(
+    //     //   snapshot: dataSnapshot,
+    //     //   engaging: engaging,
+    //     //   timer: newTimerWidget(),
+    //     // );
+    //   },
+    // );
+
     keyboardVisibilityController.onChange.listen(
       (bool visible) {
         if (visible == false && _isKeyboardSheetOpen == true) {
@@ -3068,26 +3122,26 @@ class _LivePage extends State<LiveDharamScreen>
           },
         ),
         host: ZegoLiveStreamingCoHostHostEvents(
-          onRequestReceived: (ZegoLiveStreamingCoHostHostEventRequestReceivedData user) async {
-            showNotifOverlay(user: user.audience, msg: "onCoHostRequestReceived");
+          onRequestReceived: (ZegoUIKitUser user) async {
+            showNotifOverlay(user: user, msg: "onCoHostRequestReceived");
 
             if (_controller.extendTimeWidgetVisible) {
               _controller.extendTimeWidgetVisible = false;
             } else {}
 
             await onCoHostRequest(
-              user: user.audience,
-              userId: user.audience.id,
-              userName: user.audience.name,
+              user: user,
+              userId: user.id,
+              userName: user.name,
               avatar: "https://robohash.org/avatarWidget",
             );
           },
-          onRequestCanceled: (ZegoLiveStreamingCoHostHostEventRequestCanceledData user) async {
-            showNotifOverlay(user: user.audience, msg: "onCoHostRequestCanceled");
+          onRequestCanceled: (ZegoUIKitUser user) async {
+            showNotifOverlay(user: user, msg: "onCoHostRequestCanceled");
             // await onCoHostRequestCanceled(user);
           },
-          onRequestTimeout: (ZegoLiveStreamingCoHostHostEventRequestTimeoutData user) {
-            showNotifOverlay(user: user.audience, msg: "onCoHostRequestTimeout");
+          onRequestTimeout: (ZegoUIKitUser user) {
+            showNotifOverlay(user: user, msg: "onCoHostRequestTimeout");
           },
           onActionAcceptRequest: () {
             showNotifOverlay(user: null, msg: "onActionAcceptCoHostRequest");
@@ -3095,10 +3149,10 @@ class _LivePage extends State<LiveDharamScreen>
           onActionRefuseRequest: () {
             showNotifOverlay(user: null, msg: "onActionRefuseCoHostRequest");
           },
-          onInvitationSent: (ZegoLiveStreamingCoHostHostEventInvitationSentData user) async {
-            showNotifOverlay(user: user.audience, msg: "onCoHostInvitationSent");
+          onInvitationSent: (ZegoUIKitUser user) async {
+            showNotifOverlay(user: user, msg: "onCoHostInvitationSent");
             await _controller.addUpdateToWaitList(
-              userId: user.audience.id,
+              userId: user.id,
               callType: "",
               isEngaded: false,
               isRequest: false,
@@ -3106,40 +3160,31 @@ class _LivePage extends State<LiveDharamScreen>
               isForAdd: false,
             );
           },
-          onInvitationTimeout: (ZegoLiveStreamingCoHostHostEventInvitationTimeoutData user) {
-            showNotifOverlay(user: user.audience, msg: "onCoHostInvitationTimeout");
+          onInvitationTimeout: (ZegoUIKitUser user) {
+            showNotifOverlay(user: user, msg: "onCoHostInvitationTimeout");
 
             if (isAcceptPopupOpen) {
               Get.back();
             } else {}
 
             successAndFailureCallBack(
-              message: "Removed from waitList",
+              message: "${user.name} timeout to take the call",
               isForSuccess: false,
               isForFailure: true,
             );
           },
-          onInvitationAccepted: (ZegoLiveStreamingCoHostHostEventInvitationAcceptedData user) {
-            showNotifOverlay(user: user.audience, msg: "onCoHostInvitationAccepted");
+          onInvitationAccepted: (ZegoUIKitUser user) {
+            showNotifOverlay(user: user, msg: "onCoHostInvitationAccepted");
           },
-          onInvitationRefused: (ZegoLiveStreamingCoHostHostEventInvitationRefusedData user) {
-            showNotifOverlay(user: user.audience, msg: "onCoHostInvitationRefused");
+          onInvitationRefused: (ZegoUIKitUser user) {
+            showNotifOverlay(user: user, msg: "onCoHostInvitationRefused");
 
             if (isAcceptPopupOpen) {
               Get.back();
             } else {}
-            print("successAndFailureCallBack");
-            print(user.audience.id);
-            FirebaseDatabase.instance
-                .ref()
-                .child(livePath)
-                .child(_controller.liveId)
-                .child("realTime")
-                .child("waitList")
-                .child(user.audience.id)
-                .remove();
+
             successAndFailureCallBack(
-              message: "${user.audience.name} refused to take the call",
+              message: "${user.name} refused to take the call",
               isForSuccess: false,
               isForFailure: true,
             );
@@ -3155,14 +3200,14 @@ class _LivePage extends State<LiveDharamScreen>
           onRequestTimeout: () {
             showNotifOverlay(user: null, msg: "onCoHostRequestTimeout");
           },
-          onRequestAccepted: (ZegoLiveStreamingCoHostAudienceEventRequestAcceptedData user) {
+          onRequestAccepted: () {
             showNotifOverlay(user: null, msg: "onCoHostRequestAccepted");
           },
-          onRequestRefused: (ZegoLiveStreamingCoHostAudienceEventRequestRefusedData user) {
+          onRequestRefused: () {
             showNotifOverlay(user: null, msg: "onCoHostRequestRefused");
           },
-          onInvitationReceived: (ZegoLiveStreamingCoHostAudienceEventRequestReceivedData user) {
-            showNotifOverlay(user: user.host, msg: "onCoHostInvitationReceived");
+          onInvitationReceived: (ZegoUIKitUser user) {
+            showNotifOverlay(user: user, msg: "onCoHostInvitationReceived");
           },
           onInvitationTimeout: () {
             showNotifOverlay(user: null, msg: "onCoHostInvitationTimeout");
