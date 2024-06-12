@@ -441,12 +441,24 @@ class _LivePage extends State<LiveDharamScreen>
     return Future<void>.value();
   }
 
+  Future<void> rebuildInit() async {
+    print("Rebuilding-Init");
+    FirebaseDatabase.instance
+        .ref()
+        .child(livePath)
+        .child(_controller.liveId).child("realTime").child("waitList").remove();
+    _controller.liveId = "";
+    setState(() {});
+     _controller.liveId = preferenceService.getUserDetail()!.id.toString();
+   _controller.onInit();
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     //
     LiveGlobalSingleton().buildContext = context;
     //
-
     // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
@@ -481,7 +493,8 @@ class _LivePage extends State<LiveDharamScreen>
                       ..coHost.maxCoHostCount = 1
                       ..confirmDialogInfo = null
                       ..coHost.disableCoHostInvitationReceivedDialog = true
-                      ..audioVideoView = ZegoLiveStreamingAudioVideoViewConfig(
+                      ..audioVideoView =
+                          ZegoLiveStreamingAudioVideoViewConfig(
                         showUserNameOnView: false,
                         showAvatarInAudioMode: true,
                         isVideoMirror: false,
@@ -781,7 +794,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget appBarWidget() {
     return SizedBox(
-      height: 32 + 100,
+      height: 160,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -808,6 +821,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   OverlayEntry? _overlayEntry;
   Map<String, dynamic> svgaUrls = {};
+
   Widget newLeaderboard() {
     if (_controller.subscription == null) {
       print("Animation -url ${_controller.liveId}");
@@ -951,12 +965,12 @@ class _LivePage extends State<LiveDharamScreen>
                                           ? Colors.red
                                           // : isModerator
                                           //     ? appColors.guideColor
-                                              : msg.fullGiftImage.isNotEmpty
+                                          : msg.fullGiftImage.isNotEmpty
+                                              ? appColors.black
+                                              : msg.message.contains(
+                                                      "Started following")
                                                   ? appColors.black
-                                                  : msg.message.contains(
-                                                          "Started following")
-                                                      ? appColors.black
-                                                      : Colors.white,
+                                                  : Colors.white,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -973,12 +987,12 @@ class _LivePage extends State<LiveDharamScreen>
                                             ? Colors.red
                                             // : isModerator
                                             //     ? appColors.guideColor
-                                                : msg.fullGiftImage.isNotEmpty
+                                            : msg.fullGiftImage.isNotEmpty
+                                                ? appColors.black
+                                                : msg.message.contains(
+                                                        "Started following")
                                                     ? appColors.black
-                                                    : msg.message.contains(
-                                                            "Started following")
-                                                        ? appColors.black
-                                                        : Colors.white,
+                                                    : Colors.white,
                                       ),
                                       // maxLines: 2,
                                       // overflow: TextOverflow.ellipsis,
@@ -2359,6 +2373,23 @@ class _LivePage extends State<LiveDharamScreen>
           mainAxisSize: MainAxisSize.min,
           children: [
             InkWell(
+              onTap: (){
+                rebuildInit();
+              },
+              child: SizedBox(
+                height: 32,
+                width: 32,
+                child: Padding(
+                  // padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(0.0),
+                  child: Image.asset(
+                      "assets/images/refresh.png"
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+            InkWell(
               onTap: () async {
                 final ZegoUIKit instance = ZegoUIKit.instance;
                 _controller.isFront = !_controller.isFront;
@@ -3190,14 +3221,13 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-
   Future<void> onCoHostRequest({
     required ZegoUIKitUser user,
     required String userId,
     required String userName,
     required String avatar,
   }) async {
-    if(_controller.currentWaitList == _controller.waitListModel[0].id){
+    if (_controller.currentWaitList == _controller.waitListModel[0].id) {
       return;
     }
     _controller.currentWaitList = _controller.waitListModel[0].id;
