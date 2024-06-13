@@ -13,30 +13,29 @@ import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/custom_widgets.dart";
 import "package:divine_astrologer/common/message_view.dart";
+import "package:divine_astrologer/common/permission_handler.dart";
 
 import "package:divine_astrologer/common/routes.dart";
 
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/gen/assets.gen.dart";
+import "package:divine_astrologer/gen/fonts.gen.dart";
 import "package:divine_astrologer/model/chat_offline_model.dart";
-import "package:divine_astrologer/screens/chat_message_with_socket/custom_puja/saved_remedies.dart";
-import "package:divine_astrologer/tarotCard/FlutterCarousel.dart";
 import "package:divine_astrologer/zego_call/zego_service.dart";
 import "package:emoji_picker_flutter/emoji_picker_flutter.dart";
 import "package:firebase_database/firebase_database.dart";
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
-import "package:flutter/services.dart";
-import "package:flutter/widgets.dart";
 
 import "package:flutter_screenutil/flutter_screenutil.dart";
+import "package:flutter_speed_dial/flutter_speed_dial.dart";
 import "package:flutter_svg/svg.dart";
 import "package:get/get.dart";
 
 import "package:lottie/lottie.dart";
+import "package:permission_handler/permission_handler.dart";
 import "package:simple_html_css/simple_html_css.dart";
 
-
+import "../../common/common_bottomsheet.dart";
 import "../../model/message_template_response.dart";
 import "../live_dharam/widgets/custom_image_widget.dart";
 import "chat_message_with_socket_controller.dart";
@@ -44,12 +43,15 @@ import "chat_message_with_socket_controller.dart";
 class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   const ChatMessageWithSocketUI({super.key});
 
+
+
   @override
   Widget build(BuildContext context) {
     controller.setContext(context);
     List<String> myList = [];
     return Scaffold(
       // resizeToAvoidBottomInset: true,
+
       body: GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
         return Stack(
           children: [
@@ -57,14 +59,11 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
               width: MediaQuery.of(context).size.width,
               height: double.infinity,
               fit: BoxFit.cover,
+              color: appColors.white,
             ),
             Column(
               children: [
                 AstrologerChatAppBar(),
-                // permissionRequestWidget(),
-                controller.noticeDataChat.isNotEmpty
-                    ? const SizedBox(height: 10)
-                    : const SizedBox.shrink(),
                 controller.noticeDataChat.isNotEmpty
                     ? CarouselSlider(
                         options: CarouselOptions(
@@ -77,32 +76,22 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           return Builder(
                             builder: (BuildContext context) {
                               return Container(
-                                  clipBehavior: Clip.none,
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  width: MediaQuery.of(context).size.width,
-                                  alignment: Alignment.center,
-                                  decoration: BoxDecoration(
-                                      color: appColors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: appColors.textColor
-                                              .withOpacity(0.4),
-                                          blurRadius: 3,
-                                          offset: const Offset(0, 1),
-                                        )
-                                      ],
-                                      // border:
-                                      //     Border.all(color: appColors.red, width: 2),
-                                      borderRadius: BorderRadius.circular(20)),
-                                  child: RichText(
-                                    textAlign: TextAlign.center,
-                                    text: HTML.toTextSpan(
-                                        context, i.description ?? ""),
-                                    maxLines: 2,
-                                  ));
+                                width: double.infinity,
+                                margin: const EdgeInsets.symmetric(horizontal: 10),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: const Color(0xffDA2439)),
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                alignment: Alignment.center,
+                                child: RichText(
+                                  textAlign: TextAlign.center,
+                                  text: HTML.toTextSpan(
+                                      context, i.description ?? ""),
+                                  maxLines: 2,
+                                ),
+                              );
                             },
                           );
                         }).toList(),
@@ -136,7 +125,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               children: [
                                 Padding(
                                   padding: EdgeInsets.symmetric(
-                                      vertical: 4.h, horizontal: 12.w),
+                                      vertical: 4.h, horizontal: 10.w),
                                   child: MessageView(
                                     index: index,
                                     nextChatMessage: index ==
@@ -144,8 +133,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                         ? controller.chatMessages[index]
                                         : controller.chatMessages[index + 1],
                                     chatMessage: chatMessage,
-                                    /*  yourMessage: "${chatMessage.senderId.toString()}" ==
-                                              "${preferenceService.getUserDetail()!.id.toString()}",*/
                                     yourMessage: chatMessage.msgSendBy == "1",
                                     userName: controller.customerName.value,
                                     unreadMessage:
@@ -826,207 +813,412 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             mainAxisSize: MainAxisSize.min,
             children: [
-              Stack(
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    children: [
-                      Expanded(
-                        child: AnimatedSwitcher(
-                          duration: const Duration(milliseconds: 200),
-                          child: controller.isRecording.value
-                              ? AudioWaveforms(
-                                  enableGesture: true,
-                                  size: Size(
-                                      MediaQuery.of(Get.context!).size.width,
-                                      50),
-                                  recorderController:
-                                      controller.recorderController!,
-                                  waveStyle: WaveStyle(
-                                    waveColor: appColors.guideColor,
-                                    extendWaveform: true,
-                                    showMiddleLine: false,
-                                  ),
-                                  decoration: BoxDecoration(
-                                      color: appColors.white,
-                                      borderRadius: BorderRadius.circular(30),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color:
-                                                Colors.black.withOpacity(0.3),
-                                            blurRadius: 3.0,
-                                            offset: const Offset(0.3, 3.0))
-                                      ]),
-                                  padding: const EdgeInsets.only(left: 18),
-                                  margin: const EdgeInsets.only(left: 15),
-                                )
-                              : Container(
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(30),
-                                      boxShadow: [
-                                        BoxShadow(
-                                            color:
-                                                Colors.black.withOpacity(0.3),
-                                            blurRadius: 3.0,
-                                            offset: const Offset(0.3, 3.0))
-                                      ]),
-                                  child: TextFormField(
-                                    controller: controller.messageController,
-                                    focusNode: controller.focusNode,
-                                    keyboardType: TextInputType.text,
-                                    minLines: 1,
-                                    maxLines: 3,
-                                    onTap: () {
-                                      if (controller.isEmojiShowing.value) {
-                                        controller.isEmojiShowing.value = false;
-                                      }
+                  Expanded(
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 200),
+                      child: controller.isRecording.value
+                          ? AudioWaveforms(
+                              enableGesture: true,
+                              size: Size(
+                                  MediaQuery.of(Get.context!).size.width, 36),
+                              recorderController:
+                                  controller.recorderController!,
+                              waveStyle: WaveStyle(
+                                waveColor: appColors.guideColor,
+                                extendWaveform: true,
+                                showMiddleLine: false,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xffF3F3F3),
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              padding: const EdgeInsets.only(left: 18),
+                              margin: const EdgeInsets.only(left: 15),
+                            )
+                          : Container(
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              height: 44,
+                              child: TextFormField(
+                                controller: controller.messageController,
+                                keyboardType: TextInputType.text,
+                                // expands: true,
+                                minLines: 1,
+                                maxLines: 3,
+                                style: const TextStyle(
+                                  fontFamily: FontFamily.metropolis,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                                onTap: () {
+                                  if (controller.isEmojiShowing.value) {
+                                    controller.isEmojiShowing.value = false;
+                                  }
+                                },
+                                scrollController:
+                                    controller.typingScrollController,
+                                onChanged: (value) {
+                                  controller.tyingSocket();
+                                },
+                                decoration: InputDecoration(
+                                  hintText: "Type something".tr,
+                                  isDense: true,
+                                  helperStyle: AppTextStyle.textStyle16(),
+                                  fillColor: Color(0xffF3F3F3),
+                                  hintStyle: AppTextStyle.textStyle16(
+                                      fontColor: appColors.grey),
+                                  hoverColor: appColors.white,
+                                  prefixIcon: InkWell(
+                                    onTap: () async {
+                                      controller.isEmojiShowing.value =
+                                          !controller.isEmojiShowing.value;
+                                      FocusManager.instance.primaryFocus
+                                          ?.unfocus();
                                     },
-                                    scrollController:
-                                        controller.typingScrollController,
-                                    onChanged: (value) {
-                                      controller.tyingSocket();
-                                      // controller.update();
-                                    },
-                                    decoration: InputDecoration(
-                                      hintText: "message".tr,
-                                      isDense: true,
-                                      helperStyle: AppTextStyle.textStyle16(),
-                                      fillColor: appColors.white,
-                                      hintStyle: AppTextStyle.textStyle16(
-                                          fontColor: appColors.grey),
-                                      hoverColor: appColors.white,
-                                      prefixIcon: InkWell(
-                                        onTap: () async {
-                                          controller.isEmojiShowing.value =
-                                              !controller.isEmojiShowing.value;
-                                          FocusManager.instance.primaryFocus
-                                              ?.unfocus();
-                                        },
-                                        child: Padding(
-                                          padding: EdgeInsets.fromLTRB(
-                                              6.w, 5.h, 6.w, 8.h),
-                                          child: Assets.images.icEmojiShare
-                                              .image(),
-                                        ),
-                                      ),
-                                      suffixIcon: !controller.hasMessage.value
-                                          ? InkWell(
-                                              onTap: () async {
-                                                showCurvedBottomSheet(context);
-
-                                                // Move focus to an invisible focus node to dismiss the keyboard
-                                                FocusScope.of(context)
-                                                    .requestFocus(FocusNode());
-                                                // if (controller.isOngoingChat.value) {
-
-                                                //   } else {
-                                                //     divineSnackBar(
-                                                //         data: "${'chatEnded'.tr}.", color: appColors.appYellowColour);
-                                                //   }
-                                              },
-                                              child: Padding(
-                                                padding: EdgeInsets.fromLTRB(
-                                                    0.w, 9.h, 10.w, 10.h),
-                                                child: Assets
-                                                    .images.icAttechment
-                                                    .svg(),
-                                              ),
-                                            )
-                                          : null,
-                                      filled: true,
-                                      enabledBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30.0.sp),
-                                          borderSide: BorderSide(
-                                            color: appColors.white,
-                                            width: 1.0,
-                                          )),
-                                      focusedBorder: OutlineInputBorder(
-                                          borderRadius:
-                                              BorderRadius.circular(30.0.sp),
-                                          borderSide: BorderSide(
-                                            color: appColors.guideColor,
-                                            width: 1.0,
-                                          )),
+                                    child: Padding(
+                                      padding: EdgeInsets.fromLTRB(
+                                          6.w, 5.h, 6.w, 8.h),
+                                      child: Assets.images.icEmojiShare.image(),
                                     ),
                                   ),
-                                ),
-                        ),
-                      ),
-                      const SizedBox(
-                        width: 10,
-                      ),
-                      controller.isRecording.value
-                          ? GestureDetector(
-                              onTap: () => controller.refreshWave(),
-                              child: Container(
-                                height: kToolbarHeight - Get.width * 0.008,
-                                width: kToolbarHeight - Get.width * 0.008,
-                                decoration: BoxDecoration(
-                                  color: appColors.guideColor,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Center(
-                                  child: Assets.images.icClose.svg(
-                                    height: 20,
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      vertical: 8.0, horizontal: 10.0),
+                                  suffixIcon: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      !controller.hasMessage.value
+                                          ? GestureDetector(
+                                              onTap: () {
+                                                controller.askForGift();
+                                              },
+                                              child: Center(
+                                                child: SvgPicture.asset(
+                                                    "assets/svg/chat_new_gift.svg"),
+                                              ))
+                                          : const SizedBox(),
+                                      const SizedBox(width: 10),
+                                    ],
                                   ),
+                                  filled: true,
+                                  enabledBorder: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(30.0.sp),
+                                      borderSide: BorderSide(
+                                        color: appColors.white,
+                                        width: 1.0,
+                                      )),
+                                  focusedBorder: OutlineInputBorder(
+                                      borderRadius:
+                                          BorderRadius.circular(30.0.sp),
+                                      borderSide: BorderSide(
+                                        color: appColors.transparent,
+                                        width: 1.0,
+                                      )),
                                 ),
-                              ))
-                          : Obx(() {
-                              return isGifts.value == 1
-                                  ? GestureDetector(
-                                      onTap: () {
-                                        controller.askForGift();
-                                      },
-                                      child: SvgPicture.asset(
-                                          'assets/svg/chat_gift.svg'),
-                                    )
-                                  : const SizedBox();
-                            }),
-                      const SizedBox(width: 10),
-                      controller.hasMessage.value == false
-                          ? GestureDetector(
-                              onTap: controller.startOrStopRecording,
-                              child: Container(
-                                height: kToolbarHeight - Get.width * 0.008,
-                                width: kToolbarHeight - Get.width * 0.008,
-                                margin: EdgeInsets.only(right: 10.h),
-                                decoration: BoxDecoration(
-                                  color: /*Color(0xFFFFD196)*/
-                                      appColors.guideColor,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    controller.isRecording.value
-                                        ? Icons.send
-                                        : Icons.mic,
-                                    color: appColors.white,
-                                  ),
-                                ),
-                              ))
-                          : InkWell(
-                              onTap: () {
-                                controller.sendMsg();
-                              },
-                              child: Container(
-                                height: kToolbarHeight - Get.width * 0.008,
-                                width: kToolbarHeight - Get.width * 0.008,
-                                margin: EdgeInsets.only(right: 10.h),
-                                decoration: BoxDecoration(
-                                  color: appColors.guideColor,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: Center(
-                                  child: Icon(
-                                    Icons.send,
-                                    color: appColors.white,
-                                  ),
-                                ),
-                              )),
-                      // const SizedBox(width: 10),
-                    ],
+                              ),
+                            ),
+                    ),
                   ),
+                  controller.isRecording.value
+                      ? Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                          child: GestureDetector(
+                              onTap: () => controller.refreshWave(),
+                              child: Center(
+                                child: Assets.images.icClose.svg(
+                                    height: 24,
+                                    color: const Color(0xff0E2339)
+                                        .withOpacity(0.5)),
+                              )),
+                        )
+                      : const SizedBox(width: 5),
+                  if (!controller.hasMessage.value)
+                    GestureDetector(
+                        onTap: controller.startOrStopRecording,
+                        child: Center(
+                          child: SvgPicture.asset(controller.isRecording.value
+                              ? "assets/svg/new_chat_send.svg"
+                              : "assets/svg/chat_new_mice.svg"),
+                        ))
+                  else
+                    InkWell(
+                        onTap: () {
+                          controller.sendMsg();
+                        },
+                        child: Center(
+                          child: SvgPicture.asset(
+                            "assets/svg/new_chat_send.svg",
+                          ),
+                        )),
+                  const SizedBox(
+                    width: 5,
+                  )
+                  // const SizedBox(width: 10),
                 ],
+              ),
+              SizedBox(
+                height: 40,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    isKundli.value == 1
+                        ? GestureDetector(
+                            onTap: () {
+                              Get.toNamed(RouteName.checkKundli);
+                            },
+                            child: Center(
+                                child: SvgPicture.asset(
+                                    "assets/svg/new_chat_kundli.svg")))
+                        : SizedBox(),
+                    GestureDetector(
+                      onTap: () {
+                        controller.openProduct(controller);
+                      },
+                      child: Center(
+                          child: SvgPicture.asset(
+                              "assets/svg/chat_new_product.svg")),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        controller.openCustomShop(controller);
+                      },
+                      child: Center(
+                          child: SvgPicture.asset(
+                              "assets/svg/chat_new_custom_product.svg")),
+                    ),
+                    Obx(
+                      () {
+                        Map orderData = AppFirebaseService().orderData.value;
+                        final String astrImage = orderData["astroImage"] ?? "";
+                        final String custImage =
+                            orderData["customerImage"] ?? "";
+
+                        String appendedAstrImage =
+                            "${controller.preference.getAmazonUrl()}/$astrImage";
+                        String appendedCustImage =
+                            "${controller.preference.getAmazonUrl()}/$custImage";
+
+                        print("test_appendedCustImage: $appendedAstrImage");
+
+                        return isVOIP.toString() == "0"
+                            ? const SizedBox()
+                            : ZegoService().buttonUI(
+                                isVideoCall: false,
+                                targetUserID: orderData["userId"] ?? "",
+                                targetUserName: orderData["customerName"] ?? "",
+                                checkOppositeSidePermGranted: () {
+                                  String name =
+                                      preferenceService.getUserDetail()?.name ??
+                                          "";
+                                  String message =
+                                      "$name wants to start a call, please allow all required permissions";
+                                  controller.messageController.text = message;
+                                  controller.sendMsg();
+                                },
+                                customData: {
+                                  "astr_id": orderData["astroId"] ?? "",
+                                  "astr_name":
+                                      orderData["astrologerName"] ?? "",
+                                  "astr_image": appendedAstrImage,
+                                  "cust_id": orderData["userId"] ?? "",
+                                  "cust_name": orderData["customerName"] ?? "",
+                                  "cust_image": appendedCustImage,
+                                  // "time": "00:20:00",
+                                  "time": controller.showTalkTime.value,
+                                },
+                                isAstrologer: true,
+                                astrologerDisabledCalls: () {
+                                  astroNotAcceptingCallsSnackBar(
+                                    context: context,
+                                    isVideoCall: false,
+                                  );
+                                },
+                              );
+                      },
+                    ),
+                    Obx(
+                      () {
+                        Map orderData = AppFirebaseService().orderData.value;
+                        final String astrImage = orderData["astroImage"] ?? "";
+                        final String custImage =
+                            orderData["customerImage"] ?? "";
+
+                        String appendedAstrImage =
+                            "${controller.preference.getAmazonUrl()}/$astrImage";
+                        String appendedCustImage =
+                            "${controller.preference.getAmazonUrl()}/$custImage";
+
+                        return isVOIP.toString() == "0"
+                            ? const SizedBox()
+                            : ZegoService().buttonUI(
+                                isVideoCall: true,
+                                targetUserID: orderData["userId"] ?? "",
+                                targetUserName: orderData["customerName"] ?? "",
+                                checkOppositeSidePermGranted: () {
+                                  String name =
+                                      preferenceService.getUserDetail()?.name ??
+                                          "";
+                                  String message =
+                                      "$name wants to start a call, please allow all required permissions";
+                                  controller.messageController.text = message;
+                                  controller.sendMsg();
+                                },
+                                customData: {
+                                  "astr_id": orderData["astroId"] ?? "",
+                                  "astr_name":
+                                      orderData["astrologerName"] ?? "",
+                                  "astr_image": appendedAstrImage,
+                                  "cust_id": orderData["userId"] ?? "",
+                                  "cust_name": orderData["customerName"] ?? "",
+                                  "cust_image": appendedCustImage,
+                                  // "time": "00:20:00",
+                                  "time": controller.showTalkTime.value,
+                                },
+                                isAstrologer: true,
+                                astrologerDisabledCalls: () {
+                                  astroNotAcceptingCallsSnackBar(
+                                    context: context,
+                                    isVideoCall: true,
+                                  );
+                                },
+                              );
+                      },
+                    ),
+                    Obx(() {
+                      return isCamera.value == 1
+                          ? GestureDetector(
+                              onTap: () async {
+                                if (await PermissionHelper()
+                                    .askStoragePermission(Permission.photos)) {
+                                  openBottomSheet(Get.context!,
+                                      functionalityWidget: Column(
+                                        children: [
+                                          Text("Choose Options",
+                                              style: TextStyle(
+                                                  color: appColors.textColor,
+                                                  fontFamily:
+                                                      FontFamily.metropolis,
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.w600)),
+                                          Text("Only photos can be shared",
+                                              style: TextStyle(
+                                                  color: appColors.disabledGrey,
+                                                  fontFamily:
+                                                      FontFamily.metropolis,
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w400)),
+                                          SizedBox(height: 20.w),
+                                          Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  Get.back();
+                                                  controller.getImage(true);
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          right: 30),
+                                                  child: Column(
+                                                    children: [
+                                                      Icon(Icons.camera_alt,
+                                                          color: appColors
+                                                              .disabledGrey,
+                                                          size: 50),
+                                                      Text("Camera",
+                                                          style: TextStyle(
+                                                              color: appColors
+                                                                  .textColor,
+                                                              fontFamily:
+                                                                  FontFamily
+                                                                      .metropolis,
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400)),
+                                                      Text(
+                                                          "Capture an image\nfrom your camera",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              color: appColors
+                                                                  .disabledGrey,
+                                                              fontFamily:
+                                                                  FontFamily
+                                                                      .metropolis,
+                                                              fontSize: 10,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400)),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              InkWell(
+                                                onTap: () {
+                                                  Get.back();
+                                                  controller.getImage(false);
+                                                },
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                          left: 30),
+                                                  child: Column(
+                                                    children: [
+                                                      Icon(Icons.image,
+                                                          color: appColors
+                                                              .disabledGrey,
+                                                          size: 50),
+                                                      Text("Gallery",
+                                                          style: TextStyle(
+                                                              color: appColors
+                                                                  .textColor,
+                                                              fontFamily:
+                                                                  FontFamily
+                                                                      .metropolis,
+                                                              fontSize: 16,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400)),
+                                                      Text(
+                                                          "Select an image\nfrom your gallery",
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                              color: appColors
+                                                                  .disabledGrey,
+                                                              fontFamily:
+                                                                  FontFamily
+                                                                      .metropolis,
+                                                              fontSize: 10,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w400)),
+                                                    ],
+                                                  ),
+                                                ),
+                                              )
+                                            ],
+                                          ),
+                                        ],
+                                      ));
+                                }
+                              },
+                              child: Center(
+                                  child: SvgPicture.asset(
+                                      "assets/svg/new_chat_camera.svg")))
+                          : SizedBox();
+                    }),
+                  ],
+                ),
               ),
               SizedBox(height: 20.h),
             ],
@@ -1037,14 +1229,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   }
 
   void showCurvedBottomSheet(context) {
-    // List<SvgPicture> itemList = [
-    //   SvgPicture.asset('assets/svg/camera_icon.svg'),
-    //   SvgPicture.asset('assets/svg/gallery_icon.svg'),
-    //   SvgPicture.asset('assets/svg/remedies_icon.svg'),
-    //   SvgPicture.asset('assets/svg/deck_icon.svg'),
-    //   SvgPicture.asset('assets/svg/product.svg'),
-    //   SvgPicture.asset('assets/svg/custom.svg'),
-    // ];
     List<BottomSheetModel> itemList = [
       BottomSheetModel(
           svgPicture: SvgPicture.asset('assets/svg/deck_icon.svg'),
@@ -1071,18 +1255,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
           svgPicture: SvgPicture.asset('assets/svg/custom.svg'),
           title: "custom"));
     }
-    // isCall
-    // isRemidies
-    // isEcom
-    // isChatAssistance
-    // isChat
-    // isKundli
-    // isTemplates
-    // isCamera
-    // isLive
-    // isQueue
-    // isGifts
-    // isTruecaller
+
     showModalBottomSheet(
         context: context,
         builder: (BuildContext context) {
@@ -1361,22 +1534,12 @@ class AstrologerChatAppBar extends StatelessWidget {
         controller.backFunction();
       },
       child: Container(
-        // height: 90.h + Get.mediaQuery.viewPadding.top.h,
         alignment: Alignment.center,
-        // margin: const EdgeInsets.symmetric(vertical: 5.0),
         padding: EdgeInsets.only(bottom: 12.h),
         decoration: BoxDecoration(
           borderRadius:
               const BorderRadius.vertical(bottom: Radius.circular(20)),
-          // gradient: LinearGradient(
-          //   begin: Alignment.topCenter,
-          //   end: Alignment.bottomCenter,
-          //   colors: [
-          //     Color(0xFFFFEFDA),
-          //     Color(0xFFFFD196),
-          //   ],
-          // ),
-          color: appColors.guideColor,
+          color: appColors.white,
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -1391,22 +1554,15 @@ class AstrologerChatAppBar extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        // SizedBox(width: 16.w),
                         IconButton(
                           onPressed: controller.backFunction,
                           icon: Icon(
                             Icons.arrow_back_ios_new_rounded,
-                            color: appColors.whiteGuidedColor,
+                            color: appColors.black,
                           ),
                         ),
-                        //SizedBox(width: 8.w),
                         Row(
                           children: [
-                            // CachedNetworkPhoto(
-                            //     height: 45.h,
-                            //     width: 45.w,
-                            //     url: controller.profileImage.value),
-
                             Obx(
                               () {
                                 Map<String, dynamic> order = {};
@@ -1416,8 +1572,8 @@ class AstrologerChatAppBar extends StatelessWidget {
                                     "${controller.preference.getAmazonUrl()}/$imageURL";
                                 print("img:: $appended");
                                 return SizedBox(
-                                  height: 50,
-                                  width: 50,
+                                  height: 35,
+                                  width: 35,
                                   child: CustomImageWidget(
                                     imageUrl: appended,
                                     rounded: true,
@@ -1432,222 +1588,56 @@ class AstrologerChatAppBar extends StatelessWidget {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Obx(
-                                  () => Text(
-                                    AppFirebaseService()
-                                            .orderData
-                                            .value["customerName"] ??
-                                        "",
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.w500,
-                                        fontSize: 14.sp,
-                                        color: /*appColors.darkBlue*/
-                                            appColors.whiteGuidedColor),
+                                  () => Row(
+                                    children: [
+                                      Text(
+                                        AppFirebaseService()
+                                                .orderData
+                                                .value["customerName"] ??
+                                            "",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 14.sp,
+                                            color: appColors.black),
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Text(
+                                        controller.showTalkTime.value == "-1"
+                                            ? "Chat Ended"
+                                            : controller.showTalkTime.value,
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 10.sp,
+                                            color: appColors.guideColor),
+                                      ),
+                                    ],
                                   ),
                                 ),
-                                Obx(() => AnimatedCrossFade(
-                                      duration:
-                                          const Duration(milliseconds: 200),
-                                      crossFadeState: CrossFadeState.showFirst,
-                                      secondChild: const SizedBox(),
-                                      firstChild: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            controller.showTalkTime.value ==
-                                                    "-1"
-                                                ? "Chat Ended"
-                                                : controller.showTalkTime.value,
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w500,
-                                                fontSize: 10.sp,
-                                                color: /*appColors.brownColour*/
-                                                    appColors.whiteGuidedColor),
-                                          ),
-                                          Text(
-                                            "Chat in progress",
-                                            style: TextStyle(
-                                                fontWeight: FontWeight.w400,
-                                                fontSize: 10.sp,
-                                                color: /*appColors.darkGreen*/
-                                                    appColors.whiteGuidedColor),
-                                          ),
-                                        ],
+                                AnimatedCrossFade(
+                                  duration: const Duration(milliseconds: 200),
+                                  crossFadeState: CrossFadeState.showFirst,
+                                  secondChild: const SizedBox(),
+                                  firstChild: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        "Chat in progress",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 10.sp,
+                                          color: appColors.black,
+                                        ),
                                       ),
-                                    )),
+                                    ],
+                                  ),
+                                )
                               ],
                             ),
                           ],
                         ),
                       ],
                     ),
-                    Row(
-                      children: [
-                        Obx(
-                          () {
-                            Map orderData =
-                                AppFirebaseService().orderData.value;
-                            final String astrImage =
-                                orderData["astroImage"] ?? "";
-                            final String custImage =
-                                orderData["customerImage"] ?? "";
-
-                            String appendedAstrImage =
-                                "${controller.preference.getAmazonUrl()}/$astrImage";
-                            String appendedCustImage =
-                                "${controller.preference.getAmazonUrl()}/$custImage";
-
-                            print("test_appendedCustImage: $appendedAstrImage");
-
-                            return isVOIP.toString() == "0"
-                                ? const SizedBox()
-                                : ZegoService().buttonUI(
-                                    isVideoCall: false,
-                                    targetUserID: orderData["userId"] ?? "",
-                                    targetUserName:
-                                        orderData["customerName"] ?? "",
-                                    checkOppositeSidePermGranted: () {
-                                      String name = preferenceService
-                                              .getUserDetail()
-                                              ?.name ??
-                                          "";
-                                      String message =
-                                          "$name wants to start a call, please allow all required permissions";
-                                      controller.messageController.text =
-                                          message;
-                                      controller.sendMsg();
-                                    },
-                                    customData: {
-                                      "astr_id": orderData["astroId"] ?? "",
-                                      "astr_name":
-                                          orderData["astrologerName"] ?? "",
-                                      "astr_image": appendedAstrImage,
-                                      "cust_id": orderData["userId"] ?? "",
-                                      "cust_name":
-                                          orderData["customerName"] ?? "",
-                                      "cust_image": appendedCustImage,
-                                      // "time": "00:20:00",
-                                      "time": controller.showTalkTime.value,
-                                    },
-                                    isAstrologer: true,
-                                    astrologerDisabledCalls: () {
-                                      astroNotAcceptingCallsSnackBar(
-                                        context: context,
-                                        isVideoCall: false,
-                                      );
-                                    },
-                                  );
-                          },
-                        ),
-                        SizedBox(width: 10.w),
-                        Obx(
-                          () {
-                            Map orderData =
-                                AppFirebaseService().orderData.value;
-                            final String astrImage =
-                                orderData["astroImage"] ?? "";
-                            final String custImage =
-                                orderData["customerImage"] ?? "";
-
-                            String appendedAstrImage =
-                                "${controller.preference.getAmazonUrl()}/$astrImage";
-                            String appendedCustImage =
-                                "${controller.preference.getAmazonUrl()}/$custImage";
-
-                            return isVOIP.toString() == "0"
-                                ? const SizedBox()
-                                : ZegoService().buttonUI(
-                                    isVideoCall: true,
-                                    targetUserID: orderData["userId"] ?? "",
-                                    targetUserName:
-                                        orderData["customerName"] ?? "",
-                                    checkOppositeSidePermGranted: () {
-                                      String name = preferenceService
-                                              .getUserDetail()
-                                              ?.name ??
-                                          "";
-                                      String message =
-                                          "$name wants to start a call, please allow all required permissions";
-                                      controller.messageController.text =
-                                          message;
-                                      controller.sendMsg();
-                                    },
-                                    customData: {
-                                      "astr_id": orderData["astroId"] ?? "",
-                                      "astr_name":
-                                          orderData["astrologerName"] ?? "",
-                                      "astr_image": appendedAstrImage,
-                                      "cust_id": orderData["userId"] ?? "",
-                                      "cust_name":
-                                          orderData["customerName"] ?? "",
-                                      "cust_image": appendedCustImage,
-                                      // "time": "00:20:00",
-                                      "time": controller.showTalkTime.value,
-                                    },
-                                    isAstrologer: true,
-                                    astrologerDisabledCalls: () {
-                                      astroNotAcceptingCallsSnackBar(
-                                        context: context,
-                                        isVideoCall: true,
-                                      );
-                                    },
-                                  );
-                          },
-                        ),
-                        SizedBox(width: 5.w),
-                        // PopupMenuButton(
-                        //   surfaceTintColor: Colors.transparent,
-                        //   color: Colors.white,
-                        //   itemBuilder: (context) => [
-                        //     PopupMenuItem(
-                        //         child: InkWell(
-                        //       onTap: () {
-                        //         // Navigator.pop(context);
-                        //         //
-                        //         // showCupertinoModalPopup(
-                        //         //   barrierColor:
-                        //         //   appColors.darkBlue.withOpacity(0.5),
-                        //         //   context: context,
-                        //         //   builder: (context) => ReportPostReasons(
-                        //         //       reviewData?.id.toString() ?? ''),
-                        //         //
-                        //         //   // builder: (context) => ReportPostReasons(reviewData?.id.),
-                        //         // );
-                        //       },
-                        //       child: Text(
-                        //         "Chat History",
-                        //         style: AppTextStyle.textStyle13(),
-                        //       ),
-                        //     )),
-                        //   ],
-                        //   child: const Icon(Icons.more_vert_rounded),
-                        // ),
-                        SizedBox(width: 10.w),
-                      ],
-                    ),
-
-                    // Obx(() => Visibility(
-                    //     visible: controller.isOngoingChat.value,
-                    //     child: Row(
-                    //       children: [
-                    //         InkWell(
-                    //             onTap: () {
-                    //               Duration initalTime = Duration(seconds: astroChatWatcher.value.talktime ?? 0);
-                    //               var initalDateTime = DateTime(2001).copyWith(second: initalTime.inSeconds);
-                    //               var currentTime = timer.chatDuration.value;
-                    //               var currentDateTime = DateTime(2001).copyWith(second: currentTime.inSeconds);
-                    //               int difference = initalDateTime.difference(currentDateTime).inSeconds;
-                    //
-                    //               if (difference < 60) {
-                    //                 controller.cannotEndChat(Get.context!);
-                    //               } else {
-                    //                 controller.confirmChatEnd(Get.context!);
-                    //               }
-                    //             },
-                    //             child: Assets.images.icEndChat.svg()),
-                    //         SizedBox(width: 16.w),
-                    //       ],
-                    //     ))),
                   ],
                 ),
               ),
@@ -1655,28 +1645,6 @@ class AstrologerChatAppBar extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-}
-
-class LoadingIndicatorWidget extends StatelessWidget {
-  const LoadingIndicatorWidget({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        const SizedBox(width: double.maxFinite),
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: CircularProgressIndicator(
-              color: appColors.guideColor,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
