@@ -358,12 +358,13 @@ class AppFirebaseService {
                     if (orderData.value["orderType"] == "chat") {
                       switch ((orderData.value["status"])) {
                         case "0":
-                          if(!kDebugMode){
-                            if (Get.currentRoute !=
-                                RouteName.acceptChatRequestScreen) {
-                              await Get.toNamed(
-                                  RouteName.acceptChatRequestScreen);
-                            }
+                          // if(!kDebugMode){
+                          //
+                          // }
+                          if (Get.currentRoute !=
+                              RouteName.acceptChatRequestScreen) {
+                            await Get.toNamed(
+                                RouteName.acceptChatRequestScreen);
                           }
                           break;
                         case "1":

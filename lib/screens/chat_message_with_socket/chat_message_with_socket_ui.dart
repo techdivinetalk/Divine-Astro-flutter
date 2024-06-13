@@ -32,13 +32,10 @@ import "package:flutter/widgets.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
 import "package:get/get.dart";
-import "package:get/get_state_manager/get_state_manager.dart";
+
 import "package:lottie/lottie.dart";
-import "package:permission_handler/permission_handler.dart";
 import "package:simple_html_css/simple_html_css.dart";
 
-import "package:voice_message_package/voice_message_package.dart";
-import "package:zego_express_engine/zego_express_engine.dart";
 
 import "../../model/message_template_response.dart";
 import "../live_dharam/widgets/custom_image_widget.dart";
@@ -320,26 +317,30 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       ));
                 }),
                 SizedBox(height: 10.h),
-                Obx(() => Visibility(
+                Obx(
+                  () => Visibility(
                     visible: controller.showTalkTime.value == "-1",
                     child: Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(color: appColors.grey, width: 2),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10.0)),
-                            color: appColors.white,
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                                "Chat Ended you can still send message till ${controller.extraTalkTime.value}",
-                                style: const TextStyle(
-                                    color: Colors.red, fontSize: 11),
-                                textAlign: TextAlign.center),
-                          )),
-                    ))),
+                        decoration: BoxDecoration(
+                          border: Border.all(color: appColors.grey, width: 2),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(10.0)),
+                          color: appColors.white,
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                              "Chat Ended you can still send message till ${controller.extraTalkTime.value}",
+                              style: const TextStyle(
+                                  color: Colors.red, fontSize: 11),
+                              textAlign: TextAlign.center),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
                 // Obx(
                 //   () => Column(
                 //     children: [
@@ -348,7 +349,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                 //     ],
                 //   ),
                 // ),
-                Obx(() {
+                /*Obx(() {
                   return Visibility(
                     visible: !controller.isKeyboardVisible.value,
                     child: Column(
@@ -529,7 +530,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       ],
                     ),
                   );
-                }),
+                }),*/
                 chatBottomBar(context),
                 Obx(() => AnimatedContainer(
                       duration: const Duration(milliseconds: 200),

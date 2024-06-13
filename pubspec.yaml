@@ -116,18 +116,15 @@ dependencies:
   zego_uikit_signaling_plugin: ^2.7.6
   zego_uikit_prebuilt_call: ^4.8.5
   zego_uikit_prebuilt_live_streaming: ^3.5.4
-  zego_express_engine: ^3.13.3
+  zego_express_engine: 3.15.0
   zego_uikit_beauty_plugin: ^1.5.2
 
 dependency_overrides:
+  zego_uikit: 2.22.8
   intl: ^0.18.1
 
 dev_dependencies:
-#  zego_uikit_signaling_plugin: 2.7.6
-#  zego_uikit_prebuilt_call: 4.8.5
-#  zego_uikit_prebuilt_live_streaming: 3.5.4
-#  zego_express_engine: 3.13.3
-#  zego_uikit_beauty_plugin: 1.5.2
+
   build_runner: any
   flutter_gen: ^5.3.1
   flutter_gen_runner: any
