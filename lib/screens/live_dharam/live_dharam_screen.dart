@@ -3,6 +3,7 @@
 import "dart:async";
 import "dart:convert";
 import "dart:developer";
+import "dart:io";
 import "dart:math" as math;
 
 import "package:after_layout/after_layout.dart";
@@ -63,6 +64,8 @@ import "package:svgaplayer_flutter/player.dart";
 import "package:zego_uikit_beauty_plugin/zego_uikit_beauty_plugin.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
+
+import "../../cache/custom_cache_manager.dart";
 
 const int appID = 696414715;
 const String appSign =
@@ -249,7 +252,8 @@ class _LivePage extends State<LiveDharamScreen>
     const SVGAParser parser = SVGAParser();
     String giftInfo = svgaUrls.entries.first.value;
     print(svgaUrls.length);
-    await parser.decodeFromURL(giftInfo).then((videoItem) {
+    File file = await CustomCacheManager().getFile(giftInfo);
+    await parser.decodeFromBuffer(file.readAsBytesSync()).then((videoItem) {
       print("svgaUrls.videoItem");
       _svgController.videoItem = videoItem;
       _svgController.forward();
@@ -1005,12 +1009,12 @@ class _LivePage extends State<LiveDharamScreen>
                                           ? Colors.red
                                           // : isModerator
                                           //     ? appColors.guideColor
-                                              : msg.fullGiftImage.isNotEmpty
+                                          : msg.fullGiftImage.isNotEmpty
+                                              ? appColors.black
+                                              : msg.message.contains(
+                                                      "Started following")
                                                   ? appColors.black
-                                                  : msg.message.contains(
-                                                          "Started following")
-                                                      ? appColors.black
-                                                      : Colors.white,
+                                                  : Colors.white,
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
@@ -1027,12 +1031,12 @@ class _LivePage extends State<LiveDharamScreen>
                                             ? Colors.red
                                             // : isModerator
                                             //     ? appColors.guideColor
-                                                : msg.fullGiftImage.isNotEmpty
+                                            : msg.fullGiftImage.isNotEmpty
+                                                ? appColors.black
+                                                : msg.message.contains(
+                                                        "Started following")
                                                     ? appColors.black
-                                                    : msg.message.contains(
-                                                            "Started following")
-                                                        ? appColors.black
-                                                        : Colors.white,
+                                                    : Colors.white,
                                       ),
                                       // maxLines: 2,
                                       // overflow: TextOverflow.ellipsis,
@@ -3235,14 +3239,13 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-
   Future<void> onCoHostRequest({
     required ZegoUIKitUser user,
     required String userId,
     required String userName,
     required String avatar,
   }) async {
-    if(_controller.currentWaitList == _controller.waitListModel[0].id){
+    if (_controller.currentWaitList == _controller.waitListModel[0].id) {
       return;
     }
     _controller.currentWaitList = _controller.waitListModel[0].id;
