@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
+import '../../common/routes.dart';
 import 'new_registration_controller.dart';
 
 class NewRegstrationScreen extends GetView<NewRegistrationController> {
@@ -49,46 +50,37 @@ class NewRegstrationScreen extends GetView<NewRegistrationController> {
                   },
                 ),
               ),
-              Obx(() {
-                return controller.selectedValue.value == "Other"
-                    ? Padding(
-                        padding: EdgeInsets.only(top: 10, right: 16, left: 16),
-                        child: TextFormField(
-                          decoration: InputDecoration(
-                            hintText: "Type Your Reason here",
-                            contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 0),
-                            hintStyle: AppTextStyle.textStyle16(),
-                            focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide:
-                                  BorderSide(color: AppColors().greyColor2),
-                            ),
-                            disabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide:
-                                  BorderSide(color: AppColors().greyColor2),
-                            ),
-                            errorBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide:
-                                  BorderSide(color: AppColors().greyColor2),
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide:
-                                  BorderSide(color: AppColors().greyColor2),
-                            ),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              borderSide:
-                                  BorderSide(color: AppColors().greyColor2),
-                            ),
-                          ),
-                        ),
-                      )
-                    : SizedBox();
-              }),
+              Padding(
+                padding: EdgeInsets.only(top: 10, right: 16, left: 16),
+                child: TextFormField(
+                  maxLines: 3, // Adjust the number of lines as needed
+                  decoration: InputDecoration(
+                    hintText: "Reason here.....",
+                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    hintStyle: AppTextStyle.textStyle16(),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: AppColors().greyColor2),
+                    ),
+                    disabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: AppColors().greyColor2),
+                    ),
+                    errorBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: AppColors().greyColor2),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: AppColors().greyColor2),
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                      borderSide: BorderSide(color: AppColors().greyColor2),
+                    ),
+                  ),
+                ),
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
                 child: RichText(
@@ -188,6 +180,8 @@ class NewRegstrationScreen extends GetView<NewRegistrationController> {
                                   Future.delayed(Duration(seconds: 2), () {
                                     Navigator.of(context).pop(true);
                                     controller.showRichText(true);
+                                    Get.toNamed(RouteName.profileUi);
+
                                   });
                                   return AlertDialog(
                                     alignment: Alignment.center,

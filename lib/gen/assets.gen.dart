@@ -282,6 +282,8 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_boy_kundli.svg
   SvgGenImage get icBoyKundli =>
       const SvgGenImage('assets/images/ic_boy_kundli.svg');
+  SvgGenImage get resignation =>
+      const SvgGenImage('assets/svg/resignation.svg');
 
   /// File path: assets/images/ic_bronze.png
   AssetGenImage get icBronze =>

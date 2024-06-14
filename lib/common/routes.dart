@@ -72,6 +72,8 @@ import 'package:divine_astrologer/screens/video_call_page/video_call_page.dart';
 import 'package:divine_astrologer/screens/video_call_page/video_call_page_binding.dart';
 import 'package:get/get.dart';
 
+import '../pages/new_registration/new_registration_binding.dart';
+import '../pages/new_registration/new_registration_screen.dart';
 import '../screens/add_message_template/add_message_template_binding.dart';
 import '../screens/add_message_template/add_message_template_ui.dart';
 import '../screens/bank_details/bank_detail_binding.dart';
@@ -133,6 +135,7 @@ class RouteName {
   static const String login = "/login";
   static const String otpVerificationPage = "/otpVerificationPage";
   static const String dashboard = "/dashboard";
+  static const String resignation = "/resignation";
   static const String blockedUser = "/blockedUser";
   static const String profileUi = "/profileUi";
   static const String poojaDharamMainScreen = "/poojaDharamMainScreen";
@@ -235,6 +238,10 @@ class Routes {
         page: () => const DashboardScreen(),
         name: RouteName.dashboard,
         binding: DashboardBinding()),
+    GetPage(
+        page: () =>  NewRegstrationScreen(),
+        name: RouteName.resignation,
+        binding: RegistrationBinding()),
     GetPage(
         page: () => const BlockedUserUI(),
         name: RouteName.blockedUser,
