@@ -10,6 +10,7 @@ import 'package:divine_astrologer/zego_call/chat_call_on_off_widget.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -590,17 +591,17 @@ class ZegoService {
                 : astrologerDisabledCalls();
       },
       child: SizedBox(
-        height: 32,
-        width: 32,
-        child: Image.asset(
-          color: appColors.white,
+        height: 24,
+        width: 24,
+        child: SvgPicture.asset(
           isVideoCall
               ? isAccepting
-                  ? "assets/images/chat_video_call_icon.png"
-                  : "assets/images/chat_disabled_video_call.png"
+                  ? "assets/svg/new_chat_video.svg"
+                  : "assets/svg/new_chat_video_disabled.svg"
               : isAccepting
-                  ? "assets/images/chat_voice_call_icon.png"
-                  : "assets/images/chat_disabled_voice_call.png",
+                  ? "assets/svg/new_chat_call.svg"
+                  : "assets/svg/new_chat_call_diabled.svg",
+
         ),
       ),
     );

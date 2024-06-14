@@ -1575,8 +1575,7 @@ class _LivePage extends State<LiveDharamScreen>
                 context,
                 GiftPlayerData(GiftPlayerSource.url, item["animation"]),
               );
-              // }
-              // }
+
             } else {}
             await showHideTopBanner();
           } else if (type == "Started following") {
