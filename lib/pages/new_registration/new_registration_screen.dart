@@ -6,6 +6,8 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../../common/routes.dart';
+import '../../screens/dashboard/dashboard_controller.dart';
+import '../home/home_controller.dart';
 import 'new_registration_controller.dart';
 
 class NewRegstrationScreen extends GetView<NewRegistrationController> {
@@ -181,7 +183,10 @@ class NewRegstrationScreen extends GetView<NewRegistrationController> {
                                   Future.delayed(Duration(seconds: 2), () {
                                     Navigator.of(context).pop(true);
                                     controller.showRichText(true);
-                                    Get.toNamed(RouteName.profileUi);
+
+                                    Get.offAllNamed(RouteName.dashboard)?.then((value) {
+                                      Get.find<DashboardController>().setSelectedIndex(0);
+                                    });
                                   });
                                   return AlertDialog(
                                     alignment: Alignment.center,
