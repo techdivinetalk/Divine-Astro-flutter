@@ -56,7 +56,8 @@ class NewRegstrationScreen extends GetView<NewRegistrationController> {
                   maxLines: 3, // Adjust the number of lines as needed
                   decoration: InputDecoration(
                     hintText: "Reason here.....",
-                    contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    contentPadding:
+                        EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     hintStyle: AppTextStyle.textStyle16(),
                     focusedBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -181,7 +182,6 @@ class NewRegstrationScreen extends GetView<NewRegistrationController> {
                                     Navigator.of(context).pop(true);
                                     controller.showRichText(true);
                                     Get.toNamed(RouteName.profileUi);
-
                                   });
                                   return AlertDialog(
                                     alignment: Alignment.center,
