@@ -263,10 +263,10 @@ class DashboardScreen extends GetView<DashboardController> {
                                 ],
                               ),
                             ))),
-                    // controller.chatOrderData != null
-                    //     ? acceptBottomBar(
-                    //         chatOrderData: controller.chatOrderData)
-                    //     : SizedBox(),
+                    controller.chatOrderData != null && controller.chatOrderData?.status.toString() == "0"
+                        ? acceptBottomBar(
+                            chatOrderData: controller.chatOrderData)
+                        : const SizedBox(),
                     rejoinVisibility(),
                   ],
                 );

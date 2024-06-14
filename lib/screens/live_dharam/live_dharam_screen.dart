@@ -163,12 +163,12 @@ class _LivePage extends State<LiveDharamScreen>
     _startTimer();
 
     _svgController = SVGAAnimationController(vsync: this);
-    _svgController.addStatusListener((status) {
+    _svgController.addStatusListener((status) async {
       if (status == AnimationStatus.completed) {
         _svgController.reset();
         svgaUrls.remove(svgaUrls.entries.first.key);
         if (svgaUrls.isNotEmpty) {
-          _loadRandomAnimation();
+         await _loadRandomAnimation();
         }
         if (svgaUrls.isEmpty) {
           print("Animation -removed");
@@ -212,7 +212,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> _loadRandomAnimation(
       {Map<String, dynamic>? gifts, List? giftList}) async {
-    print("load animation");
+    print("_loadRandomAnimation-2");
     _showOverlay();
     const SVGAParser parser = SVGAParser();
     String giftInfo = svgaUrls.entries.first.value;
@@ -1571,10 +1571,10 @@ class _LivePage extends State<LiveDharamScreen>
               //   for(int i = 0;i<animationsList.length;i++){
               print(item["animation"]);
               print("objectobjectobjectobject");
-              ZegoGiftPlayer().play(
-                context,
-                GiftPlayerData(GiftPlayerSource.url, item["animation"]),
-              );
+              // ZegoGiftPlayer().play(
+              //   context,
+              //   GiftPlayerData(GiftPlayerSource.url, item["animation"]),
+              // );
 
             } else {}
             await showHideTopBanner();
