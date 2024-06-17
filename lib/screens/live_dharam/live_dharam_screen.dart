@@ -60,6 +60,7 @@ import 'package:random_name_generator/random_name_generator.dart';
 import "package:simple_html_css/simple_html_css.dart";
 import "package:svgaplayer_flutter/parser.dart";
 import "package:svgaplayer_flutter/player.dart";
+import "package:zego_express_engine/zego_express_engine.dart";
 import "package:zego_uikit_beauty_plugin/zego_uikit_beauty_plugin.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
@@ -168,7 +169,7 @@ class _LivePage extends State<LiveDharamScreen>
         _svgController.reset();
         svgaUrls.remove(svgaUrls.entries.first.key);
         if (svgaUrls.isNotEmpty) {
-         await _loadRandomAnimation();
+          await _loadRandomAnimation();
         }
         if (svgaUrls.isEmpty) {
           print("Animation -removed");
@@ -176,6 +177,12 @@ class _LivePage extends State<LiveDharamScreen>
         }
       }
     });
+    if(kDebugMode) {
+      final ZegoUIKit instance = ZegoUIKit.instance;
+      _controller.isMicOn = false;
+      instance.turnMicrophoneOn(_controller.isMicOn,
+          muteMode: true);
+    }
   }
 
   Future<void> _showOverlay() async {
@@ -480,7 +487,6 @@ class _LivePage extends State<LiveDharamScreen>
     }
     return Future<void>.value();
   }
-
   @override
   Widget build(BuildContext context) {
     //
@@ -629,7 +635,12 @@ class _LivePage extends State<LiveDharamScreen>
       // ),
     );
   }
-
+  Future<void> reJoinAsAudience(String coHostID) async {
+    // Log the co-host out of the room
+    ZegoExpressEngine.instance.logoutRoom(coHostID);
+    await Future<void>.delayed(const Duration(seconds: 1));
+    ZegoExpressEngine.instance.loginRoom(coHostID, ZegoUser(coHostID, 'co-host'));
+  }
   ZegoUIKitPrebuiltLiveStreamingConfig get streamingConfig {
     final ZegoUIKitSignalingPlugin plugin = ZegoUIKitSignalingPlugin();
     final List<IZegoUIKitPlugin> pluginsList = <IZegoUIKitPlugin>[
@@ -810,7 +821,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget appBarWidget() {
     return SizedBox(
-      height: 32 + 100,
+      height: 162,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1237,13 +1248,19 @@ class _LivePage extends State<LiveDharamScreen>
           isHost: _controller.isHost,
           onAccept: () async {
             Get.back();
-
+            print("connectInvite-1 ");
             final String id = _controller.waitListModel.first.id!;
+            print("connectInvite-2 ");
             final String name = _controller.waitListModel.first.userName!;
+            print("connectInvite-3 ");
             final String avatar = _controller.waitListModel.first.avatar!;
+            print("connectInvite-4 ");
             final ZegoUIKitUser user = ZegoUIKitUser(id: id, name: name);
+            print("connectInvite-5 ");
             final connectInvite = zegoController.coHost;
-            await connectInvite.hostSendCoHostInvitationToAudience(user);
+            print("connectInvite-6 ");
+            var result = await connectInvite.hostSendCoHostInvitationToAudience(user);
+            print("connectInvite-7 $result");
           },
           onReject: Get.back,
           model: _controller.currentCaller,
@@ -2435,7 +2452,25 @@ class _LivePage extends State<LiveDharamScreen>
       ],
     );
   }
+  Future<void> refreshScreen() async {
+    try {
+      // Stop the current stream
+      ZegoExpressEngine.instance.stopPublishingStream();
 
+      // Logout from the room
+      await ZegoExpressEngine.instance.logoutRoom(_controller.userId);
+
+      // Login to the room again
+      await ZegoExpressEngine.instance.loginRoom(_controller.userId, ZegoUser(_controller.userId, _controller.userName));
+
+      // Start publishing the stream again
+      ZegoExpressEngine.instance.startPublishingStream(_controller.userId);
+
+      // Optionally, you can also handle playing streams or other configurations as needed
+    } catch (error) {
+      print("Error recreating stream: $error");
+    }
+  }
   Widget settingsRowForAstro() {
     return Row(
       children: [
@@ -2544,7 +2579,38 @@ class _LivePage extends State<LiveDharamScreen>
                 ),
               ),
             ),
-            const SizedBox(height: 0),
+            const SizedBox(height: 8),
+            InkWell(
+              onTap: () {
+                refreshScreen();
+              },
+              child: SizedBox(
+                height: 32,
+                width: 32,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(50.0),
+                    ),
+                    border: Border.all(
+                      // color: appColors.guideColor,
+                      color: appColors.transparent,
+                    ),
+                    // color: appColors.black.withOpacity(0.2),
+                    color: appColors.transparent,
+                  ),
+                  child: Padding(
+                    // padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(0.0),
+                    child: Image.asset(
+                        height: 32,
+                        width: 32,
+                        "assets/images/refresh.png"
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
         const SizedBox(width: 8),
@@ -3170,8 +3236,8 @@ class _LivePage extends State<LiveDharamScreen>
           },
           onInvitationTimeout: (ZegoUIKitUser user) {
             showNotifOverlay(user: user, msg: "onCoHostInvitationTimeout");
-print(user.id);
-print("user.id");
+            print(user.id);
+            print("user.id");
             if (isAcceptPopupOpen) {
               Get.back();
               print("if timeout");
@@ -3266,8 +3332,11 @@ print("user.id");
         //   final connectInvite = _zegoController.coHost;
         //   await connectInvite.hostSendCoHostInvitationToAudience(user);
         // } else {}
+        print("${user.id}");
+        print("${user.name}");
         print("calling accept button");
         final connectInvite = zegoController.coHost;
+        print("calling accept button");
         await connectInvite.hostSendCoHostInvitationToAudience(user);
       },
       onDeclineButton: () {},
@@ -3311,7 +3380,8 @@ print("user.id");
         },
       );
     }
-
+    print("Removing after Call");
+    reJoinAsAudience(user.id);
     if (_controller.extendTimeWidgetVisible) {
       _controller.extendTimeWidgetVisible = false;
     } else {}
