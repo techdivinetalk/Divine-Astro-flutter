@@ -119,7 +119,6 @@ class LiveDharamController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-
     initData();
   }
 

@@ -14,6 +14,7 @@ Map<String, String> mr() {
     "senderCategory": "प्रेषक श्रेणी",
     'bhavChalitChart': 'भाव चालित चार्ट',
     'cusps': 'कुस्प्स',
+    'resignation':'राजीनामा',
     'cusp': 'कस्प',
     'noDataToShow': 'दर्शविण्यासाठी कोणताही डेटा नाही',
     'planets': 'ग्रह',

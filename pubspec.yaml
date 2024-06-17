@@ -126,6 +126,8 @@ dependencies:
   zego_uikit_beauty_plugin: ^1.5.3
   flutter_speed_dial: ^5.0.0+1
   tutorial_coach_mark: ^1.2.11
+  animated_custom_dropdown: ^3.1.1
+
 
 
 dependency_overrides:

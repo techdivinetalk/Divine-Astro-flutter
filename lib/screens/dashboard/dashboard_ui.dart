@@ -56,7 +56,6 @@ class DashboardScreen extends GetView<DashboardController> {
                           () {
                             debugPrint(
                                 "test_selectedIndex: ${controller.selectedIndex.value}");
-
                             if (controller.selectedIndex.value == 0) {
                               debugPrint(
                                   "test_selectedIndex_isRegistered: ${Get.isRegistered<HomeController>()}");

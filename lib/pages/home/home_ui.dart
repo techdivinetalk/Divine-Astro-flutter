@@ -54,6 +54,7 @@ class HomeUI extends GetView<HomeController> {
   @override
 
   Widget build(BuildContext context) {
+    Get.put(HomeController());
     print("beforeGoing 5 - ${preferenceService.getUserDetail()?.id}");
     return GetBuilder<HomeController>(
         assignId: true,
@@ -1177,6 +1178,7 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget scheduledTrainingWidgetUpdated() {
+    Get.put(HomeController());
 
     return Visibility(
       visible: controller.astrologerTrainingSessionLst.isNotEmpty,
