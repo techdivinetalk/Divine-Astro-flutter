@@ -23,9 +23,7 @@ class ApiProvider {
   static const String socketUrl = "https://list.divinetalk.live";
 
   static String
-      baseUrl = /*Constants.isTeamTestingMode
-      ? "http://3.111.219.202/api/astro/$version/"
-      :*/
+        baseUrl =
       "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
 
   static const String astOnlineOffline =

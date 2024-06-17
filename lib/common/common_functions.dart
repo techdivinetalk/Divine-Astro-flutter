@@ -78,6 +78,9 @@ Future<String?> uploadImageFileToAws(
 
   // Listen for the response
   String? url;
+  print(response.request);
+  print(response.request);
+  print("responseresponseresponseresponse");
   if (response.statusCode == 200) {
     print("Image uploaded successfully.");
     var urlResponse = await http.Response.fromStream(response);
