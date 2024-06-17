@@ -1085,7 +1085,7 @@ class ChatMessageWithSocketController extends GetxController
     final String? uploadFile = await uploadImageFileToAws(
         file: File(fileData.path), moduleName: "Chat");
     if (uploadFile != "" || uploadFile != null) {
-      print("image message upload file ${uploadFile} ${base64Image}");
+      print("image message upload file ${uploadFile} base64Image==> ${base64Image}");
       addNewMessage(time, MsgType.image,
           messageText: uploadFile,
           base64Image: base64Image,

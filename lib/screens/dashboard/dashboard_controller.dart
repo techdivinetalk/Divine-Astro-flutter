@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
 import 'package:contacts_service/contacts_service.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/constants.dart';
@@ -24,13 +25,17 @@ import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
+import '../../cache/custom_cache_manager.dart';
 import '../../common/app_exception.dart';
 import '../../common/app_textstyle.dart';
 import '../../common/common_functions.dart';
 import '../../common/permission_handler.dart';
 import '../../di/fcm_notification.dart';
+import '../../model/astrologer_gift_response.dart';
 import '../../model/res_login.dart';
+import '../../repository/astrologer_profile_repository.dart';
 
 class DashboardController extends GetxController
     with GetSingleTickerProviderStateMixin, WidgetsBindingObserver {
@@ -52,6 +57,20 @@ class DashboardController extends GetxController
   // StreamSubscription<DatabaseEvent>? astroChatListener;
   // Socket? socket;
   ChatOrderData? chatOrderData;
+
+  GlobalKey<State<StatefulWidget>> keyHome = GlobalKey();
+  GlobalKey<State<StatefulWidget>> keyPerformance = GlobalKey();
+  GlobalKey<State<StatefulWidget>> keyAssistance = GlobalKey();
+  GlobalKey<State<StatefulWidget>> keyQueue = GlobalKey();
+  GlobalKey<State<StatefulWidget>> keyProfile = GlobalKey();
+  GlobalKey<State<StatefulWidget>> keyHide = GlobalKey();
+  GlobalKey<State<StatefulWidget>> keyProfileHome = GlobalKey();
+  GlobalKey<State<StatefulWidget>> keyTodayAmount = GlobalKey();
+  GlobalKey<State<StatefulWidget>> keyTotalAmount = GlobalKey();
+  GlobalKey<State<StatefulWidget>> keyCheckKundli = GlobalKey();
+  GlobalKey<State<StatefulWidget>> keyRetentionRate = GlobalKey();
+  GlobalKey<State<StatefulWidget>> keyRepurchaseRate = GlobalKey();
+  GlobalKey<State<StatefulWidget>> keyEcommerceWallet = GlobalKey();
 
   @override
   void dispose() {
@@ -139,6 +158,7 @@ class DashboardController extends GetxController
     await [
       Permission.camera,
       Permission.microphone,
+      Permission.storage,
     ].request();
     Get.back(); // Close the bottom sheet after requesting permissions
     if (await FlutterOverlayWindow.isPermissionGranted() == false) {
@@ -146,11 +166,44 @@ class DashboardController extends GetxController
     }
   }
 
+  void checkAndRequestPermissions() async {
+   // storagePermission();
+  }
+
+  Future<bool> storagePermission() async {
+    final DeviceInfoPlugin info = DeviceInfoPlugin(); // import 'package:device_info_plus/device_info_plus.dart';
+    final AndroidDeviceInfo androidInfo = await info.androidInfo;
+    debugPrint('releaseVersion : ${androidInfo.version.release}');
+    final int androidVersion = int.parse(androidInfo.version.release);
+    bool havePermission = false;
+
+    if (androidVersion >= 13) {
+      final request = await [
+        Permission.videos,
+        Permission.photos,
+        //..... as needed
+      ].request(); //import 'package:permission_handler/permission_handler.dart';
+
+      havePermission = request.values.every((status) => status == PermissionStatus.granted);
+    } else {
+      final status = await Permission.storage.request();
+      havePermission = status.isGranted;
+    }
+
+    if (!havePermission) {
+      // if no permission then open app-setting
+      await openAppSettings();
+    }
+
+    return havePermission;
+  }
   @override
   Future<void> onInit() async {
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
     checkPermissions();
+    getOrderFromApi();
+    checkAndRequestPermissions();
     //   print("microphone ${await FlutterOverlayWindow.isPermissionGranted()}");
     print("beforeGoing 2 - ${preferenceService.getUserDetail()?.id}");
     broadcastReceiver.start();
@@ -199,6 +252,7 @@ class DashboardController extends GetxController
     // firebaseMessagingConfig(Get.context!);
     getConstantDetailsData();
     print("currentTime");
+    cacheGift();
   }
 
   void compareTimes(int serverTime) {
@@ -224,8 +278,6 @@ class DashboardController extends GetxController
       print("else difference");
     }
   }
-
-
 
   void showTimeDIffBottomSheet(BuildContext context) {
     showModalBottomSheet(
@@ -272,17 +324,20 @@ class DashboardController extends GetxController
     );
   }
 
-
-
-
-
   @override
   void onReady() {
     final socket = AppSocket();
     socket.socketConnect();
-    getOrderFromApi();
     super.onReady();
   }
+  Future<void> requestPermissions1() async {
+    if (await Permission.storage.request().isGranted) {
+      print("isGranted1");
+    } else {
+      print("isGranted0");
+    }
+  }
+
 
   getOrderFromApi() async {
     try {
@@ -379,6 +434,421 @@ class DashboardController extends GetxController
       return result;
     } else {
       return status;
+    }
+  }
+
+  List<TargetFocus> createTargets() {
+    return [
+      TargetFocus(identify: "Target 1", keyTarget: keyHome, contents: [
+        TargetContent(
+            align: ContentAlign.top,
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Titulo lorem ipsum",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ]),
+      TargetFocus(identify: "Target 2", keyTarget: keyPerformance, contents: [
+        TargetContent(
+            align: ContentAlign.top,
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Titulo lorem ipsum",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ]),
+      TargetFocus(identify: "Target 3", keyTarget: keyAssistance, contents: [
+        TargetContent(
+            align: ContentAlign.top,
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Titulo lorem ipsum",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ]),
+      TargetFocus(identify: "Target 4", keyTarget: keyQueue, contents: [
+        TargetContent(
+            align: ContentAlign.top,
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Titulo lorem ipsum",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ]),
+      TargetFocus(identify: "Target 5", keyTarget: keyProfile, contents: [
+        TargetContent(
+            align: ContentAlign.top,
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Titulo lorem ipsum",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ]),
+      TargetFocus(identify: "Target 6", keyTarget: keyHide, contents: [
+        TargetContent(
+            align: ContentAlign.bottom,
+            child: Container(
+              padding: const EdgeInsets.only(top: 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Titulo lorem ipsum",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ]),
+      TargetFocus(identify: "Target 7", keyTarget: keyProfileHome, contents: [
+        TargetContent(
+            align: ContentAlign.bottom,
+            child: Container(
+              padding: const EdgeInsets.only(top: 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Titulo lorem ipsum",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ]),
+      TargetFocus(identify: "Target 8", keyTarget: keyTodayAmount, contents: [
+        TargetContent(
+            align: ContentAlign.bottom,
+            child: Container(
+              padding: const EdgeInsets.only(top: 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Titulo lorem ipsum",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ]),
+      TargetFocus(identify: "Target 9", keyTarget: keyTotalAmount, contents: [
+        TargetContent(
+            align: ContentAlign.bottom,
+            child: Container(
+              padding: const EdgeInsets.only(top: 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Titulo lorem ipsum",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ]),
+      TargetFocus(identify: "Target 10", keyTarget: keyCheckKundli, contents: [
+        TargetContent(
+            align: ContentAlign.bottom,
+            child: Container(
+              padding: const EdgeInsets.only(top: 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Titulo lorem ipsum",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ]),
+      TargetFocus(
+          identify: "Target 11",
+          keyTarget: keyRetentionRate,
+          contents: [
+            TargetContent(
+                align: ContentAlign.bottom,
+                child: Container(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "Titulo lorem ipsum",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 20.0),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: Text(
+                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                    ],
+                  ),
+                ))
+          ]),
+      TargetFocus(
+          identify: "Target 12",
+          keyTarget: keyRepurchaseRate,
+          contents: [
+            TargetContent(
+                align: ContentAlign.bottom,
+                child: Container(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "Titulo lorem ipsum",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 20.0),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: Text(
+                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                    ],
+                  ),
+                ))
+          ]),
+      TargetFocus(
+          identify: "Target 13",
+          keyTarget: keyEcommerceWallet,
+          contents: [
+            TargetContent(
+                align: ContentAlign.bottom,
+                child: Container(
+                  padding: const EdgeInsets.only(top: 30),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "Titulo lorem ipsum",
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.white,
+                            fontSize: 20.0),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(top: 10.0),
+                        child: Text(
+                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      )
+                    ],
+                  ),
+                ))
+          ]),
+    ];
+  }
+
+  void showTutorial(context) {
+    TutorialCoachMark(
+      targets: createTargets(), // List<TargetFocus>
+      colorShadow: Colors.black, // DEFAULT Colors.black
+      // alignSkip: Alignment.bottomRight,
+      // textSkip: "SKIP",
+      // showSkipInLastTarget: true,
+      hideSkip: true,
+      paddingFocus: 0,
+
+      // opacityShadow: 0.8,
+      onClickTarget: (target) {
+        print(target);
+      },
+      onClickTargetWithTapPosition: (target, tapDetails) {
+        print("target: $target");
+        print(
+            "clicked at position local: ${tapDetails.localPosition} - global: ${tapDetails.globalPosition}");
+      },
+      onClickOverlay: (target) {
+        print(target);
+      },
+      onSkip: () {
+        print("skip");
+        return false;
+      },
+      onFinish: () {
+        print("finish");
+      },
+    )..show(context: context);
+  }
+
+  cacheGift() async {
+    try {
+      GiftResponse response = await AstrologerProfileRepository()
+          .getAllGiftsAPI(successCallBack: (s) {}, failureCallBack: (s) {});
+      if (response.data != null) {
+        for (final element in response.data!) {
+          String link = element.animation ?? '';
+          if (link.isNotEmpty) {
+            await CustomCacheManager().getFile(link);
+          }
+        }
+        print("Gifts cached");
+      }
+    } catch (e) {
+      debugPrint("Error caching gifts: $e");
     }
   }
 }

@@ -189,16 +189,16 @@ class _WaitListWidgetState extends State<WaitListWidget> {
         height: 50,
         width: 50,
         child: CustomImageWidget(
-          imageUrl: item.avatar,
+          imageUrl: item.avatar ?? "",
           rounded: true,
           typeEnum: TypeEnum.user,
         ),
       ),
-      title: Text(item.userName),
+      title: Text(item.userName?? ""),
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: <Widget>[
-          callTypeIcon(callType: item.callType),
+          callTypeIcon(callType: item.callType?? ""),
           const SizedBox(width: 16),
           Text(getTotalWaitTime(item)),
           // newTimerWidget(item),
@@ -224,7 +224,7 @@ class _WaitListWidgetState extends State<WaitListWidget> {
   }
 
   Widget exitWidget() {
-    return widget.model.isEngaded && widget.model.id == widget.myUserId
+    return widget.model.isEngaded! && widget.model.id == widget.myUserId
         ? const SizedBox()
         : widget.isHost
         ? CommonButton(
@@ -247,7 +247,7 @@ class _WaitListWidgetState extends State<WaitListWidget> {
   }
 
   String getTotalWaitTime(WaitListModel item) {
-    final String source = item.totalTime;
+    final String source = item.totalTime ?? "0";
     final int epoch = int.parse(source);
     final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
     final String formattedTime =
