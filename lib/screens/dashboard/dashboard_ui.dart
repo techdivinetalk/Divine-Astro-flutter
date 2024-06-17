@@ -263,10 +263,10 @@ class DashboardScreen extends GetView<DashboardController> {
                                 ],
                               ),
                             ))),
-                    controller.chatOrderData != null
+                    controller.chatOrderData != null && controller.chatOrderData?.status.toString() == "0"
                         ? acceptBottomBar(
                             chatOrderData: controller.chatOrderData)
-                        : SizedBox(),
+                        : const SizedBox(),
                     rejoinVisibility(),
                   ],
                 );
@@ -325,12 +325,12 @@ class DashboardScreen extends GetView<DashboardController> {
             Expanded(
               flex: 6,
               child: Wrap(direction: Axis.horizontal, children: [
-                CustomText('Your Customer ', fontSize: 10.sp),
+                CustomText('You have request from ', fontSize: 10.sp),
                 CustomText(chatOrderData!.getCustomers.name,
                     fontSize: 10.sp,
                     fontColor: appColors.brown,
                     fontWeight: FontWeight.w700),
-                CustomText(' already joined', fontSize: 10.sp),
+                CustomText(' accept it', fontSize: 10.sp),
                 SizedBox(width: 8.w),
               ]),
             ),

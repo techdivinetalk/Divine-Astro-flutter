@@ -174,7 +174,6 @@ class MessageView extends StatelessWidget {
         gst: chatMessage.getPooja!.gst ?? 0,
         id: chatMessage.getPooja!.id ?? 0,
         prodName: chatMessage.getPooja!.poojaName ?? "",
-
       );
     } else {
       getProduct = chatMessage.getProduct!;
@@ -211,12 +210,12 @@ class MessageView extends StatelessWidget {
         child: ListTile(
           leading: ClipRRect(
             borderRadius: BorderRadius.circular(10.0.sp),
-            child:CommonImageView(
+            child: CommonImageView(
               height: 50,
               width: 50,
               placeHolder: Assets.images.defaultProfile.path,
               imagePath:
-              "${Get.find<SharedPreferenceService>().getAmazonUrl()}/${getProduct.prodImage}",
+                  "${Get.find<SharedPreferenceService>().getAmazonUrl()}/${getProduct.prodImage}",
             ),
           ),
           title: CustomText(
@@ -331,132 +330,172 @@ class MessageView extends StatelessWidget {
   Widget textMsgView(
       BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     RxInt msgType = (chatMessage.seenStatus ?? 0).obs;
-print(chatMessage.id.toString() ==
-    AppFirebaseService().orderData["userId"].toString());
-print("view kundli");
+
     return SizedBox(
       width: double.maxFinite,
       child: Column(
         crossAxisAlignment:
             yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            clipBehavior: Clip.antiAlias,
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 3.0,
-                    offset: const Offset(0.0, 3.0)),
-              ],
-              color: Colors.white,
-              borderRadius: const BorderRadius.all(Radius.circular(10)),
-            ),
-            constraints: BoxConstraints(
-                maxWidth: ScreenUtil().screenWidth * 0.7,
-                minWidth: ScreenUtil().screenWidth * 0.27),
-            child: Stack(
-              alignment:
-                  yourMessage ? Alignment.centerRight : Alignment.centerLeft,
-              children: [
-                Column(
-                  children: [
-                    Wrap(
-                      alignment: WrapAlignment.end,
-                      children: [
-                        Text(chatMessage.message ?? "",
-                            style: AppTextStyle.textStyle12(
-                              fontColor: chatMessage.id.toString() ==
-                                      AppFirebaseService()
-                                          .orderData["astroId"]
-                                          .toString()
-                                  ? appColors.red
-                                  : appColors.black,
-                            )),
-                      ],
-                    ),
-                    SizedBox(
-                      height: chatMessage.id.toString() ==
-                              AppFirebaseService()
-                                  .orderData["userId"]
-                                  .toString()
-                          ? 10
-                          : 0,
-                    ),
-                    Visibility(
-                      visible: chatMessage.id.toString() ==
-                          AppFirebaseService().orderData["userId"].toString(),
-                      child: CustomButton(
-                          color: appColors.guideColor,
-                          onTap: () {
-                            print(AppFirebaseService().orderData["lat"]);
-                            print("objectobjectobjectobjectobject");
-                            final dateData = DateFormat("dd/MM/yyyy")
-                                .parse(AppFirebaseService().orderData["dob"]);
-                            DateTime timeData = DateFormat("h:mm a").parse(
-                                AppFirebaseService().orderData["timeOfBirth"]);
-                            Params params = Params(
-                              name: AppFirebaseService()
-                                  .orderData["customerName"],
-                              day: dateData.day,
-                              year: dateData.year,
-                              month: dateData.month,
-                              hour: timeData.hour,
-                              min: timeData.minute,
-                              lat: double.parse(AppFirebaseService()
-                                  .orderData["lat"]
-                                  .toString()),
-                              long: double.parse(
-                                  AppFirebaseService().orderData["lng"]),
-                              location: AppFirebaseService()
-                                  .orderData["placeOfBirth"],
-                            );
-                            Get.toNamed(RouteName.kundliDetail, arguments: {
-                              "kundli_id": 0,
-                              "from_kundli": false,
-                              "params": params,
-                              "gender":
-                                  AppFirebaseService().orderData["gender"],
-                            });
-                          },
-                          child: Text(
-                            "View Kundli",
-                            style: TextStyle(color: appColors.guideTextColor),
-                          )),
-                    ),
-                    const SizedBox(height: 20),
-                  ],
-                ),
-                Positioned(
-                  bottom: 0,
-                  right: 0,
-                  child: Row(
-                    children: [
-                      Text(
-                        messageDateTime(
-                            int.parse("${chatMessage.time ?? "0"}")),
-                        style: AppTextStyle.textStyle10(
-                          fontColor: appColors.darkBlue,
-                        ),
-                      ),
-                      if (yourMessage) SizedBox(width: 8.w),
-                      if (yourMessage)
-                        Obx(() => msgType.value == 0
-                            ? Assets.images.icSingleTick.svg()
-                            : msgType.value == 1
-                                ? Assets.images.icDoubleTick.svg(
-                                    colorFilter: ColorFilter.mode(
-                                        appColors.disabledGrey,
-                                        BlendMode.srcIn))
-                                : msgType.value == 3
-                                    ? Assets.images.icDoubleTick.svg()
-                                    : Assets.images.icSingleTick.svg())
-                    ],
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment:
+                yourMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+            children: [
+              !yourMessage
+                  ? Obx(
+                      () {
+                        Map<String, dynamic> order = {};
+                        order = AppFirebaseService().orderData.value;
+                        String imageURL = order["customerImage"] ?? "";
+                        String appended =
+                            "${Get.find<SharedPreferenceService>().getAmazonUrl()}/$imageURL";
+                        print("img:: $appended");
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 3),
+                          child: SizedBox(
+                            height: 35,
+                            width: 35,
+                            child: CustomImageWidget(
+                              imageUrl: appended,
+                              rounded: true,
+                              typeEnum: TypeEnum.user,
+                            ),
+                          ),
+                        );
+                      },
+                    )
+                  : SizedBox(),
+              const SizedBox(width: 5),
+               Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                clipBehavior: Clip.antiAlias,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                      color:
+                          yourMessage ? Color(0xffFFEEF0) : Color(0xffDCDCDC)),
+                  color: yourMessage ? Color(0xffFFF9FA) : appColors.white,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(10),
+                    topLeft: Radius.circular(yourMessage ? 10 : 0),
+                    bottomRight: Radius.circular(10),
+                    topRight: Radius.circular(!yourMessage ? 10 : 0),
                   ),
                 ),
-              ],
-            ),
+                constraints: BoxConstraints(
+                    maxWidth: ScreenUtil().screenWidth * 0.8,
+                    minWidth: ScreenUtil().screenWidth * 0.27),
+                child: Stack(
+                  alignment: yourMessage
+                      ? Alignment.centerRight
+                      : Alignment.centerLeft,
+                  children: [
+                    Column(
+                      children: [
+                        Wrap(
+                          alignment: WrapAlignment.end,
+                          children: [
+                            Text(chatMessage.message ?? "",
+                                style: AppTextStyle.textStyle12(
+                                  fontColor: chatMessage.id.toString() ==
+                                          AppFirebaseService()
+                                              .orderData["astroId"]
+                                              .toString()
+                                      ? appColors.red
+                                      : appColors.black,
+                                )),
+                          ],
+                        ),
+                        SizedBox(
+                          height: chatMessage.id.toString() ==
+                                  AppFirebaseService()
+                                      .orderData["userId"]
+                                      .toString()
+                              ? 10
+                              : 0,
+                        ),
+                        Visibility(
+                          visible: chatMessage.id.toString() ==
+                              AppFirebaseService()
+                                  .orderData["userId"]
+                                  .toString(),
+                          child: CustomButton(
+                              color: appColors.guideColor,
+                              onTap: () {
+                                print(AppFirebaseService().orderData["lat"]);
+                                print("objectobjectobjectobjectobject");
+                                final dateData = DateFormat("dd/MM/yyyy").parse(
+                                    AppFirebaseService().orderData["dob"]);
+                                DateTime timeData = DateFormat("h:mm a").parse(
+                                    AppFirebaseService()
+                                        .orderData["timeOfBirth"]);
+                                Params params = Params(
+                                  name: AppFirebaseService()
+                                      .orderData["customerName"],
+                                  day: dateData.day,
+                                  year: dateData.year,
+                                  month: dateData.month,
+                                  hour: timeData.hour,
+                                  min: timeData.minute,
+                                  lat: double.parse(AppFirebaseService()
+                                      .orderData["lat"]
+                                      .toString()),
+                                  long: double.parse(
+                                      AppFirebaseService().orderData["lng"]),
+                                  location: AppFirebaseService()
+                                      .orderData["placeOfBirth"],
+                                );
+                                Get.toNamed(RouteName.kundliDetail, arguments: {
+                                  "kundli_id": 0,
+                                  "from_kundli": false,
+                                  "params": params,
+                                  "gender":
+                                      AppFirebaseService().orderData["gender"],
+                                });
+                              },
+                              child: Text(
+                                "View Kundli",
+                                style:
+                                    TextStyle(color: appColors.guideTextColor),
+                              )),
+                        ),
+                        const SizedBox(height: 20),
+                      ],
+                    ),
+                    Positioned(
+                      bottom: 0,
+                      right: 0,
+                      child: Row(
+                        children: [
+                          Text(
+                            messageDateTime(
+                                int.parse("${chatMessage.time ?? "0"}")),
+                            style: TextStyle(
+                                fontSize: 7,
+                                color: appColors.greyColor,
+                                fontFamily: FontFamily.metropolis,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          if (yourMessage) SizedBox(width: 8.w),
+                          if (yourMessage)
+                            Obx(() => msgType.value == 0
+                                ? Assets.images.icSingleTick.svg()
+                                : msgType.value == 1
+                                    ? Assets.images.icDoubleTick.svg(
+                                        colorFilter: ColorFilter.mode(
+                                            appColors.disabledGrey,
+                                            BlendMode.srcIn))
+                                    : msgType.value == 3
+                                        ? Assets.images.icDoubleTick.svg()
+                                        : Assets.images.icSingleTick.svg())
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
           )
         ],
       ),
@@ -553,42 +592,81 @@ print("view kundli");
   Widget giftSendUi(BuildContext context, ChatMessage chatMessage,
       bool yourMessage, String customerName) {
     print("giftsend called");
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: Container(
-        padding: const EdgeInsets.fromLTRB(15.0, 10, 15.0, 10),
-        decoration: BoxDecoration(
-          color: appColors.white,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Flexible(
-              child: Text(
-                "${customerName} have sent ${chatMessage.message!.contains("https") ? "" : chatMessage.message ?? ""}",
-                style:  TextStyle(color: Colors.red,fontFamily: FontFamily.metropolis,),
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment:
+      yourMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+      children: [
+        !yourMessage
+            ? Obx(
+              () {
+            Map<String, dynamic> order = {};
+            order = AppFirebaseService().orderData.value;
+            String imageURL = order["customerImage"] ?? "";
+            String appended =
+                "${Get.find<SharedPreferenceService>().getAmazonUrl()}/$imageURL";
+            print("img:: $appended");
+            return Padding(
+              padding: const EdgeInsets.only(top: 3),
+              child: SizedBox(
+                height: 35,
+                width: 35,
+                child: CustomImageWidget(
+                  imageUrl: appended,
+                  rounded: true,
+                  typeEnum: TypeEnum.user,
+                ),
               ),
+            );
+          },
+        )
+            : SizedBox(),
+        const SizedBox(width: 5),
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+          decoration: BoxDecoration(
+            border: Border.all(
+                color: yourMessage ? const Color(0xffFFEEF0) : const Color(0xffDCDCDC)),
+            color: yourMessage ? const Color(0xffFFF9FA) : appColors.white,
+            borderRadius: BorderRadius.only(
+              bottomLeft: const Radius.circular(10),
+              topLeft: Radius.circular(yourMessage ? 10 : 0),
+              bottomRight: const Radius.circular(10),
+              topRight: Radius.circular(!yourMessage ? 10 : 0),
             ),
-            SizedBox(width: 10.h),
-            SizedBox(
-              height: 32,
-              width: 32,
-              child: CustomImageWidget(
-                imageUrl: chatMessage.awsUrl ?? '',
-                rounded: true,
-                // added by divine-dharam
-                typeEnum: TypeEnum.gift,
-                //
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Flexible(
+                child: Text(
+                  "${customerName.capitalizeFirst} have sent ${chatMessage.message!.contains("https") ? "" : chatMessage.message ?? ""}",
+                  style: const TextStyle(
+                    color: Colors.red,
+                    fontFamily: FontFamily.metropolis,
+                    fontWeight: FontWeight.w500
+                  ),
+                ),
               ),
-            ),
-          ],
+              SizedBox(width: 10.h),
+              SizedBox(
+                height: 32,
+                width: 32,
+                child: CustomImageWidget(
+                  imageUrl: chatMessage.awsUrl ?? '',
+                  rounded: true,
+                  // added by divine-dharam
+                  typeEnum: TypeEnum.gift,
+                  //
+                ),
+              ),
+            ],
+          ),
         ),
-      ),
+      ],
     );
   }
-
 
   Widget imageMsgView(String image, bool yourMessage,
       {required ChatMessage chatDetail, required int index}) {
@@ -968,7 +1046,6 @@ print("view kundli");
 
   Widget CustomProductView(
       {required ChatMessage chatDetail, required int index, String? baseUrl}) {
-
     return Align(
       alignment: Alignment.bottomRight,
       child: Container(
@@ -984,7 +1061,8 @@ print("view kundli");
             CustomImageView(
               height: 165,
               width: 165,
-              imagePath: "${Get.find<SharedPreferenceService>().getAmazonUrl()}/${chatDetail.getCustomProduct!.image}",
+              imagePath:
+                  "${Get.find<SharedPreferenceService>().getAmazonUrl()}/${chatDetail.getCustomProduct!.image}",
               radius: const BorderRadius.vertical(top: Radius.circular(10)),
               placeHolder: "assets/images/default_profiles.svg",
               fit: BoxFit.cover,
