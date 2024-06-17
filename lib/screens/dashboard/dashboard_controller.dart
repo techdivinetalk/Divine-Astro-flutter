@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
 import 'package:contacts_service/contacts_service.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/constants.dart';
@@ -157,6 +158,7 @@ class DashboardController extends GetxController
     await [
       Permission.camera,
       Permission.microphone,
+      Permission.storage,
     ].request();
     Get.back(); // Close the bottom sheet after requesting permissions
     if (await FlutterOverlayWindow.isPermissionGranted() == false) {
@@ -164,11 +166,44 @@ class DashboardController extends GetxController
     }
   }
 
+  void checkAndRequestPermissions() async {
+   // storagePermission();
+  }
+
+  Future<bool> storagePermission() async {
+    final DeviceInfoPlugin info = DeviceInfoPlugin(); // import 'package:device_info_plus/device_info_plus.dart';
+    final AndroidDeviceInfo androidInfo = await info.androidInfo;
+    debugPrint('releaseVersion : ${androidInfo.version.release}');
+    final int androidVersion = int.parse(androidInfo.version.release);
+    bool havePermission = false;
+
+    if (androidVersion >= 13) {
+      final request = await [
+        Permission.videos,
+        Permission.photos,
+        //..... as needed
+      ].request(); //import 'package:permission_handler/permission_handler.dart';
+
+      havePermission = request.values.every((status) => status == PermissionStatus.granted);
+    } else {
+      final status = await Permission.storage.request();
+      havePermission = status.isGranted;
+    }
+
+    if (!havePermission) {
+      // if no permission then open app-setting
+      await openAppSettings();
+    }
+
+    return havePermission;
+  }
   @override
   Future<void> onInit() async {
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
     checkPermissions();
+    getOrderFromApi();
+    checkAndRequestPermissions();
     //   print("microphone ${await FlutterOverlayWindow.isPermissionGranted()}");
     print("beforeGoing 2 - ${preferenceService.getUserDetail()?.id}");
     broadcastReceiver.start();
@@ -293,9 +328,16 @@ class DashboardController extends GetxController
   void onReady() {
     final socket = AppSocket();
     socket.socketConnect();
-    getOrderFromApi();
     super.onReady();
   }
+  Future<void> requestPermissions1() async {
+    if (await Permission.storage.request().isGranted) {
+      print("isGranted1");
+    } else {
+      print("isGranted0");
+    }
+  }
+
 
   getOrderFromApi() async {
     try {

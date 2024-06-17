@@ -154,7 +154,7 @@ class _AstroWaitListWidgetState extends State<AstroWaitListWidget> {
   }
 
   Widget listViewForNextInLine() {
-    return widget.list.length > 0
+    return widget.list.isNotEmpty
         ? Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
