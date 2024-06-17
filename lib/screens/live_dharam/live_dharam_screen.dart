@@ -305,7 +305,7 @@ class _LivePage extends State<LiveDharamScreen>
     WidgetsBinding.instance.endOfFrame.then(
       (_) async {
         if (mounted) {
-          final bool cond1 = _controller.isHost;
+          final bool cond1 = true;
           final bool cond2 = _controller.waitListModel.isNotEmpty;
           final bool cond3 = _controller.currentCaller.id!.isEmpty;
           final bool cond4 = !isAcceptPopupOpen;
@@ -436,7 +436,7 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> onUserLeave(ZegoUIKitUser zegoUIKitUser) async {
-    final bool cond1 = _controller.isHost;
+    final bool cond1 = true;
     final bool cond2 = _controller.currentCaller.isEngaded!;
     final bool cond3 = _controller.currentCaller.id! == zegoUIKitUser.id;
     final bool cond4 = zegoUIKitUser.id != _controller.userId;
@@ -656,12 +656,10 @@ class _LivePage extends State<LiveDharamScreen>
     final ZegoUIKitSignalingPlugin plugin = ZegoUIKitSignalingPlugin();
     final List<IZegoUIKitPlugin> pluginsList = <IZegoUIKitPlugin>[
       plugin,
-      ZegoUIKitBeautyPlugin(),
+      ZegoUIKitSignalingPlugin(),
       getBeautyPlugin()
     ];
-    return _controller.isHost
-        ? ZegoUIKitPrebuiltLiveStreamingConfig.host(plugins: pluginsList)
-        : ZegoUIKitPrebuiltLiveStreamingConfig.audience(plugins: pluginsList);
+    return ZegoUIKitPrebuiltLiveStreamingConfig.host(plugins: pluginsList);
   }
 
   ZegoUIKitBeautyPlugin getBeautyPlugin() {
@@ -755,10 +753,6 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-  String formatDate(DateTime dateTime) {
-    final DateFormat formatter = DateFormat('d MMM yyyy');
-    return formatter.format(dateTime);
-  }
 
   Widget noticeBoard() {
     // do not remove
@@ -784,7 +778,6 @@ class _LivePage extends State<LiveDharamScreen>
                   final String title = noticeBoardResData.title ?? "";
                   final String description =
                       noticeBoardResData.description ?? "";
-
                   return DecoratedBox(
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(
@@ -851,7 +844,7 @@ class _LivePage extends State<LiveDharamScreen>
             maintainSize: true,
             maintainAnimation: true,
             maintainState: true,
-            visible: _controller.isHost,
+            visible: true,
             child: settingsRowForAstro(),
           ),
         ],
@@ -1043,19 +1036,13 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-  String nameWithWithoutIDs(ZegoCustomMessage msg, bool isModerator) {
-    return _controller.isHost ? "${msg.userName}" : "${msg.userName}";
-  }
+
 
   bool moreOptionConditions(ZegoCustomMessage msg, bool isModerator) {
     final bool cond1 = msg.userId != _controller.userId;
     final bool cond2 = !(_controller.currentCaller.id == (msg.userId ?? ""));
     final bool cond4 = msg.userId != _controller.userId;
-    return _controller.isHost
-        ? cond1 && cond2
-        : _controller.isMod
-            ? cond1 && cond2 && cond4
-            : false;
+    return  cond1 && cond2;
   }
 
   Widget inRoomMessageTop() {
@@ -1186,7 +1173,7 @@ class _LivePage extends State<LiveDharamScreen>
               userName: userName,
             );
           },
-          isHost: _controller.isHost,
+          isHost: true,
           walletBalance: 0,
         );
       },
@@ -1256,7 +1243,7 @@ class _LivePage extends State<LiveDharamScreen>
           astologerName: _controller.userName,
           astologerImage: _controller.avatar,
           astologerSpeciality: _controller.hostSpeciality,
-          isHost: _controller.isHost,
+          isHost: true,
           onAccept: () async {
             Get.back();
             print("connectInvite-1 ");
@@ -1320,7 +1307,7 @@ class _LivePage extends State<LiveDharamScreen>
             Get.back();
             yesDisconnect();
           },
-          isAstro: _controller.isHost,
+          isAstro: true,
           astroAvatar: _controller.avatar,
           astroUserName: _controller.userName,
           custoAvatar: _controller.currentCaller.avatar!,
@@ -1350,7 +1337,7 @@ class _LivePage extends State<LiveDharamScreen>
             Get.back();
             yesDisconnect();
           },
-          isAstro: _controller.isHost,
+          isAstro: true,
           astroAvatar: _controller.avatar,
           astroUserName: _controller.userName,
           custoAvatar: _controller.currentCaller.avatar!,
@@ -1403,7 +1390,7 @@ class _LivePage extends State<LiveDharamScreen>
         );
         return MoreOptionsWidget(
           onClose: Get.back,
-          isHost: _controller.isHost,
+          isHost: true,
           onTapAskForGifts: () async {
             Get.back();
             await giftPopup(ctx: context, userId: userId, userName: userName);
@@ -1592,12 +1579,7 @@ class _LivePage extends State<LiveDharamScreen>
       if (senderUserID != _controller.userId) {
         if (roomId == _controller.userId) {
           if (type == "") {
-            // await Future.delayed(const Duration(seconds: 3));
             if (mounted) {
-              // animationsList.add(item["animation"]);
-              // await Future.delayed(const Duration(seconds:2));
-              // if(mounted){
-              //   for(int i = 0;i<animationsList.length;i++){
               print(item["animation"]);
               print("objectobjectobjectobject");
               // ZegoGiftPlayer().play(
@@ -1689,21 +1671,13 @@ class _LivePage extends State<LiveDharamScreen>
             // if (showCardDeckToUserPopupTimeoutHappening) {
             //   Get.back();
             // } else {}
-            if (_controller.isHost) {
-              successAndFailureCallBack(
-                message: "User closed Card Selection",
-                isForSuccess: false,
-                isForFailure: true,
-              );
-            } else {
-              // successAndFailureCallBack(
-              //   message: "Card Selection Timeout",
-              //   isForSuccess: false,
-              //   isForFailure: true,
-              // );
-            }
+            successAndFailureCallBack(
+              message: "User closed Card Selection",
+              isForSuccess: false,
+              isForFailure: true,
+            );
           } else if (type == "Notify Astro For Exit WaitList") {
-            final bool cond1 = _controller.isHost;
+            final bool cond1 = true;
             final bool cond2 = isAcceptPopupOpen;
             final bool cond3 = roomId == _controller.userId;
             final bool cond4 = userId == isAcceptPopupOpenFor.id;
@@ -1768,9 +1742,7 @@ class _LivePage extends State<LiveDharamScreen>
             );
             await sendTaroCard(item);
 
-            if (_controller.isHost) {
-              await waitingForUserToSelectCardsPopup();
-            } else {}
+            await waitingForUserToSelectCardsPopup();
           },
           userName: _controller.currentCaller.userName!,
           onTimeout: () async {
@@ -1833,8 +1805,6 @@ class _LivePage extends State<LiveDharamScreen>
             );
             await sendTaroCard(item);
 
-            if (_controller.isHost) {
-            } else {}
           },
           numOfSelection: _controller.tarotGameModel.canPick ?? 0,
           userName: _controller.currentCaller.userName!,
@@ -2058,13 +2028,7 @@ class _LivePage extends State<LiveDharamScreen>
   Widget newAppBarLeft() {
     return InkWell(
       onTap: () async {
-        if (_controller.isHost) {
-          await keyboardPop();
-        } else {
-          //  _controller.isCustBlocked.data?.isCustomerBlocked == 1
-          //     ? await youAreBlocked()
-          //     : await keyboardPop();
-        }
+        await keyboardPop();
       },
       child: SizedBox(
         height: 50,
@@ -2399,7 +2363,7 @@ class _LivePage extends State<LiveDharamScreen>
       builder: (BuildContext context) {
         return ExtendTimeWidget(
           onClose: Get.back,
-          isAstro: _controller.isHost,
+          isAstro: true,
           yesExtend: () async {
             Get.back();
             // await _controller.extendTime();
@@ -2983,9 +2947,9 @@ class _LivePage extends State<LiveDharamScreen>
         ),
         Obx(() {
           return AnimatedOpacity(
-            opacity: !_controller.isHost || isLiveCall.value == 0 ? 0.0 : 1.0,
+            opacity:  isLiveCall.value == 0 ? 0.0 : 1.0,
             duration: const Duration(seconds: 1),
-            child: !_controller.isHost || isLiveCall.value == 0
+            child:  isLiveCall.value == 0
                 ? const SizedBox()
                 : Column(
                     children: [
@@ -3202,26 +3166,26 @@ class _LivePage extends State<LiveDharamScreen>
           },
         ),
         host: ZegoLiveStreamingCoHostHostEvents(
-          onRequestReceived: (ZegoUIKitUser user) async {
-            showNotifOverlay(user: user, msg: "onCoHostRequestReceived");
+          onRequestReceived: (ZegoLiveStreamingCoHostHostEventRequestReceivedData user) async {
+            showNotifOverlay(user: user.audience, msg: "onCoHostRequestReceived");
 
             if (_controller.extendTimeWidgetVisible) {
               _controller.extendTimeWidgetVisible = false;
             } else {}
 
             await onCoHostRequest(
-              user: user,
-              userId: user.id,
-              userName: user.name,
+              user: user.audience,
+              userId: user.audience.id,
+              userName: user.audience.name,
               avatar: "https://robohash.org/avatarWidget",
             );
           },
-          onRequestCanceled: (ZegoUIKitUser user) async {
-            showNotifOverlay(user: user, msg: "onCoHostRequestCanceled");
+          onRequestCanceled: (ZegoLiveStreamingCoHostHostEventRequestCanceledData user) async {
+            showNotifOverlay(user: user.audience, msg: "onCoHostRequestCanceled");
             // await onCoHostRequestCanceled(user);
           },
-          onRequestTimeout: (ZegoUIKitUser user) {
-            showNotifOverlay(user: user, msg: "onCoHostRequestTimeout");
+          onRequestTimeout: (ZegoLiveStreamingCoHostHostEventRequestTimeoutData user) {
+            showNotifOverlay(user: user.audience, msg: "onCoHostRequestTimeout");
           },
           onActionAcceptRequest: () {
             showNotifOverlay(user: null, msg: "onActionAcceptCoHostRequest");
@@ -3229,19 +3193,19 @@ class _LivePage extends State<LiveDharamScreen>
           onActionRefuseRequest: () {
             showNotifOverlay(user: null, msg: "onActionRefuseCoHostRequest");
           },
-          onInvitationSent: (ZegoUIKitUser user) async {
-            showNotifOverlay(user: user, msg: "onCoHostInvitationSent");
+          onInvitationSent: (ZegoLiveStreamingCoHostHostEventInvitationSentData user) async {
+            showNotifOverlay(user: user.audience, msg: "onCoHostInvitationSent");
             await _controller.addUpdateToWaitList(
-              customerId: user.id,
+              customerId: user.audience.id,
               callType: "",
               isEngaded: false,
               isRequest: false,
               callStatus: 1,
             );
           },
-          onInvitationTimeout: (ZegoUIKitUser user) {
-            showNotifOverlay(user: user, msg: "onCoHostInvitationTimeout");
-            print(user.id);
+          onInvitationTimeout: (ZegoLiveStreamingCoHostHostEventInvitationTimeoutData user) {
+            showNotifOverlay(user: user.audience, msg: "onCoHostInvitationTimeout");
+            print(user.audience.id);
             print("user.id");
             if (isAcceptPopupOpen) {
               Get.back();
@@ -3251,23 +3215,23 @@ class _LivePage extends State<LiveDharamScreen>
             }
             // _controller.removeFromWaitList(customerId:user.id);
             successAndFailureCallBack(
-              message: "${user.name} timeout to take the call",
+              message: "${user.audience.name} timeout to take the call",
               isForSuccess: false,
               isForFailure: true,
             );
           },
-          onInvitationAccepted: (ZegoUIKitUser user) {
-            showNotifOverlay(user: user, msg: "onCoHostInvitationAccepted");
+          onInvitationAccepted: (ZegoLiveStreamingCoHostHostEventInvitationAcceptedData user) {
+            showNotifOverlay(user: user.audience, msg: "onCoHostInvitationAccepted");
           },
-          onInvitationRefused: (ZegoUIKitUser user) {
-            showNotifOverlay(user: user, msg: "onCoHostInvitationRefused");
+          onInvitationRefused: (ZegoLiveStreamingCoHostHostEventInvitationRefusedData user) {
+            showNotifOverlay(user: user.audience, msg: "onCoHostInvitationRefused");
 
             if (isAcceptPopupOpen) {
               Get.back();
             } else {}
 
             successAndFailureCallBack(
-              message: "${user.name} refused to take the call",
+              message: "${user.audience.name} refused to take the call",
               isForSuccess: false,
               isForFailure: true,
             );
@@ -3283,14 +3247,14 @@ class _LivePage extends State<LiveDharamScreen>
           onRequestTimeout: () {
             showNotifOverlay(user: null, msg: "onCoHostRequestTimeout");
           },
-          onRequestAccepted: () {
+          onRequestAccepted: (ZegoLiveStreamingCoHostAudienceEventRequestAcceptedData user) {
             showNotifOverlay(user: null, msg: "onCoHostRequestAccepted");
           },
-          onRequestRefused: () {
+          onRequestRefused: (ZegoLiveStreamingCoHostAudienceEventRequestRefusedData user) {
             showNotifOverlay(user: null, msg: "onCoHostRequestRefused");
           },
-          onInvitationReceived: (ZegoUIKitUser user) {
-            showNotifOverlay(user: user, msg: "onCoHostInvitationReceived");
+          onInvitationReceived: (ZegoLiveStreamingCoHostAudienceEventRequestReceivedData user) {
+            showNotifOverlay(user: user.host, msg: "onCoHostInvitationReceived");
           },
           onInvitationTimeout: () {
             showNotifOverlay(user: null, msg: "onCoHostInvitationTimeout");
@@ -3333,16 +3297,13 @@ class _LivePage extends State<LiveDharamScreen>
       needAcceptButton: true,
       needDeclinetButton: false,
       onAcceptButton: () async {
-        // if (_controller.openAceeptRejectDialogForId == userId) {
-        //   final connectInvite = _zegoController.coHost;
-        //   await connectInvite.hostSendCoHostInvitationToAudience(user);
-        // } else {}
         print("${user.id}");
-        print("${user.name}");
+        print("user name ---- ${user.name}");
         print("calling accept button");
         final connectInvite = zegoController.coHost;
         print("calling accept button");
         await connectInvite.hostSendCoHostInvitationToAudience(user);
+        Get.back();
       },
       onDeclineButton: () {},
       user: user,
@@ -3416,10 +3377,7 @@ class _LivePage extends State<LiveDharamScreen>
           },
           needAcceptButton: needAcceptButton,
           needDeclinetButton: needDeclinetButton,
-          onAcceptButton: () {
-            Get.back();
-            onAcceptButton();
-          },
+          onAcceptButton: onAcceptButton,
           onDeclineButton: () {
             Get.back();
             onDeclineButton();
@@ -3427,13 +3385,9 @@ class _LivePage extends State<LiveDharamScreen>
           userId: userId,
           avatar: avatar,
           userName: userName,
-          isHost: _controller.isHost,
+          isHost: true,
           onTimeout: () {
             Get.back();
-            if (_controller.isHost) {
-            } else {
-              onDeclineButton();
-            }
           },
         );
       },
@@ -3446,10 +3400,6 @@ class _LivePage extends State<LiveDharamScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.detached) {
-      // final bool hasMyIdInWaitList = _controller.hasMyIdInWaitList();
-      // if (hasMyIdInWaitList) {
-      //   await _controller.removeFromWaitList();
-      // } else {}
       await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
       await _controller.removeMyNode();
     } else {}
