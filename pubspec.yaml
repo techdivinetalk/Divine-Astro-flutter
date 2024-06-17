@@ -124,7 +124,6 @@ dependencies:
 dependency_overrides:
   zego_uikit: 2.22.8
   intl: ^0.18.1
-  zego_uikit: 2.22.8
 
 dev_dependencies:
 
