@@ -32,7 +32,7 @@ class DashboardScreen extends GetView<DashboardController> {
 
   @override
   Widget build(BuildContext context) {
-
+    // controller.showTutorial(context);
     print("beforeGoing 4 - ${preferenceService.getUserDetail()?.id}");
     return GetBuilder<DashboardController>(
       assignId: true,
@@ -127,6 +127,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                     unselectedItemColor: appColors.lightGrey,
                                     items: <BottomNavigationBarItem>[
                                       BottomNavigationBarItem(
+                                        key: controller.keyHome,
                                         icon: Column(
                                           children: [
                                             Assets.images.icSelectedHome.svg(
@@ -144,6 +145,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                         label: 'home'.tr,
                                       ),
                                       BottomNavigationBarItem(
+                                        key: controller.keyPerformance,
                                         icon: Column(
                                           children: [
                                             Assets.images.icSelectedPerfom.svg(
@@ -161,6 +163,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                         label: 'performance'.tr,
                                       ),
                                       BottomNavigationBarItem(
+                                        key: controller.keyAssistance,
                                         icon: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
@@ -182,6 +185,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                         label: "assistance".tr,
                                       ),
                                       BottomNavigationBarItem(
+                                        key: controller.keyQueue,
                                         icon: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.center,
@@ -205,6 +209,7 @@ class DashboardScreen extends GetView<DashboardController> {
 
                                       // Profile Tab comment
                                       BottomNavigationBarItem(
+                                        key: controller.keyProfile,
                                         icon: Column(
                                           children: [
                                             userImage.value.contains("null") ||

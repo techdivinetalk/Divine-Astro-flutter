@@ -133,8 +133,8 @@ class LiveDharamController extends GetxController {
     final String image = pref.getUserDetail()?.image ?? "";
     avatar = isValidImageURL(imageURL: "$awsURL/$image");
     isMod = false;
-    isHost = true;
     isHostAvailable.value = true;
+
     hostSpeciality = getSpeciality();
 
     astrologerData = <dynamic, dynamic>{};
@@ -233,9 +233,7 @@ class LiveDharamController extends GetxController {
 
   set isMod(bool value) => _isMod(value);
 
-  bool get isHost => _isHost.value;
 
-  set isHost(bool value) => _isHost(value);
 
   String get hostSpeciality => _hostSpeciality.value;
 

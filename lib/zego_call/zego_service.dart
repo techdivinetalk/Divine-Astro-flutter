@@ -83,15 +83,18 @@ class ZegoService {
       ),
       uiConfig: ZegoCallInvitationUIConfig(
         prebuiltWithSafeArea: false,
-        callingBackgroundBuilder: (
-          BuildContext context,
-          Size size,
-          ZegoCallingBackgroundBuilderInfo info,
-        ) {
+        inviter: ZegoCallInvitationInviterUIConfig(backgroundBuilder: (context, size, info) {
           return info.callType == ZegoCallType.voiceCall
               ? backgroundImage(needBlendedColor: true)
               : null;
-        },
+        },),
+        invitee: ZegoCallInvitationInviteeUIConfig(
+          backgroundBuilder: (context, size, info) {
+            return info.callType == ZegoCallType.voiceCall
+                ? backgroundImage(needBlendedColor: true)
+                : null;
+          },
+        )
       ),
       // events: ZegoUIKitPrebuiltCallEvents(
       //   onCallEnd: (
