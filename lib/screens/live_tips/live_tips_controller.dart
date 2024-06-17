@@ -72,25 +72,6 @@ class LiveTipsController extends GetxController {
     super.onInit();
   }
 
-  /*void toggleCameraLens() {
-    final lensDirection = controller!.description.lensDirection;
-    CameraDescription newDescription;
-    if (lensDirection == CameraLensDirection.front) {
-      newDescription = cameras!.firstWhere((description) =>
-          description.lensDirection == CameraLensDirection.back);
-    } else {
-      newDescription = cameras!.firstWhere((description) =>
-          description.lensDirection == CameraLensDirection.front);
-    }
-
-    // _initCamera(newDescription)
-    controller = CameraController(
-      newDescription,
-      ResolutionPreset.max,
-    );
-    update();
-  }*/
-
   @override
   void dispose() {
     streamController.close();
@@ -135,71 +116,34 @@ class LiveTipsController extends GetxController {
     final String image = pref.getUserDetail()?.image ?? "";
     final String avatar = isValidImageURL(imageURL: "$awsURL/$image");
     final List<String> blockedCustomerList = await callBlockedCustomerListRes();
-    //
-    // if(kDebugMode){
-    //   CollectionReference live = FirebaseFirestore.instance.collection(livePath);
-    //
-    //   await live.doc(userId).set(
-    //     {
-    //       "id": userId,
-    //       "name": userName,
-    //       "image": avatar,
-    //       "isAvailable": true,
-    //       "isEngaged": 0,
-    //       "blockList": blockedCustomerList,
-    //     },
-    //   ).then((value) {
-    //     print("Node Added");
-    //   }).catchError((error) {
-    //     print("Failed to add node: $error");
-    //   });
-    // }else{
-    //   await database.ref().child("$livePath/$userId").update(
-    //     {
-    //       "id": userId,
-    //       "name": userName,
-    //       "image": avatar,
-    //       "isAvailable": true,
-    //       "isEngaged": 0,
-    //       "blockList": blockedCustomerList,
-    //     },
-    //   );
-    // }
-
-    await database.ref().child("$livePath/$userId").update(
-      {
-        "id": userId,
-        "name": userName,
-        "image": avatar,
-        "isEngaged": 0,
-      },
-    );
-
-    await database.ref().child("$livePath/$userId/realTime").update(
-      {
-        "blockList": blockedCustomerList,
-        "isAvailable": true,
-      },
-    );
-
+    CollectionReference live = FirebaseFirestore.instance.collection(livePath);
     CollectionReference liveCount =
         FirebaseFirestore.instance.collection(liveCountPath);
 
-    await liveCount.doc(userId).set(
+    await live.doc(userId).set(
       {
         "id": userId,
-        "astroName": userName,
-        "astroAvatar": avatar,
+        "isAvailable": true,
+        "blockList": blockedCustomerList,
       },
-    ).then((value) {
-      print("Node Added");
+    ).then((value) async {
+      print("Astrologer node added");
+      await liveCount.doc(userId).set({
+        "astroId":userId,
+        "astroName":userName,
+        "astroAvtar":avatar,
+      }).then((value) async {
+        print("successfully added");
+        LiveGlobalSingleton().isInLiveScreen = true;
+        await Get.offNamed(RouteName.liveDharamScreen, arguments: userId);
+        LiveGlobalSingleton().isInLiveScreen = false;
+      });
+      // LiveGlobalSingleton().isInLiveScreen = true;
+      // await Get.offNamed(RouteName.liveDharamScreen, arguments: userId);
+      // LiveGlobalSingleton().isInLiveScreen = false;
     }).catchError((error) {
       print("Failed to add node: $error");
     });
-    //
-    LiveGlobalSingleton().isInLiveScreen = true;
-    await Get.offNamed(RouteName.liveDharamScreen, arguments: userId);
-    LiveGlobalSingleton().isInLiveScreen = false;
 
     return Future<void>.value();
   }
