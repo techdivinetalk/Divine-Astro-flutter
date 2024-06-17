@@ -198,7 +198,7 @@ class RouteName {
   static const String remediesDetail = "/RemediesDetailsView";
   static const String acceptChatRequestScreen = "/AcceptChatRequestScreen";
   static const String liveLogsScreen = "/LiveLogsScreen";
-  static const String newchat = "/Newchat";
+
 }
 
 final Set<String> validRoutes = {
