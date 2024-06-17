@@ -354,7 +354,7 @@ class ChatMessageWithSocketController extends GetxController
     }
   }
 
-  void openCustomShop(ChatMessageWithSocketController controller) {
+/*  void openCustomShop(ChatMessageWithSocketController controller) {
     print(customProductData);
     print("controller.customProductData");
     Get.bottomSheet(
@@ -363,7 +363,7 @@ class ChatMessageWithSocketController extends GetxController
         customProductData: controller.customProductData,
       ),
     );
-  }
+  }*/
 
   updateOrderInfo(String key, dynamic value, bool isRemoved) {
     switch (key) {
@@ -436,6 +436,7 @@ class ChatMessageWithSocketController extends GetxController
         AppFirebaseService().database.child("order/${p0["orderId"]}").remove();
       } else {
         print("orderData Changed");
+
         initTask(p0);
       }
     });
@@ -491,9 +492,20 @@ class ChatMessageWithSocketController extends GetxController
             }
           });
         });
+
+        int userId = 0;
+        String userIdString = AppFirebaseService().orderData.value["userId"].toString();
+        print('User ID String: $userIdString');
+        if (int.tryParse(userIdString) != null) {
+          userId = int.parse(userIdString);
+        } else {
+          print('Invalid userIdString: $userIdString');
+          //throw message to user
+        }
+
         FirebaseDatabase.instance
             .ref(
-                "astrologer/${preferenceService.getUserDetail()!.id}/realTime/deliveredMsg/${int.parse(AppFirebaseService().orderData.value["userId"].toString())}")
+                "astrologer/${preferenceService.getUserDetail()!.id}/realTime/deliveredMsg/${userId}")
             .remove();
       }
     });
@@ -545,6 +557,8 @@ class ChatMessageWithSocketController extends GetxController
     //     .set((DateTime.now().millisecondsSinceEpoch) + 1);
   }
 
+
+
   navigateToOtherScreen() async {
     await Future.delayed(const Duration(milliseconds: 300));
     Get.offAllNamed(RouteName.dashboard);
@@ -552,12 +566,19 @@ class ChatMessageWithSocketController extends GetxController
 
   getMessageTemplatesLocally() async {
     final sharedPreferencesInstance = SharedPreferenceService();
-    final data = await sharedPreferencesInstance.getMessageTemplates();
-    if (data.isNotEmpty) {
-      messageTemplates(data);
+    try {
+      final data = await sharedPreferencesInstance.getMessageTemplates();
+      if (data.isNotEmpty) {
+        messageTemplates(data);
+      }
+    } catch (e) {
+      //error handling
+      print('Error retrieving message templates: $e');
+
     }
     update();
   }
+
 
   getMessageTemplates() async {
     try {
@@ -1305,16 +1326,24 @@ class ChatMessageWithSocketController extends GetxController
       debugPrint("test_scrollToBottomFunc: call");
       Timer(
         const Duration(seconds: 2),
-        () {
+            () {
           debugPrint("test_scrollToBottomFunc: jumpTo last");
-          messgeScrollController.jumpTo(
-            messgeScrollController.position.maxScrollExtent,
-          );
+          if (messgeScrollController.position.maxScrollExtent != null) {
+            messgeScrollController.animateTo(
+              messgeScrollController.position.maxScrollExtent,
+              duration: Duration(milliseconds: 500),
+              curve: Curves.easeOut,
+            );
+            update();
+          } else {
+            debugPrint("Scroll extent is null");
+          }
         },
       );
     }
-    update();
   }
+
+
 
   askForGift() async {
     await showCupertinoModalPopup(

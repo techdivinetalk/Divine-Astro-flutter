@@ -464,7 +464,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                           ),
                                         ),
                                         SizedBox(width: 10.h),
-                                        Expanded(
+                                        /*Expanded(
                                           child: GestureDetector(
                                             onTap: () async {
                                               controller
@@ -509,7 +509,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                               ),
                                             ),
                                           ),
-                                        ),
+                                        ),*/
                                       ],
                                     ),
                                     SizedBox(height: 8.h),
@@ -1154,7 +1154,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         // }
                         controller.openProduct(controller);
                         break;
-                      case "custom":
+                     // case "custom":
                         // print(controller.customProductData);
                         // print("controller.customProductData");
                         // Get.bottomSheet(
@@ -1164,8 +1164,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         //   ),
                         // );
 
-                        controller.openCustomShop(controller);
-                        break;
+                   /*     controller.openCustomShop(controller);
+                        break;*/
                     }
                   },
                   //     if (await PermissionHelper()

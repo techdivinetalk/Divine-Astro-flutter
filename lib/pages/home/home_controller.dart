@@ -71,13 +71,12 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   bool isOpenBonusSheet = false;
   bool isOpenPaidSheet = false;
   bool isOpenECommerceSheet = false;
-
   RxBool liveSwitch = true.obs;
-
   RxBool isCallEnable = true.obs;
   RxBool isChatEnable = true.obs;
   RxBool isVideoCallEnable = true.obs;
   RxBool isLiveEnable = true.obs;
+  bool istraininginfo = true;
 
   double xPosition = 10.0;
   double yPosition = Get.height * 0.4;
@@ -109,6 +108,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       update(['score_update']);
     }
   }
+
 
   onPreviousTap() {
     if (scoreIndex > 0) {

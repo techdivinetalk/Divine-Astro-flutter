@@ -16,8 +16,8 @@ class $AssetsImagesGen {
   const $AssetsImagesGen();
 
   /// File path: assets/images/chat_custom_shop.svg
-  SvgGenImage get chatCustomShop =>
-      const SvgGenImage('assets/images/chat_custom_shop.svg');
+///  SvgGenImage get chatCustomShop =>
+///      const SvgGenImage('assets/images/chat_custom_shop.svg');
 
   /// File path: assets/images/chat_product.svg
   SvgGenImage get chatProduct =>
@@ -1320,7 +1320,7 @@ class $AssetsSvgGen {
         cameraIcon,
         caution,
         chatGift,
-        custom,
+        //custom,
         customPuja,
         deckIcon,
         deleteAccout,

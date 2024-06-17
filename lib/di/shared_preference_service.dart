@@ -222,6 +222,7 @@ class SharedPreferenceService extends GetxService {
     return [];
   }
 
+
   // Future<List<MessageTemplates>> getMessageTemplates() async {
   //   final SharedPreferences sharedInstance =
   //   await SharedPreferences.getInstance();

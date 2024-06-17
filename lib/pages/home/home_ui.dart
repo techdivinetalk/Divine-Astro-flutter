@@ -5,7 +5,6 @@ import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/common/custom_widget_marquee.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
-
 import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
@@ -52,6 +51,7 @@ class HomeUI extends GetView<HomeController> {
   const HomeUI({Key? key}) : super(key: key);
 
   @override
+
   Widget build(BuildContext context) {
     print("beforeGoing 5 - ${preferenceService.getUserDetail()?.id}");
     return GetBuilder<HomeController>(
@@ -1155,6 +1155,7 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget scheduledTrainingWidgetUpdated() {
+
     return Visibility(
       visible: controller.astrologerTrainingSessionLst.isNotEmpty,
       child: ListView.builder(
@@ -1803,6 +1804,7 @@ class HomeUI extends GetView<HomeController> {
                         onTap: () {
                           Get.bottomSheet(CommonInfoSheet(
                             title: "nextOnlineTime".tr,
+
                             subTitle: "nextOnlineTimeDes".tr,
                           ));
                         },
@@ -2332,7 +2334,9 @@ class HomeUI extends GetView<HomeController> {
         ));
   }
 
+
   Widget trainingVideoWidget({HomeController? controller}) {
+
     if (controller!.homeData?.trainingVideo == null ||
         (controller.homeData?.trainingVideo ?? []).isEmpty) {
       return const SizedBox.shrink();
@@ -2372,13 +2376,21 @@ class HomeUI extends GetView<HomeController> {
                   child: SizedBox(),
                 ),
                 GestureDetector(
+
                     onTap: () {
-                      Get.bottomSheet(CommonInfoSheet(
-                        title: "trainingVideos".tr,
-                        subTitle: "trainingVideoDes".tr,
-                      ));
+                        Get.bottomSheet(CommonInfoSheet(
+                          title: "trainingVideos".tr,
+                          subTitle: "trainingVideoDes".tr,
+                        )
+                        );
                     },
-                    child: Assets.images.icInfo.svg(height: 16.h, width: 16.h)),
+                    child: Container(
+                        height:30,
+                        width:30,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Assets.images.icInfo.svg(height: 15.h, width: 15.h),
+                        ))),
               ],
             ),
           ),
@@ -2738,7 +2750,8 @@ class HomeUI extends GetView<HomeController> {
                     ),
                     SizedBox(height: 10.h),
                   ],
-                )),
+                )
+            ),
             /*Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Row(
@@ -2872,6 +2885,7 @@ class HomeUI extends GetView<HomeController> {
             )));
   }*/
 }
+
 
 class SelectedTimeForChat extends StatelessWidget {
   final HomeController? controller;

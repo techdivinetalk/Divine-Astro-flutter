@@ -198,6 +198,7 @@ class RouteName {
   static const String remediesDetail = "/RemediesDetailsView";
   static const String acceptChatRequestScreen = "/AcceptChatRequestScreen";
   static const String liveLogsScreen = "/LiveLogsScreen";
+  static const String newchat = "/Newchat";
 }
 
 final Set<String> validRoutes = {
@@ -294,10 +295,6 @@ class Routes {
     GetPage(
         page: () => const PriceChangeReqUI(),
         name: RouteName.priceChangeReqUI,
-        binding: PriceChangeReqBinding()),
-    GetPage(
-        page: () => const HomeUI(),
-        name: RouteName.homePageUI,
         binding: PriceChangeReqBinding()),
     GetPage(
         page: () => const NumberChangeReqUI(),
@@ -455,6 +452,7 @@ class Routes {
         name: RouteName.chatSuggestRemedyDetails,
         binding: ChatSuggestRemediesDetailsBinding()),
 
+
     GetPage(
         page: () => const FeedBack(),
         name: RouteName.feedback,
@@ -506,5 +504,6 @@ class Routes {
       page: LiveLogsUI.new,
       binding: LiveLogsBinding(),
     ),
+
   ];
 }

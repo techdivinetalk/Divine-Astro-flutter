@@ -92,30 +92,7 @@ Future<void> main() async {
       }
     });
   }
-  // Non-async exceptions
-  const fatalError = true;
-  FlutterError.onError = (errorDetails) {
-    if (fatalError) {
-      // If you want to record a "fatal" exception
-      FirebaseCrashlytics.instance.recordFlutterFatalError(errorDetails);
-      // ignore: dead_code
-    } else {
-      // If you want to record a "non-fatal" exception
-      FirebaseCrashlytics.instance.recordFlutterError(errorDetails);
-    }
-  };
-  // Async exceptions
-  PlatformDispatcher.instance.onError = (error, stack) {
-    if (fatalError) {
-      // If you want to record a "fatal" exception
-      FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
-      // ignore: dead_code
-    } else {
-      // If you want to record a "non-fatal" exception
-      FirebaseCrashlytics.instance.recordError(error, stack);
-    }
-    return true;
-  };
+
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("pushNotification1 ${message.notification?.title ?? ""}");
     print('Message data-: dasboardCurrentIndex---${message.data}');
@@ -237,7 +214,19 @@ Future<void> main() async {
     ZegoUIKitPrebuiltCallInvitationService().useSystemCallingUI(
       [ZegoUIKitSignalingPlugin()],
     );
-    runApp(MyApp());
+
+    try {
+      runApp(MyApp());
+    }
+    catch(error, stacktrace){
+      // If you want to record a "fatal" exception
+      print("hello");
+      FirebaseCrashlytics.instance.recordError(error, stacktrace, fatal: true);
+      // If you want to record a "non-fatal" exception
+      FirebaseCrashlytics.instance.recordError(error, stacktrace);
+
+    }
+
   });
   Permission.notification.isDenied.then((value) async {
     if (value) {
