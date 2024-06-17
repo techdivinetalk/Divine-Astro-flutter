@@ -343,7 +343,7 @@ class Routes {
         name: RouteName.chatMessageUI,
         binding: ChatMessageBinding()),
     GetPage(
-        page: () => const ChatMessageWithSocketUI(),
+        page: () =>  ChatMessageWithSocketUI(),
         name: RouteName.chatMessageWithSocketUI,
         binding: ChatMessageWithSocketBinding()),
     /* GetPage(

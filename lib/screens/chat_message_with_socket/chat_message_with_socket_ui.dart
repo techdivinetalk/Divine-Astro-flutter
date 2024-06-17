@@ -24,11 +24,14 @@ import "package:divine_astrologer/model/chat_offline_model.dart";
 import "package:divine_astrologer/zego_call/zego_service.dart";
 import "package:emoji_picker_flutter/emoji_picker_flutter.dart";
 import "package:firebase_database/firebase_database.dart";
+import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
+import "package:flutter/widgets.dart";
 
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
 import "package:get/get.dart";
+import "package:intl/intl.dart";
 
 import "package:lottie/lottie.dart";
 import "package:permission_handler/permission_handler.dart";
@@ -36,13 +39,12 @@ import "package:simple_html_css/simple_html_css.dart";
 
 import "../../common/common_bottomsheet.dart";
 import "../../model/message_template_response.dart";
+import "../home_screen_options/check_kundli/kundli_controller.dart";
 import "../live_dharam/widgets/custom_image_widget.dart";
 import "chat_message_with_socket_controller.dart";
 
 class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   const ChatMessageWithSocketUI({super.key});
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -76,11 +78,13 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             builder: (BuildContext context) {
                               return Container(
                                 width: double.infinity,
-                                margin: const EdgeInsets.symmetric(horizontal: 10),
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 10),
                                 padding:
                                     const EdgeInsets.symmetric(horizontal: 10),
                                 decoration: BoxDecoration(
-                                  border: Border.all(color: const Color(0xffDA2439)),
+                                  border: Border.all(
+                                      color: const Color(0xffDA2439)),
                                   borderRadius: BorderRadius.circular(10),
                                 ),
                                 alignment: Alignment.center,
@@ -900,6 +904,159 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                               ))
                                           : const SizedBox(),
                                       const SizedBox(width: 10),
+                                      GestureDetector(
+                                        onTap: () {
+                                          //todo
+                                          openBottomSheet(
+                                            context,
+                                            btnBorderColor: AppColors().white,
+                                            btnColor: AppColors().transparent,
+                                            functionalityWidget: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(12.0),
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: <Widget>[
+                                                  Text(
+                                                    "${AppFirebaseService().orderData["customerName"]}'s Kundali Details",
+                                                    style: AppTextStyle
+                                                        .textStyle20(
+                                                            fontColor:
+                                                                AppColors()
+                                                                    .blackColor,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                    textAlign: TextAlign.center,
+                                                  ),
+                                                  SizedBox(height: 15),
+                                                  Text(
+                                                    "Name: ${AppFirebaseService().orderData["customerName"]}",
+                                                    style: AppTextStyle
+                                                        .textStyle14(),
+                                                  ),
+                                                  Text(
+                                                    "Gender: ${AppFirebaseService().orderData["gender"]}",
+                                                    style: AppTextStyle
+                                                        .textStyle14(),
+                                                  ),
+                                                  Text(
+                                                    "DOB: ${AppFirebaseService().orderData["dob"]}",
+                                                    style: AppTextStyle
+                                                        .textStyle14(),
+                                                  ),
+                                                  Text(
+                                                    "POB: ${AppFirebaseService().orderData["placeOfBirth"]}",
+                                                    style: AppTextStyle
+                                                        .textStyle14(),
+                                                  ),
+                                                  Text(
+                                                    "TOB: ${AppFirebaseService().orderData["timeOfBirth"]}",
+                                                    style: AppTextStyle
+                                                        .textStyle14(),
+                                                  ),
+                                                  Text(
+                                                    "Marital Status: ${AppFirebaseService().orderData["maritalStatus"]}",
+                                                    style: AppTextStyle
+                                                        .textStyle14(),
+                                                  ),
+                                                  Text(
+                                                    "Problem Area: ${AppFirebaseService().orderData["topic_of_concern"]}",
+                                                    style: AppTextStyle
+                                                        .textStyle14(),
+                                                  ),
+                                                  SizedBox(height: 20),
+                                                  Align(
+                                                    alignment: Alignment.center,
+                                                    child: CustomButton(
+                                                      padding:
+                                                          EdgeInsets.all(12),
+                                                      color: AppColors().red,
+                                                      onTap: () {
+                                                        final dateData = DateFormat(
+                                                                "dd/MM/yyyy")
+                                                            .parse(AppFirebaseService()
+                                                                    .orderData[
+                                                                "dob"]);
+                                                        DateTime timeData = DateFormat(
+                                                                "h:mm a")
+                                                            .parse(AppFirebaseService()
+                                                                    .orderData[
+                                                                "timeOfBirth"]);
+                                                        Params params = Params(
+                                                          name: AppFirebaseService()
+                                                                  .orderData[
+                                                              "customerName"],
+                                                          day: dateData.day,
+                                                          year: dateData.year,
+                                                          month: dateData.month,
+                                                          hour: timeData.hour,
+                                                          min: timeData.minute,
+                                                          lat: double.parse(
+                                                              AppFirebaseService()
+                                                                  .orderData[
+                                                                      "lat"]
+                                                                  .toString()),
+                                                          long: double.parse(
+                                                              AppFirebaseService()
+                                                                      .orderData[
+                                                                  "lng"]),
+                                                          location:
+                                                              AppFirebaseService()
+                                                                      .orderData[
+                                                                  "placeOfBirth"],
+                                                        );
+
+                                                        // Perform some action or close the BottomSheet
+                                                        Get.toNamed(
+                                                            RouteName
+                                                                .kundliDetail,
+                                                            arguments: {
+                                                              "kundli_id": 0,
+                                                              "from_kundli":
+                                                                  false,
+                                                              "params": params,
+                                                              "gender":
+                                                                  AppFirebaseService()
+                                                                          .orderData[
+                                                                      "gender"],
+                                                            });
+                                                      },
+                                                      child: Text(
+                                                        'Check Kundli Details',
+                                                        style: AppTextStyle
+                                                            .textStyle14(
+                                                                fontColor:
+                                                                    AppColors()
+                                                                        .white),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          );
+                                          debugPrint(
+                                              "kundali datails ${AppFirebaseService().orderData["customerName"]}");
+                                        },
+                                        child: Container(
+                                          // width: 30,
+                                          // height: 20,
+                                          margin: EdgeInsets.only(right: 6),
+                                          padding: EdgeInsets.all(8),
+                                          decoration: BoxDecoration(
+                                              color: AppColors().red,
+                                              borderRadius:
+                                                  BorderRadius.circular(16)),
+                                          child: Text(
+                                            "Kundali",
+                                            style: AppTextStyle.textStyle9(
+                                                fontColor: AppColors().white),
+                                          ),
+                                        ),
+                                      )
                                     ],
                                   ),
                                   filled: true,
