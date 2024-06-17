@@ -16,6 +16,7 @@ import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/model/wallet_deatils_response.dart';
 import 'package:divine_astrologer/pages/home/widgets/offer_bottom_widget.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
+import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_controller.dart';
 import 'package:divine_astrologer/screens/home_screen_options/notice_board/notice_board_ui.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
@@ -84,6 +85,7 @@ class HomeUI extends GetView<HomeController> {
                 ),
                 actions: [
                   Column(
+                    key: Get.find<DashboardController>().keyHide,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
@@ -106,6 +108,7 @@ class HomeUI extends GetView<HomeController> {
                   ),
                   SizedBox(width: 15.w),
                   Column(
+                    key: Get.find<DashboardController>().keyProfileHome,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       controller.userImage.contains("null") ||
@@ -154,6 +157,8 @@ class HomeUI extends GetView<HomeController> {
                                     MainAxisAlignment.spaceBetween,
                                 children: [
                                   Expanded(
+                                    key: Get.find<DashboardController>()
+                                        .keyTodayAmount,
                                     child: controller.isShowTitle.value
                                         ? InkWell(
                                             onTap: () {},
@@ -213,6 +218,8 @@ class HomeUI extends GetView<HomeController> {
                                   ),
                                   // SizedBox(width: 15.w),
                                   Expanded(
+                                    key: Get.find<DashboardController>()
+                                        .keyTotalAmount,
                                     child: controller.isShowTitle.value
                                         ? InkWell(
                                             onTap: () {
@@ -299,6 +306,8 @@ class HomeUI extends GetView<HomeController> {
                                   ),
                                   // SizedBox(width: 10.w),
                                   InkWell(
+                                    key: Get.find<DashboardController>()
+                                        .keyCheckKundli,
                                     onTap: () {
                                       Get.toNamed(RouteName.checkKundli);
                                     },
@@ -334,33 +343,39 @@ class HomeUI extends GetView<HomeController> {
                             child: Row(
                               children: [
                                 Expanded(
+                                    key: Get.find<DashboardController>()
+                                        .keyRetentionRate,
                                     child: RetentionWidget(
-                                  isEligible: true,
-                                  title:
-                                      "${"bonusWallet".tr} \n ₹${abbreviateNumber(controller.homeData?.bonusWallet)}",
-                                  subTitle:
-                                      "${"retentionRate".tr} \n ${controller.homeData?.retention ?? 0}%",
-                                  borderColor:
-                                      (controller.homeData!.retention! <
-                                              controller
-                                                  .homeData!.minimumRetention!)
-                                          ? appColors.red
-                                          : appColors.green,
-                                  onTap: () async {
-                                    if (!controller.isOpenBonusSheet) {
-                                      controller.isOpenBonusSheet = true;
-                                      controller.update();
-                                      await controller.getWalletPointDetail(2);
-                                      ecommerceWalletDetailPopup(
-                                          Get.context!, controller.walletData,
-                                          title: "What is Bonus Wallet ?",
-                                          controller: controller,
-                                          type: 2);
-                                    }
-                                  },
-                                )),
+                                      isEligible: true,
+                                      title:
+                                          "${"bonusWallet".tr} \n ₹${abbreviateNumber(controller.homeData?.bonusWallet)}",
+                                      subTitle:
+                                          "${"retentionRate".tr} \n ${controller.homeData?.retention ?? 0}%",
+                                      borderColor:
+                                          (controller.homeData!.retention! <
+                                                  controller.homeData!
+                                                      .minimumRetention!)
+                                              ? appColors.red
+                                              : appColors.green,
+                                      onTap: () async {
+                                        if (!controller.isOpenBonusSheet) {
+                                          controller.isOpenBonusSheet = true;
+                                          controller.update();
+                                          await controller
+                                              .getWalletPointDetail(2);
+                                          ecommerceWalletDetailPopup(
+                                              Get.context!,
+                                              controller.walletData,
+                                              title: "What is Bonus Wallet ?",
+                                              controller: controller,
+                                              type: 2);
+                                        }
+                                      },
+                                    )),
                                 SizedBox(width: 7.w),
                                 Expanded(
+                                  key: Get.find<DashboardController>()
+                                      .keyRepurchaseRate,
                                   child: RetentionWidget(
                                     title:
                                         "${"paidWallet".tr} \n ₹${abbreviateNumber(controller.homeData?.paidWallet)}",
@@ -389,44 +404,51 @@ class HomeUI extends GetView<HomeController> {
                                 ),
                                 SizedBox(width: 7.w),
                                 Expanded(
+                                    key: Get.find<DashboardController>()
+                                        .keyEcommerceWallet,
                                     child: RetentionWidget(
-                                  borderColor: appColors.textColor,
-                                  bottomTextColor: appColors.textColor,
-                                  bottomColor: appColors.transparent,
-                                  onTap: () async {
-                                    if (!controller.isOpenECommerceSheet) {
-                                      controller.isOpenECommerceSheet = true;
-                                      controller.update();
-                                      await controller.getWalletPointDetail(3);
-                                      ecommerceWalletDetailPopup(
-                                          Get.context!, controller.walletData,
-                                          title: "What is Ecommerce Wallet ?",
-                                          controller: controller,
-                                          type: 3);
-                                    }
-                                  },
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      CustomText(
-                                        "ecommerceWallet".tr,
-                                        fontWeight: FontWeight.w500,
-                                        textAlign: TextAlign.center,
-                                        fontSize: 9.sp,
-                                        fontColor: appColors.textColor,
+                                      borderColor: appColors.textColor,
+                                      bottomTextColor: appColors.textColor,
+                                      bottomColor: appColors.transparent,
+                                      onTap: () async {
+                                        if (!controller.isOpenECommerceSheet) {
+                                          controller.isOpenECommerceSheet =
+                                              true;
+                                          controller.update();
+                                          await controller
+                                              .getWalletPointDetail(3);
+                                          ecommerceWalletDetailPopup(
+                                              Get.context!,
+                                              controller.walletData,
+                                              title:
+                                                  "What is Ecommerce Wallet ?",
+                                              controller: controller,
+                                              type: 3);
+                                        }
+                                      },
+                                      child: Column(
+                                        mainAxisSize: MainAxisSize.min,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CustomText(
+                                            "ecommerceWallet".tr,
+                                            fontWeight: FontWeight.w500,
+                                            textAlign: TextAlign.center,
+                                            fontSize: 9.sp,
+                                            fontColor: appColors.textColor,
+                                          ),
+                                          SizedBox(height: 5.h),
+                                          CustomText(
+                                            "₹${abbreviateNumber(controller.homeData?.ecommerceWallet)}",
+                                            fontWeight: FontWeight.w400,
+                                            textAlign: TextAlign.center,
+                                            fontSize: 9.sp,
+                                            fontColor: appColors.textColor,
+                                          ),
+                                        ],
                                       ),
-                                      SizedBox(height: 5.h),
-                                      CustomText(
-                                        "₹${abbreviateNumber(controller.homeData?.ecommerceWallet)}",
-                                        fontWeight: FontWeight.w400,
-                                        textAlign: TextAlign.center,
-                                        fontSize: 9.sp,
-                                        fontColor: appColors.textColor,
-                                      ),
-                                    ],
-                                  ),
-                                )),
+                                    )),
                               ],
                             ),
                           ),
