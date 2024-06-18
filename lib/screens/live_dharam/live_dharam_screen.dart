@@ -179,12 +179,6 @@ class _LivePage extends State<LiveDharamScreen>
         }
       }
     });
-    // if(kDebugMode) {
-    //   final ZegoUIKit instance = ZegoUIKit.instance;
-    //   _controller.isMicOn = false;
-    //   instance.turnMicrophoneOn(_controller.isMicOn,
-    //       muteMode: true);
-    // }
   }
 
   Future<void> _showOverlay() async {
@@ -485,6 +479,7 @@ class _LivePage extends State<LiveDharamScreen>
     }
     return Future<void>.value();
   }
+
   @override
   Widget build(BuildContext context) {
     //
@@ -2278,26 +2273,6 @@ class _LivePage extends State<LiveDharamScreen>
     );
   }
 
-  Future<void> refreshScreen() async {
-    try {
-      // Stop the current stream
-      ZegoExpressEngine.instance.stopPublishingStream();
-
-      // Logout from the room
-      await ZegoExpressEngine.instance.logoutRoom(_controller.userId);
-
-      // Login to the room again
-      await ZegoExpressEngine.instance.loginRoom(_controller.userId,
-          ZegoUser(_controller.userId, _controller.userName));
-
-      // Start publishing the stream again
-      ZegoExpressEngine.instance.startPublishingStream(_controller.userId);
-
-      // Optionally, you can also handle playing streams or other configurations as needed
-    } catch (error) {
-      print("Error recreating stream: $error");
-    }
-  }
   Widget settingsRowForAstro() {
     return Row(
       children: [
@@ -2306,9 +2281,10 @@ class _LivePage extends State<LiveDharamScreen>
           children: [
             InkWell(
               onTap: () async {
-                final ZegoUIKit instance = ZegoUIKit.instance;
                 _controller.isFront = !_controller.isFront;
-                instance.useFrontFacingCamera(_controller.isFront);
+                zegoController.audioVideo.camera
+                    .switchFrontFacing(_controller.isFront);
+                _controller.update();
               },
               child: SizedBox(
                 height: 32,
@@ -2319,14 +2295,11 @@ class _LivePage extends State<LiveDharamScreen>
                       Radius.circular(50.0),
                     ),
                     border: Border.all(
-                      // color: appColors.guideColor,
                       color: appColors.transparent,
                     ),
-                    // color: appColors.black.withOpacity(0.2),
                     color: appColors.transparent,
                   ),
                   child: Padding(
-                    // padding: const EdgeInsets.all(8.0),
                     padding: const EdgeInsets.all(0.0),
                     child: Image.asset(
                       _controller.isFront
@@ -2340,9 +2313,10 @@ class _LivePage extends State<LiveDharamScreen>
             const SizedBox(height: 8),
             InkWell(
               onTap: () async {
-                final ZegoUIKit instance = ZegoUIKit.instance;
                 _controller.isCamOn = !_controller.isCamOn;
-                instance.turnCameraOn(_controller.isCamOn);
+                zegoController.audioVideo.camera
+                    .turnOn(_controller.isCamOn, userID: _controller.userId);
+                _controller.update();
               },
               child: SizedBox(
                 height: 32,
@@ -2374,10 +2348,11 @@ class _LivePage extends State<LiveDharamScreen>
             const SizedBox(height: 8),
             InkWell(
               onTap: () {
-                final ZegoUIKit instance = ZegoUIKit.instance;
                 _controller.isMicOn = !_controller.isMicOn;
+
+                zegoController.audioVideo.microphone
+                    .turnOn(_controller.isMicOn, userID: _controller.userId);
                 _controller.update();
-                instance.turnMicrophoneOn(_controller.isMicOn, muteMode: true);
               },
               child: SizedBox(
                 height: 32,
@@ -2406,35 +2381,6 @@ class _LivePage extends State<LiveDharamScreen>
                 ),
               ),
             ),
-            /*const SizedBox(height: 8),
-            InkWell(
-              onTap: () {
-                refreshScreen();
-              },
-              child: SizedBox(
-                height: 32,
-                width: 32,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(50.0),
-                    ),
-                    border: Border.all(
-                      // color: appColors.guideColor,
-                      color: appColors.transparent,
-                    ),
-                    // color: appColors.black.withOpacity(0.2),
-                    color: appColors.transparent,
-                  ),
-                  child: Padding(
-                    // padding: const EdgeInsets.all(8.0),
-                    padding: const EdgeInsets.all(0.0),
-                    child: Image.asset(
-                        height: 32, width: 32, "assets/images/refresh.png"),
-                  ),
-                ),
-              ),
-            ),*/
           ],
         ),
         const SizedBox(width: 8),
@@ -2498,9 +2444,9 @@ class _LivePage extends State<LiveDharamScreen>
                   children: [
                     InkWell(
                       onTap: () async {
-                        final ZegoUIKit instance = ZegoUIKit.instance;
                         _controller.isFront = !_controller.isFront;
-                        instance.useFrontFacingCamera(_controller.isFront);
+                        zegoController.audioVideo.camera
+                            .switchFrontFacing(_controller.isFront);
                       },
                       child: SizedBox(
                         height: 50,
@@ -2539,9 +2485,12 @@ class _LivePage extends State<LiveDharamScreen>
                   children: [
                     InkWell(
                       onTap: () async {
-                        final ZegoUIKit instance = ZegoUIKit.instance;
+                        // final ZegoUIKit instance = ZegoUIKit.instance;
                         _controller.isCamOn = !_controller.isCamOn;
-                        instance.turnCameraOn(_controller.isCamOn);
+                        // instance.turnCameraOn(_controller.isCamOn);
+                        zegoController.audioVideo.camera.turnOn(
+                            _controller.isCamOn,
+                            userID: _controller.userId);
                       },
                       child: SizedBox(
                         height: 50,
@@ -2580,10 +2529,13 @@ class _LivePage extends State<LiveDharamScreen>
                   children: [
                     InkWell(
                       onTap: () {
-                        final ZegoUIKit instance = ZegoUIKit.instance;
+                        // final ZegoUIKit instance = ZegoUIKit.instance;
                         _controller.isMicOn = !_controller.isMicOn;
-                        instance.turnMicrophoneOn(_controller.isMicOn,
-                            muteMode: true);
+                        // instance.turnMicrophoneOn(_controller.isMicOn,
+                        //     muteMode: true);
+                        zegoController.audioVideo.microphone.turnOn(
+                            _controller.isMicOn,
+                            userID: _controller.userId);
                       },
                       child: SizedBox(
                         height: 50,
