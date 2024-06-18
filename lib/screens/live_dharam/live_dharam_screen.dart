@@ -226,7 +226,7 @@ class _LivePage extends State<LiveDharamScreen>
     if (gifts != null && giftList != null) {
       Future.delayed(
         const Duration(seconds: 1),
-        () async {
+            () async {
           print("gifts----  $gifts");
           print("giftList--- $giftList");
           print("gifts.keys.first ${gifts.keys.first}");
@@ -239,7 +239,7 @@ class _LivePage extends State<LiveDharamScreen>
           }).then((value) {
             print("removing gift from firebase");
           });
-          // setState(() {});
+
         },
       );
     }
@@ -3332,7 +3332,7 @@ class _LivePage extends State<LiveDharamScreen>
     if (removed) {
       await _controller.makeAPICallForEndCall(
         successCallBack: (String message) async {
-          setState(() {});
+
           successAndFailureCallBack(
               message: message, isForSuccess: true, isForFailure: false);
           await _controller.removeFromOrder();

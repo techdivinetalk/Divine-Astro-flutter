@@ -354,7 +354,7 @@ class ChatMessageWithSocketController extends GetxController
     }
   }
 
-/*  void openCustomShop(ChatMessageWithSocketController controller) {
+ void openCustomShop(ChatMessageWithSocketController controller) {
     print(customProductData);
     print("controller.customProductData");
     Get.bottomSheet(
@@ -363,7 +363,7 @@ class ChatMessageWithSocketController extends GetxController
         customProductData: controller.customProductData,
       ),
     );
-  }*/
+  }
 
   updateOrderInfo(String key, dynamic value, bool isRemoved) {
     switch (key) {

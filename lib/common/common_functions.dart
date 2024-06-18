@@ -125,7 +125,7 @@ void setHiveDatabase(String userDataKey, ChatMessage newMessage) async {
   var databaseMessage = ChatMessagesOffline();
   HiveServices hiveServices = HiveServices(boxName: userChatData);
   await hiveServices.initialize();
-  var res = await hiveServices.getData(key: userDataKey);
+  String? res = await hiveServices.getData(key: userDataKey);
 
   if (res != null) {
     var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));

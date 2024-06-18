@@ -892,7 +892,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
           noticeDataChat = noticeResponse.data;
           print(noticeDataChat.length);
           print("noticeDataChat.length");
-          setState(() {});
+
         } else {
           throw CustomException(json.decode(response.body));
         }

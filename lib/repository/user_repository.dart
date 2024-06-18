@@ -234,7 +234,8 @@ class UserRepository extends ApiProvider {
           throw CustomException("Unknown Error");
         }
       } else {
-        throw CustomException(json.decode(response.body)["message"]);
+        String exceptionmessage  = json.decode(response.body)["message"];
+        throw CustomException(exceptionmessage);
       }
     } catch (e, s) {
       debugPrint("we got $e $s");

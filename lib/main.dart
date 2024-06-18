@@ -220,7 +220,6 @@ Future<void> main() async {
     }
     catch(error, stacktrace){
       // If you want to record a "fatal" exception
-      print("hello");
       FirebaseCrashlytics.instance.recordError(error, stacktrace, fatal: true);
       // If you want to record a "non-fatal" exception
       FirebaseCrashlytics.instance.recordError(error, stacktrace);

@@ -174,6 +174,7 @@ class DashboardController extends GetxController
     final DeviceInfoPlugin info = DeviceInfoPlugin(); // import 'package:device_info_plus/device_info_plus.dart';
     final AndroidDeviceInfo androidInfo = await info.androidInfo;
     debugPrint('releaseVersion : ${androidInfo.version.release}');
+
     final int androidVersion = int.parse(androidInfo.version.release);
     bool havePermission = false;
 
@@ -183,6 +184,7 @@ class DashboardController extends GetxController
         Permission.photos,
         //..... as needed
       ].request(); //import 'package:permission_handler/permission_handler.dart';
+
 
       havePermission = request.values.every((status) => status == PermissionStatus.granted);
     } else {
@@ -210,23 +212,31 @@ class DashboardController extends GetxController
     broadcastReceiver.messages.listen((event) {
       print("broadCastResponse");
       print(AppFirebaseService().openChatUserId != "");
-      print(event.data!["orderData"]);
-      if (event.name == "ReJoinChat" &&
-          AppFirebaseService().openChatUserId != "" &&
-          event.data != null &&
-          event.data!["orderData"]["status"] != null) {
-        var orderData = event.data!["orderData"];
-        Get.toNamed(RouteName.chatMessageWithSocketUI, arguments: orderData);
+      if (event.data != null) { // Check for null data before accessing
+        print(event.data!["orderData"]);
+        if (event.name == "ReJoinChat" &&
+            AppFirebaseService().openChatUserId != "" &&
+            event.data != null &&
+            event.data!["orderData"]["status"] != null) {
+          var orderData = event.data!["orderData"];
+          Get.toNamed(RouteName.chatMessageWithSocketUI, arguments: orderData);
+        }
+      } else {
+        print("event.data is null");
       }
     });
     if (!isLogOut) {
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Future.delayed(const Duration(seconds: 5), () {
           print("is logged in");
-          appFirebaseService.readData(
-              'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
+          if (preferenceService.getUserDetail() != null) { // Check for null user details
+            appFirebaseService.readData(
+                'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
+          } else {
+            print("User details are null");
+          }
+          //appFirebaseService.masterData('masters');
         });
-        //appFirebaseService.masterData('masters');
       });
     } else {
       print("is logged out");
@@ -240,13 +250,20 @@ class DashboardController extends GetxController
     Get.find<SharedPreferenceService>()
         .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
     //
+
     String? baseAmazonUrl = preferenceService.getBaseImageURL();
-    userData = preferenceService.getUserDetail();
-    userImage(
-        userData?.image != null ? "$baseAmazonUrl/${userData?.image}" : "");
-    print(userData?.image);
-    print(userProfileImage.value);
-    print("userProfileImage.value");
+
+    // Handle potential null userData
+    if (preferenceService.getUserDetail() != null) {
+      userData = preferenceService.getUserDetail();
+      String? userImageUrl = userData?.image != null ? "$baseAmazonUrl/${userData?.image}" : "";
+      userImage(userImageUrl ?? ""); // Use nullish coalescing operator (??) for default value
+      print(userData?.image);
+      print(userProfileImage.value);
+    } else {
+      print("userData is null");
+    }
+
     loadPreDefineData();
     initMessaging();
     // firebaseMessagingConfig(Get.context!);
@@ -254,6 +271,7 @@ class DashboardController extends GetxController
     print("currentTime");
     cacheGift();
   }
+
 
   void compareTimes(int serverTime) {
     print("millisecondsSinceEpoch");

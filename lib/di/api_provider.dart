@@ -371,7 +371,6 @@ class ApiProvider {
         }
         throw CustomException(AppString.timeoutMessage);
       });
-      log('response: ${response.body}');
       await doLiveStreamPendingTasks(response);
       return response;
     } else {
