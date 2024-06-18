@@ -354,7 +354,7 @@ class ChatMessageWithSocketController extends GetxController
     }
   }
 
- void openCustomShop(ChatMessageWithSocketController controller) {
+  void openCustomShop(ChatMessageWithSocketController controller) {
     print(customProductData);
     print("controller.customProductData");
     Get.bottomSheet(
