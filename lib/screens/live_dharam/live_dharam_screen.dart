@@ -2184,8 +2184,6 @@ class _LivePage extends State<LiveDharamScreen>
 
   newTimerWidget() {
     final String source = _controller.currentCaller.totalTime!;
-    print(_controller.currentCaller.totalTime);
-    print("_controller.engagedCoHostWithAstro().totalTime");
     int epoch = int.parse(source.isEmpty ? "0" : source);
     final DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(epoch);
     return TimerCountdown(

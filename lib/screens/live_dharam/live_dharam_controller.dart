@@ -323,7 +323,6 @@ class LiveDharamController extends GetxController {
     if (snapshot != null) {
       astrologerData = snapshot;
       log(astrologerData.toString());
-      log("data.toString()");
       if (astrologerData.isNotEmpty) {
         var liveIdNode = astrologerData;
         if (liveIdNode != null) {
@@ -354,10 +353,11 @@ class LiveDharamController extends GetxController {
             leaderboardModel.value = <LeaderboardModel>[];
             update();
           }
-          if (liveIdNode["order"] != null) {
-            var orderNode = liveIdNode["order"];
 
-            currentCaller = getOrderModelGeneric(orderNode, forMe: true);
+          if (liveIdNode["order"] != null) {
+
+            var orderNode = liveIdNode["order"];
+            currentCaller = getOrderModelGeneric(orderNode);
           } else {
             currentCaller = usingForNullableWaiListModel;
             update();
@@ -387,7 +387,7 @@ class LiveDharamController extends GetxController {
   addToWaitListFunction({List? waitListData}) {
     waitListModel.value.clear();
     for (int i = 0; i < waitListData!.length; i++) {
-      waitListModel.add(
+      waitListModel.value.add(
         WaitListModel(
           isRequest: waitListData[i]["isRequest"],
           isEngaded: waitListData[i]["isEngaded"],
@@ -410,7 +410,7 @@ class LiveDharamController extends GetxController {
   addToLeaderBoardFunction({List? leaderBoard}) {
     leaderboardModel.value.clear();
     for (int i = 0; i < leaderBoard!.length; i++) {
-      leaderboardModel.add(
+      leaderboardModel.value.add(
         LeaderboardModel(
           userName: leaderBoard[i]["userName"],
           avatar: leaderBoard[i]["avatar"],
@@ -422,7 +422,7 @@ class LiveDharamController extends GetxController {
     update();
   }
 
-  WaitListModel getOrderModelGeneric(Map? map, {required bool forMe}) {
+  WaitListModel getOrderModelGeneric(Map? map) {
     bool isRequest = false;
     bool isEngaged = false;
     String callType = "";
@@ -436,11 +436,6 @@ class LiveDharamController extends GetxController {
     int callStatus = 0;
     if (map != null) {
       if (map.isNotEmpty) {
-        print(
-            'orderId--${map["id"]}----userId---$userId------isEngaged--${map["isEngaded"]}---');
-        final bool c1 = (map["id"] ?? "") == userId;
-        final bool c2 = (map["isEngaded"] ?? false) == true;
-        // isEngaged = forMe ? c1 && c2 : c2;
         isEngaged = map["isEngaded"];
         isRequest = map["isRequest"] ?? false;
         callType = map["callType"] ?? "";
@@ -552,16 +547,6 @@ class LiveDharamController extends GetxController {
 
     return Future<void>.value();
   }
-
-  Future<void> addUpdateOrder(Map<String, dynamic> orderDetails) async {
-    print(orderDetails);
-    print("updating entry orderDetails");
-    await liveStore.doc(userId).update({
-      'order': orderDetails,
-    });
-    return Future<void>.value();
-  }
-
   Future<void> removeFromOrder() async {
     print("remove order from firebase");
 
