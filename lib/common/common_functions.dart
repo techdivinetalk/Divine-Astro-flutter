@@ -57,7 +57,7 @@ Future<String?> uploadImageFileToAws(
   var token = preferenceService.getToken();
 
   var uri =
-      Uri.parse("${ApiProvider.baseUrl}uploadImage");
+      Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
 
   var request = http.MultipartRequest('POST', uri);
 

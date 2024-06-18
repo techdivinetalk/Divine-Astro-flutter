@@ -747,7 +747,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       print("getting is force training video flag");
       await preferenceService.setConstantDetails(data);
       profileDataSync.value = true;
-
+      imageUploadBaseUrl.value =getConstantDetails?.data?.imageUploadBaseUrl ?? "";
+      update();
       // getDashboardDetail();
     } catch (error) {
       debugPrint("error $error");

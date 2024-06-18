@@ -28,6 +28,7 @@ RxBool chatSwitch = false.obs;
 RxBool callSwitch = false.obs;
 RxBool videoSwitch = false.obs;
 RxString userImage = ''.obs;
+RxString imageUploadBaseUrl = ''.obs;
 
 
 RxInt isEngagedStatus = 0.obs;

@@ -416,7 +416,7 @@ class AddPujaController extends GetxController {
   Future<void> uploadImage(File imageFile) async {
     var token = await preferenceService.getToken();
 
-    var uri = Uri.parse("${ApiProvider.baseUrl}uploadImage");
+    var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
 
     var request = http.MultipartRequest('POST', uri);
 

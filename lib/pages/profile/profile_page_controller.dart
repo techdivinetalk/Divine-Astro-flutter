@@ -533,7 +533,7 @@ class ProfilePageController extends GetxController {
   Future<void> uploadImage(File imageFile) async {
     var token = preferenceService.getToken();
     // Create a Uri from the URL string
-    var uri = Uri.parse("${ApiProvider.baseUrl}uploadAstroImage");
+    var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadAstroImage");
 
     // Create a MultipartRequest
     var request = http.MultipartRequest('POST', uri);
