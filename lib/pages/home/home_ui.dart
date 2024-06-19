@@ -5,7 +5,6 @@ import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/common/custom_widget_marquee.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
-
 import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
@@ -54,6 +53,7 @@ class HomeUI extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
+    Get.put(HomeController());
     print("beforeGoing 5 - ${preferenceService.getUserDetail()?.id}");
     return GetBuilder<HomeController>(
         assignId: true,
@@ -879,6 +879,7 @@ class HomeUI extends GetView<HomeController> {
                                 controller.whatsapp();
                               },
                               child: Container(
+                                  key: Get.find<DashboardController>().keyHelp,
                                   height: 50,
                                   width: 50,
                                   decoration: BoxDecoration(
@@ -1075,6 +1076,7 @@ class HomeUI extends GetView<HomeController> {
   Widget noticeBoardWidget({HomeController? controller}) {
     return controller!.homeData != null
         ? ClipRRect(
+            key: Get.find<DashboardController>().keyNoticeBoard,
             borderRadius: BorderRadius.all(Radius.circular(20.r)),
             child: Material(
               color: appColors.transparent,
@@ -1177,6 +1179,8 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget scheduledTrainingWidgetUpdated() {
+    Get.put(HomeController());
+
     return Visibility(
       visible: controller.astrologerTrainingSessionLst.isNotEmpty,
       child: ListView.builder(
@@ -1621,6 +1625,7 @@ class HomeUI extends GetView<HomeController> {
       final bool cond2 = controller.isChatEnable.value;
       final bool cond3 = controller.isVideoCallEnable.value;
       return Container(
+        key: Get.find<DashboardController>().keySessionType,
         padding: EdgeInsets.all(16.h),
         decoration: BoxDecoration(
           boxShadow: [
@@ -2072,6 +2077,7 @@ class HomeUI extends GetView<HomeController> {
   Widget customerOfferWidget(BuildContext context,
       {HomeController? controller}) {
     return Container(
+      key: Get.find<DashboardController>().keyManageDiscountOffers,
       margin: EdgeInsets.only(top: 10.h),
       padding: EdgeInsets.all(16.h),
       decoration: BoxDecoration(
@@ -2400,7 +2406,14 @@ class HomeUI extends GetView<HomeController> {
                         subTitle: "trainingVideoDes".tr,
                       ));
                     },
-                    child: Assets.images.icInfo.svg(height: 16.h, width: 16.h)),
+                    child: Container(
+                        height: 30,
+                        width: 30,
+                        child: Padding(
+                          padding: const EdgeInsets.all(4.0),
+                          child: Assets.images.icInfo
+                              .svg(height: 15.h, width: 15.h),
+                        ))),
               ],
             ),
           ),

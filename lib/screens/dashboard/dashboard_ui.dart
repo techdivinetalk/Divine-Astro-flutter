@@ -32,7 +32,7 @@ class DashboardScreen extends GetView<DashboardController> {
 
   @override
   Widget build(BuildContext context) {
-    // controller.showTutorial(context);
+    controller.getConstantDetailsData(context);
     print("beforeGoing 4 - ${preferenceService.getUserDetail()?.id}");
     return GetBuilder<DashboardController>(
       assignId: true,
@@ -56,7 +56,6 @@ class DashboardScreen extends GetView<DashboardController> {
                           () {
                             debugPrint(
                                 "test_selectedIndex: ${controller.selectedIndex.value}");
-
                             if (controller.selectedIndex.value == 0) {
                               debugPrint(
                                   "test_selectedIndex_isRegistered: ${Get.isRegistered<HomeController>()}");
@@ -269,7 +268,8 @@ class DashboardScreen extends GetView<DashboardController> {
                                 ],
                               ),
                             ))),
-                    controller.chatOrderData != null && controller.chatOrderData?.status.toString() == "0"
+                    controller.chatOrderData != null &&
+                            controller.chatOrderData?.status.toString() == "0"
                         ? acceptBottomBar(
                             chatOrderData: controller.chatOrderData)
                         : const SizedBox(),
