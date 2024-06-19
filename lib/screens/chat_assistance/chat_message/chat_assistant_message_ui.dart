@@ -391,14 +391,14 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                   ),
                 );
               }),
-              Obx(
-                () => Column(
-                  children: [
-                    messageTemplateRow(),
-                    SizedBox(height: 20.h),
-                  ],
-                ),
-              ),
+              // Obx(
+              //   () => Column(
+              //     children: [
+              //       messageTemplateRow(),
+              //       SizedBox(height: 20.h),
+              //     ],
+              //   ),
+              // ),
               SizedBox(height: 10.h),
               chatBottomBar(context),
 

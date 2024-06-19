@@ -1160,7 +1160,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
                         print("test_appendedCustImage: $appendedAstrImage");
 
-                        return isVOIP.toString() == "0"
+                        return isVOIP.value.toString() == "0"
                             ? const SizedBox()
                             : ZegoService().buttonUI(
                                 isVideoCall: false,
@@ -1208,7 +1208,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         String appendedCustImage =
                             "${controller.preference.getAmazonUrl()}/$custImage";
 
-                        return isVOIP.toString() == "0"
+                        return isVOIP.value.toString() == "0"
                             ? const SizedBox()
                             : ZegoService().buttonUI(
                                 isVideoCall: true,
