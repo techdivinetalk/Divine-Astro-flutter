@@ -91,6 +91,12 @@ class DashboardController extends GetxController
       // Check permissions when app is resumed
       checkPermissions();
       getOrderFromApi();
+      if (preferenceService.getUserDetail() != null) { // Check for null user details
+        appFirebaseService.readData(
+            'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
+      } else {
+        divineSnackBar(data: "User Not Found");
+      }
     }
   }
 
@@ -237,7 +243,7 @@ class DashboardController extends GetxController
             appFirebaseService.readData(
                 'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
           } else {
-            print("User details are null");
+            divineSnackBar(data: "User Not Found");
           }
           //appFirebaseService.masterData('masters');
         });
