@@ -2,11 +2,9 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
-import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/di/progress_service.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_global_singleton.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
-import 'package:divine_astrologer/screens/otp_verification/otp_verification_controller.dart';
 import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
@@ -204,7 +202,11 @@ class ApiProvider {
   // Added By: divine-dharam
   final String joinLive = "join-live";
 
-  //
+  //Resignation Apis
+  final String resignationReasons = "resignation-reasons"; //Get Api
+  final String submitResignation = "submit-resignation"; //Post Api
+  final String resignationStatus = "resignation-status"; //Get Api
+  final String cancelResignation = "cancel-resignation"; //Get Api
 
   //privacy policy & terms
   final String termsAndCondition = "termsAndCondition";

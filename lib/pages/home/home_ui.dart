@@ -1,9 +1,7 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
-
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
-import 'package:divine_astrologer/common/custom_widget_marquee.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
@@ -24,23 +22,20 @@ import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/load_image.dart';
 import 'package:divine_astrologer/utils/utils.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:marquee/marquee.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
+
 import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
-import '../../common/constants.dart';
 import '../../gen/fonts.gen.dart';
 import '../../model/feedback_response.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
@@ -52,7 +47,6 @@ class HomeUI extends GetView<HomeController> {
   const HomeUI({Key? key}) : super(key: key);
 
   @override
-
   Widget build(BuildContext context) {
     Get.put(HomeController());
     print("beforeGoing 5 - ${preferenceService.getUserDetail()?.id}");
@@ -1694,28 +1688,28 @@ class HomeUI extends GetView<HomeController> {
                         ),
                       )
                     : const SizedBox(),
-                cond3
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "videoCall".tr.toUpperCase(),
-                              style: AppTextStyle.textStyle12(
-                                  fontColor: appColors.darkBlue,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                            Text(
-                              "₹${controller.homeData?.sessionType?.videoCallAmount}/Min",
-                              style: AppTextStyle.textStyle10(
-                                  fontColor: appColors.darkBlue,
-                                  fontWeight: FontWeight.w400),
-                            ),
-                          ],
-                        ),
-                      )
-                    : const SizedBox(),
+                // cond3
+                //     ? Padding(
+                //         padding: const EdgeInsets.symmetric(vertical: 4.0),
+                //         child: Column(
+                //           crossAxisAlignment: CrossAxisAlignment.start,
+                //           children: [
+                //             Text(
+                //               "videoCall".tr.toUpperCase(),
+                //               style: AppTextStyle.textStyle12(
+                //                   fontColor: appColors.darkBlue,
+                //                   fontWeight: FontWeight.w700),
+                //             ),
+                //             Text(
+                //               "₹${controller.homeData?.sessionType?.videoCallAmount}/Min",
+                //               style: AppTextStyle.textStyle10(
+                //                   fontColor: appColors.darkBlue,
+                //                   fontWeight: FontWeight.w400),
+                //             ),
+                //           ],
+                //         ),
+                //       )
+                //     : const SizedBox(),
               ],
             ),
             //SizedBox(width: 20.h),
@@ -1778,30 +1772,30 @@ class HomeUI extends GetView<HomeController> {
                         ),
                       )
                     : const SizedBox(),
-                cond3
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Column(
-                          children: [
-                            Obx(
-                              () => SwitchWidget(
-                                onTap: () async {
-                                  await controller.videoCallSwitchFN(
-                                    onComplete: () {
-                                      // if (controller.videoSwitch.value) {
-                                      // } else {
-                                      //   selectDateTimePopupForVideo();
-                                      // }
-                                    },
-                                  );
-                                },
-                                switchValue: videoSwitch.value,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : const SizedBox(),
+                // cond3
+                //     ? Padding(
+                //         padding: const EdgeInsets.symmetric(vertical: 4.0),
+                //         child: Column(
+                //           children: [
+                //             Obx(
+                //               () => SwitchWidget(
+                //                 onTap: () async {
+                //                   await controller.videoCallSwitchFN(
+                //                     onComplete: () {
+                //                       // if (controller.videoSwitch.value) {
+                //                       // } else {
+                //                       //   selectDateTimePopupForVideo();
+                //                       // }
+                //                     },
+                //                   );
+                //                 },
+                //                 switchValue: videoSwitch.value,
+                //               ),
+                //             ),
+                //           ],
+                //         ),
+                //       )
+                //     : const SizedBox(),
               ],
             ),
             //SizedBox(width: 15.h),
@@ -1828,7 +1822,6 @@ class HomeUI extends GetView<HomeController> {
                         onTap: () {
                           Get.bottomSheet(CommonInfoSheet(
                             title: "nextOnlineTime".tr,
-
                             subTitle: "nextOnlineTimeDes".tr,
                           ));
                         },
@@ -1901,40 +1894,40 @@ class HomeUI extends GetView<HomeController> {
                         ),
                       )
                     : const SizedBox(),
-                cond3
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Column(
-                          children: [
-                            Obx(() => controller.selectedVideoTime.value.isEmpty
-                                ? InkWell(
-                                    onTap:
-                                        controller.selectDateTimePopupForVideo,
-                                    child: Container(
-                                      // width: 128.w,
-                                      height: 31.h,
-                                      decoration: BoxDecoration(
-                                        color: appColors.guideColor,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(20)),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "scheduleNow".tr,
-                                          style: AppTextStyle.textStyle10(
-                                            fontColor: appColors.white,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ).pSymmetric(h: 16),
-                                    ),
-                                  )
-                                : SelectedTimeForVideoCall(
-                                    controller: controller)),
-                          ],
-                        ),
-                      )
-                    : const SizedBox(),
+                // cond3
+                //     ? Padding(
+                //         padding: const EdgeInsets.symmetric(vertical: 4.0),
+                //         child: Column(
+                //           children: [
+                //             Obx(() => controller.selectedVideoTime.value.isEmpty
+                //                 ? InkWell(
+                //                     onTap:
+                //                         controller.selectDateTimePopupForVideo,
+                //                     child: Container(
+                //                       // width: 128.w,
+                //                       height: 31.h,
+                //                       decoration: BoxDecoration(
+                //                         color: appColors.guideColor,
+                //                         borderRadius: const BorderRadius.all(
+                //                             Radius.circular(20)),
+                //                       ),
+                //                       child: Center(
+                //                         child: Text(
+                //                           "scheduleNow".tr,
+                //                           style: AppTextStyle.textStyle10(
+                //                             fontColor: appColors.white,
+                //                             fontWeight: FontWeight.w400,
+                //                           ),
+                //                         ),
+                //                       ).pSymmetric(h: 16),
+                //                     ),
+                //                   )
+                //                 : SelectedTimeForVideoCall(
+                //                     controller: controller)),
+                //           ],
+                //         ),
+                //       )
+                //     : const SizedBox(),
               ],
             ),
           ],
@@ -2358,9 +2351,7 @@ class HomeUI extends GetView<HomeController> {
         ));
   }
 
-
   Widget trainingVideoWidget({HomeController? controller}) {
-
     if (controller!.homeData?.trainingVideo == null ||
         (controller.homeData?.trainingVideo ?? []).isEmpty) {
       return const SizedBox.shrink();
@@ -2400,20 +2391,19 @@ class HomeUI extends GetView<HomeController> {
                   child: SizedBox(),
                 ),
                 GestureDetector(
-
                     onTap: () {
-                        Get.bottomSheet(CommonInfoSheet(
-                          title: "trainingVideos".tr,
-                          subTitle: "trainingVideoDes".tr,
-                        )
-                        );
+                      Get.bottomSheet(CommonInfoSheet(
+                        title: "trainingVideos".tr,
+                        subTitle: "trainingVideoDes".tr,
+                      ));
                     },
                     child: Container(
-                        height:30,
-                        width:30,
+                        height: 30,
+                        width: 30,
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: Assets.images.icInfo.svg(height: 15.h, width: 15.h),
+                          child: Assets.images.icInfo
+                              .svg(height: 15.h, width: 15.h),
                         ))),
               ],
             ),
@@ -2774,8 +2764,7 @@ class HomeUI extends GetView<HomeController> {
                     ),
                     SizedBox(height: 10.h),
                   ],
-                )
-            ),
+                )),
             /*Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Row(
@@ -2909,7 +2898,6 @@ class HomeUI extends GetView<HomeController> {
             )));
   }*/
 }
-
 
 class SelectedTimeForChat extends StatelessWidget {
   final HomeController? controller;

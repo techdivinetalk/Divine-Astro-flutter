@@ -1,16 +1,14 @@
-import 'dart:async';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'package:dio/dio.dart';
 
 import "package:contacts_service/contacts_service.dart";
+import 'package:cron/cron.dart';
+import 'package:dio/dio.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/MiddleWare.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
-import 'package:divine_astrologer/common/constants.dart';
-
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/di/fcm_notification.dart';
@@ -34,12 +32,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
-
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/state_manager.dart';
 import 'package:intl/intl.dart';
 import "package:permission_handler/permission_handler.dart";
 import 'package:url_launcher/url_launcher.dart';
@@ -49,9 +42,7 @@ import '../../common/app_exception.dart';
 import '../../common/feedback_bottomsheet.dart';
 import "../../common/important_number_bottomsheet.dart";
 import '../../di/shared_preference_service.dart';
-import '../../firebase_service/firebase_service.dart';
 import '../../model/constant_details_model_class.dart';
-import '../../model/filter_performance_response.dart';
 import '../../model/home_page_model_class.dart';
 import "../../model/important_numbers.dart";
 import '../../model/res_login.dart';
@@ -62,8 +53,6 @@ import "../../repository/important_number_repository.dart";
 import '../../repository/notice_repository.dart';
 import '../../repository/performance_repository.dart';
 import '../../repository/user_repository.dart';
-import 'package:cron/cron.dart';
-
 import 'widgets/can_not_online.dart';
 
 class HomeController extends GetxController with WidgetsBindingObserver {
@@ -108,7 +97,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       update(['score_update']);
     }
   }
-
 
   onPreviousTap() {
     if (scoreIndex > 0) {
@@ -747,7 +735,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       print("getting is force training video flag");
       await preferenceService.setConstantDetails(data);
       profileDataSync.value = true;
-      imageUploadBaseUrl.value =getConstantDetails?.data?.imageUploadBaseUrl ?? "";
+      imageUploadBaseUrl.value =
+          getConstantDetails?.data?.imageUploadBaseUrl ?? "";
       update();
       // getDashboardDetail();
     } catch (error) {
@@ -1037,7 +1026,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       UpdateOfferResponse response =
           await userRepository.updateOfferTypeApi(params);
       if (response.statusCode == 200) {
-          homeData!.offers!.customOffer![index].isOn = value;
+        homeData!.offers!.customOffer![index].isOn = value;
       } else {
         homeData!.offers!.customOffer![index].isOn = !value;
       }
@@ -1070,8 +1059,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       UpdateOfferResponse response =
           await userRepository.updateOfferTypeApi(params);
       if (response.statusCode == 200) {
-          homeData!.offers!.orderOffer![index].isOn = value;
-          // homeData!.offers!.orderOffer![index].isOn = !homeData!.offers!.orderOffer![index].isOn!;
+        homeData!.offers!.orderOffer![index].isOn = value;
+        // homeData!.offers!.orderOffer![index].isOn = !homeData!.offers!.orderOffer![index].isOn!;
       } else {
         homeData!.offers!.orderOffer![index].isOn = !value;
       }
