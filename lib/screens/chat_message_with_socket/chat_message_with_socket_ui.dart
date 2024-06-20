@@ -521,8 +521,12 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     ),
                   );
                 }),*/
-                messageTemplateRow(),
+                Visibility(visible: !controller.isKeyboardVisible.value,child: messageTemplateRow()),
+                SizedBox(
+                  height: 10,
+                ),
                 chatBottomBar(context),
+
                 Obx(() => AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       height: controller.isEmojiShowing.value ? 300 : 0,
@@ -732,13 +736,13 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
-                      color: /*Color(0xFFFFD196)*/ appColors.guideColor,
+                      color:Color(0xffFFEEF0),
                       borderRadius: const BorderRadius.all(Radius.circular(18)),
                     ),
                     child: Text(
                       '+ Add',
                       style:
-                          AppTextStyle.textStyle12(fontColor: appColors.white),
+                          AppTextStyle.textStyle12(fontColor: Color(0xff0E2339)),
                     ),
                   ),
                 )
@@ -751,13 +755,13 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
-                      color: appColors.brownColour,
+                      color:Color(0xffFFEEF0),
                       borderRadius: const BorderRadius.all(Radius.circular(18)),
                     ),
                     child: Text(
                       '${controller.messageTemplates[index - 1].message}',
                       style:
-                          AppTextStyle.textStyle12(fontColor: appColors.white),
+                      AppTextStyle.textStyle12(fontColor: Color(0xff0E2339)),
                     ),
                   ),
                 );
