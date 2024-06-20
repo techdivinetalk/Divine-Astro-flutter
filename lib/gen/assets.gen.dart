@@ -16,8 +16,8 @@ class $AssetsImagesGen {
   const $AssetsImagesGen();
 
   /// File path: assets/images/chat_custom_shop.svg
-  SvgGenImage get chatCustomShop =>
-      const SvgGenImage('assets/images/chat_custom_shop.svg');
+///  SvgGenImage get chatCustomShop =>
+///      const SvgGenImage('assets/images/chat_custom_shop.svg');
 
   /// File path: assets/images/chat_product.svg
   SvgGenImage get chatProduct =>
@@ -282,6 +282,8 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_boy_kundli.svg
   SvgGenImage get icBoyKundli =>
       const SvgGenImage('assets/images/ic_boy_kundli.svg');
+  SvgGenImage get resignation =>
+      const SvgGenImage('assets/svg/resignation.svg');
 
   /// File path: assets/images/ic_bronze.png
   AssetGenImage get icBronze =>
@@ -1320,7 +1322,7 @@ class $AssetsSvgGen {
         cameraIcon,
         caution,
         chatGift,
-        custom,
+        //custom,
         customPuja,
         deckIcon,
         deleteAccout,

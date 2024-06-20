@@ -11,6 +11,8 @@ Map<String, String> gu() {
     "message": "સંદેશ",
     'noDataToShow': 'બતાવવા માટે કોઈ ડેટા નથી',
     'dasha': 'દશા',
+    'resignation':'રાજીનામું',
+
     'planets': 'ગ્રહો',
     'rulingPlanets': 'શાસક ગ્રહો',
     'vimshottari': 'વિમશોત્તરી',

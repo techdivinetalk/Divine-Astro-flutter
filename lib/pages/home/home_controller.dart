@@ -71,13 +71,12 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   bool isOpenBonusSheet = false;
   bool isOpenPaidSheet = false;
   bool isOpenECommerceSheet = false;
-
   RxBool liveSwitch = true.obs;
-
   RxBool isCallEnable = true.obs;
   RxBool isChatEnable = true.obs;
   RxBool isVideoCallEnable = true.obs;
   RxBool isLiveEnable = true.obs;
+  bool istraininginfo = true;
 
   double xPosition = 10.0;
   double yPosition = Get.height * 0.4;
@@ -109,6 +108,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       update(['score_update']);
     }
   }
+
 
   onPreviousTap() {
     if (scoreIndex > 0) {
@@ -747,7 +747,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       print("getting is force training video flag");
       await preferenceService.setConstantDetails(data);
       profileDataSync.value = true;
-
+      imageUploadBaseUrl.value =getConstantDetails?.data?.imageUploadBaseUrl ?? "";
+      update();
       // getDashboardDetail();
     } catch (error) {
       debugPrint("error $error");
@@ -1227,7 +1228,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   showGiftBottomSheet(int giftCount, BuildContext? contextDetail,
-      {String? baseUrl}) async {
+      {var baseUrl}) async {
     // if(MiddleWare.instance.currentPage == RouteName.chatMessageUI || MiddleWare.instance.currentPage == RouteName.chatMessageWithSocketUI){
     //   return;
     // }

@@ -11,6 +11,8 @@ Map<String, String> en() {
     "timeoutMessage":
         "Something went wrong.\nPlease check you internet connection and please try again.",
     "today": "Today",
+    'resignation':'Resignation',
+
     'noDataToShow': 'No data to show',
     'deleteChat': 'Delete Chat',
     "followers": "Followers",
@@ -193,6 +195,7 @@ Map<String, String> en() {
     "contactUs": "Contact Us",
     "shareFeedback": "Share Feedback",
     "importantNumbers": "Important Numbers",
+
     "donation": "Donation",
     "importNumText":
         "You will get call and chat alerts from these numbers. Save these numbers to avoid any confusion.",
@@ -471,8 +474,7 @@ Map<String, String> en() {
     'liveStartTime': "Live Start Time",
     'liveEndTime': "Live End Time",
     'tarotNCards': "Tarot\nCards",
-    'product': "Product",
-    'customShop': "Custom Shop",
+    'product': "ProdFuct",
     'useTheseOptionsToSellECommerceProducts': "Use these options to sell e-commerce products.",
     'dailyLiveTimeRemaining_': "Daily Live Time Remaining -",
     'remainingMinutes': "Remaining Minutes",

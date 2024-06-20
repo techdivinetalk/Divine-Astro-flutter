@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'date_picker/date_picker_widget.dart';
 
 Future openBottomSheet(BuildContext context,
-    {String? title, String? btnTitle, required Widget functionalityWidget}) {
+    {String? title, String? btnTitle, required Widget functionalityWidget,Color? btnColor,Color? btnBorderColor}) {
   return showModalBottomSheet(
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
@@ -28,8 +28,8 @@ Future openBottomSheet(BuildContext context,
             padding: const EdgeInsets.all(15.0),
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                border: Border.all(color: appColors.darkBlue),
-                color: appColors.darkBlue),
+                border: Border.all(color: btnBorderColor?? appColors.darkBlue),
+                color: btnColor?? appColors.darkBlue),
             child:  Icon(
               Icons.close_rounded,
               color: appColors.white,

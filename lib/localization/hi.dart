@@ -15,6 +15,8 @@ Map<String, String> hi() {
     'planets': 'ग्रहों',
     'rulingPlanets': 'शासक ग्रह',
     "message": "संदेश",
+    'resignation':'इस्तीफा',
+
     "senderCategory": "प्रेषक श्रेणी",
     "readMore": "और पढ़ें",
     'kp': 'केपी',

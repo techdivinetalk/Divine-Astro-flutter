@@ -33,7 +33,7 @@ dependencies:
   android_intent_plus: ^2.0.2
   flutter:
     sdk: flutter
-  flutter_expanded_tile: ^0.3.7
+  flutter_expanded_tile: ^0.4.0
   flutter_holo_date_picker: ^1.1.0
   flutter_html: ^3.0.0-beta.2
   marquee: ^2.2.3
@@ -126,10 +126,12 @@ dependencies:
   zego_uikit_beauty_plugin: ^1.5.3
   flutter_speed_dial: ^5.0.0+1
   tutorial_coach_mark: ^1.2.11
+  animated_custom_dropdown: ^3.1.1
+
 
 
 dependency_overrides:
-  zego_uikit: ^2.23.0
+#  zego_uikit: ^2.23.0
   fading_edge_scrollview: ^4.1.1
   intl: ^0.18.1
 

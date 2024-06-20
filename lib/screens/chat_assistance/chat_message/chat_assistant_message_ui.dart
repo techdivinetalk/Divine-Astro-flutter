@@ -391,14 +391,14 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                   ),
                 );
               }),
-              Obx(
-                () => Column(
-                  children: [
-                    messageTemplateRow(),
-                    SizedBox(height: 20.h),
-                  ],
-                ),
-              ),
+              // Obx(
+              //   () => Column(
+              //     children: [
+              //       messageTemplateRow(),
+              //       SizedBox(height: 20.h),
+              //     ],
+              //   ),
+              // ),
               SizedBox(height: 10.h),
               chatBottomBar(context),
 
@@ -892,7 +892,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
           noticeDataChat = noticeResponse.data;
           print(noticeDataChat.length);
           print("noticeDataChat.length");
-          setState(() {});
+
         } else {
           throw CustomException(json.decode(response.body));
         }

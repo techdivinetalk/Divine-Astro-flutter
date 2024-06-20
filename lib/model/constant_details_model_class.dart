@@ -70,6 +70,7 @@ class Data {
   String? taroCard;
   String? firebaseAuthEmail;
   String? firebaseAuthPassword;
+  String? imageUploadBaseUrl;
   String? appVersion;
   int? isForceTraningVideo;
   num? currentTime;
@@ -92,6 +93,7 @@ class Data {
     this.token,
     this.isForceTraningVideo,
     this.appVersion,
+    this.imageUploadBaseUrl,
     this.firebaseAuthEmail,
     this.firebaseAuthPassword,
     this.currentTime,
@@ -111,6 +113,7 @@ class Data {
     Map<String, String>? notificationType,
     AwsCredential? awsCredential,
     String? whatsappNo,
+    String? imageUploadBaseUrl,
     String? token,
     String? appVersion,
     String? taroCard,
@@ -135,6 +138,7 @@ class Data {
         liveBackgroundImage: liveBackgroundImage ?? this.liveBackgroundImage,
         chatSuspiciousRegex: chatSuspiciousRegex ?? this.chatSuspiciousRegex,
         cityList: cityList ?? this.cityList,
+        imageUploadBaseUrl: imageUploadBaseUrl ?? this.imageUploadBaseUrl,
         notificationType: notificationType ?? this.notificationType,
         awsCredentails: awsCredentails,
         whatsappNo: whatsappNo ?? this.whatsappNo,
@@ -156,6 +160,7 @@ class Data {
         firebaseAuthEmail: json["firebase_auth_email"],
         firebaseAuthPassword: json["firebase_auth_password"],
         appVersion: json["app_version"],
+        imageUploadBaseUrl: json["image_upload_base_url"],
         isForceTraningVideo: json["is_force_traning_video"],
         chat: Chat.fromJson(json["chat"]),
         call: Call.fromJson(json["call"]),
@@ -181,6 +186,7 @@ class Data {
         "review_free_animation": reviewFreeAnimation,
         "gift_time_interval": giftTimeInterval,
         "is_force_traning_video": isForceTraningVideo,
+        "image_upload_base_url": imageUploadBaseUrl,
         "chat": chat.toJson(),
         "call": call.toJson(),
         "token": token,

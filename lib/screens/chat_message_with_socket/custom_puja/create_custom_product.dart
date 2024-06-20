@@ -343,8 +343,8 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
 
   Future<void> uploadImage(File imageFile) async {
     var uri = Uri.parse(
-        "${ApiProvider.baseUrl}uploadImage");
-
+        "${ApiProvider.imageBaseUrl}uploadImage");
+ 
     var request = http.MultipartRequest('POST', uri);
 
     request.headers.addAll({
