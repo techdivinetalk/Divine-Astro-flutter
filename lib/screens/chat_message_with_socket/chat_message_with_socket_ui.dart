@@ -521,6 +521,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     ),
                   );
                 }),*/
+                messageTemplateRow(),
                 chatBottomBar(context),
                 Obx(() => AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
@@ -1121,7 +1122,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-
                     isKundli.value == 1
                         ? GestureDetector(
                             onTap: () {
