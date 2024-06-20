@@ -61,7 +61,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
               height: double.infinity,
               fit: BoxFit.cover,
               color: appColors.white,
-            ), 
+            ),
             Column(
               children: [
                 AstrologerChatAppBar(),
@@ -1121,6 +1121,15 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
+                    GestureDetector(
+                      onTap: () {
+                        controller.openShowDeck(context, controller);
+                      },
+                      child: Center(
+                        child: SvgPicture.asset(
+                            "assets/svg/new_chat_tarrot_card.svg"),
+                      ),
+                    ),
                     isKundli.value == 1
                         ? GestureDetector(
                             onTap: () {
@@ -1322,7 +1331,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                 onTap: () {
                                                   Get.back();
                                                   controller.getImage(false);
-                                                },  
+                                                },
                                                 child: Padding(
                                                   padding:
                                                       const EdgeInsets.only(
@@ -1484,17 +1493,17 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         // }
                         controller.openProduct(controller);
                         break;
-                     // case "custom":
-                        // print(controller.customProductData);
-                        // print("controller.customProductData");
-                        // Get.bottomSheet(
-                        //   SavedRemediesBottomSheet(
-                        //     controller: controller,
-                        //     customProductData: controller.customProductData,
-                        //   ),
-                        // );
+                      // case "custom":
+                      // print(controller.customProductData);
+                      // print("controller.customProductData");
+                      // Get.bottomSheet(
+                      //   SavedRemediesBottomSheet(
+                      //     controller: controller,
+                      //     customProductData: controller.customProductData,
+                      //   ),
+                      // );
 
-                   /*     controller.openCustomShop(controller);
+                      /*     controller.openCustomShop(controller);
                         break;*/
                     }
                   },
