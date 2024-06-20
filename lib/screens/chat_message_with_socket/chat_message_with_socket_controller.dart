@@ -1520,7 +1520,7 @@ class ChatMessageWithSocketController extends GetxController
       Get.put(CallChatHistoryRepository());
 
   getChatList() async {
-/*    chatMessages.clear();
+/* chatMessages.clear();
     print("get chat list 1");
     await hiveServices.initialize();
     print("get chat list 2");
