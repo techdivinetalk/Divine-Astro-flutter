@@ -58,7 +58,8 @@ Future<String?> uploadImageFileToAws(
 
   var uri =
       Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
-
+print(ApiProvider.imageBaseUrl);
+print("ApiProvider.imageBaseUrl");
   var request = http.MultipartRequest('POST', uri);
 
   request.headers.addAll({

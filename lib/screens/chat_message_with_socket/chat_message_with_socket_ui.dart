@@ -1121,15 +1121,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    GestureDetector(
-                      onTap: () {
-                        controller.openShowDeck(context, controller);
-                      },
-                      child: Center(
-                        child: SvgPicture.asset(
-                            "assets/svg/new_chat_tarrot_card.svg"),
-                      ),
-                    ),
+
                     isKundli.value == 1
                         ? GestureDetector(
                             onTap: () {
@@ -1154,6 +1146,15 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       child: Center(
                           child: SvgPicture.asset(
                               "assets/svg/chat_new_custom_product.svg")),
+                    ),
+                    GestureDetector(
+                      onTap: () {
+                        controller.openShowDeck(context, controller);
+                      },
+                      child: Center(
+                        child: SvgPicture.asset(
+                            "assets/svg/new_chat_tarrot_card.svg"),
+                      ),
                     ),
                     Obx(
                       () {
