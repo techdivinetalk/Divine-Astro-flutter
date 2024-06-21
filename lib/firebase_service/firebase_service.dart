@@ -115,10 +115,10 @@ class AppFirebaseService {
                   orderData(Map<String, dynamic>.from(map));
                   if (orderData.value["status"] != null) {
                     if (orderData.value["orderType"] == "chat") {
-                      if(kDebugMode) {
-                        divineSnackBar(data: "$value Order status ${orderData
-                            .value["status"]}");
-                      }
+                      // if(kDebugMode) {
+                      //   divineSnackBar(data: "$value Order status ${orderData
+                      //       .value["status"]}");
+                      // }
                       switch ((orderData.value["status"])) {
                       case "0":
                           // if(!kDebugMode){

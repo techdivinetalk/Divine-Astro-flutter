@@ -563,7 +563,7 @@ class ChatMessageWithSocketController extends GetxController
     //     .child(
     //         "order/${AppFirebaseService().orderData.value["orderId"].toString()}/isAstroEntered")
     //     .set((DateTime.now().millisecondsSinceEpoch) + 1);
-    Future.delayed(Duration(milliseconds: 200), () {
+    Future.delayed(const Duration(milliseconds: 200), () {
       scrollToBottomFunc();
     },);
   }
@@ -1346,7 +1346,7 @@ class ChatMessageWithSocketController extends GetxController
     if (messgeScrollController.hasClients) {
       print("objectobjectobjectobject");
       Timer(
-        const Duration(milliseconds: 300),
+        const Duration(milliseconds: 200),
             () => messgeScrollController.animateTo(
               messgeScrollController.position.maxScrollExtent,
           duration: const Duration(milliseconds: 300),
