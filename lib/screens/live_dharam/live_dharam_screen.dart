@@ -3225,9 +3225,10 @@ class _LivePage extends State<LiveDharamScreen>
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.detached) {
-      await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
-      await _controller.removeMyNode();
-    } else {}
+      print("app is detached");
+      // await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
+      await _controller.removeMyNode(context);
+    }
   }
 
   @override

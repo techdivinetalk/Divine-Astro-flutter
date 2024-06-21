@@ -397,7 +397,7 @@ class MessageView extends StatelessWidget {
                           alignment: WrapAlignment.end,
                           children: [
                             Text(chatMessage.message ?? "",
-                                style: AppTextStyle.textStyle12(
+                                style: AppTextStyle.textStyle14(
                                   fontColor: chatMessage.id.toString() ==
                                           AppFirebaseService()
                                               .orderData["astroId"]

@@ -257,6 +257,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                       const EdgeInsets.all(5.0),
                                                   child: Image.network(
                                                     "${controller.pref.getAmazonUrl() ?? ""}/${controller.getValueByPosition(index)}",
+                                                    fit: BoxFit.cover,
                                                   ),
                                                 ),
                                               ),
