@@ -221,7 +221,7 @@ class _LivePage extends State<LiveDharamScreen>
     if (gifts != null && giftList != null) {
       Future.delayed(
         const Duration(seconds: 1),
-            () async {
+        () async {
           print("gifts----  $gifts");
           print("giftList--- $giftList");
           print("gifts.keys.first ${gifts.keys.first}");
@@ -234,7 +234,6 @@ class _LivePage extends State<LiveDharamScreen>
           }).then((value) {
             print("removing gift from firebase");
           });
-
         },
       );
     }
@@ -955,10 +954,11 @@ class _LivePage extends State<LiveDharamScreen>
                                     ),
                                     overflow: TextOverflow.ellipsis,
                                   ),
-                                  SizedBox(
-                                    width: msg.message.length > 30
-                                        ? Get.width / 2
-                                        : null,
+                                  Container(
+                                    constraints: BoxConstraints(
+                                      maxWidth: Get.width /
+                                          2.5, // Define the maximum width here
+                                    ),
                                     child: Text(
                                       msg.message ?? "",
                                       maxLines: 2,
@@ -1202,13 +1202,16 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> leaderboardPopup() async {
     LiveGlobalSingleton().isLeaderboardPopupOpen = true;
+    List<LeaderboardModel> newList = [];
+    newList.addAll(_controller.leaderboardModel);
+    newList.sort((a, b) => b.amount!.compareTo(a.amount!));
     await showCupertinoModalPopup(
       context: context,
       builder: (BuildContext context) {
         return LeaderboardWidget(
           onClose: Get.back,
           liveId: _controller.userId,
-          leaderboardModel: _controller.leaderboardModel,
+          leaderboardModel: newList,
         );
       },
     );
@@ -3155,7 +3158,6 @@ class _LivePage extends State<LiveDharamScreen>
     if (removed) {
       await _controller.makeAPICallForEndCall(
         successCallBack: (String message) async {
-
           successAndFailureCallBack(
               message: message, isForSuccess: true, isForFailure: false);
           await _controller.removeFromOrder();
