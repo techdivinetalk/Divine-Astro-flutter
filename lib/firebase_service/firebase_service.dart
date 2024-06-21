@@ -23,6 +23,7 @@ import "package:flutter/material.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 
+import "../common/MiddleWare.dart";
 import "../model/chat_offline_model.dart";
 import "../screens/live_page/constant.dart";
 
@@ -107,7 +108,6 @@ class AppFirebaseService {
             (DatabaseEvent event) async {
               final DataSnapshot dataSnapshot = event.snapshot;
               if (dataSnapshot.exists) {
-                print("data from snapshot ${dataSnapshot.value}");
                 if (dataSnapshot.value is Map<dynamic, dynamic>) {
                   Map<dynamic, dynamic> map = <dynamic, dynamic>{};
                   map = (dataSnapshot.value ?? <dynamic, dynamic>{})
@@ -115,23 +115,27 @@ class AppFirebaseService {
                   orderData(Map<String, dynamic>.from(map));
                   if (orderData.value["status"] != null) {
                     if (orderData.value["orderType"] == "chat") {
+                      if(kDebugMode) {
+                        divineSnackBar(data: "$value Order status ${orderData
+                            .value["status"]}");
+                      }
                       switch ((orderData.value["status"])) {
-                        case "0":
+                      case "0":
                           // if(!kDebugMode){
                           //
                           // }
-                          if (Get.currentRoute !=
-                              RouteName.acceptChatRequestScreen) {
+                          // if (Get.currentRoute !=
+                          //     RouteName.acceptChatRequestScreen) {
                             await Get.toNamed(
                                 RouteName.acceptChatRequestScreen);
-                          }
+                        //  }
                           break;
                         case "1":
-                          if (Get.currentRoute !=
-                              RouteName.acceptChatRequestScreen) {
+                          // if (Get.currentRoute !=
+                          //     RouteName.acceptChatRequestScreen) {
                             await Get.toNamed(
                                 RouteName.acceptChatRequestScreen);
-                          }
+                        //  }
                           break;
 
                         case "2":
@@ -160,16 +164,43 @@ class AppFirebaseService {
                     } else {
                       orderData({});
                       sendBroadcast(BroadcastMessage(name: "orderEnd"));
+                      if (MiddleWare.instance.currentPage == RouteName.acceptChatRequestScreen){
+                        Get.until(
+                              (route) {
+                            return Get.currentRoute == RouteName.dashboard;
+                          },
+                        );
+                      }
                     }
                   } else {}
                 } else {}
               } else {
+                if(kDebugMode) {
+                  divineSnackBar(data: "$value Order Ended");
+                }
                 orderData({});
                 sendBroadcast(BroadcastMessage(name: "orderEnd"));
+                if (MiddleWare.instance.currentPage == RouteName.acceptChatRequestScreen){
+                  Get.until(
+                        (route) {
+                      return Get.currentRoute == RouteName.dashboard;
+                    },
+                  );
+                }
               }
             },
           );
         } else {
+          if (MiddleWare.instance.currentPage == RouteName.acceptChatRequestScreen){
+            if(kDebugMode) {
+              divineSnackBar(data: "$value Order Ended");
+            }
+            Get.until(
+                  (route) {
+                return Get.currentRoute == RouteName.dashboard;
+              },
+            );
+          }
           orderData({});
           sendBroadcast(BroadcastMessage(name: "orderEnd"));
         }

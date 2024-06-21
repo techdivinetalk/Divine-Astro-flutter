@@ -58,7 +58,8 @@ Future<String?> uploadImageFileToAws(
 
   var uri =
       Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
-
+print(ApiProvider.imageBaseUrl);
+print("ApiProvider.imageBaseUrl");
   var request = http.MultipartRequest('POST', uri);
 
   request.headers.addAll({
@@ -191,11 +192,11 @@ void divineSnackBar({required String data, Color? color, Duration? duration}) {
   }
   if (context != null) {
     final snackBar = SnackBar(
-      duration: duration ?? const Duration(milliseconds: 4000),
+      duration: duration ?? const Duration(milliseconds: 10000),
       content: Text(
         data,
         style: TextStyle(
-            color: color != null ? appColors.white : appColors.blackColor),
+            color: color != null ? appColors.white : appColors.blackColor, fontSize: 11.0,),
       ),
       backgroundColor: color ?? appColors.guideColor,
       showCloseIcon: true,
