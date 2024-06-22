@@ -15,9 +15,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../common/common_functions.dart';
+import '../model/chat/req_common_chat_model.dart';
+import '../model/chat/res_common_chat_success.dart';
 import '../model/chat_assistant/chat_assistant_astrologer_response.dart';
+import '../repository/chat_repository.dart';
 
 const channel = AndroidNotificationChannel(
   "DivineAstrologer",
@@ -91,6 +93,9 @@ Future<void> firebaseMessagingConfig(BuildContext buildContext) async {
   }
 }
 
+
+
+
 void initMessaging() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings("@mipmap/ic_launcher");
@@ -116,15 +121,45 @@ void initMessaging() async {
           jsonDecode(notificationResponse.payload!);
       debugPrint('notification payload: -- ${payloadMap}');
       //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
-      // // if(payloadMap["type"] == "2") {
+      // if(payloadMap["type"] == "2") {
+
       if (payloadMap["type"] == "1") {
+        print("22222"+ payloadMap.toString());
         Get.toNamed(RouteName.chatMessageWithSocketUI);
-      } else if (payloadMap["type"] == "8") {
+      }else if(payloadMap["type"] == "2"){
+        print(" 1111111111111"+ payloadMap.toString());
+        Future<bool> acceptOrRejectChat(
+            {required int? orderId, required int? queueId}) async {
+// *accept_or_reject: 1 = accept, 3 = chat reject by timeout
+// * is_timeout: should be 1 when reject by timeout"
+          print("chat_reject 1");
+          ResCommonChatStatus response = await ChatRepository().chatAccept(
+              ReqCommonChatParams(
+                  queueId: queueId,
+                  orderId: orderId,
+                  isTimeout: 0,
+                  acceptOrReject: 1)
+                  .toJson());
+          print("chat_reject 2");
+          if (response.statusCode == 200) {
+            print("chat_reject 3");
+            return true;
+          } else {
+            print("chat_reject 4");
+            return false;
+          }
+        }
+
+        Get.toNamed(RouteName.liveDharamScreen);
+      }
+      else if (payloadMap["type"] == "8") {
         final senderId = payloadMap["sender_id"];
         DataList dataList = DataList();
         dataList.id = int.parse(senderId);
         dataList.name = payloadMap["title"];
+        print("333333"+ payloadMap.toString());
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
+
       }else if (payloadMap["type"] == "13") {
         dasboardCurrentIndex(3);
       } else {
@@ -152,6 +187,9 @@ void initMessaging() async {
       //
       //   // await Get.toNamed(RouteName.chatMessageWithSocketUI);
       // }, orderId: orderId);
+    }
+    else{
+      print("Raj bhai");
     }
   });
 }
