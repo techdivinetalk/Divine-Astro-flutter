@@ -32,9 +32,8 @@ class ConstantDetailsModelClass {
   String toRawJson() => json.encode(toJson());
 
   factory ConstantDetailsModelClass.fromJson(Map<String, dynamic>? json) {
-
     return ConstantDetailsModelClass(
-      data:(json?['data'] as Map<String, dynamic>?) != null
+      data: (json?['data'] as Map<String, dynamic>?) != null
           ? Data.fromJson(json?['data'] as Map<String, dynamic>)
           : null,
       success: json?["success"],
@@ -42,7 +41,6 @@ class ConstantDetailsModelClass {
       message: json?["message"],
     );
   }
-
 
   Map<String, dynamic> toJson() => {
         "data": data?.toJson(),
@@ -74,7 +72,7 @@ class Data {
   String? appVersion;
   int? isForceTraningVideo;
   num? currentTime;
-
+  Map? notice;
   Data({
     required this.leaderboardRankImage,
     required this.lottiFile,
@@ -97,6 +95,7 @@ class Data {
     this.firebaseAuthEmail,
     this.firebaseAuthPassword,
     this.currentTime,
+    required this.notice,
   });
 
   Data copyWith({
@@ -121,6 +120,7 @@ class Data {
     String? firebaseAuthPassword,
     int? isForceTraningVideo,
     num? currentTime,
+    Map? notice,
   }) =>
       Data(
         leaderboardRankImage: leaderboardRankImage ?? this.leaderboardRankImage,
@@ -144,6 +144,7 @@ class Data {
         whatsappNo: whatsappNo ?? this.whatsappNo,
         currentTime: currentTime ?? this.currentTime,
         taroCard: taroCard ?? this.taroCard,
+        notice: notice ?? this.notice,
       );
 
   factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
@@ -166,7 +167,7 @@ class Data {
         call: Call.fromJson(json["call"]),
         badWordsData: List<String>.from(json["bad_words_data"].map((x) => x)),
         liveBackgroundImage: json["live_background_image"],
-    token: json["token"] ??  "",
+        token: json["token"] ?? "",
         chatSuspiciousRegex:
             List<String>.from(json["chat_suspicious_regex"].map((x) => x)),
         cityList: List<String>.from(json["city_list"].map((x) => x)),
@@ -175,7 +176,8 @@ class Data {
         awsCredentails: AwsCredential.fromJson(json["aws_credential"]),
         whatsappNo: json["whatsappNo"],
         taroCard: json['taro_card'],
-    currentTime: json['current_time'],
+        currentTime: json['current_time'],
+        notice: json['notice'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -203,6 +205,7 @@ class Data {
         'firebase_auth_email': firebaseAuthEmail,
         'firebase_auth_password': firebaseAuthPassword,
         'current_time': currentTime,
+        'notice': notice,
       };
 }
 

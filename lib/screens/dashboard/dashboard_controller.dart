@@ -401,11 +401,9 @@ class DashboardController extends GetxController
     try {
       final data = await userRepository.constantDetailsData();
       if (data.data != null) {
+        imageUploadBaseUrl.value = data?.data?.imageUploadBaseUrl ?? "";
 
-
-          imageUploadBaseUrl.value = data?.data?.imageUploadBaseUrl ?? "";
-
-update();
+        update();
 
         PackageInfo packageInfo = await PackageInfo.fromPlatform();
         print(data.data!.appVersion!.split(".").join(""));
@@ -1028,5 +1026,36 @@ update();
     } catch (e) {
       debugPrint("Error caching gifts: $e");
     }
+  }
+
+  var isLoading = false.obs;
+  var submitTermsAndCondition;
+  void postAcceptTerms(noticeId) async {
+    isLoading(true);
+    Map<String, dynamic> param = {
+      "notice_id": noticeId,
+    };
+    try {
+      final rstatus = await repository.postTermsConditionSubmit(param);
+
+      if (rstatus.success == true) {
+        submitTermsAndCondition = rstatus;
+        isLoading(false);
+        Get.back();
+      } else {
+        isLoading(false);
+      }
+      update();
+    } catch (error) {
+      isLoading(false);
+    }
+  }
+
+  // RxBool is a reactive boolean observable
+  var isChecked = false.obs;
+
+// Method to toggle the checkbox state
+  void toggleCheckbox() {
+    isChecked.value = !isChecked.value;
   }
 }
