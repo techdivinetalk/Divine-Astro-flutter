@@ -10,6 +10,7 @@ import 'package:divine_astrologer/di/progress_service.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_authentication.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
+import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/screens/otp_verification/timer_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -150,7 +151,12 @@ class OtpVerificationController extends GetxController {
       print("jsonEncode(data.data)");
       if (data.data != null) {
         var commonConstants = await userRepository.constantDetailsData();
+        if(commonConstants?.data != null){
 
+          imageUploadBaseUrl.value = commonConstants?.data?.imageUploadBaseUrl ?? "";
+
+
+        }
         if (commonConstants.data!.token != null) {
           customTokenWithFirebase(
             token: commonConstants.data!.token,

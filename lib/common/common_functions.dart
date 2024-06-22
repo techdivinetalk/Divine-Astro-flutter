@@ -32,6 +32,12 @@ Future<String> uploadImageToS3Bucket(
   var commonConstants = await userRepository.constantDetailsData();
   var dataString = commonConstants.data!.awsCredentails.baseurl?.split(".");
   var extension = p.extension(selectedFile!.path);
+  if(commonConstants?.data != null){
+
+    imageUploadBaseUrl.value = commonConstants?.data?.imageUploadBaseUrl ?? "";
+
+
+  }
   print("extension: " + extension);
   var response = await AwsS3.uploadFile(
     // accessKey: commonConstants.data.awsCredentails.accesskey!,

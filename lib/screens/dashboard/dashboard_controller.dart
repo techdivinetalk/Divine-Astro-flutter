@@ -44,6 +44,7 @@ class DashboardController extends GetxController
   DashboardController(this.repository);
 
   RxInt selectedIndex = 0.obs;
+
   void setSelectedIndex(int index) {
     selectedIndex.value = index;
   }
@@ -95,7 +96,8 @@ class DashboardController extends GetxController
       // Check permissions when app is resumed
       checkPermissions();
       getOrderFromApi();
-      if (preferenceService.getUserDetail() != null) { // Check for null user details
+      if (preferenceService.getUserDetail() != null) {
+        // Check for null user details
         appFirebaseService.readData(
             'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
       } else {
@@ -260,6 +262,11 @@ class DashboardController extends GetxController
       print("is logged out");
     }
     commonConstants = await userRepository.constantDetailsData();
+    if (commonConstants?.data != null) {
+      imageUploadBaseUrl.value =
+          commonConstants?.data?.imageUploadBaseUrl ?? "";
+      update();
+    }
     preferenceService.setConstantDetails(commonConstants);
     preferenceService
         .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
@@ -394,6 +401,12 @@ class DashboardController extends GetxController
     try {
       final data = await userRepository.constantDetailsData();
       if (data.data != null) {
+
+
+          imageUploadBaseUrl.value = data?.data?.imageUploadBaseUrl ?? "";
+
+update();
+
         PackageInfo packageInfo = await PackageInfo.fromPlatform();
         print(data.data!.appVersion!.split(".").join(""));
         print(packageInfo.version.split(".").join(""));
@@ -967,8 +980,10 @@ class DashboardController extends GetxController
 
   void showTutorial(context) {
     TutorialCoachMark(
-      targets: createTargets(), // List<TargetFocus>
-      colorShadow: Colors.black, // DEFAULT Colors.black
+      targets: createTargets(),
+      // List<TargetFocus>
+      colorShadow: Colors.black,
+      // DEFAULT Colors.black
       // alignSkip: Alignment.bottomRight,
       // textSkip: "SKIP",
       // showSkipInLastTarget: true,
