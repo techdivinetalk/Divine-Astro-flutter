@@ -10,6 +10,7 @@ import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
 import 'package:divine_astrologer/firebase_options.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
+import 'package:divine_astrologer/new_chat/new_chat.dart';
 import 'package:divine_astrologer/remote_config/remote_config_helper.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/auth/login/login_controller.dart';
@@ -403,11 +404,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   navigatorKey: navigatorKey,
                   color: appColors.white,
                   debugShowCheckedModeBanner: false,
-                  initialRoute: preferenceService.getUserDetail()?.id == null
-                      ? RouteName.login
-                      : RouteName.dashboard,
+                  // initialRoute: preferenceService.getUserDetail()?.id == null
+                  //     ? RouteName.login
+                  //     : RouteName.dashboard,
                   getPages: Routes.routes,
-                  // home: ZegoLoginScreen(),
+                  home: const NewChatScreen(),
                   locale: getLanStrToLocale(
                       GetStorages.get(GetStorageKeys.language) ?? ""),
                   fallbackLocale: AppTranslations.fallbackLocale,

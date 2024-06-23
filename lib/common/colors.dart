@@ -12,6 +12,7 @@ class AppColors extends GetxController {
   Color white = const Color(0xFFFFFFFF);
   Color darkBlue = const Color(0xFF0E2339);
   Color lightGreen = const Color(0xff27C884);
+  Color buttonDisableColor = Color(0xFFD9D9D9);
   Color whiteGuidedColor = const Color(0xFFFFFFFF);
   Color guideColor = const Color(0xFF87919C);
   Color guideTextColor = const Color(0xFFFFFFFF);
