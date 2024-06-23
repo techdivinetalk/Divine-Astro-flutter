@@ -15,6 +15,7 @@ import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -52,6 +53,9 @@ class LiveTipsController extends GetxController {
       ResolutionPreset.max,
     );
     controller!.initialize().then((_) {
+      // portrait mode
+      DeviceOrientation portraitMode = DeviceOrientation.portraitUp;
+      controller?.lockCaptureOrientation(portraitMode);
       if (!Get.context!.mounted) {
         CameraLensDirection.front;
         return;
@@ -129,9 +133,9 @@ class LiveTipsController extends GetxController {
     ).then((value) async {
       print("Astrologer node added");
       await liveCount.doc(userId).set({
-        "astroId":userId,
-        "astroName":userName,
-        "astroAvtar":avatar,
+        "astroId": userId,
+        "astroName": userName,
+        "astroAvtar": avatar,
       }).then((value) async {
         print("successfully added");
         LiveGlobalSingleton().isInLiveScreen = true;

@@ -52,7 +52,6 @@ class HomeUI extends GetView<HomeController> {
   const HomeUI({Key? key}) : super(key: key);
 
   @override
-
   Widget build(BuildContext context) {
     Get.put(HomeController());
     print("beforeGoing 5 - ${preferenceService.getUserDetail()?.id}");
@@ -880,6 +879,7 @@ class HomeUI extends GetView<HomeController> {
                                 controller.whatsapp();
                               },
                               child: Container(
+                                  key: Get.find<DashboardController>().keyHelp,
                                   height: 50,
                                   width: 50,
                                   decoration: BoxDecoration(
@@ -1076,6 +1076,7 @@ class HomeUI extends GetView<HomeController> {
   Widget noticeBoardWidget({HomeController? controller}) {
     return controller!.homeData != null
         ? ClipRRect(
+            key: Get.find<DashboardController>().keyNoticeBoard,
             borderRadius: BorderRadius.all(Radius.circular(20.r)),
             child: Material(
               color: appColors.transparent,
@@ -1624,6 +1625,7 @@ class HomeUI extends GetView<HomeController> {
       final bool cond2 = controller.isChatEnable.value;
       final bool cond3 = controller.isVideoCallEnable.value;
       return Container(
+        key: Get.find<DashboardController>().keySessionType,
         padding: EdgeInsets.all(16.h),
         decoration: BoxDecoration(
           boxShadow: [
@@ -1828,7 +1830,6 @@ class HomeUI extends GetView<HomeController> {
                         onTap: () {
                           Get.bottomSheet(CommonInfoSheet(
                             title: "nextOnlineTime".tr,
-
                             subTitle: "nextOnlineTimeDes".tr,
                           ));
                         },
@@ -2076,6 +2077,7 @@ class HomeUI extends GetView<HomeController> {
   Widget customerOfferWidget(BuildContext context,
       {HomeController? controller}) {
     return Container(
+      key: Get.find<DashboardController>().keyManageDiscountOffers,
       margin: EdgeInsets.only(top: 10.h),
       padding: EdgeInsets.all(16.h),
       decoration: BoxDecoration(
@@ -2358,9 +2360,7 @@ class HomeUI extends GetView<HomeController> {
         ));
   }
 
-
   Widget trainingVideoWidget({HomeController? controller}) {
-
     if (controller!.homeData?.trainingVideo == null ||
         (controller.homeData?.trainingVideo ?? []).isEmpty) {
       return const SizedBox.shrink();
@@ -2400,20 +2400,19 @@ class HomeUI extends GetView<HomeController> {
                   child: SizedBox(),
                 ),
                 GestureDetector(
-
                     onTap: () {
-                        Get.bottomSheet(CommonInfoSheet(
-                          title: "trainingVideos".tr,
-                          subTitle: "trainingVideoDes".tr,
-                        )
-                        );
+                      Get.bottomSheet(CommonInfoSheet(
+                        title: "trainingVideos".tr,
+                        subTitle: "trainingVideoDes".tr,
+                      ));
                     },
                     child: Container(
-                        height:30,
-                        width:30,
+                        height: 30,
+                        width: 30,
                         child: Padding(
                           padding: const EdgeInsets.all(4.0),
-                          child: Assets.images.icInfo.svg(height: 15.h, width: 15.h),
+                          child: Assets.images.icInfo
+                              .svg(height: 15.h, width: 15.h),
                         ))),
               ],
             ),
@@ -2774,8 +2773,7 @@ class HomeUI extends GetView<HomeController> {
                     ),
                     SizedBox(height: 10.h),
                   ],
-                )
-            ),
+                )),
             /*Padding(
               padding: const EdgeInsets.only(left: 20, right: 20),
               child: Row(
@@ -2909,7 +2907,6 @@ class HomeUI extends GetView<HomeController> {
             )));
   }*/
 }
-
 
 class SelectedTimeForChat extends StatelessWidget {
   final HomeController? controller;

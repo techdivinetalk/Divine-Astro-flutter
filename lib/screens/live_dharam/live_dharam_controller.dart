@@ -19,6 +19,7 @@ import "package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart";
 import "package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
 import "package:firebase_database/firebase_database.dart";
+import "package:flutter/material.dart";
 
 import "package:get/get.dart";
 import "package:get/get_connect/http/src/status/http_status.dart";
@@ -721,8 +722,10 @@ class LiveDharamController extends GetxController {
     }
   }
 
-  Future<void> removeMyNode() async {
+  Future<void> removeMyNode(BuildContext context) async {
     // await ref.child("$livePath/$liveId").remove();
+
+    await zegoController.leave(context);
     await liveStore.doc(userId).delete();
     await liveCount.doc(userId).delete();
     update();

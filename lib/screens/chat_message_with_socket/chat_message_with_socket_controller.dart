@@ -178,7 +178,7 @@ class ChatMessageWithSocketController extends GetxController
     }
     super.onClose();
   }
- 
+
   @override
   void dispose() {
     // TODO: implement dispose
@@ -494,7 +494,8 @@ class ChatMessageWithSocketController extends GetxController
         });
 
         int userId = 0;
-        String userIdString = AppFirebaseService().orderData.value["userId"].toString();
+        String userIdString =
+            AppFirebaseService().orderData.value["userId"].toString();
         print('User ID String: $userIdString');
         if (int.tryParse(userIdString) != null) {
           userId = int.parse(userIdString);
@@ -526,11 +527,10 @@ class ChatMessageWithSocketController extends GetxController
       userId: AppFirebaseService().orderData.value["userId"],
     );
 
-    //  if (Get.arguments is ResAstroChatListener) {
     sendReadMessageStatus = true;
-    // if (data!.customerId != null) {
+
     isOngoingChat.value = true;
-    //  currentChatUserId.value = data['userId'];
+
     currentUserId.value =
         int.parse(AppFirebaseService().orderData.value['userId'].toString());
     customerName.value =
@@ -555,9 +555,10 @@ class ChatMessageWithSocketController extends GetxController
     //     .child(
     //         "order/${AppFirebaseService().orderData.value["orderId"].toString()}/isAstroEntered")
     //     .set((DateTime.now().millisecondsSinceEpoch) + 1);
+    // Future.delayed(const Duration(milliseconds: 200), () {
+    //   scrollToBottomFunc();
+    // },);
   }
-
-
 
   navigateToOtherScreen() async {
     await Future.delayed(const Duration(milliseconds: 300));
@@ -574,11 +575,9 @@ class ChatMessageWithSocketController extends GetxController
     } catch (e) {
       //error handling
       print('Error retrieving message templates: $e');
-
     }
     update();
   }
-
 
   getMessageTemplates() async {
     try {
@@ -1085,7 +1084,8 @@ class ChatMessageWithSocketController extends GetxController
     final String? uploadFile = await uploadImageFileToAws(
         file: File(fileData.path), moduleName: "Chat");
     if (uploadFile != "" || uploadFile != null) {
-      print("image message upload file ${uploadFile} base64Image==> ${base64Image}");
+      print(
+          "image message upload file ${uploadFile} base64Image==> ${base64Image}");
       addNewMessage(time, MsgType.image,
           messageText: uploadFile,
           base64Image: base64Image,
@@ -1323,27 +1323,18 @@ class ChatMessageWithSocketController extends GetxController
 
   scrollToBottomFunc() {
     if (messgeScrollController.hasClients) {
-      debugPrint("test_scrollToBottomFunc: call");
+      print("objectobjectobjectobject");
       Timer(
-        const Duration(seconds: 2),
-            () {
-          debugPrint("test_scrollToBottomFunc: jumpTo last");
-          if (messgeScrollController.position.maxScrollExtent != null) {
-            messgeScrollController.animateTo(
-              messgeScrollController.position.maxScrollExtent,
-              duration: Duration(milliseconds: 500),
-              curve: Curves.easeOut,
-            );
-            update();
-          } else {
-            debugPrint("Scroll extent is null");
-          }
-        },
+        const Duration(milliseconds: 200),
+        () => messgeScrollController.animateTo(
+          messgeScrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        ),
       );
+      update();
     }
   }
-
-
 
   askForGift() async {
     await showCupertinoModalPopup(
@@ -1451,6 +1442,7 @@ class ChatMessageWithSocketController extends GetxController
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
     unreadMessageIndex.value = -1;
     addNewMessage(time, MsgType.text, messageText: msg.description);
+    scrollToBottomFunc();
   }
 
   // int getListOfCardLength() {
@@ -1520,7 +1512,7 @@ class ChatMessageWithSocketController extends GetxController
       Get.put(CallChatHistoryRepository());
 
   getChatList() async {
-/*    chatMessages.clear();
+/* chatMessages.clear();
     print("get chat list 1");
     await hiveServices.initialize();
     print("get chat list 2");
@@ -1567,6 +1559,7 @@ class ChatMessageWithSocketController extends GetxController
           chatMessages.clear();
           chatMessages.addAll(fetchedMessages.reversed);
 
+          scrollToBottomFunc();
           chatMessages.refresh();
         }
       } else {
