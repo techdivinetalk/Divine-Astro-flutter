@@ -1,10 +1,12 @@
-
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/new_chat/new_chat_controller.dart';
+import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_ui.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart';
+import 'package:divine_astrologer/zego_call/zego_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -35,7 +37,7 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
       ),
       title: Row(
         children: [
-          const SizedBox(width: 10),
+          // const SizedBox(width: 10),
           Obx(
             () {
               Map<String, dynamic> order = {};
@@ -45,8 +47,7 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                   "${controller!.preference.getAmazonUrl()}$imageURL";
               print("img:: -xx-$appended");
               return GestureDetector(
-                onTap: () {
-                },
+                onTap: () {},
                 child: Container(
                   height: 35,
                   width: 35,
@@ -66,8 +67,7 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           const SizedBox(width: 10),
           Flexible(
             child: InkWell(
-              onTap: () {
-              },
+              onTap: () {},
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -116,10 +116,109 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           ),
         ],
       ),
+      actions: [
+        Obx(
+          () {
+            Map orderData = AppFirebaseService().orderData.value;
+            final String astrImage = orderData["astroImage"] ?? "";
+            final String custImage = orderData["customerImage"] ?? "";
+
+            String appendedAstrImage =
+                "${preferenceService.getAmazonUrl()}/$astrImage";
+            String appendedCustImage =
+                "${preferenceService.getAmazonUrl()}/$custImage";
+
+            print("test_appendedCustImage: $appendedAstrImage");
+
+            return isVOIP.value.toString() == "0"
+                ? const SizedBox()
+                : ZegoService().buttonUI(
+                    isVideoCall: false,
+                    targetUserID: orderData["userId"] ?? "",
+                    targetUserName: orderData["customerName"] ?? "",
+                    checkOppositeSidePermGranted: () {
+                      String name =
+                          preferenceService.getUserDetail()?.name ?? "";
+                      String message =
+                          "$name wants to start a call, please allow all required permissions";
+
+                      /// write code for send call
+                      // controller.messageController.text = message;
+                      // controller.sendMsg();
+                    },
+                    customData: {
+                      "astr_id": orderData["astroId"] ?? "",
+                      "astr_name": orderData["astrologerName"] ?? "",
+                      "astr_image": appendedAstrImage,
+                      "cust_id": orderData["userId"] ?? "",
+                      "cust_name": orderData["customerName"] ?? "",
+                      "cust_image": appendedCustImage,
+                      // "time": "00:20:00",
+                      "time": controller!.showTalkTime.value,
+                    },
+                    isAstrologer: true,
+                    astrologerDisabledCalls: () {
+                      astroNotAcceptingCallsSnackBar(
+                        context: context,
+                        isVideoCall: false,
+                      );
+                    },
+                  );
+          },
+        ),
+        const SizedBox(width: 15),
+        Obx(
+          () {
+            Map orderData = AppFirebaseService().orderData.value;
+            final String astrImage = orderData["astroImage"] ?? "";
+            final String custImage = orderData["customerImage"] ?? "";
+
+            String appendedAstrImage =
+                "${preferenceService.getAmazonUrl()}$astrImage";
+            String appendedCustImage =
+                "${preferenceService.getAmazonUrl()}$custImage";
+
+            return controller!.isOfferVisible.value || isVOIP.toString() == "0"
+                ? const SizedBox()
+                : ZegoService().buttonUI(
+                    isVideoCall: true,
+                    targetUserID: orderData["astroId"] ?? "",
+                    targetUserName: orderData["astrologerName"] ?? "",
+                    checkOppositeSidePermGranted: () {
+                      String name =
+                          preferenceService.getUserDetail()?.name ?? "";
+                      String message =
+                          "$name wants to start a call, please allow all required permissions";
+                      controller!.messageController.text = message;
+
+                      /// permission require auto generating msg
+                      // controller!.sendMsg();
+                    },
+                    customData: {
+                      "astr_id": orderData["astroId"] ?? "",
+                      "astr_name": orderData["astrologerName"] ?? "",
+                      "astr_image": appendedAstrImage,
+                      "cust_id": orderData["userId"] ?? "",
+                      "cust_name": orderData["customerName"] ?? "",
+                      "cust_image": appendedCustImage,
+                      "time": controller!.showTalkTime.value,
+                    },
+                    isAstrologer: false,
+                    astrologerDisabledCalls: () {
+                      astroNotAcceptingCallsSnackBar(
+                        context: Get.context!,
+                        isVideoCall: true,
+                      );
+                    },
+                  );
+          },
+        ),
+        const SizedBox(width: 10),
+      ],
     );
   }
 
-  Widget commonRowForPopUpMenu({  IconData? icon,String? title}){
+  Widget commonRowForPopUpMenu({IconData? icon, String? title}) {
     return Row(mainAxisSize: MainAxisSize.min, children: [
       Icon(
         icon,

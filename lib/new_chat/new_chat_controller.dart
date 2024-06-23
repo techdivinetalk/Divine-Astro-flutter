@@ -5,15 +5,22 @@ import 'dart:io';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:camera/camera.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:divine_astrologer/common/ask_for_gift_bottom_sheet.dart';
 import 'package:divine_astrologer/common/camera.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/common/show_permission_widget.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
+import 'package:divine_astrologer/model/astrologer_gift_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
+import 'package:divine_astrologer/screens/chat_message_with_socket/custom_puja/saved_remedies.dart';
+import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
+import 'package:divine_astrologer/tarotCard/FlutterCarousel.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/utils.dart';
+import 'package:flutter/cupertino.dart';
 import "package:http/http.dart" as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -22,7 +29,6 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
-
 
 class NewChatController extends GetxController {
   TextEditingController messageController = TextEditingController();
@@ -41,7 +47,7 @@ class NewChatController extends GetxController {
   Loading loading = Loading.initial;
   RxBool isAudioPlaying = false.obs;
   RxString astrologerName = "".obs;
-
+  RxString customerName = "".obs;
 
   Duration? timeDifference;
 
@@ -343,5 +349,87 @@ class NewChatController extends GetxController {
       } else {}
     }
     return Future<bool>.value(hasStoragePermission);
+  }
+
+  /// ------------------ Product bottom sheet ----------------------- ///
+  Future<void> openProduct() async {
+    var result = await Get.toNamed(RouteName.chatAssistProductPage, arguments: {
+      'customerId':
+          int.parse(AppFirebaseService().orderData.value["userId"].toString())
+    });
+    if (result != null) {
+      final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+      // write code for send product
+      // controller.addNewMessage(
+      //   time,
+      //   MsgType.product,
+      //   data: {
+      //     'data': result,
+      //   },
+      //   messageText: 'Product',
+      // );
+    }
+  }
+
+  /// ------------------ Custom Product bottom sheet ----------------------- ///
+  void openCustomShop() {
+    // Get.bottomSheet(
+    //   SavedRemediesBottomSheet(
+    //     controller: NewChatController(),
+    //     customProductData: controller.customProductData,
+    //   ),
+    // );
+  }
+
+  /// ------------------ Tarrot card bottom sheet ----------------------- ///
+  RxBool isCardBotOpen = false.obs;
+
+  void openShowDeck() {
+    isCardBotOpen.value = true;
+    // showCardChoiceBottomSheet(context, controller);
+  }
+  /// ------------------ Remedies bottom sheet ----------------------- ///
+  Future<void> openRemedies() async {
+    var result = await Get.toNamed(RouteName.chatSuggestRemedy);
+    if (result != null) {
+      final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+     /// write code for send remedies
+      // addNewMessage(
+      //   time,
+      //   MsgType.remedies,
+      //   messageText: result.toString(),
+      // );
+    }
+  }
+  /// ------------------ Ask gift bottom sheet ----------------------- ///
+  askForGift() async {
+    await showCupertinoModalPopup(
+      //backgroundColor: Colors.transparent,
+      context: Get.context!,
+      builder: (context) {
+        return AskForGiftBottomSheet(
+          customerName: customerName.value,
+          giftList: GiftsSingleton().gifts.data ?? <GiftData>[],
+          onSelect: (GiftData item, num quantity) async {
+            Get.back();
+            print('number of gifts $quantity');
+            await sendGiftFunc(item, quantity);
+          },
+        );
+      },
+    );
+  }
+
+  sendGiftFunc(GiftData item, num quantity) {
+    if (item.giftName.isNotEmpty) {
+      final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+      /// write code ask gift
+      // unreadMessageIndex.value = -1;
+      // addNewMessage(time, MsgType.gift,
+      //     messageText: item.giftName,
+      //     productId: item.id.toString(),
+      //     awsUrl: item.fullGiftImage,
+      //     giftId: item.id.toString());
+    }
   }
 }
