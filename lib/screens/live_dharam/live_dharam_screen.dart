@@ -123,7 +123,7 @@ class _LivePage extends State<LiveDharamScreen>
         if (snapshotData != null) {
           data["isAvailable"] = snapshotData["isAvailable"];
           data["blockList"] = snapshotData["blockList"];
-          data["order"] = snapshotData["order"];
+          data["LiveOrder"] = snapshotData["LiveOrder"];
           data["waitList"] = snapshotData["waitList"];
           data["leaderBoard"] = snapshotData["leaderBoard"];
           data["gift"] = snapshotData["gift"];

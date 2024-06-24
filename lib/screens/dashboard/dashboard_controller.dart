@@ -174,7 +174,6 @@ class DashboardController extends GetxController
     await [
       Permission.camera,
       Permission.microphone,
-      Permission.storage,
     ].request();
     Get.back(); // Close the bottom sheet after requesting permissions
     if (await FlutterOverlayWindow.isPermissionGranted() == false) {
@@ -420,7 +419,7 @@ update();
           );
           // showTutorial(context);
         } else {
-          showTutorial(context);
+         // showTutorial(context);
         }
       }
 
