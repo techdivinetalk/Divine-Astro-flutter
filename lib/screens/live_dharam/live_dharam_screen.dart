@@ -850,14 +850,17 @@ class _LivePage extends State<LiveDharamScreen>
   Map<String, dynamic> svgaUrls = {};
 
   Widget newLeaderboard() {
+    List<LeaderboardModel> newList = [];
+    newList.addAll(_controller.leaderboardModel);
+    newList.sort((a, b) => b.amount!.compareTo(a.amount!));
     return AnimatedOpacity(
-      opacity: _controller.leaderboardModel.isEmpty ? 0.0 : 1.0,
+      opacity: newList.isEmpty ? 0.0 : 1.0,
       duration: const Duration(seconds: 1),
-      child: _controller.leaderboardModel.isEmpty
+      child: newList.isEmpty
           ? const SizedBox()
           : LeaderBoardWidget(
-              avatar: _controller.leaderboardModel.first.avatar,
-              userName: _controller.leaderboardModel.first.userName,
+              avatar: newList.first.avatar,
+              userName: newList.first.userName,
               fullGiftImage: "",
               astrologerName: "Astrologer",
               //

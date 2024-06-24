@@ -44,7 +44,7 @@ class WaitListUI extends GetView<WaitListUIController> {
                 },
               ),
               SliverToBoxAdapter(
-                child: _buildBody(controller),
+                child: _buildBody(controller, context),
               ),
             ],
           );
@@ -122,16 +122,22 @@ class WaitListUI extends GetView<WaitListUIController> {
     );
   }
 
-  Widget _buildBody(WaitListUIController controller) {
+  Widget _buildBody(WaitListUIController controller, context) {
     if (controller.loading == Loading.loading) {
-      return Center(
-        child: CircularProgressIndicator.adaptive(
-          valueColor: AlwaysStoppedAnimation(Colors.yellow),
+      return SizedBox(
+        height: MediaQuery.of(context).size.height * 0.7,
+        child: const Center(
+          child: CircularProgressIndicator.adaptive(
+            valueColor: AlwaysStoppedAnimation(Colors.yellow),
+          ),
         ),
       );
     } else if (controller.waitingPersons.isEmpty) {
-      return Center(
-        child: Text("jobTitle".tr),
+      return SizedBox(
+        height: MediaQuery.of(context).size.height * 0.7,
+        child: Center(
+          child: Text("jobTitle".tr),
+        ),
       );
     } else {
       return SingleChildScrollView(

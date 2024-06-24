@@ -1,6 +1,5 @@
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:math';
 
 import 'package:camera/camera.dart';
@@ -40,9 +39,7 @@ import 'common/MiddleWare.dart';
 import 'common/app_theme.dart';
 import 'common/colors.dart';
 import 'common/common_functions.dart';
-
 import 'common/routes.dart';
-
 import 'di/fcm_notification.dart';
 import 'di/firebase_network_service.dart';
 import 'di/network_service.dart';
@@ -217,15 +214,12 @@ Future<void> main() async {
 
     try {
       runApp(MyApp());
-    }
-    catch(error, stacktrace){
+    } catch (error, stacktrace) {
       // If you want to record a "fatal" exception
       FirebaseCrashlytics.instance.recordError(error, stacktrace, fatal: true);
       // If you want to record a "non-fatal" exception
       FirebaseCrashlytics.instance.recordError(error, stacktrace);
-
     }
-
   });
   Permission.notification.isDenied.then((value) async {
     if (value) {
@@ -394,7 +388,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           builder: (context, child) {
             return OverlaySupport.global(
               child: MediaQuery(
-                data: MediaQuery.of(context).copyWith(textScaler: TextScaler.noScaling),
+                data: MediaQuery.of(context)
+                    .copyWith(textScaler: TextScaler.noScaling),
                 child: GetMaterialApp(
                   navigatorObservers: <NavigatorObserver>[
                     GetObserver(MiddleWare.instance.observer, Get.routing),

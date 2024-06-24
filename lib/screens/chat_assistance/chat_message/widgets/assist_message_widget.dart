@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'dart:io';
-import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
@@ -105,7 +103,8 @@ class AssistMessageView extends StatelessWidget {
         messageWidget = voucherMsgView(chatMessage, yourMessage);
         break;
       case MsgType.customProduct:
-        messageWidget = CustomProductView(message:chatMessage,yourMessage: yourMessage);
+        messageWidget =
+            CustomProductView(message: chatMessage, yourMessage: yourMessage);
         break;
       default:
         messageWidget = const SizedBox.shrink();
@@ -238,14 +237,12 @@ class AssistMessageView extends StatelessWidget {
     );
   }
 
-  Widget CustomProductView(
-      { AssistChatData? message, bool? yourMessage}) {
+  Widget CustomProductView({AssistChatData? message, bool? yourMessage}) {
     return Align(
       alignment: Alignment.bottomRight,
       child: Container(
         width: 165,
         height: 220,
-
         decoration: BoxDecoration(
           color: appColors.white,
           borderRadius: BorderRadius.circular(10),
@@ -439,8 +436,7 @@ class AssistMessageView extends StatelessWidget {
           clipBehavior: Clip.antiAlias,
           decoration: BoxDecoration(
             borderRadius: const BorderRadius.all(Radius.circular(40)),
-
-           color: Color(0xffFFF4E1),
+            color: Color(0xffFFF4E1),
           ),
           constraints: BoxConstraints(
               maxWidth: ScreenUtil().screenWidth * 0.8,
@@ -590,7 +586,7 @@ class AssistMessageView extends StatelessWidget {
         .substring(1, (chatMessage.message ?? '').length - 1);
     List temp = jsonString.split(', ');
 
-  //  print("get templist $temp");
+    //  print("get templist $temp");
     print("get templist ${temp.length}");
 
     if (temp.length < 2) {
@@ -608,8 +604,7 @@ class AssistMessageView extends StatelessWidget {
                   offset: const Offset(0, 1),
                   blurRadius: 3,
                 ),
-              ]
-          ),
+              ]),
           child: ListTile(
             leading: CircleAvatar(
               backgroundColor: appColors.red,
@@ -623,12 +618,14 @@ class AssistMessageView extends StatelessWidget {
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
             ),
-            subtitle: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children:
-              List.generate(temp.length, (index) {
-                return CustomText(temp[index], fontSize: 12.sp);
-              }),
+            subtitle: Padding(
+              padding: const EdgeInsets.only(bottom: 14),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: List.generate(temp.length, (index) {
+                  return CustomText(temp[index], fontSize: 12.sp);
+                }),
+              ),
             ),
           ),
         ),
@@ -644,7 +641,7 @@ class AssistMessageView extends StatelessWidget {
                   fontColor: appColors.textColor,
                 ),
               ),
-               SizedBox(width: 3.w),
+              SizedBox(width: 3.w),
               if ((chatMessage.sendBy) == SendBy.astrologer)
                 chatSeenStatusWidget(
                   seenStatus: chatMessage.seenStatus ?? SeenStatus.sent,
@@ -674,7 +671,7 @@ class AssistMessageView extends StatelessWidget {
             "isSentMessage": true,
             "customerId": chatMessage.customerId,
           });
-        } 
+        }
       },
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 10),
@@ -690,8 +687,7 @@ class AssistMessageView extends StatelessWidget {
                       offset: const Offset(0, 1),
                       blurRadius: 3,
                     ),
-                  ]
-              ),
+                  ]),
               child: ListTile(
                 leading: ClipRRect(
                   borderRadius: BorderRadius.circular(10.0.sp),

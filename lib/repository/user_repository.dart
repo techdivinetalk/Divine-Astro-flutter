@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -11,6 +10,7 @@ import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/model/pivacy_policy_model.dart';
 import 'package:divine_astrologer/model/res_reply_review.dart';
 import 'package:divine_astrologer/model/res_user_profile.dart';
+import 'package:divine_astrologer/model/resignation/ResignationCancelModel.dart';
 import 'package:divine_astrologer/model/terms_and_condition_model.dart';
 import 'package:divine_astrologer/model/update_bank_response.dart';
 import 'package:divine_astrologer/model/update_offer_type_response.dart';
@@ -18,7 +18,6 @@ import 'package:divine_astrologer/model/update_profile_response.dart';
 import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/model/upload_image_model.dart';
 import 'package:divine_astrologer/model/upload_story_response.dart';
-import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:divine_astrologer/screens/add_puja/model/puja_product_categories_model.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_model.dart';
 import 'package:divine_astrologer/screens/puja/model/add_edit_puja_model.dart';
@@ -26,14 +25,12 @@ import 'package:divine_astrologer/screens/puja/model/pooja_listing_model.dart';
 import 'package:divine_astrologer/screens/remedies/model/remedies_model.dart';
 import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide FormData;
 import 'package:get/get_connect/http/src/status/http_status.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../common/app_exception.dart';
 import '../common/common_functions.dart';
-import '../common/routes.dart';
 import '../di/api_provider.dart';
 import "../model/blocked_customers_response.dart";
 import '../model/constant_details_model_class.dart';
@@ -42,6 +39,9 @@ import '../model/report_review_model_class.dart';
 import '../model/res_blocked_customers.dart';
 import '../model/res_login.dart';
 import '../model/res_review_ratings.dart';
+import '../model/resignation/ResignationReasonModel.dart';
+import '../model/resignation/ResignationSubmitModel.dart';
+import '../model/resignation/Resignation_status_model.dart';
 import '../model/send_feed_back_model.dart';
 import '../model/send_otp.dart';
 import '../model/verify_otp.dart';
@@ -234,7 +234,7 @@ class UserRepository extends ApiProvider {
           throw CustomException("Unknown Error");
         }
       } else {
-        String exceptionmessage  = json.decode(response.body)["message"];
+        String exceptionmessage = json.decode(response.body)["message"];
         throw CustomException(exceptionmessage);
       }
     } catch (e, s) {
@@ -588,7 +588,8 @@ class UserRepository extends ApiProvider {
       log("CurrentChatOrder");
       if (response.statusCode == 200) {
         log("CurrentChatOrder-1");
-        ChatOrderResponse  chatOrderResponse =  ChatOrderResponse.fromJson(json.decode(response.body));
+        ChatOrderResponse chatOrderResponse =
+            ChatOrderResponse.fromJson(json.decode(response.body));
         if (chatOrderResponse.statusCode == successResponse &&
             chatOrderResponse.success == true) {
           log("CurrentChatOrder-2");
@@ -607,7 +608,8 @@ class UserRepository extends ApiProvider {
       rethrow;
     }
   }
- Future<ConstantDetailsModelClass> constantDetailsData() async {
+
+  Future<ConstantDetailsModelClass> constantDetailsData() async {
     try {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       String version = packageInfo.version;
@@ -641,6 +643,7 @@ class UserRepository extends ApiProvider {
             ConstantDetailsModelClass.fromJson(json.decode(response.body));
         if (constantDetailsModelClass.statusCode == successResponse &&
             constantDetailsModelClass.success == true) {
+          log("1111111 - ${constantDetailsModelClass.toString()}");
           return constantDetailsModelClass;
         } else {
           throw CustomException(json.decode(response.body)["error"]);
@@ -788,6 +791,126 @@ class UserRepository extends ApiProvider {
       }
     } catch (e, s) {
       debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<ResignationReasonModel> getResignationReason(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await get(resignationReasons,
+          queryParameters: param, headers: await getJsonHeaderURL());
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final blockedCustomerList =
+              ResignationReasonModel.fromJson(json.decode(response.body));
+          if (blockedCustomerList.statusCode == successResponse &&
+              blockedCustomerList.success!) {
+            return blockedCustomerList;
+          } else {
+            throw CustomException("Data not found");
+          }
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<ResignationStatus> getResignationStatus(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await get(resignationStatus,
+          queryParameters: param, headers: await getJsonHeaderURL());
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final getResignationStatus =
+              ResignationStatus.fromJson(jsonDecode(response.body));
+          return getResignationStatus;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<ResignationCancelModel> getResignationCancel(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await get(cancelResignation,
+          queryParameters: param, headers: await getJsonHeaderURL());
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final getResignationCancel =
+              ResignationCancelModel.fromJson(jsonDecode(response.body));
+          return getResignationCancel;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<ResignationSubmitModel> postsubmitResignation(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await post(submitResignation,
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
+
+      debugPrint("Response status: ${response.statusCode}");
+      debugPrint("Response body: ${response.body}");
+
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
+      if (response.statusCode == HttpStatus.ok) {
+        final responseBody = json.decode(response.body);
+        if (responseBody["status_code"] == HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(responseBody["error"]);
+        } else {
+          final submitResignation =
+              ResignationSubmitModel.fromJson(responseBody);
+          return submitResignation;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"].toString());
+      }
+    } catch (e, s) {
+      debugPrint("Exception occurred: $e\nStack trace: $s");
       rethrow;
     }
   }

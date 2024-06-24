@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:divine_astrologer/common/app_exception.dart';
@@ -402,8 +401,6 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
               SizedBox(height: 10.h),
               chatBottomBar(context),
 
-
-
               // Padding(
               //   padding:
               //   EdgeInsets.only(left: 20.h, right: 20.h, bottom: 20.h),
@@ -450,7 +447,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
               Container(
                 decoration: BoxDecoration(
                   borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(50.0)),
+                      const BorderRadius.vertical(top: Radius.circular(50.0)),
                   border: Border.all(color: Colors.white, width: 2),
                   color: Colors.white,
                 ),
@@ -473,67 +470,67 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                       ),
                       child: controller.messageTemplates.isEmpty
                           ? Container(
-                        height: 100.h,
-                        alignment: AlignmentDirectional.center,
-                        child: Text(
-                          "noAnyTemplateFound".tr,
-                          textAlign: TextAlign.start,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            color: appColors.grey,
-                            fontSize: 18.sp,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                      )
+                              height: 100.h,
+                              alignment: AlignmentDirectional.center,
+                              child: Text(
+                                "noAnyTemplateFound".tr,
+                                textAlign: TextAlign.start,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: appColors.grey,
+                                  fontSize: 18.sp,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                            )
                           : ListView.builder(
-                        shrinkWrap: true,
-                        padding: const EdgeInsets.only(bottom: 20),
-                        itemCount: controller.messageTemplates.length,
-                        itemBuilder: (context, index) {
-                          MessageTemplates messageTemplatesModel =
-                          controller.messageTemplates[index];
+                              shrinkWrap: true,
+                              padding: const EdgeInsets.only(bottom: 20),
+                              itemCount: controller.messageTemplates.length,
+                              itemBuilder: (context, index) {
+                                MessageTemplates messageTemplatesModel =
+                                    controller.messageTemplates[index];
 
-                          return GestureDetector(
-                            onTap: () {
-                              controller.sendMsgTemplate(
-                                  messageTemplatesModel, true);
-
-                            },
-                            child: Column(
-                              children: [
-                                Container(
-                                  margin: const EdgeInsets.symmetric(
-                                      horizontal: 13),
-                                  padding: const EdgeInsets.symmetric(horizontal: 2,vertical: 10),
-                                  child: Row(
+                                return GestureDetector(
+                                  onTap: () {
+                                    controller.sendMsgTemplate(
+                                        messageTemplatesModel, true);
+                                  },
+                                  child: Column(
                                     children: [
-                                      Expanded(
-                                        child: Text(
-                                          '${messageTemplatesModel.message}',
-                                          textAlign: TextAlign.start,
-                                          // maxLines: 3,
-                                          maxLines: 1000,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                            fontSize: 14.sp,
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                      Container(
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 13),
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 2, vertical: 10),
+                                        child: Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                '${messageTemplatesModel.message}',
+                                                textAlign: TextAlign.start,
+                                                // maxLines: 3,
+                                                maxLines: 1000,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                  fontSize: 14.sp,
+                                                  fontWeight: FontWeight.w500,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
+                                      ),
+                                      Container(
+                                        width: double.infinity,
+                                        height: 1.h,
+                                        color: appColors.grey,
                                       ),
                                     ],
                                   ),
-                                ),
-                                Container(
-                                  width: double.infinity,
-                                  height: 1.h,
-                                  color: appColors.grey,
-                                ),
-                              ],
+                                );
+                              },
                             ),
-                          );
-                        },
-                      ),
                     ),
                   ],
                 ),
@@ -552,53 +549,51 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
         padding: const EdgeInsets.symmetric(horizontal: 20),
         scrollDirection: Axis.horizontal,
         // itemCount: controller.messageTemplates.length + 1,
-        itemCount: controller.messageTemplates.length ,
+        itemCount: controller.messageTemplates.length,
         separatorBuilder: (_, index) => SizedBox(width: 10.w),
         itemBuilder: (context, index) {
           late final MessageTemplates msg;
           return
-            // index == 0 || controller.messageTemplates.isEmpty
-            //   ? GestureDetector(
-            //       onTap: () async {
-            //         await Get.toNamed(RouteName.messageTemplate);
-            //         controller.getMessageTemplateForChatAssist();
-            //         controller.getMessageTemplatesLocally();
-            //         controller.update();
-            //       },
-            //       child: Container(
-            //         padding:
-            //             const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-            //         decoration: BoxDecoration(
-            //           color: appColors.red,
-            //           borderRadius: const BorderRadius.all(Radius.circular(18)),
-            //         ),
-            //         child: Text(
-            //           '+ Add',
-            //           style:
-            //               AppTextStyle.textStyle12(fontColor: appColors.white),
-            //         ),
-            //       ),
-            //     )
-            //   :
-          GestureDetector(
-                  onTap: () {
-                    controller.sendMsgTemplate(
-                        controller.messageTemplates[/*index - 1*/index],false);
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: /*appColors.brownColour*/appColors.textColor,
-                      borderRadius: const BorderRadius.all(Radius.circular(18)),
-                    ),
-                    child: Text(
-                      '${controller.messageTemplates[/*index - 1*/index].message}',
-                      style:
-                          AppTextStyle.textStyle12(fontColor: appColors.white),
-                    ),
-                  ),
-                );
+              // index == 0 || controller.messageTemplates.isEmpty
+              //   ? GestureDetector(
+              //       onTap: () async {
+              //         await Get.toNamed(RouteName.messageTemplate);
+              //         controller.getMessageTemplateForChatAssist();
+              //         controller.getMessageTemplatesLocally();
+              //         controller.update();
+              //       },
+              //       child: Container(
+              //         padding:
+              //             const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              //         decoration: BoxDecoration(
+              //           color: appColors.red,
+              //           borderRadius: const BorderRadius.all(Radius.circular(18)),
+              //         ),
+              //         child: Text(
+              //           '+ Add',
+              //           style:
+              //               AppTextStyle.textStyle12(fontColor: appColors.white),
+              //         ),
+              //       ),
+              //     )
+              //   :
+              GestureDetector(
+            onTap: () {
+              controller.sendMsgTemplate(
+                  controller.messageTemplates[/*index - 1*/ index], false);
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: /*appColors.brownColour*/ appColors.textColor,
+                borderRadius: const BorderRadius.all(Radius.circular(18)),
+              ),
+              child: Text(
+                '${controller.messageTemplates[/*index - 1*/ index].message}',
+                style: AppTextStyle.textStyle12(fontColor: appColors.white),
+              ),
+            ),
+          );
         },
       ),
     );
@@ -707,7 +702,8 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                                 child: Assets.images.icAttechment.svg(),
                               ),
                             ),
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 10),
                             enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(30.0.sp),
                                 borderSide: BorderSide(
@@ -726,7 +722,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                     onTap: () async {
                       if (controller.messageController.text.isNotEmpty) {
                         controller.sendMsg(MsgType.text,
-                            {'text': controller.messageController.text},false);
+                            {'text': controller.messageController.text}, false);
                       } /*else {
                         final result = await voucherPopUp(context);
                         if (result != null) {
@@ -841,9 +837,8 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                               "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
                           controller.sendMsg(
                             MsgType.remedies,
-                            {
-                              'message': result.toString()
-                            },false,
+                            {'message': result.toString()},
+                            false,
                           );
                           // controller.addNewMessage(time, "Remedies",
                           //     messageText: result.toString());
@@ -855,7 +850,8 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                           RouteName.chatAssistProductPage,
                           arguments: {'customerId': controller.args?.id},
                         );
-                        controller.sendMsg(MsgType.product, {'data': result},false);
+                        controller.sendMsg(
+                            MsgType.product, {'data': result}, false);
                         break;
                       case 4:
                         controller.getImage(false);
@@ -892,7 +888,6 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
           noticeDataChat = noticeResponse.data;
           print(noticeDataChat.length);
           print("noticeDataChat.length");
-
         } else {
           throw CustomException(json.decode(response.body));
         }

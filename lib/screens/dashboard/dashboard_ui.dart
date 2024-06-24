@@ -16,13 +16,13 @@ import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+
 import '../../../common/colors.dart';
 import '../../../gen/assets.gen.dart';
 import '../../common/common_functions.dart';
-import "../../common/routes.dart";
 import '../../pages/home/home_ui.dart';
 import '../../pages/performance/performance_ui.dart';
-
+import '../../repository/waiting_list_queue_repository.dart';
 import '../chat_assistance/chat_assistance_ui.dart';
 import '../live_page/constant.dart';
 import 'dashboard_controller.dart';
@@ -85,6 +85,8 @@ class DashboardScreen extends GetView<DashboardController> {
                               if (Get.isRegistered<WaitListUIController>() &&
                                   !Get.find<WaitListUIController>().isInit) {
                                 Get.find<WaitListUIController>().onInit();
+                                WaitListUIController(WaitingListQueueRepo())
+                                    .getWaitingList();
                               }
                             } else if (controller.selectedIndex.value == 4) {
                               debugPrint(
