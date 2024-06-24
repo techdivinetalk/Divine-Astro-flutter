@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 
@@ -18,9 +19,14 @@ import 'package:divine_astrologer/model/astrologer_gift_response.dart';
 import 'package:divine_astrologer/model/chat_histroy_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/model/save_remedies_response.dart';
+import 'package:divine_astrologer/model/tarot_response.dart';
+import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/get_single_pooja_response.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/custom_puja/saved_remedies.dart';
+import 'package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_list_model.dart';
+import 'package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_model.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
+import 'package:divine_astrologer/tarotCard/FlutterCarousel.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/utils.dart';
 import 'package:firebase_database/firebase_database.dart';
@@ -33,7 +39,9 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import '../di/api_provider.dart';
 import '../model/res_product_detail.dart';
 
 class NewChatController extends GetxController {
@@ -61,10 +69,10 @@ class NewChatController extends GetxController {
   void onInit() {
     if (AppFirebaseService().orderData.isNotEmpty) {
       print("order is not empty");
-      getChatList();
     }
     initialiseControllers();
     getDir();
+    getAllApiDataInChat();
     messageController.addListener(onMessageChanged);
     Future.delayed(
       const Duration(milliseconds: 300),
@@ -72,8 +80,12 @@ class NewChatController extends GetxController {
         scrollToBottomFunc();
       },
     );
-
     super.onInit();
+  }
+
+  getAllApiDataInChat() async {
+    await getChatList();
+    getCustomEcom();
   }
 
   @override
@@ -84,14 +96,35 @@ class NewChatController extends GetxController {
     super.onClose();
   }
 
+  /// ------------------ back function  ----------------------- ///
+  void backFunction() {
+    WidgetsBinding.instance.endOfFrame.then(
+      (_) async {
+        print("userLeavePrivateChatListenerSocket");
+
+        // chatTimer?.cancel();
+        print("WentBack backFunc");
+        // extraTimer?.cancel();
+        // Get.delete<ChatMessageWithSocketController>();
+        Get.until(
+          (route) {
+            return Get.currentRoute == RouteName.dashboard;
+          },
+        );
+      },
+    );
+    return;
+  }
+
   /// ------------------ scroll to bottom  ----------------------- ///
   scrollToBottomFunc() {
     if (messageScrollController.hasClients) {
+      print("messageScrollController.hasClients");
       Timer(
-        const Duration(milliseconds: 0),
+        const Duration(milliseconds: 150),
         () => messageScrollController.animateTo(
           messageScrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 0),
+          duration: const Duration(milliseconds: 150),
           curve: Curves.easeOut,
         ),
       );
@@ -183,14 +216,12 @@ class NewChatController extends GetxController {
 
   uploadAudioFile(File soundFile) async {
     try {
-      String time = ("${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
       var uploadFile =
           await uploadImageFileToAws(file: soundFile, moduleName: "chat");
       if (uploadFile != "" && uploadFile != null) {
         print("is uploaded the file from recorder");
 
         /// write logic for send audio msg
-
         addNewMessage(msgType: MsgType.audio, awsUrl: uploadFile);
       } else {}
     } catch (e) {
@@ -383,13 +414,37 @@ class NewChatController extends GetxController {
   }
 
   /// ------------------ Custom Product bottom sheet ----------------------- ///
+  List<CustomProductData> customProductData = [];
+  NoticeRepository noticeRepository = NoticeRepository();
+
   void openCustomShop() {
     Get.bottomSheet(
       SavedRemediesBottomSheet(
         newChatController: NewChatController(),
-        customProductData: [],
+        customProductData: customProductData,
       ),
     );
+  }
+
+  getCustomEcom() async {
+    try {
+      final response = await noticeRepository.get(ApiProvider.getCustomEcom,
+          headers: await noticeRepository.getJsonHeaderURL());
+      CustomProductListModel savedRemediesData =
+          CustomProductListModel.fromJson(jsonDecode(response.body));
+      if (savedRemediesData.statusCode == 200) {
+        customProductData = savedRemediesData.data!;
+        print(jsonEncode(customProductData));
+        print(customProductData.length);
+        print("customProductData.length");
+        update();
+      } else {
+        customProductData = [];
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
   }
 
   /// ------------------ Tarrot card bottom sheet ----------------------- ///
@@ -397,7 +452,52 @@ class NewChatController extends GetxController {
 
   void openShowDeck() {
     isCardBotOpen.value = true;
-    // showCardChoiceBottomSheet(context, controller);
+    showCardChoiceBottomSheet(NewChatController());
+  }
+
+  Future<void> sendTarotCard(int? choice) async {
+    HashMap<String, dynamic> hsMap = HashMap();
+    hsMap["isCardVisible"] = false;
+    var randomTarotCards = await printRandomTarotCards(choice);
+    hsMap["listOfCard"] = randomTarotCards;
+    int orderId = AppFirebaseService().orderData.value["orderId"] ?? 0;
+    print("hashmap" + hsMap.toString());
+    if (orderId != 0) {
+      await FirebaseDatabase.instance
+          .ref()
+          .child("order/$orderId/card")
+          .set(hsMap);
+    }
+  }
+
+  Future<HashMap<String, dynamic>> printRandomTarotCards(int? choice) async {
+    List<TarotCard> cards = await loadTarotCards();
+    HashMap<String, dynamic> listOfCard = HashMap();
+    if (cards.isNotEmpty) {
+      // Shuffle the list and take the first 3 cards
+      cards.shuffle();
+      List<TarotCard> randomCards = cards.take(choice!).toList();
+
+      for (var card in randomCards) {
+        print(card.name);
+        listOfCard["${card.name}"] = card.image;
+      }
+      return listOfCard;
+    } else {
+      return HashMap();
+    }
+  }
+
+  Future<List<TarotCard>> loadTarotCards() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? cardsJson = prefs.getString('tarot_cards');
+
+    if (cardsJson != null) {
+      List<dynamic> jsonList = json.decode(cardsJson) as List;
+      return jsonList.map((jsonItem) => TarotCard.fromJson(jsonItem)).toList();
+    } else {
+      return [];
+    }
   }
 
   /// ------------------ Remedies bottom sheet ----------------------- ///

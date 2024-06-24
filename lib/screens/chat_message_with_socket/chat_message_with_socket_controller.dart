@@ -322,7 +322,7 @@ class ChatMessageWithSocketController extends GetxController
   void openShowDeck(
       BuildContext context, ChatMessageWithSocketController controller) {
     isCardBotOpen.value = true;
-    showCardChoiceBottomSheet(context, controller);
+    // showCardChoiceBottomSheet( controller);
   }
 
   Future<void> openRemedies() async {

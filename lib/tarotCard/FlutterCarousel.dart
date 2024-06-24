@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
+import 'package:divine_astrologer/new_chat/new_chat_controller.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_controller.dart';
 import 'package:divine_astrologer/tarotCard/src/_flutter_carousel_widget.dart';
 import 'package:divine_astrologer/tarotCard/src/components/image_constant.dart';
@@ -882,9 +883,9 @@ class _FiveCardWidgetState extends State<FiveCardWidget> {
 }
 
 /*============================================== Bottom Sheet  ==============================================================*/
-void showCardChoiceBottomSheet(BuildContext context, ChatMessageWithSocketController controller) {
+void showCardChoiceBottomSheet( NewChatController controller) {
   showModalBottomSheet<void>(
-    context: context,
+    context: Get.context!,
     isDismissible:false,
     builder: (BuildContext context) {
       return CardChoiceBottomSheet(controller);
@@ -894,7 +895,7 @@ void showCardChoiceBottomSheet(BuildContext context, ChatMessageWithSocketContro
 
 
 class CardChoiceBottomSheet extends StatefulWidget {
-  final ChatMessageWithSocketController controller;
+  final NewChatController controller;
 
   CardChoiceBottomSheet(this.controller);
 
@@ -906,7 +907,7 @@ class CardChoiceBottomSheet extends StatefulWidget {
 class _CardChoiceBottomSheetState extends State<CardChoiceBottomSheet> {
   int? _choice;
   bool isVisible = false;
-  ChatMessageWithSocketController controller;
+  NewChatController controller;
 
   _CardChoiceBottomSheetState(this.controller);
 
