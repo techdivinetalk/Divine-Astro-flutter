@@ -30,9 +30,7 @@ import '../../model/res_login.dart';
 import '../../model/res_review_ratings.dart';
 import '../../model/res_user_profile.dart';
 import '../../repository/user_repository.dart';
-import '../../screens/dashboard/dashboard_controller.dart';
 import '../../screens/live_page/constant.dart';
-import '../home/home_controller.dart';
 
 class ProfilePageController extends GetxController {
   final UserRepository userRepository;
@@ -129,8 +127,10 @@ class ProfilePageController extends GetxController {
           '/blockedUser'),
       ProfileOptionModelClass("eCommerce".tr,
           Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja'),
-      ProfileOptionModelClass("resignation".tr,
-          Assets.images.resignation.svg(width: 30.h, height: 30.h), '/resignation'),
+      ProfileOptionModelClass(
+          "resignation".tr,
+          Assets.images.resignation.svg(width: 30.h, height: 30.h),
+          '/resignation'),
     ].obs;
   }
 
@@ -170,8 +170,8 @@ class ProfilePageController extends GetxController {
         '/blockedUser'),
     ProfileOptionModelClass("eCommerce".tr,
         Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja'),
-    ProfileOptionModelClass("resignation".tr,
-        Assets.images.resignation.svg(width: 30.h, height: 30.h), '/resignation'),
+    // ProfileOptionModelClass("resignation".tr,
+    //     Assets.images.resignation.svg(width: 30.h, height: 30.h), '/resignation'),
     // ProfileOptionModelClass("Add Remedies",
     //     Assets.images.remedies.svg(width: 30.h, height: 30.h), ''),
   ].obs;
