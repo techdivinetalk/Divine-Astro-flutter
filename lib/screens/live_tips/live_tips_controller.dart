@@ -129,6 +129,7 @@ class LiveTipsController extends GetxController {
         "id": userId,
         "isAvailable": true,
         "blockList": blockedCustomerList,
+        "gift": FieldValue.arrayUnion([]),
       },
     ).then((value) async {
       print("Astrologer node added");
