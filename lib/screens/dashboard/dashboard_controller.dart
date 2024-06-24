@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
@@ -7,15 +6,19 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/ChatOrderResponse.dart';
+import 'package:divine_astrologer/model/constant_model_class.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
-import 'package:divine_astrologer/screens/dashboard/widgets/terms_and_condition_popup.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/force_update_sheet.dart';
+import 'package:divine_astrologer/zego_call/zego_service.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
@@ -28,6 +31,7 @@ import '../../cache/custom_cache_manager.dart';
 import '../../common/app_exception.dart';
 import '../../common/app_textstyle.dart';
 import '../../common/common_functions.dart';
+import '../../common/permission_handler.dart';
 import '../../di/fcm_notification.dart';
 import '../../model/astrologer_gift_response.dart';
 import '../../model/res_login.dart';
@@ -40,6 +44,7 @@ class DashboardController extends GetxController
   DashboardController(this.repository);
 
   RxInt selectedIndex = 0.obs;
+
   void setSelectedIndex(int index) {
     selectedIndex.value = index;
   }
@@ -71,6 +76,10 @@ class DashboardController extends GetxController
   GlobalKey<State<StatefulWidget>> keyRetentionRate = GlobalKey();
   GlobalKey<State<StatefulWidget>> keyRepurchaseRate = GlobalKey();
   GlobalKey<State<StatefulWidget>> keyEcommerceWallet = GlobalKey();
+  GlobalKey<State<StatefulWidget>> keyHelp = GlobalKey();
+  GlobalKey<State<StatefulWidget>> keyNoticeBoard = GlobalKey();
+  GlobalKey<State<StatefulWidget>> keySessionType = GlobalKey();
+  GlobalKey<State<StatefulWidget>> keyManageDiscountOffers = GlobalKey();
 
   @override
   void dispose() {
@@ -95,14 +104,6 @@ class DashboardController extends GetxController
         divineSnackBar(data: "User Not Found");
       }
     }
-  }
-
-  // RxBool is a reactive boolean observable
-  var isChecked = false.obs;
-
-  // Method to toggle the checkbox state
-  void toggleCheckbox() {
-    isChecked.value = !isChecked.value;
   }
 
   void checkPermissions() async {
@@ -173,7 +174,6 @@ class DashboardController extends GetxController
     await [
       Permission.camera,
       Permission.microphone,
-      Permission.storage,
     ].request();
     Get.back(); // Close the bottom sheet after requesting permissions
     if (await FlutterOverlayWindow.isPermissionGranted() == false) {
@@ -261,16 +261,15 @@ class DashboardController extends GetxController
       print("is logged out");
     }
     commonConstants = await userRepository.constantDetailsData();
-    log("11111111 - ${commonConstants.data!.currentTime.toString()}");
+    if (commonConstants?.data != null) {
+      imageUploadBaseUrl.value =
+          commonConstants?.data?.imageUploadBaseUrl ?? "";
+      update();
+    }
     preferenceService.setConstantDetails(commonConstants);
     preferenceService
         .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
-    if (commonConstants.data.notice == null ||
-        commonConstants.data.notice == "null") {
-    } else {
-      log(commonConstants.data.notice.toString());
-      showRecommendedPopupAlert();
-    }
+
     //added by: dev-dharam
     Get.find<SharedPreferenceService>()
         .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
@@ -294,7 +293,7 @@ class DashboardController extends GetxController
     loadPreDefineData();
     initMessaging();
     // firebaseMessagingConfig(Get.context!);
-    getConstantDetailsData();
+    // getConstantDetailsData();
     print("currentTime");
     cacheGift();
   }
@@ -383,29 +382,6 @@ class DashboardController extends GetxController
     }
   }
 
-  var isLoading = false.obs;
-  var submitTermsAndCondition;
-  void postAcceptTerms(noticeId) async {
-    isLoading(true);
-    Map<String, dynamic> param = {
-      "notice_id": noticeId,
-    };
-    try {
-      final rstatus = await repository.postTermsConditionSubmit(param);
-
-      if (rstatus.success == true) {
-        submitTermsAndCondition = rstatus;
-        isLoading(false);
-        Get.back();
-      } else {
-        isLoading(false);
-      }
-      update();
-    } catch (error) {
-      isLoading(false);
-    }
-  }
-
   getOrderFromApi() async {
     try {
       ChatOrderResponse data = await userRepository.getChatOrderDetails();
@@ -420,10 +396,14 @@ class DashboardController extends GetxController
     }
   }
 
-  getConstantDetailsData() async {
+  getConstantDetailsData(context) async {
     try {
       final data = await userRepository.constantDetailsData();
       if (data.data != null) {
+        imageUploadBaseUrl.value = data?.data?.imageUploadBaseUrl ?? "";
+
+        update();
+
         PackageInfo packageInfo = await PackageInfo.fromPlatform();
         print(data.data!.appVersion!.split(".").join(""));
         print(packageInfo.version.split(".").join(""));
@@ -435,6 +415,9 @@ class DashboardController extends GetxController
             const ForceUpdateSheet(),
             isDismissible: false,
           );
+          // showTutorial(context);
+        } else {
+         // showTutorial(context);
         }
       }
 
@@ -516,7 +499,7 @@ class DashboardController extends GetxController
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "Titulo lorem ipsum",
+                    "Home Tab",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -525,7 +508,7 @@ class DashboardController extends GetxController
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                      "Amount of today's prediction and total prediction, retention rate, repurchase rate, and e-commerce wallet, noticboard, and other details, manage call and chat, manage discount  offers, manage profile, and feedback, and other details.",
                       style: TextStyle(color: Colors.white),
                     ),
                   )
@@ -543,7 +526,7 @@ class DashboardController extends GetxController
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "Titulo lorem ipsum",
+                    "Performance Tab",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -552,7 +535,7 @@ class DashboardController extends GetxController
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                      "Your performance details with graph",
                       style: TextStyle(color: Colors.white),
                     ),
                   )
@@ -570,7 +553,7 @@ class DashboardController extends GetxController
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "Titulo lorem ipsum",
+                    "Assistance Tab",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -579,7 +562,7 @@ class DashboardController extends GetxController
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                      "Find old users data and chats here",
                       style: TextStyle(color: Colors.white),
                     ),
                   )
@@ -597,7 +580,7 @@ class DashboardController extends GetxController
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "Titulo lorem ipsum",
+                    "Queue Tab",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -606,7 +589,7 @@ class DashboardController extends GetxController
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                      "Waitlist of users who are waiting for your call and chat",
                       style: TextStyle(color: Colors.white),
                     ),
                   )
@@ -624,7 +607,7 @@ class DashboardController extends GetxController
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "Titulo lorem ipsum",
+                    "Profile Tab",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -633,7 +616,7 @@ class DashboardController extends GetxController
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                      "Manage your profile, bank details, story, gallery, language, E-commerce and other details",
                       style: TextStyle(color: Colors.white),
                     ),
                   )
@@ -651,7 +634,7 @@ class DashboardController extends GetxController
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "Titulo lorem ipsum",
+                    "Hide and Show amount",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -660,7 +643,7 @@ class DashboardController extends GetxController
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                      "Hide and show amount of today's prediction and total prediction",
                       style: TextStyle(color: Colors.white),
                     ),
                   )
@@ -678,7 +661,7 @@ class DashboardController extends GetxController
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "Titulo lorem ipsum",
+                    "Your Profile",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -687,7 +670,7 @@ class DashboardController extends GetxController
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                      "Manage your profile, bank details, story, gallery, language, E-commerce and other details",
                       style: TextStyle(color: Colors.white),
                     ),
                   )
@@ -699,13 +682,13 @@ class DashboardController extends GetxController
         TargetContent(
             align: ContentAlign.bottom,
             child: Container(
-              padding: const EdgeInsets.only(top: 30),
+              padding: const EdgeInsets.only(top: 60),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "Titulo lorem ipsum",
+                    "Today's Amount",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -714,7 +697,7 @@ class DashboardController extends GetxController
                   Padding(
                     padding: const EdgeInsets.only(top: 10.0),
                     child: Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                      "Amount of today's prediction",
                       style: TextStyle(color: Colors.white),
                     ),
                   )
@@ -726,26 +709,29 @@ class DashboardController extends GetxController
         TargetContent(
             align: ContentAlign.bottom,
             child: Container(
-              padding: const EdgeInsets.only(top: 30),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Titulo lorem ipsum",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 20.0),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
-                      style: TextStyle(color: Colors.white),
+              padding: const EdgeInsets.only(top: 60),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Text(
+                      "Total Amount",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 20.0),
                     ),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        "Amount of total prediction",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ))
       ]),
@@ -754,25 +740,28 @@ class DashboardController extends GetxController
             align: ContentAlign.bottom,
             child: Container(
               padding: const EdgeInsets.only(top: 30),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Text(
-                    "Titulo lorem ipsum",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        fontSize: 20.0),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Text(
-                      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
-                      style: TextStyle(color: Colors.white),
+              child: Align(
+                alignment: Alignment.bottomRight,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Check Kundli",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 20.0),
                     ),
-                  )
-                ],
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        "Check Kundli of users",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
               ),
             ))
       ]),
@@ -789,7 +778,7 @@ class DashboardController extends GetxController
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "Titulo lorem ipsum",
+                        "Retention Rate",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -798,7 +787,7 @@ class DashboardController extends GetxController
                       Padding(
                         padding: const EdgeInsets.only(top: 10.0),
                         child: Text(
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                          "Retention rate of users",
                           style: TextStyle(color: Colors.white),
                         ),
                       )
@@ -816,10 +805,10 @@ class DashboardController extends GetxController
                   padding: const EdgeInsets.only(top: 30),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
                       Text(
-                        "Titulo lorem ipsum",
+                        "Repurchase Rate",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -828,7 +817,7 @@ class DashboardController extends GetxController
                       Padding(
                         padding: const EdgeInsets.only(top: 10.0),
                         child: Text(
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                          "Repurchase rate of users",
                           style: TextStyle(color: Colors.white),
                         ),
                       )
@@ -844,12 +833,129 @@ class DashboardController extends GetxController
                 align: ContentAlign.bottom,
                 child: Container(
                   padding: const EdgeInsets.only(top: 30),
+                  child: Align(
+                    alignment: Alignment.bottomRight,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          "E-commerce Wallet",
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                              fontSize: 20.0),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 10.0),
+                          child: Text(
+                            "Your e-commerce wallet",
+                            style: TextStyle(color: Colors.white),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                ))
+          ]),
+      TargetFocus(identify: "Target 14", keyTarget: keyHelp, contents: [
+        TargetContent(
+            align: ContentAlign.bottom,
+            child: Container(
+              padding: const EdgeInsets.only(top: 30),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Help",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Get help from us",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ]),
+      TargetFocus(identify: "Target 15", keyTarget: keyNoticeBoard, contents: [
+        TargetContent(
+            align: ContentAlign.bottom,
+            child: Container(
+              padding: const EdgeInsets.only(top: 130),
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      "Notice Board",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          fontSize: 20.0),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Text(
+                        "Notice board for you",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+            ))
+      ]),
+      TargetFocus(identify: "Target 16", keyTarget: keySessionType, contents: [
+        TargetContent(
+            align: ContentAlign.top,
+            child: Container(
+              padding: const EdgeInsets.only(bottom: 140),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text(
+                    "Session Type",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                        fontSize: 20.0),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: Text(
+                      "Manage your sessions",
+                      style: TextStyle(color: Colors.white),
+                    ),
+                  )
+                ],
+              ),
+            ))
+      ]),
+      TargetFocus(
+          identify: "Target 17",
+          keyTarget: keyManageDiscountOffers,
+          contents: [
+            TargetContent(
+                align: ContentAlign.top,
+                child: Container(
+                  padding: const EdgeInsets.only(bottom: 120),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Text(
-                        "Titulo lorem ipsum",
+                        "Manage Discount Offers",
                         style: TextStyle(
                             fontWeight: FontWeight.bold,
                             color: Colors.white,
@@ -858,7 +964,7 @@ class DashboardController extends GetxController
                       Padding(
                         padding: const EdgeInsets.only(top: 10.0),
                         child: Text(
-                          "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin pulvinar tortor eget maximus iaculis.",
+                          "Manage your discount offers",
                           style: TextStyle(color: Colors.white),
                         ),
                       )
@@ -871,8 +977,10 @@ class DashboardController extends GetxController
 
   void showTutorial(context) {
     TutorialCoachMark(
-      targets: createTargets(), // List<TargetFocus>
-      colorShadow: Colors.black, // DEFAULT Colors.black
+      targets: createTargets(),
+      // List<TargetFocus>
+      colorShadow: Colors.black,
+      // DEFAULT Colors.black
       // alignSkip: Alignment.bottomRight,
       // textSkip: "SKIP",
       // showSkipInLastTarget: true,
@@ -917,5 +1025,36 @@ class DashboardController extends GetxController
     } catch (e) {
       debugPrint("Error caching gifts: $e");
     }
+  }
+
+  var isLoading = false.obs;
+  var submitTermsAndCondition;
+  void postAcceptTerms(noticeId) async {
+    isLoading(true);
+    Map<String, dynamic> param = {
+      "notice_id": noticeId,
+    };
+    try {
+      final rstatus = await repository.postTermsConditionSubmit(param);
+
+      if (rstatus.success == true) {
+        submitTermsAndCondition = rstatus;
+        isLoading(false);
+        Get.back();
+      } else {
+        isLoading(false);
+      }
+      update();
+    } catch (error) {
+      isLoading(false);
+    }
+  }
+
+  // RxBool is a reactive boolean observable
+  var isChecked = false.obs;
+
+// Method to toggle the checkbox state
+  void toggleCheckbox() {
+    isChecked.value = !isChecked.value;
   }
 }

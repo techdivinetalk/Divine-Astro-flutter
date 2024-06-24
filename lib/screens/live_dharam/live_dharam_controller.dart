@@ -19,6 +19,7 @@ import "package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart";
 import "package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
 import "package:firebase_database/firebase_database.dart";
+import "package:flutter/material.dart";
 
 import "package:get/get.dart";
 import "package:get/get_connect/http/src/status/http_status.dart";
@@ -354,9 +355,9 @@ class LiveDharamController extends GetxController {
             update();
           }
 
-          if (liveIdNode["order"] != null) {
+          if (liveIdNode["LiveOrder"] != null) {
 
-            var orderNode = liveIdNode["order"];
+            var orderNode = liveIdNode["LiveOrder"];
             currentCaller = getOrderModelGeneric(orderNode);
           } else {
             currentCaller = usingForNullableWaiListModel;
@@ -551,7 +552,7 @@ class LiveDharamController extends GetxController {
     print("remove order from firebase");
 
     await liveStore.doc(userId).update({
-      'order': FieldValue.delete(),
+      'LiveOrder': FieldValue.delete(),
     });
     return Future<void>.value();
   }
@@ -652,7 +653,7 @@ class LiveDharamController extends GetxController {
   }) async {
     print(astrologerData);
     print("datadatadatadatadatadatadata");
-    if (astrologerData != null && astrologerData["order"] != null) {
+    if (astrologerData != null && astrologerData["LiveOrder"] != null) {
       Map<String, dynamic> param = <String, dynamic>{};
       param = <String, dynamic>{
         "order_id": getOrderId(),
@@ -721,8 +722,10 @@ class LiveDharamController extends GetxController {
     }
   }
 
-  Future<void> removeMyNode() async {
+  Future<void> removeMyNode(BuildContext context) async {
     // await ref.child("$livePath/$liveId").remove();
+
+    await zegoController.leave(context);
     await liveStore.doc(userId).delete();
     await liveCount.doc(userId).delete();
     update();

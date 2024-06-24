@@ -32,7 +32,7 @@ class DashboardScreen extends GetView<DashboardController> {
 
   @override
   Widget build(BuildContext context) {
-    // controller.showTutorial(context);
+    controller.getConstantDetailsData(context);
     print("beforeGoing 4 - ${preferenceService.getUserDetail()?.id}");
     return GetBuilder<DashboardController>(
       assignId: true,

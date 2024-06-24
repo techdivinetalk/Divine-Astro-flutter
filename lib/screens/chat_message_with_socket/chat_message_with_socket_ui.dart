@@ -61,7 +61,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
               height: double.infinity,
               fit: BoxFit.cover,
               color: appColors.white,
-            ), 
+            ),
             Column(
               children: [
                 AstrologerChatAppBar(),
@@ -257,6 +257,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                       const EdgeInsets.all(5.0),
                                                   child: Image.network(
                                                     "${controller.pref.getAmazonUrl() ?? ""}/${controller.getValueByPosition(index)}",
+                                                    fit: BoxFit.cover,
                                                   ),
                                                 ),
                                               ),
@@ -521,7 +522,12 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     ),
                   );
                 }),*/
+                Visibility(visible: !controller.isKeyboardVisible.value,child: messageTemplateRow()),
+                SizedBox(
+                  height: 10,
+                ),
                 chatBottomBar(context),
+
                 Obx(() => AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       height: controller.isEmojiShowing.value ? 300 : 0,
@@ -731,13 +737,13 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
-                      color: /*Color(0xFFFFD196)*/ appColors.guideColor,
+                      color:Color(0xffFFEEF0),
                       borderRadius: const BorderRadius.all(Radius.circular(18)),
                     ),
                     child: Text(
                       '+ Add',
                       style:
-                          AppTextStyle.textStyle12(fontColor: appColors.white),
+                          AppTextStyle.textStyle12(fontColor: Color(0xff0E2339)),
                     ),
                   ),
                 )
@@ -750,13 +756,13 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
-                      color: appColors.brownColour,
+                      color:Color(0xffFFEEF0),
                       borderRadius: const BorderRadius.all(Radius.circular(18)),
                     ),
                     child: Text(
                       '${controller.messageTemplates[index - 1].message}',
                       style:
-                          AppTextStyle.textStyle12(fontColor: appColors.white),
+                      AppTextStyle.textStyle12(fontColor: Color(0xff0E2339)),
                     ),
                   ),
                 );
@@ -1146,6 +1152,15 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           child: SvgPicture.asset(
                               "assets/svg/chat_new_custom_product.svg")),
                     ),
+                    GestureDetector(
+                      onTap: () {
+                        controller.openShowDeck(context, controller);
+                      },
+                      child: Center(
+                        child: SvgPicture.asset(
+                            "assets/svg/new_chat_tarrot_card.svg"),
+                      ),
+                    ),
                     Obx(
                       () {
                         Map orderData = AppFirebaseService().orderData.value;
@@ -1322,7 +1337,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                 onTap: () {
                                                   Get.back();
                                                   controller.getImage(false);
-                                                },  
+                                                },
                                                 child: Padding(
                                                   padding:
                                                       const EdgeInsets.only(
@@ -1484,17 +1499,17 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         // }
                         controller.openProduct(controller);
                         break;
-                     // case "custom":
-                        // print(controller.customProductData);
-                        // print("controller.customProductData");
-                        // Get.bottomSheet(
-                        //   SavedRemediesBottomSheet(
-                        //     controller: controller,
-                        //     customProductData: controller.customProductData,
-                        //   ),
-                        // );
+                      // case "custom":
+                      // print(controller.customProductData);
+                      // print("controller.customProductData");
+                      // Get.bottomSheet(
+                      //   SavedRemediesBottomSheet(
+                      //     controller: controller,
+                      //     customProductData: controller.customProductData,
+                      //   ),
+                      // );
 
-                   /*     controller.openCustomShop(controller);
+                      /*     controller.openCustomShop(controller);
                         break;*/
                     }
                   },
@@ -1516,147 +1531,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         });
   }
 
-  // Widget imageMsgView(String image, bool yourMessage, {required ChatMessage chatDetail, required int index}) {
-  //   Uint8List bytesImage = const Base64Decoder().convert(image);
-  //   RxInt msgType = (chatDetail.type ?? 0).obs;
-  //   return SizedBox(
-  //     width: double.maxFinite,
-  //     child: Column(
-  //       crossAxisAlignment: yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
-  //       children: [
-  //         Container(
-  //           padding: const EdgeInsets.all(8.0),
-  //           clipBehavior: Clip.antiAlias,
-  //           decoration: BoxDecoration(
-  //             boxShadow: [
-  //               BoxShadow(
-  //                   color: Colors.black.withOpacity(0.2), blurRadius: 3.0, offset: const Offset(0.0, 3.0)),
-  //             ],
-  //             color: Colors.white,
-  //             borderRadius: BorderRadius.all(Radius.circular(8.r)),
-  //           ),
-  //           constraints: BoxConstraints(
-  //               maxWidth: ScreenUtil().screenWidth * 0.7, minWidth: ScreenUtil().screenWidth * 0.27),
-  //           child: chatDetail.downloadedPath != ""
-  //               ? InkWell(
-  //                   onTap: () {
-  //                     Get.toNamed(RouteName.imagePreviewUi, arguments: chatDetail.downloadedPath);
-  //                   },
-  //                   child: Stack(
-  //                     children: [
-  //                       ClipRRect(
-  //                         borderRadius: BorderRadius.circular(8.0.r),
-  //                         child: Image.file(
-  //                           File(chatDetail.downloadedPath ?? ""),
-  //                           fit: BoxFit.cover,
-  //                           height: 200.h,
-  //                         ),
-  //                       ),
-  //                       Positioned(
-  //                         bottom: 0,
-  //                         right: 0,
-  //                         child: Container(
-  //                           padding: const EdgeInsets.symmetric(horizontal: 6).copyWith(left: 10),
-  //                           decoration: BoxDecoration(
-  //                             borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.r)),
-  //                             gradient: LinearGradient(
-  //                               colors: [
-  //                                 appColors.darkBlue.withOpacity(0.0),
-  //                                 appColors.darkBlue.withOpacity(0.0),
-  //                                 appColors.darkBlue.withOpacity(0.5),
-  //                               ],
-  //                               begin: Alignment.topLeft,
-  //                               end: Alignment.bottomCenter,
-  //                             ),
-  //                           ),
-  //                           child: Row(
-  //                             mainAxisAlignment: MainAxisAlignment.end,
-  //                             children: [
-  //                               Text(
-  //                                 messageDateTime(chatDetail.time ?? 0),
-  //                                 style: AppTextStyle.textStyle10(fontColor: appColors.white),
-  //                               ),
-  //                               if (yourMessage) SizedBox(width: 8.w),
-  //                               if (yourMessage)
-  //                                 msgType.value == 0
-  //                                     ? Assets.images.icSingleTick.svg()
-  //                                     : msgType.value == 1
-  //                                         ? Assets.images.icDoubleTick.svg(
-  //                                             colorFilter: const ColorFilter.mode(
-  //                                                 appColors.greyColor, BlendMode.srcIn))
-  //                                         : msgType.value == 2
-  //                                             ? Assets.images.icDoubleTick.svg()
-  //                                             : Assets.images.icSingleTick.svg()
-  //                             ],
-  //                           ),
-  //                         ),
-  //                       ),
-  //                     ],
-  //                   ),
-  //                 )
-  //               : Stack(
-  //                   alignment: Alignment.center,
-  //                   children: [
-  //                     ClipRRect(
-  //                       borderRadius: BorderRadius.circular(10.0.sp),
-  //                       child: ImageFiltered(
-  //                         imageFilter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
-  //                         child: Image.memory(
-  //                           bytesImage,
-  //                           fit: BoxFit.cover,
-  //                           height: 200.h,
-  //                         ),
-  //                       ),
-  //                     ),
-  //                     InkWell(
-  //                       onTap: () {
-  //                         controller.downloadImage(fileName: image, chatDetail: chatDetail, index: index);
-  //                       },
-  //                       child: Container(
-  //                         padding: const EdgeInsets.all(10),
-  //                         decoration: BoxDecoration(
-  //                           color: appColors.darkBlue.withOpacity(0.3),
-  //                           shape: BoxShape.circle,
-  //                         ),
-  //                         child: const Icon(Icons.download_rounded, color: appColors.white),
-  //                       ),
-  //                     ),
-  //                     Positioned(
-  //                       bottom: 0,
-  //                       right: 0,
-  //                       child: Row(
-  //                         mainAxisAlignment: MainAxisAlignment.end,
-  //                         children: [
-  //                           Container(
-  //                             padding: const EdgeInsets.symmetric(horizontal: 6).copyWith(left: 10),
-  //                             decoration: BoxDecoration(
-  //                               borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.r)),
-  //                               gradient: LinearGradient(
-  //                                 colors: [
-  //                                   appColors.darkBlue.withOpacity(0.0),
-  //                                   appColors.darkBlue.withOpacity(0.0),
-  //                                   appColors.darkBlue.withOpacity(0.5),
-  //                                 ],
-  //                                 begin: Alignment.topLeft,
-  //                                 end: Alignment.bottomCenter,
-  //                               ),
-  //                             ),
-  //                             child: Text(
-  //                               messageDateTime(chatDetail.time ?? 0),
-  //                               style: AppTextStyle.textStyle10(fontColor: appColors.white),
-  //                             ),
-  //                           ),
-  //                           SizedBox(width: 8.w),
-  //                         ],
-  //                       ),
-  //                     ),
-  //                   ],
-  //                 ),
-  //         )
-  //       ],
-  //     ),
-  //   );
-  // }
 
   _onBackspacePressed() {
     controller.messageController

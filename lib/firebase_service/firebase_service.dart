@@ -115,10 +115,10 @@ class AppFirebaseService {
                   orderData(Map<String, dynamic>.from(map));
                   if (orderData.value["status"] != null) {
                     if (orderData.value["orderType"] == "chat") {
-                      if(kDebugMode) {
-                        divineSnackBar(data: "$value Order status ${orderData
-                            .value["status"]}");
-                      }
+                      // if(kDebugMode) {
+                      //   divineSnackBar(data: "$value Order status ${orderData
+                      //       .value["status"]}");
+                      // }
                       switch ((orderData.value["status"])) {
                       case "0":
                           // if(!kDebugMode){
@@ -175,9 +175,9 @@ class AppFirebaseService {
                   } else {}
                 } else {}
               } else {
-                if(kDebugMode) {
-                  divineSnackBar(data: "$value Order Ended");
-                }
+                // if(kDebugMode) {
+                //   divineSnackBar(data: "$value Order Ended");
+                // }
                 orderData({});
                 sendBroadcast(BroadcastMessage(name: "orderEnd"));
                 if (MiddleWare.instance.currentPage == RouteName.acceptChatRequestScreen){
@@ -192,9 +192,9 @@ class AppFirebaseService {
           );
         } else {
           if (MiddleWare.instance.currentPage == RouteName.acceptChatRequestScreen){
-            if(kDebugMode) {
-              divineSnackBar(data: "$value Order Ended");
-            }
+            // if(kDebugMode) {
+            //   divineSnackBar(data: "$value Order Ended");
+            // }
             Get.until(
                   (route) {
                 return Get.currentRoute == RouteName.dashboard;

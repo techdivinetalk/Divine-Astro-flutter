@@ -874,6 +874,7 @@ class HomeUI extends GetView<HomeController> {
                                 controller.whatsapp();
                               },
                               child: Container(
+                                  key: Get.find<DashboardController>().keyHelp,
                                   height: 50,
                                   width: 50,
                                   decoration: BoxDecoration(
@@ -1070,6 +1071,7 @@ class HomeUI extends GetView<HomeController> {
   Widget noticeBoardWidget({HomeController? controller}) {
     return controller!.homeData != null
         ? ClipRRect(
+            key: Get.find<DashboardController>().keyNoticeBoard,
             borderRadius: BorderRadius.all(Radius.circular(20.r)),
             child: Material(
               color: appColors.transparent,
@@ -1618,6 +1620,7 @@ class HomeUI extends GetView<HomeController> {
       final bool cond2 = controller.isChatEnable.value;
       final bool cond3 = controller.isVideoCallEnable.value;
       return Container(
+        key: Get.find<DashboardController>().keySessionType,
         padding: EdgeInsets.all(16.h),
         decoration: BoxDecoration(
           boxShadow: [
@@ -2069,6 +2072,7 @@ class HomeUI extends GetView<HomeController> {
   Widget customerOfferWidget(BuildContext context,
       {HomeController? controller}) {
     return Container(
+      key: Get.find<DashboardController>().keyManageDiscountOffers,
       margin: EdgeInsets.only(top: 10.h),
       padding: EdgeInsets.all(16.h),
       decoration: BoxDecoration(
