@@ -88,10 +88,10 @@ class NewChatController extends GetxController {
   scrollToBottomFunc() {
     if (messageScrollController.hasClients) {
       Timer(
-        const Duration(milliseconds: 300),
+        const Duration(milliseconds: 0),
         () => messageScrollController.animateTo(
           messageScrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 300),
+          duration: const Duration(milliseconds: 0),
           curve: Curves.easeOut,
         ),
       );
@@ -386,8 +386,8 @@ class NewChatController extends GetxController {
   void openCustomShop() {
     Get.bottomSheet(
       SavedRemediesBottomSheet(
-        controller: NewChatController(),
-        customProductData: controller.customProductData,
+        newChatController: NewChatController(),
+        customProductData: [],
       ),
     );
   }
