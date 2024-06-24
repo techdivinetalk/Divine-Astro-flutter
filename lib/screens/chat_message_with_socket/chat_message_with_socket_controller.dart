@@ -1118,7 +1118,6 @@ class ChatMessageWithSocketController extends GetxController
         orderId: AppFirebaseService().orderData.value["orderId"],
         id: int.parse(time),
         message: messageText,
-        // createdAt: DateTime.now().toIso8601String(),
         receiverId: int.parse(
             AppFirebaseService().orderData.value["userId"].toString()),
         senderId: preference.getUserDetail()!.id,
@@ -1216,7 +1215,6 @@ class ChatMessageWithSocketController extends GetxController
         orderId: AppFirebaseService().orderData.value["orderId"],
         id: int.parse(time),
         message: messageText,
-        // createdAt: DateTime.now().toIso8601String(),
         receiverId: int.parse(
             AppFirebaseService().orderData.value["userId"].toString()),
         senderId: preference.getUserDetail()!.id,
@@ -1227,7 +1225,6 @@ class ChatMessageWithSocketController extends GetxController
         base64Image: base64Image,
         downloadedPath: downloadedPath,
         msgType: msgType,
-
         kundliId: kundliId,
         title: giftId ?? "${userData?.name} sent you a message.",
         type: 0,
@@ -1238,9 +1235,7 @@ class ChatMessageWithSocketController extends GetxController
     scrollToBottomFunc();
     print("newMessage10909");
     print(newMessage.toOfflineJson());
-    // chatMessages.add(newMessage);
-    // chatMessages.refresh();
-    // scrollToBottomFunc();
+
     updateChatMessages(newMessage, false, isSendMessage: true);
     print("last message  ${chatMessages.last.message}");
   }

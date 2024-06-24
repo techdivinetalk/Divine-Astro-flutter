@@ -17,11 +17,10 @@ import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/astrologer_gift_response.dart';
 import 'package:divine_astrologer/model/chat_histroy_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
-import 'package:divine_astrologer/screens/chat_message_with_socket/custom_puja/saved_remedies.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
-import 'package:divine_astrologer/tarotCard/FlutterCarousel.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/utils.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import "package:http/http.dart" as http;
 import 'package:flutter/material.dart';
@@ -60,7 +59,7 @@ class NewChatController extends GetxController {
       getChatList();
     }
     initialiseControllers();
-    getDir(); 
+    getDir();
     Future.delayed(
       const Duration(milliseconds: 300),
       () {
@@ -78,8 +77,6 @@ class NewChatController extends GetxController {
     }
     super.onClose();
   }
-
-
 
   /// ------------------ scroll to bottom  ----------------------- ///
   scrollToBottomFunc() {
@@ -356,7 +353,6 @@ class NewChatController extends GetxController {
     return Future<bool>.value(hasStoragePermission);
   }
 
-
   /// ------------------ Product bottom sheet ----------------------- ///
   Future<void> openProduct() async {
     var result = await Get.toNamed(RouteName.chatAssistProductPage, arguments: {
@@ -394,12 +390,14 @@ class NewChatController extends GetxController {
     isCardBotOpen.value = true;
     // showCardChoiceBottomSheet(context, controller);
   }
+
   /// ------------------ Remedies bottom sheet ----------------------- ///
   Future<void> openRemedies() async {
     var result = await Get.toNamed(RouteName.chatSuggestRemedy);
     if (result != null) {
       final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-     /// write code for send remedies
+
+      /// write code for send remedies
       // addNewMessage(
       //   time,
       //   MsgType.remedies,
@@ -407,6 +405,7 @@ class NewChatController extends GetxController {
       // );
     }
   }
+
   /// ------------------ Ask gift bottom sheet ----------------------- ///
   askForGift() async {
     await showCupertinoModalPopup(
@@ -426,11 +425,10 @@ class NewChatController extends GetxController {
     );
   }
 
-
-
   sendGiftFunc(GiftData item, num quantity) {
     if (item.giftName.isNotEmpty) {
       final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+
       /// write code ask gift
       // unreadMessageIndex.value = -1;
       // addNewMessage(time, MsgType.gift,
@@ -441,12 +439,10 @@ class NewChatController extends GetxController {
     }
   }
 
-
-
   /// -------------------------- chat history API ------------------------ ///
   RxList<ChatMessage> chatMessages = <ChatMessage>[].obs;
   CallChatHistoryRepository callChatFeedBackRepository =
-  CallChatHistoryRepository();
+      CallChatHistoryRepository();
 
   getChatList() async {
     try {
@@ -480,5 +476,39 @@ class NewChatController extends GetxController {
     } finally {
       update();
     }
+  }
+
+  /// -------------------------- send message firebase  ------------------------ ///
+  final FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+
+  sendNewMessage() {
+    final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+    ChatMessage newMessage = ChatMessage(
+      orderId: AppFirebaseService().orderData.value["orderId"],
+      id: int.parse(time),
+      message: messageController.text,
+      receiverId:
+          int.parse(AppFirebaseService().orderData.value["userId"].toString()),
+      senderId: preference.getUserDetail()!.id,
+      time: int.parse(time),
+      awsUrl: /*awsUrl*/ "",
+      // is image or audio send
+      msgSendBy: "1",
+      productId: "0",
+      base64Image: "base64Image",
+      downloadedPath: "downloadedPath",
+      msgType: MsgType.text,
+      kundliId: 0,
+      title: "title",
+      type: 0,
+      userType: "astrologer",
+    );
+    print(newMessage.toOfflineJson());
+    print("newMessage.toOfflineJson()");
+    firebaseDatabase
+        .ref()
+        .child(
+            "chatMessages/${AppFirebaseService().orderData.value["orderId"]}/$time")
+        .update({});
   }
 }

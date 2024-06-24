@@ -45,7 +45,7 @@ class TextViewWidget extends StatelessWidget {
                       "$preferenceService/$imageURL";
                   print("img:: $appended");
                   return Padding(
-                    padding: const EdgeInsets.only(top: 3),
+                    padding: const EdgeInsets.only(top: 3,right: 5),
                     child: SizedBox(
                       height: 35,
                       width: 35,
@@ -59,6 +59,7 @@ class TextViewWidget extends StatelessWidget {
                 },
               )
                   : SizedBox(),
+
               Container(
                 padding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -116,19 +117,19 @@ class TextViewWidget extends StatelessWidget {
                                   fontFamily: FontFamily.metropolis,
                                   fontWeight: FontWeight.w500),
                             ),
-                          if (yourMessage) SizedBox(width: 5.w),
-                          if (yourMessage &&
-                              chatDetail.msgType != "warningMsg")
-                            Obx(() => chatDetail.type == 0
-                                ? Assets.images.icSingleTick.svg()
-                                : chatDetail.type == 1
-                                ? Assets.images.icDoubleTick.svg(
-                                colorFilter: ColorFilter.mode(
-                                    appColors.disabledGrey,
-                                    BlendMode.srcIn))  
-                                : chatDetail.type == 3
-                                ? Assets.images.icDoubleTick.svg()
-                                : Assets.images.icSingleTick.svg())
+                          // if (yourMessage) SizedBox(width: 5.w),
+                          // if (yourMessage &&
+                          //     chatDetail.msgType != "warningMsg")
+                          //   Obx(() => chatDetail.type == 0
+                          //       ? Assets.images.icSingleTick.svg()
+                          //       : chatDetail.type == 1
+                          //       ? Assets.images.icDoubleTick.svg(
+                          //       colorFilter: ColorFilter.mode(
+                          //           appColors.disabledGrey,
+                          //           BlendMode.srcIn))
+                          //       : chatDetail.type == 3
+                          //       ? Assets.images.icDoubleTick.svg()
+                          //       : Assets.images.icSingleTick.svg())
                         ],
                       ),
                     ),
