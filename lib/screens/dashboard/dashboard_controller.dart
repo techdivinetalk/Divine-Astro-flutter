@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
@@ -6,19 +7,15 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/ChatOrderResponse.dart';
-import 'package:divine_astrologer/model/constant_model_class.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
+import 'package:divine_astrologer/screens/dashboard/widgets/terms_and_condition_popup.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/force_update_sheet.dart';
-import 'package:divine_astrologer/zego_call/zego_service.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
@@ -31,7 +28,6 @@ import '../../cache/custom_cache_manager.dart';
 import '../../common/app_exception.dart';
 import '../../common/app_textstyle.dart';
 import '../../common/common_functions.dart';
-import '../../common/permission_handler.dart';
 import '../../di/fcm_notification.dart';
 import '../../model/astrologer_gift_response.dart';
 import '../../model/res_login.dart';
@@ -43,11 +39,11 @@ class DashboardController extends GetxController
 
   DashboardController(this.repository);
 
-
   RxInt selectedIndex = 0.obs;
   void setSelectedIndex(int index) {
-    selectedIndex.value=index;
+    selectedIndex.value = index;
   }
+
   RxString userProfileImage = "".obs;
   final GlobalKey<ScaffoldState> scaffoldkey = GlobalKey();
   SharedPreferenceService preferenceService =
@@ -91,13 +87,22 @@ class DashboardController extends GetxController
       // Check permissions when app is resumed
       checkPermissions();
       getOrderFromApi();
-      if (preferenceService.getUserDetail() != null) { // Check for null user details
+      if (preferenceService.getUserDetail() != null) {
+        // Check for null user details
         appFirebaseService.readData(
             'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
       } else {
         divineSnackBar(data: "User Not Found");
       }
     }
+  }
+
+  // RxBool is a reactive boolean observable
+  var isChecked = false.obs;
+
+  // Method to toggle the checkbox state
+  void toggleCheckbox() {
+    isChecked.value = !isChecked.value;
   }
 
   void checkPermissions() async {
@@ -177,11 +182,12 @@ class DashboardController extends GetxController
   }
 
   void checkAndRequestPermissions() async {
-   // storagePermission();
+    // storagePermission();
   }
 
   Future<bool> storagePermission() async {
-    final DeviceInfoPlugin info = DeviceInfoPlugin(); // import 'package:device_info_plus/device_info_plus.dart';
+    final DeviceInfoPlugin info =
+        DeviceInfoPlugin(); // import 'package:device_info_plus/device_info_plus.dart';
     final AndroidDeviceInfo androidInfo = await info.androidInfo;
     debugPrint('releaseVersion : ${androidInfo.version.release}');
 
@@ -195,8 +201,8 @@ class DashboardController extends GetxController
         //..... as needed
       ].request(); //import 'package:permission_handler/permission_handler.dart';
 
-
-      havePermission = request.values.every((status) => status == PermissionStatus.granted);
+      havePermission =
+          request.values.every((status) => status == PermissionStatus.granted);
     } else {
       final status = await Permission.storage.request();
       havePermission = status.isGranted;
@@ -209,6 +215,7 @@ class DashboardController extends GetxController
 
     return havePermission;
   }
+
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -222,7 +229,8 @@ class DashboardController extends GetxController
     broadcastReceiver.messages.listen((event) {
       print("broadCastResponse");
       print(AppFirebaseService().openChatUserId != "");
-      if (event.data != null) { // Check for null data before accessing
+      if (event.data != null) {
+        // Check for null data before accessing
         print(event.data!["orderData"]);
         if (event.name == "ReJoinChat" &&
             AppFirebaseService().openChatUserId != "" &&
@@ -239,7 +247,8 @@ class DashboardController extends GetxController
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Future.delayed(const Duration(seconds: 5), () {
           print("is logged in");
-          if (preferenceService.getUserDetail() != null) { // Check for null user details
+          if (preferenceService.getUserDetail() != null) {
+            // Check for null user details
             appFirebaseService.readData(
                 'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
           } else {
@@ -252,10 +261,16 @@ class DashboardController extends GetxController
       print("is logged out");
     }
     commonConstants = await userRepository.constantDetailsData();
+    log("11111111 - ${commonConstants.data!.currentTime.toString()}");
     preferenceService.setConstantDetails(commonConstants);
     preferenceService
         .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
-
+    if (commonConstants.data.notice == null ||
+        commonConstants.data.notice == "null") {
+    } else {
+      log(commonConstants.data.notice.toString());
+      showRecommendedPopupAlert();
+    }
     //added by: dev-dharam
     Get.find<SharedPreferenceService>()
         .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
@@ -266,8 +281,10 @@ class DashboardController extends GetxController
     // Handle potential null userData
     if (preferenceService.getUserDetail() != null) {
       userData = preferenceService.getUserDetail();
-      String? userImageUrl = userData?.image != null ? "$baseAmazonUrl/${userData?.image}" : "";
-      userImage(userImageUrl ?? ""); // Use nullish coalescing operator (??) for default value
+      String? userImageUrl =
+          userData?.image != null ? "$baseAmazonUrl/${userData?.image}" : "";
+      userImage(userImageUrl ??
+          ""); // Use nullish coalescing operator (??) for default value
       print(userData?.image);
       print(userProfileImage.value);
     } else {
@@ -281,7 +298,6 @@ class DashboardController extends GetxController
     print("currentTime");
     cacheGift();
   }
-
 
   void compareTimes(int serverTime) {
     print("millisecondsSinceEpoch");
@@ -358,6 +374,7 @@ class DashboardController extends GetxController
     socket.socketConnect();
     super.onReady();
   }
+
   Future<void> requestPermissions1() async {
     if (await Permission.storage.request().isGranted) {
       print("isGranted1");
@@ -366,6 +383,28 @@ class DashboardController extends GetxController
     }
   }
 
+  var isLoading = false.obs;
+  var submitTermsAndCondition;
+  void postAcceptTerms(noticeId) async {
+    isLoading(true);
+    Map<String, dynamic> param = {
+      "notice_id": noticeId,
+    };
+    try {
+      final rstatus = await repository.postTermsConditionSubmit(param);
+
+      if (rstatus.success == true) {
+        submitTermsAndCondition = rstatus;
+        isLoading(false);
+        Get.back();
+      } else {
+        isLoading(false);
+      }
+      update();
+    } catch (error) {
+      isLoading(false);
+    }
+  }
 
   getOrderFromApi() async {
     try {

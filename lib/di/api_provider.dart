@@ -90,6 +90,7 @@ class ApiProvider {
   final String astroNoticeBoard = "astroNoticeBoard";
   final String getAstroAllNotice = "getAstroAllNotice";
   final String getSpecialityList = "getSpecialityList";
+  final String addNoticeToAstrologer = "addNoticeToAstrologer";
   final String updateProfileDetails = "updateProfileDetails";
   final String addPooja = "addPooja";
   final String addProductByAstrologer = "addProductByAstrologer";
@@ -465,6 +466,7 @@ class ApiProvider {
       }
 
       if (url != constantDetails) {
+        log(endPoint + url);
         log('response: ${response.body}');
       }
       await doLiveStreamPendingTasks(response);

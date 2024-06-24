@@ -1,11 +1,14 @@
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
+import 'dart:developer';
+
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_progress_dialog.dart';
+import 'package:divine_astrologer/model/resignation/ResignationReasonModel.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../common/common_functions.dart';
 import 'new_registration_controller.dart';
 
 class NewRegstrationScreen extends GetView<NewRegistrationController> {
@@ -26,7 +29,6 @@ class NewRegstrationScreen extends GetView<NewRegistrationController> {
       initState: (_) {},
       builder: (_) {
         return Scaffold(
-          appBar: appbarSmall1(context, "Resignation".tr),
           body: controller.isLoading.value == true
               ? const Center(
                   child: LoadingWidget(),
@@ -34,96 +36,101 @@ class NewRegstrationScreen extends GetView<NewRegistrationController> {
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    controller.loadingReasons.value == true
+                    SizedBox(
+                      height: 10,
+                    ),
+                    controller.loadingReasons.value == true ||
+                            controller.resignationReasonModel == null
                         ? const Center(
                             child: LoadingWidget(),
                           )
-                        : controller.resignationStatus!.isResign == true
-                            ? AbsorbPointer(
-                                child: Container(
-                                  margin: EdgeInsets.symmetric(horizontal: 16),
-                                  decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(12),
-                                      border: Border.all(
-                                          color: AppColors().greyColor2)),
-                                  child: CustomDropdown<String>(
-                                    decoration: CustomDropdownDecoration(
-                                        headerStyle: AppTextStyle.textStyle16(),
-                                        listItemStyle:
-                                            AppTextStyle.textStyle16()),
-                                    closedHeaderPadding: EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 0),
-                                    hintText: 'Select job role',
-                                    items: _list,
-                                    initialItem: _list[0],
-                                    onChanged: (value) {
-                                      controller.selectedValue(value);
-                                      print(
-                                          "S====> ${controller.selectedValue.value}");
-                                    },
-                                  ),
-                                ),
-                              )
-                            : Container(
-                                margin: EdgeInsets.symmetric(horizontal: 16),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(12),
-                                    border: Border.all(
-                                        color: AppColors().greyColor2)),
-                                child: CustomDropdown<String>(
-                                  decoration: CustomDropdownDecoration(
-                                      headerStyle: AppTextStyle.textStyle16(),
-                                      listItemStyle:
-                                          AppTextStyle.textStyle16()),
-                                  closedHeaderPadding: EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 0),
-                                  hintText: 'Select job role',
-                                  items: _list,
-                                  initialItem: _list[0],
-                                  onChanged: (value) {
-                                    controller.selectedValue(value);
-                                    print(
-                                        "S====> ${controller.selectedValue.value}");
+                        : AbsorbPointer(
+                            absorbing:
+                                controller.resignationStatus!.isResign == true
+                                    ? true
+                                    : false,
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 16),
+                              decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                      color: AppColors().greyColor2)),
+                              child: Padding(
+                                padding: const EdgeInsets.all(4.0),
+                                child: DropdownButton<Data>(
+                                  isExpanded: true,
+                                  underline: SizedBox(),
+                                  hint: Text('Select Type'),
+                                  value: controller.selectedReasonData,
+                                  onChanged: (Data? newValue) {
+                                    log(newValue!.reason.toString());
+                                    log(newValue.id.toString());
+                                    controller.updateSelectReason(newValue);
                                   },
+                                  items: controller.resignationReasonModel?.data
+                                      ?.map<DropdownMenuItem<Data>>(
+                                          (Data reason) {
+                                    return DropdownMenuItem<Data>(
+                                      value: reason,
+                                      child: Text(reason.reason!),
+                                    );
+                                  }).toList(),
                                 ),
                               ),
-                    Padding(
-                      padding: EdgeInsets.only(top: 10, right: 16, left: 16),
-                      child: TextFormField(
-                        maxLines: 3, // Adjust the number of lines as needed
-                        decoration: InputDecoration(
-                          hintText: "Reason here.....",
-                          contentPadding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                          hintStyle: AppTextStyle.textStyle16(),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide:
-                                BorderSide(color: AppColors().greyColor2),
+                            ),
                           ),
-                          disabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide:
-                                BorderSide(color: AppColors().greyColor2),
+                    controller.selectedReasonData!.haveComment == false
+                        ? SizedBox()
+                        : AbsorbPointer(
+                            absorbing:
+                                controller.resignationStatus!.isResign == true
+                                    ? true
+                                    : false,
+                            child: Padding(
+                              padding:
+                                  EdgeInsets.only(top: 10, right: 16, left: 16),
+                              child: TextFormField(
+                                controller: controller.textController,
+                                onChanged: (value) {
+                                  controller.selectedReason = value;
+                                  log(controller.selectedReason);
+                                },
+                                maxLines:
+                                    3, // Adjust the number of lines as needed
+                                decoration: InputDecoration(
+                                  hintText: "Reason here.....",
+                                  contentPadding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 8),
+                                  hintStyle: AppTextStyle.textStyle16(),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                        color: AppColors().greyColor2),
+                                  ),
+                                  disabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                        color: AppColors().greyColor2),
+                                  ),
+                                  errorBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                        color: AppColors().greyColor2),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                        color: AppColors().greyColor2),
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12),
+                                    borderSide: BorderSide(
+                                        color: AppColors().greyColor2),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide:
-                                BorderSide(color: AppColors().greyColor2),
-                          ),
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide:
-                                BorderSide(color: AppColors().greyColor2),
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide:
-                                BorderSide(color: AppColors().greyColor2),
-                          ),
-                        ),
-                      ),
-                    ),
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -219,7 +226,16 @@ class NewRegstrationScreen extends GetView<NewRegistrationController> {
                                 splashColor: Colors.red.withOpacity(0.5),
                                 highlightColor: Colors.transparent,
                                 onTap: () {
-                                  controller.postResignationSubmit();
+                                  if (controller.selectedReasonData!
+                                              .haveComment ==
+                                          true &&
+                                      controller.textController.text.isEmpty) {
+                                    divineSnackBar(
+                                        data: "Please add reason",
+                                        color: appColors.redColor);
+                                  } else {
+                                    controller.postResignationSubmit();
+                                  }
                                 },
                                 child: Center(
                                   child: Text(

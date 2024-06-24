@@ -643,6 +643,7 @@ class UserRepository extends ApiProvider {
             ConstantDetailsModelClass.fromJson(json.decode(response.body));
         if (constantDetailsModelClass.statusCode == successResponse &&
             constantDetailsModelClass.success == true) {
+          log("1111111 - ${constantDetailsModelClass.toString()}");
           return constantDetailsModelClass;
         } else {
           throw CustomException(json.decode(response.body)["error"]);
@@ -883,23 +884,33 @@ class UserRepository extends ApiProvider {
       Map<String, dynamic> param) async {
     try {
       final response = await post(submitResignation,
-          body: param, headers: await getJsonHeaderURL());
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
 
-      if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] ==
-            HttpStatus.unauthorized) {
+      debugPrint("Response status: ${response.statusCode}");
+      debugPrint("Response body: ${response.body}");
+
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
+      if (response.statusCode == HttpStatus.ok) {
+        final responseBody = json.decode(response.body);
+        if (responseBody["status_code"] == HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
-          throw CustomException(json.decode(response.body)["error"]);
+          throw CustomException(responseBody["error"]);
         } else {
-          final postResignationSubmit =
-              ResignationSubmitModel.fromJson(jsonDecode(response.body));
-          return postResignationSubmit;
+          final submitResignation =
+              ResignationSubmitModel.fromJson(responseBody);
+          return submitResignation;
         }
       } else {
-        throw CustomException(json.decode(response.body)["error"]);
+        throw CustomException(json.decode(response.body)["error"].toString());
       }
     } catch (e, s) {
-      debugPrint("we got $e $s");
+      debugPrint("Exception occurred: $e\nStack trace: $s");
       rethrow;
     }
   }

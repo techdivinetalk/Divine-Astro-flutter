@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:divine_astrologer/model/resignation/ResignationCancelModel.dart';
 import 'package:divine_astrologer/model/resignation/ResignationReasonModel.dart';
 import 'package:divine_astrologer/model/resignation/ResignationSubmitModel.dart';
@@ -13,7 +15,7 @@ import '../../repository/user_repository.dart';
 
 class NewRegistrationController extends GetxController {
   NewRegistrationController(this.userRepository);
-
+  TextEditingController textController = TextEditingController();
   final UserRepository userRepository;
   ResignationStatus? resignationStatus;
   ResignationCancelModel? resignationCancelModel;
@@ -24,14 +26,22 @@ class NewRegistrationController extends GetxController {
 
   RxString selectedValue = ''.obs;
   var selectedReason;
+  Data? selectedReasonData;
   RxBool showRichText = false.obs;
   RxBool status = false.obs;
+
+  updateSelectReason(Data value) {
+    selectedReason = value.reason;
+    selectedReasonData = value;
+    update();
+  }
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    getResignationStatus();
     getResignationReasons();
+    getResignationStatus();
   }
 
   getResignationReasons() async {
@@ -39,11 +49,10 @@ class NewRegistrationController extends GetxController {
 
     try {
       final rstatus = await userRepository.getResignationReason({});
-      print(rstatus.success.toString());
-      print(rstatus.data.toString());
-      print(rstatus.statusCode.toString());
       if (rstatus.success == true) {
         resignationReasonModel = rstatus;
+        selectedReason = resignationReasonModel!.data![0].reason.toString();
+        selectedReasonData = resignationReasonModel!.data![0];
         loadingReasons(false);
 
         // return rstatus.data!; // Return the list of Data objects
@@ -77,7 +86,15 @@ class NewRegistrationController extends GetxController {
       print(rstatus.statusCode.toString());
       if (rstatus.success == true) {
         resignationStatus = rstatus;
-        selectedReason = resignationReasonModel!.data![0];
+        if (resignationStatus!.data == null) {
+        } else {
+          selectedReason = resignationReasonModel!.data![0].reason.toString();
+          selectedReasonData = resignationReasonModel!.data![0];
+
+          selectedReason = resignationStatus!.data['comment'].toString();
+
+          textController.text = resignationStatus!.data['comment'].toString();
+        }
         isLoading(false);
       } else {
         isLoading(false);
@@ -108,12 +125,13 @@ class NewRegistrationController extends GetxController {
       print(rstatus.message.toString());
       if (rstatus.success == true) {
         resignationCancelModel = rstatus;
+        selectedReason = "";
+        selectedReasonData = null;
+        textController.clear();
         divineSnackBar(
             data: rstatus.message.toString(), color: appColors.green);
-
+        getResignationReasons();
         getResignationStatus();
-
-        isLoading(false);
       } else {
         isLoading(false);
       }
@@ -134,36 +152,32 @@ class NewRegistrationController extends GetxController {
   }
 
   void postResignationSubmit() async {
-    isLoading(true);
-    var param = {
-      "reason_id": "1",
-      "comment": "Personal reasons",
+    Map<String, dynamic> param = {
+      "reason_id": selectedReasonData!.id.toString(),
+      "comment": selectedReason.toString(),
     };
+    isLoading(true);
+
     try {
       final rstatus = await userRepository.postsubmitResignation(param);
-
-      print(rstatus.success.toString());
-      print(rstatus.statusCode.toString());
-      print(rstatus.message.toString());
+      log(rstatus.success.toString());
       if (rstatus.success == true) {
         resignationSubmitModel = rstatus;
-        isLoading(false);
         getResignationStatus();
+        getResignationReasons();
       } else {
         isLoading(false);
       }
       update();
     } catch (error) {
-      isLoading(false);
-
-      debugPrint("error $error");
+      debugPrint("Error occurred: $error");
       if (error is AppException) {
         error.onException();
       } else {
-        isLoading(false);
-
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        // Handle other types of errors if needed
+        debugPrint("Unexpected error: $error");
       }
+      isLoading(false);
     }
   }
 
