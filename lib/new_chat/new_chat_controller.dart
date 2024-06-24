@@ -446,6 +446,8 @@ class NewChatController extends GetxController {
 
   getChatList() async {
     try {
+      print(AppFirebaseService().orderData.value["orderId"]);
+      print("AppFirebaseService().orderData.value");
       // endChatLoader.value = chatMessages.isEmpty;
       var userId = int.parse(AppFirebaseService().orderData.value["userId"]);
       var astroId = int.parse(AppFirebaseService().orderData.value["astroId"]);
