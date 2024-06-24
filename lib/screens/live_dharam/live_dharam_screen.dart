@@ -944,6 +944,7 @@ class _LivePage extends State<LiveDharamScreen>
                                     child: Text(
                                       msg.userName ?? "",
                                       // nameWithWithoutIDs(msg, isModerator),
+                                      maxLines: 100000,
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: isBlocked
@@ -967,7 +968,7 @@ class _LivePage extends State<LiveDharamScreen>
                                     ),
                                     child: Text(
                                       msg.message ?? "",
-                                      maxLines: 2,
+                                      maxLines: 100000,
                                       style: TextStyle(
                                         fontSize: 13,
                                         color: isBlocked
