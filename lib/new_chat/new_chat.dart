@@ -39,7 +39,7 @@ class NewChatScreen extends GetView<NewChatController> {
                     ChatMessage data = controller.chatMessages[index];
                     return socketMessageView(
                         controller: controller,
-                        yourMessage: data.msgSendBy == "0",
+                        yourMessage: data.msgSendBy == "1",
                         chatMessage: data,
                         index: index
                     );
@@ -70,7 +70,7 @@ class NewChatScreen extends GetView<NewChatController> {
           controller: controller,
         );
       case MsgType.audio:
-        return AudioViewWidget(
+        return AudioViewWidget( 
             chatDetail: chatMessage,
             yourMessage: yourMessage!,
             controller: controller);

@@ -19,6 +19,7 @@ import 'package:divine_astrologer/model/chat_histroy_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/model/save_remedies_response.dart';
 import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/get_single_pooja_response.dart';
+import 'package:divine_astrologer/screens/chat_message_with_socket/custom_puja/saved_remedies.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/utils.dart';
@@ -383,12 +384,12 @@ class NewChatController extends GetxController {
 
   /// ------------------ Custom Product bottom sheet ----------------------- ///
   void openCustomShop() {
-    // Get.bottomSheet(
-    //   SavedRemediesBottomSheet(
-    //     controller: NewChatController(),
-    //     customProductData: controller.customProductData,
-    //   ),
-    // );
+    Get.bottomSheet(
+      SavedRemediesBottomSheet(
+        controller: NewChatController(),
+        customProductData: controller.customProductData,
+      ),
+    );
   }
 
   /// ------------------ Tarrot card bottom sheet ----------------------- ///
@@ -630,8 +631,6 @@ class NewChatController extends GetxController {
         userType: "astrologer",
       );
     }
-    print("last message  ${chatMessages.last.message}");
-    scrollToBottomFunc();
     firebaseDatabase
         .ref()
         .child(
@@ -639,5 +638,8 @@ class NewChatController extends GetxController {
         .update(
           newMessage.toOfflineJson(),
         );
+    print("last message  ${chatMessages.last.message}");
+    chatMessages.value.add(newMessage);
+    scrollToBottomFunc();
   }
 }

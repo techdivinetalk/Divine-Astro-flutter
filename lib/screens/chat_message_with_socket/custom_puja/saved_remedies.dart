@@ -3,6 +3,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
+import 'package:divine_astrologer/new_chat/new_chat_controller.dart';
 import 'package:divine_astrologer/screens/chat_assistance/chat_message/chat_assistant_message_controller.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_controller.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/custom_puja/create_custom_product.dart';
@@ -14,11 +15,11 @@ import 'package:get/get.dart';
 class SavedRemediesBottomSheet extends StatelessWidget {
   final List<CustomProductData>? customProductData;
   final ChatMessageController? chatMessageController;
-  final ChatMessageWithSocketController? controller;
+  final NewChatController? newChatController;
 
   const SavedRemediesBottomSheet({
     this.customProductData,
-    this.controller,
+    this.newChatController,
     this.chatMessageController,
   });
 
@@ -83,12 +84,12 @@ class SavedRemediesBottomSheet extends StatelessWidget {
                               print("data.image");
                               return GestureDetector(
                                 onTap: () {
-                                  if (controller != null) {
+                                  if (newChatController != null) {
                                     final String time =
                                         "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
 
-                                    controller!.addNewMessage(
-                                        time, MsgType.customProduct,
+                                    newChatController!.addNewMessage(
+                                        msgType: MsgType.customProduct,
                                         messageText: data.name,
                                         productPrice: data.amount.toString(),
                                         productId: data.id.toString(),
@@ -195,7 +196,7 @@ class SavedRemediesBottomSheet extends StatelessWidget {
                       Get.back();
                       Get.bottomSheet(
                           CreateCustomProductSheet(
-                            controller: controller,
+                            newChatController: newChatController,
                             chatMessageController: chatMessageController,
                           ),
                           isScrollControlled: true);

@@ -17,6 +17,7 @@ import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/model/chat_histroy_response.dart";
 import "package:divine_astrologer/model/chat_offline_model.dart";
 import "package:divine_astrologer/model/res_login.dart";
+import "package:divine_astrologer/new_chat/new_chat_controller.dart";
 import "package:divine_astrologer/repository/message_template_repository.dart";
 import "package:divine_astrologer/repository/user_repository.dart";
 import "package:divine_astrologer/screens/chat_message_with_socket/custom_puja/saved_remedies.dart";
@@ -359,7 +360,7 @@ class ChatMessageWithSocketController extends GetxController
     print("controller.customProductData");
     Get.bottomSheet(
       SavedRemediesBottomSheet(
-        controller: controller,
+        newChatController: NewChatController(),
         customProductData: controller.customProductData,
       ),
     );

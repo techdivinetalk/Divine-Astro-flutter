@@ -5,6 +5,7 @@ import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:divine_astrologer/model/astrologer_gift_response.dart';
+import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/new_chat/new_chat_controller.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_ui.dart';
 import 'package:divine_astrologer/utils/enum.dart';
@@ -125,7 +126,8 @@ class _ChatBottomBarWidgetState extends State<ChatBottomBarWidget> {
                                     mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      !widget.controller!.hasMessage.value && isGifts.value == 1
+                                      !widget.controller!.hasMessage.value &&
+                                              isGifts.value == 1
                                           ? GestureDetector(
                                               onTap: () {
                                                 widget.controller!.askForGift();
@@ -184,7 +186,14 @@ class _ChatBottomBarWidgetState extends State<ChatBottomBarWidget> {
                     InkWell(
                         onTap: () {
                           // write  logic for send msg code
-                          // widget.controller!.sendNewMessage();
+
+                          widget.controller!.addNewMessage(
+                              msgType: MsgType.text,
+                              messageText: widget
+                                  .controller!.messageController.text
+                                  .trim());
+                          widget.controller!.messageController.clear();
+                          widget.controller!.update();
                         },
                         child: Center(
                           child: SvgPicture.asset(
