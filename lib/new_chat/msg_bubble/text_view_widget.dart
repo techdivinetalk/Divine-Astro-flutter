@@ -1,13 +1,15 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
+
 import 'package:divine_astrologer/model/chat_offline_model.dart';
-import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/product/pooja/widgets/custom_widget/pooja_common_list.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../gen/assets.gen.dart';
 import '../../gen/fonts.gen.dart';
@@ -38,25 +40,17 @@ class TextViewWidget extends StatelessWidget {
                     () {
                   Map<String, dynamic> order = {};
                   order = AppFirebaseService().orderData.value;
-                  String imageURL = order["astroImage"] ?? "";
+                  String imageURL = order["customerImage"] ?? "";
                   String appended =
-                      "${pref.getAmazonUrl()}$imageURL";
-                  print("img:: -xx-$appended");
-                  return GestureDetector(
-                    onTap: () {
-
-                    },
-                    child: Container(
+                      "$preferenceService/$imageURL";
+                  print("img:: $appended");
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 3),
+                    child: SizedBox(
                       height: 35,
                       width: 35,
-                      margin: EdgeInsets.only(right: 5),
-                      decoration: BoxDecoration(
-                        border: Border.all(color: appColors.guideColor),
-                        shape: BoxShape.circle,
-                      ),
                       child: CustomImageWidget(
                         imageUrl: appended,
-
                         rounded: true,
                         typeEnum: TypeEnum.user,
                       ),
@@ -64,7 +58,7 @@ class TextViewWidget extends StatelessWidget {
                   );
                 },
               )
-                  : const SizedBox(),
+                  : SizedBox(),
               Container(
                 padding:
                 const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -146,5 +140,11 @@ class TextViewWidget extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  String messageDateTime(int datetime) {
+    var millis = datetime;
+    var dt = DateTime.fromMillisecondsSinceEpoch(millis * 1000);
+    return DateFormat('hh:mm a').format(dt);
   }
 }

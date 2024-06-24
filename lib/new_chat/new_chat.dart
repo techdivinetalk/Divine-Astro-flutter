@@ -32,13 +32,16 @@ class NewChatScreen extends GetView<NewChatController> {
               Expanded(
                 child: ListView.separated(
                   controller: controller.messageScrollController,
-                  itemCount: 50,
+                  itemCount: controller.chatMessages.length,
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
                   shrinkWrap: true,
                   itemBuilder: (context, index) {
-                    return Container(
-                      height: 30,
-                      width: double.infinity,
-                      color: Colors.red,
+                    ChatMessage data = controller.chatMessages[index];
+                    return socketMessageView(
+                        controller: controller,
+                        yourMessage: data.msgSendBy == "0",
+                        chatMessage: data,
+                        index: index
                     );
                   },
                   separatorBuilder: (context, index) => const SizedBox(
@@ -54,34 +57,37 @@ class NewChatScreen extends GetView<NewChatController> {
     );
   }
 
-  Widget socketMessageView(BuildContext context, ChatMessage chatMessage,
-      NewChatController controller, bool yourMessage, int index) {
-    switch (chatMessage.msgType) {
+  Widget socketMessageView(
+      {ChatMessage? chatMessage,
+      NewChatController? controller,
+      bool? yourMessage,
+      int? index}) {
+    switch (chatMessage!.msgType) {
       case MsgType.text:
         return TextViewWidget(
           chatDetail: chatMessage,
-          yourMessage: yourMessage,
+          yourMessage: yourMessage!,
           controller: controller,
         );
       case MsgType.audio:
         return AudioViewWidget(
             chatDetail: chatMessage,
-            yourMessage: yourMessage,
+            yourMessage: yourMessage!,
             controller: controller);
       case MsgType.gift:
         return RequestGiftViewWidget(
             chatDetail: chatMessage,
-            yourMessage: yourMessage,
+            yourMessage: yourMessage!,
             controller: controller);
       case MsgType.sendgifts:
         return SendGiftWidget(
             chatDetail: chatMessage,
-            yourMessage: yourMessage,
+            yourMessage: yourMessage!,
             controller: controller);
       case MsgType.image:
         return ImageViewWidget(
           image: chatMessage.base64Image ?? '',
-          yourMessage: yourMessage,
+          yourMessage: yourMessage!,
           chatDetail: chatMessage,
           controller: controller,
         );
@@ -89,24 +95,24 @@ class NewChatScreen extends GetView<NewChatController> {
         return KundliViewWidget(
           chatDetail: chatMessage,
           controller: controller,
-          yourMessage: yourMessage,
+          yourMessage: yourMessage!,
         );
       case MsgType.customProduct:
         return CustomProductWidget(
           chatDetail: chatMessage,
-          yourMessage: yourMessage,
+          yourMessage: yourMessage!,
           controller: controller,
         );
       case MsgType.product || MsgType.pooja:
         return ProductMsgViewWidget(
           chatDetail: chatMessage,
-          yourMessage: yourMessage,
+          yourMessage: yourMessage!,
           controller: controller,
         );
       case MsgType.remedies:
         return RemediesViewWidget(
           chatDetail: chatMessage,
-          yourMessage: yourMessage,
+          yourMessage: yourMessage!,
           controller: controller,
         );
       default:

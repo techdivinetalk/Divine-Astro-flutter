@@ -118,7 +118,7 @@ void initMessaging() async {
       //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
       // // if(payloadMap["type"] == "2") {
       if (payloadMap["type"] == "1") {
-        Get.toNamed(RouteName.chatMessageWithSocketUI);
+        Get.toNamed(RouteName.newChat);
       } else if (payloadMap["type"] == "8") {
         final senderId = payloadMap["sender_id"];
         DataList dataList = DataList();
@@ -198,7 +198,7 @@ void onDidReceiveNotificationResponse(
     //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
     // // if(payloadMap["type"] == "2") {
     if (payloadMap["type"] == "1") {
-      Get.toNamed(RouteName.chatMessageWithSocketUI);
+      Get.toNamed(RouteName.newChat);
     } else if (payloadMap["type"] == "8") {
       final senderId = payloadMap["sender_id"];
       DataList dataList = DataList();

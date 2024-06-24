@@ -238,7 +238,7 @@ class DashboardController extends GetxController
             event.data != null &&
             event.data!["orderData"]["status"] != null) {
           var orderData = event.data!["orderData"];
-          Get.toNamed(RouteName.chatMessageWithSocketUI, arguments: orderData);
+          Get.toNamed(RouteName.newChat, arguments: orderData);
         }
       } else {
         print("event.data is null");

@@ -6,6 +6,7 @@ import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/new_chat/new_chat_controller.dart';
+import 'package:divine_astrologer/tarotCard/widget/custom_image_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -22,10 +23,10 @@ class CustomProductWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: Alignment.centerLeft,
+      alignment: Alignment.bottomRight,
       child: Container(
         width: 165,
-        height: 250,
+        height: 220,
         decoration: BoxDecoration(
           color: appColors.white,
           borderRadius: BorderRadius.circular(10),
@@ -33,40 +34,21 @@ class CustomProductWidget extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            chatDetail.getCustomProduct!.image == null
-                ? ClipRRect(
-              borderRadius:
-              const BorderRadius.vertical(top: Radius.circular(10)),
-              child: Image.asset(
-                Assets.images.defaultProfile.path,
-                height: 165,
-                width: 165,
-                fit: BoxFit.cover,
-              ),
-            )
-                : CommonImageView(
+            CustomImageView(
               height: 165,
               width: 165,
               imagePath:
-              "${preferenceService.getAmazonUrl()!}${chatDetail.getCustomProduct!.image}",
-              radius:
-              const BorderRadius.vertical(top: Radius.circular(10)),
+              "$preferenceService/${chatDetail.getCustomProduct!.image}",
+              radius: const BorderRadius.vertical(top: Radius.circular(10)),
+              placeHolder: "assets/images/default_profiles.svg",
               fit: BoxFit.cover,
-              placeHolder: Assets.images.defaultProfile.path,
-              placeholderWidget: Image.asset(
-                Assets.images.defaultProfile.path,
-                height: 165,
-                width: 165,
-                fit: BoxFit.cover,
-              ),
             ),
-            const SizedBox(height: 5),
             Text(
               chatDetail.getCustomProduct!.name ?? "",
               maxLines: 1,
               style: AppTextStyle.textStyle12(
                 fontColor: appColors.textColor,
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w400,
               ),
             ),
             const SizedBox(height: 5),
@@ -78,28 +60,6 @@ class CustomProductWidget extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 5),
-            GestureDetector(
-              onTap: () {
-
-              },
-              child: Container(
-                height: 26,
-                width: 85,
-                decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(16),
-                    color: appColors.guideColor),
-                child: Center(
-                  child: Text(
-                    "Buy Now",
-                    style: AppTextStyle.textStyle12(
-                      fontColor: appColors.white,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            const SizedBox(height: 10),
           ],
         ),
       ),

@@ -48,7 +48,7 @@ class _CameraPageState extends State<CameraPage> {
       print("CameraIssue3 ${picture.path}");
       Get.until(
             (route) {
-          return Get.currentRoute == RouteName.chatMessageWithSocketUI;
+          return Get.currentRoute == RouteName.newChat;
         },
       );
       // Navigator.push(

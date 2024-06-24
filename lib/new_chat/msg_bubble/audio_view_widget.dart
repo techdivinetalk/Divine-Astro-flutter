@@ -80,18 +80,18 @@ class AudioViewWidget extends StatelessWidget {
                         style: AppTextStyle.textStyle10(
                             fontColor: appColors.black),
                       ),
-                      if (yourMessage) SizedBox(width: 8.w),
-                      if (yourMessage)
-                        chatDetail.type == 0
-                            ? Assets.images.icSingleTick.svg()
-                            : chatDetail.type == 1
-                            ? Assets.images.icDoubleTick.svg(
-                            colorFilter: ColorFilter.mode(
-                                appColors.disabledGrey,
-                                BlendMode.srcIn))
-                            : chatDetail.type == 3
-                            ? Assets.images.icDoubleTick.svg()
-                            : Assets.images.icSingleTick.svg()
+                      // if (yourMessage) SizedBox(width: 8.w),
+                      // if (yourMessage)
+                      //   chatDetail.type == 0
+                      //       ? Assets.images.icSingleTick.svg()
+                      //       : chatDetail.type == 1
+                      //       ? Assets.images.icDoubleTick.svg(
+                      //       colorFilter: ColorFilter.mode(
+                      //           appColors.disabledGrey,
+                      //           BlendMode.srcIn))
+                      //       : chatDetail.type == 3
+                      //       ? Assets.images.icDoubleTick.svg()
+                      //       : Assets.images.icSingleTick.svg()
                     ],
                   ),
                 ),

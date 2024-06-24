@@ -4,6 +4,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
+import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/new_chat/new_chat_controller.dart';
@@ -24,23 +25,40 @@ class ProductMsgViewWidget extends StatefulWidget {
 }
 
 class _ProductMsgViewWidgetState extends State<ProductMsgViewWidget> {
-  GetProduct getProduct = GetProduct();
+
+
   @override
   Widget build(BuildContext context) {
-
+    GetProduct getProduct = GetProduct();
+    if (widget.chatDetail.msgType == MsgType.pooja) {
+      print(widget.chatDetail.getPooja!.poojaName);
+      print("chatMessage.getPooja!.poojaName");
+      getProduct = GetProduct(
+        productPriceInr: widget.chatDetail.getPooja!.poojaPriceInr ?? 0,
+        prodImage: widget.chatDetail.getPooja!.poojaImage ?? "",
+        prodDesc: widget.chatDetail.getPooja!.poojaDesc ?? "",
+        gst: widget.chatDetail.getPooja!.gst ?? 0,
+        id: widget.chatDetail.getPooja!.id ?? 0,
+        prodName: widget.chatDetail.getPooja!.poojaName ?? "",
+      );
+    } else {
+      getProduct = widget.chatDetail.getProduct!;
+    }
     return GestureDetector(
       onTap: () {
-        // Map<String, dynamic> param = {};
-        // param["is_recharge"] = "2";
-        // param["product_type"] =
-        // widget.chatDetail.msgType == MsgType.pooja ? "10" : "1";
-        // param["product_id"] = widget.chatDetail.productId;
-        // param["suggested_remedies_id"] = widget.chatDetail.suggestedId;
-        // param["astrologer_id"] =
-        //     AppFirebaseService().orderData.value["astroId"].toString();
-        // Get.put(PaymentSummaryController()).initPayment(
-        //     getProduct.productPriceInr.toString(), param, 0,
-        //     gst: getProduct.gst ?? 0);
+        if (widget.chatDetail.msgType == MsgType.pooja) {
+          Get.toNamed(RouteName.poojaDharamDetailsScreen, arguments: {
+            'detailOnly': true,
+            "isSentMessage": true,
+            'data': int.parse(widget.chatDetail.productId ?? '0')
+          });
+        } else {
+          Get.toNamed(RouteName.categoryDetail, arguments: {
+            "productId": widget.chatDetail.productId.toString(),
+            "isSentMessage": true,
+            "customerId": widget.chatDetail.senderId,
+          });
+        }
       },
       child: Container(
         margin: EdgeInsets.symmetric(vertical: 5.w),

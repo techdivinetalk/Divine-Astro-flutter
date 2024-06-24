@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:camera/camera.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/common/ask_for_gift_bottom_sheet.dart';
 import 'package:divine_astrologer/common/camera.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -14,6 +15,7 @@ import 'package:divine_astrologer/common/show_permission_widget.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/astrologer_gift_response.dart';
+import 'package:divine_astrologer/model/chat_histroy_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/custom_puja/saved_remedies.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
@@ -53,8 +55,12 @@ class NewChatController extends GetxController {
 
   @override
   void onInit() {
+    if (AppFirebaseService().orderData.isNotEmpty) {
+      print("order is not empty");
+      getChatList();
+    }
     initialiseControllers();
-    getDir();
+    getDir(); 
     Future.delayed(
       const Duration(milliseconds: 300),
       () {
@@ -73,8 +79,7 @@ class NewChatController extends GetxController {
     super.onClose();
   }
 
-  /// ------------------ get All chat history  ----------------------- ///
-  RxList<ChatMessage> chatMessages = <ChatMessage>[].obs;
+
 
   /// ------------------ scroll to bottom  ----------------------- ///
   scrollToBottomFunc() {
@@ -351,6 +356,7 @@ class NewChatController extends GetxController {
     return Future<bool>.value(hasStoragePermission);
   }
 
+
   /// ------------------ Product bottom sheet ----------------------- ///
   Future<void> openProduct() async {
     var result = await Get.toNamed(RouteName.chatAssistProductPage, arguments: {
@@ -420,6 +426,8 @@ class NewChatController extends GetxController {
     );
   }
 
+
+
   sendGiftFunc(GiftData item, num quantity) {
     if (item.giftName.isNotEmpty) {
       final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
@@ -430,6 +438,47 @@ class NewChatController extends GetxController {
       //     productId: item.id.toString(),
       //     awsUrl: item.fullGiftImage,
       //     giftId: item.id.toString());
+    }
+  }
+
+
+
+  /// -------------------------- chat history API ------------------------ ///
+  RxList<ChatMessage> chatMessages = <ChatMessage>[].obs;
+  CallChatHistoryRepository callChatFeedBackRepository =
+  CallChatHistoryRepository();
+
+  getChatList() async {
+    try {
+      // endChatLoader.value = chatMessages.isEmpty;
+      var userId = int.parse(AppFirebaseService().orderData.value["userId"]);
+      var astroId = int.parse(AppFirebaseService().orderData.value["astroId"]);
+
+      var response = await callChatFeedBackRepository.getAstrologerChats(
+        userId,
+        astroId,
+      );
+
+      if (response.success ?? false) {
+        // endChatLoader.value = false;
+        if (response.chatMessages!.isNotEmpty) {
+          chatMessages.clear();
+          chatMessages.addAll(response.chatMessages!.reversed);
+          update();
+          print("ChatMessage Data:: ${chatMessages.toJson()}");
+          print("orderIdorderIdorderIdorderId");
+        }
+      } else {
+        throw CustomException(response.message ?? 'Failed to get chat history');
+      }
+    } catch (error) {
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.red);
+      }
+    } finally {
+      update();
     }
   }
 }

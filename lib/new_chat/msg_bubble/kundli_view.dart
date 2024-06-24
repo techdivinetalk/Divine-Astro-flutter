@@ -20,109 +20,89 @@ class KundliViewWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-
+        Get.toNamed(RouteName.kundliDetail, arguments: {
+          "kundli_id": chatDetail.kundliId ?? chatDetail.kundli!.kundliId,
+          "from_kundli": true,
+          "birth_place":
+          chatDetail.kundliPlace ?? chatDetail.kundli!.kundliPlace,
+          "gender": chatDetail.gender ?? chatDetail.kundli!.gender,
+          "name": chatDetail.kundliName ?? chatDetail.kundli!.kundliName,
+          "longitude": chatDetail.longitude ?? chatDetail.kundli!.longitude,
+          "latitude": chatDetail.latitude ?? chatDetail.kundli!.latitude,
+        });
       },
       child: Card(
-        child: Column(
-          children: [
-            Container(
-              padding: EdgeInsets.all(12.h),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: appColors.buttonDisableColor),
-                    child: Padding(
-                      padding: const EdgeInsets.all(15.0),
-                      child: Text(
-                        chatDetail.kundliName?[0] ??
-                            chatDetail.kundli?.kundliName[0] ??
-                            '',
-                        style: AppTextStyle.textStyle24(
-                            fontColor: appColors.white,
-                            fontWeight: FontWeight.w600),
+        color: appColors.white,
+        surfaceTintColor: appColors.white,
+        child: Container(
+          padding: EdgeInsets.all(12.h),
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    shape: BoxShape.circle, color: appColors.extraLightGrey),
+                child: Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Text(
+                    chatDetail.kundliName?[0] ??
+                        chatDetail.kundli?.kundliName[0] ??
+                        '',
+                    style: AppTextStyle.textStyle24(
+                        fontColor: appColors.white,
+                        fontWeight: FontWeight.w600),
+                  ),
+                ),
+              ),
+              SizedBox(width: 15.w),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      chatDetail.kundliName ??
+                          chatDetail.kundli?.kundliName ??
+                          "",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.sp,
+                        color: appColors.darkBlue,
                       ),
                     ),
-                  ),
-                  SizedBox(width: 15.w), 
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          chatDetail.kundliName ??
-                              chatDetail.kundli?.kundliName ??
-                              "",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 16.sp,
-                            color: appColors.textColor,
-                          ),
-                        ),
-                        SizedBox(height: 5.h),
-                        Text(
-                          chatDetail.kundliDateTime ??
-                              chatDetail.kundli?.kundliDateTime ??
-                              "",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 10.sp,
-                            color: appColors.disabledGrey,
-                          ),
-                        ),
-                        SizedBox(height: 5.h),
-                        Text(
-                          chatDetail.kundliPlace ??
-                              chatDetail.kundli?.kundliPlace ??
-                              "",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 10.sp,
-                            color: appColors.disabledGrey,
-                          ),
-                        ),
-                      ],
+                    SizedBox(height: 5.h),
+                    Text(
+                      chatDetail.kundliDateTime ??
+                          chatDetail.kundli!.kundliDateTime,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 10.sp,
+                        //color: appColors.lightGrey,
+                      ),
                     ),
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 15),
-                    child: Icon(
-                      Icons.keyboard_arrow_right,
-                      size: 35,
+                    SizedBox(height: 5.h),
+                    Text(
+                      chatDetail.kundliPlace ??
+                          chatDetail.kundli?.kundliPlace ??
+                          "",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 10.sp,
+                        color: appColors.lightGrey,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-            /*Row(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                if (chatDetail.msgType != "warningMsg")
-                  Text(
-                    messageDateTime(int.parse(chatDetail.time.toString())),
-                    style: AppTextStyle.textStyle10(
-                      fontColor: appColors.textColor,
-                    ),
-                  ),
-                SizedBox(width: 5),
-                Obx(() => (msgType.value == 0 || msgType.value == 0) &&
-                        chatDetail.seenStatus == 0
-                    ? Assets.images.icSingleTick.svg()
-                    : (msgType.value == 1 || msgType.value == 0) &&
-                            chatDetail.seenStatus == 1
-                        ? Assets.images.icDoubleTick.svg(
-                            colorFilter: ColorFilter.mode(
-                                appColors.greyColor, BlendMode.srcIn))
-                        : (msgType.value == 3 || msgType.value == 0) &&
-                                chatDetail.seenStatus == 3
-                            ? Assets.images.icDoubleTick.svg()
-                            : Assets.images.icSingleTick.svg())
-              ],
-            ).pOnly(right: 10, bottom: 10),*/
-          ],
+              const Padding(
+                padding: EdgeInsets.only(top: 15),
+                child: Icon(
+                  Icons.keyboard_arrow_right,
+                  size: 35,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

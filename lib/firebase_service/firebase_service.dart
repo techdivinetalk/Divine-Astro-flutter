@@ -9,6 +9,7 @@ import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/di/hive_services.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/model/res_login.dart";
+import "package:divine_astrologer/new_chat/new_chat.dart";
 import "package:divine_astrologer/pages/profile/profile_page_controller.dart";
 import "package:divine_astrologer/repository/pre_defind_repository.dart";
 import "package:divine_astrologer/repository/user_repository.dart";
@@ -120,39 +121,35 @@ class AppFirebaseService {
                       //       .value["status"]}");
                       // }
                       switch ((orderData.value["status"])) {
-                      case "0":
+                        case "0":
                           // if(!kDebugMode){
                           //
                           // }
                           // if (Get.currentRoute !=
                           //     RouteName.acceptChatRequestScreen) {
-                            await Get.toNamed(
-                                RouteName.acceptChatRequestScreen);
-                        //  }
+                          await Get.toNamed(RouteName.acceptChatRequestScreen);
+                          //  }
                           break;
                         case "1":
                           // if (Get.currentRoute !=
                           //     RouteName.acceptChatRequestScreen) {
-                            await Get.toNamed(
-                                RouteName.acceptChatRequestScreen);
-                        //  }
+                          await Get.toNamed(RouteName.acceptChatRequestScreen);
+                          //  }
                           break;
 
                         case "2":
-                          if (Get.currentRoute !=
-                              RouteName.chatMessageWithSocketUI) {
+                          if (Get.currentRoute != RouteName.newChat) {
                             await Get.toNamed(
-                              RouteName.chatMessageWithSocketUI,
+                              RouteName.newChat,
                               arguments: {"orderData": orderData},
                             );
                           }
                           break;
 
                         case "3":
-                          if (Get.currentRoute !=
-                              RouteName.chatMessageWithSocketUI) {
+                          if (Get.currentRoute != RouteName.newChat) {
                             await Get.toNamed(
-                              RouteName.chatMessageWithSocketUI,
+                              RouteName.newChat,
                               arguments: {"orderData": orderData},
                             );
                           }
@@ -164,9 +161,10 @@ class AppFirebaseService {
                     } else {
                       orderData({});
                       sendBroadcast(BroadcastMessage(name: "orderEnd"));
-                      if (MiddleWare.instance.currentPage == RouteName.acceptChatRequestScreen){
+                      if (MiddleWare.instance.currentPage ==
+                          RouteName.acceptChatRequestScreen) {
                         Get.until(
-                              (route) {
+                          (route) {
                             return Get.currentRoute == RouteName.dashboard;
                           },
                         );
@@ -180,9 +178,10 @@ class AppFirebaseService {
                 // }
                 orderData({});
                 sendBroadcast(BroadcastMessage(name: "orderEnd"));
-                if (MiddleWare.instance.currentPage == RouteName.acceptChatRequestScreen){
+                if (MiddleWare.instance.currentPage ==
+                    RouteName.acceptChatRequestScreen) {
                   Get.until(
-                        (route) {
+                    (route) {
                       return Get.currentRoute == RouteName.dashboard;
                     },
                   );
@@ -191,12 +190,13 @@ class AppFirebaseService {
             },
           );
         } else {
-          if (MiddleWare.instance.currentPage == RouteName.acceptChatRequestScreen){
+          if (MiddleWare.instance.currentPage ==
+              RouteName.acceptChatRequestScreen) {
             // if(kDebugMode) {
             //   divineSnackBar(data: "$value Order Ended");
             // }
             Get.until(
-                  (route) {
+              (route) {
                 return Get.currentRoute == RouteName.dashboard;
               },
             );
@@ -436,8 +436,6 @@ class AppFirebaseService {
     } catch (e) {
       debugPrint("Error reading data from the database: $e");
     }
-
-
   }
 
   saveMasterData(DataSnapshot dataSnapshot) {

@@ -1,5 +1,7 @@
 import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
 import 'package:divine_astrologer/common/custom_get_page.dart';
+import 'package:divine_astrologer/new_chat/new_chat.dart';
+import 'package:divine_astrologer/new_chat/new_chat_binding.dart';
 import 'package:divine_astrologer/pages/home/home_ui.dart';
 import 'package:divine_astrologer/pages/profile/profile_binding.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
@@ -163,6 +165,7 @@ class RouteName {
   static const String donationDetailPage = "/donationDetailPage";
   static const String chatMessageUI = "/chatMessageUI";
   static const String chatMessageWithSocketUI = "/chatMessageWithSocketUI";
+  static const String newChat = "/newChat";
   static const String suggestRemediesSubUI = "/suggestRemediesSubUI";
   static const String finalRemediesSubUI = "/finalRemediesSubUI";
   static const String categoryDetail = "/categoryDetail";
@@ -343,6 +346,10 @@ class Routes {
         page: () =>  ChatMessageWithSocketUI(),
         name: RouteName.chatMessageWithSocketUI,
         binding: ChatMessageWithSocketBinding()),
+    GetPage(
+        page: () =>  NewChatScreen(),
+        name: RouteName.newChat,
+        binding: NewChatBinding()),
     /* GetPage(
         page: () => const SuggestRemediesView(),
         name: RouteName.suggestRemediesView),*/

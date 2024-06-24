@@ -98,11 +98,11 @@ Future<void> main() async {
     print("pushNotification1 ${message.notification?.title ?? ""}");
     print('Message data-: dasboardCurrentIndex---${message.data}');
     print(
-        'Message data-: ${MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI}');
+        'Message data-: ${MiddleWare.instance.currentPage != RouteName.newChat}');
     if (message.data["type"] == "2") {
       print('msg ---- from notification');
       return;
-    }
+    }   
 
     // if (message.data["type"] == "1") {
     //   print('msg ---- from notification');
@@ -110,7 +110,7 @@ Future<void> main() async {
     // }
     if (message.data["type"].toString() == "1") {
       if (MiddleWare.instance.currentPage !=
-          RouteName.chatMessageWithSocketUI) {
+          RouteName.newChat) {
         print("messageReceive21 ${MiddleWare.instance.currentPage}");
         showNotification(message.data["title"], message.data["message"],
             message.data['type'], message.data);
@@ -404,11 +404,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   navigatorKey: navigatorKey,
                   color: appColors.white,
                   debugShowCheckedModeBanner: false,
-                  // initialRoute: preferenceService.getUserDetail()?.id == null
-                  //     ? RouteName.login
-                  //     : RouteName.dashboard,
+                  initialRoute: preferenceService.getUserDetail()?.id == null
+                      ? RouteName.login
+                      : RouteName.dashboard,
                   getPages: Routes.routes,
-                  home: const NewChatScreen(),
+                  // home: const NewChatScreen(),
                   locale: getLanStrToLocale(
                       GetStorages.get(GetStorageKeys.language) ?? ""),
                   fallbackLocale: AppTranslations.fallbackLocale,
