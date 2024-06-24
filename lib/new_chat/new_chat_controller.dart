@@ -17,6 +17,8 @@ import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/astrologer_gift_response.dart';
 import 'package:divine_astrologer/model/chat_histroy_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
+import 'package:divine_astrologer/model/save_remedies_response.dart';
+import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/get_single_pooja_response.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/utils.dart';
@@ -30,6 +32,8 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+
+import '../model/res_product_detail.dart';
 
 class NewChatController extends GetxController {
   TextEditingController messageController = TextEditingController();
@@ -60,6 +64,7 @@ class NewChatController extends GetxController {
     }
     initialiseControllers();
     getDir();
+    messageController.addListener(onMessageChanged);
     Future.delayed(
       const Duration(milliseconds: 300),
       () {
@@ -185,7 +190,7 @@ class NewChatController extends GetxController {
 
         /// write logic for send audio msg
 
-        // addNewMessage(time, MsgType.audio, awsUrl: uploadFile); <===== old code
+        addNewMessage(msgType: MsgType.audio, awsUrl: uploadFile);
       } else {}
     } catch (e) {
       print("getting error while sending audio ${e}");
@@ -307,8 +312,12 @@ class NewChatController extends GetxController {
     print("IMAGE STEP UPLOAD 3 $uploadFile");
     if (uploadFile != null || uploadFile != "") {
       /// write a code for sending image
-    } else {
-      // addNewMessage(time, "image", awsUrl: uploadFile, base64Image: base64Image, downloadedPath: outPath);
+      addNewMessage(
+        msgType: MsgType.image,
+        messageText: uploadFile,
+        base64Image: base64Image,
+        downloadedPath: '',
+      );
     }
   }
 
@@ -362,14 +371,13 @@ class NewChatController extends GetxController {
     if (result != null) {
       final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       // write code for send product
-      // controller.addNewMessage(
-      //   time,
-      //   MsgType.product,
-      //   data: {
-      //     'data': result,
-      //   },
-      //   messageText: 'Product',
-      // );
+      addNewMessage(
+        msgType: MsgType.product,
+        data: {
+          'data': result,
+        },
+        messageText: 'Product',
+      );
     }
   }
 
@@ -395,14 +403,10 @@ class NewChatController extends GetxController {
   Future<void> openRemedies() async {
     var result = await Get.toNamed(RouteName.chatSuggestRemedy);
     if (result != null) {
-      final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-
-      /// write code for send remedies
-      // addNewMessage(
-      //   time,
-      //   MsgType.remedies,
-      //   messageText: result.toString(),
-      // );
+      addNewMessage(
+        msgType: MsgType.remedies,
+        messageText: result.toString(),
+      );
     }
   }
 
@@ -431,12 +435,20 @@ class NewChatController extends GetxController {
 
       /// write code ask gift
       // unreadMessageIndex.value = -1;
-      // addNewMessage(time, MsgType.gift,
-      //     messageText: item.giftName,
-      //     productId: item.id.toString(),
-      //     awsUrl: item.fullGiftImage,
-      //     giftId: item.id.toString());
+      addNewMessage(
+        msgType: MsgType.gift,
+        messageText: item.giftName,
+        productId: item.id.toString(),
+        awsUrl: item.fullGiftImage,
+        giftId: item.id.toString(),
+      );
     }
+  }
+
+  /// ------------------ TextEditing onchanged  ----------------------- ///
+  onMessageChanged() {
+    hasMessage.value = messageController.text.isNotEmpty;
+    update();
   }
 
   /// -------------------------- chat history API ------------------------ ///
@@ -483,34 +495,149 @@ class NewChatController extends GetxController {
   /// -------------------------- send message firebase  ------------------------ ///
   final FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
 
-  sendNewMessage() {
+  addNewMessage({
+    MsgType? msgType,
+    Map? data,
+    String? messageText,
+    String? awsUrl,
+    String? base64Image,
+    String? downloadedPath,
+    String? kundliId,
+    String? giftId,
+    String? title,
+    String? productPrice,
+    String? productId,
+    String? shopId,
+    String? suggestedId,
+    String? customProductId,
+    CustomProduct? getCustomProduct,
+  }) async {
     final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-    ChatMessage newMessage = ChatMessage(
-      orderId: AppFirebaseService().orderData.value["orderId"],
-      id: int.parse(time),
-      message: messageController.text,
-      receiverId:
-          int.parse(AppFirebaseService().orderData.value["userId"].toString()),
-      senderId: preference.getUserDetail()!.id,
-      time: int.parse(time),
-      awsUrl: /*awsUrl*/ "",
-      // is image or audio send
-      msgSendBy: "1",
-      productId: "0",
-      base64Image: "base64Image",
-      downloadedPath: "downloadedPath",
-      msgType: MsgType.text,
-      kundliId: 0,
-      title: "title",
-      type: 0,
-      userType: "astrologer",
-    );
-    print(newMessage.toOfflineJson());
-    print("newMessage.toOfflineJson()");
+    late ChatMessage newMessage;
+    if (msgType == MsgType.customProduct) {
+      newMessage = ChatMessage(
+        orderId: AppFirebaseService().orderData.value["orderId"],
+        id: int.parse(time),
+        message: messageText,
+        receiverId: int.parse(
+            AppFirebaseService().orderData.value["userId"].toString()),
+        senderId: preference.getUserDetail()!.id,
+        time: int.parse(time),
+        msgSendBy: "1",
+        awsUrl: awsUrl,
+        base64Image: base64Image,
+        downloadedPath: downloadedPath,
+        msgType: msgType,
+        kundliId: kundliId,
+        productPrice: productPrice,
+        title: giftId ?? "${userData?.name} sent you a message.",
+        type: 0,
+        productId: productId,
+        userType: "astrologer",
+        getCustomProduct: getCustomProduct,
+      );
+    } else if (msgType == MsgType.product) {
+      final isPooja = data?['data']['isPooja'] as bool;
+      if (isPooja) {
+        final productDetails = data?['data']['poojaData'] as Pooja;
+        final saveRemediesData =
+            data?['data']['saveRemediesData'] as SaveRemediesResponse;
+        newMessage = ChatMessage(
+          message: productDetails.poojaName,
+          astrologerId: userData?.id,
+          id: int.parse(time),
+          time: int.parse(time),
+          isSuspicious: 0,
+          isPoojaProduct: true,
+          awsUrl: productDetails.poojaImg ?? '',
+          msgType: MsgType.pooja,
+          suggestedId: saveRemediesData.data!.id,
+          type: 0,
+          msgSendBy: "1",
+          orderId: AppFirebaseService().orderData.value["orderId"],
+          userType: "astrologer",
+          memberId: saveRemediesData.data!.id,
+          productId: productDetails.id.toString(),
+          shopId: productDetails.id.toString(),
+          // msgStatus: MsgStatus.sent,
+          receiverId: int.parse(
+              AppFirebaseService().orderData.value["userId"].toString()),
+          senderId: preference.getUserDetail()!.id,
+          getPooja: GetPooja(
+            poojaName: productDetails.poojaName,
+            id: productDetails.id,
+            gst: productDetails.gst,
+            poojaDesc: productDetails.poojaDesc,
+            poojaImage: productDetails.poojaImg,
+            poojaPriceInr: productDetails.poojaStartingPriceInr,
+          ),
+        );
+      } else {
+        final productData =
+            data?['data']['saveRemedies'] as SaveRemediesResponse;
+        final productDetails = data?['data']['product_detail'] as Products;
+        print("going in");
+        newMessage = ChatMessage(
+            message: productDetails.prodName,
+            title: productDetails.prodName,
+            astrologerId: preferenceService.getUserDetail()!.id,
+            time: int.parse(time),
+            id: int.parse(time),
+            isSuspicious: 0,
+            suggestedId: productData.data!.id,
+            userType: "astrologer",
+            isPoojaProduct: false,
+            awsUrl: userData?.image ?? '',
+            msgType: MsgType.product,
+            msgSendBy: "1",
+            type: 0,
+            orderId: AppFirebaseService().orderData.value["orderId"],
+            memberId: productData.data?.id ?? 0,
+            productId: productData.data?.productId.toString(),
+            shopId: productData.data?.shopId.toString(),
+            receiverId: int.parse(
+                AppFirebaseService().orderData.value["userId"].toString()),
+            senderId: preference.getUserDetail()!.id,
+            getProduct: GetProduct(
+              prodName: productDetails.prodName,
+              id: productDetails.id,
+              gst: productDetails.gst,
+              prodDesc: productDetails.prodDesc,
+              prodImage: productDetails.prodImage,
+              productLongDesc: productDetails.productLongDesc,
+              productPriceInr: productDetails.productPriceInr,
+            ));
+      }
+    } else {
+      print("new message added text type");
+      newMessage = ChatMessage(
+        orderId: AppFirebaseService().orderData.value["orderId"],
+        id: int.parse(time),
+        message: messageText,
+        receiverId: int.parse(
+            AppFirebaseService().orderData.value["userId"].toString()),
+        senderId: preference.getUserDetail()!.id,
+        time: int.parse(time),
+        awsUrl: awsUrl,
+        msgSendBy: "1",
+        productId: productId,
+        base64Image: base64Image,
+        downloadedPath: downloadedPath,
+        msgType: msgType,
+        kundliId: kundliId,
+        title: giftId ?? "${userData?.name} sent you a message.",
+        type: 0,
+        userType: "astrologer",
+      );
+    }
+    print("last message  ${chatMessages.last.message}");
+    scrollToBottomFunc();
     firebaseDatabase
         .ref()
         .child(
             "chatMessages/${AppFirebaseService().orderData.value["orderId"]}/$time")
-        .update({});
+        .update(
+          newMessage.toOfflineJson(),
+        );
   }
 }

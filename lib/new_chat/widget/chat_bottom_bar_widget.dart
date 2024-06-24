@@ -184,6 +184,7 @@ class _ChatBottomBarWidgetState extends State<ChatBottomBarWidget> {
                     InkWell(
                         onTap: () {
                           // write  logic for send msg code
+                          // widget.controller!.sendNewMessage();
                         },
                         child: Center(
                           child: SvgPicture.asset(
