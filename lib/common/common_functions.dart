@@ -29,11 +29,8 @@ Future<String> uploadImageToS3Bucket(
   var commonConstants = await userRepository.constantDetailsData();
   var dataString = commonConstants.data!.awsCredentails.baseurl?.split(".");
   var extension = p.extension(selectedFile!.path);
-  if(commonConstants?.data != null){
-
+  if (commonConstants?.data != null) {
     imageUploadBaseUrl.value = commonConstants?.data?.imageUploadBaseUrl ?? "";
-
-
   }
   print("extension: " + extension);
   var response = await AwsS3.uploadFile(
@@ -59,10 +56,9 @@ Future<String?> uploadImageFileToAws(
     {required File file, required String moduleName}) async {
   var token = preferenceService.getToken();
 
-  var uri =
-      Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
-print(ApiProvider.imageBaseUrl);
-print("ApiProvider.imageBaseUrl");
+  var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+  print(ApiProvider.imageBaseUrl);
+  print("ApiProvider.imageBaseUrl");
   var request = http.MultipartRequest('POST', uri);
 
   request.headers.addAll({

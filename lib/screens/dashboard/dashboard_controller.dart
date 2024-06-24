@@ -6,19 +6,14 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/ChatOrderResponse.dart';
-import 'package:divine_astrologer/model/constant_model_class.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/force_update_sheet.dart';
-import 'package:divine_astrologer/zego_call/zego_service.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
@@ -28,6 +23,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../cache/custom_cache_manager.dart';
+import '../../common/app_exception.dart';
+import '../../common/app_textstyle.dart';
+import '../../common/common_functionsdart';
 import '../../common/app_exception.dart';
 import '../../common/app_textstyle.dart';
 import '../../common/common_functions.dart';
@@ -417,7 +415,7 @@ class DashboardController extends GetxController
           );
           // showTutorial(context);
         } else {
-         // showTutorial(context);
+          // showTutorial(context);
         }
       }
 
