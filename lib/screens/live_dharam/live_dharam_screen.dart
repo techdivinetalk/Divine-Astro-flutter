@@ -936,23 +936,29 @@ class _LivePage extends State<LiveDharamScreen>
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    msg.userName ?? "",
-                                    // nameWithWithoutIDs(msg, isModerator),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: isBlocked
-                                          ? Colors.red
-                                          : isModerator
-                                              ? appColors.guideColor
-                                              : msg.fullGiftImage.isNotEmpty
-                                                  ? appColors.black
-                                                  : msg.message.contains(
-                                                          "Started following")
-                                                      ? appColors.black
-                                                      : Colors.white,
+                                  Container(
+                                    constraints: BoxConstraints(
+                                      maxWidth: Get.width /
+                                          2.5, // Define the maximum width here
                                     ),
-                                    overflow: TextOverflow.ellipsis,
+                                    child: Text(
+                                      msg.userName ?? "",
+                                      // nameWithWithoutIDs(msg, isModerator),
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: isBlocked
+                                            ? Colors.red
+                                            : isModerator
+                                                ? appColors.guideColor
+                                                : msg.fullGiftImage.isNotEmpty
+                                                    ? appColors.black
+                                                    : msg.message.contains(
+                                                            "Started following")
+                                                        ? appColors.black
+                                                        : Colors.white,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
                                   Container(
                                     constraints: BoxConstraints(

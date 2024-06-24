@@ -1,7 +1,7 @@
-import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/waiting_list_queue.dart';
 import 'package:divine_astrologer/repository/waiting_list_queue_repository.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -10,7 +10,6 @@ import 'package:get/get.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/cached_network_image.dart';
 import '../../../common/colors.dart';
-
 import '../../../gen/assets.gen.dart';
 import '../../../utils/enum.dart';
 import 'wait_list_controller.dart';
@@ -33,72 +32,24 @@ class WaitListUI extends GetView<WaitListUIController> {
             )),
       ),
       body: GetBuilder<WaitListUIController>(
-          init: WaitListUIController(WaitingListQueueRepo()),
-          assignId: true,
-          builder: (controller) {
-            if (controller.loading == Loading.loading) {
-              return const Center(
-                child: CircularProgressIndicator.adaptive(
-                  valueColor: AlwaysStoppedAnimation(Colors.yellow),
-                ),
-              );
-            } else if (controller.waitingPersons.isEmpty) {
-              return Center(
-                child: Text("jobTitle".tr),
-              );
-            } else {
-              return SingleChildScrollView(
-                child: Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "nextInLine".tr,
-                        style: AppTextStyle.textStyle20(
-                            fontColor: appColors.darkBlue),
-                      ),
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      waitingListTile(
-                        controller.waitingPersons[0].getCustomers!,
-                        controller.waitingPersons[0].waitTime ?? 0,
-                        controller.waitingPersons[0],
-                        controller: controller,
-                        index: 0,
-                      ),
-                      Padding(
-                        padding: EdgeInsets.symmetric(vertical: 10.h),
-                        child: const Divider(),
-                      ),
-                      Text(
-                        "waitingQueue".tr,
-                        style: AppTextStyle.textStyle20(
-                            fontColor: appColors.darkBlue),
-                      ),
-                      SizedBox(
-                        height: 15.h,
-                      ),
-                      ListView.builder(
-                        itemCount: controller.waitingPersons.length - 1,
-                        primary: false,
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          WaitingListQueueData person =
-                              controller.waitingPersons[index + 1];
-                          return waitingListTile(person.getCustomers!,
-                              person.waitTime ?? 0, person,
-                              index: index + 1, controller: controller);
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-              );
-            }
-          }),
+        init: WaitListUIController(WaitingListQueueRepo()),
+        builder: (controller) {
+          return CustomScrollView(
+            physics: const BouncingScrollPhysics(
+                parent: AlwaysScrollableScrollPhysics()),
+            slivers: [
+              CupertinoSliverRefreshControl(
+                onRefresh: () async {
+                  await controller.getWaitingList();
+                },
+              ),
+              SliverToBoxAdapter(
+                child: _buildBody(controller),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -169,6 +120,76 @@ class WaitListUI extends GetView<WaitListUIController> {
         ],
       ),
     );
+  }
+
+  Widget _buildBody(WaitListUIController controller) {
+    if (controller.loading == Loading.loading) {
+      return Center(
+        child: CircularProgressIndicator.adaptive(
+          valueColor: AlwaysStoppedAnimation(Colors.yellow),
+        ),
+      );
+    } else if (controller.waitingPersons.isEmpty) {
+      return Center(
+        child: Text("jobTitle".tr),
+      );
+    } else {
+      return SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 15.h),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "nextInLine".tr,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 20.sp,
+                  color: Colors.blue,
+                ),
+              ),
+              SizedBox(height: 15.h),
+              waitingListTile(
+                controller.waitingPersons[0].getCustomers!,
+                controller.waitingPersons[0].waitTime ?? 0,
+                controller.waitingPersons[0],
+                controller: controller,
+                index: 0,
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10.h),
+                child: const Divider(),
+              ),
+              Text(
+                "waitingQueue".tr,
+                style: TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 20.sp,
+                  color: Colors.blue,
+                ),
+              ),
+              SizedBox(height: 15.h),
+              ListView.builder(
+                itemCount: controller.waitingPersons.length - 1,
+                primary: false,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  WaitingListQueueData person =
+                      controller.waitingPersons[index + 1];
+                  return waitingListTile(
+                    person.getCustomers!,
+                    person.waitTime ?? 0,
+                    person,
+                    index: index + 1,
+                    controller: controller,
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    }
   }
 }
 
