@@ -68,15 +68,21 @@ class NewChatController extends GetxController {
   @override
   void onInit() {
     if (AppFirebaseService().orderData.isNotEmpty) {
-      print("order is not empty");
+      initialiseControllers();
     }
-    initialiseControllers();
     getDir();
     getAllApiDataInChat();
     messageController.addListener(onMessageChanged);
-    Future.delayed(
-      const Duration(milliseconds: 300),
-      () {
+    FirebaseDatabase.instance
+        .ref("chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
+        .onChildAdded
+        .listen(
+      (event) {
+        print(jsonDecode(jsonEncode(event.snapshot.value)));
+        print("jsonDecode(jsonEncode(event.snapshot.value))");
+        ChatMessage chatMessage = ChatMessage.fromOfflineJson(
+            jsonDecode(jsonEncode(event.snapshot.value)));
+        chatMessages.add(chatMessage);
         scrollToBottomFunc();
       },
     );
@@ -336,9 +342,6 @@ class NewChatController extends GetxController {
     );
     List<int> imageBytes = File(result!.path).readAsBytesSync();
     String base64Image = base64Encode(imageBytes);
-    print("IMAGE STEP UPLOAD 2");
-    // print("IMAGE STEP UPLOAD 2 ${fileData.path}");
-    String time = ("${DateTime.now().millisecondsSinceEpoch ~/ 1000}");
     var uploadFile = await uploadImageFileToAws(
         file: File(fileData.path), moduleName: "chat");
     print("IMAGE STEP UPLOAD 3 $uploadFile");
@@ -401,7 +404,6 @@ class NewChatController extends GetxController {
           int.parse(AppFirebaseService().orderData.value["userId"].toString())
     });
     if (result != null) {
-      final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       // write code for send product
       addNewMessage(
         msgType: MsgType.product,
@@ -532,8 +534,6 @@ class NewChatController extends GetxController {
 
   sendGiftFunc(GiftData item, num quantity) {
     if (item.giftName.isNotEmpty) {
-      final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-
       /// write code ask gift
       // unreadMessageIndex.value = -1;
       addNewMessage(
@@ -569,15 +569,17 @@ class NewChatController extends GetxController {
         userId,
         astroId,
       );
-
       if (response.success ?? false) {
-        // endChatLoader.value = false;
         if (response.chatMessages!.isNotEmpty) {
           chatMessages.clear();
           chatMessages.addAll(response.chatMessages!.reversed);
           update();
-          print("ChatMessage Data:: ${chatMessages.toJson()}");
-          print("orderIdorderIdorderIdorderId");
+          Future.delayed(
+            const Duration(milliseconds: 200),
+            () {
+              scrollToBottomFunc();
+            },
+          );
         }
       } else {
         throw CustomException(response.message ?? 'Failed to get chat history');
@@ -731,15 +733,16 @@ class NewChatController extends GetxController {
         userType: "astrologer",
       );
     }
+    print(jsonEncode(newMessage));
+    print("jsonEncode(newMessage)");
+    print("newMessage.toOfflineJson()");
     firebaseDatabase
         .ref()
         .child(
             "chatMessages/${AppFirebaseService().orderData.value["orderId"]}/$time")
         .update(
-          newMessage.toOfflineJson(),
+          jsonDecode(jsonEncode(newMessage)),
         );
     print("last message  ${chatMessages.last.message}");
-    chatMessages.value.add(newMessage);
-    scrollToBottomFunc();
   }
 }

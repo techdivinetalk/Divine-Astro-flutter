@@ -85,9 +85,7 @@ class SavedRemediesBottomSheet extends StatelessWidget {
                               return GestureDetector(
                                 onTap: () {
                                   if (newChatController != null) {
-                                    final String time =
-                                        "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-
+print("sending product");
                                     newChatController!.addNewMessage(
                                         msgType: MsgType.customProduct,
                                         messageText: data.name,

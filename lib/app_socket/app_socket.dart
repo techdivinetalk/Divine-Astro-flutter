@@ -198,8 +198,8 @@ class AppSocket {
   }
 
   void sendMessageSocket(ChatMessage newMessage) {
-    debugPrint('newMessage.toOfflineJson() ${newMessage.toOfflineJson()}');
-    socket?.emit(ApiProvider().sendMessage, newMessage.toOfflineJson());
+    debugPrint('newMessage.toOfflineJson() ${newMessage.toJson()}');
+    socket?.emit(ApiProvider().sendMessage, newMessage.toJson());
   }
 
   void sendMessageSocketListenerSocket(void Function(dynamic) callback) {

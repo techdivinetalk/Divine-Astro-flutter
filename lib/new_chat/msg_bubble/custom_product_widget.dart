@@ -1,4 +1,3 @@
-
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
@@ -16,9 +15,9 @@ class CustomProductWidget extends StatelessWidget {
   final NewChatController? controller;
   final ChatMessage chatDetail;
   final bool yourMessage;
-  CustomProductWidget({required this.chatDetail, required this.yourMessage, this.controller});
 
-
+  CustomProductWidget(
+      {required this.chatDetail, required this.yourMessage, this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +26,19 @@ class CustomProductWidget extends StatelessWidget {
       child: Container(
         width: 165,
         height: 220,
+        // padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
         decoration: BoxDecoration(
-          color: appColors.white,
-          borderRadius: BorderRadius.circular(10),
-        ),
+            border: Border.all(
+                color: yourMessage
+                    ? const Color(0xffFFEEF0)
+                    : const Color(0xffDCDCDC)),
+            color: yourMessage ? const Color(0xffFFF9FA) : appColors.white,
+            borderRadius: BorderRadius.only(
+              bottomLeft: const Radius.circular(10),
+              topLeft: Radius.circular(yourMessage ? 10 : 0),
+              bottomRight: const Radius.circular(10),
+              topRight: Radius.circular(!yourMessage ? 10 : 0),
+            )),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
@@ -38,7 +46,7 @@ class CustomProductWidget extends StatelessWidget {
               height: 165,
               width: 165,
               imagePath:
-              "$preferenceService/${chatDetail.getCustomProduct!.image}",
+                  "${preferenceService.getAmazonUrl()}/${chatDetail.getCustomProduct!.image}",
               radius: const BorderRadius.vertical(top: Radius.circular(10)),
               placeHolder: "assets/images/default_profiles.svg",
               fit: BoxFit.cover,

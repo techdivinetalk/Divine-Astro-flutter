@@ -27,7 +27,7 @@ class ChatHistoryResponse {
       data['order'] = order!.map((order) => order.toJson()).toList();
     }
     if (this.data != null) {
-      data['data'] = this.data!.map((message) => message.toOfflineJson()).toList();
+      data['data'] = this.data!.map((message) => message.toJson()).toList();
     }
     data['success'] = success;
     data['status_code'] = statusCode;

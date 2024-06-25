@@ -12,13 +12,13 @@ class ChatMessagesOffline {
           chatMessages: json['data'] == null
               ? []
               : List<ChatMessage>.from(
-                  json["data"].map((x) => ChatMessage.fromOfflineJson(x))));
+              json["data"].map((x) => ChatMessage.fromOfflineJson(x))));
 
   Map<String, dynamic> toOfflineJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
 
     if (chatMessages != null) {
-      data['data'] = chatMessages!.map((v) => v.toOfflineJson()).toList();
+      data['data'] = chatMessages!.map((v) => v.toJson()).toList();
     }
     return data;
   }
@@ -212,8 +212,10 @@ class ChatMessage {
     getProduct = (json['get_product'] as Map<String, dynamic>?) != null
         ? GetProduct.fromJson(json['get_product'] as Map<String, dynamic>)
         : null;
-    getCustomProduct = (json['get_custom_product'] as Map<String, dynamic>?) != null
-        ? CustomProduct.fromJson(json['get_custom_product'] as Map<String, dynamic>)
+    getCustomProduct =
+    (json['get_custom_product'] as Map<String, dynamic>?) != null
+        ? CustomProduct.fromJson(
+        json['get_custom_product'] as Map<String, dynamic>)
         : null;
     getPooja = (json['get_pooja'] as Map<String, dynamic>?) != null
         ? GetPooja.fromJson(json['get_pooja'] as Map<String, dynamic>)
@@ -222,74 +224,131 @@ class ChatMessage {
     kundli = json['kundli'] != null ? Kundli.fromJson(json['kundli']) : null;
   }
 
-  Map<String, dynamic> toOfflineJson() {
-    final Map<String, dynamic> data = <String, dynamic>{};
-    data['chatMessageId'] = id;
-    data['order_id'] = orderId;
-    data['get_pooja'] = getPooja;
-    data['get_custom_product'] = getCustomProduct;
-    data['member_id'] = memberId;
-    data['productPrice'] = productPrice;
-    data['role_id'] = roleId;
-    data['latitude'] = latitude;
-    data['longitude'] = longitude;
-    data['get_product'] = getProduct;
-    data['title'] = title;
-    data['customer_id'] = customerId;
-    data['msg_sequence'] = msgSequence;
-    data['msg_type'] = msgTypeValues.reverse[msgType];
-    data['message'] = message;
-    data['multiimage'] = multiImage;
-    data['suggested_remedies_id'] = suggestedId;
-    data['msg_time'] = msgTime;
-    //  data['created_at'] = createdAt;
-    data['updated_at'] = updatedAt;
-    data['msg_send_by'] = msgSendBy;
-    data['shop_id'] = shopId;
-    data['product_id'] = productId;
-    data['is_suspicious'] = isSuspicious;
-    data['is_email_sent'] = isEmailSent;
-    data['kundli_id'] = kundliId;
-    data['seen_status'] = seenStatus;
-    data['base64image'] = base64Image;
-    data['deleted_at'] = deletedAt;
-    data['chat_msg_id'] = chatMsgId;
-    data['is_pooja_product'] = isPoojaProduct == true ? "1" : "0";
+  Map<String, dynamic> toJson() =>
+      {
+        // final Map<String, dynamic> data = <String, dynamic>{};
 
-    data['astrologer_id'] = astrologerId;
-    data['call_initiate'] = callInitiate;
-    data['exotel_initiate_response'] = exotelInitiateResponse;
-    data['call_started_at'] = callStartedAt;
-    data['call_ended_at'] = callEndedAt;
-    data['call_duration'] = callDuration;
+        // data['chatMessageId'] = id;
+        "chatMessageId": id,
 
-    data['exotel_end_response'] = exotelEndResponse;
-    data['exotel_call_sid'] = exotelCallSid;
-    data['call_status'] = callStatus;
-    data['call_reject_reason'] = callRejectReason;
-    data['call_end'] = callEnd;
-    data['call_recording'] = callRecording;
-    data['order_id'] = orderId;
 
-    data['customer_call_status'] = customerCallStatus;
-    data['member_call_status'] = memberCallStatus;
-    data['api_call_from'] = apiCallFrom;
-    data['receiverId'] = receiverId;
-    data['senderId'] = senderId;
-    data['orderId'] = orderId;
-    data['time'] = time;
-    data['type'] = type;
-    data['awsUrl'] = awsUrl;
-    data['downloadedPath'] = downloadedPath;
-    data['kundliId'] = kundliId;
-    data['kundliName'] = kundliName;
-    data['kundliDateTime'] = kundliDateTime;
-    data['kundliPlace'] = kundliPlace;
-    data['gender'] = gender;
-    data['userType'] = userType;
-    data['kundli'] = kundli;
-    return data;
-  }
+        "get_pooja": getPooja,
+
+        "get_custom_product": getCustomProduct,
+
+        "member_id": memberId,
+
+        "productPrice": productPrice,
+
+        "role_id": roleId,
+
+        "latitude": latitude,
+
+        "longitude": longitude,
+
+        "get_product": getProduct,
+
+        "title": title,
+
+        "customer_id": customerId,
+
+        "msg_sequence": msgSequence,
+
+        "msg_type": msgTypeValues.reverse[msgType],
+
+        "message": message,
+
+        "multiimage": multiImage,
+
+        "suggested_remedies_id": suggestedId,
+
+        "msg_time": msgTime,
+
+        "updated_at": updatedAt,
+
+        "msg_send_by": msgSendBy,
+
+        "shop_id": shopId,
+
+        "product_id": productId,
+
+        "is_suspicious": isSuspicious,
+
+        "is_email_sent": isEmailSent,
+
+        "kundli_id": kundliId,
+
+        "seen_status": seenStatus,
+
+        "base64image": base64Image,
+
+        "deleted_at": deletedAt,
+
+        "chat_msg_id": chatMsgId,
+
+        "is_pooja_product": isPoojaProduct == true ? "1" : "0",
+
+        "astrologer_id": astrologerId,
+
+        "call_initiate": callInitiate,
+
+        "exotel_initiate_response": exotelInitiateResponse,
+
+        "call_started_at": callStartedAt,
+
+        "call_ended_at": callEndedAt,
+
+        "call_duration": callDuration,
+
+        "exotel_end_response": exotelEndResponse,
+
+
+        "exotel_call_sid": exotelCallSid,
+
+        "call_status": callStatus,
+
+        "call_reject_reason": callRejectReason,
+
+        "call_end": callEnd,
+
+        "call_recording": callRecording,
+
+        "order_id": orderId,
+        "customer_call_status": customerCallStatus,
+
+        "member_call_status": memberCallStatus,
+
+        "api_call_from": apiCallFrom,
+
+        "receiverId": receiverId,
+
+        "senderId": senderId,
+
+        "orderId": orderId,
+
+        "time": time,
+
+        "type": type,
+
+        "awsUrl": awsUrl,
+
+        "downloadedPath": downloadedPath,
+
+        "kundliId": kundliId,
+
+        "kundliName": kundliName,
+
+        "kundliDateTime": kundliDateTime,
+
+        "kundliPlace": kundliPlace,
+
+        "gender": gender,
+
+        "userType": userType,
+
+        "kundli": kundli,
+
+      };
 }
 
 class GetProduct {
@@ -320,7 +379,8 @@ class GetProduct {
         productLongDesc = json['product_long_desc'] as String?,
         gst = json['gst'] as int?;
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         'id': id,
         'prod_name': prodName,
         'prod_image': prodImage,
@@ -337,7 +397,7 @@ class GetPooja {
   final String? poojaImage;
   final String? poojaDesc;
   final int? poojaPriceInr;
-  final int?  gst;
+  final int? gst;
 
   GetPooja({
     this.id,
@@ -356,7 +416,8 @@ class GetPooja {
         poojaPriceInr = json['pooja_starting_price_inr'] as int?,
         gst = json['gst'] as int?;
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         'id': id,
         'pooja_name': poojaName,
         'pooja_img': poojaImage,
@@ -391,7 +452,8 @@ class CustomProduct {
         amount = json['amount'] as int?,
         astrologerId = json['astrologer_id'] as int?;
 
-  Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() =>
+      {
         'id': id,
         'name': name,
         'image': image,

@@ -841,7 +841,7 @@ class ChatMessageWithSocketController extends GetxController
     }
     // await hiveServices.addData(
     //     key: userDataKey,
-    //     data: jsonEncode(databaseMessage.value.toOfflineJson()));
+    //     data: jsonEncode(databaseMessage.value.toJson()));
   }
 
   void typingListenerSocket() {
@@ -1235,7 +1235,7 @@ class ChatMessageWithSocketController extends GetxController
     socket.sendMessageSocket(newMessage);
     scrollToBottomFunc();
     print("newMessage10909");
-    print(newMessage.toOfflineJson());
+    print(newMessage.toJson());
 
     updateChatMessages(newMessage, false, isSendMessage: true);
     print("last message  ${chatMessages.last.message}");
@@ -1299,7 +1299,7 @@ class ChatMessageWithSocketController extends GetxController
             .id ??
         -1;
     chatMessages.refresh();
-    setHiveDataDatabase();
+
     if (!isFromNotification) {
       print("isFromNotification-->>${isFromNotification}");
       updateReadMessageStatus();
@@ -1307,15 +1307,7 @@ class ChatMessageWithSocketController extends GetxController
     }
   }
 
-  Future<void> setHiveDataDatabase() async {
-    final HiveServices hiveServices = HiveServices(boxName: userChatData);
-    await hiveServices.initialize();
-    databaseMessage.value.chatMessages = chatMessages;
-    await hiveServices.addData(
-      key: userDataKey,
-      data: jsonEncode(databaseMessage.value.toOfflineJson()),
-    );
-  }
+
 
   scrollToBottomFunc() {
     if (messgeScrollController.hasClients) {
@@ -1618,7 +1610,7 @@ class ChatMessageWithSocketController extends GetxController
     });
     chatMessages[index2].downloadedPath = filePathAndName;
     chatMessages.refresh();
-    setHiveDataDatabase();
+
     update();
   }
 
