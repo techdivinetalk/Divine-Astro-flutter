@@ -44,6 +44,7 @@ import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart
 import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_astro_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
+import "package:easy_debounce/easy_throttle.dart";
 
 // import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:firebase_database/firebase_database.dart";
@@ -138,14 +139,21 @@ class _LivePage extends State<LiveDharamScreen>
         );
         if (data['gift'] != null) {
           List<dynamic> giftList = data['gift'] ?? [];
+          Map<String, dynamic> newUrls = {};
           for (var gift in giftList) {
             gift.forEach((key, value) {
               print(value);
-              svgaUrls[key.toString()] = value.toString();
-              if (svgaUrls.length == 1) {
-                _loadRandomAnimation(gifts: svgaUrls, giftList: giftList);
+              newUrls[key.toString()] = value.toString();
+              if (newUrls.length == 1) {
+                // _loadRandomAnimation(gifts: svgaUrls, giftList: giftList);
               }
             });
+          }
+          if (!_controller.areMapsSame(svgaUrls, newUrls) &&
+              giftList.isNotEmpty &&
+              newUrls.length == 1) {
+            svgaUrls = newUrls;
+            _loadRandomAnimation(gifts: svgaUrls, giftList: giftList);
           }
         }
       } else {
@@ -213,14 +221,13 @@ class _LivePage extends State<LiveDharamScreen>
     const SVGAParser parser = SVGAParser();
     String giftInfo = svgaUrls.entries.first.value;
     File file = await CustomCacheManager().getFile(giftInfo);
-    await parser.decodeFromBuffer(file.readAsBytesSync()).then((videoItem) {
-      print("svgaUrls.videoItem");
-      _svgController.videoItem = videoItem;
-      _svgController.forward();
-    });
+    var videoItem = await parser.decodeFromBuffer(file.readAsBytesSync());
+    print("svgaUrls.videoItem");
+    _svgController.videoItem = videoItem;
+    _svgController.forward();
     if (gifts != null && giftList != null) {
       Future.delayed(
-        const Duration(seconds: 1),
+        const Duration(seconds: 0),
         () async {
           print("gifts----  $gifts");
           print("giftList--- $giftList");

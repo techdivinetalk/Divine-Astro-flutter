@@ -233,8 +233,6 @@ class LiveDharamController extends GetxController {
 
   set isMod(bool value) => _isMod(value);
 
-
-
   String get hostSpeciality => _hostSpeciality.value;
 
   set hostSpeciality(String value) => _hostSpeciality(value);
@@ -262,7 +260,6 @@ class LiveDharamController extends GetxController {
   bool get showTopBanner => _showTopBanner.value;
 
   set showTopBanner(bool value) => _showTopBanner(value);
-
 
   List<BlockedCustomerListResData> blockedCustomerList = [];
 
@@ -296,7 +293,6 @@ class LiveDharamController extends GetxController {
   bool get hasFollowPopupOpen => _hasFollowPopupOpen.value;
 
   set hasFollowPopupOpen(bool value) => _hasFollowPopupOpen(value);
-
 
   RequestClass get requestClass => _requestClass.value;
 
@@ -356,7 +352,6 @@ class LiveDharamController extends GetxController {
           }
 
           if (liveIdNode["LiveOrder"] != null) {
-
             var orderNode = liveIdNode["LiveOrder"];
             currentCaller = getOrderModelGeneric(orderNode);
           } else {
@@ -548,6 +543,7 @@ class LiveDharamController extends GetxController {
 
     return Future<void>.value();
   }
+
   Future<void> removeFromOrder() async {
     print("remove order from firebase");
 
@@ -889,6 +885,34 @@ class LiveDharamController extends GetxController {
       data.add("Instagram Id");
     } else {}
     return data.isEmpty ? "" : data.join(", ");
+  }
+
+  bool areArraysSame(List<dynamic> array1, List<dynamic> array2) {
+    if (array1.length != array2.length) {
+      return false;
+    }
+
+    for (int i = 0; i < array1.length; i++) {
+      if (array1[i] != array2[i]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  bool areMapsSame(Map<String, dynamic> map1, Map<String, dynamic> map2) {
+    if (map1.length != map2.length) {
+      return false;
+    }
+
+    for (String key in map1.keys) {
+      if (!map2.containsKey(key) || map1[key] != map2[key]) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
 
