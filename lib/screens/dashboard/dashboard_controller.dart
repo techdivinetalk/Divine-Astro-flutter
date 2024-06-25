@@ -6,19 +6,14 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/ChatOrderResponse.dart';
-import 'package:divine_astrologer/model/constant_model_class.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/force_update_sheet.dart';
-import 'package:divine_astrologer/zego_call/zego_service.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
@@ -28,6 +23,9 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../cache/custom_cache_manager.dart';
+import '../../common/app_exception.dart';
+import '../../common/app_textstyle.dart';
+
 import '../../common/app_exception.dart';
 import '../../common/app_textstyle.dart';
 import '../../common/common_functions.dart';
@@ -44,6 +42,7 @@ class DashboardController extends GetxController
   DashboardController(this.repository);
 
   RxInt selectedIndex = 0.obs;
+
   void setSelectedIndex(int index) {
     selectedIndex.value = index;
   }
@@ -95,7 +94,8 @@ class DashboardController extends GetxController
       // Check permissions when app is resumed
       checkPermissions();
       getOrderFromApi();
-      if (preferenceService.getUserDetail() != null) { // Check for null user details
+      if (preferenceService.getUserDetail() != null) {
+        // Check for null user details
         appFirebaseService.readData(
             'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
       } else {
@@ -172,7 +172,6 @@ class DashboardController extends GetxController
     await [
       Permission.camera,
       Permission.microphone,
-      Permission.storage,
     ].request();
     Get.back(); // Close the bottom sheet after requesting permissions
     if (await FlutterOverlayWindow.isPermissionGranted() == false) {
@@ -260,6 +259,11 @@ class DashboardController extends GetxController
       print("is logged out");
     }
     commonConstants = await userRepository.constantDetailsData();
+    if (commonConstants?.data != null) {
+      imageUploadBaseUrl.value =
+          commonConstants?.data?.imageUploadBaseUrl ?? "";
+      update();
+    }
     preferenceService.setConstantDetails(commonConstants);
     preferenceService
         .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
@@ -394,6 +398,10 @@ class DashboardController extends GetxController
     try {
       final data = await userRepository.constantDetailsData();
       if (data.data != null) {
+        imageUploadBaseUrl.value = data?.data?.imageUploadBaseUrl ?? "";
+
+        update();
+
         PackageInfo packageInfo = await PackageInfo.fromPlatform();
         print(data.data!.appVersion!.split(".").join(""));
         print(packageInfo.version.split(".").join(""));
@@ -407,7 +415,7 @@ class DashboardController extends GetxController
           );
           // showTutorial(context);
         } else {
-          showTutorial(context);
+          // showTutorial(context);
         }
       }
 
@@ -967,8 +975,10 @@ class DashboardController extends GetxController
 
   void showTutorial(context) {
     TutorialCoachMark(
-      targets: createTargets(), // List<TargetFocus>
-      colorShadow: Colors.black, // DEFAULT Colors.black
+      targets: createTargets(),
+      // List<TargetFocus>
+      colorShadow: Colors.black,
+      // DEFAULT Colors.black
       // alignSkip: Alignment.bottomRight,
       // textSkip: "SKIP",
       // showSkipInLastTarget: true,
@@ -1013,5 +1023,36 @@ class DashboardController extends GetxController
     } catch (e) {
       debugPrint("Error caching gifts: $e");
     }
+  }
+
+  var isLoading = false.obs;
+  var submitTermsAndCondition;
+  void postAcceptTerms(noticeId) async {
+    isLoading(true);
+    Map<String, dynamic> param = {
+      "notice_id": noticeId,
+    };
+    try {
+      final rstatus = await repository.postTermsConditionSubmit(param);
+
+      if (rstatus.success == true) {
+        submitTermsAndCondition = rstatus;
+        isLoading(false);
+        Get.back();
+      } else {
+        isLoading(false);
+      }
+      update();
+    } catch (error) {
+      isLoading(false);
+    }
+  }
+
+  // RxBool is a reactive boolean observable
+  var isChecked = false.obs;
+
+// Method to toggle the checkbox state
+  void toggleCheckbox() {
+    isChecked.value = !isChecked.value;
   }
 }

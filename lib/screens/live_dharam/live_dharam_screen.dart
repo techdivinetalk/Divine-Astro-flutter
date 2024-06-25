@@ -123,7 +123,7 @@ class _LivePage extends State<LiveDharamScreen>
         if (snapshotData != null) {
           data["isAvailable"] = snapshotData["isAvailable"];
           data["blockList"] = snapshotData["blockList"];
-          data["order"] = snapshotData["order"];
+          data["LiveOrder"] = snapshotData["LiveOrder"];
           data["waitList"] = snapshotData["waitList"];
           data["leaderBoard"] = snapshotData["leaderBoard"];
           data["gift"] = snapshotData["gift"];
@@ -850,14 +850,17 @@ class _LivePage extends State<LiveDharamScreen>
   Map<String, dynamic> svgaUrls = {};
 
   Widget newLeaderboard() {
+    List<LeaderboardModel> newList = [];
+    newList.addAll(_controller.leaderboardModel);
+    newList.sort((a, b) => b.amount!.compareTo(a.amount!));
     return AnimatedOpacity(
-      opacity: _controller.leaderboardModel.isEmpty ? 0.0 : 1.0,
+      opacity: newList.isEmpty ? 0.0 : 1.0,
       duration: const Duration(seconds: 1),
-      child: _controller.leaderboardModel.isEmpty
+      child: newList.isEmpty
           ? const SizedBox()
           : LeaderBoardWidget(
-              avatar: _controller.leaderboardModel.first.avatar,
-              userName: _controller.leaderboardModel.first.userName,
+              avatar: newList.first.avatar,
+              userName: newList.first.userName,
               fullGiftImage: "",
               astrologerName: "Astrologer",
               //
@@ -936,23 +939,30 @@ class _LivePage extends State<LiveDharamScreen>
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    msg.userName ?? "",
-                                    // nameWithWithoutIDs(msg, isModerator),
-                                    style: TextStyle(
-                                      fontSize: 14,
-                                      color: isBlocked
-                                          ? Colors.red
-                                          : isModerator
-                                              ? appColors.guideColor
-                                              : msg.fullGiftImage.isNotEmpty
-                                                  ? appColors.black
-                                                  : msg.message.contains(
-                                                          "Started following")
-                                                      ? appColors.black
-                                                      : Colors.white,
+                                  Container(
+                                    constraints: BoxConstraints(
+                                      maxWidth: Get.width /
+                                          2.5, // Define the maximum width here
                                     ),
-                                    overflow: TextOverflow.ellipsis,
+                                    child: Text(
+                                      msg.userName ?? "",
+                                      // nameWithWithoutIDs(msg, isModerator),
+                                      maxLines: 100000,
+                                      style: TextStyle(
+                                        fontSize: 14,
+                                        color: isBlocked
+                                            ? Colors.red
+                                            : isModerator
+                                                ? appColors.guideColor
+                                                : msg.fullGiftImage.isNotEmpty
+                                                    ? appColors.black
+                                                    : msg.message.contains(
+                                                            "Started following")
+                                                        ? appColors.black
+                                                        : Colors.white,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
                                   Container(
                                     constraints: BoxConstraints(
@@ -961,7 +971,7 @@ class _LivePage extends State<LiveDharamScreen>
                                     ),
                                     child: Text(
                                       msg.message ?? "",
-                                      maxLines: 2,
+                                      maxLines: 100000,
                                       style: TextStyle(
                                         fontSize: 13,
                                         color: isBlocked

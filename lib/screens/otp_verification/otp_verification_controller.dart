@@ -10,19 +10,20 @@ import 'package:divine_astrologer/di/progress_service.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_authentication.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
+import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/screens/otp_verification/timer_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
 import '../../common/app_exception.dart';
 import '../../common/colors.dart';
 import '../../common/common_functions.dart';
 import '../../common/routes.dart';
-import '../../model/firebase_model.dart';
 import '../../model/res_login.dart';
 import '../../model/send_otp.dart';
 import '../../model/verify_otp.dart';
@@ -60,10 +61,15 @@ class OtpVerificationController extends GetxController {
       sessionId = args[1];
       countryCode = args[2];
     }
-    FirebaseMessaging.instance.getToken().then((value) {
-      debugPrint(value);
-      deviceToken = value;
-    });
+    try {
+      FirebaseMessaging.instance.getToken().then((value) {
+        debugPrint(value);
+        deviceToken = value;
+      });
+    } catch (e) {
+      print("Error getting FCM token: $e");
+      FirebaseCrashlytics.instance.recordError(e, null);
+    }
     super.onReady();
   }
 
@@ -150,7 +156,12 @@ class OtpVerificationController extends GetxController {
       print("jsonEncode(data.data)");
       if (data.data != null) {
         var commonConstants = await userRepository.constantDetailsData();
+        if(commonConstants?.data != null){
 
+          imageUploadBaseUrl.value = commonConstants?.data?.imageUploadBaseUrl ?? "";
+
+
+        }
         if (commonConstants.data!.token != null) {
           customTokenWithFirebase(
             token: commonConstants.data!.token,

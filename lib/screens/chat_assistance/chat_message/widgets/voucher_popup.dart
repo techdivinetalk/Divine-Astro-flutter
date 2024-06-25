@@ -9,7 +9,6 @@ import '../../../../common/colors.dart';
 import '../../../../gen/assets.gen.dart';
 import '../chat_assistant_message_controller.dart';
 
-
 voucherPopUp(BuildContext context) {
   return showModalBottomSheet(
       backgroundColor: Colors.transparent,

@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/screens/profile_options/upload_story/upload_story_controller.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
 class UploadStoryUi extends GetView<UploadStoryController> {
@@ -28,6 +28,10 @@ class UploadStoryUi extends GetView<UploadStoryController> {
                   onTap: () {
                     Fluttertoast.showToast(msg: "${'uploadStory'.tr}..");
                     controller.saveVideo();
+
+                    // controller.encodedURLFunction();
+                    // String fullEncodeURL = controller.encodedURLFunction();
+                    // print("fullEncodeURL: $fullEncodeURL");
                   },
                   child: const Text("Upload"),
                 ),
@@ -54,7 +58,6 @@ class UploadStoryUi extends GetView<UploadStoryController> {
                             );
 
                             controller.selectedFile?.value = true;
-
                           }
                           controller.update();
                         },
@@ -74,7 +77,7 @@ class UploadStoryUi extends GetView<UploadStoryController> {
                               viewerHeight: 50.0,
                               viewerWidth: MediaQuery.of(context).size.width,
                               maxVideoLength: const Duration(seconds: 30),
-                              onChangeStart: (value){
+                              onChangeStart: (value) {
                                 print(value.runtimeType);
                                 print("value.runtimeTyp");
                                 controller.startValue = value;
@@ -82,8 +85,7 @@ class UploadStoryUi extends GetView<UploadStoryController> {
                                 print(controller.startValue.runtimeType);
                                 print("controller.startValue.runtimeType");
                                 controller.update();
-                              }
-                                  ,
+                              },
                               onChangeEnd: (value) =>
                                   controller.endValue = value,
                               onChangePlaybackState: (value) {
@@ -194,6 +196,4 @@ class UploadStoryUi extends GetView<UploadStoryController> {
       },
     );
   }
-
-
 }

@@ -52,9 +52,9 @@ class LiveTipsController extends GetxController {
           description.lensDirection == CameraLensDirection.front),
       ResolutionPreset.max,
     );
+    DeviceOrientation portraitMode = DeviceOrientation.portraitUp;
+    controller?.lockCaptureOrientation(portraitMode);
     controller!.initialize().then((_) {
-      // portrait mode
-      DeviceOrientation portraitMode = DeviceOrientation.portraitUp;
       controller?.lockCaptureOrientation(portraitMode);
       if (!Get.context!.mounted) {
         CameraLensDirection.front;
@@ -129,6 +129,7 @@ class LiveTipsController extends GetxController {
         "id": userId,
         "isAvailable": true,
         "blockList": blockedCustomerList,
+        "gift": FieldValue.arrayUnion([]),
       },
     ).then((value) async {
       print("Astrologer node added");

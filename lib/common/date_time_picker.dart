@@ -10,13 +10,13 @@ import 'date_picker/date_picker_widget.dart';
 class DateTimePicker extends StatelessWidget {
   const DateTimePicker(
       {Key? key,
-        required this.pickerStyle,
-        required this.initialDate,
-        required this.title,
-        required this.looping,
-        required this.onConfirm,
-        required this.onChange,
-        required this.buttonTitle})
+      required this.pickerStyle,
+      required this.initialDate,
+      required this.title,
+      required this.looping,
+      required this.onConfirm,
+      required this.onChange,
+      required this.buttonTitle})
       : super(key: key);
 
   final String pickerStyle, title, buttonTitle;
@@ -51,8 +51,9 @@ class DateTimePicker extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         Container(
-          decoration:  BoxDecoration(
-            borderRadius:const BorderRadius.vertical(top: Radius.circular(50.0)),
+          decoration: BoxDecoration(
+            borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(50.0)),
             color: appColors.white,
           ),
           child: Column(
@@ -72,7 +73,7 @@ class DateTimePicker extends StatelessWidget {
                 color: appColors.transparent,
                 child: Text(
                   title,
-                  style:  TextStyle(
+                  style: TextStyle(
                       fontWeight: FontWeight.w700,
                       color: appColors.darkBlue,
                       fontSize: 20.0),
@@ -115,7 +116,7 @@ class DateTimePicker extends StatelessWidget {
                     pickerHeight: 180,
                     itemHeight: 44,
                     backgroundColor: appColors.white,
-                    itemTextStyle:  TextStyle(
+                    itemTextStyle: TextStyle(
                         color: appColors.darkBlue,
                         fontSize: 20,
                         fontWeight: FontWeight.w700),

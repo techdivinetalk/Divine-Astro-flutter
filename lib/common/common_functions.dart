@@ -4,22 +4,19 @@ import 'dart:io';
 import 'package:aws_s3_upload/aws_s3_upload.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
-
 import 'package:divine_astrologer/model/chat/req_common_chat_model.dart';
 import 'package:divine_astrologer/repository/chat_repository.dart';
-import 'package:firebase_database/firebase_database.dart';
+import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:path/path.dart' as p;
 
 import '../di/hive_services.dart';
 import '../di/shared_preference_service.dart';
 import '../model/chat/res_common_chat_success.dart';
 import '../model/chat_offline_model.dart';
-import 'package:divine_astrologer/repository/user_repository.dart';
-import 'package:path/path.dart' as p;
-
 import '../screens/live_page/constant.dart';
 import 'colors.dart';
 
@@ -32,6 +29,9 @@ Future<String> uploadImageToS3Bucket(
   var commonConstants = await userRepository.constantDetailsData();
   var dataString = commonConstants.data!.awsCredentails.baseurl?.split(".");
   var extension = p.extension(selectedFile!.path);
+  if (commonConstants?.data != null) {
+    imageUploadBaseUrl.value = commonConstants?.data?.imageUploadBaseUrl ?? "";
+  }
   print("extension: " + extension);
   var response = await AwsS3.uploadFile(
     // accessKey: commonConstants.data.awsCredentails.accesskey!,
@@ -56,10 +56,9 @@ Future<String?> uploadImageFileToAws(
     {required File file, required String moduleName}) async {
   var token = preferenceService.getToken();
 
-  var uri =
-      Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
-print(ApiProvider.imageBaseUrl);
-print("ApiProvider.imageBaseUrl");
+  var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+  print(ApiProvider.imageBaseUrl);
+  print("ApiProvider.imageBaseUrl");
   var request = http.MultipartRequest('POST', uri);
 
   request.headers.addAll({
@@ -95,31 +94,31 @@ print("ApiProvider.imageBaseUrl");
 
 void checkNotification(
     {required bool isFromNotification, Map? updatedData}) async {
-      // if (Get.currentRoute == RouteName.chatMessageUI) {
-      //   var chatController = Get.find<ChatMessageController>();
-      //   if (chatController.currentUserId.value == value["sender_id"] ||
-      //       chatController.currentUserId.value == value["receiver_id"]) {
-      //     chatController.updateChatMessages(newMessage, true);
-      //     if (value["sender_id"] == chatController.currentUserId.value) {
-      //       chatController.updateChatMessages(newMessage, true);
-      //     }
-      //   } else {
-      //     if (value["type"] == 0) {
-      //       showNotificationWithActions(message: "${value["message"]}", title: "${value["title"]}");
-      //       updateMsgDelieveredStatus(newMessage, 1);
-      //     }
-      //
-      //     setHiveDatabase("userKey_${userData?.id}_$senderId", newMessage);
-      //   }
-      // } else {
-      //   if (value["type"] == 0) {
-      //     showNotificationWithActions(message: "${value["message"]}", title: "${value["title"]}");
-      //     updateMsgDelieveredStatus(newMessage, 1);
-      //   }
-      //
-      //   setHiveDatabase("userKey_${userData?.id}_$senderId", newMessage);
-      // }
-    //  removeNotificationNode();
+  // if (Get.currentRoute == RouteName.chatMessageUI) {
+  //   var chatController = Get.find<ChatMessageController>();
+  //   if (chatController.currentUserId.value == value["sender_id"] ||
+  //       chatController.currentUserId.value == value["receiver_id"]) {
+  //     chatController.updateChatMessages(newMessage, true);
+  //     if (value["sender_id"] == chatController.currentUserId.value) {
+  //       chatController.updateChatMessages(newMessage, true);
+  //     }
+  //   } else {
+  //     if (value["type"] == 0) {
+  //       showNotificationWithActions(message: "${value["message"]}", title: "${value["title"]}");
+  //       updateMsgDelieveredStatus(newMessage, 1);
+  //     }
+  //
+  //     setHiveDatabase("userKey_${userData?.id}_$senderId", newMessage);
+  //   }
+  // } else {
+  //   if (value["type"] == 0) {
+  //     showNotificationWithActions(message: "${value["message"]}", title: "${value["title"]}");
+  //     updateMsgDelieveredStatus(newMessage, 1);
+  //   }
+  //
+  //   setHiveDatabase("userKey_${userData?.id}_$senderId", newMessage);
+  // }
+  //  removeNotificationNode();
 }
 
 void setHiveDatabase(String userDataKey, ChatMessage newMessage) async {
@@ -149,7 +148,7 @@ void setHiveDatabase(String userDataKey, ChatMessage newMessage) async {
   });
 }
 
-void  updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
+void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   // type 1= New chat message, 2 = Delievered, 3= Msg read, 4= Other messages
   ChatMessage message = ChatMessage(
     orderId: newMessage.orderId,
@@ -175,8 +174,6 @@ void  updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   // removeNotificationNode(nodeId: "/${newMessage.time}");
 }
 
-
-
 String messageDateTime(int datetime) {
   var millis = datetime;
   var dt = DateTime.fromMillisecondsSinceEpoch(millis * 1000);
@@ -196,7 +193,9 @@ void divineSnackBar({required String data, Color? color, Duration? duration}) {
       content: Text(
         data,
         style: TextStyle(
-            color: color != null ? appColors.white : appColors.blackColor, fontSize: 11.0,),
+          color: color != null ? appColors.white : appColors.blackColor,
+          fontSize: 11.0,
+        ),
       ),
       backgroundColor: color ?? appColors.guideColor,
       showCloseIcon: true,

@@ -2,13 +2,11 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:math' as math;
 
-import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import "package:divine_astrologer/di/hive_services.dart";
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import "package:divine_astrologer/model/chat_offline_model.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -161,6 +159,7 @@ void initMessaging() async {
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
 
       }else if (payloadMap["type"] == "13") {
+      } else if (payloadMap["type"] == "13") {
         dasboardCurrentIndex(3);
       } else {
         if (!await launchUrl(Uri.parse(payloadMap["url"].toString()))) {

@@ -6,7 +6,8 @@ class CustomInfoWidget extends StatelessWidget {
   final String text;
   final String badgeText;
 
-  const CustomInfoWidget({super.key,
+  const CustomInfoWidget({
+    super.key,
     required this.text,
     required this.badgeText,
   });
@@ -14,7 +15,9 @@ class CustomInfoWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 10.sp,),
+      padding: EdgeInsets.symmetric(
+        vertical: 10.sp,
+      ),
       child: Stack(
         clipBehavior: Clip.none,
         alignment: Alignment.centerLeft,
@@ -34,7 +37,7 @@ class CustomInfoWidget extends StatelessWidget {
                     textAlign: TextAlign.start,
                     // maxLines: 3,
                     maxLines: 1000,
-                    overflow: TextOverflow.ellipsis,
+                    overflow: TextOverflow.clip,
                     style: TextStyle(
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,

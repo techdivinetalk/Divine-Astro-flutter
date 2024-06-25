@@ -1,6 +1,4 @@
 import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
-import 'package:divine_astrologer/common/custom_get_page.dart';
-import 'package:divine_astrologer/pages/home/home_ui.dart';
 import 'package:divine_astrologer/pages/profile/profile_binding.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_binding.dart';
@@ -66,14 +64,10 @@ import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy
 import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy/final_remedies_sub_ui.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggest_remedies_sub/suggest_remedies_sub_binding.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggest_remedies_sub/suggest_remedies_sub_ui.dart';
-import 'package:divine_astrologer/screens/video_call/video_call.dart';
-import 'package:divine_astrologer/screens/video_call/video_call_binding.dart';
 import 'package:divine_astrologer/screens/video_call_page/video_call_page.dart';
 import 'package:divine_astrologer/screens/video_call_page/video_call_page_binding.dart';
 import 'package:get/get.dart';
 
-import '../pages/new_registration/new_registration_binding.dart';
-import '../pages/new_registration/new_registration_screen.dart';
 import '../screens/add_message_template/add_message_template_binding.dart';
 import '../screens/add_message_template/add_message_template_ui.dart';
 import '../screens/bank_details/bank_detail_binding.dart';
@@ -105,9 +99,9 @@ import '../screens/edit_profile/edit_profile_binding.dart';
 import '../screens/edit_profile/edit_profile_ui.dart';
 import '../screens/home_screen_options/discount_offers/discount_offers_bindings.dart';
 import '../screens/home_screen_options/notice_board_detail/notice_detail_bindings.dart';
+import '../screens/leave_and_resignation/leave_and_resignation.dart';
 import '../screens/number_change/number_change_binding.dart';
 import '../screens/number_change/number_change_ui.dart';
-import '../screens/order_history/all_tab/suggest_remedies_view.dart';
 import '../screens/order_history/order_history_binding.dart';
 import '../screens/order_history/order_history_ui.dart';
 import '../screens/price_change/price_change_binding.dart';
@@ -201,7 +195,6 @@ class RouteName {
   static const String remediesDetail = "/RemediesDetailsView";
   static const String acceptChatRequestScreen = "/AcceptChatRequestScreen";
   static const String liveLogsScreen = "/LiveLogsScreen";
-
 }
 
 final Set<String> validRoutes = {
@@ -240,9 +233,10 @@ class Routes {
         name: RouteName.dashboard,
         binding: DashboardBinding()),
     GetPage(
-        page: () =>  NewRegstrationScreen(),
-        name: RouteName.resignation,
-        binding: RegistrationBinding()),
+      page: () => leaveAndResignationTab(),
+      name: RouteName.resignation,
+      // binding: RegistrationBinding()
+    ),
     GetPage(
         page: () => const BlockedUserUI(),
         name: RouteName.blockedUser,
@@ -340,7 +334,7 @@ class Routes {
         name: RouteName.chatMessageUI,
         binding: ChatMessageBinding()),
     GetPage(
-        page: () =>  ChatMessageWithSocketUI(),
+        page: () => ChatMessageWithSocketUI(),
         name: RouteName.chatMessageWithSocketUI,
         binding: ChatMessageWithSocketBinding()),
     /* GetPage(
@@ -459,7 +453,6 @@ class Routes {
         name: RouteName.chatSuggestRemedyDetails,
         binding: ChatSuggestRemediesDetailsBinding()),
 
-
     GetPage(
         page: () => const FeedBack(),
         name: RouteName.feedback,
@@ -511,6 +504,5 @@ class Routes {
       page: LiveLogsUI.new,
       binding: LiveLogsBinding(),
     ),
-
   ];
 }

@@ -2,7 +2,6 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/pages/new_registration/new_registration_screen.dart';
-import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -29,7 +28,7 @@ class SideMenuDrawer extends GetView<HomeController> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 /*Text(
-                 *//* "${'version'.tr} 4.1.0"*//*"",
+                 */ /* "${'version'.tr} 4.1.0"*/ /*"",
                   style: TextStyle(fontSize: 16, color: appColors.grey),
                 ),*/
                 InkWell(
@@ -83,7 +82,8 @@ class SideMenuDrawer extends GetView<HomeController> {
                   divineSnackBar(data: "Please give permission for contacts");
                 }
               },
-            ),ListTile(
+            ),
+            ListTile(
               leading: Assets.images.icImportContact.svg(),
               title: Text('New Reg'.tr),
               onTap: () async {

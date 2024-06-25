@@ -355,9 +355,9 @@ class LiveDharamController extends GetxController {
             update();
           }
 
-          if (liveIdNode["order"] != null) {
+          if (liveIdNode["LiveOrder"] != null) {
 
-            var orderNode = liveIdNode["order"];
+            var orderNode = liveIdNode["LiveOrder"];
             currentCaller = getOrderModelGeneric(orderNode);
           } else {
             currentCaller = usingForNullableWaiListModel;
@@ -552,7 +552,7 @@ class LiveDharamController extends GetxController {
     print("remove order from firebase");
 
     await liveStore.doc(userId).update({
-      'order': FieldValue.delete(),
+      'LiveOrder': FieldValue.delete(),
     });
     return Future<void>.value();
   }
@@ -653,7 +653,7 @@ class LiveDharamController extends GetxController {
   }) async {
     print(astrologerData);
     print("datadatadatadatadatadatadata");
-    if (astrologerData != null && astrologerData["order"] != null) {
+    if (astrologerData != null && astrologerData["LiveOrder"] != null) {
       Map<String, dynamic> param = <String, dynamic>{};
       param = <String, dynamic>{
         "order_id": getOrderId(),
