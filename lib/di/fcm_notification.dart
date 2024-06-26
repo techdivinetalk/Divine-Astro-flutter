@@ -11,6 +11,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../common/common_functions.dart';
@@ -69,10 +70,28 @@ Future<void> firebaseMessagingConfig(BuildContext buildContext) async {
       //  checkNotification(isFromNotification: true);
     }
   });
-
+  Future<void> showNotification() async {
+    const AndroidNotificationDetails androidPlatformChannelSpecifics =
+    AndroidNotificationDetails(
+      'your channel id',
+      'your channel name',
+      importance: Importance.max,
+      priority: Priority.high,
+      showWhen: false,
+    );
+    const NotificationDetails platformChannelSpecifics =
+    NotificationDetails(android: androidPlatformChannelSpecifics);
+    await flutterLocalNotificationsPlugin.show(
+      0,
+      'Test Notification',
+      'This is the body of the notification',
+      platformChannelSpecifics,
+      payload: 'item x',
+    );
+  }
   FirebaseMessaging.onMessageOpenedApp.listen((message) {
-    debugPrint('Got a message whilst in the foreground!');
-    if (message.notification != null) {
+    AppFirebaseService().payload = message.data;
+     if (message.notification != null) {
       debugPrint("Notification received : 2");
       checkNotification(isFromNotification: true);
     }
