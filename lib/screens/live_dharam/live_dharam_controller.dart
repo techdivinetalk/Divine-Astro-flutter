@@ -854,7 +854,10 @@ class LiveDharamController extends GetxController {
   }
 
   Future<void> tarotCardInit() async {
-    while (deckCardModelList.isEmpty) {
+    int retryCount = 0;
+    const int maxRetries = 10;
+
+    while (deckCardModelList.isEmpty && retryCount < maxRetries) {
       NewTarotCardModel newTarotCardModel =
           await HomePageRepository().getTarotCardData();
       deckCardModelList = [...newTarotCardModel.data ?? []];
@@ -862,7 +865,14 @@ class LiveDharamController extends GetxController {
         element.image = "${pref.getAmazonUrl()}${element.image}";
       }
       await Future.delayed(const Duration(seconds: 1));
+      retryCount++;
     }
+
+    if (deckCardModelList.isEmpty) {
+      // Handle the case where data could not be fetched after maxRetries attempts
+      print("Failed to fetch tarot card data after $maxRetries attempts.");
+    }
+
     return;
   }
 
