@@ -74,7 +74,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   RxString appbarTitle = "Astrologer Name ".obs;
   RxBool isShowTitle = true.obs;
   TextEditingController feedBackText = TextEditingController();
-  final socket = AppSocket();
+
   ExpandedTileController? expandedTileController = ExpandedTileController();
   ExpandedTileController? expandedTile2Controller = ExpandedTileController();
   UserData userData = UserData();

@@ -477,18 +477,18 @@ class MessageView extends StatelessWidget {
                                 fontFamily: FontFamily.metropolis,
                                 fontWeight: FontWeight.w500),
                           ),
-                          // if (yourMessage) SizedBox(width: 8.w),
-                          // if (yourMessage)
-                          //   Obx(() => msgType.value == 0
-                          //       ? Assets.images.icSingleTick.svg()
-                          //       : msgType.value == 1
-                          //           ? Assets.images.icDoubleTick.svg(
-                          //               colorFilter: ColorFilter.mode(
-                          //                   appColors.disabledGrey,
-                          //                   BlendMode.srcIn))
-                          //           : msgType.value == 3
-                          //               ? Assets.images.icDoubleTick.svg()
-                          //               : Assets.images.icSingleTick.svg())
+                          if (yourMessage) SizedBox(width: 8.w),
+                          if (yourMessage)
+                            Obx(() => msgType.value == 0
+                                ? Assets.images.icSingleTick.svg()
+                                : msgType.value == 1
+                                    ? Assets.images.icDoubleTick.svg(
+                                        colorFilter: ColorFilter.mode(
+                                            appColors.disabledGrey,
+                                            BlendMode.srcIn))
+                                    : msgType.value == 3
+                                        ? Assets.images.icDoubleTick.svg()
+                                        : Assets.images.icSingleTick.svg())
                         ],
                       ),
                     ),
@@ -566,17 +566,17 @@ class MessageView extends StatelessWidget {
                           style: AppTextStyle.textStyle10(
                               fontColor: appColors.black),
                         ),
-                        // if (yourMessage) SizedBox(width: 8.w),
-                        // if (yourMessage)
-                        //   Obx(() => msgType.value == 0
-                        //       ? Assets.images.icSingleTick.svg()
-                        //       : msgType.value == 1
-                        //           ? Assets.images.icDoubleTick.svg(
-                        //               colorFilter: ColorFilter.mode(
-                        //                   appColors.lightGrey, BlendMode.srcIn))
-                        //           : msgType.value == 3
-                        //               ? Assets.images.icDoubleTick.svg()
-                        //               : Assets.images.icSingleTick.svg())
+                        if (yourMessage) SizedBox(width: 8.w),
+                        if (yourMessage)
+                          Obx(() => msgType.value == 0
+                              ? Assets.images.icSingleTick.svg()
+                              : msgType.value == 1
+                                  ? Assets.images.icDoubleTick.svg(
+                                      colorFilter: ColorFilter.mode(
+                                          appColors.lightGrey, BlendMode.srcIn))
+                                  : msgType.value == 3
+                                      ? Assets.images.icDoubleTick.svg()
+                                      : Assets.images.icSingleTick.svg())
                       ],
                     ),
                   ),
