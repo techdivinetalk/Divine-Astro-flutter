@@ -25,7 +25,10 @@ import "package:get/get.dart";
 import "package:get/get_connect/http/src/status/http_status.dart";
 import "package:http/http.dart" as http;
 
+import "../../repository/home_page_repository.dart";
+
 class LiveDharamController extends GetxController {
+  RxBool isEndCallLoading = false.obs;
   final SharedPreferenceService pref = Get.put(SharedPreferenceService());
 
   final AstrologerProfileRepository liveRepository =
@@ -658,15 +661,24 @@ class LiveDharamController extends GetxController {
         "role_id": 7,
       };
       final int offerId = getOfferId();
-      param.addAll(<String, dynamic>{"offer_id": offerId});
-      if (orderID != getOrderId()) {
-        orderID = getOrderId();
-        await liveRepository.endLiveApi(
-          params: param,
-          successCallBack: successCallBack,
-          failureCallBack: failureCallBack,
-        );
+      String orderId = param["order_id"];
+      if (orderId == '0' || orderId == '') {
+        return Future<void>.value();
       }
+      param.addAll(<String, dynamic>{"offer_id": offerId});
+      await liveRepository.endLiveApi(
+        params: param,
+        successCallBack: successCallBack,
+        failureCallBack: failureCallBack,
+      );
+      // if (orderID != getOrderId()) {
+      //   orderID = getOrderId();
+      //   await liveRepository.endLiveApi(
+      //     params: param,
+      //     successCallBack: successCallBack,
+      //     failureCallBack: failureCallBack,
+      //   );
+      // }
     } else {
       print("order is empty");
     }
@@ -841,12 +853,15 @@ class LiveDharamController extends GetxController {
     return;
   }
 
-  void tarotCardInit() {
-    NewTarotCardModel newTarotCardModel = NewTarotCardModel();
-    newTarotCardModel = LiveSharedPreferencesSingleton().getAllTarotCard();
-    deckCardModelList = [...newTarotCardModel.data ?? []];
-    for (var element in deckCardModelList) {
-      element.image = "${pref.getAmazonUrl()}/${element.image}";
+  Future<void> tarotCardInit() async {
+    while (deckCardModelList.isEmpty) {
+      NewTarotCardModel newTarotCardModel =
+          await HomePageRepository().getTarotCardData();
+      deckCardModelList = [...newTarotCardModel.data ?? []];
+      for (var element in deckCardModelList) {
+        element.image = "${pref.getAmazonUrl()}${element.image}";
+      }
+      await Future.delayed(const Duration(seconds: 1));
     }
     return;
   }
