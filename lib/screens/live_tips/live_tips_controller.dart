@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:camera/camera.dart';
+import 'package:camerax/camerax.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'package:divine_astrologer/di/shared_preference_service.dart';
@@ -47,32 +47,29 @@ class LiveTipsController extends GetxController {
 
   @override
   void onInit() {
-    controller = CameraController(
-      cameras!.firstWhere((description) =>
-          description.lensDirection == CameraLensDirection.front),
-      ResolutionPreset.max,
-    );
-    controller!.initialize().then((_) {
-      // portrait mode
-      DeviceOrientation portraitMode = DeviceOrientation.portraitUp;
-      controller?.lockCaptureOrientation(portraitMode);
-      if (!Get.context!.mounted) {
-        CameraLensDirection.front;
-        return;
-      }
-      update();
-    }).catchError((Object e) {
-      if (e is CameraException) {
-        switch (e.code) {
-          case 'CameraAccessDenied':
-            // Handle access errors here.
-            break;
-          default:
-            // Handle other errors here.
-            break;
-        }
-      }
-    });
+    controller = CameraController(CameraFacing.front);
+    DeviceOrientation portraitMode = DeviceOrientation.portraitUp;
+    controller?.startAsync().then((_) {});
+    // controller?.lockCaptureOrientation(portraitMode);
+    // controller!.initialize().then((_) {
+    //   // controller?.lockCaptureOrientation(portraitMode);
+    //   if (!Get.context!.mounted) {
+    //     CameraLensDirection.front;
+    //     return;
+    //   }
+    //   update();
+    // }).catchError((Object e) {
+    //   if (e is CameraException) {
+    //     switch (e.code) {
+    //       case 'CameraAccessDenied':
+    //         // Handle access errors here.
+    //         break;
+    //       default:
+    //         // Handle other errors here.
+    //         break;
+    //     }
+    //   }
+    // });
     super.onInit();
   }
 
@@ -129,6 +126,7 @@ class LiveTipsController extends GetxController {
         "id": userId,
         "isAvailable": true,
         "blockList": blockedCustomerList,
+        "gift": FieldValue.arrayUnion([]),
       },
     ).then((value) async {
       print("Astrologer node added");
@@ -366,5 +364,14 @@ class LiveTipsController extends GetxController {
         ],
       ),
     );
+  }
+
+  toggleCameraLens() {
+    isFrontCamera.value = !isFrontCamera.value;
+    controller = CameraController(
+      isFrontCamera.value ? CameraFacing.front : CameraFacing.back,
+    );
+    controller?.startAsync().then((_) {});
+    update();
   }
 }

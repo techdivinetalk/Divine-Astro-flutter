@@ -25,7 +25,10 @@ import "package:get/get.dart";
 import "package:get/get_connect/http/src/status/http_status.dart";
 import "package:http/http.dart" as http;
 
+import "../../repository/home_page_repository.dart";
+
 class LiveDharamController extends GetxController {
+  RxBool isEndCallLoading = false.obs;
   final SharedPreferenceService pref = Get.put(SharedPreferenceService());
 
   final AstrologerProfileRepository liveRepository =
@@ -233,8 +236,6 @@ class LiveDharamController extends GetxController {
 
   set isMod(bool value) => _isMod(value);
 
-
-
   String get hostSpeciality => _hostSpeciality.value;
 
   set hostSpeciality(String value) => _hostSpeciality(value);
@@ -262,7 +263,6 @@ class LiveDharamController extends GetxController {
   bool get showTopBanner => _showTopBanner.value;
 
   set showTopBanner(bool value) => _showTopBanner(value);
-
 
   List<BlockedCustomerListResData> blockedCustomerList = [];
 
@@ -296,7 +296,6 @@ class LiveDharamController extends GetxController {
   bool get hasFollowPopupOpen => _hasFollowPopupOpen.value;
 
   set hasFollowPopupOpen(bool value) => _hasFollowPopupOpen(value);
-
 
   RequestClass get requestClass => _requestClass.value;
 
@@ -356,7 +355,6 @@ class LiveDharamController extends GetxController {
           }
 
           if (liveIdNode["LiveOrder"] != null) {
-
             var orderNode = liveIdNode["LiveOrder"];
             currentCaller = getOrderModelGeneric(orderNode);
           } else {
@@ -548,6 +546,7 @@ class LiveDharamController extends GetxController {
 
     return Future<void>.value();
   }
+
   Future<void> removeFromOrder() async {
     print("remove order from firebase");
 
@@ -662,15 +661,24 @@ class LiveDharamController extends GetxController {
         "role_id": 7,
       };
       final int offerId = getOfferId();
-      param.addAll(<String, dynamic>{"offer_id": offerId});
-      if (orderID != getOrderId()) {
-        orderID = getOrderId();
-        await liveRepository.endLiveApi(
-          params: param,
-          successCallBack: successCallBack,
-          failureCallBack: failureCallBack,
-        );
+      String orderId = param["order_id"];
+      if (orderId == '0' || orderId == '') {
+        return Future<void>.value();
       }
+      param.addAll(<String, dynamic>{"offer_id": offerId});
+      await liveRepository.endLiveApi(
+        params: param,
+        successCallBack: successCallBack,
+        failureCallBack: failureCallBack,
+      );
+      // if (orderID != getOrderId()) {
+      //   orderID = getOrderId();
+      //   await liveRepository.endLiveApi(
+      //     params: param,
+      //     successCallBack: successCallBack,
+      //     failureCallBack: failureCallBack,
+      //   );
+      // }
     } else {
       print("order is empty");
     }
@@ -845,13 +853,26 @@ class LiveDharamController extends GetxController {
     return;
   }
 
-  void tarotCardInit() {
-    NewTarotCardModel newTarotCardModel = NewTarotCardModel();
-    newTarotCardModel = LiveSharedPreferencesSingleton().getAllTarotCard();
-    deckCardModelList = [...newTarotCardModel.data ?? []];
-    for (var element in deckCardModelList) {
-      element.image = "${pref.getAmazonUrl()}/${element.image}";
+  Future<void> tarotCardInit() async {
+    int retryCount = 0;
+    const int maxRetries = 10;
+
+    while (deckCardModelList.isEmpty && retryCount < maxRetries) {
+      NewTarotCardModel newTarotCardModel =
+          await HomePageRepository().getTarotCardData();
+      deckCardModelList = [...newTarotCardModel.data ?? []];
+      for (var element in deckCardModelList) {
+        element.image = "${pref.getAmazonUrl()}${element.image}";
+      }
+      await Future.delayed(const Duration(seconds: 1));
+      retryCount++;
     }
+
+    if (deckCardModelList.isEmpty) {
+      // Handle the case where data could not be fetched after maxRetries attempts
+      print("Failed to fetch tarot card data after $maxRetries attempts.");
+    }
+
     return;
   }
 
@@ -889,6 +910,34 @@ class LiveDharamController extends GetxController {
       data.add("Instagram Id");
     } else {}
     return data.isEmpty ? "" : data.join(", ");
+  }
+
+  bool areArraysSame(List<dynamic> array1, List<dynamic> array2) {
+    if (array1.length != array2.length) {
+      return false;
+    }
+
+    for (int i = 0; i < array1.length; i++) {
+      if (array1[i] != array2[i]) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  bool areMapsSame(Map<String, dynamic> map1, Map<String, dynamic> map2) {
+    if (map1.length != map2.length) {
+      return false;
+    }
+
+    for (String key in map1.keys) {
+      if (!map2.containsKey(key) || map1[key] != map2[key]) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
 

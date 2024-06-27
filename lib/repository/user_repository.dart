@@ -12,7 +12,6 @@ import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/model/pivacy_policy_model.dart';
 import 'package:divine_astrologer/model/res_reply_review.dart';
 import 'package:divine_astrologer/model/res_user_profile.dart';
-import 'package:divine_astrologer/model/resignation/ResignationCancelModel.dart';
 import 'package:divine_astrologer/model/terms_and_condition_model.dart';
 import 'package:divine_astrologer/model/update_bank_response.dart';
 import 'package:divine_astrologer/model/update_offer_type_response.dart';
@@ -43,6 +42,7 @@ import '../model/report_review_model_class.dart';
 import '../model/res_blocked_customers.dart';
 import '../model/res_login.dart';
 import '../model/res_review_ratings.dart';
+import '../model/resignation/ResignationCancelModel.dart';
 import '../model/resignation/ResignationReasonModel.dart';
 import '../model/resignation/ResignationSubmitModel.dart';
 import '../model/resignation/Resignation_status_model.dart';
@@ -1195,7 +1195,6 @@ class UserRepository extends ApiProvider {
           if (logOutResponse.statusCode == successResponse &&
               logOutResponse.success!) {
             print("One time log out");
-            isLogOut = true;
             return logOutResponse;
           } else {
             throw CustomException(logOutResponse.message!);

@@ -43,6 +43,7 @@ import 'common/routes.dart';
 import 'di/fcm_notification.dart';
 import 'di/firebase_network_service.dart';
 import 'di/network_service.dart';
+import 'di/notification_two.dart';
 import 'di/progress_service.dart';
 import 'di/shared_preference_service.dart';
 import 'firebase_service/firebase_service.dart';
@@ -93,10 +94,17 @@ Future<void> main() async {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("pushNotification1 ${message.notification?.title ?? ""}");
     print('Message data-: dasboardCurrentIndex---${message.data}');
-    print(
-        'Message data-: ${MiddleWare.instance.currentPage != RouteName.chatMessageWithSocketUI}');
-    if (message.data["type"] == "2") {
+     if (message.data["type"] == "2") {
       print('msg ---- from notification');
+      // if (message.data['type'] == "2") {
+      //   Map<String, String?>? payload = {};
+      //   message.data.forEach((key, value) {
+      //     payload[key] = value;
+      //   });
+      //   showSecondNotification(message.notification!.title ?? '',
+      //       message.notification!.body ?? '', payload);
+      //   return;
+      // }
       return;
     }
 
@@ -192,8 +200,7 @@ Future<void> main() async {
         }
       }
     } else {
-      print("message.data");
-      showNotification(message.data["title"], message.data["message"],
+       showNotification(message.data["title"], message.data["message"],
           message.data['type'], message.data);
     }
     if (message.notification != null) {

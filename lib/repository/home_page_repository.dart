@@ -57,7 +57,7 @@ class HomePageRepository extends ApiProvider {
     }
   }
 
-  Future<TarotResponse> getTarotCardData() async {
+  Future<NewTarotCardModel> getTarotCardData() async {
     print("response.data3");
     try {
       final response = await get(
@@ -79,7 +79,7 @@ class HomePageRepository extends ApiProvider {
               NewTarotCardModel.fromJson(json.decode(response.body));
           await LiveSharedPreferencesSingleton().setAllTarotCard(model: model);
 
-          return tarotResponse;
+          return model;
         }
       } else {
         throw CustomException(json.decode(response.body)["error"]);

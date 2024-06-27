@@ -254,7 +254,7 @@ class ApiProvider {
   final String sendOtpNumberChange = "sendOtpForNumberChange";
   final String verifyOtpNumberChange = "verifyOtpForNumberChange";
 
-  // // added by raj
+  // added by raj
   // final String addNoticeToAstrologer = "addNoticeToAstrologer";
 
   // // socket
