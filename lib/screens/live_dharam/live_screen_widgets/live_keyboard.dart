@@ -3,6 +3,8 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import '../../../common/common_functions.dart';
+
 class LiveKeyboard extends StatefulWidget {
   const LiveKeyboard({required this.sendKeyboardMesage, super.key});
   final Function(String message) sendKeyboardMesage;
@@ -41,6 +43,10 @@ class _LiveKeyboardState extends State<LiveKeyboard> {
             setState(() {});
           },
           onSubmitted: (String value) {
+            if (value.isEmpty) {
+              divineSnackBar(data: "Please enter message");
+              return;
+            }
             sendKeyboardMesage();
           },
           inputFormatters: [
@@ -53,12 +59,12 @@ class _LiveKeyboardState extends State<LiveKeyboard> {
             suffixIcon: _editingController.value.text == ""
                 ? null
                 : IconButton(
-              onPressed: sendKeyboardMesage,
-              icon: Image.asset(
-                "assets/images/live_send_message_new.png",
-                color: appColors.guideColor,
-              ),
-            ),
+                    onPressed: sendKeyboardMesage,
+                    icon: Image.asset(
+                      "assets/images/live_send_message_new.png",
+                      color: appColors.guideColor,
+                    ),
+                  ),
             floatingLabelBehavior: FloatingLabelBehavior.never,
             filled: true,
             fillColor: appColors.white,
