@@ -1770,6 +1770,11 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> showCardDeckToUserPopup1() async {
+    if (_controller.deckCardModelList.isEmpty) {
+      await _controller.tarotCardInit();
+      showCardDeckToUserPopup1();
+      return;
+    }
     showCardDeckToUserPopupTimeoutHappening = true;
     LiveGlobalSingleton().isShowCardDeckToUser1PopupOpen = true;
 
@@ -2163,36 +2168,40 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Widget newAppBarRight() {
-    return InkWell(
-      onTap: () async {
-        //
-        //
-        await exitFunc();
-        //
-        //
-      },
-      child: SizedBox(
-        height: 50,
-        width: 50,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(50.0),
-            ),
-            border: Border.all(
-              color: appColors.guideColor,
-            ),
-            color: appColors.black.withOpacity(0.2),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(0.0),
-            child: Image.asset(
-              _controller.currentCaller.isEngaded!
-                  ? "assets/images/live_new_hang_up.png"
-                  : "assets/images/live_exit_red.png",
-            ),
-          ),
-        ),
+    return Obx(
+      () => InkWell(
+        onTap: () async {
+          //
+          //
+          await exitFunc();
+          //
+          //
+        },
+        child: _controller.isEndCallLoading.value
+            ? const SizedBox.shrink()
+            : SizedBox(
+                height: 50,
+                width: 50,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(50.0),
+                    ),
+                    border: Border.all(
+                      color: appColors.guideColor,
+                    ),
+                    color: appColors.black.withOpacity(0.2),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Image.asset(
+                      _controller.currentCaller.isEngaded!
+                          ? "assets/images/live_new_hang_up.png"
+                          : "assets/images/live_exit_red.png",
+                    ),
+                  ),
+                ),
+              ),
       ),
     );
   }
@@ -3173,13 +3182,16 @@ class _LivePage extends State<LiveDharamScreen>
     }
 
     if (removed) {
+      _controller.isEndCallLoading.value = true;
       await _controller.makeAPICallForEndCall(
         successCallBack: (String message) async {
+          _controller.isEndCallLoading.value = false;
           successAndFailureCallBack(
               message: message, isForSuccess: true, isForFailure: false);
           await _controller.removeFromOrder();
         },
         failureCallBack: (String message) {
+          _controller.isEndCallLoading.value = false;
           successAndFailureCallBack(
             message: message,
             isForSuccess: false,

@@ -24,7 +24,7 @@ class AstrologerProfileRepository extends ApiProvider {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = GiftResponse.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized ) {
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
@@ -48,7 +48,8 @@ class AstrologerProfileRepository extends ApiProvider {
     BlockedCustomerListRes data = BlockedCustomerListRes();
     try {
       final String requestBody = jsonEncode(params);
-      final response = await post(blockCustomerlist, body: requestBody); if (response.statusCode == HttpStatus.unauthorized) {
+      final response = await post(blockCustomerlist, body: requestBody);
+      if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
       } else if (response.statusCode == HttpStatus.badRequest) {
         Utils().handleStatusCode400(response.body);
@@ -58,7 +59,7 @@ class AstrologerProfileRepository extends ApiProvider {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = BlockedCustomerListRes.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized ) {
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
@@ -82,7 +83,8 @@ class AstrologerProfileRepository extends ApiProvider {
     BlockedCustomerRes data = BlockedCustomerRes();
     try {
       final String requestBody = jsonEncode(params);
-      final response = await post(blockCustomer, body: requestBody); if (response.statusCode == HttpStatus.unauthorized) {
+      final response = await post(blockCustomer, body: requestBody);
+      if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
       } else if (response.statusCode == HttpStatus.badRequest) {
         Utils().handleStatusCode400(response.body);
@@ -92,7 +94,7 @@ class AstrologerProfileRepository extends ApiProvider {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = BlockedCustomerRes.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized ) {
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
@@ -120,7 +122,7 @@ class AstrologerProfileRepository extends ApiProvider {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = NoticeBoardRes.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized ) {
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
@@ -144,7 +146,8 @@ class AstrologerProfileRepository extends ApiProvider {
     String data = "";
     try {
       final String requestBody = jsonEncode(params);
-      final response = await post(agoraCallEnd, body: requestBody); if (response.statusCode == HttpStatus.unauthorized) {
+      final response = await post(agoraCallEnd, body: requestBody);
+      if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
       } else if (response.statusCode == HttpStatus.badRequest) {
         Utils().handleStatusCode400(response.body);
@@ -154,7 +157,7 @@ class AstrologerProfileRepository extends ApiProvider {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = "";
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized ) {
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
@@ -182,7 +185,7 @@ class AstrologerProfileRepository extends ApiProvider {
         if (responseBody["status_code"] == HttpStatus.ok) {
           data = NewTarotCardModel.fromJson(responseBody);
           successCallBack(responseBody["message"] ?? "Unknown Error Occurred");
-        } else if (responseBody["status_code"] == HttpStatus.unauthorized ) {
+        } else if (responseBody["status_code"] == HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
         } else {
           failureCallBack(responseBody["message"] ?? "Unknown Error Occurred");
