@@ -1,9 +1,11 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:divine_astrologer/model/resignation/ResignationCancelModel.dart';
 import 'package:divine_astrologer/model/resignation/ResignationReasonModel.dart';
 import 'package:divine_astrologer/model/resignation/ResignationSubmitModel.dart';
 import 'package:divine_astrologer/model/resignation/Resignation_status_model.dart';
+import 'package:divine_astrologer/pages/new_registration/widgets/submit_popup.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
@@ -40,6 +42,7 @@ class NewRegistrationController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+
     getResignationReasons();
     getResignationStatus();
   }
@@ -157,28 +160,47 @@ class NewRegistrationController extends GetxController {
       "comment": selectedReason.toString(),
     };
     isLoading(true);
-
     try {
-      final rstatus = await userRepository.postsubmitResignation(param);
-      log(rstatus.success.toString());
-      if (rstatus.success == true) {
-        resignationSubmitModel = rstatus;
+      var response = await userRepository.postsubmitResignation(param);
+      if (response.success == true) {
+        resignationSubmitModel = response;
+        showResignationPopupAlert();
         getResignationStatus();
         getResignationReasons();
       } else {
         isLoading(false);
       }
       update();
+      log("Data Of submit ==> ${jsonEncode(response.data)}");
     } catch (error) {
-      debugPrint("Error occurred: $error");
+      isLoading(false);
+      debugPrint("error $error");
       if (error is AppException) {
         error.onException();
       } else {
-        // Handle other types of errors if needed
-        debugPrint("Unexpected error: $error");
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
-      isLoading(false);
     }
+    // try {
+    //   final rstatus = await userRepository.postsubmitResignation(param);
+    //   if (rstatus.statusCode == 200) {
+    //     resignationSubmitModel = rstatus;
+    //     getResignationStatus();
+    //     getResignationReasons();
+    //   } else {
+    //     isLoading(false);
+    //   }
+    //   update();
+    // } catch (error) {
+    //   debugPrint("Error occurred: $error");
+    //   if (error is AppException) {
+    //     error.onException();
+    //   } else {
+    //     // Handle other types of errors if needed
+    //     debugPrint("Unexpected error: $error");
+    //   }
+    //   isLoading(false);
+    // }
   }
 
   updateStatus(val) {

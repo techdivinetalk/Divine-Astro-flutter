@@ -95,7 +95,9 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                             ),
                             onTap: (value) {
                               controller.currentIndex.value = value;
-                              controller.getApiData(Get.arguments['from_kundli'], tab: value);
+                              controller.getApiData(
+                                  Get.arguments['from_kundli'],
+                                  tab: value);
                             },
                             tabs: [
                               Padding(
@@ -119,7 +121,8 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                                 child: Tab(text: "navamansha".tr),
                               ),
                               Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 30.w), child: Tab(text: "dosha".tr),
+                                padding: EdgeInsets.symmetric(horizontal: 30.w),
+                                child: Tab(text: "dosha".tr),
                               ),
                               Padding(
                                 padding: EdgeInsets.symmetric(horizontal: 30.w),

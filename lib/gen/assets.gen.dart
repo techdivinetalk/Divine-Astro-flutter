@@ -3,21 +3,21 @@
 ///  FlutterGen
 /// *****************************************************
 
+import 'package:flutter/services.dart';
 // coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter/services.dart';
 import 'package:lottie/lottie.dart';
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
 
   /// File path: assets/images/chat_custom_shop.svg
-///  SvgGenImage get chatCustomShop =>
-///      const SvgGenImage('assets/images/chat_custom_shop.svg');
+  ///  SvgGenImage get chatCustomShop =>
+  ///      const SvgGenImage('assets/images/chat_custom_shop.svg');
 
   /// File path: assets/images/chat_product.svg
   SvgGenImage get chatProduct =>

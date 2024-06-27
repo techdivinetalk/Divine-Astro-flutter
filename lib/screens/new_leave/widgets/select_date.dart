@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_holo_date_picker/date_picker_theme.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,8 +15,10 @@ class showSelectStartAndEndDate extends StatelessWidget {
       required this.initialStartDate,
       required this.initialEndDate,
       required this.looping,
-      required this.onConfirm,
-      required this.onChange,
+      required this.onConfirmStart,
+      required this.onConfirmEnd,
+      required this.onStartChange,
+      required this.onEndChange,
       required this.buttonTitle})
       : super(key: key);
 
@@ -21,11 +26,15 @@ class showSelectStartAndEndDate extends StatelessWidget {
   final DateTime? initialStartDate;
   final DateTime? initialEndDate;
   final bool looping;
-  final Function(String) onConfirm, onChange;
+  final Function(String) onConfirmStart,
+      onConfirmEnd,
+      onStartChange,
+      onEndChange;
 
   @override
   Widget build(BuildContext context) {
-    String pickerData = "";
+    String pickerStartData = "";
+    String pickerEndData = "";
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -88,13 +97,20 @@ class showSelectStartAndEndDate extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: DatePickerWidget(
                   initialDate: initialStartDate,
-                  lastDate: DateTime.now(),
-                  firstDate: DateTime(DateTime.now().year - 100),
-                  dateFormat: "MM/dd/yyyy",
+                  lastDate: DateTime(DateTime.now().year + 100),
+                  firstDate: DateTime.now(),
+                  dateFormat: "MMM/dd/yyyy",
                   pickerType: "DateCalendar",
                   looping: looping,
-                  onConfirm: (DateTime newDate, _) {},
-                  onChange: (DateTime newDate, _) {},
+                  onConfirm: (DateTime newDate, _) {
+                    pickerStartData = newDate.toString();
+                    // onConfirmStart(newDate.toString());
+                  },
+                  onChange: (DateTime newDate, _) {
+                    pickerStartData = newDate.toString();
+
+                    // onStartChange(newDate.toString());
+                  },
                   pickerTheme: DateTimePickerTheme(
                     pickerHeight: 180,
                     itemHeight: 44,
@@ -136,13 +152,19 @@ class showSelectStartAndEndDate extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 10),
                 child: DatePickerWidget(
                   initialDate: initialEndDate,
-                  lastDate: DateTime.now(),
-                  firstDate: DateTime(DateTime.now().year - 100),
-                  dateFormat: "MM/dd/yyyy",
+                  lastDate: DateTime(DateTime.now().year + 100),
+                  firstDate: DateTime.now(),
+                  dateFormat: "MMM/dd/yyyy",
                   pickerType: "DateCalendar",
                   looping: looping,
-                  onConfirm: (DateTime newDate, _) {},
-                  onChange: (DateTime newDate, _) {},
+                  onConfirm: (DateTime newDate, _) {
+                    pickerEndData = newDate.toString();
+                    // onConfirmEnd(newDate.toString());
+                  },
+                  onChange: (DateTime newDate, _) {
+                    pickerEndData = newDate.toString();
+                    // onEndChange(newDate.toString());
+                  },
                   pickerTheme: DateTimePickerTheme(
                     pickerHeight: 180,
                     itemHeight: 44,
@@ -165,7 +187,18 @@ class showSelectStartAndEndDate extends StatelessWidget {
                   borderRadius: BorderRadius.all(Radius.circular(10.0)),
                 ),
                 onPressed: () {
-                  Get.back();
+                  if (DateTime.parse(pickerEndData)
+                      .isBefore(DateTime.parse(pickerStartData))) {
+                    divineSnackBar(
+                        data: "End date can not be previous of start date");
+                  } else {
+                    log(pickerStartData.toString());
+                    onConfirmStart(pickerStartData.toString());
+                    onStartChange(pickerStartData.toString());
+                    onConfirmEnd(pickerEndData.toString());
+                    onEndChange(pickerEndData.toString());
+                    Get.back();
+                  }
                 },
                 color: appColors.guideColor,
                 child: Text(

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/repository/kundli_repository.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_controller.dart';
@@ -9,6 +10,7 @@ import 'package:get/get.dart';
 
 import '../../../common/colors.dart';
 import '../../../common/common_functions.dart';
+import '../../../di/shared_preference_service.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../model/internal/astro_details_model.dart';
 import '../../../model/internal/birth_details_model.dart';
@@ -67,6 +69,8 @@ class KundliDetailController extends GetxController {
 
   KundliDetailController(this.kundliRepository);
 
+  var preference = Get.find<SharedPreferenceService>();
+
   RxBool isVimshottari = RxBool(true);
   RxBool isYogini = RxBool(false);
   // RxBool isSubDasha = RxBool(false);
@@ -75,8 +79,6 @@ class KundliDetailController extends GetxController {
   Rx<Params> kundliParams = Params().obs;
   String? kundaliId;
   Map<String, dynamic> kundaliIdParms = {};
-
-
 
   @override
   void onInit() {
@@ -109,7 +111,7 @@ class KundliDetailController extends GetxController {
       location: args["birth_place"].toString(),
     );
     log("Kundli===>$kundaliId");
-    getApiData(true,tab: 0);
+    getApiData(true, tab: 0);
   }
 
   getNewKundliData(dynamic args) async {
@@ -120,13 +122,13 @@ class KundliDetailController extends GetxController {
     kundliParams.value = Params(
       name: args['params'].name ?? "",
       day: args['params'].day ?? 0,
-      month: args['params'].month ?? 0 ,
+      month: args['params'].month ?? 0,
       year: args['params'].year ?? 0,
       hour: args['params'].hour ?? 0,
       min: args['params'].min ?? 0,
       lat: args['params'].lat ?? 0.0,
       long: args['params'].long ?? 0.0,
-      tzone:5.30,
+      tzone: 5.30,
       // tzone: args['params'].tzone,
       location: args['params'].location ?? "",
     );
@@ -141,7 +143,7 @@ class KundliDetailController extends GetxController {
       "tzone": 5.30,
       // "tzone": args['params'].tzone,
     };
-    getApiData(false,tab: 0);
+    getApiData(false, tab: 0);
   }
 
   /*getApiData(bool fromKundali) async {
@@ -160,6 +162,7 @@ class KundliDetailController extends GetxController {
     ]);
   }*/
   getApiData(bool fromKundali, {int tab = 0}) async {
+    log(preference.getAmazonUrl().toString());
     switch (tab) {
       case 0:
         if (astroDetails.value.data == null) {
@@ -201,7 +204,7 @@ class KundliDetailController extends GetxController {
         }
         break;
       case 7:
-      // getKpTableDataListAPI(fromKundali);
+        // getKpTableDataListAPI(fromKundali);
         if (dashaTableData.value.data == null) {
           getDashaTableDataListAPI(fromKundali);
         }
@@ -243,7 +246,8 @@ class KundliDetailController extends GetxController {
 
   Future<void> getAntraDataApiList(String planetName) async {
     try {
-      PlanetlDetailModel response = await kundliRepository.getPlanetDetailsAPI(params, planetName);
+      PlanetlDetailModel response =
+          await kundliRepository.getPlanetDetailsAPI(params, planetName);
       if ((response.data ?? []).isNotEmpty) {
         planetDataDetail.value = response;
       } else {
@@ -268,7 +272,7 @@ class KundliDetailController extends GetxController {
       HoroChartModel response = await kundliRepository.getHoroChart(
           fromKundali ? kundaliIdParms : params, 'CHALIT');
       chalitChart.value = response;
-      // log("chalitChart==>${jsonEncode(chalitChart.value)}");
+      log("------------------------------${preference.getAmazonUrl()}/${chalitChart.value.data!.svg}");
 
       update();
     } catch (error) {
@@ -340,7 +344,7 @@ class KundliDetailController extends GetxController {
     try {
       BirthDetailsModel response = await kundliRepository
           .getBirthDetails(fromKundali ? kundaliIdParms : params);
-        birthDetails.value = response;
+      birthDetails.value = response;
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
@@ -357,6 +361,9 @@ class KundliDetailController extends GetxController {
       HoroChartModel response = await kundliRepository.getHoroChart(
           fromKundali ? kundaliIdParms : params, ':chartId');
       lagnaChart.value = response;
+      log("------------------------------${preference.getAmazonUrl()}/${lagnaChart.value.data!.svg}");
+      log("------------------------------${lagnaChart.value.data!.svg}");
+
       update();
     } catch (error) {
       debugPrint("error $error");
@@ -370,10 +377,15 @@ class KundliDetailController extends GetxController {
   }
 
   Future<void> moonChartApi(bool fromKundali) async {
+    log(fromKundali.toString());
+    log(kundaliIdParms.toString());
+    log(params.toString());
+
     try {
       HoroChartModel response = await kundliRepository.getHoroChart(
           fromKundali ? kundaliIdParms : params, 'MOON');
       moonChart.value = response;
+      log("------------------------------${preference.getAmazonUrl()}/${moonChart.value.data!.svg}");
       update();
     } catch (error) {
       debugPrint("error $error");
@@ -391,6 +403,8 @@ class KundliDetailController extends GetxController {
       HoroChartModel response = await kundliRepository.getHoroChart(
           fromKundali ? kundaliIdParms : params, 'SUN');
       sunChart.value = response;
+      log("------------------------------${preference.getAmazonUrl()}/${sunChart.value.data!.svg}");
+
       update();
     } catch (error) {
       debugPrint("error $error");
@@ -408,6 +422,8 @@ class KundliDetailController extends GetxController {
       HoroChartModel response = await kundliRepository.getHoroChart(
           fromKundali ? kundaliIdParms : params, 'D9');
       navamashaChart.value = response;
+      log("------------------------------${preference.getAmazonUrl()}/${navamashaChart.value.data!.svg}");
+
       update();
     } catch (error) {
       debugPrint("error $error");
@@ -419,7 +435,6 @@ class KundliDetailController extends GetxController {
     }
     update();
   }
-
 
   Future<void> kundliPredictionApi(bool fromKundali) async {
     try {

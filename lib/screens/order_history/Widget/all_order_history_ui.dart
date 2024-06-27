@@ -31,17 +31,17 @@ class AllOrderHistoryUi extends StatelessWidget {
             backgroundColor: appColors.guideColor,
             color: appColors.white,
             child: GetBuilder<OrderHistoryController>(
-              id: 'allOrders',
-              builder: (context) {
-                scrollController.addListener(() {
-                  if (scrollController.position.maxScrollExtent ==
-                      scrollController.position.pixels) {
-                    if (!controller.allApiCalling.value) {
-                      controller.getOrderHistory(
-                          type: 0, page: controller.allPageCount);
+                id: 'allOrders',
+                builder: (context) {
+                  scrollController.addListener(() {
+                    if (scrollController.position.maxScrollExtent ==
+                        scrollController.position.pixels) {
+                      if (!controller.allApiCalling.value) {
+                        controller.getOrderHistory(
+                            type: 0, page: controller.allPageCount);
+                      }
                     }
-                  }
-                });
+                  });
                   return Column(
                     children: [
                       Expanded(
@@ -65,8 +65,7 @@ class AllOrderHistoryUi extends StatelessWidget {
                         controller.paginationLoadingWidget(),
                     ],
                   );
-                }
-            )),
+                })),
         if (controller.allHistoryList.isEmpty)
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -81,19 +80,53 @@ class AllOrderHistoryUi extends StatelessWidget {
   Widget orderDetailView(int index, List<AllHistoryData> data) {
     String productTypeText;
 
+    // 1	astrologer_product	products
+    // 2	agora_gift	giftings
+    // 3	agora_video_call	astrologers
+    // 4	agora_audio_call	astrologers
+    // 5	agora_anonymous_call	astrologers
+    // 7	exotel_audio_call	astrologers
+    // 8	meditation	meditations
+    // 9	ayurveda_product	ayurveda_products
+    // 10	pooja	poojas
+    // 11	donation	donations
+    // 12	personnel_chat	astrologers
+    // 14	ecom custom product	custom_ecom_products
     switch (data[index].productType) {
-      case 7:
-        productTypeText = 'Call';
-        break;
-      case 12:
-        productTypeText = 'Chat';
+      case 1:
+        productTypeText = 'Astrologer Products';
         break;
       case 2:
         productTypeText = 'Gifts';
         break;
       case 3:
-        productTypeText = 'Remedy Suggested';
+        productTypeText = 'Video Call';
         break;
+      case 4:
+        productTypeText = 'Audio Call';
+        break;
+      case 5:
+        productTypeText = 'Anonymous Call';
+        break;
+      case 7:
+        productTypeText = 'Audio Call';
+        break;
+      case 8:
+        productTypeText = 'Meditations';
+        break;
+      case 9:
+        productTypeText = 'Ayurveda Products';
+        break;
+      case 10:
+        productTypeText = "Pooja's";
+        break;
+      case 11:
+        productTypeText = 'Donation';
+        break;
+      case 12:
+        productTypeText = 'Ecommerce Product';
+        break;
+
       default:
         productTypeText = 'Unknown';
     }
@@ -124,7 +157,7 @@ class AllOrderHistoryUi extends StatelessWidget {
                     children: [
                       Padding(
                         padding: const EdgeInsets.only(left: 10, right: 10),
-                        child: detailView(index, data),
+                        child: detailView(index, data, Get.context),
                       ),
                     ],
                   ),
@@ -214,7 +247,7 @@ class AllOrderHistoryUi extends StatelessWidget {
     );
   }
 
-  Widget detailView(int index, List<AllHistoryData> data) {
+  Widget detailView(int index, List<AllHistoryData> data, context) {
     String getGenderText(int? gender) {
       switch (gender) {
         case 0:
@@ -241,9 +274,14 @@ class AllOrderHistoryUi extends StatelessWidget {
                 ),
               ],
             ),
-            Text(
-              "${data[index].orderId}",
-              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            SizedBox(
+              width: MediaQuery.of(context).size.width / 2,
+              child: Text(
+                "${data[index].orderId}",
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.right,
+                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+              ),
             ),
           ],
         ),

@@ -1,21 +1,14 @@
-import 'dart:convert';
-
 /// success : true
 /// data : {"astrologer_id":2129,"reason_id":1,"comment":"Personal reasons","status":"pending","updated_at":"2024-06-20T11:32:26.000000Z","created_at":"2024-06-20T11:32:26.000000Z","id":2}
 /// status_code : 201
 /// message : "Resignation application submitted successfully"
-ResignationSubmitModel resignationSubmitModelFromJson(String str) =>
-    ResignationSubmitModel.fromJson(json.decode(str));
-
-String resignationSubmitModelFromJsonModelToJson(ResignationSubmitModel data) =>
-    json.encode(data.toJson());
 
 class ResignationSubmitModel {
   ResignationSubmitModel({
-    bool? success,
-    SubmitData? data,
-    num? statusCode,
-    String? message,
+    final bool? success,
+    final SubmitData? data,
+    final int? statusCode,
+    final String? message,
   }) {
     _success = success;
     _data = data;
@@ -31,12 +24,12 @@ class ResignationSubmitModel {
   }
   bool? _success;
   SubmitData? _data;
-  num? _statusCode;
+  int? _statusCode;
   String? _message;
   ResignationSubmitModel copyWith({
     bool? success,
     SubmitData? data,
-    num? statusCode,
+    int? statusCode,
     String? message,
   }) =>
       ResignationSubmitModel(
@@ -47,7 +40,7 @@ class ResignationSubmitModel {
       );
   bool? get success => _success;
   SubmitData? get data => _data;
-  num? get statusCode => _statusCode;
+  int? get statusCode => _statusCode;
   String? get message => _message;
 
   Map<String, dynamic> toJson() {
@@ -72,13 +65,13 @@ class ResignationSubmitModel {
 
 class SubmitData {
   SubmitData({
-    num? astrologerId,
-    num? reasonId,
-    String? comment,
-    String? status,
-    String? updatedAt,
-    String? createdAt,
-    num? id,
+    var astrologerId,
+    var reasonId,
+    final String? comment,
+    final String? status,
+    final String? updatedAt,
+    final String? createdAt,
+    var id,
   }) {
     _astrologerId = astrologerId;
     _reasonId = reasonId;
@@ -98,21 +91,21 @@ class SubmitData {
     _createdAt = json['created_at'];
     _id = json['id'];
   }
-  num? _astrologerId;
-  num? _reasonId;
+  var _astrologerId;
+  var _reasonId;
   String? _comment;
   String? _status;
   String? _updatedAt;
   String? _createdAt;
-  num? _id;
+  var _id;
   SubmitData copyWith({
-    num? astrologerId,
-    num? reasonId,
+    var astrologerId,
+    var reasonId,
     String? comment,
     String? status,
     String? updatedAt,
     String? createdAt,
-    num? id,
+    var id,
   }) =>
       SubmitData(
         astrologerId: astrologerId ?? _astrologerId,
@@ -123,13 +116,13 @@ class SubmitData {
         createdAt: createdAt ?? _createdAt,
         id: id ?? _id,
       );
-  num? get astrologerId => _astrologerId;
-  num? get reasonId => _reasonId;
+  get astrologerId => _astrologerId;
+  get reasonId => _reasonId;
   String? get comment => _comment;
   String? get status => _status;
   String? get updatedAt => _updatedAt;
   String? get createdAt => _createdAt;
-  num? get id => _id;
+  get id => _id;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
