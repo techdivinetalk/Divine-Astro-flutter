@@ -96,7 +96,7 @@ class _ChatBottomBarWidgetState extends State<ChatBottomBarWidget> {
                                     widget.controller?.typingScrollController,
                                 onChanged: (value) {
                                   /// write a code when user typing
-                                  // controller!.tyingSocket();
+                                  widget.controller!.tyingSocket();
                                 },
                                 decoration: InputDecoration(
                                   hintText: "Type something".tr,

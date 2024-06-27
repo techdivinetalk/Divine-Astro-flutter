@@ -852,10 +852,6 @@ class ChatMessageWithSocketController extends GetxController
       if (data['data']["typist"].toString() ==
           AppFirebaseService().orderData.value["userId"].toString()) {
         isTyping.value = true;
-        //chatStatus.value = "Typing";
-        // if (isScrollAtBottom()) {
-        //   scrollToBottomFunc();
-        // }
         startTimer();
       }
     });

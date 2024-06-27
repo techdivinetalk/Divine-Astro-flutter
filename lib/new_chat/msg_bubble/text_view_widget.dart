@@ -58,7 +58,7 @@ class TextViewWidget extends StatelessWidget {
                   );
                 },
               )
-                  : SizedBox(),
+                  : const SizedBox(),
 
               Container(
                 padding:
@@ -70,9 +70,9 @@ class TextViewWidget extends StatelessWidget {
                       yourMessage ? Color(0xffFFEEF0) : Color(0xffDCDCDC)),
                   color: yourMessage ? Color(0xffFFF9FA) : appColors.white,
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
+                    bottomLeft: const Radius.circular(10),
                     topLeft: Radius.circular(yourMessage ? 10 : 0),
-                    bottomRight: Radius.circular(10),
+                    bottomRight: const Radius.circular(10),
                     topRight: Radius.circular(!yourMessage ? 10 : 0),
                   ),
                 ),

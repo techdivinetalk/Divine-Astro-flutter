@@ -1,11 +1,13 @@
 import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:camera/camera.dart';
 import 'package:device_info_plus/device_info_plus.dart';
+import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/common/ask_for_gift_bottom_sheet.dart';
 import 'package:divine_astrologer/common/camera.dart';
@@ -18,8 +20,10 @@ import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/astrologer_gift_response.dart';
 import 'package:divine_astrologer/model/chat_histroy_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
+import 'package:divine_astrologer/model/message_template_response.dart';
 import 'package:divine_astrologer/model/save_remedies_response.dart';
 import 'package:divine_astrologer/model/tarot_response.dart';
+import 'package:divine_astrologer/repository/message_template_repository.dart';
 import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/get_single_pooja_response.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/custom_puja/saved_remedies.dart';
@@ -62,16 +66,24 @@ class NewChatController extends GetxController {
   RxBool isAudioPlaying = false.obs;
   RxString astrologerName = "".obs;
   RxString customerName = "".obs;
-
+  AppSocket appSocket = AppSocket();
   Duration? timeDifference;
 
   @override
   void onInit() {
     if (AppFirebaseService().orderData.isNotEmpty) {
       initialiseControllers();
+      joinRoomSocketEvent();
     }
+    appSocket.socket!.on(
+      ApiProvider.message,
+      (data) {
+        log("when i am listening message");
+      },
+    );
     getDir();
     getAllApiDataInChat();
+    typingListenerSocket();
     messageController.addListener(onMessageChanged);
     FirebaseDatabase.instance
         .ref("chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
@@ -91,6 +103,8 @@ class NewChatController extends GetxController {
 
   getAllApiDataInChat() async {
     await getChatList();
+    await getMessageTemplates();
+    await getMessageTemplatesLocally();
     getCustomEcom();
   }
 
@@ -99,7 +113,28 @@ class NewChatController extends GetxController {
     if (recorderController != null) {
       recorderController?.dispose();
     }
+    leaveRoomSocketEvent();
     super.onClose();
+  }
+
+  /// ------------ joinRoom socket event -------------- ///
+  joinRoomSocketEvent() {
+    if (appSocket.socket!.disconnected) {
+      appSocket.socketConnect();
+    }
+    appSocket.socket!.emit(ApiProvider.enterRoom, {
+      "name": AppFirebaseService().orderData.value['astrologerName'],
+      "room": AppFirebaseService().orderData.value['orderId'],
+    });
+  }
+
+  /// ------------ leave room socket event -------------- ///
+  leaveRoomSocketEvent() {
+    if (appSocket.socket!.disconnected) {
+      appSocket.socketConnect();
+    }
+    appSocket.socket!.emit(ApiProvider.leaveRoom,
+        AppFirebaseService().orderData.value['astrologerName']);
   }
 
   /// ------------------ back function  ----------------------- ///
@@ -120,6 +155,64 @@ class NewChatController extends GetxController {
       },
     );
     return;
+  }
+
+  /// ------------------ send message socket functions  ----------------------- ///
+  sendMessageInSocket(ChatMessage? newMessage) {
+    log(jsonEncode(newMessage));
+    print("jsonEncode(newMessage)");
+    log(newMessage!.toJson().toString());
+    print("newMessage!.toJson()");
+    appSocket.socket!.emit(
+      ApiProvider.sendNewMessage,
+      newMessage!.toJson(),
+    );
+  }
+
+  /// ------------------ typing functions  ----------------------- ///
+  Timer? _timer2;
+  RxBool isTyping = false.obs;
+
+  void typingListenerSocket() {
+    appSocket.socket!.on(ApiProvider.activity, (data) {
+      isTyping.value = true;
+      typingTimer();
+      scrollToBottomFunc();
+      update();
+      debugPrint("typingListenerSocket $data");
+    });
+  }
+
+  void typingTimer() {
+    int _start = 5;
+    if (_timer2 != null) {
+      _timer2!.cancel();
+    }
+    const Duration oneSec = Duration(seconds: 1);
+    _timer2 = Timer.periodic(
+      oneSec,
+      (Timer timer) {
+        if (_start == 0) {
+          timer.cancel();
+          isTyping.value = false;
+        } else {
+          _start--;
+        }
+        update();
+      },
+    );
+  }
+
+  void tyingSocket() {
+    debugPrint(
+        'tyingSocket orderId\n${AppFirebaseService().orderData.value['orderId'].toString()},\nuserId: ${AppFirebaseService().orderData.value['userId']}');
+    if (AppSocket().socket!.disconnected) {
+      AppSocket().socketConnect();
+    }
+    appSocket.socket!.emit(
+      ApiProvider.activity,
+      AppFirebaseService().orderData.value['astrologerName'],
+    );
   }
 
   /// ------------------ scroll to bottom  ----------------------- ///
@@ -451,6 +544,7 @@ class NewChatController extends GetxController {
 
   /// ------------------ Tarrot card bottom sheet ----------------------- ///
   RxBool isCardBotOpen = false.obs;
+  RxBool isCardVisible = false.obs;
 
   void openShowDeck() {
     isCardBotOpen.value = true;
@@ -499,6 +593,49 @@ class NewChatController extends GetxController {
       return jsonList.map((jsonItem) => TarotCard.fromJson(jsonItem)).toList();
     } else {
       return [];
+    }
+  }
+
+  String getKeyByPosition(int position) {
+    var orderData = AppFirebaseService().orderData.value;
+    var card = orderData['card'];
+    var listOfCard = card['listOfCard'] as Map;
+    var keysList = listOfCard.keys.toList();
+
+    if (position < keysList.length) {
+      String key = keysList[position];
+      //  return keysList[position];
+      return key;
+    } else {
+      throw IndexError(position, keysList, 'Index out of range');
+    }
+  }
+
+  int getListOfCardLength(BuildContext context) {
+    var orderData = AppFirebaseService().orderData.value;
+    if (isCardVisible.value == true && orderData.containsKey("card")) {
+      ScaffoldMessenger.of(context).hideCurrentSnackBar();
+
+      var listOfCard =
+          AppFirebaseService().orderData.value['card']['listOfCard'] as Map;
+
+      print("listOfCard ${listOfCard.length}");
+      return listOfCard.length;
+    }
+    return 0;
+  }
+
+  String getValueByPosition(int position) {
+    var card = AppFirebaseService().orderData.value['card'];
+    var listOfCard = card['listOfCard'] as Map;
+    var keysList = listOfCard.keys.toList();
+
+    if (position < keysList.length) {
+      String key = keysList[position];
+      print("imgUrl --${listOfCard[key]}");
+      return listOfCard[key];
+    } else {
+      throw IndexError(position, keysList, 'Index out of range');
     }
   }
 
@@ -593,6 +730,36 @@ class NewChatController extends GetxController {
     } finally {
       update();
     }
+  }
+
+  /// -------------------------- send message firebase  ------------------------ ///
+  RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
+  MessageTemplateRepo messageTemplateRepository = MessageTemplateRepo();
+
+  getMessageTemplates() async {
+    try {
+      final response = await messageTemplateRepository.fetchTemplates();
+      if (response.data != null) {
+        messageTemplates.value = response.data!;
+      }
+      update();
+    } catch (error) {
+      divineSnackBar(data: error.toString(), color: appColors.redColor);
+    }
+  }
+
+  getMessageTemplatesLocally() async {
+    final sharedPreferencesInstance = SharedPreferenceService();
+    try {
+      final data = await sharedPreferencesInstance.getMessageTemplates();
+      if (data.isNotEmpty) {
+        messageTemplates(data);
+      }
+    } catch (e) {
+      //error handling
+      print('Error retrieving message templates: $e');
+    }
+    update();
   }
 
   /// -------------------------- send message firebase  ------------------------ ///
@@ -733,8 +900,7 @@ class NewChatController extends GetxController {
         userType: "astrologer",
       );
     }
-    print(jsonEncode(newMessage));
-    print("jsonEncode(newMessage)");
+
     print("newMessage.toOfflineJson()");
     firebaseDatabase
         .ref()
@@ -743,6 +909,7 @@ class NewChatController extends GetxController {
         .update(
           jsonDecode(jsonEncode(newMessage)),
         );
-    print("last message  ${chatMessages.last.message}");
+    // print("last message  ${chatMessages.last.message}");
+    sendMessageInSocket(newMessage);
   }
 }

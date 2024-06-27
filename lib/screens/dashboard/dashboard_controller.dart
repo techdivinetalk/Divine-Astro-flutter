@@ -5,6 +5,7 @@ import 'package:android_intent_plus/flag.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
+import 'package:divine_astrologer/common/MiddleWare.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/common/routes.dart';
@@ -401,11 +402,9 @@ class DashboardController extends GetxController
     try {
       final data = await userRepository.constantDetailsData();
       if (data.data != null) {
+        imageUploadBaseUrl.value = data?.data?.imageUploadBaseUrl ?? "";
 
-
-          imageUploadBaseUrl.value = data?.data?.imageUploadBaseUrl ?? "";
-
-update();
+        update();
 
         PackageInfo packageInfo = await PackageInfo.fromPlatform();
         print(data.data!.appVersion!.split(".").join(""));
@@ -414,10 +413,12 @@ update();
         if (int.parse(data.data!.appVersion!.split(".").join("")) >
             int.parse(packageInfo.version.split(".").join(""))) {
           print("objectobjectobjectobject");
-          Get.bottomSheet(
-            const ForceUpdateSheet(),
-            isDismissible: false,
-          );
+          if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+            Get.bottomSheet(
+              const ForceUpdateSheet(),
+              isDismissible: false,
+            );
+          }
           // showTutorial(context);
         } else {
           showTutorial(context);

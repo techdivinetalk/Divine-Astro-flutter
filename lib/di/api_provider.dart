@@ -21,7 +21,7 @@ class ApiProvider {
   static const String version = 'v7';
 
   // static const String socketUrl = "http://13.127.116.89:4000";
-  static const String socketUrl = "https://list.divinetalk.live";
+  static const String socketUrl = "http://13.200.230.93:8081";
 
   static String baseUrl =
       "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
@@ -29,7 +29,7 @@ class ApiProvider {
       "${imageUploadBaseUrl.value}/api/astro/$version/";
 
   static const String astOnlineOffline =
-      "https://list.divinetalk.live/api/v3/updateAstroStatusV2?unique_no=";
+      "http://13.200.230.93:8081/api/v3/updateAstroStatusV2?unique_no=";
 
   //final String baseUrl = "http://13.235.46.27/admin/$version/";
 
@@ -244,7 +244,13 @@ class ApiProvider {
   final String sendOtpNumberChange = "sendOtpForNumberChange";
   final String verifyOtpNumberChange = "verifyOtpForNumberChange";
 
-  // // socket
+  // ------------------  new socket ----------------- ///
+  static String enterRoom = "enterRoom";
+  static String leaveRoom = "leaveRoom";
+  static String message = "message";
+  static String sendNewMessage = "sendMessage";
+  static String activity = "activity";
+
   // final String masterDataSocket = "master-Data";
 
   //

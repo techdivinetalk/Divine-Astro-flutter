@@ -25,7 +25,7 @@ class AppSocket {
 
   AppSocket._internal();
 
-  void socketConnect() {
+  void  socketConnect() {
     debugPrint('socketConnect ');
     socket = io(
         ApiProvider.socketUrl,
@@ -154,7 +154,7 @@ class AppSocket {
         debugPrint("test_socket_id: ${socket?.id}");
 
         final response = await Dio().post(
-          "https://list.divinetalk.live/api/v3/removeLiveData",
+          "http://13.200.230.93:8081/api/v3/removeLiveData",
           data: {
             "astroId": pref.getUserDetail()?.id ?? 0,
             "clientId": socket?.id ?? "",
@@ -189,7 +189,7 @@ class AppSocket {
     socket?.emit(ApiProvider().userTyping, {
       "typist": preferenceService.getUserDetail()!.id.toString(),
       "listener": userId,
-      "orderId": orderId
+      "orderId": orderId,
     });
   }
 
