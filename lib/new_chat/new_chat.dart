@@ -17,6 +17,7 @@ import 'widget/chat_app_bar_widget.dart';
 import 'widget/chat_bottom_bar_widget.dart';
 import 'widget/end_chat_timer.dart';
 import 'widget/message_template_widget.dart';
+import 'widget/notice_board.dart';
 
 class NewChatScreen extends GetView<NewChatController> {
   const NewChatScreen({super.key});
@@ -36,6 +37,7 @@ class NewChatScreen extends GetView<NewChatController> {
           appBar: ChatAppBarWidget(controller: controller),
           body: Column(
             children: [
+               NoticeBoardWidget(controller: controller),
               Expanded(
                 child: ListView.separated(
                   controller: controller.messageScrollController,

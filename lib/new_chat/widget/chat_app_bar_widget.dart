@@ -47,20 +47,17 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
               String appended =
                   "${controller!.preference.getAmazonUrl()}$imageURL";
               print("img:: -xx-$appended");
-              return GestureDetector(
-                onTap: () {},
-                child: Container(
-                  height: 35,
-                  width: 35,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: appColors.guideColor),
-                    shape: BoxShape.circle,
-                  ),
-                  child: CustomImageWidget(
-                    imageUrl: appended,
-                    rounded: true,
-                    typeEnum: TypeEnum.user,
-                  ),
+              return Container(
+                height: 35,
+                width: 35,
+                decoration: BoxDecoration(
+                  border: Border.all(color: appColors.guideColor),
+                  shape: BoxShape.circle,
+                ),
+                child: CustomImageWidget(
+                  imageUrl: appended,
+                  rounded: true,
+                  typeEnum: TypeEnum.user,
                 ),
               );
             },
@@ -78,7 +75,7 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                         Text(
                           AppFirebaseService()
                                   .orderData
-                                  .value["astrologerName"] ??
+                                  .value["customerName"] ??
                               'Astrologer Name',
                           softWrap: true,
                           maxLines: 1,
@@ -93,7 +90,7 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                         Text(
                           controller!.showTalkTime.value == "-1"
                               ? "Chat Ended"
-                              : "00:00:00",
+                              : controller!.showTalkTime.value,
                           style: TextStyle(
                             fontWeight: FontWeight.w500,
                             fontSize: 12,

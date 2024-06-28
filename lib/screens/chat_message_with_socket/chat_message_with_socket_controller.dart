@@ -127,8 +127,8 @@ class ChatMessageWithSocketController extends GetxController
   RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
 
   final AppSocket socket = AppSocket();
-  Timer? extraTimer;
-  Timer? chatTimer;
+    Timer? extraTimer;
+    Timer? chatTimer;
   Timer? _timer2;
 
   Rx<bool> isRecording = false.obs;

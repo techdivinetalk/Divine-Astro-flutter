@@ -8,6 +8,7 @@ import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:camera/camera.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
+import 'package:divine_astrologer/common/MiddleWare.dart';
 import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/common/ask_for_gift_bottom_sheet.dart';
 import 'package:divine_astrologer/common/camera.dart';
@@ -21,6 +22,7 @@ import 'package:divine_astrologer/model/astrologer_gift_response.dart';
 import 'package:divine_astrologer/model/chat_histroy_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/model/message_template_response.dart';
+import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:divine_astrologer/model/save_remedies_response.dart';
 import 'package:divine_astrologer/model/tarot_response.dart';
 import 'package:divine_astrologer/repository/message_template_repository.dart';
@@ -33,6 +35,7 @@ import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
 import 'package:divine_astrologer/tarotCard/FlutterCarousel.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/utils.dart';
+import 'package:divine_astrologer/zego_call/zego_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import "package:http/http.dart" as http;
@@ -47,6 +50,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../di/api_provider.dart';
 import '../model/res_product_detail.dart';
+import '../screens/live_page/constant.dart';
 
 class NewChatController extends GetxController {
   TextEditingController messageController = TextEditingController();
@@ -85,6 +89,20 @@ class NewChatController extends GetxController {
     getAllApiDataInChat();
     typingListenerSocket();
     messageController.addListener(onMessageChanged);
+    if (astroChatWatcher.value.orderId != null) {
+      timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0,
+          astroChatWatcher.value.orderId!);
+    }
+    AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
+      if (p0["status"] == null || p0["astroId"] == null) {
+        backFunction();
+        AppFirebaseService().database.child("order/${p0["orderId"]}").remove();
+      } else {
+        print("orderData Changed");
+
+        initTask(p0);
+      }
+    });
     FirebaseDatabase.instance
         .ref("chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
         .onChildAdded
@@ -105,6 +123,7 @@ class NewChatController extends GetxController {
     await getChatList();
     await getMessageTemplates();
     await getMessageTemplatesLocally();
+    await noticeAPi();
     getCustomEcom();
   }
 
@@ -115,6 +134,148 @@ class NewChatController extends GetxController {
     }
     leaveRoomSocketEvent();
     super.onClose();
+  }
+
+  /// ------------ timer functions -------------- ///
+  Timer? extraTimer;
+  Timer? chatTimer;
+
+  void initTask(Map<String, dynamic> p0) {
+    if (p0["status"] == null || p0["status"] == "5") {
+      WidgetsBinding.instance.endOfFrame.then(
+        (_) async {
+          chatTimer?.cancel();
+          print("WentBack Status-5");
+          extraTimer?.cancel();
+          Get.until(
+            (route) {
+              return Get.currentRoute == RouteName.dashboard;
+            },
+          );
+        },
+      );
+      return;
+    }
+    if (p0["status"] == "3" || p0["status"] == "2") {
+      extraTimer?.cancel();
+      print("extraTime closing");
+      int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
+      talkTimeStartTimer(remainingTime);
+    } else {
+      if (p0["order_end_time"] != null) {
+        startExtraTimer(p0["order_end_time"], p0["status"]);
+      }
+    }
+
+    // if (p0["isCustEntered"] != null &&
+    //     p0["isCustEntered"] > DateTime.now().microsecondsSinceEpoch) {
+    //   updateReadMessage();
+    // }
+    print("extraTime ${p0["status"]}");
+
+    isCardVisible.value =
+        p0["card"] != null ? (p0["card"]["isCardVisible"] ?? false) : false;
+
+    if (isCardBotOpen == true &&
+        p0["card"] != null &&
+        !(p0["card"]["isCardVisible"])) {
+      // "Picking tarot card...";
+      update();
+    }
+  }
+
+  void startExtraTimer(int futureTimeInEpochMillis, String status) {
+    if (status == "4") {
+      chatTimer?.cancel();
+      showTalkTime.value = "-1";
+    }
+    DateTime dateTime =
+        DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis);
+    Duration timeLeft = const Duration(minutes: 1);
+    extraTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      // final currentTime = DateTime.now();
+      final difference = dateTime.difference(DateTime.now());
+      if (difference.isNegative ||
+          (difference.inSeconds == 0 &&
+              difference.inMinutes == 0 &&
+              difference.inHours == 0)) {
+        if (AppFirebaseService().orderData.value["orderId"] != null ||
+            AppFirebaseService().orderData.value["status"] == "4") {
+          extraTimer?.cancel();
+          extraTalkTime.value = "0";
+          timer.cancel();
+          print("WentBack timeUp");
+          timeLeft = Duration.zero;
+          backFunction();
+        }
+      } else {
+        timeLeft = difference;
+        extraTalkTime.value =
+            "${timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
+            "${timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
+        print("time Left ${extraTalkTime.value}");
+        if (MiddleWare.instance.currentPage == RouteName.dashboard ||
+            AppFirebaseService().orderData.value["status"] == "3") {
+          print("ExtraTalktime is closing");
+          extraTimer?.cancel();
+          //AppFirebaseService().orderData.value={};
+          //  endChatApi();
+        }
+        print("time Left ${MiddleWare.instance.currentPage}");
+      }
+    });
+  }
+
+  void talkTimeStartTimer(int futureTimeInEpochMillis) {
+    DateTime dateTime =
+        DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
+    print("futureTime.minute $futureTimeInEpochMillis");
+    chatTimer?.cancel();
+    chatTimer = null;
+    chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
+      timeDifference = dateTime.difference(DateTime.now());
+
+      if (timeDifference!.isNegative ||
+          (timeDifference?.inSeconds == 0 &&
+              timeDifference?.inMinutes == 0 &&
+              timeDifference?.inHours == 0)) {
+        await callHangup();
+        showTalkTime.value = "-1";
+        print("chatTimeLeft ${showTalkTime.value}");
+        chatTimer?.cancel();
+        Future.delayed(const Duration(seconds: 4)).then((value) {
+          if (AppFirebaseService().orderData.value["status"] == "3" &&
+              showTalkTime.value == "-1") {
+            DatabaseReference ref = FirebaseDatabase.instance.ref(
+                "order/${AppFirebaseService().orderData.value["orderId"]}");
+            ref.update({
+              "status": "4",
+              "source": "astrorApp",
+              "order_end_time": DateTime.now().millisecondsSinceEpoch + 60000
+            });
+          }
+        });
+      } else {
+        extraTimer?.cancel();
+        //         print('Countdown working');
+        showTalkTime.value =
+            "${timeDifference?.inHours.toString().padLeft(2, '0')}:"
+            "${timeDifference?.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
+            "${timeDifference?.inSeconds.remainder(60).toString().padLeft(2, '0')}";
+        if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+          timer.cancel();
+        }
+        print("${MiddleWare.instance.currentPage}");
+        print(
+            'chatTimeLeft ${timeDifference?.inHours}:${timeDifference?.inMinutes.remainder(60)}:${timeDifference?.inSeconds.remainder(60)}');
+      }
+    });
+  }
+
+  Future<void> callHangup() {
+    ZegoService().controller.hangUp(Get.context!, showConfirmation: false);
+    update();
+    return Future<void>.value();
   }
 
   /// ------------ joinRoom socket event -------------- ///
@@ -542,6 +703,35 @@ class NewChatController extends GetxController {
     }
   }
 
+  /// ------------------ Notice Board Api ----------------------- ///
+
+  List<NoticeDatum> noticeDataChat = [];
+
+  noticeAPi() async {
+    try {
+      final response = await noticeRepository.get(
+          ApiProvider.getAstroAllNoticeType3,
+          headers: await noticeRepository.getJsonHeaderURL());
+
+      if (response.statusCode == 200) {
+        final noticeResponse = noticeResponseFromJson(response.body);
+        if (noticeResponse.statusCode == noticeRepository.successResponse &&
+            noticeResponse.success!) {
+          noticeDataChat = noticeResponse.data;
+          print(noticeDataChat.length);
+          print("noticeDataChat.length");
+          update();
+        } else {
+          throw CustomException(json.decode(response.body));
+        }
+      } else {
+        throw CustomException(json.decode(response.body));
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
   /// ------------------ Tarrot card bottom sheet ----------------------- ///
   RxBool isCardBotOpen = false.obs;
   RxBool isCardVisible = false.obs;

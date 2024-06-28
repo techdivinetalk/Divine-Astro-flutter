@@ -61,7 +61,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
               height: double.infinity,
               fit: BoxFit.cover,
               color: appColors.white,
-            ),
+            ), 
             Column(
               children: [
                 AstrologerChatAppBar(),

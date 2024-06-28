@@ -95,6 +95,10 @@ class DashboardController extends GetxController
     if (state == AppLifecycleState.resumed) {
       print("checkPermissions");
       // Check permissions when app is resumed
+
+      if(AppSocket().socket!.disconnected){
+        AppSocket().socketConnect();
+      }
       checkPermissions();
       getOrderFromApi();
       if (preferenceService.getUserDetail() != null) {
