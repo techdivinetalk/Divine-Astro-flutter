@@ -690,6 +690,35 @@ class UserRepository extends ApiProvider {
       rethrow;
     }
   }
+  Future<UpdateProfileResponse> getAstroImagesApi(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await post(getAstrologerImages,
+          body: jsonEncode(param), headers: await getJsonHeaderURL());
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final editResponse = updateProfileResponseFromJson(response.body);
+          return editResponse;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
 
   Future<AddEditPujaModel> addEditPujaApi(Map<String, dynamic> param) async {
     try {

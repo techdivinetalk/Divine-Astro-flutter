@@ -124,9 +124,11 @@ class AllOrderHistoryUi extends StatelessWidget {
         productTypeText = 'Donation';
         break;
       case 12:
+        productTypeText = 'Customer Chat';
+        break;
+      case 14:
         productTypeText = 'Ecommerce Product';
         break;
-
       default:
         productTypeText = 'Unknown';
     }

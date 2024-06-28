@@ -93,6 +93,7 @@ class ApiProvider {
   final String getSpecialityList = "getSpecialityList";
   final String addNoticeToAstrologer = "addNoticeToAstrologer";
   final String updateProfileDetails = "updateProfileDetails";
+  final String getAstrologerImages = "getAstrologerImages";
   final String addPooja = "addPooja";
   final String addProductByAstrologer = "addProductByAstrologer";
   final String getCategory = "getCategory";
