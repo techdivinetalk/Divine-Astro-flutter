@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
@@ -12,6 +13,7 @@ import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/ChatOrderResponse.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
+import 'package:divine_astrologer/screens/dashboard/widgets/terms_and_condition_popup.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/force_update_sheet.dart';
 import 'package:flutter/foundation.dart';
@@ -290,8 +292,12 @@ class DashboardController extends GetxController
     preferenceService.setConstantDetails(commonConstants);
     preferenceService
         .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
-
-    //added by: dev-dharam
+    if (commonConstants.data.notice == null ||
+        commonConstants.data.notice == "null") {
+    } else {
+      log(commonConstants.data.notice.toString());
+      showRecommendedPopupAlert();
+    } //added by: dev-dharam
     Get.find<SharedPreferenceService>()
         .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
     //

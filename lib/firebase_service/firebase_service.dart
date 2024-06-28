@@ -1,12 +1,9 @@
 import "dart:async";
-import "dart:convert";
 
 import "package:divine_astrologer/app_socket/app_socket.dart";
-import "package:divine_astrologer/common/accept_chat_request_screen.dart";
 import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/constants.dart";
 import "package:divine_astrologer/common/routes.dart";
-import "package:divine_astrologer/di/hive_services.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/pages/profile/profile_page_controller.dart";
@@ -14,7 +11,6 @@ import "package:divine_astrologer/repository/pre_defind_repository.dart";
 import "package:divine_astrologer/repository/user_repository.dart";
 import "package:divine_astrologer/screens/dashboard/dashboard_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/live_global_singleton.dart";
-import "package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart";
 import "package:divine_astrologer/screens/side_menu/settings/settings_controller.dart";
 import "package:divine_astrologer/watcher/real_time_watcher.dart";
 import "package:firebase_database/firebase_database.dart";
@@ -24,7 +20,6 @@ import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 
 import "../common/MiddleWare.dart";
-import "../model/chat_offline_model.dart";
 import "../screens/live_page/constant.dart";
 
 bool isLogOut = false;
@@ -121,22 +116,20 @@ class AppFirebaseService {
                       //       .value["status"]}");
                       // }
                       switch ((orderData.value["status"])) {
-                      case "0":
+                        case "0":
                           // if(!kDebugMode){
                           //
                           // }
                           // if (Get.currentRoute !=
                           //     RouteName.acceptChatRequestScreen) {
-                            await Get.toNamed(
-                                RouteName.acceptChatRequestScreen);
-                        //  }
+                          await Get.toNamed(RouteName.acceptChatRequestScreen);
+                          //  }
                           break;
                         case "1":
                           // if (Get.currentRoute !=
                           //     RouteName.acceptChatRequestScreen) {
-                            await Get.toNamed(
-                                RouteName.acceptChatRequestScreen);
-                        //  }
+                          await Get.toNamed(RouteName.acceptChatRequestScreen);
+                          //  }
                           break;
 
                         case "2":
@@ -165,9 +158,10 @@ class AppFirebaseService {
                     } else {
                       orderData({});
                       sendBroadcast(BroadcastMessage(name: "orderEnd"));
-                      if (MiddleWare.instance.currentPage == RouteName.acceptChatRequestScreen){
+                      if (MiddleWare.instance.currentPage ==
+                          RouteName.acceptChatRequestScreen) {
                         Get.until(
-                              (route) {
+                          (route) {
                             return Get.currentRoute == RouteName.dashboard;
                           },
                         );
@@ -181,9 +175,10 @@ class AppFirebaseService {
                 // }
                 orderData({});
                 sendBroadcast(BroadcastMessage(name: "orderEnd"));
-                if (MiddleWare.instance.currentPage == RouteName.acceptChatRequestScreen){
+                if (MiddleWare.instance.currentPage ==
+                    RouteName.acceptChatRequestScreen) {
                   Get.until(
-                        (route) {
+                    (route) {
                       return Get.currentRoute == RouteName.dashboard;
                     },
                   );
@@ -192,12 +187,13 @@ class AppFirebaseService {
             },
           );
         } else {
-          if (MiddleWare.instance.currentPage == RouteName.acceptChatRequestScreen){
+          if (MiddleWare.instance.currentPage ==
+              RouteName.acceptChatRequestScreen) {
             // if(kDebugMode) {
             //   divineSnackBar(data: "$value Order Ended");
             // }
             Get.until(
-                  (route) {
+              (route) {
                 return Get.currentRoute == RouteName.dashboard;
               },
             );
@@ -437,8 +433,6 @@ class AppFirebaseService {
     } catch (e) {
       debugPrint("Error reading data from the database: $e");
     }
-
-
   }
 
   saveMasterData(DataSnapshot dataSnapshot) {

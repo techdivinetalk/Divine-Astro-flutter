@@ -1,12 +1,11 @@
+import 'dart:developer';
+
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/order_history_model/feed_order_history.dart';
-import 'package:divine_astrologer/pages/performance/widget/date_selection_ui.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
-import 'package:video_trimmer/video_trimmer.dart';
 
 import '../../common/app_exception.dart';
 import '../../di/shared_preference_service.dart';
@@ -58,7 +57,7 @@ class OrderHistoryController extends GetxController {
       initialPage = Get.arguments;
       print(initialPage);
 
-     /* getOrderHistory(type: 3, page: liveGiftPageCount);
+      /* getOrderHistory(type: 3, page: liveGiftPageCount);
       update();*/
     }
     super.onInit();
@@ -104,7 +103,7 @@ class OrderHistoryController extends GetxController {
       //     startDate ?? DateFormat("yyyy-mm-dd").format(DateTime.now()),
       // "end_date": endDate ?? DateFormat("yyyy-mm-dd").format(DateTime.now()),
     };
-
+    log("paramparam ${params.toString()}");
     // 0: All,
     // 1:Call,
     // 2:Chat,
@@ -112,7 +111,6 @@ class OrderHistoryController extends GetxController {
     // 4:Remedy Suggested
 
     try {
-
       if (type == 0) {
         allApiCalling.value = true;
         update();
@@ -130,12 +128,11 @@ class OrderHistoryController extends GetxController {
           emptyMsg.value = data.message ?? "No data found!";
         }
         update(['allOrders']);
-
       } else if (type == 1) {
         callApiCalling.value = true;
         update();
         CallOrderHistoryModelClass data =
-        await OrderHistoryRepository().getCallOrderHistory(params);
+            await OrderHistoryRepository().getCallOrderHistory(params);
         callApiCalling.value = false;
         var history = data.data;
 
@@ -148,12 +145,11 @@ class OrderHistoryController extends GetxController {
           emptyMsg.value = data.message ?? "No data found!";
         }
         update();
-
       } else if (type == 2) {
         chatApiCalling.value = true;
         update();
         ChatOrderHistoryModelClass data =
-        await OrderHistoryRepository().getChatOrderHistory(params);
+            await OrderHistoryRepository().getChatOrderHistory(params);
         chatApiCalling.value = false;
         var history = data.data;
 
@@ -199,11 +195,11 @@ class OrderHistoryController extends GetxController {
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
-      } else if(type == 5){
+      } else if (type == 5) {
         orderApiCalling.value = true;
         update();
         FeedBackOrder data =
-        await OrderHistoryRepository().getFeedbackChatOrderHistory(params);
+            await OrderHistoryRepository().getFeedbackChatOrderHistory(params);
         orderApiCalling.value = false;
         var feedbackOrder = data.data;
 
@@ -220,13 +216,13 @@ class OrderHistoryController extends GetxController {
     } catch (error) {
       if (type == 1) {
         allApiCalling.value = false;
-      }else if (type == 1) {
+      } else if (type == 1) {
         callApiCalling.value = false;
-      }else if (type == 2) {
+      } else if (type == 2) {
         chatApiCalling.value = false;
-      }else if (type == 3) {
+      } else if (type == 3) {
         giftsApiCalling.value = false;
-      }else if (type == 3) {
+      } else if (type == 3) {
         suggestApiCalling.value = false;
       }
       debugPrint("error $error");
@@ -239,9 +235,9 @@ class OrderHistoryController extends GetxController {
   }
 
   Widget paginationLoadingWidget() => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 10),
-    child: CircularProgressIndicator(color: appColors.guideColor),
-  );
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: CircularProgressIndicator(color: appColors.guideColor),
+      );
 
   /*getFilterDate({String? type}) {
     String startDate = "";

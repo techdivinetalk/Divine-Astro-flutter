@@ -4,9 +4,8 @@ import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
-import '../common/routes.dart';
+
 import '../model/get_kundli_data.dart' as kundli_data;
 import '../model/internal/astro_details_model.dart';
 import '../model/internal/birth_details_model.dart';
@@ -98,8 +97,11 @@ class KundliRepository extends ApiProvider {
   Future<HoroChartModel> getHoroChart(
       Map<String, dynamic> params, String chartId) async {
     try {
-      final response = await post('$horoChartImageInt$chartId',
-          headers: await getJsonHeaderURL(), body: jsonEncode(params));
+      final response = await post(
+        '$horoChartImageInt$chartId',
+        headers: await getJsonHeaderURL(),
+        body: jsonEncode(params),
+      );
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
       } else if (response.statusCode == HttpStatus.badRequest) {
@@ -158,7 +160,8 @@ class KundliRepository extends ApiProvider {
       }
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {

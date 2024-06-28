@@ -174,7 +174,7 @@ class Data {
         notificationType: Map.from(json["notification_type"])
             .map((k, v) => MapEntry<String, String>(k, v)),
         awsCredentails: AwsCredential.fromJson(json["aws_credential"]),
-        whatsappNo: json["whatsappNo"],
+        whatsappNo: json["whatsappNo"] ?? "",
         taroCard: json['taro_card'],
         currentTime: json['current_time'],
         notice: json['notice'],
