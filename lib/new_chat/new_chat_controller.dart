@@ -75,6 +75,7 @@ class NewChatController extends GetxController {
 
   @override
   void onInit() {
+    super.onInit();
     if (AppFirebaseService().orderData.isNotEmpty) {
       initialiseControllers();
       joinRoomSocketEvent();
@@ -116,7 +117,7 @@ class NewChatController extends GetxController {
         scrollToBottomFunc();
       },
     );
-    super.onInit();
+
   }
 
   getAllApiDataInChat() async {
@@ -320,7 +321,8 @@ class NewChatController extends GetxController {
 
   /// ------------------ send message socket functions  ----------------------- ///
   sendMessageInSocket(ChatMessage? newMessage) {
-    log(jsonEncode(newMessage));
+    // log(jsonEncode(newMessage));
+    // log(jsonEncode(newMessage).runtimeType.toString());
     print("jsonEncode(newMessage)");
     log(newMessage!.toJson().toString());
     print("newMessage!.toJson()");
@@ -389,7 +391,7 @@ class NewChatController extends GetxController {
         ),
       );
     }
-    update();
+    // update();
   }
 
   /// ------------------ download image  ----------------------- ///
