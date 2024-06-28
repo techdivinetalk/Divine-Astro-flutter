@@ -164,7 +164,6 @@ flutter:
     - assets/images/
     - assets/lottie/
     - assets/svg/
-    - assets/svga/
     - assets/
   fonts:
     - family: Poppins
