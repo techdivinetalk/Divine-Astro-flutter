@@ -105,6 +105,29 @@ class _LivePage extends State<LiveDharamScreen>
   @override
   void initState() {
     super.initState();
+    _svgController = SVGAAnimationController(vsync: this);
+    _svgController.addStatusListener((status) async {
+      if (status == AnimationStatus.completed) {
+        _svgController.reset();
+        svgaUrls.remove(svgaUrls.entries.first.key);
+        List<dynamic> giftList = [];
+        for (var gift in svgaUrls.entries) {
+          giftList.add({gift.key: gift.value});
+        }
+        // remove from firestore
+        await _controller.liveStore.doc(_controller.userId).update({
+          "gift": giftList,
+        });
+        print('gift - removed - from - firestore');
+        if (svgaUrls.isNotEmpty) {
+          await _loadRandomAnimation();
+        }
+        if (svgaUrls.isEmpty) {
+          print("Animation -removed");
+          _removeOverlay();
+        }
+      }
+    });
 
     WidgetsBinding.instance.addObserver(this);
 
@@ -139,22 +162,18 @@ class _LivePage extends State<LiveDharamScreen>
         );
         if (data['gift'] != null) {
           List<dynamic> giftList = data['gift'] ?? [];
-          Map<String, dynamic> newUrls = {};
           for (var gift in giftList) {
             gift.forEach((key, value) {
-              print(value);
-              newUrls[key.toString()] = value.toString();
-              if (newUrls.length == 1) {
-                // _loadRandomAnimation(gifts: svgaUrls, giftList: giftList);
-              }
+              svgaUrls[key.toString()] = value.toString();
             });
           }
-          if (!_controller.areMapsSame(svgaUrls, newUrls) &&
-              giftList.isNotEmpty &&
-              newUrls.length == 1) {
-            svgaUrls = newUrls;
-            _loadRandomAnimation(gifts: svgaUrls, giftList: giftList);
-          }
+          _loadRandomAnimation(gifts: svgaUrls, giftList: giftList);
+          // if (!_controller.areMapsSame(svgaUrls, newUrls) &&
+          //     giftList.isNotEmpty &&
+          //     newUrls.length == 1) {
+          //   svgaUrls = newUrls;
+          //   _loadRandomAnimation(gifts: svgaUrls, giftList: giftList);
+          // }
         }
       } else {
         print('Document does not exist');
@@ -172,21 +191,6 @@ class _LivePage extends State<LiveDharamScreen>
     );
 
     _startTimer();
-
-    _svgController = SVGAAnimationController(vsync: this);
-    _svgController.addStatusListener((status) async {
-      if (status == AnimationStatus.completed) {
-        _svgController.reset();
-        svgaUrls.remove(svgaUrls.entries.first.key);
-        if (svgaUrls.isNotEmpty) {
-          await _loadRandomAnimation();
-        }
-        if (svgaUrls.isEmpty) {
-          print("Animation -removed");
-          _removeOverlay();
-        }
-      }
-    });
   }
 
   Future<void> _showOverlay() async {
@@ -216,6 +220,12 @@ class _LivePage extends State<LiveDharamScreen>
 
   Future<void> _loadRandomAnimation(
       {Map<String, dynamic>? gifts, List? giftList}) async {
+    if (_svgController.isAnimating) {
+      return;
+    }
+    if (svgaUrls.isEmpty) {
+      return;
+    }
     print("_loadRandomAnimation-2");
     _showOverlay();
     const SVGAParser parser = SVGAParser();
@@ -225,25 +235,6 @@ class _LivePage extends State<LiveDharamScreen>
     print("svgaUrls.videoItem");
     _svgController.videoItem = videoItem;
     _svgController.forward();
-    if (gifts != null && giftList != null) {
-      Future.delayed(
-        const Duration(seconds: 0),
-        () async {
-          print("gifts----  $gifts");
-          print("giftList--- $giftList");
-          print("gifts.keys.first ${gifts.keys.first}");
-          print("removing code of gift from firebase");
-          // giftList.remove(gifts);
-          giftList
-              .removeWhere((element) => element.containsKey(gifts.keys.first));
-          await _controller.liveStore.doc(_controller.userId).update({
-            "gift": giftList,
-          }).then((value) {
-            print("removing gift from firebase");
-          });
-        },
-      );
-    }
   }
 
   void successAndFailureCallBack({
@@ -1770,6 +1761,11 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Future<void> showCardDeckToUserPopup1() async {
+    if (_controller.deckCardModelList.isEmpty) {
+      await _controller.tarotCardInit();
+      showCardDeckToUserPopup1();
+      return;
+    }
     showCardDeckToUserPopupTimeoutHappening = true;
     LiveGlobalSingleton().isShowCardDeckToUser1PopupOpen = true;
 
@@ -2163,36 +2159,40 @@ class _LivePage extends State<LiveDharamScreen>
   }
 
   Widget newAppBarRight() {
-    return InkWell(
-      onTap: () async {
-        //
-        //
-        await exitFunc();
-        //
-        //
-      },
-      child: SizedBox(
-        height: 50,
-        width: 50,
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(50.0),
-            ),
-            border: Border.all(
-              color: appColors.guideColor,
-            ),
-            color: appColors.black.withOpacity(0.2),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(0.0),
-            child: Image.asset(
-              _controller.currentCaller.isEngaded!
-                  ? "assets/images/live_new_hang_up.png"
-                  : "assets/images/live_exit_red.png",
-            ),
-          ),
-        ),
+    return Obx(
+      () => InkWell(
+        onTap: () async {
+          //
+          //
+          await exitFunc();
+          //
+          //
+        },
+        child: _controller.isEndCallLoading.value
+            ? const SizedBox.shrink()
+            : SizedBox(
+                height: 50,
+                width: 50,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(50.0),
+                    ),
+                    border: Border.all(
+                      color: appColors.guideColor,
+                    ),
+                    color: appColors.black.withOpacity(0.2),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Image.asset(
+                      _controller.currentCaller.isEngaded!
+                          ? "assets/images/live_new_hang_up.png"
+                          : "assets/images/live_exit_red.png",
+                    ),
+                  ),
+                ),
+              ),
       ),
     );
   }
@@ -3173,13 +3173,16 @@ class _LivePage extends State<LiveDharamScreen>
     }
 
     if (removed) {
+      _controller.isEndCallLoading.value = true;
       await _controller.makeAPICallForEndCall(
         successCallBack: (String message) async {
+          _controller.isEndCallLoading.value = false;
           successAndFailureCallBack(
               message: message, isForSuccess: true, isForFailure: false);
           await _controller.removeFromOrder();
         },
         failureCallBack: (String message) {
+          _controller.isEndCallLoading.value = false;
           successAndFailureCallBack(
             message: message,
             isForSuccess: false,

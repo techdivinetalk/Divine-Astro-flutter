@@ -101,10 +101,10 @@ class UploadYourPhotosUi extends GetView<UploadYourPhotosController> {
                                       child: Align(
                                         alignment: Alignment.topRight,
                                         child: Container(
-                                          decoration:  BoxDecoration(
+                                          decoration: BoxDecoration(
                                               shape: BoxShape.circle,
                                               color: appColors.blackColor),
-                                          child:  Padding(
+                                          child: Padding(
                                             padding: const EdgeInsets.all(3.0),
                                             child: Icon(
                                               Icons.close,
@@ -122,25 +122,31 @@ class UploadYourPhotosUi extends GetView<UploadYourPhotosController> {
               ),
             ),
             Obx(() {
-              return controller.isLoading.value ?  CustomLightYellowButton(
-                name: "pleaseWait".tr,
-                onTaped: () {},
-              ) : CustomLightYellowButton(
-                name: "uploadImages".tr,
-                onTaped: () {
-                  if (controller.selectedImages.isNotEmpty) {
-                    // Images are selected, proceed with uploading
-                    if (controller.selectedImages.length <= 5) {
-                      controller.uploadImageToS3Bucket(controller.selectedImages);
-                    } else {
-                      divineSnackBar(data: "imageValidationMsg".tr);
-                    }
-                  } else {
-                    // No images are selected, show a Snackbar
-                    divineSnackBar(data: "No images selected. Please choose at least one image to upload.".tr);
-                  }
-                },
-              );
+              return controller.isLoading.value
+                  ? CustomLightYellowButton(
+                      name: "pleaseWait".tr,
+                      onTaped: () {},
+                    )
+                  : CustomLightYellowButton(
+                      name: "uploadImages".tr,
+                      onTaped: () {
+                        if (controller.selectedImages.isNotEmpty) {
+                          // Images are selected, proceed with uploading
+                          if (controller.selectedImages.length <= 5) {
+                            controller.uploadImageToS3Bucket(
+                                controller.selectedImages);
+                          } else {
+                            divineSnackBar(data: "imageValidationMsg".tr);
+                          }
+                        } else {
+                          // No images are selected, show a Snackbar
+                          divineSnackBar(
+                              data:
+                                  "No images selected. Please choose at least one image to upload."
+                                      .tr);
+                        }
+                      },
+                    );
             }),
           ],
         ),

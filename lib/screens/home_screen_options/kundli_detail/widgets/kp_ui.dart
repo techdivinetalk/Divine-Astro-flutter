@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+
 import '../../../../common/app_textstyle.dart';
 import '../../../../common/colors.dart';
 import '../../../../common/custom_progress_dialog.dart';
 import '../../../../model/internal/kp_data_model.dart';
+import '../../../../tarotCard/widget/custom_image_view.dart';
 import '../kundli_detail_controller.dart';
 
 class KpUI extends StatelessWidget {
@@ -56,9 +57,24 @@ class KpUI extends StatelessWidget {
                                   fontWeight: FontWeight.w500,
                                   fontColor: appColors.textColor)),
                           SizedBox(height: 15.h),
-                          SvgPicture.string(
-                            controller.chalitChart.value.data?.svg ?? '',
-                          ),
+                          controller.chalitChart.value.data?.svg != null
+                              ? Center(
+                                  child: CustomImageView(
+                                    // height: 40,
+                                    // width: 40,
+                                    imagePath:
+                                        "${controller.preference.getAmazonUrl()}/${controller.chalitChart.value.data!.svg}",
+                                    radius: BorderRadius.circular(10),
+                                    placeHolder:
+                                        "assets/images/default_profile.png",
+                                    fit: BoxFit.cover,
+                                  ),
+                                )
+
+                              // SvgPicture.string(
+                              //     controller.moonChart.value.data?.svg ?? '',
+                              //   )
+                              : SizedBox(),
                           SizedBox(height: 15.h),
                         ],
                       ),
@@ -92,8 +108,7 @@ class KpUI extends StatelessWidget {
       children: [
         Text("cusps".tr,
             style: AppTextStyle.textStyle20(
-                fontWeight: FontWeight.w500,
-                fontColor: appColors.textColor)),
+                fontWeight: FontWeight.w500, fontColor: appColors.textColor)),
         SizedBox(
           height: 20.h,
         ),
@@ -245,8 +260,7 @@ class KpUI extends StatelessWidget {
       children: [
         Text("planets".tr,
             style: AppTextStyle.textStyle20(
-                fontWeight: FontWeight.w500,
-                fontColor: appColors.textColor)),
+                fontWeight: FontWeight.w500, fontColor: appColors.textColor)),
         SizedBox(
           height: 20.h,
         ),
@@ -398,8 +412,7 @@ class KpUI extends StatelessWidget {
       children: [
         Text("rulingPlanets".tr,
             style: AppTextStyle.textStyle20(
-                fontWeight: FontWeight.w500,
-                fontColor: appColors.textColor)),
+                fontWeight: FontWeight.w500, fontColor: appColors.textColor)),
         SizedBox(
           height: 15.h,
         ),

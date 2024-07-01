@@ -6,7 +6,7 @@ import 'package:divine_astrologer/di/progress_service.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_global_singleton.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/utils.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -21,6 +21,7 @@ class ApiProvider {
   // static const String socketUrl = "http://13.127.116.89:4000";
   static const String socketUrl = "https://list.divinetalk.live";
 
+  static String debugingUrl = "http://13.235.46.27/api/astro/$version/";
   static String baseUrl =
       "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
   static String imageBaseUrl =
@@ -92,6 +93,7 @@ class ApiProvider {
   final String getSpecialityList = "getSpecialityList";
   final String addNoticeToAstrologer = "addNoticeToAstrologer";
   final String updateProfileDetails = "updateProfileDetails";
+  final String getAstrologerImages = "getAstrologerImages";
   final String addPooja = "addPooja";
   final String addProductByAstrologer = "addProductByAstrologer";
   final String getCategory = "getCategory";
@@ -208,6 +210,12 @@ class ApiProvider {
   final String submitResignation = "submit-resignation"; //Post Api
   final String resignationStatus = "resignation-status"; //Get Api
   final String cancelResignation = "cancel-resignation"; //Get Api
+
+  //Leave Apis
+  final String leaveReasons = "leave-reasons"; //Get Api
+  final String submitLeave = "submit-leave"; //Post Api
+  final String leaveStatus = "leave-status"; //Get Api
+  final String cancelLeave = "cancel-leave"; //Get Api
 
   //privacy policy & terms
   final String termsAndCondition = "termsAndCondition";
@@ -440,13 +448,16 @@ class ApiProvider {
       dynamic body,
       Encoding? encoding,
       bool closeDialogOnTimeout = true}) async {
-    endPoint ??= baseUrl;
+    endPoint ??= //kDebugMode == true ? debugingUrl :
+        baseUrl;
     headers ??= await getAuthorisedHeader();
+    log("urllllllll: ${endPoint + url}");
 
     if (await networkManager.isConnected() ?? false) {
       log('url: $endPoint$url');
       log('body: $body');
       log("headers: $headers");
+      log("urllllllll: ${endPoint + url}");
       var response = await http
           .post(
         Uri.parse(endPoint + url),

@@ -79,58 +79,62 @@ class NewRegstrationScreen extends GetView<NewRegistrationController> {
                               ),
                             ),
                           ),
-                    controller.selectedReasonData!.haveComment == false
+                    controller.selectedReasonData == null
                         ? SizedBox()
-                        : AbsorbPointer(
-                            absorbing:
-                                controller.resignationStatus!.isResign == true
-                                    ? true
-                                    : false,
-                            child: Padding(
-                              padding:
-                                  EdgeInsets.only(top: 10, right: 16, left: 16),
-                              child: TextFormField(
-                                controller: controller.textController,
-                                onChanged: (value) {
-                                  controller.selectedReason = value;
-                                  log(controller.selectedReason);
-                                },
-                                maxLines:
-                                    3, // Adjust the number of lines as needed
-                                decoration: InputDecoration(
-                                  hintText: "Reason here.....",
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 8),
-                                  hintStyle: AppTextStyle.textStyle16(),
-                                  focusedBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide(
-                                        color: AppColors().greyColor2),
-                                  ),
-                                  disabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide(
-                                        color: AppColors().greyColor2),
-                                  ),
-                                  errorBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide(
-                                        color: AppColors().greyColor2),
-                                  ),
-                                  enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide(
-                                        color: AppColors().greyColor2),
-                                  ),
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12),
-                                    borderSide: BorderSide(
-                                        color: AppColors().greyColor2),
+                        : controller.selectedReasonData!.haveComment == false
+                            ? SizedBox()
+                            : AbsorbPointer(
+                                absorbing:
+                                    controller.resignationStatus!.isResign ==
+                                            true
+                                        ? true
+                                        : false,
+                                child: Padding(
+                                  padding: EdgeInsets.only(
+                                      top: 10, right: 16, left: 16),
+                                  child: TextFormField(
+                                    controller: controller.textController,
+                                    onChanged: (value) {
+                                      controller.selectedReason = value;
+                                      log(controller.selectedReason);
+                                    },
+                                    maxLines:
+                                        3, // Adjust the number of lines as needed
+                                    decoration: InputDecoration(
+                                      hintText: "Reason here.....",
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 8),
+                                      hintStyle: AppTextStyle.textStyle16(),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide(
+                                            color: AppColors().greyColor2),
+                                      ),
+                                      disabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide(
+                                            color: AppColors().greyColor2),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide(
+                                            color: AppColors().greyColor2),
+                                      ),
+                                      enabledBorder: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide(
+                                            color: AppColors().greyColor2),
+                                      ),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(12),
+                                        borderSide: BorderSide(
+                                            color: AppColors().greyColor2),
+                                      ),
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                          ),
                     Padding(
                       padding:
                           EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -172,7 +176,12 @@ class NewRegstrationScreen extends GetView<NewRegistrationController> {
                                       // Single tapped.
                                     ),
                                     TextSpan(
-                                      text: 'Pending',
+                                      text: controller.resignationStatus!
+                                                  .data['status'] ==
+                                              "pending"
+                                          ? 'Pending'
+                                          : controller.resignationStatus!
+                                              .data['approval_date'],
                                       style: AppTextStyle.textStyle16(
                                         fontWeight: FontWeight.w500,
                                         fontColor: AppColors().red,

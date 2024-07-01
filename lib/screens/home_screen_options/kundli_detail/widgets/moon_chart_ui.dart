@@ -1,10 +1,10 @@
 import 'package:divine_astrologer/screens/home_screen_options/kundli_detail/kundli_detail_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 
 import '../../../../common/custom_progress_dialog.dart';
+import '../../../../tarotCard/widget/custom_image_view.dart';
 
 class MoonChartUi extends StatelessWidget {
   final KundliDetailController controller;
@@ -33,9 +33,23 @@ class MoonChartUi extends StatelessWidget {
                   const LoadingWidget(),
                 ],
               ),
-              firstChild: SvgPicture.string(
-                controller.moonChart.value.data?.svg??'',
-              ),
+              firstChild: controller.moonChart.value.data?.svg != null
+                  ? Center(
+                      child: CustomImageView(
+                        // height: 40,
+                        // width: 40,
+                        imagePath:
+                            "${controller.preference.getAmazonUrl()}/${controller.moonChart.value.data!.svg}",
+                        radius: BorderRadius.circular(10),
+                        placeHolder: "assets/images/default_profile.png",
+                        fit: BoxFit.cover,
+                      ),
+                    )
+                  //
+                  // SvgPicture.string(
+                  //     controller.moonChart.value.data?.svg ?? '',
+                  //   )
+                  : SizedBox(),
             ),
           ),
         ],
