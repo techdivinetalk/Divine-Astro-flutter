@@ -135,8 +135,8 @@ class ChatMessageWithSocketController extends GetxController
   Rx<bool> isCardBotOpen = false.obs;
   bool isGalleryOpen = false;
 
-  FocusNode focusNode = FocusNode();
-  RxBool isKeyboardVisible = false.obs;
+
+
 
   void startTimer() {
     int _start = 5;
@@ -183,7 +183,7 @@ class ChatMessageWithSocketController extends GetxController
   void dispose() {
     // TODO: implement dispose
 
-    focusNode.dispose();
+
 
     _appLinkingStreamSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
@@ -419,13 +419,6 @@ class ChatMessageWithSocketController extends GetxController
       });
     }
 
-    focusNode.addListener(() {
-      isKeyboardVisible.value = focusNode.hasFocus;
-
-      if (isKeyboardVisible.value) {
-        scrollToBottomFunc();
-      }
-    });
     getDir();
     initialiseControllers();
     noticeAPi();
