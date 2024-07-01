@@ -235,7 +235,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                         assetImage: false,
                         placeHolderPath: Assets.images.defaultProfile.path,
                         imagePath: (controller.args?.image ?? '').startsWith(
-                                'https://divinenew-prod.s3.ap-south-1.amazonaws.com/')
+                                'https://divineprod.blob.core.windows.net/divineprod/')
                             ? controller.args?.image ?? ''
                             : "${preferenceService.getAmazonUrl()}/${controller.args?.image ?? ''}",
                         loadingIndicator: SizedBox(

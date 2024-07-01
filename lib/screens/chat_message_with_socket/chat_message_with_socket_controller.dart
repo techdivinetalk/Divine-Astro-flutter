@@ -386,7 +386,7 @@ class ChatMessageWithSocketController extends GetxController
         final key = event.snapshot.key; // Get the key of the changed child
         final value = event.snapshot.value;
         if (event.snapshot.value != null) {
-          print("onChildChanged $key");
+          print("onChildChanged-2 $key");
           print("onChildChanged $value");
           updateOrderInfo(key!, value, false);
         }
@@ -433,7 +433,7 @@ class ChatMessageWithSocketController extends GetxController
     AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
       if (p0["status"] == null || p0["astroId"] == null) {
         backFunction();
-        AppFirebaseService().database.child("order/${p0["orderId"]}").remove();
+       // AppFirebaseService().database.child("order/${p0["orderId"]}").remove();
       } else {
         print("orderData Changed");
 

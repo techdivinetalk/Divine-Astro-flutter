@@ -97,14 +97,15 @@ Future<void> firebaseMessagingConfig(BuildContext buildContext) async {
     }
   });
 
-  FirebaseMessaging.onBackgroundMessage((message) async {
-    debugPrint("Notification received : 3");
-    return checkNotification(isFromNotification: true);
-  });
+  // FirebaseMessaging.onBackgroundMessage((message) async {
+  //   print("Notification received : 3");
+  //   return checkNotification(isFromNotification: true);
+  // });
   // ignore: unused_element
   Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+    print("Notification received : 4");
     if (message.notification != null) {
-      debugPrint("Notification received : 4");
+      print("Notification received : 4");
       checkNotification(isFromNotification: true);
     }
   }

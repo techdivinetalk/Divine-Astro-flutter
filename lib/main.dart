@@ -43,7 +43,6 @@ import 'common/routes.dart';
 import 'di/fcm_notification.dart';
 import 'di/firebase_network_service.dart';
 import 'di/network_service.dart';
-import 'di/notification_two.dart';
 import 'di/progress_service.dart';
 import 'di/shared_preference_service.dart';
 import 'firebase_service/firebase_service.dart';
@@ -53,7 +52,10 @@ import 'screens/live_page/constant.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 late List<CameraDescription>? cameras;
-
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+  print('Handling a background message: ${message.messageId}');
+}
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
@@ -264,32 +266,33 @@ Future<void> initServices() async {
   await Hive.initFlutter();
 }
 
-@pragma('vm:entry-point')
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  // FirebaseDatabase.instance.ref().child("pushR").set(DateTime.now());
-
-  if (message.data["type"] == "8" &&
-      MiddleWare.instance.currentPage == RouteName.chatMessageUI &&
-      chatAssistantCurrentUserId.value.toString() ==
-          message.data['sender_id'].toString()) {
-    assistChatNewMsg([...assistChatNewMsg, message.data]);
-    assistChatNewMsg.refresh();
-  }
-
-  if (message.data['type'] == "1") {
-    HashMap<String, dynamic> updateData = HashMap();
-    updateData[message.data["chatId"]] = 1;
-    FirebaseDatabase.instance
-        .ref("user")
-        .child(
-            "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
-        .update(updateData);
-  }
-  showNotification(message.data["title"], message.data["message"],
-      message.data['type'], message.data);
-}
+// @pragma('vm:entry-point')
+// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+//   print("Background-Called");
+//   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+//
+//   // FirebaseDatabase.instance.ref().child("pushR").set(DateTime.now());
+//
+//   if (message.data["type"] == "8" &&
+//       MiddleWare.instance.currentPage == RouteName.chatMessageUI &&
+//       chatAssistantCurrentUserId.value.toString() ==
+//           message.data['sender_id'].toString()) {
+//     assistChatNewMsg([...assistChatNewMsg, message.data]);
+//     assistChatNewMsg.refresh();
+//   }
+//
+//   if (message.data['type'] == "1") {
+//     HashMap<String, dynamic> updateData = HashMap();
+//     updateData[message.data["chatId"]] = 1;
+//     FirebaseDatabase.instance
+//         .ref("user")
+//         .child(
+//             "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
+//         .update(updateData);
+//   }
+//   showNotification(message.data["title"], message.data["message"],
+//       message.data['type'], message.data);
+// }
 
 Future<void> showNotification(String title, String message, String type,
     Map<String, dynamic> data) async {
@@ -388,6 +391,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
+  //  showSecondNotification("title", "body", AppFirebaseService().payload);
     return AppTheme(
       child: ScreenUtilInit(
           designSize: Size(MediaQuery.sizeOf(context).width,

@@ -67,7 +67,7 @@ class AppFirebaseService {
   var imagePath = "";
   RxMap<String, dynamic> orderData = <String, dynamic>{}.obs;
   final DatabaseReference database = FirebaseDatabase.instance.ref();
-  Map<String, dynamic>? payload = {};
+  Map<String, dynamic> payload = {};
 
   Future<void> writeData(String path, Map<String, dynamic> data) async {
     try {
@@ -297,7 +297,7 @@ class AppFirebaseService {
         final value =
             event.snapshot.value; // Get the new value of the changed child
         if (event.snapshot.value != null) {
-          print("onChildChanged $key");
+          print("onChildChanged-1 $key");
           print("onChildChanged $value");
           userRealTime(key!, value, path);
         }
