@@ -391,7 +391,7 @@ class NewChatController extends GetxController {
         ),
       );
     }
-    // update();
+    // update(); 
   }
 
   /// ------------------ download image  ----------------------- ///
