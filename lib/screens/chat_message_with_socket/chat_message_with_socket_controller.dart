@@ -1325,10 +1325,10 @@ class ChatMessageWithSocketController extends GetxController
     if (messgeScrollController.hasClients) {
       print("objectobjectobjectobject");
       Timer(
-        const Duration(milliseconds: 0),
+        const Duration(milliseconds: 100),
         () => messgeScrollController.animateTo(
           messgeScrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 0),
+          duration: const Duration(milliseconds: 100),
           curve: Curves.easeOut,
         ),
       );
