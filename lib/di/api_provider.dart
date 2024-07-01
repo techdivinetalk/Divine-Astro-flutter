@@ -22,15 +22,16 @@ class ApiProvider {
   static const String socketUrl = "https://list.divinetalk.live";
 
   static String debugingUrl = "http://13.235.46.27/api/astro/$version/";
-  static String baseUrl =
-      "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+  static String baseUrl = kDebugMode
+      ? "http://172.172.246.49/api/astro/$version/"
+      : "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
   static String imageBaseUrl =
       "${imageUploadBaseUrl.value}/api/astro/$version/";
 
   static const String astOnlineOffline =
       "https://list.divinetalk.live/api/v3/updateAstroStatusV2?unique_no=";
 
-  //final String baseUrl = "http://13.235.46.27/admin/$version/";
+  // final String baseUrl = "http://13.235.46.27/admin/$version/";
 
   //Socket Event
   final String deleteSession = "deleteSession";
