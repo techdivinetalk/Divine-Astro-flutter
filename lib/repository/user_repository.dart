@@ -548,31 +548,6 @@ class UserRepository extends ApiProvider {
     }
   }
 
-  /*Future<ConstantDetailsModelClass> constantDetailsData() async {
-    try {
-      // debugPrint("Params $param");
-      final response =
-          await post(constantDetails, headers: await getJsonHeaderURL());
-      log(response.body);
-      log("response.body");
-      if (response.statusCode == 200) {
-        final constantDetailsModelClass =
-            ConstantDetailsModelClass.fromJson(json.decode(response.body));
-        if (constantDetailsModelClass.statusCode == successResponse &&
-            constantDetailsModelClass.success == true) {
-          return constantDetailsModelClass;
-        } else {
-          throw CustomException(json.decode(response.body)["error"]);
-        }
-      } else {
-        throw CustomException(json.decode(response.body)[0]["message"]);
-      }
-    } catch (e, s) {
-      preferenceService.erase();
-      debugPrint("we got $e $s");
-      rethrow;
-    }
-  }*/
 
   Future<ChatOrderResponse> getChatOrderDetails() async {
     try {

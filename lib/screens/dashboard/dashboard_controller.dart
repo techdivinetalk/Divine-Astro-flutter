@@ -221,22 +221,24 @@ class DashboardController extends GetxController
 
     return havePermission;
   }
+
   Future<void> furtherProcedure() async {
     try {
-      if(kDebugMode){
+      if (kDebugMode) {
         Fluttertoast.showToast(msg: AppFirebaseService().payload!["order_id"]);
         Fluttertoast.showToast(msg: AppFirebaseService().payload!["queue_id"]);
       }
       ResCommonChatStatus response = await ChatRepository().chatAccept(
           ReqCommonChatParams(
-              queueId: AppFirebaseService().payload!["queue_id"],
-              orderId: AppFirebaseService().payload!["order_id"],
-              isTimeout: 0,
-              acceptOrReject: 1)
+                  queueId: AppFirebaseService().payload!["queue_id"],
+                  orderId: AppFirebaseService().payload!["order_id"],
+                  isTimeout: 0,
+                  acceptOrReject: 1)
               .toJson());
       print("chat_reject 2");
       if (response.statusCode == 200) {
-        Fluttertoast.showToast(msg: "Waiting for Customer to accept the request");
+        Fluttertoast.showToast(
+            msg: "Waiting for Customer to accept the request");
       } else {
         Fluttertoast.showToast(msg: response.message.toString());
       }
@@ -247,6 +249,7 @@ class DashboardController extends GetxController
       // Optionally, show a snackbar or dialog to inform the user about the error
     }
   }
+
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -254,7 +257,7 @@ class DashboardController extends GetxController
     checkPermissions();
     getOrderFromApi();
     checkAndRequestPermissions();
-     if (AppFirebaseService().payload != null) {
+    if (AppFirebaseService().payload != null) {
       // if (AppFirebaseService().payload!["type"] == null) {
       //   return;
       // }
@@ -301,9 +304,11 @@ class DashboardController extends GetxController
     Get.find<SharedPreferenceService>()
         .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
     //
-
+    print(commonConstants.data!.awsCredentails.baseurl);
+    print("commonConstants.data!.awsCredentails.baseurl");
     String? baseAmazonUrl = preferenceService.getBaseImageURL();
-
+    print(baseAmazonUrl);
+    print("baseAmazonUrlbaseAmazonUrlbaseAmazonUrl");
     // Handle potential null userData
     if (preferenceService.getUserDetail() != null) {
       userData = preferenceService.getUserDetail();
@@ -1056,6 +1061,7 @@ class DashboardController extends GetxController
 
   var isLoading = false.obs;
   var submitTermsAndCondition;
+
   void postAcceptTerms(noticeId) async {
     isLoading(true);
     Map<String, dynamic> param = {
