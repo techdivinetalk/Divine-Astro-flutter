@@ -223,6 +223,9 @@ class $AssetsImagesGen {
   AssetGenImage get divineLogo =>
       const AssetGenImage('assets/images/divine_logo.png');
 
+  /// File path: assets/images/done.png
+  AssetGenImage get done => const AssetGenImage('assets/images/done.png');
+
   /// File path: assets/images/empty-box 1.png
   AssetGenImage get emptyBox1 =>
       const AssetGenImage('assets/images/empty-box 1.png');
@@ -897,6 +900,7 @@ class $AssetsImagesGen {
         defaultProfiles,
         deleteAccout,
         divineLogo,
+        done,
         emptyBox1,
         ganeshJiPng,
         ganeshJiSvg,
@@ -1204,9 +1208,6 @@ class $AssetsSvgGen {
   /// File path: assets/svg/done.svg
   SvgGenImage get done => const SvgGenImage('assets/svg/done.svg');
 
-  /// File path: assets/svg/empty-box 1.svg
-  SvgGenImage get emptyBox1 => const SvgGenImage('assets/svg/empty-box 1.svg');
-
   /// File path: assets/svg/forward_icon.svg
   SvgGenImage get forwardIcon =>
       const SvgGenImage('assets/svg/forward_icon.svg');
@@ -1421,7 +1422,6 @@ class $AssetsSvgGen {
         diamond,
         disconnect,
         done,
-        emptyBox1,
         forwardIcon,
         gallery,
         galleryIcon,
