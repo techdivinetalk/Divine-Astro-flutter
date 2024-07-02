@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_holo_date_picker/date_picker_theme.dart';
+import 'package:flutter_holo_date_picker/i18n/date_picker_i18n.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
@@ -112,6 +113,7 @@ class DateTimePicker extends StatelessWidget {
                       onChange(pickerData);
                     }
                   },
+                  locale: DateTimePickerLocale.en_us,
                   pickerTheme: DateTimePickerTheme(
                     pickerHeight: 180,
                     itemHeight: 44,

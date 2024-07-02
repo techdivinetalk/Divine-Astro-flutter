@@ -29,19 +29,14 @@ import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 import '../../cache/custom_cache_manager.dart';
 import '../../common/app_exception.dart';
 import '../../common/app_textstyle.dart';
-
-import '../../common/app_exception.dart';
-import '../../common/app_textstyle.dart';
 import '../../common/common_functions.dart';
 import '../../di/fcm_notification.dart';
 import '../../model/astrologer_gift_response.dart';
-import '../../model/chat/ReqEndChat.dart';
 import '../../model/chat/req_common_chat_model.dart';
 import '../../model/chat/res_common_chat_success.dart';
 import '../../model/res_login.dart';
 import '../../repository/astrologer_profile_repository.dart';
 import '../../repository/chat_repository.dart';
-import '../live_dharam/perm/app_permission_service.dart';
 
 class DashboardController extends GetxController
     with GetSingleTickerProviderStateMixin, WidgetsBindingObserver {
@@ -221,22 +216,24 @@ class DashboardController extends GetxController
 
     return havePermission;
   }
+
   Future<void> furtherProcedure() async {
     try {
-      if(kDebugMode){
+      if (kDebugMode) {
         Fluttertoast.showToast(msg: AppFirebaseService().payload!["order_id"]);
         Fluttertoast.showToast(msg: AppFirebaseService().payload!["queue_id"]);
       }
       ResCommonChatStatus response = await ChatRepository().chatAccept(
           ReqCommonChatParams(
-              queueId: AppFirebaseService().payload!["queue_id"],
-              orderId: AppFirebaseService().payload!["order_id"],
-              isTimeout: 0,
-              acceptOrReject: 1)
+                  queueId: AppFirebaseService().payload!["queue_id"],
+                  orderId: AppFirebaseService().payload!["order_id"],
+                  isTimeout: 0,
+                  acceptOrReject: 1)
               .toJson());
       print("chat_reject 2");
       if (response.statusCode == 200) {
-        Fluttertoast.showToast(msg: "Waiting for Customer to accept the request");
+        Fluttertoast.showToast(
+            msg: "Waiting for Customer to accept the request");
       } else {
         Fluttertoast.showToast(msg: response.message.toString());
       }
@@ -247,6 +244,7 @@ class DashboardController extends GetxController
       // Optionally, show a snackbar or dialog to inform the user about the error
     }
   }
+
   @override
   Future<void> onInit() async {
     super.onInit();
@@ -254,7 +252,7 @@ class DashboardController extends GetxController
     checkPermissions();
     getOrderFromApi();
     checkAndRequestPermissions();
-     if (AppFirebaseService().payload != null) {
+    if (AppFirebaseService().payload != null) {
       // if (AppFirebaseService().payload!["type"] == null) {
       //   return;
       // }

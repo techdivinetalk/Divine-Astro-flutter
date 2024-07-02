@@ -1,22 +1,12 @@
-import "dart:collection";
-import "dart:convert";
-import "dart:io";
-import "dart:ui";
-
 import "package:audio_waveforms/audio_waveforms.dart";
-import "package:camera/camera.dart";
 import "package:carousel_slider/carousel_slider.dart";
 import "package:divine_astrologer/common/app_textstyle.dart";
-import "package:divine_astrologer/common/camera.dart";
-
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/custom_widgets.dart";
 import "package:divine_astrologer/common/message_view.dart";
 import "package:divine_astrologer/common/permission_handler.dart";
-
 import "package:divine_astrologer/common/routes.dart";
-
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/gen/assets.gen.dart";
 import "package:divine_astrologer/gen/fonts.gen.dart";
@@ -24,15 +14,11 @@ import "package:divine_astrologer/model/chat_offline_model.dart";
 import "package:divine_astrologer/zego_call/zego_service.dart";
 import "package:emoji_picker_flutter/emoji_picker_flutter.dart";
 import "package:firebase_database/firebase_database.dart";
-import "package:flutter/cupertino.dart";
 import "package:flutter/material.dart";
-import "package:flutter/widgets.dart";
-
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
 import "package:get/get.dart";
 import "package:intl/intl.dart";
-
 import "package:lottie/lottie.dart";
 import "package:permission_handler/permission_handler.dart";
 import "package:simple_html_css/simple_html_css.dart";
@@ -257,7 +243,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                       const EdgeInsets.all(5.0),
                                                   child: Image.network(
                                                     "${controller.pref.getAmazonUrl() ?? ""}/${controller.getValueByPosition(index)}",
-                                                    fit: BoxFit.cover,
                                                   ),
                                                 ),
                                               ),
@@ -522,12 +507,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     ),
                   );
                 }),*/
-                Visibility(visible: !controller.isKeyboardVisible.value,child: messageTemplateRow()),
-                SizedBox(
-                  height: 10,
-                ),
                 chatBottomBar(context),
-
                 Obx(() => AnimatedContainer(
                       duration: const Duration(milliseconds: 200),
                       height: controller.isEmojiShowing.value ? 300 : 0,
@@ -737,13 +717,13 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
-                      color:Color(0xffFFEEF0),
+                      color: /*Color(0xFFFFD196)*/ appColors.guideColor,
                       borderRadius: const BorderRadius.all(Radius.circular(18)),
                     ),
                     child: Text(
                       '+ Add',
                       style:
-                          AppTextStyle.textStyle12(fontColor: Color(0xff0E2339)),
+                          AppTextStyle.textStyle12(fontColor: appColors.white),
                     ),
                   ),
                 )
@@ -756,13 +736,13 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     padding:
                         const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                     decoration: BoxDecoration(
-                      color:Color(0xffFFEEF0),
+                      color: appColors.brownColour,
                       borderRadius: const BorderRadius.all(Radius.circular(18)),
                     ),
                     child: Text(
                       '${controller.messageTemplates[index - 1].message}',
                       style:
-                      AppTextStyle.textStyle12(fontColor: Color(0xff0E2339)),
+                          AppTextStyle.textStyle12(fontColor: appColors.white),
                     ),
                   ),
                 );
@@ -808,6 +788,42 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                 : const SizedBox(),
           )),
     );
+  }
+
+  String convertDate(String inputDate) {
+    try {
+      // Define the input and output date formats
+      DateFormat inputFormat = DateFormat("dd MMM yyyy");
+      DateFormat outputFormat = DateFormat("dd/MM/yyyy");
+
+      // Parse the input date string to a DateTime object
+      DateTime parsedDate = inputFormat.parse(inputDate);
+
+      // Format the DateTime object to the desired output format
+      String formattedDate = outputFormat.format(parsedDate);
+
+      return formattedDate;
+    } catch (e) {
+      // Handle any parsing errors
+      debugPrint("Error parsing or formatting date: $e");
+      return "";
+    }
+  }
+
+  DateTime parseDate(String dateStr) {
+    try {
+      // Define the input date format
+      DateFormat inputFormat = DateFormat("dd/MM/yyyy");
+
+      // Parse the input date string to a DateTime object
+      DateTime parsedDate = inputFormat.parse(dateStr);
+
+      return parsedDate;
+    } catch (e) {
+      // Handle any parsing errors
+      debugPrint("Error parsing date: $e");
+      return DateTime.now(); // Return the current date as a fallback
+    }
   }
 
   Widget chatBottomBar(BuildContext context) {
@@ -983,9 +999,11 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                       onTap: () {
                                                         final dateData = DateFormat(
                                                                 "dd/MM/yyyy")
-                                                            .parse(AppFirebaseService()
+                                                            .parse(convertDate(
+                                                                AppFirebaseService()
                                                                     .orderData[
-                                                                "dob"]);
+                                                                        "dob"]
+                                                                    .toString()));
                                                         DateTime timeData = DateFormat(
                                                                 "h:mm a")
                                                             .parse(AppFirebaseService()
@@ -1152,15 +1170,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           child: SvgPicture.asset(
                               "assets/svg/chat_new_custom_product.svg")),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        controller.openShowDeck(context, controller);
-                      },
-                      child: Center(
-                        child: SvgPicture.asset(
-                            "assets/svg/new_chat_tarrot_card.svg"),
-                      ),
-                    ),
                     Obx(
                       () {
                         Map orderData = AppFirebaseService().orderData.value;
@@ -1175,7 +1184,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
                         print("test_appendedCustImage: $appendedAstrImage");
 
-                        return isVOIP.value.toString() == "0"
+                        return isVOIP.toString() == "0"
                             ? const SizedBox()
                             : ZegoService().buttonUI(
                                 isVideoCall: false,
@@ -1223,7 +1232,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         String appendedCustImage =
                             "${controller.preference.getAmazonUrl()}/$custImage";
 
-                        return isVOIP.value.toString() == "0"
+                        return isVOIP.toString() == "0"
                             ? const SizedBox()
                             : ZegoService().buttonUI(
                                 isVideoCall: true,
@@ -1531,6 +1540,147 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
         });
   }
 
+  // Widget imageMsgView(String image, bool yourMessage, {required ChatMessage chatDetail, required int index}) {
+  //   Uint8List bytesImage = const Base64Decoder().convert(image);
+  //   RxInt msgType = (chatDetail.type ?? 0).obs;
+  //   return SizedBox(
+  //     width: double.maxFinite,
+  //     child: Column(
+  //       crossAxisAlignment: yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+  //       children: [
+  //         Container(
+  //           padding: const EdgeInsets.all(8.0),
+  //           clipBehavior: Clip.antiAlias,
+  //           decoration: BoxDecoration(
+  //             boxShadow: [
+  //               BoxShadow(
+  //                   color: Colors.black.withOpacity(0.2), blurRadius: 3.0, offset: const Offset(0.0, 3.0)),
+  //             ],
+  //             color: Colors.white,
+  //             borderRadius: BorderRadius.all(Radius.circular(8.r)),
+  //           ),
+  //           constraints: BoxConstraints(
+  //               maxWidth: ScreenUtil().screenWidth * 0.7, minWidth: ScreenUtil().screenWidth * 0.27),
+  //           child: chatDetail.downloadedPath != ""
+  //               ? InkWell(
+  //                   onTap: () {
+  //                     Get.toNamed(RouteName.imagePreviewUi, arguments: chatDetail.downloadedPath);
+  //                   },
+  //                   child: Stack(
+  //                     children: [
+  //                       ClipRRect(
+  //                         borderRadius: BorderRadius.circular(8.0.r),
+  //                         child: Image.file(
+  //                           File(chatDetail.downloadedPath ?? ""),
+  //                           fit: BoxFit.cover,
+  //                           height: 200.h,
+  //                         ),
+  //                       ),
+  //                       Positioned(
+  //                         bottom: 0,
+  //                         right: 0,
+  //                         child: Container(
+  //                           padding: const EdgeInsets.symmetric(horizontal: 6).copyWith(left: 10),
+  //                           decoration: BoxDecoration(
+  //                             borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.r)),
+  //                             gradient: LinearGradient(
+  //                               colors: [
+  //                                 appColors.darkBlue.withOpacity(0.0),
+  //                                 appColors.darkBlue.withOpacity(0.0),
+  //                                 appColors.darkBlue.withOpacity(0.5),
+  //                               ],
+  //                               begin: Alignment.topLeft,
+  //                               end: Alignment.bottomCenter,
+  //                             ),
+  //                           ),
+  //                           child: Row(
+  //                             mainAxisAlignment: MainAxisAlignment.end,
+  //                             children: [
+  //                               Text(
+  //                                 messageDateTime(chatDetail.time ?? 0),
+  //                                 style: AppTextStyle.textStyle10(fontColor: appColors.white),
+  //                               ),
+  //                               if (yourMessage) SizedBox(width: 8.w),
+  //                               if (yourMessage)
+  //                                 msgType.value == 0
+  //                                     ? Assets.images.icSingleTick.svg()
+  //                                     : msgType.value == 1
+  //                                         ? Assets.images.icDoubleTick.svg(
+  //                                             colorFilter: const ColorFilter.mode(
+  //                                                 appColors.greyColor, BlendMode.srcIn))
+  //                                         : msgType.value == 2
+  //                                             ? Assets.images.icDoubleTick.svg()
+  //                                             : Assets.images.icSingleTick.svg()
+  //                             ],
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 )
+  //               : Stack(
+  //                   alignment: Alignment.center,
+  //                   children: [
+  //                     ClipRRect(
+  //                       borderRadius: BorderRadius.circular(10.0.sp),
+  //                       child: ImageFiltered(
+  //                         imageFilter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+  //                         child: Image.memory(
+  //                           bytesImage,
+  //                           fit: BoxFit.cover,
+  //                           height: 200.h,
+  //                         ),
+  //                       ),
+  //                     ),
+  //                     InkWell(
+  //                       onTap: () {
+  //                         controller.downloadImage(fileName: image, chatDetail: chatDetail, index: index);
+  //                       },
+  //                       child: Container(
+  //                         padding: const EdgeInsets.all(10),
+  //                         decoration: BoxDecoration(
+  //                           color: appColors.darkBlue.withOpacity(0.3),
+  //                           shape: BoxShape.circle,
+  //                         ),
+  //                         child: const Icon(Icons.download_rounded, color: appColors.white),
+  //                       ),
+  //                     ),
+  //                     Positioned(
+  //                       bottom: 0,
+  //                       right: 0,
+  //                       child: Row(
+  //                         mainAxisAlignment: MainAxisAlignment.end,
+  //                         children: [
+  //                           Container(
+  //                             padding: const EdgeInsets.symmetric(horizontal: 6).copyWith(left: 10),
+  //                             decoration: BoxDecoration(
+  //                               borderRadius: BorderRadius.only(bottomRight: Radius.circular(10.r)),
+  //                               gradient: LinearGradient(
+  //                                 colors: [
+  //                                   appColors.darkBlue.withOpacity(0.0),
+  //                                   appColors.darkBlue.withOpacity(0.0),
+  //                                   appColors.darkBlue.withOpacity(0.5),
+  //                                 ],
+  //                                 begin: Alignment.topLeft,
+  //                                 end: Alignment.bottomCenter,
+  //                               ),
+  //                             ),
+  //                             child: Text(
+  //                               messageDateTime(chatDetail.time ?? 0),
+  //                               style: AppTextStyle.textStyle10(fontColor: appColors.white),
+  //                             ),
+  //                           ),
+  //                           SizedBox(width: 8.w),
+  //                         ],
+  //                       ),
+  //                     ),
+  //                   ],
+  //                 ),
+  //         )
+  //       ],
+  //     ),
+  //   );
+  // }
 
   _onBackspacePressed() {
     controller.messageController

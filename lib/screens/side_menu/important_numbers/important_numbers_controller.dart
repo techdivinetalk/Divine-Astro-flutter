@@ -1,7 +1,6 @@
 import 'package:contacts_service/contacts_service.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -45,7 +44,7 @@ class ImportantNumbersController extends GetxController {
           if (contact.displayName == item.label
               // &&
               // numberList.every((el) => el.contains(element.value!))
-          ) {
+              ) {
             return isExist = true;
           }
         }
