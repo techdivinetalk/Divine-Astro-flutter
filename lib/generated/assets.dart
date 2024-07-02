@@ -322,5 +322,4 @@ class Assets {
   static const String svgaNewYearGifts = 'assets/svga/new_year_gifts.svga';
   static const String svgaSportsCar = 'assets/svga/sports_car.svga';
   static const String svgaWhiteHorse = 'assets/svga/white_horse.svga';
-
 }

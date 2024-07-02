@@ -356,7 +356,7 @@ class _LivePage extends State<LiveDharamScreen>
                   userId: "0",
                   userName: "Live Monitoring Team",
                   avatar:
-                      "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
+                      "https://divineprod.blob.core.windows.net/divineprod/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
                   message: "Joined",
                   timeStamp: DateTime.now().toString(),
                   fullGiftImage: "",
@@ -373,7 +373,7 @@ class _LivePage extends State<LiveDharamScreen>
                   userId: "0",
                   userName: "Quality Team",
                   avatar:
-                      "https://divinenew-prod.s3.ap-south-1.amazonaws.com/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
+                      "https://divineprod.blob.core.windows.net/divineprod/astrologers/February2024/j2Jk4GAUbEipC81xRPKt.png",
                   message: "Joined",
                   timeStamp: DateTime.now().toString(),
                   fullGiftImage: "",

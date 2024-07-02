@@ -95,7 +95,7 @@ class DashboardController extends GetxController
     if (state == AppLifecycleState.resumed) {
       print("checkPermissions");
       // Check permissions when app is resumed
-      checkPermissions();
+    //  checkPermissions();
       getOrderFromApi();
       if (preferenceService.getUserDetail() != null) {
         // Check for null user details
@@ -219,16 +219,19 @@ class DashboardController extends GetxController
 
   Future<void> furtherProcedure() async {
     try {
-      if (kDebugMode) {
-        Fluttertoast.showToast(msg: AppFirebaseService().payload!["order_id"]);
-        Fluttertoast.showToast(msg: AppFirebaseService().payload!["queue_id"]);
+      if(kDebugMode){
+        Fluttertoast.showToast(msg: AppFirebaseService().payload["order_id"] ?? "");
+        Fluttertoast.showToast(msg: AppFirebaseService().payload["queue_id"]?? "");
       }
-      ResCommonChatStatus response = await ChatRepository().chatAccept(
+      if(AppFirebaseService().payload["order_id"].toString() == ""){
+        return;
+      }
+       ResCommonChatStatus response = await ChatRepository().chatAccept(
           ReqCommonChatParams(
-                  queueId: AppFirebaseService().payload!["queue_id"],
-                  orderId: AppFirebaseService().payload!["order_id"],
-                  isTimeout: 0,
-                  acceptOrReject: 1)
+              queueId: int.parse(AppFirebaseService().payload["queue_id"].toString()),
+              orderId: int.parse(AppFirebaseService().payload["order_id"].toString()),
+              isTimeout: 0,
+              acceptOrReject: 1)
               .toJson());
       print("chat_reject 2");
       if (response.statusCode == 200) {
@@ -249,7 +252,7 @@ class DashboardController extends GetxController
   Future<void> onInit() async {
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
-    checkPermissions();
+  //  checkPermissions();
     getOrderFromApi();
     checkAndRequestPermissions();
     if (AppFirebaseService().payload != null) {
@@ -299,9 +302,11 @@ class DashboardController extends GetxController
     Get.find<SharedPreferenceService>()
         .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
     //
-
+    print(commonConstants.data!.awsCredentails.baseurl);
+    print("commonConstants.data!.awsCredentails.baseurl");
     String? baseAmazonUrl = preferenceService.getBaseImageURL();
-
+    print(baseAmazonUrl);
+    print("baseAmazonUrlbaseAmazonUrlbaseAmazonUrl");
     // Handle potential null userData
     if (preferenceService.getUserDetail() != null) {
       userData = preferenceService.getUserDetail();

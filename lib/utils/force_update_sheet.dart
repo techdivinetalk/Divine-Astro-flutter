@@ -33,7 +33,7 @@ class ForceUpdateSheet extends StatelessWidget {
             ),
             child: Column(
               children: [
-                Assets.images.updateSvg.svg(),
+                Assets.svg.update.svg(),
                 Text(
                   "New Version is Available!",
                   style: AppTextStyle.textStyle20(

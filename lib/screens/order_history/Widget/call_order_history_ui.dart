@@ -148,6 +148,7 @@ class CallOrderHistory extends StatelessWidget {
       default:
         productTypeText = 'Unknown';
     }
+
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(

@@ -135,8 +135,8 @@ class ChatMessageWithSocketController extends GetxController
   Rx<bool> isCardBotOpen = false.obs;
   bool isGalleryOpen = false;
 
-  FocusNode focusNode = FocusNode();
-  RxBool isKeyboardVisible = false.obs;
+
+
 
   void startTimer() {
     int _start = 5;
@@ -183,7 +183,7 @@ class ChatMessageWithSocketController extends GetxController
   void dispose() {
     // TODO: implement dispose
 
-    focusNode.dispose();
+
 
     _appLinkingStreamSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
@@ -386,7 +386,7 @@ class ChatMessageWithSocketController extends GetxController
         final key = event.snapshot.key; // Get the key of the changed child
         final value = event.snapshot.value;
         if (event.snapshot.value != null) {
-          print("onChildChanged $key");
+          print("onChildChanged-2 $key");
           print("onChildChanged $value");
           updateOrderInfo(key!, value, false);
         }
@@ -419,13 +419,6 @@ class ChatMessageWithSocketController extends GetxController
       });
     }
 
-    focusNode.addListener(() {
-      isKeyboardVisible.value = focusNode.hasFocus;
-
-      if (isKeyboardVisible.value) {
-        scrollToBottomFunc();
-      }
-    });
     getDir();
     initialiseControllers();
     noticeAPi();
@@ -433,7 +426,7 @@ class ChatMessageWithSocketController extends GetxController
     AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
       if (p0["status"] == null || p0["astroId"] == null) {
         backFunction();
-        AppFirebaseService().database.child("order/${p0["orderId"]}").remove();
+       // AppFirebaseService().database.child("order/${p0["orderId"]}").remove();
       } else {
         print("orderData Changed");
 
@@ -550,14 +543,7 @@ class ChatMessageWithSocketController extends GetxController
     getChatList();
     socketReconnect();
     initTask(AppFirebaseService().orderData.value);
-    // FirebaseDatabase.instance
-    //     .ref()
-    //     .child(
-    //         "order/${AppFirebaseService().orderData.value["orderId"].toString()}/isAstroEntered")
-    //     .set((DateTime.now().millisecondsSinceEpoch) + 1);
-    // Future.delayed(const Duration(milliseconds: 200), () {
-    //   scrollToBottomFunc();
-    // },);
+
   }
 
   navigateToOtherScreen() async {
@@ -1325,14 +1311,14 @@ class ChatMessageWithSocketController extends GetxController
     if (messgeScrollController.hasClients) {
       print("objectobjectobjectobject");
       Timer(
-        const Duration(milliseconds: 0),
+        const Duration(milliseconds: 100),
         () => messgeScrollController.animateTo(
           messgeScrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 0),
+          duration: const Duration(milliseconds: 100),
           curve: Curves.easeOut,
         ),
       );
-      update();
+      // update();
     }
   }
 
@@ -1512,39 +1498,10 @@ class ChatMessageWithSocketController extends GetxController
       Get.put(CallChatHistoryRepository());
 
   getChatList() async {
-/* chatMessages.clear();
-    print("get chat list 1");
-    await hiveServices.initialize();
-    print("get chat list 2");
-    final res = await hiveServices.getData(key: "chat_${currentUserId.value}");
-    print("get chat list $res");
-    if (res != null) {
-      final ChatMessagesOffline msg =
-          ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
-      chatMessages.value = msg.chatMessages ?? <ChatMessage>[];
-      if (sendReadMessageStatus) {
-        unreadMessageIndex.value = chatMessages
-                .firstWhere(
-                  (ChatMessage element) =>
-                      element.type != 2 && element.senderId != userData?.id,
-                  orElse: () => ChatMessage(),
-                )
-                .id ??
-            -1;
-        if (unreadMessageIndex.value != -1) {
-          updateReadMessageStatus();
-        }
-      }
-    } else {
-      // Map<String, int> params = {"customer_id": currentUserId.value};
-      // var response = await chatRepository.getChatListApi(params);
-      // debugPrint("$response");
-    }*/
+
     update();
     try {
-      /* if (processedPages.contains(currentPage.value)) {
-        return;
-      }*/
+
 
       var userId = int.parse(AppFirebaseService().orderData.value["userId"]);
       var astroId = int.parse(AppFirebaseService().orderData.value["astroId"]);

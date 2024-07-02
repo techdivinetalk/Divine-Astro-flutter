@@ -365,7 +365,7 @@ class ChatAssistanceTile extends StatelessWidget {
                   assetImage: false,
                   placeHolderPath: Assets.images.defaultProfile.path,
                   imagePath: (data.image ?? '').startsWith(
-                          'https://divinenew-prod.s3.ap-south-1.amazonaws.com/')
+                          'https://divineprod.blob.core.windows.net/divineprod/')
                       ? data.image ?? ''
                       : "${preferenceService.getAmazonUrl()}/${data.image ?? ''}",
                   loadingIndicator: SizedBox(
@@ -563,7 +563,7 @@ class ChatAssistanceDataTile extends StatelessWidget {
                       assetImage: false,
                       placeHolderPath: Assets.images.defaultProfile.path,
                       imagePath: (data.customerImage ?? '').startsWith(
-                              'https://divinenew-prod.s3.ap-south-1.amazonaws.com/')
+                              'https://divineprod.blob.core.windows.net/divineprod/')
                           ? data.customerImage ?? ''
                           : "${preferenceService.getAmazonUrl()}/${data.customerImage ?? ''}",
                       loadingIndicator: SizedBox(

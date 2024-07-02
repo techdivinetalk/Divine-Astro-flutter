@@ -45,9 +45,9 @@ class CustomImageWidget extends StatelessWidget {
     final bool condition1 = imageUrl == "${_pref.getAmazonUrl()}";
     final bool condition2 = imageUrl == "${_pref.getAmazonUrl()}/";
     final bool condition3 =
-        imageUrl == "https://divinenew-prod.s3.ap-south-1.amazonaws.com";
+        imageUrl == "https://divineprod.blob.core.windows.net/divineprod/";
     final bool condition4 =
-        imageUrl == "https://divinenew-prod.s3.ap-south-1.amazonaws.com/";
+        imageUrl == "https://divineprod.blob.core.windows.net/divineprod/";
 
     Widget widget = const SizedBox();
 
