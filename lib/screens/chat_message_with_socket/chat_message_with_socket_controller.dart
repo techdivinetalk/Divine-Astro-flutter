@@ -72,12 +72,9 @@ import "../live_dharam/gifts_singleton.dart";
 
 class ChatMessageWithSocketController extends GetxController
     with WidgetsBindingObserver {
-  BuildContext? context;
 
-  void setContext(BuildContext context) {
-    this.context = context;
-    return;
-  }
+
+
 
   var pref = Get.find<SharedPreferenceService>();
   final UserRepository userRepository = Get.find<UserRepository>();
@@ -742,7 +739,7 @@ class ChatMessageWithSocketController extends GetxController
   // Added by divine-dharam
   Future<void> callHangup() {
     print("ZegoService().controller.hangUp start");
-    ZegoService().controller.hangUp(context!, showConfirmation: false);
+    ZegoService().controller.hangUp(Get.context!, showConfirmation: false);
     print("ZegoService().controller.hangUp end");
     return Future<void>.value();
   }
@@ -882,7 +879,7 @@ class ChatMessageWithSocketController extends GetxController
   void sendMessageListenerSocket() {
     socket.sendMessageListenerSocket((data) {
       debugPrint("sendMessageListenerSocketssss ${data["msgSendBy"]}");
-      debugPrint("sendMessageListenerSocket context $context");
+      debugPrint("sendMessageListenerSocket context ${Get.context!}");
 
       if (data is Map<String, dynamic>) {
         isTyping.value = false;
@@ -926,7 +923,7 @@ class ChatMessageWithSocketController extends GetxController
       print("data.first.animation ${data.first.animation}");
       print("GiftPlayerSource.url ${GiftPlayerSource.url}");
       ZegoGiftPlayer().play(
-        context!,
+        Get.context!,
         GiftPlayerData(
           GiftPlayerSource.url,
           data.first.animation,
