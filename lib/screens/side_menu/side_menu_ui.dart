@@ -1,7 +1,6 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
-import 'package:divine_astrologer/pages/new_registration/new_registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -83,20 +82,21 @@ class SideMenuDrawer extends GetView<HomeController> {
                 }
               },
             ),
-            ListTile(
-              leading: Assets.images.icImportContact.svg(),
-              title: Text('New Reg'.tr),
-              onTap: () async {
-                Navigator.of(context).pop();
-                Get.to(NewRegstrationScreen());
-                // bool isPermission = await requestPermissions();
-                // if (isPermission) {
-                //   Get.toNamed(RouteName.importantNumbers);
-                // } else {
-                //   divineSnackBar(data: "Please give permission for contacts");
-                // }
-              },
-            ),
+            // ListTile(
+            //   leading: Assets.images.icImportContact.svg(),
+            //   title: Text("leaveresignation".tr),
+            //   onTap: () async {
+            //     Navigator.of(context).pop();
+            //     Get.toNamed(RouteName.resignation);
+            //
+            //     // bool isPermission = await requestPermissions();
+            //     // if (isPermission) {
+            //     //   Get.toNamed(RouteName.importantNumbers);
+            //     // } else {
+            //     //   divineSnackBar(data: "Please give permission for contacts");
+            //     // }
+            //   },
+            // ),
             /*  ListTile(
               leading: Assets.images.icDonations.svg(),
               title: Text('donation'.tr),

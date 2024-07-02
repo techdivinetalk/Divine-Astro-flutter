@@ -441,7 +441,7 @@ class ApiProvider {
     endPoint ??= //kDebugMode == true ? debugingUrl :
         baseUrl;
     headers ??= await getAuthorisedHeader();
-    log("urllllllll: ${endPoint + url}");
+    log('url: $baseUrl$url');
 
     if (await networkManager.isConnected() ?? false) {
       log('url: $endPoint$url');
@@ -511,6 +511,8 @@ class ApiProvider {
       {String type = "POST", Map<String, String>? headers}) async {
     if (await networkManager.isConnected() ?? false) {
       var uri = Uri.parse(baseUrl + url);
+      log('url: $baseUrl$url');
+
       debugPrint("url: $baseUrl$url");
       http.MultipartRequest request = http.MultipartRequest(type, uri);
       request.headers.addAll(headers ?? await getAuthorisedHeader());

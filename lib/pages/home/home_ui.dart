@@ -1081,7 +1081,7 @@ class HomeUI extends GetView<HomeController> {
               child: InkWell(
                 onTap: () {
                   Get.toNamed(RouteName.noticeDetail,
-                      arguments: controller!.homeData?.noticeBoard,
+                      arguments: controller.homeData?.noticeBoard,
                       parameters: {"from_list": "0"});
                 },
                 child: Ink(
@@ -1105,7 +1105,7 @@ class HomeUI extends GetView<HomeController> {
                           SizedBox(
                             width: 150,
                             child: CustomText(
-                              controller.homeData?.noticeBoard?.title ?? '',
+                              controller.homeData?.noticeBoard!.title ?? '',
                               fontWeight: FontWeight.w500,
                               fontColor: appColors.darkBlue,
                               maxLines: 2,
@@ -1114,12 +1114,16 @@ class HomeUI extends GetView<HomeController> {
                           ),
                           Row(
                             children: [
-                              Text(
-                                '${dateToString(controller.homeData?.noticeBoard?.createdAt ?? DateTime.now(), format: "h:mm a")}  '
-                                '${formatDateTime(controller.homeData?.noticeBoard?.createdAt ?? DateTime.now())} ',
-                                style: AppTextStyle.textStyle10(
-                                    fontWeight: FontWeight.w400,
-                                    fontColor: appColors.darkBlue),
+                              SizedBox(
+                                width: 100,
+                                child: Text(
+                                  '${dateToString(controller.homeData?.noticeBoard?.createdAt ?? DateTime.now(), format: "h:mm a")}  '
+                                  '${formatDateTime(controller.homeData?.noticeBoard?.createdAt ?? DateTime.now())} ',
+                                  textAlign: TextAlign.right,
+                                  style: AppTextStyle.textStyle10(
+                                      fontWeight: FontWeight.w400,
+                                      fontColor: appColors.darkBlue),
+                                ),
                               ),
                               SizedBox(width: 10.w),
                               GestureDetector(

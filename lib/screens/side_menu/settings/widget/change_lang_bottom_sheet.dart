@@ -40,8 +40,9 @@ class LanguageBottomSheetWidget extends StatelessWidget {
         Container(
           width: double.maxFinite,
           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 0.h),
-          decoration:  BoxDecoration(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(50.0)),
+          decoration: BoxDecoration(
+            borderRadius:
+                const BorderRadius.vertical(top: Radius.circular(50.0)),
             color: appColors.white,
           ),
           child: Column(
@@ -97,21 +98,28 @@ class LanguageBottomSheetWidget extends StatelessWidget {
                                       borderRadius: BorderRadius.circular(10.r),
                                       child: Material(
                                         color: Colors.transparent,
-                                        child: Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                              item.languagesMain.toString(),
-                                              style: AppTextStyle.textStyle20(
-                                                  fontWeight: FontWeight.w600),
-                                            ),
-                                            SizedBox(height: 10.h),
-                                            Text(
-                                              item.languages.toString(),
-                                              style: AppTextStyle.textStyle16(),
-                                            ),
-                                          ],
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                item.languagesMain.toString(),
+                                                overflow: TextOverflow.clip,
+                                                textAlign: TextAlign.center,
+                                                style: AppTextStyle.textStyle16(
+                                                    fontWeight:
+                                                        FontWeight.w600),
+                                              ),
+                                              SizedBox(height: 0.h),
+                                              Text(
+                                                item.languages.toString(),
+                                                style:
+                                                    AppTextStyle.textStyle16(),
+                                              ),
+                                            ],
+                                          ),
                                         ),
                                       ),
                                     ),
