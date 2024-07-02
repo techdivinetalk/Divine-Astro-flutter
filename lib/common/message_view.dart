@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 import 'dart:ui';
 
@@ -274,6 +275,26 @@ class MessageView extends StatelessWidget {
     );
   }
 
+  String convertDate(String inputDate) {
+    try {
+      // Define the input and output date formats
+      DateFormat inputFormat = DateFormat("dd MMM yyyy");
+      DateFormat outputFormat = DateFormat("dd/MM/yyyy");
+
+      // Parse the input date string to a DateTime object
+      DateTime parsedDate = inputFormat.parse(inputDate);
+
+      // Format the DateTime object to the desired output format
+      String formattedDate = outputFormat.format(parsedDate);
+
+      return formattedDate;
+    } catch (e) {
+      // Handle any parsing errors
+      debugPrint("Error parsing or formatting date: $e");
+      return "";
+    }
+  }
+
   DateTime parseDate(String dateStr) {
     try {
       // Define the input date format
@@ -437,18 +458,28 @@ class MessageView extends StatelessWidget {
                               color: appColors.guideColor,
                               onTap: () {
                                 print(AppFirebaseService().orderData["lat"]);
-                                print("objectobjectobjectobjectobject");
-                                final dateData = DateFormat("dd/MM/yyyy").parse(
+                                print(
+                                    "objectobjectobjectobjectobject${AppFirebaseService().orderData["dob"]}");
+                                // Parse the date string to DateTime
+                                DateTime date = DateFormat('d MMMM yyyy').parse(
                                     AppFirebaseService().orderData["dob"]);
+
+                                // Format the DateTime to 'dd/MM/yyyy'
+                                String formattedDate =
+                                    DateFormat('dd/MM/yyyy').format(date);
+
+                                final dateData = DateFormat("dd/MM/yyyy")
+                                    .parse(formattedDate);
+
                                 DateTime timeData = DateFormat("h:mm a").parse(
                                     AppFirebaseService()
                                         .orderData["timeOfBirth"]);
                                 Params params = Params(
                                   name: AppFirebaseService()
                                       .orderData["customerName"],
-                                  day: dateData.day,
-                                  year: dateData.year,
-                                  month: dateData.month,
+                                  day: parseDate(dateData.toString()).day,
+                                  year: parseDate(dateData.toString()).year,
+                                  month: parseDate(dateData.toString()).month,
                                   hour: timeData.hour,
                                   min: timeData.minute,
                                   lat: double.parse(AppFirebaseService()
@@ -1006,6 +1037,8 @@ class MessageView extends StatelessWidget {
 
     return InkWell(
       onTap: () {
+        log("fjdfkdjfkdjkdjkfjd");
+
         Get.toNamed(RouteName.kundliDetail, arguments: {
           "kundli_id": chatDetail.kundliId ?? chatDetail.kundli!.kundliId,
           "from_kundli": true,

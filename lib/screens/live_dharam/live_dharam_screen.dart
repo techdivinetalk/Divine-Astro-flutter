@@ -4,7 +4,6 @@ import "dart:async";
 import "dart:convert";
 import "dart:developer";
 import "dart:io";
-import "dart:math" as math;
 
 import "package:after_layout/after_layout.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
@@ -41,24 +40,17 @@ import "package:divine_astrologer/screens/live_dharam/widgets/gift_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
-import "package:divine_astrologer/screens/live_dharam/widgets/show_all_avail_astro_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
-import "package:divine_astrologer/screens/live_page/constant.dart";
-import "package:easy_debounce/easy_throttle.dart";
-
 // import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import "package:flutter_svg/svg.dart";
 import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import "package:fluttertoast/fluttertoast.dart";
 import "package:get/get.dart";
-import "package:intl/intl.dart";
-import 'package:random_name_generator/random_name_generator.dart';
 import "package:simple_html_css/simple_html_css.dart";
 import "package:svgaplayer_flutter/parser.dart";
 import "package:svgaplayer_flutter/player.dart";
@@ -66,6 +58,7 @@ import "package:zego_express_engine/zego_express_engine.dart";
 import "package:zego_uikit_beauty_plugin/zego_uikit_beauty_plugin.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
+
 import '../../cache/custom_cache_manager.dart';
 
 const int appID = 696414715;

@@ -1,3 +1,5 @@
+import "dart:developer";
+
 import "package:audio_waveforms/audio_waveforms.dart";
 import "package:carousel_slider/carousel_slider.dart";
 import "package:divine_astrologer/common/app_textstyle.dart";
@@ -1015,13 +1017,24 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                           EdgeInsets.all(12),
                                                       color: AppColors().red,
                                                       onTap: () {
+                                                        log("fjdfkdjfkdjkdjkfjd");
+                                                        // Parse the date string to DateTime
+                                                        DateTime date = DateFormat(
+                                                                'd MMMM yyyy')
+                                                            .parse(AppFirebaseService()
+                                                                    .orderData[
+                                                                "dob"]);
+
+                                                        // Format the DateTime to 'dd/MM/yyyy'
+                                                        String formattedDate =
+                                                            DateFormat(
+                                                                    'dd/MM/yyyy')
+                                                                .format(date);
+
                                                         final dateData = DateFormat(
                                                                 "dd/MM/yyyy")
-                                                            .parse(convertDate(
-                                                                AppFirebaseService()
-                                                                    .orderData[
-                                                                        "dob"]
-                                                                    .toString()));
+                                                            .parse(
+                                                                formattedDate);
                                                         DateTime timeData = DateFormat(
                                                                 "h:mm a")
                                                             .parse(AppFirebaseService()
