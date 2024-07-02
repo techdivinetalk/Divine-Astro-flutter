@@ -34,7 +34,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.setContext(context);
+
     bool keyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
     List<String> myList = [];
     return Scaffold(
@@ -42,7 +42,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
       body: GetBuilder<ChatMessageWithSocketController>(
           init: ChatMessageWithSocketController(),
-          builder: (controller) {
+          builder: (controller) { 
             if (keyboardVisible) {
               controller.scrollToBottomFunc();
             }
@@ -524,7 +524,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     const SizedBox(
                       height: 10,
                     ),
-                    chatBottomBar(context),
+                    chatBottomBar(context,controller),
                     Obx(() => AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           height: controller.isEmojiShowing.value ? 300 : 0,
@@ -844,10 +844,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
     }
   }
 
-  Widget chatBottomBar(BuildContext context) {
+  Widget chatBottomBar(BuildContext context,ChatMessageWithSocketController? controller) {
     return Obx(
       () {
-        debugPrint('is recording value ${controller.isRecording.value}');
+        debugPrint('is recording value ${controller!.isRecording.value}');
         return Padding(
           padding: EdgeInsets.symmetric(
               horizontal: controller.isRecording.value ? 0 : 12.h),
