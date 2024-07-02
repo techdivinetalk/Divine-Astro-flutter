@@ -22,6 +22,7 @@ import '../../../common/routes.dart';
 import '../../../di/shared_preference_service.dart';
 import '../../../model/send_otp.dart';
 import '../../../repository/user_repository.dart';
+import '../../server_maintenance_popup/server_maintenance_popup.dart';
 
 class LoginController extends GetxController {
   LoginController(this.userRepository);
@@ -278,6 +279,7 @@ class LoginController extends GetxController {
     }
     // isLogOut = false;
     super.onInit();
+    maintenanceCheck();
     // getLoginImages();
     countryCodeController = TextEditingController(text: "+91");
     mobileNumberController = TextEditingController(text: "");

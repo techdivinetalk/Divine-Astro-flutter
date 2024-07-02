@@ -17,6 +17,7 @@ import '../../common/routes.dart';
 import '../../di/shared_preference_service.dart';
 
 import '../../repository/important_number_repository.dart';
+import '../server_maintenance_popup/server_maintenance_popup.dart';
 
 class SplashController extends GetxController with WidgetsBindingObserver {
   SharedPreferenceService preferenceService =
@@ -25,6 +26,7 @@ class SplashController extends GetxController with WidgetsBindingObserver {
   @override
   void onInit() {
     super.onInit();
+    maintenanceCheck();
     WidgetsBinding.instance.addObserver(this);
 
     notificationPermission();

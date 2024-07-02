@@ -49,16 +49,22 @@ import 'di/shared_preference_service.dart';
 import 'firebase_service/firebase_service.dart';
 import 'gen/fonts.gen.dart';
 import 'localization/translations.dart';
+import 'maintenance_msg.dart';
 import 'screens/live_page/constant.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 late List<CameraDescription>? cameras;
 
 Future<void> main() async {
+  Get.put(MessageController());
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   // initMessaging();
+  AppFirebaseService().masterData("masters");
+  if (!kDebugMode) {
+    AppFirebaseService().masterData("masters");
+  }
   cameras = await availableCameras();
   Get.put(AppColors());
   // await RemoteConfigService.instance.initFirebaseRemoteConfig();
@@ -237,6 +243,7 @@ Future<void> main() async {
       }
     }
   });
+  AppFirebaseService().masterData("masters");
   if (!kDebugMode) {
     AppFirebaseService().masterData("masters");
   }
