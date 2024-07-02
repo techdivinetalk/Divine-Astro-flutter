@@ -64,9 +64,6 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   // initMessaging();
   AppFirebaseService().masterData("masters");
-  if (!kDebugMode) {
-    AppFirebaseService().masterData("masters");
-  }
   cameras = await availableCameras();
   Get.put(AppColors());
   // await RemoteConfigService.instance.initFirebaseRemoteConfig();
