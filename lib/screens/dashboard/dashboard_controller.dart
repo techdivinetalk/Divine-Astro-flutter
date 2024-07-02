@@ -95,7 +95,7 @@ class DashboardController extends GetxController
     if (state == AppLifecycleState.resumed) {
       print("checkPermissions");
       // Check permissions when app is resumed
-    //  checkPermissions();
+      //  checkPermissions();
       getOrderFromApi();
       if (preferenceService.getUserDetail() != null) {
         // Check for null user details
@@ -219,19 +219,23 @@ class DashboardController extends GetxController
 
   Future<void> furtherProcedure() async {
     try {
-      if(kDebugMode){
-        Fluttertoast.showToast(msg: AppFirebaseService().payload["order_id"] ?? "");
-        Fluttertoast.showToast(msg: AppFirebaseService().payload["queue_id"]?? "");
+      if (kDebugMode) {
+        Fluttertoast.showToast(
+            msg: AppFirebaseService().payload["order_id"] ?? "");
+        Fluttertoast.showToast(
+            msg: AppFirebaseService().payload["queue_id"] ?? "");
       }
-      if(AppFirebaseService().payload["order_id"].toString() == ""){
+      if (AppFirebaseService().payload["order_id"].toString() == "") {
         return;
       }
-       ResCommonChatStatus response = await ChatRepository().chatAccept(
+      ResCommonChatStatus response = await ChatRepository().chatAccept(
           ReqCommonChatParams(
-              queueId: int.parse(AppFirebaseService().payload["queue_id"].toString()),
-              orderId: int.parse(AppFirebaseService().payload["order_id"].toString()),
-              isTimeout: 0,
-              acceptOrReject: 1)
+                  queueId: int.parse(
+                      AppFirebaseService().payload["queue_id"].toString()),
+                  orderId: int.parse(
+                      AppFirebaseService().payload["order_id"].toString()),
+                  isTimeout: 0,
+                  acceptOrReject: 1)
               .toJson());
       print("chat_reject 2");
       if (response.statusCode == 200) {
@@ -252,7 +256,7 @@ class DashboardController extends GetxController
   Future<void> onInit() async {
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
-  //  checkPermissions();
+    //  checkPermissions();
     getOrderFromApi();
     checkAndRequestPermissions();
     if (AppFirebaseService().payload != null) {
