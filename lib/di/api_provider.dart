@@ -22,9 +22,9 @@ class ApiProvider {
   static const String socketUrl = "http://13.200.230.93:8081";
 
   static String debugingUrl = "http://13.235.46.27/api/astro/$version/";
-  static String baseUrl = kDebugMode
+  static String baseUrl = /*kDebugMode
       ? "http://172.172.246.49/api/astro/$version/"
-      : "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+      : */"https://uat-divine-partner.divinetalk.live/api/astro/$version/";
   static String imageBaseUrl =
       "${imageUploadBaseUrl.value}/api/astro/$version/";
 
