@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
@@ -12,11 +13,14 @@ import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/ChatOrderResponse.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
+import 'package:divine_astrologer/screens/dashboard/widgets/terms_and_condition_popup.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/force_update_sheet.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -29,11 +33,15 @@ import '../../common/app_textstyle.dart';
 import '../../common/app_exception.dart';
 import '../../common/app_textstyle.dart';
 import '../../common/common_functions.dart';
-import '../../common/permission_handler.dart';
 import '../../di/fcm_notification.dart';
 import '../../model/astrologer_gift_response.dart';
+import '../../model/chat/ReqEndChat.dart';
+import '../../model/chat/req_common_chat_model.dart';
+import '../../model/chat/res_common_chat_success.dart';
 import '../../model/res_login.dart';
 import '../../repository/astrologer_profile_repository.dart';
+import '../../repository/chat_repository.dart';
+import '../live_dharam/perm/app_permission_service.dart';
 
 class DashboardController extends GetxController
     with GetSingleTickerProviderStateMixin, WidgetsBindingObserver {
@@ -92,7 +100,7 @@ class DashboardController extends GetxController
     if (state == AppLifecycleState.resumed) {
       print("checkPermissions");
       // Check permissions when app is resumed
-      checkPermissions();
+    //  checkPermissions();
       getOrderFromApi();
       if (preferenceService.getUserDetail() != null) {
         // Check for null user details
@@ -213,14 +221,52 @@ class DashboardController extends GetxController
 
     return havePermission;
   }
+  Future<void> furtherProcedure() async {
+    try {
+      if(kDebugMode){
+        Fluttertoast.showToast(msg: AppFirebaseService().payload["order_id"] ?? "");
+        Fluttertoast.showToast(msg: AppFirebaseService().payload["queue_id"]?? "");
+      }
+      if(AppFirebaseService().payload["order_id"].toString() == ""){
+        return;
+      }
+       ResCommonChatStatus response = await ChatRepository().chatAccept(
+          ReqCommonChatParams(
+              queueId: int.parse(AppFirebaseService().payload["queue_id"].toString()),
+              orderId: int.parse(AppFirebaseService().payload["order_id"].toString()),
+              isTimeout: 0,
+              acceptOrReject: 1)
+              .toJson());
+      print("chat_reject 2");
+      if (response.statusCode == 200) {
+        Fluttertoast.showToast(
+            msg: "Waiting for Customer to accept the request");
+      } else {
+        Fluttertoast.showToast(msg: response.message.toString());
+      }
+      return Future<void>.value();
+    } catch (e) {
+      // Handle exceptions
+      print('Error in furtherProcedure: $e');
+      // Optionally, show a snackbar or dialog to inform the user about the error
+    }
+  }
 
   @override
   Future<void> onInit() async {
     super.onInit();
     WidgetsBinding.instance.addObserver(this);
-    checkPermissions();
+  //  checkPermissions();
     getOrderFromApi();
     checkAndRequestPermissions();
+    if (AppFirebaseService().payload != null) {
+      // if (AppFirebaseService().payload!["type"] == null) {
+      //   return;
+      // }
+      if (AppFirebaseService().payload!["type"] == "2") {
+        furtherProcedure();
+      }
+    }
     //   print("microphone ${await FlutterOverlayWindow.isPermissionGranted()}");
     print("beforeGoing 2 - ${preferenceService.getUserDetail()?.id}");
     broadcastReceiver.start();
@@ -241,23 +287,7 @@ class DashboardController extends GetxController
         print("event.data is null");
       }
     });
-    if (!isLogOut) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Future.delayed(const Duration(seconds: 5), () {
-          print("is logged in");
-          if (preferenceService.getUserDetail() != null) {
-            // Check for null user details
-            appFirebaseService.readData(
-                'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
-          } else {
-            divineSnackBar(data: "User Not Found");
-          }
-          //appFirebaseService.masterData('masters');
-        });
-      });
-    } else {
-      print("is logged out");
-    }
+
     commonConstants = await userRepository.constantDetailsData();
     if (commonConstants?.data != null) {
       imageUploadBaseUrl.value =
@@ -267,14 +297,20 @@ class DashboardController extends GetxController
     preferenceService.setConstantDetails(commonConstants);
     preferenceService
         .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
-
-    //added by: dev-dharam
+    if (commonConstants.data.notice == null ||
+        commonConstants.data.notice == "null") {
+    } else {
+      log(commonConstants.data.notice.toString());
+      showRecommendedPopupAlert();
+    } //added by: dev-dharam
     Get.find<SharedPreferenceService>()
         .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
     //
-
+    print(commonConstants.data!.awsCredentails.baseurl);
+    print("commonConstants.data!.awsCredentails.baseurl");
     String? baseAmazonUrl = preferenceService.getBaseImageURL();
-
+    print(baseAmazonUrl);
+    print("baseAmazonUrlbaseAmazonUrlbaseAmazonUrl");
     // Handle potential null userData
     if (preferenceService.getUserDetail() != null) {
       userData = preferenceService.getUserDetail();

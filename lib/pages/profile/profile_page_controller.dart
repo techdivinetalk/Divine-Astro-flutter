@@ -129,7 +129,7 @@ class ProfilePageController extends GetxController {
           Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja'),
       ProfileOptionModelClass(
           "resignation".tr,
-          Assets.images.resignation.svg(width: 30.h, height: 30.h),
+          Assets.svg.resignation.svg(width: 30.h, height: 30.h),
           '/resignation'),
     ].obs;
   }
@@ -170,8 +170,10 @@ class ProfilePageController extends GetxController {
         '/blockedUser'),
     ProfileOptionModelClass("eCommerce".tr,
         Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja'),
-    // ProfileOptionModelClass("resignation".tr,
-    //     Assets.images.resignation.svg(width: 30.h, height: 30.h), '/resignation'),
+    ProfileOptionModelClass(
+        "leaveresignation".tr,
+        Assets.svg.resignation.svg(width: 30.h, height: 30.h),
+        '/resignation'),
     // ProfileOptionModelClass("Add Remedies",
     //     Assets.images.remedies.svg(width: 30.h, height: 30.h), ''),
   ].obs;

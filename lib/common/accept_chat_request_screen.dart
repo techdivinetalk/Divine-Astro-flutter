@@ -143,14 +143,14 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
       _player?.dispose();
       _player = null;
     }
-
-    _player = AudioPlayer();
-    await _player!.setSourceAsset("accept.mp3");
-
-    _player!.play(AssetSource("accept.mp3"));
-    if (mounted) {
-      setState(() {});
-    }
+    //
+    // _player = AudioPlayer();
+    // await _player!.setSourceAsset("accept.mp3");
+    //
+    // _player!.play(AssetSource("accept.mp3"));
+    // if (mounted) {
+    //   setState(() {});
+    // }
   }
 
   @override

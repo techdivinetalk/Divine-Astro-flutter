@@ -106,17 +106,41 @@ class FeedBackOrderHistory extends StatelessWidget {
   Widget orderDetailView(int index, List<FeedBackData> data) {
     String productTypeText;
     switch (data[index].productType) {
-      case 7:
-        productTypeText = 'Call';
-        break;
-      case 12:
-        productTypeText = 'Chat';
+      case 1:
+        productTypeText = 'Astrologer Products';
         break;
       case 2:
         productTypeText = 'Gifts';
         break;
       case 3:
-        productTypeText = 'Remedy Suggested';
+        productTypeText = 'Video Call';
+        break;
+      case 4:
+        productTypeText = 'Audio Call';
+        break;
+      case 5:
+        productTypeText = 'Anonymous Call';
+        break;
+      case 7:
+        productTypeText = 'Audio Call';
+        break;
+      case 8:
+        productTypeText = 'Meditations';
+        break;
+      case 9:
+        productTypeText = 'Ayurveda Products';
+        break;
+      case 10:
+        productTypeText = "Pooja's";
+        break;
+      case 11:
+        productTypeText = 'Donation';
+        break;
+      case 12:
+        productTypeText = 'Customer Chat';
+        break;
+      case 14:
+        productTypeText = 'Ecommerce Product';
         break;
       default:
         productTypeText = 'Unknown';

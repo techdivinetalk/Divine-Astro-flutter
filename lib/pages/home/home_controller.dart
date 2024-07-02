@@ -12,6 +12,7 @@ import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/di/fcm_notification.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/model/astrologer_training_session_response.dart';
 import 'package:divine_astrologer/model/feedback_response.dart';
@@ -188,6 +189,18 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     getAstrologerTrainingSession();
     getAstrologerLiveData();
     print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
+    Future.delayed(const Duration(seconds: 3), () {
+      print("isLogged");
+      print(" ${preferenceService.getUserDetail()}");
+      if (preferenceService.getUserDetail() != null) {
+        // Check for null user details
+        AppFirebaseService().readData(
+            'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
+      } else {
+        divineSnackBar(data: "User Not Found");
+      }
+      //appFirebaseService.masterData('masters');
+    });
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((event) {
       debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');

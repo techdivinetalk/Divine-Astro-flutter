@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:camera/camera.dart';
+import 'package:camerax/camerax.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -34,7 +35,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
             Container(
               height: double.infinity,
               width: double.infinity,
-              child: CameraPreview(
+              child: CameraView(
                 controller.controller!,
               ),
             ),
@@ -98,9 +99,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                           padding: EdgeInsets.only(top: 20.h),
                           child: InkWell(
                             onTap: () {
-                              controller.isFrontCamera.value =
-                                  !controller.isFrontCamera.value;
-                              // controller.toggleCameraLens();
+                              controller.toggleCameraLens();
                             },
                             child: Obx(
                               () => Icon(

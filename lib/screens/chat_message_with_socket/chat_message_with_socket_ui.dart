@@ -49,11 +49,15 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   @override
   Widget build(BuildContext context) {
     controller.setContext(context);
+    bool keyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
     List<String> myList = [];
     return Scaffold(
       // resizeToAvoidBottomInset: true,
 
-      body: GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
+      body: GetBuilder<ChatMessageWithSocketController>(init: ChatMessageWithSocketController(),builder: (controller) {
+        if (keyboardVisible) {
+          controller.scrollToBottomFunc();
+        }
         return Stack(
           children: [
             Assets.images.bgChatWallpaper.image(
@@ -522,8 +526,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     ),
                   );
                 }),*/
-                Visibility(visible: !controller.isKeyboardVisible.value,child: messageTemplateRow()),
-                SizedBox(
+                Visibility(visible: !keyboardVisible,child: messageTemplateRow()),
+                const SizedBox(
                   height: 10,
                 ),
                 chatBottomBar(context),

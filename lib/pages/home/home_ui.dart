@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
@@ -909,7 +911,8 @@ class HomeUI extends GetView<HomeController> {
   Widget viewKundliWidgetUpdated() {
     return Obx(() {
       var data = callKunadliUpdated.value;
-
+      log("open_order -- $data");
+      log("open_order -- $data");
       return !mapEquals(data, {})
           ? Container(
               margin: EdgeInsets.only(

@@ -367,7 +367,7 @@ class MessageView extends StatelessWidget {
                     )
                   : SizedBox(),
               const SizedBox(width: 5),
-               Container(
+              Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 clipBehavior: Clip.antiAlias,
@@ -595,38 +595,40 @@ class MessageView extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment:
-      yourMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+          yourMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
       children: [
         !yourMessage
             ? Obx(
-              () {
-            Map<String, dynamic> order = {};
-            order = AppFirebaseService().orderData.value;
-            String imageURL = order["customerImage"] ?? "";
-            String appended =
-                "${Get.find<SharedPreferenceService>().getAmazonUrl()}/$imageURL";
-            print("img:: $appended");
-            return Padding(
-              padding: const EdgeInsets.only(top: 3),
-              child: SizedBox(
-                height: 35,
-                width: 35,
-                child: CustomImageWidget(
-                  imageUrl: appended,
-                  rounded: true,
-                  typeEnum: TypeEnum.user,
-                ),
-              ),
-            );
-          },
-        )
+                () {
+                  Map<String, dynamic> order = {};
+                  order = AppFirebaseService().orderData.value;
+                  String imageURL = order["customerImage"] ?? "";
+                  String appended =
+                      "${Get.find<SharedPreferenceService>().getAmazonUrl()}/$imageURL";
+                  print("img:: $appended");
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 3),
+                    child: SizedBox(
+                      height: 35,
+                      width: 35,
+                      child: CustomImageWidget(
+                        imageUrl: appended,
+                        rounded: true,
+                        typeEnum: TypeEnum.user,
+                      ),
+                    ),
+                  );
+                },
+              )
             : SizedBox(),
         const SizedBox(width: 5),
         Container(
-          padding: const EdgeInsets.symmetric(horizontal: 10,vertical: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
           decoration: BoxDecoration(
             border: Border.all(
-                color: yourMessage ? const Color(0xffFFEEF0) : const Color(0xffDCDCDC)),
+                color: yourMessage
+                    ? const Color(0xffFFEEF0)
+                    : const Color(0xffDCDCDC)),
             color: yourMessage ? const Color(0xffFFF9FA) : appColors.white,
             borderRadius: BorderRadius.only(
               bottomLeft: const Radius.circular(10),
@@ -643,10 +645,9 @@ class MessageView extends StatelessWidget {
                 child: Text(
                   "${customerName.capitalizeFirst} have sent ${chatMessage.message!.contains("https") ? "" : chatMessage.message ?? ""}",
                   style: const TextStyle(
-                    color: Colors.red,
-                    fontFamily: FontFamily.metropolis,
-                    fontWeight: FontWeight.w500
-                  ),
+                      color: Colors.red,
+                      fontFamily: FontFamily.metropolis,
+                      fontWeight: FontWeight.w500),
                 ),
               ),
               SizedBox(width: 10.h),
