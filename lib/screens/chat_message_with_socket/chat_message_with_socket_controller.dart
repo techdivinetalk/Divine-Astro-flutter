@@ -543,14 +543,7 @@ class ChatMessageWithSocketController extends GetxController
     getChatList();
     socketReconnect();
     initTask(AppFirebaseService().orderData.value);
-    // FirebaseDatabase.instance
-    //     .ref()
-    //     .child(
-    //         "order/${AppFirebaseService().orderData.value["orderId"].toString()}/isAstroEntered")
-    //     .set((DateTime.now().millisecondsSinceEpoch) + 1);
-    // Future.delayed(const Duration(milliseconds: 200), () {
-    //   scrollToBottomFunc();
-    // },);
+
   }
 
   navigateToOtherScreen() async {
@@ -1325,7 +1318,7 @@ class ChatMessageWithSocketController extends GetxController
           curve: Curves.easeOut,
         ),
       );
-      update();
+      // update();
     }
   }
 
@@ -1505,39 +1498,10 @@ class ChatMessageWithSocketController extends GetxController
       Get.put(CallChatHistoryRepository());
 
   getChatList() async {
-/* chatMessages.clear();
-    print("get chat list 1");
-    await hiveServices.initialize();
-    print("get chat list 2");
-    final res = await hiveServices.getData(key: "chat_${currentUserId.value}");
-    print("get chat list $res");
-    if (res != null) {
-      final ChatMessagesOffline msg =
-          ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
-      chatMessages.value = msg.chatMessages ?? <ChatMessage>[];
-      if (sendReadMessageStatus) {
-        unreadMessageIndex.value = chatMessages
-                .firstWhere(
-                  (ChatMessage element) =>
-                      element.type != 2 && element.senderId != userData?.id,
-                  orElse: () => ChatMessage(),
-                )
-                .id ??
-            -1;
-        if (unreadMessageIndex.value != -1) {
-          updateReadMessageStatus();
-        }
-      }
-    } else {
-      // Map<String, int> params = {"customer_id": currentUserId.value};
-      // var response = await chatRepository.getChatListApi(params);
-      // debugPrint("$response");
-    }*/
+
     update();
     try {
-      /* if (processedPages.contains(currentPage.value)) {
-        return;
-      }*/
+
 
       var userId = int.parse(AppFirebaseService().orderData.value["userId"]);
       var astroId = int.parse(AppFirebaseService().orderData.value["astroId"]);
