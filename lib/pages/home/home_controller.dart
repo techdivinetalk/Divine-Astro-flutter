@@ -721,6 +721,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   Dio dio = Dio();
 
   astroOnlineOffline({String? status}) async {
+    print("${ApiProvider.astOnlineOffline}${userData.uniqueNo}&${status}");
+    print("ApiProvider.astOnlineOffline");
     try {
       // Configure the default headers for all requests
       dio.options.headers = {
