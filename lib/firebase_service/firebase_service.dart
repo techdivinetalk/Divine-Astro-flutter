@@ -16,10 +16,12 @@ import "package:divine_astrologer/watcher/real_time_watcher.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
+import "package:flutter/services.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 
 import "../common/MiddleWare.dart";
+import "../maintenance_msg.dart";
 import "../screens/live_page/constant.dart";
 
 bool isLogOut = false;
@@ -483,9 +485,19 @@ class AppFirebaseService {
       // case "truecaller":
       //   isTruecaller(int.parse(dataSnapshot.value.toString()));
       //   break;
-      case "voip":
-        isVOIP(int.parse(dataSnapshot.value.toString()));
+      case "astroUnderMaintenance":
+        final messageController = Get.find<MessageController>();
+        messageController.isUnderMaintenance.value = dataSnapshot.value as bool;
+        print(messageController.isUnderMaintenance.value);
+        print("🫣🫣🫣🫣🫣🫣🫣🫣🫣");
         break;
+      case "astroMsg":
+        final messageController = Get.find<MessageController>();
+        messageController.customMessage.value = dataSnapshot.value.toString();
+        print(messageController.customMessage.value);
+        print("🫣🫣🫣🫣🫣🫣🫣🫣🫣");
+        break;
+
       default:
         preferenceService.setStringPref(
             dataSnapshot.key.toString(), dataSnapshot.value.toString());
@@ -507,6 +519,7 @@ class AppFirebaseService {
     } catch (e) {
       debugPrint("Error reading data from the database: $e");
     }
+    return null;
   }
 
   void stopListening() {

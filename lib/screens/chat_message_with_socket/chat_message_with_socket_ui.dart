@@ -855,7 +855,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(30),
                               ),
-                              height: 44,
+                              // height: 44,
                               child: TextFormField(
                                 controller: controller.messageController,
                                 keyboardType: TextInputType.text,
