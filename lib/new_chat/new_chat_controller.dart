@@ -3,7 +3,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-
+import "package:flutter/scheduler.dart" as scheduler;
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:camera/camera.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -72,6 +72,9 @@ class NewChatController extends GetxController {
   RxString customerName = "".obs;
   AppSocket appSocket = AppSocket();
   Duration? timeDifference;
+  AppLifecycleState? _state;
+  final List<String> _states = <String>[];
+  late AppLifecycleListener _listener;
 
   @override
   void onInit() {
@@ -115,9 +118,48 @@ class NewChatController extends GetxController {
             jsonDecode(jsonEncode(event.snapshot.value)));
         chatMessages.add(chatMessage);
         scrollToBottomFunc();
+        update();
       },
     );
-
+    _state = scheduler.SchedulerBinding.instance.lifecycleState;
+    _listener = AppLifecycleListener(
+      onShow: () {},
+      onResume: () {
+        print("when app is resume from background");
+        if (!isGalleryOpen) {
+          getChatList();
+        }
+        joinRoomSocketEvent();
+        isGalleryOpen = false;
+      },
+      onHide: () {
+        print("when app is in background");
+      },
+      onInactive: () {
+        print("when app is in onInactive");
+        leaveRoomSocketEvent();
+      },
+      onPause: () {
+        print("when app is in onPause");
+      },
+      onDetach: () {
+        leaveRoomSocketEvent();
+        WidgetsBinding.instance.removeObserver(_listener);
+        Get.until(
+          (route) {
+            return Get.currentRoute == RouteName.dashboard;
+          },
+        );
+        //  Get.find<SocketChatWithAstrologerController>().dispose();
+      },
+      onRestart: () {},
+      onStateChange: (value) {
+        print("on state changed called ${value.name}");
+      },
+    );
+    if (_state != null) {
+      _states.add(_state!.name);
+    }
   }
 
   getAllApiDataInChat() async {
@@ -391,7 +433,7 @@ class NewChatController extends GetxController {
         ),
       );
     }
-    // update(); 
+    // update();
   }
 
   /// ------------------ download image  ----------------------- ///
@@ -734,6 +776,7 @@ class NewChatController extends GetxController {
       rethrow;
     }
   }
+
   /// ------------------ Tarrot card bottom sheet ----------------------- ///
   RxBool isCardBotOpen = false.obs;
   RxBool isCardVisible = false.obs;
@@ -1101,6 +1144,7 @@ class NewChatController extends GetxController {
         .update(
           jsonDecode(jsonEncode(newMessage)),
         );
+    update();
     // print("last message  ${chatMessages.last.message}");
     sendMessageInSocket(newMessage);
   }

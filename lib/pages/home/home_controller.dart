@@ -730,7 +730,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         'Keep-Alive': 'timeout=5, max=1000',
       };
       final response = await dio.get(
-          /*Constants.isTestingMode?"http://13.200.230.93:8081:8081/api/v3/updateAstroStatusV2?unique_no=${userData.uniqueNo}&${status}&android=android":*/
+          /*Constants.isTestingMode?"http://4.240.97.131:8081:8081/api/v3/updateAstroStatusV2?unique_no=${userData.uniqueNo}&${status}&android=android":*/
           "${ApiProvider.astOnlineOffline}${userData.uniqueNo}&${status}");
       log(response.data.toString());
 
