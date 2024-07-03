@@ -111,7 +111,7 @@ class TextViewWidget extends StatelessWidget {
                               : 0,
                         ),
                         Visibility(
-                          visible: chatDetail.id.toString() ==
+                          visible: chatDetail.msgId.toString() ==
                               AppFirebaseService()
                                   .orderData["userId"]
                                   .toString(),

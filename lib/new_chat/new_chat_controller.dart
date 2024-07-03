@@ -117,10 +117,33 @@ class NewChatController extends GetxController {
             jsonDecode(jsonEncode(event.snapshot.value)));
         chatMessage.id = int.parse(event.snapshot.key ?? "0");
         chatMessages.add(chatMessage);
+
         scrollToBottomFunc();
+
         update();
+        // if (chatMessage.senderId !=
+        //     AppFirebaseService().orderData.value["astroId"]) {
+        //   FirebaseDatabase.instance
+        //       .ref(
+        //           "chatMessages/${AppFirebaseService().orderData.value["orderId"]}/${chatMessage.id}")
+        //       .update({
+        //     "msg_type": 2,
+        //   });
+        //   FirebaseDatabase.instance
+        //       .ref(
+        //           "chatMessages/${AppFirebaseService().orderData.value["orderId"]}/${chatMessage.id}")
+        //       .onChildChanged
+        //       .listen(
+        //     (event) {
+        //       print(jsonDecode(jsonEncode(event.snapshot.value)));
+        //       print(
+        //           "jsonDecode(jsonEncode(event.snapshot.value))--updated time");
+        //     },
+        //   );
+        // }
       },
     );
+
     _state = scheduler.SchedulerBinding.instance.lifecycleState;
     _listener = AppLifecycleListener(
       onShow: () {},

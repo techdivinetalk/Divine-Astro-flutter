@@ -12,7 +12,7 @@ class ChatMessagesOffline {
           chatMessages: json['data'] == null
               ? []
               : List<ChatMessage>.from(
-              json["data"].map((x) => ChatMessage.fromOfflineJson(x))));
+                  json["data"].map((x) => ChatMessage.fromOfflineJson(x))));
 
   Map<String, dynamic> toOfflineJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
@@ -26,6 +26,7 @@ class ChatMessagesOffline {
 
 class ChatMessage {
   int? id;
+  int? msgId;
   int? orderId;
   int? memberId;
   int? roleId;
@@ -87,6 +88,7 @@ class ChatMessage {
 
   ChatMessage({
     this.id,
+    this.msgId,
     this.orderId,
     this.memberId,
     this.suggestedId,
@@ -149,6 +151,7 @@ class ChatMessage {
   ChatMessage.fromOfflineJson(Map<String, dynamic> json) {
     id = json['id'];
     orderId = json['order_id'];
+    msgId = json['msgId'];
     memberId = json['member_id'];
     roleId = json['role_id'];
     customerId = json['customer_id'];
@@ -213,10 +216,10 @@ class ChatMessage {
         ? GetProduct.fromJson(json['get_product'] as Map<String, dynamic>)
         : null;
     getCustomProduct =
-    (json['get_custom_product'] as Map<String, dynamic>?) != null
-        ? CustomProduct.fromJson(
-        json['get_custom_product'] as Map<String, dynamic>)
-        : null;
+        (json['get_custom_product'] as Map<String, dynamic>?) != null
+            ? CustomProduct.fromJson(
+                json['get_custom_product'] as Map<String, dynamic>)
+            : null;
     getPooja = (json['get_pooja'] as Map<String, dynamic>?) != null
         ? GetPooja.fromJson(json['get_pooja'] as Map<String, dynamic>)
         : null;
@@ -224,14 +227,12 @@ class ChatMessage {
     kundli = json['kundli'] != null ? Kundli.fromJson(json['kundli']) : null;
   }
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         // final Map<String, dynamic> data = <String, dynamic>{};
 
         // data['chatMessageId'] = id;
         "id": id,
-
-
+        "msgId": msgId,
         "get_pooja": getPooja,
 
         "get_custom_product": getCustomProduct,
@@ -302,7 +303,6 @@ class ChatMessage {
 
         "exotel_end_response": exotelEndResponse,
 
-
         "exotel_call_sid": exotelCallSid,
 
         "call_status": callStatus,
@@ -347,7 +347,6 @@ class ChatMessage {
         "userType": userType,
 
         "kundli": kundli,
-
       };
 }
 
@@ -379,8 +378,7 @@ class GetProduct {
         productLongDesc = json['product_long_desc'] as String?,
         gst = json['gst'] as int?;
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'id': id,
         'prod_name': prodName,
         'prod_image': prodImage,
@@ -416,8 +414,7 @@ class GetPooja {
         poojaPriceInr = json['pooja_starting_price_inr'] as int?,
         gst = json['gst'] as int?;
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'id': id,
         'pooja_name': poojaName,
         'pooja_img': poojaImage,
@@ -452,8 +449,7 @@ class CustomProduct {
         amount = json['amount'] as int?,
         astrologerId = json['astrologer_id'] as int?;
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'id': id,
         'name': name,
         'image': image,
