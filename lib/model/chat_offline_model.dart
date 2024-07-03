@@ -147,7 +147,7 @@ class ChatMessage {
   });
 
   ChatMessage.fromOfflineJson(Map<String, dynamic> json) {
-    id = json['chatMessageId'];
+    id = json['id'];
     orderId = json['order_id'];
     memberId = json['member_id'];
     roleId = json['role_id'];
@@ -229,7 +229,7 @@ class ChatMessage {
         // final Map<String, dynamic> data = <String, dynamic>{};
 
         // data['chatMessageId'] = id;
-        "chatMessageId": id,
+        "id": id,
 
 
         "get_pooja": getPooja,

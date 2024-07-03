@@ -100,7 +100,6 @@ class NewChatController extends GetxController {
     AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
       if (p0["status"] == null || p0["astroId"] == null) {
         backFunction();
-        AppFirebaseService().database.child("order/${p0["orderId"]}").remove();
       } else {
         print("orderData Changed");
 
@@ -458,11 +457,11 @@ class NewChatController extends GetxController {
     File file2 = File(filePathAndName);
     file2.writeAsBytesSync(response.bodyBytes);
     print("chat download path $filePathAndName");
-    // int index = chatMessages.indexWhere((element) {
-    //   return element.id == id;
-    // });
-    // chatMessages[index].downloadedPath = filePathAndName;
-    // chatMessages.refresh();
+    int index = chatMessages.indexWhere((element) {
+      return element.id == id;
+    });
+    chatMessages[index].downloadedPath = filePathAndName;
+    chatMessages.refresh();
     // write code
     update();
   }
@@ -1021,8 +1020,7 @@ class NewChatController extends GetxController {
     late ChatMessage newMessage;
     if (msgType == MsgType.customProduct) {
       newMessage = ChatMessage(
-        orderId: AppFirebaseService().orderData.value["orderId"],
-        id: int.parse(time),
+        
         message: messageText,
         receiverId: int.parse(
             AppFirebaseService().orderData.value["userId"].toString()),
@@ -1050,7 +1048,7 @@ class NewChatController extends GetxController {
         newMessage = ChatMessage(
           message: productDetails.poojaName,
           astrologerId: userData?.id,
-          id: int.parse(time),
+          
           time: int.parse(time),
           isSuspicious: 0,
           isPoojaProduct: true,
@@ -1059,12 +1057,10 @@ class NewChatController extends GetxController {
           suggestedId: saveRemediesData.data!.id,
           type: 0,
           msgSendBy: "1",
-          orderId: AppFirebaseService().orderData.value["orderId"],
           userType: "astrologer",
           memberId: saveRemediesData.data!.id,
           productId: productDetails.id.toString(),
           shopId: productDetails.id.toString(),
-          // msgStatus: MsgStatus.sent,
           receiverId: int.parse(
               AppFirebaseService().orderData.value["userId"].toString()),
           senderId: preference.getUserDetail()!.id,
@@ -1087,7 +1083,7 @@ class NewChatController extends GetxController {
             title: productDetails.prodName,
             astrologerId: preferenceService.getUserDetail()!.id,
             time: int.parse(time),
-            id: int.parse(time),
+            
             isSuspicious: 0,
             suggestedId: productData.data!.id,
             userType: "astrologer",
@@ -1096,7 +1092,6 @@ class NewChatController extends GetxController {
             msgType: MsgType.product,
             msgSendBy: "1",
             type: 0,
-            orderId: AppFirebaseService().orderData.value["orderId"],
             memberId: productData.data?.id ?? 0,
             productId: productData.data?.productId.toString(),
             shopId: productData.data?.shopId.toString(),
@@ -1116,8 +1111,7 @@ class NewChatController extends GetxController {
     } else {
       print("new message added text type");
       newMessage = ChatMessage(
-        orderId: AppFirebaseService().orderData.value["orderId"],
-        id: int.parse(time),
+        
         message: messageText,
         receiverId: int.parse(
             AppFirebaseService().orderData.value["userId"].toString()),
@@ -1136,7 +1130,7 @@ class NewChatController extends GetxController {
       );
     }
 
-    print("newMessage.toOfflineJson()");
+
     firebaseDatabase
         .ref()
         .child(
@@ -1145,7 +1139,8 @@ class NewChatController extends GetxController {
           jsonDecode(jsonEncode(newMessage)),
         );
     update();
-    // print("last message  ${chatMessages.last.message}");
+    log("last message ----- ${jsonDecode(jsonEncode(newMessage))}");
+    print("last message ----- ${jsonDecode(jsonEncode(newMessage)).runtimeType}");
     sendMessageInSocket(newMessage);
   }
 }

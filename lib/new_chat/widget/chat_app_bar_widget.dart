@@ -41,6 +41,8 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           // const SizedBox(width: 10),
           Obx(
             () {
+              print(controller!.showTalkTime.value);
+              print("controller!.showTalkTime.value");
               Map<String, dynamic> order = {};
               order = AppFirebaseService().orderData.value;
               String imageURL = order["astroImage"] ?? "";

@@ -7,6 +7,7 @@ import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/new_chat/new_chat_controller.dart';
 import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
@@ -343,9 +344,8 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
   }
 
   Future<void> uploadImage(File imageFile) async {
-    var uri = Uri.parse(
-        "${ApiProvider.imageBaseUrl}uploadImage");
- 
+    var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+
     var request = http.MultipartRequest('POST', uri);
 
     request.headers.addAll({
@@ -401,8 +401,7 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
           final String time =
               "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
           widget.newChatController!.addNewMessage(
-
-            msgType:MsgType.customProduct,
+            msgType: MsgType.customProduct,
             messageText: productName.text,
             productPrice: productPrice.text,
             productId: customProductData!.id.toString(),
@@ -411,17 +410,21 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
               id: customProductData!.id,
               name: productName.text,
               image: productApiPath,
+              astrologerId: AppFirebaseService().orderData.value["astroId"],
               amount: int.parse(productPrice.text),
               desc: "",
             ),
           );
         } else if (widget.chatMessageController != null) {
-          widget.chatMessageController!.sendMsg(MsgType.customProduct, {
-            'title': productName.text,
-            'image': productApiPath.toString(),
-            'product_price': productPrice.text.toString(),
-            'product_id': customProductData!.id.toString(),
-          },false);
+          widget.chatMessageController!.sendMsg(
+              MsgType.customProduct,
+              {
+                'title': productName.text,
+                'image': productApiPath.toString(),
+                'product_price': productPrice.text.toString(),
+                'product_id': customProductData!.id.toString(),
+              },
+              false);
         }
 
         Get.back();
