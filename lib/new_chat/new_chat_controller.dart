@@ -3,6 +3,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
+import 'package:divine_astrologer/utils/is_bad_word.dart';
 import "package:flutter/scheduler.dart" as scheduler;
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:camera/camera.dart';
@@ -102,7 +103,6 @@ class NewChatController extends GetxController {
         backFunction();
       } else {
         print("orderData Changed");
-
         initTask(p0);
       }
     });
@@ -1149,7 +1149,7 @@ class NewChatController extends GetxController {
         userType: "astrologer",
       );
     }
-
+    newMessage.isSuspicious = isBadWord(messageText ?? "") ? 1 : 0;
     firebaseDatabase
         .ref()
         .child(

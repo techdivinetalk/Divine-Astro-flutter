@@ -22,8 +22,9 @@ class TextViewWidget extends StatelessWidget {
   final NewChatController? controller;
   final ChatMessage chatDetail;
   final bool yourMessage;
-  TextViewWidget({required this.chatDetail, required this.yourMessage, this.controller});
 
+  TextViewWidget(
+      {required this.chatDetail, required this.yourMessage, this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -31,45 +32,46 @@ class TextViewWidget extends StatelessWidget {
       width: double.maxFinite,
       child: Column(
         crossAxisAlignment:
-        yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment:
-            yourMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+                yourMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
               !yourMessage
                   ? Obx(
-                    () {
-                  Map<String, dynamic> order = {};
-                  order = AppFirebaseService().orderData.value;
-                  String imageURL = order["customerImage"] ?? "";
-                  String appended =
-                      "$preferenceService/$imageURL";
-                  print("img:: $appended");
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 3,right: 5),
-                    child: SizedBox(
-                      height: 35,
-                      width: 35,
-                      child: CustomImageWidget(
-                        imageUrl: appended,
-                        rounded: true,
-                        typeEnum: TypeEnum.user,
-                      ),
-                    ),
-                  );
-                },
-              )
+                      () {
+                        Map<String, dynamic> order = {};
+                        order = AppFirebaseService().orderData.value;
+                        String imageURL = order["customerImage"] ?? "";
+                        String appended = "$preferenceService/$imageURL";
+                        print("img:: $appended");
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 3, right: 5),
+                          child: SizedBox(
+                            height: 35,
+                            width: 35,
+                            child: CustomImageWidget(
+                              imageUrl: appended,
+                              rounded: true,
+                              typeEnum: TypeEnum.user,
+                            ),
+                          ),
+                        );
+                      },
+                    )
                   : const SizedBox(),
-
               Container(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                   border: Border.all(
-                      color:
-                      yourMessage ? Color(0xffFFEEF0) : Color(0xffDCDCDC)),
+                      color: chatDetail.isSuspicious == 1
+                          ? Colors.red
+                          : yourMessage
+                              ? const Color(0xffFFEEF0)
+                              : const Color(0xffDCDCDC)),
                   color: yourMessage ? Color(0xffFFF9FA) : appColors.white,
                   borderRadius: BorderRadius.only(
                     bottomLeft: Radius.circular(10),
@@ -91,12 +93,15 @@ class TextViewWidget extends StatelessWidget {
                         Wrap(
                           alignment: WrapAlignment.end,
                           children: [
-                            Text(chatDetail.message ?? "",
+                            Text(
+                                /*chatDetail.isSuspicious == 1
+                                    ? "Inappropriate Message"
+                                    : */chatDetail.message ?? "",
                                 style: AppTextStyle.textStyle14(
                                   fontColor: chatDetail.id.toString() ==
-                                      AppFirebaseService()
-                                          .orderData["astroId"]
-                                          .toString()
+                                          AppFirebaseService()
+                                              .orderData["astroId"]
+                                              .toString()
                                       ? appColors.red
                                       : appColors.black,
                                 )),
@@ -104,9 +109,9 @@ class TextViewWidget extends StatelessWidget {
                         ),
                         SizedBox(
                           height: chatDetail.id.toString() ==
-                              AppFirebaseService()
-                                  .orderData["userId"]
-                                  .toString()
+                                  AppFirebaseService()
+                                      .orderData["userId"]
+                                      .toString()
                               ? 10
                               : 0,
                         ),
@@ -146,13 +151,13 @@ class TextViewWidget extends StatelessWidget {
                                   "from_kundli": false,
                                   "params": params,
                                   "gender":
-                                  AppFirebaseService().orderData["gender"],
+                                      AppFirebaseService().orderData["gender"],
                                 });
                               },
                               child: Text(
                                 "View Kundli",
                                 style:
-                                TextStyle(color: appColors.guideTextColor),
+                                    TextStyle(color: appColors.guideTextColor),
                               )),
                         ),
                         const SizedBox(height: 20),
