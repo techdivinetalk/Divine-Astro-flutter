@@ -115,6 +115,7 @@ class NewChatController extends GetxController {
         print("jsonDecode(jsonEncode(event.snapshot.value))");
         ChatMessage chatMessage = ChatMessage.fromOfflineJson(
             jsonDecode(jsonEncode(event.snapshot.value)));
+        chatMessage.id = int.parse(event.snapshot.key ?? "0");
         chatMessages.add(chatMessage);
         scrollToBottomFunc();
         update();
@@ -1020,7 +1021,6 @@ class NewChatController extends GetxController {
     late ChatMessage newMessage;
     if (msgType == MsgType.customProduct) {
       newMessage = ChatMessage(
-        
         message: messageText,
         receiverId: int.parse(
             AppFirebaseService().orderData.value["userId"].toString()),
@@ -1048,7 +1048,6 @@ class NewChatController extends GetxController {
         newMessage = ChatMessage(
           message: productDetails.poojaName,
           astrologerId: userData?.id,
-          
           time: int.parse(time),
           isSuspicious: 0,
           isPoojaProduct: true,
@@ -1083,7 +1082,6 @@ class NewChatController extends GetxController {
             title: productDetails.prodName,
             astrologerId: preferenceService.getUserDetail()!.id,
             time: int.parse(time),
-            
             isSuspicious: 0,
             suggestedId: productData.data!.id,
             userType: "astrologer",
@@ -1111,7 +1109,6 @@ class NewChatController extends GetxController {
     } else {
       print("new message added text type");
       newMessage = ChatMessage(
-        
         message: messageText,
         receiverId: int.parse(
             AppFirebaseService().orderData.value["userId"].toString()),
@@ -1130,7 +1127,6 @@ class NewChatController extends GetxController {
       );
     }
 
-
     firebaseDatabase
         .ref()
         .child(
@@ -1140,7 +1136,8 @@ class NewChatController extends GetxController {
         );
     update();
     log("last message ----- ${jsonDecode(jsonEncode(newMessage))}");
-    print("last message ----- ${jsonDecode(jsonEncode(newMessage)).runtimeType}");
+    print(
+        "last message ----- ${jsonDecode(jsonEncode(newMessage)).runtimeType}");
     sendMessageInSocket(newMessage);
   }
 }

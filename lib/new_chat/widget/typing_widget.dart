@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
+import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:divine_astrologer/new_chat/new_chat_controller.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart';
 import 'package:flutter/material.dart';
@@ -55,12 +56,24 @@ class TypingWidget extends StatelessWidget {
                         topRight: Radius.circular(10),
                       ),
                     ),
-                    child: Assets.lottie.loadingDots.lottie(
-                      width: 45,
-                      height: 30,
-                      repeat: true,
-                      frameRate: FrameRate(120),
-                      animate: true,
+                    child: Row(
+                      children: [
+                        const Text(
+                          "Typing",
+                          style: TextStyle(
+                            fontFamily: FontFamily.metropolis,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        // SizedBox(width: 5),
+                        Assets.lottie.loadingDots.lottie(
+                            width: 45,
+                            height: 30,
+                            repeat: true,
+                            frameRate:  FrameRate(120),
+                            animate: true),
+                      ],
                     ),
                   ),
                 ),
