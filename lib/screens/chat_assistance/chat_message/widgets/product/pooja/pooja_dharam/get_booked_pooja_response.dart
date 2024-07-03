@@ -415,7 +415,7 @@ class PoojaHistory {
     isFine = json['is_fine'];
     partnerFineAmount = json['partner_fine_amount'];
     getPooja =
-        json['get_pooja'] != null ? GetPooja.fromJson(json['get_pooja']) : null;
+        json['get_pooja'] != null ? GetPooja.fromJson(json['pooja']) : null;
     type = json['type'];
   }
 
@@ -451,7 +451,7 @@ class PoojaHistory {
     data['is_fine'] = isFine;
     data['partner_fine_amount'] = partnerFineAmount;
     if (getPooja != null) {
-      data['get_pooja'] = getPooja!.toJson();
+      data['pooja'] = getPooja!.toJson();
     }
     data['type'] = type;
     return data;

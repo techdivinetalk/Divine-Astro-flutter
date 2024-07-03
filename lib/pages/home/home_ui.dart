@@ -1033,7 +1033,7 @@ class HomeUI extends GetView<HomeController> {
                               name: data["userName"],
                             );
                             Get.toNamed(
-                              RouteName.kundliDetail,
+                              RouteName.checkKundli,
                               arguments: {
                                 "kundli_id": data["kundli_id"],
                                 "from_kundli": false,
@@ -2363,10 +2363,10 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget trainingVideoWidget({HomeController? controller}) {
-    if (controller!.homeData?.trainingVideo == null ||
-        (controller.homeData?.trainingVideo ?? []).isEmpty) {
-      return const SizedBox.shrink();
-    }
+    // if (controller!.homeData?.trainingVideo == null ||
+    //     (controller.homeData?.trainingVideo ?? []).isEmpty) {
+    //   return const SizedBox.shrink();
+    // }
     return Container(
       width: double.infinity,
       margin: EdgeInsets.only(
@@ -2425,7 +2425,7 @@ class HomeUI extends GetView<HomeController> {
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemCount: controller.homeData?.trainingVideo?.length ?? 0,
+              itemCount: controller!.homeData?.trainingVideo?.length ?? 0,
               separatorBuilder: (context, i) => SizedBox(width: 10.w),
               itemBuilder: (BuildContext context, int index) {
                 return Row(

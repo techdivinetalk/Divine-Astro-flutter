@@ -1,21 +1,15 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:math' hide log;
 
 import 'package:contacts_service/contacts_service.dart';
 import 'package:divine_astrologer/common/important_number_bottomsheet.dart';
-
-import 'package:divine_astrologer/model/login_images.dart';
-import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 import '../../common/routes.dart';
 import '../../di/shared_preference_service.dart';
-
 import '../../repository/important_number_repository.dart';
 import '../server_maintenance_popup/server_maintenance_popup.dart';
 
@@ -143,7 +137,6 @@ class SplashController extends GetxController with WidgetsBindingObserver {
     // Number not found in any contact
     return false;
   }
-
 
   navigation() async {
     log(jsonEncode(preferenceService.getUserDetail()));
