@@ -28,13 +28,13 @@ class ChatMessage {
   int? id;
   int? msgId;
   int? orderId;
-  int? memberId;
+
   int? roleId;
   int? customerId;
   int? msgSequence;
   MsgType? msgType;
   String? message;
-  String? multiImage;
+
   String? msgTime;
 
   //String? createdAt;
@@ -90,7 +90,6 @@ class ChatMessage {
     this.id,
     this.msgId,
     this.orderId,
-    this.memberId,
     this.suggestedId,
     this.roleId,
     this.productId,
@@ -103,7 +102,6 @@ class ChatMessage {
     this.isPoojaProduct,
     this.msgType,
     this.message,
-    this.multiImage,
     this.msgTime,
     //this.createdAt,
     this.updatedAt,
@@ -152,7 +150,7 @@ class ChatMessage {
     id = json['id'];
     orderId = json['order_id'];
     msgId = json['msgId'];
-    memberId = json['member_id'];
+
     roleId = json['role_id'];
     customerId = json['customer_id'];
     title = json['title'];
@@ -166,7 +164,6 @@ class ChatMessage {
     productId = json['product_id'].toString();
     shopId = json['shop_id'].toString();
     isPoojaProduct = json['is_pooja_product'].toString() == "1" ? true : false;
-    multiImage = json['multiimage'];
     msgTime = json['msg_time'];
     // createdAt = json['created_at'] != null ? DateTime.parse(json['created_at']).millisecondsSinceEpoch.toString() : "";
     updatedAt = json['updated_at'];
@@ -228,124 +225,63 @@ class ChatMessage {
   }
 
   Map<String, dynamic> toJson() => {
-        // final Map<String, dynamic> data = <String, dynamic>{};
-
-        // data['chatMessageId'] = id;
         "id": id,
         "msgId": msgId,
         "get_pooja": getPooja,
-
         "get_custom_product": getCustomProduct,
-
-        "member_id": memberId,
-
         "productPrice": productPrice,
-
         "role_id": roleId,
-
         "latitude": latitude,
-
         "longitude": longitude,
-
         "get_product": getProduct,
-
         "title": title,
-
         "customer_id": customerId,
-
         "msg_sequence": msgSequence,
-
         "msg_type": msgTypeValues.reverse[msgType],
-
         "message": message,
-
-        "multiimage": multiImage,
-
         "suggested_remedies_id": suggestedId,
-
         "msg_time": msgTime,
-
         "updated_at": updatedAt,
-
         "msg_send_by": msgSendBy,
-
         "shop_id": shopId,
-
         "product_id": productId,
-
         "is_suspicious": isSuspicious,
-
         "is_email_sent": isEmailSent,
-
         "kundli_id": kundliId,
-
         "seen_status": seenStatus,
-
         "base64image": base64Image,
-
         "deleted_at": deletedAt,
-
         "chat_msg_id": chatMsgId,
-
         "is_pooja_product": isPoojaProduct == true ? "1" : "0",
-
         "astrologer_id": astrologerId,
-
         "call_initiate": callInitiate,
-
         "exotel_initiate_response": exotelInitiateResponse,
-
         "call_started_at": callStartedAt,
-
         "call_ended_at": callEndedAt,
-
         "call_duration": callDuration,
-
         "exotel_end_response": exotelEndResponse,
-
         "exotel_call_sid": exotelCallSid,
-
         "call_status": callStatus,
-
         "call_reject_reason": callRejectReason,
-
         "call_end": callEnd,
-
         "call_recording": callRecording,
-
         "order_id": orderId,
         "customer_call_status": customerCallStatus,
-
         "member_call_status": memberCallStatus,
-
         "api_call_from": apiCallFrom,
-
         "receiverId": receiverId,
-
         "senderId": senderId,
-
         "orderId": orderId,
-
         "time": time,
-
         "type": type,
-
         "awsUrl": awsUrl,
-
         "downloadedPath": downloadedPath,
-
         "kundliId": kundliId,
-
         "kundliName": kundliName,
-
         "kundliDateTime": kundliDateTime,
-
         "kundliPlace": kundliPlace,
-
         "gender": gender,
-
         "userType": userType,
-
         "kundli": kundli,
       };
 }

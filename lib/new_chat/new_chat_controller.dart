@@ -210,7 +210,6 @@ class NewChatController extends GetxController {
 
   @override
   void dispose() {
-
     super.dispose();
   }
 
@@ -279,6 +278,7 @@ class NewChatController extends GetxController {
     if (status == "4") {
       chatTimer?.cancel();
       showTalkTime.value = "-1";
+      print("objectobjectobjectobjectobjectobject");
     }
     DateTime dateTime =
         DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis);
@@ -395,10 +395,8 @@ class NewChatController extends GetxController {
       (_) async {
         print("userLeavePrivateChatListenerSocket");
 
-        // chatTimer?.cancel();
-        print("WentBack backFunc");
-        // extraTimer?.cancel();
-        // Get.delete<ChatMessageWithSocketController>();
+        chatTimer?.cancel();
+        extraTimer?.cancel();
         Get.until(
           (route) {
             return Get.currentRoute == RouteName.dashboard;
@@ -926,9 +924,11 @@ class NewChatController extends GetxController {
   Future<void> openRemedies() async {
     var result = await Get.toNamed(RouteName.chatSuggestRemedy);
     if (result != null) {
+      print(result);
       addNewMessage(
         msgType: MsgType.remedies,
-        messageText: result.toString(),
+        messageText: result["remedies"].toString(),
+        suggestedId: result["remedies_id"].toString(),
       );
     }
   }
@@ -1083,7 +1083,7 @@ class NewChatController extends GetxController {
         productPrice: productPrice,
         title: giftId ?? "${userData?.name} sent you a message.",
         type: 0,
-        productId: productId,
+        productId: getCustomProduct!.id.toString(),
         userType: "astrologer",
         getCustomProduct: getCustomProduct,
       );
@@ -1101,11 +1101,10 @@ class NewChatController extends GetxController {
           isPoojaProduct: true,
           awsUrl: productDetails.poojaImg ?? '',
           msgType: MsgType.pooja,
-          suggestedId: saveRemediesData.data!.id,
+          // suggestedId: saveRemediesData.data!.id,
           type: 0,
           msgSendBy: "1",
           userType: "astrologer",
-          memberId: saveRemediesData.data!.id,
           productId: productDetails.id.toString(),
           shopId: productDetails.id.toString(),
           receiverId: int.parse(
@@ -1131,14 +1130,12 @@ class NewChatController extends GetxController {
             astrologerId: preferenceService.getUserDetail()!.id,
             time: int.parse(time),
             isSuspicious: 0,
-            suggestedId: productData.data!.id,
             userType: "astrologer",
             isPoojaProduct: false,
             awsUrl: userData?.image ?? '',
             msgType: MsgType.product,
             msgSendBy: "1",
             type: 0,
-            memberId: productData.data?.id ?? 0,
             productId: productData.data?.productId.toString(),
             shopId: productData.data?.shopId.toString(),
             receiverId: int.parse(
@@ -1168,6 +1165,7 @@ class NewChatController extends GetxController {
         base64Image: base64Image,
         downloadedPath: downloadedPath,
         msgType: msgType,
+        suggestedId: int.parse(suggestedId ?? "0"),
         kundliId: kundliId,
         title: giftId ?? "${userData?.name} sent you a message.",
         type: 0,

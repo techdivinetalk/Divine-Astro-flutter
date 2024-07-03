@@ -1153,7 +1153,6 @@ class ChatMessageWithSocketController extends GetxController
           msgSendBy: "1",
           orderId: AppFirebaseService().orderData.value["orderId"],
           userType: "astrologer",
-          memberId: saveRemediesData.data!.id,
           productId: productDetails.id.toString(),
           shopId: productDetails.id.toString(),
           // msgStatus: MsgStatus.sent,
@@ -1190,7 +1189,6 @@ class ChatMessageWithSocketController extends GetxController
             msgSendBy: "1",
             type: 0,
             orderId: AppFirebaseService().orderData.value["orderId"],
-            memberId: productData.data?.id ?? 0,
             productId: productData.data?.productId.toString(),
             shopId: productData.data?.shopId.toString(),
             receiverId: int.parse(

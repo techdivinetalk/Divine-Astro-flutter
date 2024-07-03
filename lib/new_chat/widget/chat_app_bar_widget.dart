@@ -130,7 +130,7 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
             print("test_appendedCustImage: $appendedAstrImage");
 
-            return isVOIP.value.toString() == "0"
+            return controller!.isOfferVisible.value || isVOIP.value.toString() == "0"
                 ? const SizedBox()
                 : ZegoService().buttonUI(
                     isVideoCall: false,
@@ -178,7 +178,7 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             String appendedCustImage =
                 "${preferenceService.getAmazonUrl()}$custImage";
 
-            return controller!.isOfferVisible.value || isVOIP.toString() == "0"
+            return controller!.isOfferVisible.value || isVOIP.value.toString() == "0"
                 ? const SizedBox()
                 : ZegoService().buttonUI(
                     isVideoCall: true,

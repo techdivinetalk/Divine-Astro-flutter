@@ -34,7 +34,6 @@ class ChatSuggestRemediesDetailsPage
                 padding: EdgeInsets.symmetric(horizontal: 20.w),
                 itemCount: (controller.remedies.value.remedies ?? []).length,
                 itemBuilder: (context, index) {
-
                   return Obx(() {
                     print("above line ${controller.selectedIndex.obs}");
                     return card(index);
@@ -44,13 +43,18 @@ class ChatSuggestRemediesDetailsPage
               Visibility(
                 visible: controller.selectedIndex.value != -1,
                 child: Padding(
-                  padding:  EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
+                  padding:
+                      EdgeInsets.symmetric(vertical: 10.h, horizontal: 20.w),
                   child: GestureDetector(
                     onTap: () {
-                      final remedy = controller.remedies.value.remedies![controller.selectedIndex.value];
-                      List temp = [ remedy.name.upperCamelCase, remedy.content];
+                      final remedy = controller.remedies.value
+                          .remedies![controller.selectedIndex.value];
+                      List temp = [remedy.name.upperCamelCase, remedy.content];
                       Get.back();
-                      Get.back(result: temp);
+                      Get.back(result: {
+                        "remedies": temp,
+                        "remedies_id": remedy.id,
+                      });
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width,
@@ -81,13 +85,15 @@ class ChatSuggestRemediesDetailsPage
     );
   }
 
-  Widget card(index){
+  Widget card(index) {
     final remedy = controller.remedies.value.remedies![index];
     return Card(
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
-            color: controller.selectedIndex.value == index ? appColors.guideColor : Colors.transparent,
+            color: controller.selectedIndex.value == index
+                ? appColors.guideColor
+                : Colors.transparent,
           ),
           borderRadius: BorderRadius.circular(8.0),
         ),
