@@ -1201,6 +1201,15 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           child: SvgPicture.asset(
                               "assets/svg/chat_new_custom_product.svg")),
                     ),
+                    GestureDetector(
+                      onTap: () {
+                        controller.openShowDeck(context, controller);
+                      },
+                      child: Center(
+                        child: SvgPicture.asset(
+                            "assets/svg/new_chat_tarrot_card.svg"),
+                      ),
+                    ),
                     Obx(
                       () {
                         Map orderData = AppFirebaseService().orderData.value;
