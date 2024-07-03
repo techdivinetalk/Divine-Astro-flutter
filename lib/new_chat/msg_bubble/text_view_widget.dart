@@ -23,8 +23,11 @@ class TextViewWidget extends StatelessWidget {
   final ChatMessage chatDetail;
   final bool yourMessage;
 
-  TextViewWidget(
-      {required this.chatDetail, required this.yourMessage, this.controller});
+  TextViewWidget({
+    required this.chatDetail,
+    required this.yourMessage,
+    this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -94,9 +97,9 @@ class TextViewWidget extends StatelessWidget {
                           alignment: WrapAlignment.end,
                           children: [
                             Text(
-                                /*chatDetail.isSuspicious == 1
+                                chatDetail.isSuspicious == 1
                                     ? "Inappropriate Message"
-                                    : */chatDetail.message ?? "",
+                                    : chatDetail.message ?? "",
                                 style: AppTextStyle.textStyle14(
                                   fontColor: chatDetail.id.toString() ==
                                           AppFirebaseService()
@@ -177,18 +180,18 @@ class TextViewWidget extends StatelessWidget {
                                 fontFamily: FontFamily.metropolis,
                                 fontWeight: FontWeight.w500),
                           ),
-                          // if (yourMessage) SizedBox(width: 8.w),
-                          // if (yourMessage)
-                          //   Obx(() => msgType.value == 0
-                          //       ? Assets.images.icSingleTick.svg()
-                          //       : msgType.value == 1
-                          //           ? Assets.images.icDoubleTick.svg(
-                          //               colorFilter: ColorFilter.mode(
-                          //                   appColors.disabledGrey,
-                          //                   BlendMode.srcIn))
-                          //           : msgType.value == 3
-                          //               ? Assets.images.icDoubleTick.svg()
-                          //               : Assets.images.icSingleTick.svg())
+                          if (yourMessage) SizedBox(width: 8.w),
+                          if (yourMessage)
+                            chatDetail.type == 0
+                                ? Assets.images.icSingleTick.svg()
+                                : chatDetail.type == 1
+                                ? Assets.images.icDoubleTick.svg(
+                                colorFilter: ColorFilter.mode(
+                                    appColors.disabledGrey,
+                                    BlendMode.srcIn))
+                                :chatDetail.type == 3
+                                ? Assets.images.icDoubleTick.svg()
+                                : Assets.images.icSingleTick.svg()
                         ],
                       ),
                     ),

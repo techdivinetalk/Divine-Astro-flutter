@@ -22,8 +22,8 @@ bool isBadWord(String word) {
     log('Time taken to check bad word: ${end.difference(start).inMilliseconds} ms');
     return true;
   }
-  // check if special characters
-  if (RegExp(r'[!@#<>?":_`~;[\]\\|=+)(*&^%0-9-]').hasMatch(word)) {
+  // check if special character @
+  if (RegExp(r'[@]').hasMatch(word)) {
     DateTime end = DateTime.now();
     log('Time taken to check bad word: ${end.difference(start).inMilliseconds} ms');
     return true;

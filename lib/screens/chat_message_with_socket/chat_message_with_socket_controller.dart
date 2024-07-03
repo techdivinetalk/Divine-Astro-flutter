@@ -179,7 +179,7 @@ class ChatMessageWithSocketController extends GetxController
     }
     super.onClose();
   }
-
+  StreamSubscription? streamSubscription;
   @override
   void dispose() {
     // TODO: implement dispose

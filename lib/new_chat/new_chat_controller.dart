@@ -76,6 +76,8 @@ class NewChatController extends GetxController {
   AppLifecycleState? _state;
   final List<String> _states = <String>[];
   late AppLifecycleListener _listener;
+  StreamSubscription? msgAddSubscription;
+  StreamSubscription? msgUpdateSubscription;
 
   @override
   void onInit() {
@@ -106,7 +108,7 @@ class NewChatController extends GetxController {
         initTask(p0);
       }
     });
-    FirebaseDatabase.instance
+    msgAddSubscription = FirebaseDatabase.instance
         .ref("chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
         .onChildAdded
         .listen(
@@ -121,29 +123,42 @@ class NewChatController extends GetxController {
         scrollToBottomFunc();
 
         update();
-        // if (chatMessage.senderId !=
-        //     AppFirebaseService().orderData.value["astroId"]) {
-        //   FirebaseDatabase.instance
-        //       .ref(
-        //           "chatMessages/${AppFirebaseService().orderData.value["orderId"]}/${chatMessage.id}")
-        //       .update({
-        //     "msg_type": 2,
-        //   });
-        //   FirebaseDatabase.instance
-        //       .ref(
-        //           "chatMessages/${AppFirebaseService().orderData.value["orderId"]}/${chatMessage.id}")
-        //       .onChildChanged
-        //       .listen(
-        //     (event) {
-        //       print(jsonDecode(jsonEncode(event.snapshot.value)));
-        //       print(
-        //           "jsonDecode(jsonEncode(event.snapshot.value))--updated time");
-        //     },
-        //   );
-        // }
+        if (MiddleWare.instance.currentPage == RouteName.newChat) {
+          if (chatMessage.userType == "astrologer") {
+            print("chatMessage.userType");
+            FirebaseDatabase.instance
+                .ref(
+                    "chatMessages/${AppFirebaseService().orderData.value["orderId"]}/${chatMessage.id}")
+                .update({
+              "type": 3,
+            });
+          }
+        }
       },
     );
-
+    if (MiddleWare.instance.currentPage == RouteName.newChat) {
+      msgUpdateSubscription = FirebaseDatabase.instance
+          .ref(
+              "chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
+          .onChildChanged
+          .listen(
+        (event) {
+          ChatMessage chatMessage = ChatMessage.fromOfflineJson(
+              jsonDecode(jsonEncode(event.snapshot.value)));
+          chatMessage.id = int.parse(event.snapshot.key ?? "0");
+          if (chatMessages.isNotEmpty) {
+            for (int i = 0; i < chatMessages.length; i++) {
+              if (chatMessages[i].id == chatMessage.id) {
+                chatMessages[i].type = chatMessage.type;
+                print("updating ticks");
+                update();
+                break;
+              }
+            }
+          }
+        },
+      );
+    }
     _state = scheduler.SchedulerBinding.instance.lifecycleState;
     _listener = AppLifecycleListener(
       onShow: () {},
@@ -194,10 +209,20 @@ class NewChatController extends GetxController {
   }
 
   @override
+  void dispose() {
+
+    super.dispose();
+  }
+
+  @override
   void onClose() {
     if (recorderController != null) {
       recorderController?.dispose();
     }
+
+    msgUpdateSubscription!.cancel();
+    msgAddSubscription!.cancel();
+    print("on close msgUpdateSubscription");
     leaveRoomSocketEvent();
     super.onClose();
   }
