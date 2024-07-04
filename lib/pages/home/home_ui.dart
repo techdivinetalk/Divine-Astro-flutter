@@ -1742,14 +1742,18 @@ class HomeUI extends GetView<HomeController> {
                             Obx(
                               () => SwitchWidget(
                                 onTap: () async {
-                                  await controller.chatSwitchFN(
-                                    onComplete: () {
-                                      // if (controller.chatSwitch.value) {
-                                      // } else {
-                                      //   selectDateTimePopupForChat();
-                                      // }
-                                    },
-                                  );
+                                  if (chatSwitch.value) {
+                                    controller.selectDateTimePopupForChat(true);
+                                  } else {
+                                    await controller.chatSwitchFN(
+                                      onComplete: () {
+                                        // if (controller.chatSwitch.value) {
+                                        // } else {
+                                        //   selectDateTimePopupForChat();
+                                        // }
+                                      },
+                                    );
+                                  }
                                 },
                                 switchValue: chatSwitch.value,
                               ),
@@ -1766,14 +1770,18 @@ class HomeUI extends GetView<HomeController> {
                             Obx(
                               () => SwitchWidget(
                                 onTap: () async {
-                                  await controller.callSwitchFN(
-                                    onComplete: () {
-                                      // if (controller.callSwitch.value) {
-                                      // } else {
-                                      //   selectDateTimePopupForCall();
-                                      // }
-                                    },
-                                  );
+                                  if (callSwitch.value) {
+                                    controller.selectDateTimePopupForCall(true);
+                                  } else {
+                                    await controller.callSwitchFN(
+                                      onComplete: () {
+                                        // if (controller.callSwitch.value) {
+                                        // } else {
+                                        //   selectDateTimePopupForCall();
+                                        // }
+                                      },
+                                    );
+                                  }
                                 },
                                 switchValue: callSwitch.value,
                               ),
@@ -1845,10 +1853,12 @@ class HomeUI extends GetView<HomeController> {
                         padding: const EdgeInsets.symmetric(vertical: 4.0),
                         child: Column(
                           children: [
-                            Obx(() => controller.selectedChatTime.value.isEmpty
+                            Obx(() => controller
+                                        .selectedChatTime.value.isEmpty ||
+                                    chatSwitch.value
                                 ? InkWell(
-                                    onTap:
-                                        controller.selectDateTimePopupForChat,
+                                    onTap: () => controller
+                                        .selectDateTimePopupForChat(false),
                                     child: Container(
                                       // width: 128.w,
                                       height: 31.h,
@@ -1877,10 +1887,12 @@ class HomeUI extends GetView<HomeController> {
                         padding: const EdgeInsets.symmetric(vertical: 4.0),
                         child: Column(
                           children: [
-                            Obx(() => controller.selectedCallTime.value.isEmpty
+                            Obx(() => controller
+                                        .selectedCallTime.value.isEmpty ||
+                                    callSwitch.value
                                 ? InkWell(
-                                    onTap:
-                                        controller.selectDateTimePopupForCall,
+                                    onTap: () => controller
+                                        .selectDateTimePopupForCall(false),
                                     child: Container(
                                       // width: 128.w,
                                       height: 31.h,
