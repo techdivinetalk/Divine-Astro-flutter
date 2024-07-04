@@ -13,6 +13,7 @@ import 'package:divine_astrologer/new_chat/widget/typing_widget.dart';
 import 'package:divine_astrologer/new_chat/widget/visible_tarrot_card.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'widget/chat_app_bar_widget.dart';
 import 'widget/chat_bottom_bar_widget.dart';
 import 'widget/end_chat_timer.dart';
@@ -33,48 +34,57 @@ class NewChatScreen extends GetView<NewChatController> {
         if (keyboardVisible) {
           controller.scrollToBottomFunc();
         }
-        return Scaffold(
-          appBar: ChatAppBarWidget(controller: controller),
-          body: Column(
-            children: [
-               NoticeBoardWidget(controller: controller),
-              Expanded(
-                child: ListView.separated(
-                  controller: controller.messageScrollController,
-                  itemCount: controller.chatMessages.length,
-                  padding: const EdgeInsets.symmetric(horizontal: 15),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    ChatMessage data = controller.chatMessages[index];
-                    return Column(
-                      children: [
-                        socketMessageView(
-                          controller: controller,
-                          yourMessage: data.msgSendBy == "1",
-                          chatMessage: data,
-                          index: index,
-                        ),
-                        if (index == (controller.chatMessages.length - 1))
-                          TypingWidget(
-                            controller: controller,
-                            yourMessage: data.msgSendBy == "1",
-                          )
-                      ],
-                    );
-                  },
-                  separatorBuilder: (context, index) =>
-                      const SizedBox(height: 15),
-                ),
+        return Stack(
+          children: [
+            Scaffold(
+              appBar: ChatAppBarWidget(controller: controller),
+              body: Column(
+                children: [
+                  NoticeBoardWidget(controller: controller),
+                  Expanded(
+                    child: ListView.separated(
+                      controller: controller.messageScrollController,
+                      itemCount: controller.chatMessages.length,
+                      padding: const EdgeInsets.symmetric(horizontal: 15),
+                      shrinkWrap: true,
+                      itemBuilder: (context, index) {
+                        ChatMessage data = controller.chatMessages[index];
+                        return Column(
+                          children: [
+                            socketMessageView(
+                              controller: controller,
+                              yourMessage: data.msgSendBy == "1",
+                              chatMessage: data,
+                              index: index,
+                            ),
+                            if (index == (controller.chatMessages.length - 1))
+                              TypingWidget(
+                                controller: controller,
+                                yourMessage: data.msgSendBy == "1",
+                              )
+                          ],
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          const SizedBox(height: 15),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  VisibleTarrotCard(controller: controller),
+                  EndChatTimer(controller: controller),
+                  Visibility(
+                      visible: !keyboardVisible,
+                      child: MessageTemplateWidget(controller: controller)),
+                  ChatBottomBarWidget(controller: controller),
+                ],
               ),
-              const SizedBox(height: 15),
-              VisibleTarrotCard(controller: controller),
-              EndChatTimer(controller: controller),
-              Visibility(
-                  visible: !keyboardVisible,
-                  child: MessageTemplateWidget(controller: controller)),
-              ChatBottomBarWidget(controller: controller),
-            ],
-          ),
+            ),
+            Center(
+              child: SVGAImage(
+                controller.svgaController,
+              ),
+            ),
+          ],
         );
       },
     );

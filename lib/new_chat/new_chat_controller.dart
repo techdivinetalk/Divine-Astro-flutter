@@ -48,12 +48,16 @@ import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 
+import '../cache/custom_cache_manager.dart';
 import '../di/api_provider.dart';
 import '../model/res_product_detail.dart';
 import '../screens/live_page/constant.dart';
 
-class NewChatController extends GetxController {
+class NewChatController extends GetxController
+    with GetTickerProviderStateMixin {
+  late SVGAAnimationController svgaController;
   TextEditingController messageController = TextEditingController();
   TextEditingController reportMessageController = TextEditingController();
   ScrollController messageScrollController = ScrollController();
@@ -82,6 +86,13 @@ class NewChatController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    svgaController = SVGAAnimationController(vsync: this);
+    svgaController.addListener(() {
+      if (svgaController.isCompleted == true) {
+        svgaController.reset();
+        svgaController.stop();
+      }
+    });
     if (AppFirebaseService().orderData.isNotEmpty) {
       initialiseControllers();
       joinRoomSocketEvent();
@@ -115,8 +126,8 @@ class NewChatController extends GetxController {
         chatMessage.id = int.parse(event.snapshot.key ?? "0");
         chatMessages.add(chatMessage);
         scrollToBottomFunc();
-        if (MsgType.gift == chatMessage.msgType) {
-          /// write a code of gift
+        if (chatMessage.animation != null) {
+          playGift(chatMessage.animation);
         }
         update();
         if (MiddleWare.instance.currentPage == RouteName.newChat) {
@@ -1195,5 +1206,14 @@ class NewChatController extends GetxController {
     print(
         "last message ----- ${jsonDecode(jsonEncode(newMessage)).runtimeType}");
     sendMessageInSocket(newMessage);
+  }
+
+  playGift(String? url) async {
+    const SVGAParser parser = SVGAParser();
+    File file = await CustomCacheManager().getFile(url ?? '');
+    await parser.decodeFromBuffer(file.readAsBytesSync()).then((videoItem) {
+      svgaController.videoItem = videoItem;
+      svgaController.forward();
+    });
   }
 }

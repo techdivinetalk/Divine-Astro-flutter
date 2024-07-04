@@ -85,6 +85,7 @@ class ChatMessage {
   GetProduct? getProduct;
   GetPooja? getPooja;
   CustomProduct? getCustomProduct;
+  String? animation;
 
   ChatMessage({
     this.id,
@@ -144,6 +145,7 @@ class ChatMessage {
     this.productPrice,
     this.kundli,
     this.getCustomProduct,
+    this.animation,
   });
 
   ChatMessage.fromOfflineJson(Map<String, dynamic> json) {
@@ -222,6 +224,7 @@ class ChatMessage {
         : null;
     userType = json['userType'];
     kundli = json['kundli'] != null ? Kundli.fromJson(json['kundli']) : null;
+    animation = json['animation'];
   }
 
   Map<String, dynamic> toJson() => {
@@ -283,6 +286,7 @@ class ChatMessage {
         "gender": gender,
         "userType": userType,
         "kundli": kundli,
+        "animation": animation,
       };
 }
 
