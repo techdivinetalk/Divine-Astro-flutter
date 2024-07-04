@@ -63,7 +63,7 @@ class NewChatController extends GetxController {
   RxString showTalkTime = "".obs;
   RxString extraTalkTime = "".obs;
   RecorderController? recorderController;
-  RxBool isOfferVisible = false.obs;
+
   RxBool isRecording = false.obs;
   RxBool hasMessage = false.obs;
   RxBool isEmojiShowing = false.obs;
@@ -100,14 +100,8 @@ class NewChatController extends GetxController {
       timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0,
           astroChatWatcher.value.orderId!);
     }
-    AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
-      if (p0["status"] == null || p0["astroId"] == null) {
-        backFunction();
-      } else {
-        print("orderData Changed");
-        initTask(p0);
-      }
-    });
+
+    initTask(AppFirebaseService().orderData);
     msgAddSubscription = FirebaseDatabase.instance
         .ref("chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
         .onChildAdded
@@ -117,11 +111,13 @@ class NewChatController extends GetxController {
         print("jsonDecode(jsonEncode(event.snapshot.value))");
         ChatMessage chatMessage = ChatMessage.fromOfflineJson(
             jsonDecode(jsonEncode(event.snapshot.value)));
+
         chatMessage.id = int.parse(event.snapshot.key ?? "0");
         chatMessages.add(chatMessage);
-
         scrollToBottomFunc();
-
+        if (MsgType.gift == chatMessage.msgType) {
+          /// write a code of gift
+        }
         update();
         if (MiddleWare.instance.currentPage == RouteName.newChat) {
           if (chatMessage.userType == "astrologer") {
@@ -168,6 +164,7 @@ class NewChatController extends GetxController {
           getChatList();
         }
         joinRoomSocketEvent();
+        initTask(AppFirebaseService().orderData);
         isGalleryOpen = false;
       },
       onHide: () {
@@ -211,6 +208,19 @@ class NewChatController extends GetxController {
   @override
   void dispose() {
     super.dispose();
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
+    AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
+      if (p0["status"] == null || p0["astroId"] == null) {
+        backFunction();
+      } else {
+        print("orderData Changed");
+        initTask(p0);
+      }
+    });
   }
 
   @override

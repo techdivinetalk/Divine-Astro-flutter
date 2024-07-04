@@ -21,6 +21,7 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return AppBar(
       elevation: 0,
       scrolledUnderElevation: 0,
@@ -66,52 +67,49 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           ),
           const SizedBox(width: 10),
           Flexible(
-            child: InkWell(
-              onTap: () {},
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Obx(
-                    () => Row(
-                      children: [
-                        Text(
-                          AppFirebaseService()
-                                  .orderData
-                                  .value["customerName"] ??
-                              'Astrologer Name',
-                          softWrap: true,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14,
-                            color: appColors.black,
-                          ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Obx(
+                  () => Row(
+                    children: [
+                      Text(
+                        AppFirebaseService()
+                                .orderData
+                                .value["customerName"] ??
+                            'Astrologer Name',
+                        softWrap: true,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14,
+                          color: appColors.black,
                         ),
-                        const SizedBox(width: 5),
-                        Text(
-                          controller!.showTalkTime.value == "-1"
-                              ? "Chat Ended"
-                              : controller!.showTalkTime.value,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 12,
-                            color: appColors.guideColor,
-                          ),
+                      ),
+                      const SizedBox(width: 5),
+                      Text(
+                        controller!.showTalkTime.value == "-1"
+                            ? "Chat Ended"
+                            : controller!.showTalkTime.value,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                          color: appColors.guideColor,
                         ),
-                      ],
-                    ),
+                      ),
+                    ],
                   ),
-                  Text(
-                    "Chat in Progress",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 13,
-                      color: appColors.black,
-                    ),
+                ),
+                Text(
+                  "Chat in Progress",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 13,
+                    color: appColors.black,
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ],
@@ -130,7 +128,7 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
             print("test_appendedCustImage: $appendedAstrImage");
 
-            return controller!.isOfferVisible.value || isVOIP.value.toString() == "0"
+            return  isVOIP.value.toString() == "0"
                 ? const SizedBox()
                 : ZegoService().buttonUI(
                     isVideoCall: false,
@@ -178,7 +176,7 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             String appendedCustImage =
                 "${preferenceService.getAmazonUrl()}$custImage";
 
-            return controller!.isOfferVisible.value || isVOIP.value.toString() == "0"
+            return  isVOIP.value.toString() == "0"
                 ? const SizedBox()
                 : ZegoService().buttonUI(
                     isVideoCall: true,
