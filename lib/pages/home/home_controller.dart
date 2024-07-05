@@ -247,7 +247,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               isCallEnable(isCallEnableRes);
 
               final voiceCallStatus = map["voiceCallStatus"] ?? 0;
-              callSwitch(voiceCallStatus == 1);
+              callSwitch(voiceCallStatus != 0);
 
               if (callSwitch.value) {
                 selectedCallDate.value = DateTime.now();
@@ -258,7 +258,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               isChatEnable(isChatEnableRes);
 
               final chatStatusRes = map["chatStatus"] ?? 0;
-              chatSwitch(chatStatusRes == 1);
+              chatSwitch(chatStatusRes != 0);
 
               if (chatSwitch.value) {
                 selectedChatDate.value = DateTime.now();
