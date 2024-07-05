@@ -18,6 +18,7 @@ import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/force_update_sheet.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -255,6 +256,7 @@ class DashboardController extends GetxController
   @override
   Future<void> onInit() async {
     super.onInit();
+    if(appFirebaseService.astroMsg != null){serverUnderMaintenancePopup(appFirebaseService.astroMsg);}
     WidgetsBinding.instance.addObserver(this);
   //  checkPermissions();
     getOrderFromApi();
@@ -1007,6 +1009,34 @@ class DashboardController extends GetxController
                 ))
           ]),
     ];
+  }
+  void serverUnderMaintenancePopup(String? message) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      print("$message🤑🤑🤑🤑🤑🤑🤑🤑🤑🤑");
+      showDialog(
+        context: Get.context!,
+        barrierDismissible: false,
+        // Prevents closing the popup by tapping outside
+        builder: (BuildContext context) {
+          return PopScope(
+            canPop:false,
+            child: AlertDialog(
+              title: const Text('Notification'),
+              content: Text(message!),
+              actions: <Widget>[
+                TextButton(
+                  child: const Text('Close'),
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the popup
+                    SystemNavigator.pop(); // Close the app
+                  },
+                ),
+              ],
+            ),
+          );
+        },
+      );
+    });
   }
 
   void showTutorial(context) {

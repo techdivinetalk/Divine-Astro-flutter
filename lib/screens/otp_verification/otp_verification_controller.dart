@@ -151,6 +151,7 @@ class OtpVerificationController extends GetxController {
       await preferenceService.setUserDetail(data.data!);
       await preferenceService.setToken(data.token!);
       await preferenceService.setDeviceToken(deviceToken ?? "");
+      log('😈😈😈😈😈😈😈😈');
       print(data.token);
       log(jsonEncode(data.data));
       print("jsonEncode(data.data)");

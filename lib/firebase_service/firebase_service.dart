@@ -56,7 +56,7 @@ class AppFirebaseService {
   factory AppFirebaseService() {
     return _instance;
   }
-
+  String? astroMsg;
   var watcher = RealTimeWatcher();
   var acceptBottomWatcher = RealTimeWatcher();
   final appSocket = AppSocket();
@@ -485,17 +485,8 @@ class AppFirebaseService {
       // case "truecaller":
       //   isTruecaller(int.parse(dataSnapshot.value.toString()));
       //   break;
-      case "astroUnderMaintenance":
-        final messageController = Get.find<MessageController>();
-        messageController.isUnderMaintenance.value = dataSnapshot.value as bool;
-        print(messageController.isUnderMaintenance.value);
-        print("🫣🫣🫣🫣🫣🫣🫣🫣🫣");
-        break;
       case "astroMsg":
-        final messageController = Get.find<MessageController>();
-        messageController.customMessage.value = dataSnapshot.value.toString();
-        print(messageController.customMessage.value);
-        print("🫣🫣🫣🫣🫣🫣🫣🫣🫣");
+        astroMsg = dataSnapshot.value.toString();
         break;
 
       default:

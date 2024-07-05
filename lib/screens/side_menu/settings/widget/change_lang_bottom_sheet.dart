@@ -28,8 +28,8 @@ class LanguageBottomSheetWidget extends StatelessWidget {
           },
           child: Container(
             decoration: BoxDecoration(
-                border: Border.all(color: appColors.white, width: 1.5),
-                borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+                border: Border.all(color: appColors.white, width: 1.5.w),
+                borderRadius:  BorderRadius.all(Radius.circular(50.r)),
                 color: appColors.white.withOpacity(0.1)),
             child: const Icon(
               Icons.close,
@@ -41,7 +41,7 @@ class LanguageBottomSheetWidget extends StatelessWidget {
           width: double.maxFinite,
           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 0.h),
           decoration:  BoxDecoration(
-            borderRadius: const BorderRadius.vertical(top: Radius.circular(50.0)),
+            borderRadius:  BorderRadius.vertical(top: Radius.circular(50.r)),
             color: appColors.white,
           ),
           child: Column(
@@ -78,9 +78,9 @@ class LanguageBottomSheetWidget extends StatelessWidget {
                                       shape: BoxShape.circle,
                                       border: item.isSelected
                                           ? Border.all(
-                                              width: 1, color: Colors.grey)
+                                              width: 1.w, color: Colors.grey)
                                           : Border.all(
-                                              width: 0, color: Colors.white)),
+                                              width: 0.w, color: Colors.white)),
                                   child: Container(
                                     decoration: BoxDecoration(
                                       shape: BoxShape.circle,
@@ -104,12 +104,15 @@ class LanguageBottomSheetWidget extends StatelessWidget {
                                             Text(
                                               item.languagesMain.toString(),
                                               style: AppTextStyle.textStyle20(
+                                                fontSize: 16.h,
                                                   fontWeight: FontWeight.w600),
                                             ),
                                             SizedBox(height: 10.h),
                                             Text(
                                               item.languages.toString(),
-                                              style: AppTextStyle.textStyle16(),
+                                              style: AppTextStyle.textStyle16(
+                                                fontSize: 14.h,
+                                              ),
                                             ),
                                           ],
                                         ),

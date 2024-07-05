@@ -26,7 +26,7 @@ class SplashController extends GetxController with WidgetsBindingObserver {
   @override
   void onInit() {
     super.onInit();
-    maintenanceCheck();
+    // maintenanceCheck();
     WidgetsBinding.instance.addObserver(this);
 
     notificationPermission();

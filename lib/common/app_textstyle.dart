@@ -53,9 +53,9 @@ class AppTextStyle {
         overflow: TextOverflow.ellipsis);
   }
 
-  static TextStyle textStyle16({Color? fontColor, FontWeight? fontWeight}) {
+  static TextStyle textStyle16({Color? fontColor, FontWeight? fontWeight, double? fontSize}) {
     return TextStyle(
-        fontSize: 16.sp,
+        fontSize: fontSize ?? 16.sp,
         fontWeight: fontWeight ?? FontWeight.w400,
         color: fontColor ?? appColors.textColor,
         );
@@ -69,9 +69,9 @@ class AppTextStyle {
         overflow: TextOverflow.ellipsis);
   }
 
-  static TextStyle textStyle20({Color? fontColor, FontWeight? fontWeight}) {
+  static TextStyle textStyle20({Color? fontColor, FontWeight? fontWeight, double? fontSize}) {
     return TextStyle(
-        fontSize: 20.sp,
+        fontSize: fontSize ?? 20.sp,
         fontWeight: fontWeight ?? FontWeight.w400,
         color: fontColor ?? appColors.textColor,
         );
