@@ -83,6 +83,7 @@ class NewChatController extends GetxController
   StreamSubscription? msgAddSubscription;
   StreamSubscription? msgUpdateSubscription;
 
+
   @override
   void onInit() {
     super.onInit();
@@ -131,7 +132,7 @@ class NewChatController extends GetxController
         }
         update();
         if (MiddleWare.instance.currentPage == RouteName.newChat) {
-          if (chatMessage.userType == "astrologer") {
+          if (chatMessage.userType == "customer") {
             print("chatMessage.userType");
             FirebaseDatabase.instance
                 .ref(
@@ -216,9 +217,21 @@ class NewChatController extends GetxController
     getCustomEcom();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  // @override
+  // void dispose() {
+  //   unsubscribeFromMessageUpdates();
+  //    super.dispose();
+  // }
+
+  void unsubscribeFromMessageUpdates() {
+    if (msgUpdateSubscription != null) {
+      msgUpdateSubscription?.cancel();
+      msgUpdateSubscription = null;
+    }
+    if (msgAddSubscription != null) {
+      msgAddSubscription?.cancel();
+      msgAddSubscription = null;
+    }
   }
 
   @override
@@ -239,9 +252,7 @@ class NewChatController extends GetxController
     if (recorderController != null) {
       recorderController?.dispose();
     }
-
-    msgUpdateSubscription!.cancel();
-    msgAddSubscription!.cancel();
+    unsubscribeFromMessageUpdates();
     print("on close msgUpdateSubscription");
     leaveRoomSocketEvent();
     super.onClose();

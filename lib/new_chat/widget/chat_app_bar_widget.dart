@@ -3,6 +3,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
+import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/new_chat/new_chat_controller.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_ui.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart';
@@ -21,7 +22,6 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return AppBar(
       elevation: 0,
       scrolledUnderElevation: 0,
@@ -74,9 +74,7 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                   () => Row(
                     children: [
                       Text(
-                        AppFirebaseService()
-                                .orderData
-                                .value["customerName"] ??
+                        AppFirebaseService().orderData.value["customerName"] ??
                             'Astrologer Name',
                         softWrap: true,
                         maxLines: 1,
@@ -128,7 +126,7 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
 
             print("test_appendedCustImage: $appendedAstrImage");
 
-            return  isVOIP.value.toString() == "0"
+            return isVOIP.value.toString() == "0"
                 ? const SizedBox()
                 : ZegoService().buttonUI(
                     isVideoCall: false,
@@ -139,6 +137,8 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                           preferenceService.getUserDetail()?.name ?? "";
                       String message =
                           "$name wants to start a call, please allow all required permissions";
+                      controller!.addNewMessage(
+                          msgType: MsgType.text, messageText: message);
 
                       /// write code for send call
                       // controller.messageController.text = message;
@@ -176,7 +176,7 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             String appendedCustImage =
                 "${preferenceService.getAmazonUrl()}$custImage";
 
-            return  isVOIP.value.toString() == "0"
+            return isVOIP.value.toString() == "0"
                 ? const SizedBox()
                 : ZegoService().buttonUI(
                     isVideoCall: true,
@@ -187,10 +187,12 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
                           preferenceService.getUserDetail()?.name ?? "";
                       String message =
                           "$name wants to start a call, please allow all required permissions";
-                      controller!.messageController.text = message;
 
                       /// permission require auto generating msg
-                      // controller!.sendMsg();
+                      controller!.addNewMessage(
+                        msgType: MsgType.text,
+                        messageText: message, 
+                      );
                     },
                     customData: {
                       "astr_id": orderData["astroId"] ?? "",
