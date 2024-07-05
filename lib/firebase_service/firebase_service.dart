@@ -136,9 +136,9 @@ class AppFirebaseService {
 
                         case "2":
                           if (Get.currentRoute !=
-                              RouteName.chatMessageWithSocketUI) {
+                              RouteName.newChat) {
                             await Get.toNamed(
-                              RouteName.chatMessageWithSocketUI,
+                              RouteName.newChat,
                               arguments: {"orderData": orderData},
                             );
                           }
@@ -146,9 +146,9 @@ class AppFirebaseService {
 
                         case "3":
                           if (Get.currentRoute !=
-                              RouteName.chatMessageWithSocketUI) {
+                              RouteName.newChat) {
                             await Get.toNamed(
-                              RouteName.chatMessageWithSocketUI,
+                              RouteName.newChat,
                               arguments: {"orderData": orderData},
                             );
                           }

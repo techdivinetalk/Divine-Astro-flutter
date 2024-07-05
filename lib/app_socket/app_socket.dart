@@ -154,7 +154,7 @@ class AppSocket {
         debugPrint("test_socket_id: ${socket?.id}");
 
         final response = await Dio().post(
-          "https://list.divinetalk.live/api/v3/removeLiveData",
+          "http://4.240.97.131:8081/api/v3/removeLiveData",
           data: {
             "astroId": pref.getUserDetail()?.id ?? 0,
             "clientId": socket?.id ?? "",

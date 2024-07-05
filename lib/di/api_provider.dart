@@ -17,12 +17,12 @@ import 'shared_preference_service.dart';
 
 class ApiProvider {
   static const String version = 'v7';
-  static const String socketUrl = "https://list.divinetalk.live";
+  static const String socketUrl = "http://4.240.97.131:8081";
   static String baseUrl =  "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
   static String imageBaseUrl =
       "${imageUploadBaseUrl.value}/api/astro/$version/";
   static const String astOnlineOffline =
-      "https://list.divinetalk.live/api/v3/updateAstroStatusV2?unique_no=";
+      "http://4.240.97.131:8081/api/v3/updateAstroStatusV2?unique_no=";
   final String deleteSession = "deleteSession";
   final String deleteSessionResponse = "deleteSessionResponse";
   static String playStoreLiveUrl =
@@ -244,7 +244,12 @@ class ApiProvider {
   final String getCustomOffer = "getCustomOffer";
   final String sendOtpNumberChange = "sendOtpForNumberChange";
   final String verifyOtpNumberChange = "verifyOtpForNumberChange";
-
+  // ------------------  new socket ----------------- ///
+  static String enterRoom = "enterRoom";
+  static String leaveRoom = "leaveRoom";
+  static String message = "message";
+  static String sendNewMessage = "sendMessage";
+  static String activity = "activity";
   // added by raj
   // final String addNoticeToAstrologer = "addNoticeToAstrologer";
 

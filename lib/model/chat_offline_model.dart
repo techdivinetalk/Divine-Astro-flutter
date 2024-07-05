@@ -27,6 +27,7 @@ class ChatMessagesOffline {
 class ChatMessage {
   int? id;
   int? orderId;
+  int? msgId;
   int? memberId;
   int? roleId;
   int? customerId;
@@ -44,6 +45,7 @@ class ChatMessage {
   dynamic kundliId;
   int? seenStatus;
   String? base64Image;
+  String? animation;
   dynamic deletedAt;
   int? chatMsgId;
   int? astrologerId;
@@ -88,8 +90,10 @@ class ChatMessage {
   ChatMessage({
     this.id,
     this.orderId,
+    this.msgId,
     this.memberId,
     this.suggestedId,
+    this.animation,
     this.roleId,
     this.productId,
     this.title,
@@ -149,12 +153,14 @@ class ChatMessage {
   ChatMessage.fromOfflineJson(Map<String, dynamic> json) {
     id = json['chatMessageId'];
     orderId = json['order_id'];
+    msgId = json['msgId'];
     memberId = json['member_id'];
     roleId = json['role_id'];
     customerId = json['customer_id'];
     title = json['title'];
     latitude = json['latitude'];
     longitude = json['longitude'];
+    animation = json['animation'];
     msgSequence = json['msg_sequence'];
     msgType = json['msg_type'] != null
         ? msgTypeValues.map[json["msg_type"].toString()]
@@ -175,6 +181,7 @@ class ChatMessage {
     seenStatus = json['seen_status'];
     base64Image = json['base64image'];
     deletedAt = json['deleted_at'];
+
 
     chatMsgId = json['chat_msg_id'];
     suggestedId = json['suggested_remedies_id'];
@@ -227,11 +234,13 @@ class ChatMessage {
     data['chatMessageId'] = id;
     data['order_id'] = orderId;
     data['get_pooja'] = getPooja;
+    data['animation'] = animation;
     data['get_custom_product'] = getCustomProduct;
     data['member_id'] = memberId;
     data['productPrice'] = productPrice;
     data['role_id'] = roleId;
     data['latitude'] = latitude;
+    data['msgId'] = msgId;
     data['longitude'] = longitude;
     data['get_product'] = getProduct;
     data['title'] = title;

@@ -120,7 +120,7 @@ Future<void> main() async {
     // }
     if (message.data["type"].toString() == "1") {
       if (MiddleWare.instance.currentPage !=
-          RouteName.chatMessageWithSocketUI) {
+          RouteName.newChat) {
         print("messageReceive21 ${MiddleWare.instance.currentPage}");
         showNotification(message.data["title"], message.data["message"],
             message.data['type'], message.data);

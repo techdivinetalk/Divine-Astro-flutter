@@ -7,6 +7,7 @@ import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
+import 'package:divine_astrologer/new_chat/new_chat_controller.dart';
 import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/add_puja/add_puja_controller.dart';
@@ -30,7 +31,7 @@ import '../../../gen/assets.gen.dart';
 import '../../../model/chat_offline_model.dart';
 
 class CreateCustomProductSheet extends StatefulWidget {
-  final ChatMessageWithSocketController? controller;
+  final NewChatController? controller;
   final ChatMessageController? chatMessageController;
 
   const CreateCustomProductSheet(
@@ -400,8 +401,8 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
           final String time =
               "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
           widget.controller!.addNewMessage(
-            time,
-            MsgType.customProduct,
+
+            msgType:MsgType.customProduct,
             messageText: productName.text,
             productPrice: productPrice.text,
             productId: customProductData!.id.toString(),

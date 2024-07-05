@@ -13,6 +13,7 @@ import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/gen/assets.gen.dart";
 import "package:divine_astrologer/gen/fonts.gen.dart";
 import "package:divine_astrologer/model/chat_offline_model.dart";
+import "package:divine_astrologer/new_chat/new_chat_controller.dart";
 import "package:divine_astrologer/zego_call/zego_service.dart";
 import "package:emoji_picker_flutter/emoji_picker_flutter.dart";
 import "package:firebase_database/firebase_database.dart";
@@ -525,7 +526,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     const SizedBox(
                       height: 10,
                     ),
-                    chatBottomBar(context, controller),
+                    // chatBottomBar(context, controller),
                     Obx(() => AnimatedContainer(
                           duration: const Duration(milliseconds: 200),
                           height: controller.isEmojiShowing.value ? 300 : 0,
@@ -846,7 +847,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   }
 
   Widget chatBottomBar(
-      BuildContext context, ChatMessageWithSocketController? controller) {
+      BuildContext context, NewChatController? controller) {
     return Obx(
       () {
         debugPrint('is recording value ${controller!.isRecording.value}');
@@ -1158,7 +1159,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   else
                     InkWell(
                         onTap: () {
-                          controller.sendMsg();
+                          // controller!.sendMsg();
                         },
                         child: Center(
                           child: SvgPicture.asset(
@@ -1187,7 +1188,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         : SizedBox(),
                     GestureDetector(
                       onTap: () {
-                        controller.openProduct(controller);
+                        // controller.openProduct(controller);
                       },
                       child: Center(
                           child: SvgPicture.asset(
@@ -1195,7 +1196,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        controller.openCustomShop(controller);
+                        // controller.openCustomShop(controller);
                       },
                       child: Center(
                           child: SvgPicture.asset(
@@ -1203,7 +1204,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        controller.openShowDeck(context, controller);
+                        // controller.openShowDeck(context, controller);
                       },
                       child: Center(
                         child: SvgPicture.asset(
@@ -1237,7 +1238,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   String message =
                                       "$name wants to start a call, please allow all required permissions";
                                   controller.messageController.text = message;
-                                  controller.sendMsg();
+                                  // controller.sendMsg();
                                 },
                                 customData: {
                                   "astr_id": orderData["astroId"] ?? "",
@@ -1285,7 +1286,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   String message =
                                       "$name wants to start a call, please allow all required permissions";
                                   controller.messageController.text = message;
-                                  controller.sendMsg();
+                                  // controller.sendMsg();
                                 },
                                 customData: {
                                   "astr_id": orderData["astroId"] ?? "",
@@ -1523,7 +1524,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         // controller.isCardBotOpen.value = true;
                         // showCardChoiceBottomSheet(context, controller);
 
-                        controller.openShowDeck(context, controller);
+                        // controller.openShowDeck(context, controller);
                         break;
                       case "product":
                         // var result = await Get.toNamed(

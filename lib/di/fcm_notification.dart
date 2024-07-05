@@ -140,7 +140,7 @@ void initMessaging() async {
 
       if (payloadMap["type"] == "1") {
         print("22222" + payloadMap.toString());
-        Get.toNamed(RouteName.chatMessageWithSocketUI);
+        Get.toNamed(RouteName.newChat);
       } else if (payloadMap["type"] == "2") {
         print(" 1111111111111" + payloadMap.toString());
         Future<bool> acceptOrRejectChat(
@@ -249,7 +249,7 @@ void onDidReceiveNotificationResponse(
     //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
     // // if(payloadMap["type"] == "2") {
     if (payloadMap["type"] == "1") {
-      Get.toNamed(RouteName.chatMessageWithSocketUI);
+      Get.toNamed(RouteName.newChat);
     } else if (payloadMap["type"] == "8") {
       final senderId = payloadMap["sender_id"];
       DataList dataList = DataList();

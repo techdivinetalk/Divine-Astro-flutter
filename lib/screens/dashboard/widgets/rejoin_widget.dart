@@ -66,7 +66,7 @@ class RejoinWidget extends StatelessWidget {
               child: InkWell(
                 onTap: () async {
                   debugPrint('rejoinChatIcon');
-                  Get.toNamed(RouteName.chatMessageWithSocketUI);
+                  Get.toNamed(RouteName.newChat);
                 },
                 child: Padding(
                   padding: EdgeInsets.all(10.0.sp), // Adjust padding as needed
