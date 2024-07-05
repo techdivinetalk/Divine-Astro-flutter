@@ -11,6 +11,7 @@ import 'package:divine_astrologer/screens/dashboard/widgets/rejoin_widget.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart';
 import 'package:divine_astrologer/screens/side_menu/wait_list/wait_list_controller.dart';
 import 'package:divine_astrologer/screens/side_menu/wait_list/wait_list_ui.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -32,7 +33,9 @@ class DashboardScreen extends GetView<DashboardController> {
 
   @override
   Widget build(BuildContext context) {
-    controller.getConstantDetailsData(context);
+    if (!kDebugMode) {
+      controller.getConstantDetailsData(context);
+    }
     print("beforeGoing 4 - ${preferenceService.getUserDetail()?.id}");
     return GetBuilder<DashboardController>(
       assignId: true,

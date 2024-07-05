@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'dart:math';
 
 import 'package:camera/camera.dart';
+import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
@@ -53,6 +54,7 @@ import 'screens/live_page/constant.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 late List<CameraDescription>? cameras;
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print('Handling a background message: ${message.messageId}');
@@ -119,8 +121,7 @@ Future<void> main() async {
     //   return;
     // }
     if (message.data["type"].toString() == "1") {
-      if (MiddleWare.instance.currentPage !=
-          RouteName.newChat) {
+      if (MiddleWare.instance.currentPage != RouteName.newChat) {
         print("messageReceive21 ${MiddleWare.instance.currentPage}");
         showNotification(message.data["title"], message.data["message"],
             message.data['type'], message.data);
@@ -375,6 +376,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+
+    AppSocket().socketConnect();
     checkForUpdate();
   }
 

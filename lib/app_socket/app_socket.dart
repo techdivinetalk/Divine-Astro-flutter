@@ -33,11 +33,12 @@ class AppSocket {
             .enableAutoConnect()
             .setTransports(['websocket']).build());
     socket!.connect();
-    if (socket!.disconnected) {
-      socket
-        ?..disconnect()
-        ..connect();
-    }
+    print("socket is successfully connected");
+    // if (socket!.disconnected) {
+    //   socket
+    //     ?..disconnect()
+    //     ..connect();
+    // }
     socket?.onConnect(
       (_) async {
         await socketAPI();
@@ -198,8 +199,8 @@ class AppSocket {
   }
 
   void sendMessageSocket(ChatMessage newMessage) {
-    debugPrint('newMessage.toOfflineJson() ${newMessage.toOfflineJson()}');
-    socket?.emit(ApiProvider().sendMessage, newMessage.toOfflineJson());
+    debugPrint('newMessage.toOfflineJson() ${newMessage.toJson()}');
+    socket?.emit(ApiProvider().sendMessage, newMessage.toJson());
   }
 
   void sendMessageSocketListenerSocket(void Function(dynamic) callback) {

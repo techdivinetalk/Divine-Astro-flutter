@@ -55,7 +55,6 @@ import '../di/api_provider.dart';
 import '../model/res_product_detail.dart';
 import '../screens/live_page/constant.dart';
 
-
 class NewChatController extends GetxController
     with GetTickerProviderStateMixin {
   late SVGAAnimationController svgaController;
@@ -83,7 +82,7 @@ class NewChatController extends GetxController
   late AppLifecycleListener _listener;
   StreamSubscription? msgAddSubscription;
   StreamSubscription? msgUpdateSubscription;
-
+  List<ChatMessage> localChatList = <ChatMessage>[];
 
   @override
   void onInit() {
@@ -127,12 +126,15 @@ class NewChatController extends GetxController
 
         chatMessage.id = int.parse(event.snapshot.key ?? "0");
         chatMessages.add(chatMessage);
+
         scrollToBottomFunc();
         if (chatMessage.animation != null) {
           playGift(chatMessage.animation);
         }
+        localChatList.add(chatMessage);
+        saveAndGetMessage(chatMessages: localChatList);
         update();
-        if (MiddleWare.instance.currentPage == RouteName.newChat) {
+        /*if (MiddleWare.instance.currentPage == RouteName.newChat) {
           if (chatMessage.userType == "customer") {
             print("chatMessage.userType");
             FirebaseDatabase.instance
@@ -142,32 +144,32 @@ class NewChatController extends GetxController
               "type": 3,
             });
           }
-        }
+        }*/
       },
     );
-    if (MiddleWare.instance.currentPage == RouteName.newChat) {
-      msgUpdateSubscription = FirebaseDatabase.instance
-          .ref(
-              "chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
-          .onChildChanged
-          .listen(
-        (event) {
-          ChatMessage chatMessage = ChatMessage.fromOfflineJson(
-              jsonDecode(jsonEncode(event.snapshot.value)));
-          chatMessage.id = int.parse(event.snapshot.key ?? "0");
-          if (chatMessages.isNotEmpty) {
-            for (int i = 0; i < chatMessages.length; i++) {
-              if (chatMessages[i].id == chatMessage.id) {
-                chatMessages[i].type = chatMessage.type;
-                print("updating ticks");
-                update();
-                break;
-              }
-            }
-          }
-        },
-      );
-    }
+    // if (MiddleWare.instance.currentPage == RouteName.newChat) {
+    //   msgUpdateSubscription = FirebaseDatabase.instance
+    //       .ref(
+    //           "chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
+    //       .onChildChanged
+    //       .listen(
+    //     (event) {
+    //       ChatMessage chatMessage = ChatMessage.fromOfflineJson(
+    //           jsonDecode(jsonEncode(event.snapshot.value)));
+    //       chatMessage.id = int.parse(event.snapshot.key ?? "0");
+    //       if (chatMessages.isNotEmpty) {
+    //         for (int i = 0; i < chatMessages.length; i++) {
+    //           if (chatMessages[i].id == chatMessage.id) {
+    //             chatMessages[i].type = chatMessage.type;
+    //             print("updating ticks");
+    //             update();
+    //             break;
+    //           }
+    //         }
+    //       }
+    //     },
+    //   );
+    // }
     _state = scheduler.SchedulerBinding.instance.lifecycleState;
     _listener = AppLifecycleListener(
       onShow: () {},
@@ -190,9 +192,10 @@ class NewChatController extends GetxController
       onPause: () {
         print("when app is in onPause");
       },
-      onDetach: () {
+      onDetach: () async {
         leaveRoomSocketEvent();
         WidgetsBinding.instance.removeObserver(_listener);
+        await preference.clearPreferencesMessages();
         Get.until(
           (route) {
             return Get.currentRoute == RouteName.dashboard;
@@ -208,6 +211,10 @@ class NewChatController extends GetxController
     if (_state != null) {
       _states.add(_state!.name);
     }
+  }
+
+  saveAndGetMessage({List<ChatMessage>? chatMessages}) async {
+    await preference.saveMessages(chatMessages!);
   }
 
   getAllApiDataInChat() async {
@@ -264,6 +271,8 @@ class NewChatController extends GetxController
   Timer? chatTimer;
 
   void initTask(Map<String, dynamic> p0) {
+    print(AppFirebaseService().orderData.value["orderId"]);
+    print("AppFirebaseService().orderData.value");
     if (p0["status"] == null || p0["status"] == "5") {
       WidgetsBinding.instance.endOfFrame.then(
         (_) async {
@@ -427,7 +436,7 @@ class NewChatController extends GetxController
     WidgetsBinding.instance.endOfFrame.then(
       (_) async {
         print("userLeavePrivateChatListenerSocket");
-
+        await preference.clearPreferencesMessages();
         chatTimer?.cancel();
         extraTimer?.cancel();
         Get.until(
@@ -445,11 +454,11 @@ class NewChatController extends GetxController
     // log(jsonEncode(newMessage));
     // log(jsonEncode(newMessage).runtimeType.toString());
     print("jsonEncode(newMessage)");
-    log(newMessage!.toOfflineJson().toString());
+    log(newMessage!.toJson().toString());
     print("newMessage!.toJson()");
     appSocket.socket!.emit(
       ApiProvider.sendNewMessage,
-      newMessage!.toOfflineJson(),
+      newMessage!.toJson(),
     );
   }
 
@@ -862,7 +871,7 @@ class NewChatController extends GetxController
 
   void openShowDeck() {
     isCardBotOpen.value = true;
-    showCardChoiceBottomSheet(Get.context!,NewChatController());
+    showCardChoiceBottomSheet(Get.context!, NewChatController());
   }
 
   Future<void> sendTarotCard(int? choice) async {
@@ -995,6 +1004,7 @@ class NewChatController extends GetxController
         productId: item.id.toString(),
         awsUrl: item.fullGiftImage,
         giftId: item.id.toString(),
+        animation: item.animation,
       );
     }
   }
@@ -1026,6 +1036,10 @@ class NewChatController extends GetxController
         if (response.chatMessages!.isNotEmpty) {
           chatMessages.clear();
           chatMessages.addAll(response.chatMessages!.reversed);
+          var data = await preference.getMessages();
+          chatMessages.addAll(data);
+          // chatMessages.reversed;
+          print("preference.getMessages");
           update();
           Future.delayed(
             const Duration(milliseconds: 200),
@@ -1093,6 +1107,7 @@ class NewChatController extends GetxController
     String? title,
     String? productPrice,
     String? productId,
+    String? animation,
     String? shopId,
     String? suggestedId,
     String? customProductId,
@@ -1188,6 +1203,7 @@ class NewChatController extends GetxController
       print("new message added text type");
       newMessage = ChatMessage(
         message: messageText,
+        animation: animation,
         receiverId: int.parse(
             AppFirebaseService().orderData.value["userId"].toString()),
         senderId: preference.getUserDetail()!.id,
@@ -1217,7 +1233,7 @@ class NewChatController extends GetxController
     log("last message ----- ${jsonDecode(jsonEncode(newMessage))}");
     print(
         "last message ----- ${jsonDecode(jsonEncode(newMessage)).runtimeType}");
-    sendMessageInSocket(newMessage);
+    // sendMessageInSocket(newMessage);
   }
 
   playGift(String? url) async {

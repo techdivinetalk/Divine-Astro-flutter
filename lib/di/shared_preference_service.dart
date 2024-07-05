@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
+import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/model/message_template_response.dart';
 import 'package:divine_astrologer/model/update_bank_response.dart';
@@ -25,6 +26,7 @@ class SharedPreferenceService extends GetxService {
   static const specialAbility = "specialAbility";
   static const loginImages = "loginImages";
   static const baseAmazonUrl = "baseAmazonUrl";
+  static const localChatHistory = "localChatHistory";
   static const assistChatUnreadkey = "chatAssistUnreadMessage";
 
   static const updatedBankDetails = "updatedBankDetails";
@@ -68,6 +70,34 @@ class SharedPreferenceService extends GetxService {
 
   Future<int> getIntPrefs(String key) async {
     return prefs!.getInt(key) ?? 0;
+  }
+
+   Future<void> saveMessages(List<ChatMessage> messages) async {
+
+    List<String> jsonStringList =
+    messages.map((message) => jsonEncode(message.toJson())).toList();
+    print(jsonStringList);
+    print("jsonStringListjsonStringListjsonStringListjsonStringList");
+    await prefs!.setStringList(localChatHistory, jsonStringList);
+  }
+
+   Future<List<ChatMessage>> getMessages() async {
+
+    List<String>? jsonStringList = prefs!.getStringList(localChatHistory);
+    if (jsonStringList == null) {
+      return [];
+    }
+    return jsonStringList
+        .map((jsonString) => ChatMessage.fromOfflineJson(jsonDecode(jsonString)))
+        .toList();
+  }
+
+   Future<void> clearPreferencesMessages() async {
+    try {
+      await prefs!.remove(localChatHistory);
+    } catch (e) {
+      print('Error clearing preferences: $e');
+    }
   }
 
   // Future saveChatAssistUnreadMessage() async {

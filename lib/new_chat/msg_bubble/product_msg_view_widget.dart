@@ -26,10 +26,10 @@ class ProductMsgViewWidget extends StatefulWidget {
 
 class _ProductMsgViewWidgetState extends State<ProductMsgViewWidget> {
 
+    GetProduct getProduct = GetProduct();
 
   @override
   Widget build(BuildContext context) {
-    GetProduct getProduct = GetProduct();
     if (widget.chatDetail.msgType == MsgType.pooja) {
       print(widget.chatDetail.getPooja!.poojaName);
       print("chatMessage.getPooja!.poojaName");
@@ -81,11 +81,11 @@ class _ProductMsgViewWidgetState extends State<ProductMsgViewWidget> {
               width: 50,
               placeHolder: Assets.images.defaultProfile.path,
               imagePath:
-              "${preferenceService.getAmazonUrl()}${getProduct.prodImage}",
+              "${preferenceService.getAmazonUrl()}/${getProduct.prodImage}",
             ),
           ),
           title: CustomText(
-            "${widget.controller!.astrologerName.value} have suggested you a ${widget.chatDetail.msgType == MsgType.pooja ? "Pooja" : "product"}",
+            "You have suggested a ${widget.chatDetail.msgType == MsgType.pooja ? "Pooja" : "product"}",
             fontSize: 14.sp,
             maxLines: 2,
             fontWeight: FontWeight.w600,
@@ -96,22 +96,22 @@ class _ProductMsgViewWidgetState extends State<ProductMsgViewWidget> {
             maxLines: 20,
             fontWeight: FontWeight.w500,
           ),
-          trailing: Container(
-            height: 26,
-            width: 70,
-            decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: appColors.guideColor),
-            child: Center(
-              child: Text(
-                "Book",
-                style: AppTextStyle.textStyle12(
-                  fontColor: appColors.white,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
-            ),
-          ),
+          // trailing: Container(
+          //   height: 26,
+          //   width: 70,
+          //   decoration: BoxDecoration(
+          //       borderRadius: BorderRadius.circular(16),
+          //       color: appColors.guideColor),
+          //   child: Center(
+          //     child: Text(
+          //       "Book",
+          //       style: AppTextStyle.textStyle12(
+          //         fontColor: appColors.white,
+          //         fontWeight: FontWeight.w500,
+          //       ),
+          //     ),
+          //   ),
+          // ),
           // onTap: () => Get.toNamed(RouteName.remediesDetail,
           //     arguments: {'title': temp[0], 'subtitle': temp[1]}),
         ),

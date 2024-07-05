@@ -96,7 +96,7 @@ class DashboardController extends GetxController
       print("checkPermissions");
       // Check permissions when app is resumed
       //  checkPermissions();
-      getOrderFromApi();
+      // getOrderFromApi();
       if (preferenceService.getUserDetail() != null) {
         // Check for null user details
         appFirebaseService.readData(
@@ -403,8 +403,9 @@ class DashboardController extends GetxController
 
   @override
   void onReady() {
-    final socket = AppSocket();
-    socket.socketConnect();
+    if(AppSocket().socket!.disconnected){
+      AppSocket().socketConnect();
+    }
     super.onReady();
   }
 

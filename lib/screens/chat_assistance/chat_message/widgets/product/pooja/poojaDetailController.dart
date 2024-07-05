@@ -1,3 +1,5 @@
+import 'dart:ffi';
+
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
 
@@ -11,7 +13,7 @@ class PoojaDharamMainController extends GetxController {
   final Rx<GetPoojaResponse> _getPooja = GetPoojaResponse().obs;
   final Rx<GetBookedPoojaResponse> _getBookedPooja =
       GetBookedPoojaResponse().obs;
-  final RxBool _isLoading = false.obs;
+   RxBool isLoading = false.obs;
 
   GetPoojaResponse get getPooja => _getPooja.value;
   set getPooja(GetPoojaResponse value) => _getPooja(value);
@@ -19,8 +21,7 @@ class PoojaDharamMainController extends GetxController {
   GetBookedPoojaResponse get getBookedPooja => _getBookedPooja.value;
   set getBookedPooja(GetBookedPoojaResponse value) => _getBookedPooja(value);
 
-  bool get isLoading => _isLoading.value;
-  set isLoading(bool value) => _isLoading(value);
+
 
   RxInt customerId = 0.obs;
 
@@ -40,7 +41,7 @@ class PoojaDharamMainController extends GetxController {
     customerId(Get.arguments["customerId"] ?? 0);
 
     getBookedPooja = GetBookedPoojaResponse();
-    isLoading = false;
+    isLoading.value = false;
     return;
   }
 
@@ -48,7 +49,7 @@ class PoojaDharamMainController extends GetxController {
   void onClose() {
     _getPooja.close();
     _getBookedPooja.close();
-    _isLoading.close();
+    isLoading.close();
     super.onClose();
   }
 
@@ -56,7 +57,7 @@ class PoojaDharamMainController extends GetxController {
     required Function(String message) successCallBack,
     required Function(String message) failureCallBack,
   }) async {
-    isLoading = true;
+    isLoading.value = true;
     Map<String, dynamic> param = <String, dynamic>{};
     param = <String, dynamic>{"master_category_id": 1};
     GetPoojaResponse response = GetPoojaResponse();
@@ -68,7 +69,7 @@ class PoojaDharamMainController extends GetxController {
     getPooja = response.statusCode == HttpStatus.ok
         ? GetPoojaResponse.fromJson(response.toJson())
         : GetPoojaResponse.fromJson(GetPoojaResponse().toJson());
-    isLoading = false;
+    isLoading.value = false;
     return Future<void>.value();
   }
 

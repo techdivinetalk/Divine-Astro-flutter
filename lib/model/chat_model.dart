@@ -20,7 +20,7 @@ class ChatHistoryResponse {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     if (chatMessages != null) {
-      data['data'] = chatMessages!.map((message) => message.toOfflineJson()).toList();
+      data['data'] = chatMessages!.map((message) => message.toJson()).toList();
     }
     data['success'] = success;
     data['status_code'] = statusCode;

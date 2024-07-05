@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:after_layout/after_layout.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
+import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:dynamic_height_grid_view/dynamic_height_grid_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -117,7 +118,7 @@ class _PoojaDharamMainScreenState extends State<PoojaDharamMainScreen>
           },
           body: Obx(
             () {
-              return _controller.isLoading ? const PoojaLoader() : gridWidget();
+              return _controller.isLoading.value ? const GenericLoadingWidget() : gridWidget();
             },
           ),
         ),
@@ -421,8 +422,8 @@ class _PoojaDharamMainScreenState extends State<PoojaDharamMainScreen>
               shrinkWrap: true,
               itemCount: _controller.getPooja.data?.pooja?.length ?? 0,
               crossAxisCount: 2,
-              crossAxisSpacing: 0,
-              mainAxisSpacing: 0,
+              crossAxisSpacing: 10,
+              mainAxisSpacing: 10,
               rowCrossAxisAlignment: CrossAxisAlignment.center,
               builder: (BuildContext context, int index) {
                 final GetPoojaResponse resp = _controller.getPooja;
@@ -432,81 +433,88 @@ class _PoojaDharamMainScreenState extends State<PoojaDharamMainScreen>
                 final startPoint = pref.getAmazonUrl() ?? "";
                 final endPoint = pooja.poojaImg ?? "";
                 final String poojaImg = "$startPoint$endPoint";
-                return SizedBox(
-                  height: Get.height / 2.5,
-                  width: double.infinity,
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      clipBehavior: Clip.hardEdge,
-                      child: InkWell(
-                        onTap: () async {
-                          var route = RouteName.poojaDharamDetailsScreen;
-                          var arguments = pooja.id;
-                          await Get.toNamed(route, arguments: {
-                            'detailOnly': false,
-                            'data': arguments
-                          });
-                          await getPoojaCall();
-                          // await getBookedPoojaCall();
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: <Widget>[
-                            SizedBox(
-                              // height: Get.height / 6,
-                              width: double.infinity,
-                              child: CustomImageWidget(
-                                imageUrl: poojaImg,
-                                rounded: false,
-                                typeEnum: TypeEnum.pooja,
-                              ),
-                            ),
-                            Text(
-                              pooja.poojaName ?? "",
-                              style: TextStyle(
-                                color: appColors.black,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                            ),
-                            Text(
-                              "Starting from ₹${pooja.poojaStartingPriceInr ?? ""}",
-                              style: TextStyle(
-                                color: appColors.grey,
-                                fontSize: 12,
-                              ),
-                              maxLines: 1,
-                              textAlign: TextAlign.center,
-                            ),
-                            Container(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              color: const Color(0xff5F3C08),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    ((pooja.cashbackType ?? 0) == 1)
-                                        ? "Upto ${pooja.cashbackValue}% Cashback"
-                                        : ((pooja.cashbackType ?? 0) == 2)
-                                            ? "Upto ${pooja.cashbackValue}₹ Cashback"
-                                            : "",
-                                    style: TextStyle(
-                                      color: appColors.white,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                    maxLines: 1,
-                                    textAlign: TextAlign.center,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ],
+                print(pooja.cashbackType);
+                print("pooja.cashbackType");
+                return Card(
+                  clipBehavior: Clip.hardEdge,
+                  child: InkWell(
+                    onTap: () async {
+                      var route = RouteName.poojaDharamDetailsScreen;
+                      var arguments = pooja.id;
+                      await Get.toNamed(route, arguments: {
+                        'detailOnly': false,
+                        'data': arguments
+                      });
+                      await getPoojaCall();
+                      // await getBookedPoojaCall();
+                    },
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: <Widget>[
+                        SizedBox(
+                          // height: Get.height / 6,
+                          width: double.infinity,
+                          child: CustomImageWidget(
+                            imageUrl: poojaImg,
+                            rounded: false,
+                            typeEnum: TypeEnum.pooja,
+                          ),
                         ),
-                      ),
+                        SizedBox(
+                          height: 10
+                        ),
+                        Container(
+                          width: 100,
+                          child: Text(
+                            pooja.poojaName ?? "",
+                            style: TextStyle(
+                              color: appColors.black,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            maxLines: 2,
+                            textAlign: TextAlign.center,
+                          ),
+                        ),
+                        SizedBox(
+                            height: 5
+                        ),
+                        Text(
+                          "Starting from ₹${pooja.poojaStartingPriceInr ?? ""}",
+                          style: TextStyle(
+                            color: appColors.grey,
+                            fontSize: 12,
+                          ),
+                          maxLines: 1,
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(
+                            height: 5
+                        ),
+                        !(pooja.cashbackValue == 0) ?    Container(
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          color: const Color(0xff5F3C08),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                ((pooja.cashbackType ?? 0) == 1)
+                                    ? "Upto ${pooja.cashbackValue}% Cashback"
+                                    : ((pooja.cashbackType ?? 0) == 2)
+                                        ? "Upto ${pooja.cashbackValue}₹ Cashback"
+                                        : "",
+                                style: TextStyle(
+                                  color: appColors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                                maxLines: 1,
+                                textAlign: TextAlign.center,
+                              ),
+                            ],
+                          ),
+                        ):SizedBox(),
+                      ],
                     ),
                   ),
                 );

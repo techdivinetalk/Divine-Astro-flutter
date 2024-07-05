@@ -50,7 +50,10 @@ class ChatSuggestRemediesDetailsPage
                       final remedy = controller.remedies.value.remedies![controller.selectedIndex.value];
                       List temp = [ remedy.name.upperCamelCase, remedy.content];
                       Get.back();
-                      Get.back(result: temp);
+                      Get.back(result: {
+                        "remedies": temp,
+                        "remedies_id": remedy.id,
+                      });
                     },
                     child: Container(
                       width: MediaQuery.of(context).size.width,

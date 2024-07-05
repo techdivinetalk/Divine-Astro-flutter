@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:contacts_service/contacts_service.dart';
+import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/important_number_bottomsheet.dart';
 import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
 import 'package:flutter/material.dart';
@@ -147,7 +148,10 @@ class SplashController extends GetxController with WidgetsBindingObserver {
       print("goining in else part");
       Future.delayed(
         const Duration(seconds: 1),
-        () => Get.offAllNamed(RouteName.dashboard),
+        () {
+          AppSocket().socketConnect();
+          Get.offAllNamed(RouteName.dashboard);
+        },
       );
     }
   }

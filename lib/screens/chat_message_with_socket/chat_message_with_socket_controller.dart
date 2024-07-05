@@ -260,7 +260,9 @@ class ChatMessageWithSocketController extends GetxController
       onResume: () {
         print("resume");
         isGalleryOpen = false;
-        socket.socketConnect();
+        if(AppSocket().socket!.disconnected){
+          AppSocket().socketConnect();
+        }
         socket.startAstroCustumerSocketEvent(
           orderId: AppFirebaseService().orderData.value["orderId"].toString(),
           userId: AppFirebaseService().orderData.value["userId"],
@@ -299,7 +301,9 @@ class ChatMessageWithSocketController extends GetxController
         );
       },
       onRestart: () {
-        socket.socketConnect();
+        if(AppSocket().socket!.disconnected){
+          AppSocket().socketConnect();
+        }
         socket.startAstroCustumerSocketEvent(
           orderId: AppFirebaseService().orderData.value["orderId"].toString(),
           userId: AppFirebaseService().orderData.value["userId"],
@@ -1141,7 +1145,7 @@ class ChatMessageWithSocketController extends GetxController
           msgSendBy: "1",
           orderId: AppFirebaseService().orderData.value["orderId"],
           userType: "astrologer",
-          memberId: saveRemediesData.data!.id,
+
           productId: productDetails.id.toString(),
           shopId: productDetails.id.toString(),
           // msgStatus: MsgStatus.sent,
@@ -1178,7 +1182,7 @@ class ChatMessageWithSocketController extends GetxController
             msgSendBy: "1",
             type: 0,
             orderId: AppFirebaseService().orderData.value["orderId"],
-            memberId: productData.data?.id ?? 0,
+
             productId: productData.data?.productId.toString(),
             shopId: productData.data?.shopId.toString(),
             receiverId: int.parse(
@@ -1221,10 +1225,8 @@ class ChatMessageWithSocketController extends GetxController
     socket.sendMessageSocket(newMessage);
     scrollToBottomFunc();
     print("newMessage10909");
-    print(newMessage.toOfflineJson());
-    // chatMessages.add(newMessage);
-    // chatMessages.refresh();
-    // scrollToBottomFunc();
+
+
     updateChatMessages(newMessage, false, isSendMessage: true);
     print("last message  ${chatMessages.last.message}");
   }

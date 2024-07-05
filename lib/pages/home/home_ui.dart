@@ -5,6 +5,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
+import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
@@ -50,7 +51,6 @@ class HomeUI extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(HomeController());
     print("beforeGoing 5 - ${preferenceService.getUserDetail()?.id}");
     return GetBuilder<HomeController>(
         assignId: true,
@@ -902,7 +902,7 @@ class HomeUI extends GetView<HomeController> {
                         ))
                   ]);
                 } else {
-                  return Container(color: Colors.white);
+                  return GenericLoadingWidget();
                 }
               }));
         });

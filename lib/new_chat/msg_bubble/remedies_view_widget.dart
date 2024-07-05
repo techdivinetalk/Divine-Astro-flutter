@@ -42,13 +42,13 @@ class RemediesViewWidget extends StatelessWidget {
           borderRadius: BorderRadius.circular(8.0),
         ),
         child: ListTile(
-          leading: CircleAvatar(
-            backgroundColor: appColors.red,
-            child: CustomText(
-              temp[0][0],
-              fontColor: appColors.white,
-            ), // Display the first letter of the name
-          ),
+          // leading: CircleAvatar(
+          //   backgroundColor: appColors.red,
+          //   child: CustomText(
+          //     temp[0][0],
+          //     fontColor: appColors.white,
+          //   ), // Display the first letter of the name
+          // ),
           title: CustomText(
             temp[0],
             fontSize: 14.sp,

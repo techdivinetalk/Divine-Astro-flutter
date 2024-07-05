@@ -11,6 +11,7 @@ import 'package:divine_astrologer/new_chat/msg_bubble/text_view_widget.dart';
 import 'package:divine_astrologer/new_chat/new_chat_controller.dart';
 import 'package:divine_astrologer/new_chat/widget/typing_widget.dart';
 import 'package:divine_astrologer/new_chat/widget/visible_tarrot_card.dart';
+import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
@@ -47,6 +48,7 @@ class NewChatScreen extends GetView<NewChatController> {
                       itemCount: controller.chatMessages.length,
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       shrinkWrap: true,
+                      // reverse: true,
                       itemBuilder: (context, index) {
                         ChatMessage data = controller.chatMessages[index];
                         return Column(
@@ -72,10 +74,36 @@ class NewChatScreen extends GetView<NewChatController> {
                   const SizedBox(height: 15),
                   VisibleTarrotCard(controller: controller),
                   EndChatTimer(controller: controller),
-                  Visibility(
-                      visible: !keyboardVisible,
-                      child: MessageTemplateWidget(controller: controller)),
+                  Obx(() {
+                    return !controller.isEmojiShowing.value
+                        ? Visibility(
+                            visible: !keyboardVisible,
+                            child:
+                                MessageTemplateWidget(controller: controller))
+                        : const SizedBox();
+                  }),
                   ChatBottomBarWidget(controller: controller),
+                  Obx(() => AnimatedContainer(
+                        duration: const Duration(milliseconds: 200),
+                        height: controller.isEmojiShowing.value ? 300 : 0,
+                        child: SizedBox(
+                          height: 300,
+                          child: EmojiPicker(
+                              onBackspacePressed: () {
+                                controller.messageController
+                                  ..text = controller
+                                      .messageController.text.characters
+                                      .toString()
+                                  ..selection = TextSelection.fromPosition(
+                                      TextPosition(
+                                          offset: controller
+                                              .messageController.text.length));
+                              },
+                              textEditingController:
+                                  controller.messageController,
+                              config: const Config()),
+                        ),
+                      ))
                 ],
               ),
             ),
