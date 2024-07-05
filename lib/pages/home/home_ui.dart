@@ -113,15 +113,15 @@ class HomeUI extends GetView<HomeController> {
                               controller.userImage == ""
                           ? SizedBox(
                               height: 24.h,
-                              width: 24.h,
+                              width: 24.w,
                             )
                           : CommonImageView(
                               imagePath: controller.userImage,
                               fit: BoxFit.cover,
                               height: 24.h,
-                              width: 24.h,
+                              width: 24.w,
                               placeHolder: Assets.images.defaultProfile.path,
-                              radius: BorderRadius.circular(100.h),
+                              radius: BorderRadius.circular(100.r),
                               onTap: () async {
                                 Get.toNamed(RouteName.profileUi);
                               },
