@@ -63,7 +63,7 @@ class PoojaDharamMainController extends GetxController {
     response = await poojaRepository.getPoojaApi(
       params: param,
       successCallBack: successCallBack,
-      failureCallBack:  failureCallBack,
+      failureCallBack: failureCallBack,
     );
     getPooja = response.statusCode == HttpStatus.ok
         ? GetPoojaResponse.fromJson(response.toJson())

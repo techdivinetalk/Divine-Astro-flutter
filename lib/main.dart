@@ -57,15 +57,13 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print('Handling a background message: ${message.messageId}');
 }
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   // initMessaging();
   AppFirebaseService().masterData("masters");
-  if (!kDebugMode) {
-    AppFirebaseService().masterData("masters");
-  }
   cameras = await availableCameras();
   Get.put(AppColors());
   // await RemoteConfigService.instance.initFirebaseRemoteConfig();
@@ -101,7 +99,7 @@ Future<void> main() async {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("pushNotification1 ${message.notification?.title ?? ""}");
     print('Message data-: dasboardCurrentIndex---${message.data}');
-     if (message.data["type"] == "2") {
+    if (message.data["type"] == "2") {
       print('msg ---- from notification');
       // if (message.data['type'] == "2") {
       //   Map<String, String?>? payload = {};
@@ -207,7 +205,7 @@ Future<void> main() async {
         }
       }
     } else {
-       showNotification(message.data["title"], message.data["message"],
+      showNotification(message.data["title"], message.data["message"],
           message.data['type'], message.data);
     }
     if (message.notification != null) {
@@ -215,6 +213,14 @@ Future<void> main() async {
           'Message also contained a notification: ${message.notification?.title}');
     }
   });
+  if (await Permission.notification.status.isPermanentlyDenied ||
+      await Permission.notification.status.isRestricted ||
+      await Permission.notification.status.isDenied) {
+    await Permission.notification.request();
+    if (Get.isRegistered<LoginController>()) {
+      Get.find<LoginController>().onReady();
+    }
+  }
   await initServices();
   Get.put(UserRepository());
   GiftsSingleton().init();
@@ -235,15 +241,16 @@ Future<void> main() async {
       FirebaseCrashlytics.instance.recordError(error, stacktrace);
     }
   });
-  Permission.notification.isDenied.then((value) async {
-    if (value) {
-      await Permission.notification.request();
 
-      if (Get.isRegistered<LoginController>()) {
-        Get.find<LoginController>().onReady();
-      }
-    }
-  });
+  // Permission.notification.isDenied.then((value) async {
+  //   if (value) {
+  //     await Permission.notification.request();
+  //
+  //     if (Get.isRegistered<LoginController>()) {
+  //       Get.find<LoginController>().onReady();
+  //     }
+  //   }
+  // });
   AppFirebaseService().masterData("masters");
   if (!kDebugMode) {
     AppFirebaseService().masterData("masters");
@@ -397,7 +404,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-  //  showSecondNotification("title", "body", AppFirebaseService().payload);
+    //  showSecondNotification("title", "body", AppFirebaseService().payload);
     return AppTheme(
       child: ScreenUtilInit(
           designSize: Size(MediaQuery.sizeOf(context).width,

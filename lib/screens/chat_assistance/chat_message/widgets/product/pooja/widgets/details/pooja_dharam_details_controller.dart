@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
 
@@ -47,9 +50,12 @@ class PoojaDharamDetailsController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    initData();
-
-    // poojaId = Get.arguments;
+    poojaId = Get.arguments['data'];
+    log("pooja Id ${poojaId.toString()}");
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Your state update code here
+      initData();
+    });
 
     final result = Get.arguments;
     if (result == null) {
@@ -65,7 +71,7 @@ class PoojaDharamDetailsController extends GetxController {
     getSinglePooja = GetSinglePoojaResponse();
     getPoojaAddOnes = GetPoojaAddOnesResponse();
     isLoading = false;
-    poojaId = 0;
+    // poojaId = 0;
     selectedDate = "";
     selectedTime = "";
     return;

@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/ChatOrderResponse.dart';
 import 'package:divine_astrologer/model/leave/LeaveStatusModel.dart';
 import 'package:divine_astrologer/model/leave/LeaveSubmitModel.dart';
@@ -669,7 +668,8 @@ class UserRepository extends ApiProvider {
       rethrow;
     }
   }
-  Future<UpdateProfileResponse> getAstroImagesApi(
+
+  Future<UpdateProfileResponse> getAstroImagesApis(
       Map<String, dynamic> param) async {
     try {
       final response = await post(getAstrologerImages,
@@ -697,7 +697,6 @@ class UserRepository extends ApiProvider {
       rethrow;
     }
   }
-
 
   Future<AddEditPujaModel> addEditPujaApi(Map<String, dynamic> param) async {
     try {

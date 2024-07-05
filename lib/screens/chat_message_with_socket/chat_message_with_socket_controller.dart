@@ -72,12 +72,9 @@ import "../live_dharam/gifts_singleton.dart";
 
 class ChatMessageWithSocketController extends GetxController
     with WidgetsBindingObserver {
-  BuildContext? context;
 
-  void setContext(BuildContext context) {
-    this.context = context;
-    return;
-  }
+
+
 
   var pref = Get.find<SharedPreferenceService>();
   final UserRepository userRepository = Get.find<UserRepository>();
@@ -543,14 +540,7 @@ class ChatMessageWithSocketController extends GetxController
     userDataKey = "chat_${currentUserId.value}";
     getChatList();
     initTask(AppFirebaseService().orderData.value);
-    // FirebaseDatabase.instance
-    //     .ref()
-    //     .child(
-    //         "order/${AppFirebaseService().orderData.value["orderId"].toString()}/isAstroEntered")
-    //     .set((DateTime.now().millisecondsSinceEpoch) + 1);
-    // Future.delayed(const Duration(milliseconds: 200), () {
-    //   scrollToBottomFunc();
-    // },);
+
   }
 
   navigateToOtherScreen() async {
@@ -749,7 +739,7 @@ class ChatMessageWithSocketController extends GetxController
   // Added by divine-dharam
   Future<void> callHangup() {
     print("ZegoService().controller.hangUp start");
-    ZegoService().controller.hangUp(context!, showConfirmation: false);
+    ZegoService().controller.hangUp(Get.context!, showConfirmation: false);
     print("ZegoService().controller.hangUp end");
     return Future<void>.value();
   }
@@ -889,7 +879,7 @@ class ChatMessageWithSocketController extends GetxController
   void sendMessageListenerSocket() {
     socket.sendMessageListenerSocket((data) {
       debugPrint("sendMessageListenerSocketssss ${data["msgSendBy"]}");
-      debugPrint("sendMessageListenerSocket context $context");
+      debugPrint("sendMessageListenerSocket context ${Get.context!}");
 
       if (data is Map<String, dynamic>) {
         isTyping.value = false;
@@ -933,7 +923,7 @@ class ChatMessageWithSocketController extends GetxController
       print("data.first.animation ${data.first.animation}");
       print("GiftPlayerSource.url ${GiftPlayerSource.url}");
       ZegoGiftPlayer().play(
-        context!,
+        Get.context!,
         GiftPlayerData(
           GiftPlayerSource.url,
           data.first.animation,
@@ -1325,7 +1315,7 @@ class ChatMessageWithSocketController extends GetxController
           curve: Curves.easeOut,
         ),
       );
-      update();
+      // update();
     }
   }
 
@@ -1505,39 +1495,10 @@ class ChatMessageWithSocketController extends GetxController
       Get.put(CallChatHistoryRepository());
 
   getChatList() async {
-/* chatMessages.clear();
-    print("get chat list 1");
-    await hiveServices.initialize();
-    print("get chat list 2");
-    final res = await hiveServices.getData(key: "chat_${currentUserId.value}");
-    print("get chat list $res");
-    if (res != null) {
-      final ChatMessagesOffline msg =
-          ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
-      chatMessages.value = msg.chatMessages ?? <ChatMessage>[];
-      if (sendReadMessageStatus) {
-        unreadMessageIndex.value = chatMessages
-                .firstWhere(
-                  (ChatMessage element) =>
-                      element.type != 2 && element.senderId != userData?.id,
-                  orElse: () => ChatMessage(),
-                )
-                .id ??
-            -1;
-        if (unreadMessageIndex.value != -1) {
-          updateReadMessageStatus();
-        }
-      }
-    } else {
-      // Map<String, int> params = {"customer_id": currentUserId.value};
-      // var response = await chatRepository.getChatListApi(params);
-      // debugPrint("$response");
-    }*/
+
     update();
     try {
-      /* if (processedPages.contains(currentPage.value)) {
-        return;
-      }*/
+
 
       var userId = int.parse(AppFirebaseService().orderData.value["userId"]);
       var astroId = int.parse(AppFirebaseService().orderData.value["astroId"]);

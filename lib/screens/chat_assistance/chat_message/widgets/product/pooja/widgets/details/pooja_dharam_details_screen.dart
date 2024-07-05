@@ -4,9 +4,7 @@ import 'package:after_layout/after_layout.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 
 import '../../../../../../../../common/appbar.dart';
 import '../../../../../../../../common/colors.dart';
@@ -18,7 +16,6 @@ import '../../../../../../../home_screen_options/notice_board/notice_board_ui.da
 import '../../../../../../../live_dharam/widgets/custom_image_widget.dart';
 import '../../pooja_dharam/get_single_pooja_response.dart';
 import '../custom_widget/pooja_add_one_widget.dart';
-import '../custom_widget/pooja_common_list.dart';
 import '../custom_widget/pooja_custom_button.dart';
 import '../custom_widget/pooja_loader.dart';
 import 'pooja_dharam_details_controller.dart';
@@ -130,7 +127,7 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
             ];
           },
           body: Obx(
-                () {
+            () {
               if (_controller.isLoading) {
                 return const PoojaLoader();
               } else {
@@ -138,7 +135,6 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
               }
             },
           ),
-
         ),
       ),
     );
@@ -146,7 +142,9 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
 
   Widget mainWidget() {
     final Pooja pooja =
-    _controller.getSinglePooja.data?.pooja?.isNotEmpty == true ? _controller.getSinglePooja.data!.pooja!.first : Pooja();
+        _controller.getSinglePooja.data?.pooja?.isNotEmpty == true
+            ? _controller.getSinglePooja.data!.pooja!.first
+            : Pooja();
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -321,8 +319,12 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
                 Map<String, dynamic> params = {
                   "product_id": pooja.id,
                   "shop_id": 0,
-                  "customer_id":AppFirebaseService().orderData.value["userId"] != null ? int.parse(AppFirebaseService().orderData.value["userId"]):_controller.customerId.value,
-                  "order_id":AppFirebaseService().orderData.value["orderId"]
+                  "customer_id":
+                      AppFirebaseService().orderData.value["userId"] != null
+                          ? int.parse(
+                              AppFirebaseService().orderData.value["userId"])
+                          : _controller.customerId.value,
+                  "order_id": AppFirebaseService().orderData.value["orderId"]
                 };
                 var response =
                     await ShopRepository().saveRemediesForChatAssist(params);

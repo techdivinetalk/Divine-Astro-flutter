@@ -7,7 +7,9 @@ class GetPoojaResponse {
   GetPoojaResponse({this.data, this.success, this.statusCode, this.message});
 
   GetPoojaResponse.fromJson(Map<String, dynamic> json) {
-    data = json['data'] != null ? new GetPoojaResponseData.fromJson(json['data']) : null;
+    data = json['data'] != null
+        ? new GetPoojaResponseData.fromJson(json['data'])
+        : null;
     success = json['success'];
     statusCode = json['status_code'];
     message = json['message'];

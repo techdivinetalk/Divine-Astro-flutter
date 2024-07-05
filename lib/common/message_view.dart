@@ -1,3 +1,7 @@
+import 'dart:developer';
+import 'dart:io';
+import 'dart:ui';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -14,20 +18,14 @@ import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_controller.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart';
 import 'package:divine_astrologer/tarotCard/widget/custom_image_view.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:velocity_x/velocity_x.dart';
 import 'package:voice_message_package/voice_message_package.dart';
-import 'dart:convert';
-import 'dart:io';
-import 'dart:ui';
 
 import '../screens/chat_assistance/chat_message/widgets/product/pooja/widgets/custom_widget/pooja_common_list.dart';
-import '../utils/load_image.dart';
 
 var chatController = Get.find<ChatMessageWithSocketController>();
 
@@ -277,6 +275,42 @@ class MessageView extends StatelessWidget {
     );
   }
 
+  String convertDate(String inputDate) {
+    try {
+      // Define the input and output date formats
+      DateFormat inputFormat = DateFormat("dd MMM yyyy");
+      DateFormat outputFormat = DateFormat("dd/MM/yyyy");
+
+      // Parse the input date string to a DateTime object
+      DateTime parsedDate = inputFormat.parse(inputDate);
+
+      // Format the DateTime object to the desired output format
+      String formattedDate = outputFormat.format(parsedDate);
+
+      return formattedDate;
+    } catch (e) {
+      // Handle any parsing errors
+      debugPrint("Error parsing or formatting date: $e");
+      return "";
+    }
+  }
+
+  DateTime parseDate(String dateStr) {
+    try {
+      // Define the input date format
+      DateFormat inputFormat = DateFormat("dd/MM/yyyy");
+
+      // Parse the input date string to a DateTime object
+      DateTime parsedDate = inputFormat.parse(dateStr);
+
+      return parsedDate;
+    } catch (e) {
+      // Handle any parsing errors
+      debugPrint("Error parsing date: $e");
+      return DateTime.now(); // Return the current date as a fallback
+    }
+  }
+
   Widget remediesMsgView(
       BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     var jsonString = (chatMessage.message ?? '')
@@ -424,18 +458,28 @@ class MessageView extends StatelessWidget {
                               color: appColors.guideColor,
                               onTap: () {
                                 print(AppFirebaseService().orderData["lat"]);
-                                print("objectobjectobjectobjectobject");
-                                final dateData = DateFormat("dd/MM/yyyy").parse(
+                                print(
+                                    "objectobjectobjectobjectobject${AppFirebaseService().orderData["dob"]}");
+                                // Parse the date string to DateTime
+                                DateTime date = DateFormat('d MMMM yyyy').parse(
                                     AppFirebaseService().orderData["dob"]);
+
+                                // Format the DateTime to 'dd/MM/yyyy'
+                                String formattedDate =
+                                    DateFormat('dd/MM/yyyy').format(date);
+
+                                final dateData = DateFormat("dd/MM/yyyy")
+                                    .parse(formattedDate);
+
                                 DateTime timeData = DateFormat("h:mm a").parse(
                                     AppFirebaseService()
                                         .orderData["timeOfBirth"]);
                                 Params params = Params(
                                   name: AppFirebaseService()
                                       .orderData["customerName"],
-                                  day: dateData.day,
-                                  year: dateData.year,
-                                  month: dateData.month,
+                                  day: parseDate(dateData.toString()).day,
+                                  year: parseDate(dateData.toString()).year,
+                                  month: parseDate(dateData.toString()).month,
                                   hour: timeData.hour,
                                   min: timeData.minute,
                                   lat: double.parse(AppFirebaseService()
@@ -955,8 +999,46 @@ class MessageView extends StatelessWidget {
   }
 
   Widget kundliView({required ChatMessage chatDetail, required int index}) {
+    String convertDate(String inputDate) {
+      try {
+        // Define the input and output date formats
+        DateFormat inputFormat = DateFormat("dd MMM yyyy");
+        DateFormat outputFormat = DateFormat("dd/MM/yyyy");
+
+        // Parse the input date string to a DateTime object
+        DateTime parsedDate = inputFormat.parse(inputDate);
+
+        // Format the DateTime object to the desired output format
+        String formattedDate = outputFormat.format(parsedDate);
+
+        return formattedDate;
+      } catch (e) {
+        // Handle any parsing errors
+        debugPrint("Error parsing or formatting date: $e");
+        return "";
+      }
+    }
+
+    DateTime parseDate(String dateStr) {
+      try {
+        // Define the input date format
+        DateFormat inputFormat = DateFormat("dd/MM/yyyy");
+
+        // Parse the input date string to a DateTime object
+        DateTime parsedDate = inputFormat.parse(dateStr);
+
+        return parsedDate;
+      } catch (e) {
+        // Handle any parsing errors
+        debugPrint("Error parsing date: $e");
+        return DateTime.now(); // Return the current date as a fallback
+      }
+    }
+
     return InkWell(
       onTap: () {
+        log("fjdfkdjfkdjkdjkfjd");
+
         Get.toNamed(RouteName.kundliDetail, arguments: {
           "kundli_id": chatDetail.kundliId ?? chatDetail.kundli!.kundliId,
           "from_kundli": true,

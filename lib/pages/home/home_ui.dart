@@ -1033,7 +1033,7 @@ class HomeUI extends GetView<HomeController> {
                               name: data["userName"],
                             );
                             Get.toNamed(
-                              RouteName.kundliDetail,
+                              RouteName.checkKundli,
                               arguments: {
                                 "kundli_id": data["kundli_id"],
                                 "from_kundli": false,
@@ -1081,7 +1081,7 @@ class HomeUI extends GetView<HomeController> {
               child: InkWell(
                 onTap: () {
                   Get.toNamed(RouteName.noticeDetail,
-                      arguments: controller!.homeData?.noticeBoard,
+                      arguments: controller.homeData?.noticeBoard,
                       parameters: {"from_list": "0"});
                 },
                 child: Ink(
@@ -1105,7 +1105,7 @@ class HomeUI extends GetView<HomeController> {
                           SizedBox(
                             width: 150.w,
                             child: CustomText(
-                              controller.homeData?.noticeBoard?.title ?? '',
+                              controller.homeData?.noticeBoard!.title ?? '',
                               fontWeight: FontWeight.w500,
                               fontColor: appColors.darkBlue,
                               maxLines: 2,
@@ -1114,12 +1114,16 @@ class HomeUI extends GetView<HomeController> {
                           ),
                           Row(
                             children: [
-                              Text(
-                                '${dateToString(controller.homeData?.noticeBoard?.createdAt ?? DateTime.now(), format: "h:mm a")}  '
-                                '${formatDateTime(controller.homeData?.noticeBoard?.createdAt ?? DateTime.now())} ',
-                                style: AppTextStyle.textStyle10(
-                                    fontWeight: FontWeight.w400,
-                                    fontColor: appColors.darkBlue),
+                              SizedBox(
+                                width: 100,
+                                child: Text(
+                                  '${dateToString(controller.homeData?.noticeBoard?.createdAt ?? DateTime.now(), format: "h:mm a")}  '
+                                  '${formatDateTime(controller.homeData?.noticeBoard?.createdAt ?? DateTime.now())} ',
+                                  textAlign: TextAlign.right,
+                                  style: AppTextStyle.textStyle10(
+                                      fontWeight: FontWeight.w400,
+                                      fontColor: appColors.darkBlue),
+                                ),
                               ),
                               SizedBox(width: 10.w),
                               GestureDetector(
@@ -1738,14 +1742,18 @@ class HomeUI extends GetView<HomeController> {
                             Obx(
                               () => SwitchWidget(
                                 onTap: () async {
-                                  await controller.chatSwitchFN(
-                                    onComplete: () {
-                                      // if (controller.chatSwitch.value) {
-                                      // } else {
-                                      //   selectDateTimePopupForChat();
-                                      // }
-                                    },
-                                  );
+                                  if (chatSwitch.value) {
+                                    controller.selectDateTimePopupForChat(true);
+                                  } else {
+                                    await controller.chatSwitchFN(
+                                      onComplete: () {
+                                        // if (controller.chatSwitch.value) {
+                                        // } else {
+                                        //   selectDateTimePopupForChat();
+                                        // }
+                                      },
+                                    );
+                                  }
                                 },
                                 switchValue: chatSwitch.value,
                               ),
@@ -1762,14 +1770,18 @@ class HomeUI extends GetView<HomeController> {
                             Obx(
                               () => SwitchWidget(
                                 onTap: () async {
-                                  await controller.callSwitchFN(
-                                    onComplete: () {
-                                      // if (controller.callSwitch.value) {
-                                      // } else {
-                                      //   selectDateTimePopupForCall();
-                                      // }
-                                    },
-                                  );
+                                  if (callSwitch.value) {
+                                    controller.selectDateTimePopupForCall(true);
+                                  } else {
+                                    await controller.callSwitchFN(
+                                      onComplete: () {
+                                        // if (controller.callSwitch.value) {
+                                        // } else {
+                                        //   selectDateTimePopupForCall();
+                                        // }
+                                      },
+                                    );
+                                  }
                                 },
                                 switchValue: callSwitch.value,
                               ),
@@ -1841,10 +1853,12 @@ class HomeUI extends GetView<HomeController> {
                         padding: const EdgeInsets.symmetric(vertical: 4.0),
                         child: Column(
                           children: [
-                            Obx(() => controller.selectedChatTime.value.isEmpty
+                            Obx(() => controller
+                                        .selectedChatTime.value.isEmpty ||
+                                    chatSwitch.value
                                 ? InkWell(
-                                    onTap:
-                                        controller.selectDateTimePopupForChat,
+                                    onTap: () => controller
+                                        .selectDateTimePopupForChat(false),
                                     child: Container(
                                       // width: 128.w,
                                       height: 31.h,
@@ -1873,10 +1887,12 @@ class HomeUI extends GetView<HomeController> {
                         padding: const EdgeInsets.symmetric(vertical: 4.0),
                         child: Column(
                           children: [
-                            Obx(() => controller.selectedCallTime.value.isEmpty
+                            Obx(() => controller
+                                        .selectedCallTime.value.isEmpty ||
+                                    callSwitch.value
                                 ? InkWell(
-                                    onTap:
-                                        controller.selectDateTimePopupForCall,
+                                    onTap: () => controller
+                                        .selectDateTimePopupForCall(false),
                                     child: Container(
                                       // width: 128.w,
                                       height: 31.h,
@@ -2359,10 +2375,10 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget trainingVideoWidget({HomeController? controller}) {
-    if (controller!.homeData?.trainingVideo == null ||
-        (controller.homeData?.trainingVideo ?? []).isEmpty) {
-      return const SizedBox.shrink();
-    }
+    // if (controller!.homeData?.trainingVideo == null ||
+    //     (controller.homeData?.trainingVideo ?? []).isEmpty) {
+    //   return const SizedBox.shrink();
+    // }
     return Container(
       width: double.infinity,
       margin: EdgeInsets.only(
@@ -2421,7 +2437,7 @@ class HomeUI extends GetView<HomeController> {
               padding: EdgeInsets.symmetric(horizontal: 16.w),
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemCount: controller.homeData?.trainingVideo?.length ?? 0,
+              itemCount: controller!.homeData?.trainingVideo?.length ?? 0,
               separatorBuilder: (context, i) => SizedBox(width: 10.w),
               itemBuilder: (BuildContext context, int index) {
                 return Row(

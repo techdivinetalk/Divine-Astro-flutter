@@ -28,6 +28,7 @@ import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
+import 'package:divine_astrologer/utils/show_loader.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -245,8 +246,24 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               final isCallEnableRes = map["is_call_enable"] ?? false;
               isCallEnable(isCallEnableRes);
 
+              final voiceCallStatus = map["voiceCallStatus"] ?? 0;
+              callSwitch(voiceCallStatus != 0);
+
+              if (callSwitch.value) {
+                selectedCallDate.value = DateTime.now();
+                selectedCallTime.value = "";
+              }
+
               final isChatEnableRes = map["is_chat_enable"] ?? false;
               isChatEnable(isChatEnableRes);
+
+              final chatStatusRes = map["chatStatus"] ?? 0;
+              chatSwitch(chatStatusRes != 0);
+
+              if (chatSwitch.value) {
+                selectedChatDate.value = DateTime.now();
+                selectedChatTime.value = "";
+              }
 
               final isVideoCallEnableRes = map["is_video_call_enable"] ?? false;
               isVideoCallEnable(isVideoCallEnableRes);
@@ -874,15 +891,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   Future<void> chatSwitchFN({required Function() onComplete}) async {
-    chatSwitch(!chatSwitch.value);
-    await updateSessionType(chatSwitch.value, chatSwitch, 1);
+    await updateSessionType(!chatSwitch.value, chatSwitch, 1);
     onComplete();
     return Future<void>.value();
   }
 
   Future<void> callSwitchFN({required Function() onComplete}) async {
-    callSwitch(!callSwitch.value);
-    await updateSessionType(callSwitch.value, callSwitch, 2);
+    await updateSessionType(!callSwitch.value, callSwitch, 2);
     onComplete();
     return Future<void>.value();
   }
@@ -934,6 +949,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     RxBool switchType,
     int type,
   ) async {
+    showLoader();
     //type: 1 - chat, 2 - call, 3 - videoCall
     Map<String, dynamic> params = {
       "type": type,
@@ -958,27 +974,27 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           //   chat: chatSwitch.value ? "1" : "0",
           //   video: videoSwitch.value ? "1" : "0",
           // );
-          switch (type) {
-            case 1:
-              astroOnlineOffline(
-                  status: 'chat_status=${chatSwitch.value ? "1" : "0"}');
-              break;
-            case 2:
-              astroOnlineOffline(
-                  status: 'call_status=${callSwitch.value ? "1" : "0"}');
-              break;
-            default:
-              break;
-          }
+          // switch (type) {
+          //   case 1:
+          //     astroOnlineOffline(
+          //         status: 'chat_status=${chatSwitch.value ? "1" : "0"}');
+          //     break;
+          //   case 2:
+          //     astroOnlineOffline(
+          //         status: 'call_status=${callSwitch.value ? "1" : "0"}');
+          //     break;
+          //   default:
+          //     break;
+          // }
           divineSnackBar(data: message);
         },
         failureCallBack: (message) {
           switch (type) {
             case 1:
-              chatSwitch(!chatSwitch.value);
+              // chatSwitch(!chatSwitch.value);
               break;
             case 2:
-              callSwitch(!callSwitch.value);
+              // callSwitch(!callSwitch.value);
               break;
             case 3:
               videoSwitch(!videoSwitch.value);
@@ -990,23 +1006,33 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         },
       );
 
+      Get.back();
+
       if (response.statusCode == 200) {
         if (!videoSwitch.value && type == 3) {
           selectDateTimePopupForVideo();
         } else {
           selectedVideoTime.value = "";
         }
-        if (!callSwitch.value && type == 2) {
-          selectDateTimePopupForCall();
-        } else {
-          selectedCallTime.value = "";
-        }
-        if (!chatSwitch.value && type == 1) {
-          selectDateTimePopupForChat();
-        } else {
-          selectedChatTime.value = "";
-        }
-        switchType.value = value;
+        // if (!callSwitch.value && type == 2) {
+        //   // selectDateTimePopupForCall();
+        // } else {
+        //   selectedCallTime.value = "";
+        // }
+        // if (!chatSwitch.value && type == 1) {
+        //   // selectDateTimePopupForChat();
+        // } else {
+        //   selectedChatTime.value = "";
+        // }
+        // switchType.value = value;
+        // if (switchType.value && type == 1) {
+        //   selectedChatDate.value = DateTime.now();
+        //   selectedChatTime.value = "";
+        // }
+        // if (switchType.value && type == 2) {
+        //   selectedCallDate.value = DateTime.now();
+        //   selectedCallTime.value = "";
+        // }
       } else if (response.statusCode == 400) {
         Get.bottomSheet(CantOnline(message: response.message));
       }
@@ -1106,7 +1132,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     return difference;
   }
 
-  void scheduleCall(String value) async {
+  void scheduleCall(String value, bool fromSwitch) async {
+    if (fromSwitch) {
+      showLoader();
+    }
     var selectedTime = value == "CHAT"
         ? selectedChatTime.value
         : value == "CALL"
@@ -1159,8 +1188,29 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         final response = await noticeRepository.astroScheduleOnlineAPI(
           request.toJson(),
         );
+        Get.back();
         if (response.statusCode == 200 && response.success) {
           divineSnackBar(data: response.message);
+        }
+        if (fromSwitch && value == "CHAT") {
+          await chatSwitchFN(
+            onComplete: () {
+              // if (controller.chatSwitch.value) {
+              // } else {
+              //   selectDateTimePopupForChat();
+              // }
+            },
+          );
+        }
+        if (fromSwitch && value == "CALL") {
+          await callSwitchFN(
+            onComplete: () {
+              // if (controller.callSwitch.value) {
+              // } else {
+              //   selectDateTimePopupForCall();
+              // }
+            },
+          );
         }
       } catch (err) {
         if (err is AppException) {
@@ -1324,7 +1374,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           // controller.selectVideoTime(value);
           if (isValidDate("VIDEO", value)) {
             selectVideoTime(value);
-            scheduleCall("VIDEO");
+            scheduleCall("VIDEO", false);
           } else {
             // Fluttertoast.showToast(msg: "Please select future date and time");
           }
@@ -1333,7 +1383,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     );
   }
 
-  void selectDateTimePopupForCall() {
+  void selectDateTimePopupForCall(fromSwitch) {
     selectDateOrTime(
       futureDate: true,
       Get.context!,
@@ -1360,7 +1410,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         }, onClickOkay: (value1) {
           if (isValidDate("CALL", value1)) {
             selectCallTime(value1);
-            scheduleCall("CALL");
+            scheduleCall("CALL", fromSwitch);
           } else {
             // Fluttertoast.showToast(msg: "Please select future date and time");
           }
@@ -1369,7 +1419,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     );
   }
 
-  void selectDateTimePopupForChat() {
+  void selectDateTimePopupForChat(fromSwitch) {
     selectDateOrTime(
       Get.context!,
       futureDate: true,
@@ -1402,7 +1452,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           onClickOkay: (timeValue) {
             if (isValidDate("CHAT", timeValue)) {
               selectChatTime(timeValue);
-              scheduleCall("CHAT");
+              scheduleCall("CHAT", fromSwitch);
             } else {
               // Fluttertoast.showToast(msg: "Please select future date and time");
             }

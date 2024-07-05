@@ -123,6 +123,7 @@ class LiveDharamController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    tarotCardInit();
     initData();
   }
 
@@ -862,7 +863,7 @@ class LiveDharamController extends GetxController {
           await HomePageRepository().getTarotCardData();
       deckCardModelList = [...newTarotCardModel.data ?? []];
       for (var element in deckCardModelList) {
-        element.image = "${pref.getAmazonUrl()}${element.image}";
+        element.image = "${pref.getAmazonUrl()}/${element.image}";
       }
       await Future.delayed(const Duration(seconds: 1));
       retryCount++;
