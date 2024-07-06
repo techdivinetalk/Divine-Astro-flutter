@@ -58,6 +58,7 @@ class ChatMessage {
   String? callStatus;
   dynamic callRejectReason;
   bool? isPoojaProduct;
+  bool? isAnimationPlay;
   int? callEnd;
   String? callRecording;
   dynamic customerCallStatus;
@@ -100,6 +101,7 @@ class ChatMessage {
     this.longitude,
     this.customerId,
     this.msgSequence,
+    this.isAnimationPlay,
     this.isPoojaProduct,
     this.msgType,
     this.message,
@@ -163,6 +165,7 @@ class ChatMessage {
         ? msgTypeValues.map[json["msg_type"].toString()]
         : MsgType.text;
     message = json['message'];
+    isAnimationPlay = json['is_animation_play'] ?? false;
     productId = json['product_id'].toString();
     shopId = json['shop_id'].toString();
     isPoojaProduct = json['is_pooja_product'].toString() == "1" ? true : false;
@@ -231,6 +234,7 @@ class ChatMessage {
     "id": id,
     "msgId": msgId,
     "get_pooja": getPooja,
+    "is_animation_play": isAnimationPlay,
     "get_custom_product": getCustomProduct,
     "productPrice": productPrice,
     "role_id": roleId,

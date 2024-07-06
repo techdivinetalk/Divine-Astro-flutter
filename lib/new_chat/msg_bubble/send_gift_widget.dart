@@ -4,6 +4,7 @@ import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/new_chat/new_chat_controller.dart';
+import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/product/pooja/widgets/custom_widget/pooja_common_list.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,11 +14,16 @@ class SendGiftWidget extends StatelessWidget {
   final ChatMessage chatDetail;
   final bool yourMessage;
 
-  SendGiftWidget(
-      {required this.chatDetail, required this.yourMessage, this.controller});
+  SendGiftWidget({
+    required this.chatDetail,
+    required this.yourMessage,
+    this.controller,
+  });
 
   @override
   Widget build(BuildContext context) {
+    print(chatDetail.awsUrl);
+    print("chatDetail.awsUrl");
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       mainAxisAlignment:
@@ -68,7 +74,7 @@ class SendGiftWidget extends StatelessWidget {
             children: [
               Flexible(
                 child: Text(
-                  "${controller!.customerName.value.capitalizeFirst} have sent ${chatDetail.message!.contains("https") ? "" : chatDetail.message ?? ""}",
+                  "${AppFirebaseService().orderData.value["customerName"]} have sent ${chatDetail.message!.contains("https") ? "" : chatDetail.message ?? ""}",
                   style: const TextStyle(
                       color: Colors.red,
                       fontFamily: FontFamily.metropolis,
@@ -80,6 +86,7 @@ class SendGiftWidget extends StatelessWidget {
                 height: 32,
                 width: 32,
                 child: CustomImageWidget(
+                  // imageUrl:preferenceService.getAmazonUrl()!.contains("https://divineprod.blob.core.windows.net/divineprod") ?chatDetail.awsUrl : "${preferenceService.getAmazonUrl()!}${chatDetail.awsUrl}",
                   imageUrl: chatDetail.awsUrl ?? '',
                   rounded: true,
                   // added by divine-dharam

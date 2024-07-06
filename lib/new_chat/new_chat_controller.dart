@@ -128,8 +128,18 @@ class NewChatController extends GetxController
         chatMessages.add(chatMessage);
 
         scrollToBottomFunc();
-        if (chatMessage.animation != null) {
-          playGift(chatMessage.animation);
+        if (MiddleWare.instance.currentPage == RouteName.newChat) {
+          if (chatMessage.animation != null) {
+            if (!chatMessage.isAnimationPlay!) {
+              playGift(chatMessage.animation);
+              FirebaseDatabase.instance
+                  .ref(
+                      "chatMessages/${AppFirebaseService().orderData.value["orderId"]}/${chatMessage.id}")
+                  .update({
+                "is_animation_play": true,
+              });
+            }
+          }
         }
         localChatList.add(chatMessage);
         saveAndGetMessage(chatMessages: localChatList);
