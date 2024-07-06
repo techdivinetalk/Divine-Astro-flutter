@@ -145,7 +145,7 @@ class NewChatController extends GetxController
         localChatList.add(chatMessage);
         saveAndGetMessage(chatMessages: localChatList);
         update();
-        /*if (MiddleWare.instance.currentPage == RouteName.newChat) {
+        if (MiddleWare.instance.currentPage == RouteName.newChat) {
           if (chatMessage.userType == "customer") {
             print("chatMessage.userType");
             FirebaseDatabase.instance
@@ -155,32 +155,32 @@ class NewChatController extends GetxController
               "type": 3,
             });
           }
-        }*/
+        }
       },
     );
-    // if (MiddleWare.instance.currentPage == RouteName.newChat) {
-    //   msgUpdateSubscription = FirebaseDatabase.instance
-    //       .ref(
-    //           "chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
-    //       .onChildChanged
-    //       .listen(
-    //     (event) {
-    //       ChatMessage chatMessage = ChatMessage.fromOfflineJson(
-    //           jsonDecode(jsonEncode(event.snapshot.value)));
-    //       chatMessage.id = int.parse(event.snapshot.key ?? "0");
-    //       if (chatMessages.isNotEmpty) {
-    //         for (int i = 0; i < chatMessages.length; i++) {
-    //           if (chatMessages[i].id == chatMessage.id) {
-    //             chatMessages[i].type = chatMessage.type;
-    //             print("updating ticks");
-    //             update();
-    //             break;
-    //           }
-    //         }
-    //       }
-    //     },
-    //   );
-    // }
+    if (MiddleWare.instance.currentPage == RouteName.newChat) {
+      msgUpdateSubscription = FirebaseDatabase.instance
+          .ref(
+              "chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
+          .onChildChanged
+          .listen(
+        (event) {
+          ChatMessage chatMessage = ChatMessage.fromOfflineJson(
+              jsonDecode(jsonEncode(event.snapshot.value)));
+          chatMessage.id = int.parse(event.snapshot.key ?? "0");
+          if (chatMessages.isNotEmpty) {
+            for (int i = 0; i < chatMessages.length; i++) {
+              if (chatMessages[i].id == chatMessage.id) {
+                chatMessages[i].type = chatMessage.type;
+                print("updating ticks");
+                update();
+                break;
+              }
+            }
+          }
+        },
+      );
+    }
     _state = scheduler.SchedulerBinding.instance.lifecycleState;
     _listener = AppLifecycleListener(
       onShow: () {},
