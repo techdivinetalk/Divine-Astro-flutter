@@ -74,8 +74,8 @@ class HomeUI extends GetView<HomeController> {
                 elevation: 0,
                 centerTitle: false,
                 title: Text(
-                  controller.appbarTitle.value,
-                  style: AppTextStyle.textStyle15(
+                  controller.appbarTitle.value + " New Chat",
+                  style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w400,
                     fontColor: appColors.darkBlue,
                   ),

@@ -129,7 +129,8 @@ class NewChatController extends GetxController
 
         scrollToBottomFunc();
         if (MiddleWare.instance.currentPage == RouteName.newChat) {
-          if (chatMessage.animation != null) {
+          if (chatMessage.animation != null &&
+              chatMessage.userType == "customer") {
             if (!chatMessage.isAnimationPlay!) {
               playGift(chatMessage.animation);
               FirebaseDatabase.instance
