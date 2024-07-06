@@ -407,7 +407,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     //  showSecondNotification("title", "body", AppFirebaseService().payload);
     return AppTheme(
       child: ScreenUtilInit(
-          designSize: const Size(375, 812), // Use your design's dimensions here
+          designSize: const Size(411, 736), // Use your design's dimensions here
           minTextAdapt: true, // Ensure text adapts even on smaller screens
           splitScreenMode: true, // Ensure split screen is handled properly
           builder: (context, child) {
