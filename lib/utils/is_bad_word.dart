@@ -17,7 +17,7 @@ bool isBadWord(String word) {
     }
   }
   // check if not only 10 digits
-  if (word.length == 10 && !RegExp(r'^[0-9]*$').hasMatch(word)) {
+  if (word.length == 10 && RegExp(r'^[0-9]*$').hasMatch(word)) {
     DateTime end = DateTime.now();
     log('Time taken to check bad word: ${end.difference(start).inMilliseconds} ms');
     return true;
