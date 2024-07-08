@@ -279,7 +279,7 @@ class LoginController extends GetxController {
     }
     // isLogOut = false;
     super.onInit();
-    maintenanceCheck();
+    // maintenanceCheck();
     // getLoginImages();
     countryCodeController = TextEditingController(text: "+91");
     mobileNumberController = TextEditingController(text: "");

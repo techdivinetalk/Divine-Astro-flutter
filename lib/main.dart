@@ -61,7 +61,6 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
 }
 
 Future<void> main() async {
-  Get.put(MessageController());
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -411,8 +410,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     //  showSecondNotification("title", "body", AppFirebaseService().payload);
     return AppTheme(
       child: ScreenUtilInit(
-          designSize: Size(MediaQuery.sizeOf(context).width,
-              MediaQuery.sizeOf(context).height),
+          designSize: const Size(411, 736), // Use your design's dimensions here
+          minTextAdapt: true, // Ensure text adapts even on smaller screens
+          splitScreenMode: true, // Ensure split screen is handled properly
           builder: (context, child) {
             return OverlaySupport.global(
               child: MediaQuery(

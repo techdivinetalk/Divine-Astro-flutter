@@ -15,17 +15,14 @@ class PerformanceController extends GetxController {
   var percentageSubTitle = <ScoreModelClass>[
     ScoreModelClass("Total user converted from first user offer."),
     ScoreModelClass("Total repeated orders out of total orders received."),
-    ScoreModelClass(
-        "Total online hours spent on application on chat and call ."),
+    ScoreModelClass("Total online hours spent on application on chat and call ."),
     ScoreModelClass("Total duration spent on application over live session."),
     ScoreModelClass("Total revenue generated through product selling."),
-    ScoreModelClass(
-        "Total busy hours out of online hours when busy over consultation."),
+    ScoreModelClass("Total busy hours out of online hours when busy over consultation."),
   ].obs;
 
   Rx<Loading> loading = Loading.initial.obs;
-  var txt =
-      "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It ";
+  var txt = "Lorem Ipsum is simply dummy text of the printing and typesetting industry...";
 
   var scoreList = <ScoreModelClass>[
     ScoreModelClass("conversionRate".tr),
@@ -47,12 +44,12 @@ class PerformanceController extends GetxController {
   ].obs;
 
   var durationValue = ['yesterday', 'last_week', 'last_month'].obs;
-
   var durationOptions = ['Yesterday', 'Last Week', 'Last Month'].obs;
+
   RxString selectedValue = "yesterday".obs;
   RxString selectedOption = "Yesterday".obs;
 
-  updateDurationValue(String val) {
+  void updateDurationValue(String val) {
     if (selectedOption.value != val) {
       selectedOption.value = val;
       int index = durationOptions.indexOf(val);
@@ -61,11 +58,10 @@ class PerformanceController extends GetxController {
     }
   }
 
-  PerformanceResponse? performanceData;
-
-  // PerformanceFilterResponse? performanceFilterResponse;
+  var performanceData = Rxn<PerformanceResponse>(); // Reactive variable
 
   bool isInit = false;
+
   @override
   void onReady() {
     isInit = false;
@@ -80,21 +76,21 @@ class PerformanceController extends GetxController {
     init();
   }
 
-  init() async {
+  Future<void> init() async {
     await getPerformance();
-    // await getFilteredPerformance();
   }
 
   RxList<dynamic> overAllScoreList = <dynamic?>[].obs;
 
-  getPerformance() async {
+  Future<void> getPerformance() async {
     loading.value = Loading.loading;
     update();
     try {
       Map<String, dynamic> params = {"filter": selectedValue.value};
       var response = await PerformanceRepository().getPerformance(params);
+      log('😻😻😻😻😻😻😻😻😻');
       log("Res-->${jsonEncode(response.data)}");
-      performanceData = response;
+      performanceData.value = response; // Assigning response to performanceData
       overAllScoreList.value = [
         response.data?.conversionRate,
         response.data?.repurchaseRate,
@@ -105,7 +101,8 @@ class PerformanceController extends GetxController {
       ];
 
       update();
-      log("performanceData==>${jsonEncode(performanceData!.data)}");
+      log('🤟🤟🤟🤟🤟🤟🤟');
+      log("performanceData==>${jsonEncode(performanceData.value?.data)}");
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
@@ -116,37 +113,6 @@ class PerformanceController extends GetxController {
     }
     loading.value = Loading.loaded;
   }
-
-/* getFilteredPerformance() async {
-    loading.value = Loading.loading;
-    update();
-    try {
-      Map<String, dynamic> params = {"filter": selectedValue.value};
-      // Map<String, dynamic> params = {"filter": 'last_month'};
-      var response = await PerformanceRepository().getFilteredPerformance(params);
-      log("Res-->${jsonEncode(response.data)}");
-      performanceFilterResponse = response;
-      overAllScoreList.value = [
-        response.data?.response?.conversion,
-        response.data?.response?.repurchaseRate,
-        response.data?.response?.onlineHours,
-        response.data?.response?.liveOnline,
-        response.data?.response?.averageServiceTime,
-        response.data?.response?.customerSatisfactionRatings,
-      ];
-
-      update();
-      log("performanceData==>${jsonEncode(performanceData!.data)}");
-    } catch (error) {
-      debugPrint("error $error");
-      if (error is AppException) {
-        error.onException();
-      } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
-      }
-    }
-    loading.value = Loading.loaded;
-  }*/
 }
 
 class ScoreModelClass {

@@ -602,6 +602,9 @@ class UserRepository extends ApiProvider {
       param["device_manufacture"] = androidInfo.manufacturer;
       param["device_sdk_code"] = buildNumber;
       param["appCurrentVersion"] = version;
+      print('🥹🥹🥹🥹🥹🥹🥹🥹');
+      print(jsonEncode(param).toString());
+      print('🥹🥹🥹🥹🥹🥹🥹🥹');
 
       final response = await post(
         constantDetails,
@@ -613,8 +616,9 @@ class UserRepository extends ApiProvider {
       } else if (response.statusCode == HttpStatus.badRequest) {
         Utils().handleStatusCode400(response.body);
       }
-
+      log('😇😇😇😇😇😇😇😇');
       log(response.body);
+      log('😇😇😇😇😇😇😇😇');
       log("response.body");
       if (response.statusCode == 200) {
         final constantDetailsModelClass =

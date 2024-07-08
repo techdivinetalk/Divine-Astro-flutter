@@ -34,12 +34,3 @@ void serverUnderMaintenancePopup(String message) {
     );
   });
 }
-
-
-void maintenanceCheck() {
-  print("👻👻👻👻👻👻👻👻");
-  if (messageController.isUnderMaintenance.value) {
-    print("😈😈😈😈😈😈😈");
-    WidgetsBinding.instance.addPostFrameCallback((_) => serverUnderMaintenancePopup(messageController.customMessage.value));
-  }
-}

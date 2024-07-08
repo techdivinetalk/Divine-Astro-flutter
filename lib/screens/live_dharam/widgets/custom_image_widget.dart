@@ -53,21 +53,27 @@ class CustomImageWidget extends StatelessWidget {
 
     switch (typeEnum) {
       case TypeEnum.user:
-        widget = GetUtils.isURL(imageUrl)
+        Uri uri = Uri.parse(imageUrl);
+        bool check = GetUtils.isURL(uri.toString());
+        widget = check
             ? (condition1 || condition2 || condition3 || condition4)
                 ? assetImage()
                 : cachedNetworkImage()
             : assetImage();
         break;
       case TypeEnum.gift:
-        widget = GetUtils.isURL(imageUrl)
+        Uri uri = Uri.parse(imageUrl);
+        bool check = GetUtils.isURL(uri.toString());
+        widget = check
             ? (condition1 || condition2 || condition3 || condition4)
                 ? assetImage()
                 : cachedNetworkImage()
             : assetImage();
         break;
       case TypeEnum.pooja:
-        widget = GetUtils.isURL(imageUrl)
+        Uri uri = Uri.parse(imageUrl);
+        bool check = GetUtils.isURL(uri.toString());
+        widget = check
             ? (condition1 || condition2 || condition3 || condition4)
                 ? assetImage()
                 : cachedNetworkImage()

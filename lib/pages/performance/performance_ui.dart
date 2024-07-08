@@ -46,14 +46,14 @@ class PerformanceUI extends GetView<PerformanceController> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TodayAvailabilityWidget(
-                      todaysAvailiblity:
-                          controller.performanceData?.data?.todaysAvailiblity),
+                      todaysAvailiblity: controller
+                          .performanceData.value?.data?.todaysAvailiblity),
                   SizedBox(
                     height: 20.h,
                   ),
                   LastAvailabilityWidget(
                       last30DaysAvailiblity: controller
-                          .performanceData?.data?.last30DaysAvailiblity),
+                          .performanceData.value?.data?.last30DaysAvailiblity),
                   SizedBox(
                     height: 20.h,
                   ),
@@ -64,7 +64,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                   ),
                   OverAllScoreData(
                       performanceResponse:
-                          controller.performanceData?.data?.overall),
+                          controller.performanceData.value?.data?.overall),
                   SizedBox(
                     height: 30.h,
                   ),
@@ -562,14 +562,14 @@ class LastAvailabilityWidget extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                   Expanded(
+                  Expanded(
                     flex: 2,
                     child: CustomText(
                       textAlign: TextAlign.center,
                       maxLines: 2,
                       last30DaysAvailiblity?.data ?? "Date not available",
-                        fontWeight: FontWeight.w400,
-                        fontColor: appColors.darkBlue,
+                      fontWeight: FontWeight.w400,
+                      fontColor: appColors.darkBlue,
                       fontSize: 9.sp,
                     ),
                   ),
@@ -635,6 +635,9 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
 
   @override
   Widget build(BuildContext context) {
+    debugPrint('😇😇😇😇😇😇😇😇😇');
+    debugPrint('Today\'s Availability Data: ${todaysAvailiblity.toString()}');  // Print the todaysAvailiblity data
+
     return Container(
       padding: EdgeInsets.all(12.h),
       decoration: BoxDecoration(
@@ -661,13 +664,14 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
               ),
               const Expanded(child: SizedBox()),
               GestureDetector(
-                  onTap: () {
-                    Get.bottomSheet(CommonInfoSheet(
-                      title: "totalAvailability".tr,
-                      subTitle: "totalAvailabilityDes".tr,
-                    ));
-                  },
-                  child: Assets.images.icInfo.svg(height: 17.h, width: 17.h)),
+                onTap: () {
+                  Get.bottomSheet(CommonInfoSheet(
+                    title: "totalAvailability".tr,
+                    subTitle: "totalAvailabilityDes".tr,
+                  ));
+                },
+                child: Assets.images.icInfo.svg(height: 17.h, width: 17.h),
+              ),
             ],
           ),
           SizedBox(
@@ -676,7 +680,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              //Title
+              // Title
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -780,7 +784,6 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       height: 10.h,
                     ),
                     Text(
-                      // "19 mins",
                       "${todaysAvailiblity?.busyChat ?? "0"} mins",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
@@ -799,7 +802,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
                       height: 10.h,
                     ),
                     Text(
-                      "${todaysAvailiblity?.busyLive} mins",
+                      "${todaysAvailiblity?.busyLive ?? "0"} mins",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
                           fontColor: appColors.darkBlue),
@@ -815,6 +818,7 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
   }
 }
 
+
 class OverAllScoreData extends GetView<PerformanceController> {
   final Overall? performanceResponse;
 
@@ -825,7 +829,7 @@ class OverAllScoreData extends GetView<PerformanceController> {
     return InkWell(
       onTap: () {
         Get.toNamed(RouteName.rankSystemUI, arguments: [
-          controller.performanceData?.data?.overall?.rankSystem
+          controller.performanceData.value?.data?.overall?.rankSystem
         ]);
       },
       child: Container(
@@ -887,8 +891,7 @@ class OverAllScoreData extends GetView<PerformanceController> {
                       ),
                       Row(
                         children: [
-                          setImage(performanceResponse?.rank ??
-                                  "") ??
+                          setImage(performanceResponse?.rank ?? "") ??
                               SizedBox(
                                 width: 10.w,
                               ),
