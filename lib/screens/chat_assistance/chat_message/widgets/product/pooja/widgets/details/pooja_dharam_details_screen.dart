@@ -4,6 +4,7 @@ import 'package:after_layout/after_layout.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 
 import '../../../../../../../../common/appbar.dart';
@@ -179,7 +180,7 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(width: 16),
-                      (pooja.cashbackType ?? 0) != 0
+                      (pooja.cashbackValue ?? 0) != 0
                           ? Container(
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(50.0),
@@ -216,11 +217,15 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
                     ),
                   ),
                   const SizedBox(height: 16),
-                  ExpandableHtml(
-                    htmlData: pooja.poojaDesc ?? "",
-                    trimLength: 500,
-                    // color: appColors.guideColor,
+                  Html(
+                    shrinkWrap: true,
+                    data: pooja.poojaDesc ?? "",
                   ),
+                  // ExpandableHtml(
+                  //   htmlData: pooja.poojaDesc ?? "",
+                  //   trimLength: 500,
+                  //   // color: appColors.guideColor,
+                  // ),
                   const SizedBox(height: 16),
                   // Text(
                   //   "Select Pooja Date and Timing.",
