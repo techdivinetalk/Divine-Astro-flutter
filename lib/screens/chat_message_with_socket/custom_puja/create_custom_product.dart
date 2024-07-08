@@ -226,7 +226,7 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
                       children: [
                         CustomButton(
                           onTap: () async {
-                            Get.back();
+                            // Get.back();
                             await getImage(true);
                           },
                           child: Column(
@@ -243,7 +243,7 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
                         SizedBox(width: 64.w),
                         CustomButton(
                           onTap: () async {
-                            Get.back();
+                            // Get.back();
                             await getImage(false);
                           },
                           child: Column(
@@ -279,8 +279,12 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
 
     if (pickedFile != null) {
       image = File(pickedFile!.path);
-
-      await cropImage();
+      print(image!.path);
+      print("image!.path");
+      uploadImage(image!);
+      // await cropImage();
+    }else{
+      print("picked file is null ???????");
     }
   }
 
@@ -293,7 +297,7 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
   XFile? pickedFile;
   File? uploadFile;
 
-  cropImage() async {
+  /*cropImage() async {
     CroppedFile? croppedFile = await ImageCropper().cropImage(
       sourcePath: image!.path,
       aspectRatioPresets: [
@@ -340,12 +344,11 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
     } else {
       debugPrint("Image is not cropped.");
     }
-  }
+  }*/
 
   Future<void> uploadImage(File imageFile) async {
-    var uri = Uri.parse(
-        "${ApiProvider.imageBaseUrl}uploadImage");
- 
+    var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+
     var request = http.MultipartRequest('POST', uri);
 
     request.headers.addAll({
@@ -368,6 +371,7 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
       print(jsonDecode(value)["data"]);
       productApiPath = jsonDecode(value)["data"]["path"];
       productImageUrl = jsonDecode(value)["data"]["full_path"];
+      Get.back();
       setState(() {});
       print("valuevaluevaluevaluevaluevaluevalue");
     });
@@ -401,8 +405,7 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
           final String time =
               "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
           widget.controller!.addNewMessage(
-
-            msgType:MsgType.customProduct,
+            msgType: MsgType.customProduct,
             messageText: productName.text,
             productPrice: productPrice.text,
             productId: customProductData!.id.toString(),
@@ -416,12 +419,15 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
             ),
           );
         } else if (widget.chatMessageController != null) {
-          widget.chatMessageController!.sendMsg(MsgType.customProduct, {
-            'title': productName.text,
-            'image': productApiPath.toString(),
-            'product_price': productPrice.text.toString(),
-            'product_id': customProductData!.id.toString(),
-          },false);
+          widget.chatMessageController!.sendMsg(
+              MsgType.customProduct,
+              {
+                'title': productName.text,
+                'image': productApiPath.toString(),
+                'product_price': productPrice.text.toString(),
+                'product_id': customProductData!.id.toString(),
+              },
+              false);
         }
 
         Get.back();

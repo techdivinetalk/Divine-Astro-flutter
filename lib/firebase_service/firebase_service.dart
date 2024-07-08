@@ -490,8 +490,8 @@ class AppFirebaseService {
         break;
 
       default:
-        preferenceService.setStringPref(
-            dataSnapshot.key.toString(), dataSnapshot.value.toString());
+        // preferenceService.setStringPref(
+        //     dataSnapshot.key.toString(), dataSnapshot.value.toString());
         break;
     }
   }

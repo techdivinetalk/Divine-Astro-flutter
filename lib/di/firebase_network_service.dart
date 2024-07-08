@@ -20,9 +20,7 @@ class FirebaseNetworkService extends GetxService {
       _onDatabaseConnected.sink.add(connected);
       if (connected) {
         debugPrint("You are Connected.");
-        if(AppSocket().socket!.disconnected){
-          AppSocket().socketConnect();
-        }
+        AppSocket().socketConnect();
 
       } else {
         debugPrint("You DisConnected");

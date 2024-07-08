@@ -126,9 +126,9 @@ class TextViewWidget extends StatelessWidget {
                           child: CustomButton(
                               color: appColors.guideColor,
                               onTap: () {
-                                print(AppFirebaseService().orderData["lat"]);
+                                print(AppFirebaseService().orderData["orderId"]);
                                 print("objectobjectobjectobjectobject");
-                                final dateData = DateFormat("dd/MM/yyyy").parse(
+                                DateTime dateData = DateFormat('d MMMM yyyy').parse(
                                     AppFirebaseService().orderData["dob"]);
                                 DateTime timeData = DateFormat("h:mm a").parse(
                                     AppFirebaseService()
