@@ -200,9 +200,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           Obx(() {
                             return Visibility(
                                 visible: AppFirebaseService()
-                                        .orderData
-                                        .value["card"] !=
-                                    null,
+                                            .orderData
+                                            .value["card"] !=
+                                        null &&
+                                    controller.getListOfCardLength(context) > 0,
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(

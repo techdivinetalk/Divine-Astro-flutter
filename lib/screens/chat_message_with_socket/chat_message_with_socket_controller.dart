@@ -1460,12 +1460,14 @@ class ChatMessageWithSocketController extends GetxController
     var orderData = AppFirebaseService().orderData.value;
     if (isCardVisible.value == true && orderData.containsKey("card")) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-
-      var listOfCard =
-          AppFirebaseService().orderData.value['card']['listOfCard'] as Map;
-
-      print("listOfCard ${listOfCard.length}");
-      return listOfCard.length;
+      if (AppFirebaseService().orderData.value['card']['listOfCard'] != null) {
+        var listOfCard =
+            AppFirebaseService().orderData.value['card']['listOfCard'] as Map;
+        print("listOfCard ${listOfCard.length}");
+        return listOfCard.length;
+      } else {
+        return 0;
+      }
     }
     return 0;
   }
