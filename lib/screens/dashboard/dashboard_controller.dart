@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
+// import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
@@ -218,23 +219,25 @@ class DashboardController extends GetxController
     return havePermission;
   }
 
-  Future<void> furtherProcedure() async {
+  Future<void> furtherProcedure({String? orderId, String? queueId}) async {
+    String? order_id = AppFirebaseService().payload["order_id"];
+    String? queue_id = AppFirebaseService().payload["queue_id"];
+    if (orderId != null && queueId != null) {
+      order_id = orderId;
+      queue_id = queueId;
+    }
     try {
       if (kDebugMode) {
-        Fluttertoast.showToast(
-            msg: AppFirebaseService().payload["order_id"] ?? "");
-        Fluttertoast.showToast(
-            msg: AppFirebaseService().payload["queue_id"] ?? "");
+        Fluttertoast.showToast(msg: order_id ?? "");
+        Fluttertoast.showToast(msg: queue_id ?? "");
       }
-      if (AppFirebaseService().payload["order_id"].toString() == "") {
+      if (order_id.toString() == "") {
         return;
       }
       ResCommonChatStatus response = await ChatRepository().chatAccept(
           ReqCommonChatParams(
-                  queueId: int.parse(
-                      AppFirebaseService().payload["queue_id"].toString()),
-                  orderId: int.parse(
-                      AppFirebaseService().payload["order_id"].toString()),
+                  queueId: int.parse(queue_id.toString()),
+                  orderId: int.parse(order_id.toString()),
                   isTimeout: 0,
                   acceptOrReject: 1)
               .toJson());
@@ -261,6 +264,7 @@ class DashboardController extends GetxController
     //  checkPermissions();
     getOrderFromApi();
     checkAndRequestPermissions();
+    // notificationTwoInit();
     if (AppFirebaseService().payload != null) {
       // if (AppFirebaseService().payload!["type"] == null) {
       //   return;
@@ -1121,4 +1125,17 @@ class DashboardController extends GetxController
   void toggleCheckbox() {
     isChecked.value = !isChecked.value;
   }
+
+  // notificationTwoInit() async {
+  //   ReceivedAction? receivedAction = await AwesomeNotifications()
+  //       .getInitialNotificationAction(removeFromActionEvents: false);
+  //   Map<String, String?>? payload = receivedAction?.payload;
+
+  //   if (payload != null && payload["type"] == "2") {
+  //     furtherProcedure(
+  //       orderId: payload["order_id"],
+  //       queueId: payload["queue_id"],
+  //     );
+  //   }
+  // }
 }
