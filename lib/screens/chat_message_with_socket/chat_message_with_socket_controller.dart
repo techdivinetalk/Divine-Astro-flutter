@@ -94,7 +94,6 @@ class ChatMessageWithSocketController extends GetxController
   RxBool isEmojiShowing = false.obs;
   Rx<String> showTalkTime = "".obs;
   Rx<String> extraTalkTime = "".obs;
-  late SVGAAnimationController svgController;
   // FocusNode msgFocus = FocusNode();
   RxInt unreadMessageIndex = 0.obs;
   RxBool scrollToBottom = false.obs;
@@ -366,7 +365,7 @@ class ChatMessageWithSocketController extends GetxController
   //       break;
   //   }
   // }
-  void receiveMessage(DataSnapshot snapshot){
+  Future<void> receiveMessage(DataSnapshot snapshot) async {
     Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
     var chatMessage = ChatMessage.fromOfflineJson(values);
     int index = chatMessages.indexWhere((element) {
@@ -408,10 +407,10 @@ class ChatMessageWithSocketController extends GetxController
         .orderByChild("msg_send_by")
         .equalTo("0")
         .onChildAdded
-        .listen((event) {
+        .listen((event) async {
       var snapshot = event.snapshot;
       if (snapshot.value != null) {
-        receiveMessage(snapshot);
+        await receiveMessage(snapshot);
       }
     });
     getDir();
