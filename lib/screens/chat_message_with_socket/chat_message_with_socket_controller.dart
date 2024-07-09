@@ -38,6 +38,8 @@ import "package:path_provider/path_provider.dart";
 import "package:permission_handler/permission_handler.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:socket_io_client/socket_io_client.dart";
+import "package:svgaplayer_flutter/svgaplayer_flutter.dart";
+import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:svgaplayer_flutter/parser.dart";
 import "package:svgaplayer_flutter/player.dart";
 
@@ -65,6 +67,8 @@ import "../live_dharam/gifts_singleton.dart";
 
 class ChatMessageWithSocketController extends GetxController
     with WidgetsBindingObserver, GetTickerProviderStateMixin {
+  late SVGAAnimationController svgController;
+
   var pref = Get.find<SharedPreferenceService>();
   final UserRepository userRepository = Get.find<UserRepository>();
   final MessageTemplateRepo messageTemplateRepository =
@@ -174,7 +178,7 @@ class ChatMessageWithSocketController extends GetxController
   @override
   void dispose() {
     // TODO: implement dispose
-    svgController.dispose();
+
     _appLinkingStreamSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     ZegoGiftPlayer().clear();
@@ -182,6 +186,7 @@ class ChatMessageWithSocketController extends GetxController
     chatTimer?.cancel();
     print("WentBack dispose-5");
     extraTimer?.cancel();
+    svgController.dispose();
     super.dispose();
   }
 
@@ -389,6 +394,13 @@ class ChatMessageWithSocketController extends GetxController
   @override
   void onInit() {
     super.onInit();
+    svgController = SVGAAnimationController(vsync: this);
+    svgController.addListener(() {
+      if (svgController.isCompleted) {
+        svgController.reset();
+        svgController.stop();
+      }
+    });
     AppFirebaseService()
         .database
         .child(
@@ -499,6 +511,11 @@ class ChatMessageWithSocketController extends GetxController
     // leavePrivateChat();
     customerLeavedPrivateChatListenerSocket();
     astrologerJoinedPrivateChat();
+    socket.startAstroCustumerSocketEvent(
+      orderId: AppFirebaseService().orderData.value["orderId"].toString(),
+      userId: AppFirebaseService().orderData.value["userId"],
+    );
+
     // socket.startAstroCustumerSocketEvent(
     //   orderId: AppFirebaseService().orderData.value["orderId"].toString(),
     //   userId: AppFirebaseService().orderData.value["userId"],
@@ -531,6 +548,7 @@ class ChatMessageWithSocketController extends GetxController
     userData = preferenceService.getUserDetail();
     userDataKey = "chat_${currentUserId.value}";
     getChatList();
+    socketReconnect();
     initTask(AppFirebaseService().orderData.value);
   }
 
@@ -1465,12 +1483,14 @@ class ChatMessageWithSocketController extends GetxController
     var orderData = AppFirebaseService().orderData.value;
     if (isCardVisible.value == true && orderData.containsKey("card")) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
-
-      var listOfCard =
-          AppFirebaseService().orderData.value['card']['listOfCard'] as Map;
-
-      print("listOfCard ${listOfCard.length}");
-      return listOfCard.length;
+      if (AppFirebaseService().orderData.value['card']['listOfCard'] != null) {
+        var listOfCard =
+            AppFirebaseService().orderData.value['card']['listOfCard'] as Map;
+        print("listOfCard ${listOfCard.length}");
+        return listOfCard.length;
+      } else {
+        return 0;
+      }
     }
     return 0;
   }

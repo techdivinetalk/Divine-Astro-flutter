@@ -24,7 +24,7 @@ import "package:intl/intl.dart";
 import "package:lottie/lottie.dart";
 import "package:permission_handler/permission_handler.dart";
 import "package:simple_html_css/simple_html_css.dart";
-import "package:svgaplayer_flutter/player.dart";
+import "package:svgaplayer_flutter/svgaplayer_flutter.dart";
 
 import "../../common/common_bottomsheet.dart";
 import "../../model/message_template_response.dart";
@@ -39,23 +39,23 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   Widget build(BuildContext context) {
     bool keyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
     List<String> myList = [];
-    return Scaffold(
-      // resizeToAvoidBottomInset: true,
+    return WillPopScope(
+      onWillPop: () => controller.checkIfEmojisOpen(),
+      child: Scaffold(
+        // resizeToAvoidBottomInset: true,
 
-      body: SizedBox(
-        width: double.infinity,
-        height: double.infinity,
-        child: Stack(
-          children: [
-            GetBuilder<ChatMessageWithSocketController>(
-                init: ChatMessageWithSocketController(),
-                builder: (controller) {
-                  if (keyboardVisible) {
-                    controller.scrollToBottomFunc();
-                  }
-                  return WillPopScope(
-                    onWillPop: () => controller.checkIfEmojisOpen(),
-                    child: Stack(
+        body: SizedBox(
+          width: double.infinity,
+          height: double.infinity,
+          child: Stack(
+            children: [
+              GetBuilder<ChatMessageWithSocketController>(
+                  init: ChatMessageWithSocketController(),
+                  builder: (controller) {
+                    if (keyboardVisible) {
+                      controller.scrollToBottomFunc();
+                    }
+                    return Stack(
                       children: [
                         Assets.images.bgChatWallpaper.image(
                           width: MediaQuery.of(context).size.width,
@@ -85,8 +85,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                 horizontal: 10),
                                             decoration: BoxDecoration(
                                               border: Border.all(
-                                                  color: const Color(0xffDA2439)),
-                                              borderRadius: BorderRadius.circular(10),
+                                                  color:
+                                                      const Color(0xffDA2439)),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
                                             ),
                                             alignment: Alignment.center,
                                             child: RichText(
@@ -106,7 +108,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 children: [
                                   Obx(
                                     () => ListView.builder(
-                                      controller: controller.messgeScrollController,
+                                      controller:
+                                          controller.messgeScrollController,
                                       itemCount: controller.chatMessages.length,
                                       shrinkWrap: true,
                                       reverse: false,
@@ -118,11 +121,13 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                         print(
                                             "${AppFirebaseService().orderData["orderId"]}");
                                         if (myList.length < 3 &&
-                                            chatMessage.msgType == MsgType.text &&
+                                            chatMessage.msgType ==
+                                                MsgType.text &&
                                             chatMessage.orderId ==
                                                 AppFirebaseService()
                                                     .orderData["orderId"]) {
-                                          myList.add(chatMessage.time.toString());
+                                          myList
+                                              .add(chatMessage.time.toString());
                                           print("timeSet ${chatMessage.time}");
                                           print("${chatMessage.msgType}");
                                           print("${chatMessage.msgType}");
@@ -131,28 +136,33 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                           children: [
                                             Padding(
                                               padding: EdgeInsets.symmetric(
-                                                  vertical: 4.h, horizontal: 10.w),
+                                                  vertical: 4.h,
+                                                  horizontal: 10.w),
                                               child: MessageView(
                                                 index: index,
                                                 nextChatMessage: index ==
-                                                        controller
-                                                                .chatMessages.length -
+                                                        controller.chatMessages
+                                                                .length -
                                                             1
-                                                    ? controller.chatMessages[index]
-                                                    : controller
-                                                        .chatMessages[index + 1],
+                                                    ? controller
+                                                        .chatMessages[index]
+                                                    : controller.chatMessages[
+                                                        index + 1],
                                                 chatMessage: chatMessage,
                                                 yourMessage:
-                                                    chatMessage.msgSendBy == "1",
-                                                userName:
-                                                    controller.customerName.value,
+                                                    chatMessage.msgSendBy ==
+                                                        "1",
+                                                userName: controller
+                                                    .customerName.value,
                                                 unreadMessage: controller
                                                     .unreadMessageIndex.value,
                                                 myList: myList,
                                               ),
                                             ),
                                             if (index ==
-                                                (controller.chatMessages.length - 1))
+                                                (controller
+                                                        .chatMessages.length -
+                                                    1))
                                               typingWidget()
                                           ],
                                         );
@@ -162,41 +172,48 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   Positioned(
                                     bottom: 4.h,
                                     right: 25.w,
-                                    child: Obx(() => controller.scrollToBottom.value
-                                        ? InkWell(
-                                            onTap: () {
-                                              //  controller.scrollToBottomFunc();
-                                              //  controller.updateReadMessageStatus();
-                                            },
-                                            child: Badge(
-                                              backgroundColor: appColors.darkBlue,
-                                              offset: const Offset(4, -2),
-                                              isLabelVisible:
-                                                  (controller.unreadMsgCount.value >
+                                    child: Obx(
+                                        () => controller.scrollToBottom.value
+                                            ? InkWell(
+                                                onTap: () {
+                                                  //  controller.scrollToBottomFunc();
+                                                  //  controller.updateReadMessageStatus();
+                                                },
+                                                child: Badge(
+                                                  backgroundColor:
+                                                      appColors.darkBlue,
+                                                  offset: const Offset(4, -2),
+                                                  isLabelVisible: (controller
+                                                          .unreadMsgCount
+                                                          .value >
                                                       0),
-                                              label: Text(
-                                                  "${controller.unreadMsgCount.value}"),
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 6.w),
-                                              smallSize: 14.sp,
-                                              largeSize: 20.sp,
-                                              child: Icon(
-                                                  Icons
-                                                      .arrow_drop_down_circle_outlined,
-                                                  color: appColors.guideColor,
-                                                  size: 40.h),
-                                            ),
-                                          )
-                                        : const SizedBox()),
+                                                  label: Text(
+                                                      "${controller.unreadMsgCount.value}"),
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 6.w),
+                                                  smallSize: 14.sp,
+                                                  largeSize: 20.sp,
+                                                  child: Icon(
+                                                      Icons
+                                                          .arrow_drop_down_circle_outlined,
+                                                      color:
+                                                          appColors.guideColor,
+                                                      size: 40.h),
+                                                ),
+                                              )
+                                            : const SizedBox()),
                                   ),
                                 ],
                               ),
                             ),
                             Obx(() {
                               return Visibility(
-                                  visible:
-                                      AppFirebaseService().orderData.value["card"] !=
-                                          null,
+                                  visible: AppFirebaseService()
+                                              .orderData
+                                              .value["card"] !=
+                                          null &&
+                                      controller.getListOfCardLength(context) >
+                                          0,
                                   child: Padding(
                                     padding: const EdgeInsets.all(8.0),
                                     child: Container(
@@ -221,7 +238,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                   children: [
                                                     GestureDetector(
                                                       onTap: () {
-                                                        FirebaseDatabase.instance
+                                                        FirebaseDatabase
+                                                            .instance
                                                             .ref(
                                                                 "order/${AppFirebaseService().orderData.value["orderId"]}/card")
                                                             .remove();
@@ -229,12 +247,14 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                             .value = false;
                                                       },
                                                       child: Icon(Icons.cancel,
-                                                          color: appColors.white),
+                                                          color:
+                                                              appColors.white),
                                                     ),
                                                     const Text(
                                                       "Chosen cards",
                                                       style: TextStyle(
-                                                          color: Color(0x00ffffff)),
+                                                          color: Color(
+                                                              0x00ffffff)),
                                                     ),
                                                   ],
                                                 ),
@@ -245,30 +265,37 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                         MainAxisAlignment
                                                             .spaceBetween,
                                                     children: List.generate(
-                                                      controller.getListOfCardLength(
-                                                          context),
+                                                      controller
+                                                          .getListOfCardLength(
+                                                              context),
                                                       (index) => Expanded(
                                                         flex: 1,
                                                         child: Padding(
-                                                          padding: const EdgeInsets
-                                                              .symmetric(
-                                                              horizontal: 4),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal:
+                                                                      4),
                                                           child: Container(
-                                                            width: double.infinity,
+                                                            width:
+                                                                double.infinity,
                                                             height: 120,
                                                             // Adjust the height as needed
-                                                            decoration: BoxDecoration(
+                                                            decoration:
+                                                                BoxDecoration(
                                                               color: const Color(
                                                                   0xFF212121),
                                                               borderRadius:
-                                                                  BorderRadius.circular(
-                                                                      10), // Second container border radius
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10), // Second container border radius
                                                             ),
                                                             child: Padding(
                                                               padding:
                                                                   const EdgeInsets
                                                                       .all(5.0),
-                                                              child: Image.network(
+                                                              child:
+                                                                  Image.network(
                                                                 "${controller.pref.getAmazonUrl() ?? ""}/${controller.getValueByPosition(index)}",
                                                               ),
                                                             ),
@@ -284,24 +311,28 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                         MainAxisAlignment
                                                             .spaceBetween,
                                                     children: List.generate(
-                                                      controller.getListOfCardLength(
-                                                          context),
+                                                      controller
+                                                          .getListOfCardLength(
+                                                              context),
                                                       (index) => Expanded(
                                                         flex: 1,
                                                         child: Padding(
-                                                          padding: const EdgeInsets
-                                                              .symmetric(
-                                                              horizontal: 2),
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal:
+                                                                      2),
                                                           child: Center(
                                                               child: Text(
-                                                            textAlign:
-                                                                TextAlign.center,
+                                                            textAlign: TextAlign
+                                                                .center,
                                                             // Add this line for text alignment
                                                             controller
                                                                 .getKeyByPosition(
                                                                     index),
                                                             style: TextStyle(
-                                                              color: appColors.white,
+                                                              color: appColors
+                                                                  .white,
                                                               fontSize:
                                                                   12, // Adjust the font size as needed
                                                             ),
@@ -330,8 +361,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
                                     decoration: BoxDecoration(
-                                      border:
-                                          Border.all(color: appColors.grey, width: 2),
+                                      border: Border.all(
+                                          color: appColors.grey, width: 2),
                                       borderRadius: const BorderRadius.all(
                                           Radius.circular(10.0)),
                                       color: appColors.white,
@@ -547,7 +578,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             chatBottomBar(context, controller),
                             Obx(() => AnimatedContainer(
                                   duration: const Duration(milliseconds: 200),
-                                  height: controller.isEmojiShowing.value ? 300 : 0,
+                                  height:
+                                      controller.isEmojiShowing.value ? 300 : 0,
                                   child: SizedBox(
                                     height: 300,
                                     child: EmojiPicker(
@@ -562,16 +594,20 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           ],
                         ),
                       ],
-                    ),
-                  );
-                }),
-            Center(
-              child: SVGAImage(
-                controller.svgController,
-                fit: BoxFit.fitHeight,
+                    );
+                  }),
+              Center(
+                child: Container(
+                  height: Get.height,
+                  width: Get.width,
+                  child: SVGAImage(
+                    controller.svgController,
+                    fit: BoxFit.fitHeight,
+                  ),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
