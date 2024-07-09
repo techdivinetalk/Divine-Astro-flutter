@@ -3,14 +3,12 @@ import "dart:collection";
 import "dart:convert";
 import "dart:developer";
 import "dart:io";
-import "dart:typed_data";
 
 import "package:audio_waveforms/audio_waveforms.dart";
 import "package:camera/camera.dart";
 import "package:device_info_plus/device_info_plus.dart";
 import "package:divine_astrologer/app_socket/app_socket.dart";
 import "package:divine_astrologer/common/colors.dart";
-import "package:divine_astrologer/common/custom_widgets.dart";
 import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/di/hive_services.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
@@ -32,10 +30,7 @@ import "package:flutter/material.dart";
 import "package:flutter/scheduler.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
-import "package:flutter_screenutil/flutter_screenutil.dart";
-import "package:fluttertoast/fluttertoast.dart";
 import "package:get/get.dart";
-import "package:get/get_rx/get_rx.dart";
 import "package:http/http.dart" as http;
 import "package:image_cropper/image_cropper.dart";
 import "package:image_picker/image_picker.dart";
@@ -43,7 +38,6 @@ import "package:path_provider/path_provider.dart";
 import "package:permission_handler/permission_handler.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:socket_io_client/socket_io_client.dart";
-import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 
 import "../../common/MiddleWare.dart";
 import "../../common/app_exception.dart";
@@ -53,11 +47,7 @@ import "../../common/common_functions.dart";
 import "../../common/show_permission_widget.dart";
 import "../../di/api_provider.dart";
 import "../../firebase_service/firebase_service.dart";
-import "../../gen/assets.gen.dart";
 import "../../model/astrologer_gift_response.dart";
-import "../../model/chat/ReqCommonChat.dart";
-import "../../model/chat/ReqEndChat.dart";
-import "../../model/chat/res_common_chat_success.dart";
 import "../../model/message_template_response.dart";
 import "../../model/notice_response.dart";
 import "../../model/res_product_detail.dart";
@@ -72,10 +62,6 @@ import "../live_dharam/gifts_singleton.dart";
 
 class ChatMessageWithSocketController extends GetxController
     with WidgetsBindingObserver {
-
-
-
-
   var pref = Get.find<SharedPreferenceService>();
   final UserRepository userRepository = Get.find<UserRepository>();
   final MessageTemplateRepo messageTemplateRepository =
@@ -132,8 +118,14 @@ class ChatMessageWithSocketController extends GetxController
   Rx<bool> isCardBotOpen = false.obs;
   bool isGalleryOpen = false;
 
-
-
+  Future<bool> checkIfEmojisOpen() async {
+    if (isEmojiShowing.value) {
+      isEmojiShowing.value = false;
+    } else {
+      Get.back();
+    }
+    return false;
+  }
 
   void startTimer() {
     int _start = 5;
@@ -179,8 +171,6 @@ class ChatMessageWithSocketController extends GetxController
   @override
   void dispose() {
     // TODO: implement dispose
-
-
 
     _appLinkingStreamSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
@@ -423,7 +413,7 @@ class ChatMessageWithSocketController extends GetxController
     AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
       if (p0["status"] == null || p0["astroId"] == null) {
         backFunction();
-       // AppFirebaseService().database.child("order/${p0["orderId"]}").remove();
+        // AppFirebaseService().database.child("order/${p0["orderId"]}").remove();
       } else {
         print("orderData Changed");
 
@@ -540,7 +530,6 @@ class ChatMessageWithSocketController extends GetxController
     getChatList();
     socketReconnect();
     initTask(AppFirebaseService().orderData.value);
-
   }
 
   navigateToOtherScreen() async {
@@ -1495,11 +1484,8 @@ class ChatMessageWithSocketController extends GetxController
       Get.put(CallChatHistoryRepository());
 
   getChatList() async {
-
     update();
     try {
-
-
       var userId = int.parse(AppFirebaseService().orderData.value["userId"]);
       var astroId = int.parse(AppFirebaseService().orderData.value["astroId"]);
 

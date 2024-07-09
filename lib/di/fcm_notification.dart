@@ -11,9 +11,9 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 import '../common/common_functions.dart';
 import '../model/chat/req_common_chat_model.dart';
 import '../model/chat/res_common_chat_success.dart';
@@ -72,7 +72,7 @@ Future<void> firebaseMessagingConfig(BuildContext buildContext) async {
   });
   Future<void> showNotification() async {
     const AndroidNotificationDetails androidPlatformChannelSpecifics =
-    AndroidNotificationDetails(
+        AndroidNotificationDetails(
       'your channel id',
       'your channel name',
       importance: Importance.max,
@@ -80,7 +80,7 @@ Future<void> firebaseMessagingConfig(BuildContext buildContext) async {
       showWhen: false,
     );
     const NotificationDetails platformChannelSpecifics =
-    NotificationDetails(android: androidPlatformChannelSpecifics);
+        NotificationDetails(android: androidPlatformChannelSpecifics);
     await flutterLocalNotificationsPlugin.show(
       0,
       'Test Notification',
@@ -89,9 +89,10 @@ Future<void> firebaseMessagingConfig(BuildContext buildContext) async {
       payload: 'item x',
     );
   }
+
   FirebaseMessaging.onMessageOpenedApp.listen((message) {
     AppFirebaseService().payload = message.data;
-     if (message.notification != null) {
+    if (message.notification != null) {
       debugPrint("Notification received : 2");
       checkNotification(isFromNotification: true);
     }

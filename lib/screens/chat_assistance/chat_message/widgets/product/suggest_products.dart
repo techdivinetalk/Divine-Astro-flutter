@@ -1,6 +1,3 @@
-import 'dart:io';
-
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/screens/puja/widget/multiple_image_view.dart';
 import 'package:flutter/material.dart';
@@ -10,12 +7,12 @@ import 'package:get/get.dart';
 
 import '../../../../../common/appbar.dart';
 import '../../../../../common/colors.dart';
+import '../../../../../common/custom_progress_dialog.dart';
 import '../../../../../common/custom_text_field.dart';
 import '../../../../../common/routes.dart';
 import '../../../../../gen/assets.gen.dart';
 import '../../../../../model/shop_model_response.dart';
 import '../../../../../repository/shop_repository.dart';
-import '../../../../../utils/load_image.dart';
 import 'suggestProducts_controller.dart';
 
 class SuggestProducts extends GetView<SuggestProductController> {
@@ -66,68 +63,75 @@ class SuggestProducts extends GetView<SuggestProductController> {
                   child: Padding(
                     padding:
                         EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
-                    child: controller.shopList.isEmpty
-                        ? Center(
-                            child:
-                                SvgPicture.asset('assets/svg/Group 129525.svg'))
-                        : GridView.builder(
-                            itemCount: controller.searchShopList.isNotEmpty
-                                ? controller.searchShopList.length
-                                : controller.shopList.length,
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                                    crossAxisCount: 3,
-                                    crossAxisSpacing: 25.h,
-                                    childAspectRatio: 0.6,
-                                    mainAxisSpacing: 20.h),
-                            itemBuilder: (BuildContext context, int index) {
-                              Shop item = (controller.searchShopList.isNotEmpty
-                                  ? controller.searchShopList
-                                  : controller.shopList)[index];
-                              print(controller.imageUrl +
-                                  item.shopImage.toString());
-                              print("shop image");
-                              return InkWell(
-                                onTap: () async {
-                                  print(item.id);
-                                  print("item.iditem.iditem.iditem.id");
-                                  if (item.id == 0) {
-                                    Get.toNamed(RouteName.poojaDharamMainScreen,
-                                        arguments: {
-                                          "customerId":
-                                              controller.customerId.value,
-                                        });
-                                  } else {
-                                    Get.toNamed(
-                                        RouteName.chatAssistProductSubPage,
-                                        arguments: {
-                                          "shodId": item.id,
-                                          "productName": item.shopName,
-                                          "customerId":
-                                              controller.customerId.value,
-                                        });
-                                  }
-                                },
-                                child: Container(
-                                  width: 300,
-                                  decoration: BoxDecoration(
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.2),
-                                        blurRadius: 3.0,
-                                        offset: const Offset(0.0, 3.0),
+                    child: controller.isLoading.value == true
+                        ? const Center(
+                            child: LoadingWidget(),
+                          )
+                        : controller.shopList.isEmpty
+                            ? Center(
+                                child: SvgPicture.asset(
+                                    'assets/svg/Group 129525.svg'))
+                            : GridView.builder(
+                                itemCount: controller.searchShopList.isNotEmpty
+                                    ? controller.searchShopList.length
+                                    : controller.shopList.length,
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 3,
+                                        crossAxisSpacing: 25.h,
+                                        childAspectRatio: 0.6,
+                                        mainAxisSpacing: 20.h),
+                                itemBuilder: (BuildContext context, int index) {
+                                  Shop item =
+                                      (controller.searchShopList.isNotEmpty
+                                          ? controller.searchShopList
+                                          : controller.shopList)[index];
+                                  print(controller.imageUrl +
+                                      item.shopImage.toString());
+                                  print("shop image");
+                                  return InkWell(
+                                    onTap: () async {
+                                      print(item.id);
+                                      print("item.iditem.iditem.iditem.id");
+                                      if (item.id == 0) {
+                                        Get.toNamed(
+                                            RouteName.poojaDharamMainScreen,
+                                            arguments: {
+                                              "customerId":
+                                                  controller.customerId.value,
+                                            });
+                                      } else {
+                                        Get.toNamed(
+                                            RouteName.chatAssistProductSubPage,
+                                            arguments: {
+                                              "shodId": item.id,
+                                              "productName": item.shopName,
+                                              "customerId":
+                                                  controller.customerId.value,
+                                            });
+                                      }
+                                    },
+                                    child: Container(
+                                      width: 300,
+                                      decoration: BoxDecoration(
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                Colors.black.withOpacity(0.2),
+                                            blurRadius: 3.0,
+                                            offset: const Offset(0.0, 3.0),
+                                          ),
+                                        ],
+                                        color: Colors.white,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(20),
+                                        ),
                                       ),
-                                    ],
-                                    color: Colors.white,
-                                    borderRadius: const BorderRadius.all(
-                                      Radius.circular(20),
-                                    ),
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
-                                    children: [
-                                      /*Center(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          /*Center(
                                         child: ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(20),
@@ -147,69 +151,75 @@ class SuggestProducts extends GetView<SuggestProductController> {
                                           ),
                                         ),
                                       ),*/
-                                      ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(12.r),
-                                          child: MultipleTypeImageView(
-                                            // height: 120,
+                                          ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12.r),
+                                              child: MultipleTypeImageView(
+                                                // height: 120,
+                                                width: double.infinity,
+                                                imageUrlData: item.id == 0
+                                                    ? item.shopImage
+                                                    : "${controller.imageUrl}/${item.shopImage}",
+                                                onTapOfLottie: (p0) async {
+                                                  if (item.id == 0) {
+                                                    Get.toNamed(
+                                                        RouteName
+                                                            .poojaDharamMainScreen,
+                                                        arguments: {
+                                                          "customerId":
+                                                              controller
+                                                                  .customerId
+                                                                  .value,
+                                                        });
+                                                  }
+                                                },
+                                              )),
+                                          SizedBox(height: 8.h),
+                                          CustomText(
+                                            item.shopName ?? "",
+                                            textAlign: TextAlign.center,
+                                            maxLines: item.shopName != null &&
+                                                    item.shopName!
+                                                        .contains('\n')
+                                                ? 1
+                                                : 2,
+                                            fontWeight: FontWeight.w600,
+                                            fontColor: appColors.darkBlue,
+                                            fontSize: 11.sp,
+                                          ),
+                                          const Expanded(child: SizedBox()),
+                                          Container(
                                             width: double.infinity,
-                                            imageUrlData: item.id == 0
-                                                ? item.shopImage
-                                                : "${controller.imageUrl}/${item.shopImage}",
-                                            onTapOfLottie: (p0) async {
-                                              if (item.id == 0) {
-                                                Get.toNamed(
-                                                    RouteName
-                                                        .poojaDharamMainScreen,
-                                                    arguments: {
-                                                      "customerId": controller
-                                                          .customerId.value,
-                                                    });
-                                              }
-                                            },
-                                          )),
-                                      SizedBox(height: 8.h),
-                                      CustomText(
-                                        item.shopName ?? "",
-                                        textAlign: TextAlign.center,
-                                        maxLines: item.shopName != null &&
-                                                item.shopName!.contains('\n')
-                                            ? 1
-                                            : 2,
-                                        fontWeight: FontWeight.w600,
-                                        fontColor: appColors.darkBlue,
-                                        fontSize: 11.sp,
-                                      ),
-                                      const Expanded(child: SizedBox()),
-                                      Container(
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                            color: appColors.brown,
-                                            borderRadius:
-                                                const BorderRadius.only(
-                                              bottomLeft: Radius.circular(20),
-                                              bottomRight: Radius.circular(20),
-                                            )),
-                                        child: Padding(
-                                          padding: const EdgeInsets.all(8.0),
-                                          child: Center(
-                                            child: Text(
-                                              "Explore Now",
-                                              textAlign: TextAlign.center,
-                                              style: TextStyle(
-                                                fontWeight: FontWeight.w600,
-                                                fontSize: 10.sp,
-                                                color: appColors.white,
+                                            decoration: BoxDecoration(
+                                                color: appColors.brown,
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(20),
+                                                  bottomRight:
+                                                      Radius.circular(20),
+                                                )),
+                                            child: Padding(
+                                              padding:
+                                                  const EdgeInsets.all(8.0),
+                                              child: Center(
+                                                child: Text(
+                                                  "Explore Now",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                    fontWeight: FontWeight.w600,
+                                                    fontSize: 10.sp,
+                                                    color: appColors.white,
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                ),
-                              );
-                            }),
+                                    ),
+                                  );
+                                }),
                   ),
                 ),
               ],
