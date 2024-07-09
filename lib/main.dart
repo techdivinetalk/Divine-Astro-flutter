@@ -6,6 +6,7 @@ import 'package:camera/camera.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
+import 'package:divine_astrologer/di/notification_two.dart';
 import 'package:divine_astrologer/firebase_options.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
@@ -56,10 +57,13 @@ late List<CameraDescription>? cameras;
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print('Handling a background message: ${message.messageId}');
+  if (message.data["type"] == "2") {
+    // showSecondNotification(message.notification?.title ?? '',
+    // message.notification?.body ?? '', message.data);
+  }
 }
 
 Future<void> main() async {
-  Get.put(MessageController());
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
@@ -408,8 +412,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     //  showSecondNotification("title", "body", AppFirebaseService().payload);
     return AppTheme(
       child: ScreenUtilInit(
-          designSize: Size(MediaQuery.sizeOf(context).width,
-              MediaQuery.sizeOf(context).height),
+          designSize: const Size(411, 736), // Use your design's dimensions here
+          minTextAdapt: true, // Ensure text adapts even on smaller screens
+          splitScreenMode: true, // Ensure split screen is handled properly
           builder: (context, child) {
             return OverlaySupport.global(
               child: MediaQuery(

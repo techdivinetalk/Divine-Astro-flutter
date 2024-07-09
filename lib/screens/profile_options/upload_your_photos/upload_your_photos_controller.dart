@@ -118,7 +118,7 @@ class UploadYourPhotosController extends GetxController {
         if (imageUpload.success && imageUpload.statusCode == 200) {
           isLoading.value = false;
           Get.back();
-          divineSnackBar(data: "Image uploaded successfully");
+          divineSnackBar(data: "Image Under Review");
           debugPrint("Uploaded Url : $response");
         }
       } catch (err) {

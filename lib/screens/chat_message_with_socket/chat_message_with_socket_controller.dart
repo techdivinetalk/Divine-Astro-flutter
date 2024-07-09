@@ -493,6 +493,7 @@ class ChatMessageWithSocketController extends GetxController
     messageController.addListener(_onMessageChanged);
     // getMessageTemplates();
     // isAstroJoinedChat();
+    socketReconnect();
     getMessageTemplatesLocally();
     checkIsCustomerJoinedPrivateChat();
     typingListenerSocket();
@@ -502,10 +503,10 @@ class ChatMessageWithSocketController extends GetxController
     // leavePrivateChat();
     customerLeavedPrivateChatListenerSocket();
     astrologerJoinedPrivateChat();
-    socket.startAstroCustumerSocketEvent(
-      orderId: AppFirebaseService().orderData.value["orderId"].toString(),
-      userId: AppFirebaseService().orderData.value["userId"],
-    );
+    // socket.startAstroCustumerSocketEvent(
+    //   orderId: AppFirebaseService().orderData.value["orderId"].toString(),
+    //   userId: AppFirebaseService().orderData.value["userId"],
+    // );
 
     sendReadMessageStatus = true;
 
@@ -528,7 +529,6 @@ class ChatMessageWithSocketController extends GetxController
     userData = preferenceService.getUserDetail();
     userDataKey = "chat_${currentUserId.value}";
     getChatList();
-    socketReconnect();
     initTask(AppFirebaseService().orderData.value);
   }
 

@@ -25,6 +25,7 @@ import "package:get/get.dart";
 import "package:get/get_connect/http/src/status/http_status.dart";
 import "package:http/http.dart" as http;
 
+import "../../common/common_functions.dart";
 import "../../repository/home_page_repository.dart";
 
 class LiveDharamController extends GetxController {
@@ -123,6 +124,7 @@ class LiveDharamController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    tarotCardInit();
     initData();
   }
 
@@ -663,6 +665,9 @@ class LiveDharamController extends GetxController {
       final int offerId = getOfferId();
       String orderId = param["order_id"];
       if (orderId == '0' || orderId == '') {
+        isEndCallLoading.value = false;
+        divineSnackBar(
+            data: 'Order Id: ${orderId} is not valid call not disconnected');
         return Future<void>.value();
       }
       param.addAll(<String, dynamic>{"offer_id": offerId});
@@ -862,7 +867,7 @@ class LiveDharamController extends GetxController {
           await HomePageRepository().getTarotCardData();
       deckCardModelList = [...newTarotCardModel.data ?? []];
       for (var element in deckCardModelList) {
-        element.image = "${pref.getAmazonUrl()}${element.image}";
+        element.image = "${pref.getAmazonUrl()}/${element.image}";
       }
       await Future.delayed(const Duration(seconds: 1));
       retryCount++;

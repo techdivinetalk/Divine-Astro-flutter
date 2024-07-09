@@ -67,7 +67,7 @@ class CommonInfoSheet extends StatelessWidget {
                         arguments: argument,
                         parameters: {"from_list": "0"});
                   }
-                  Fluttertoast.showToast(msg: "No info for now!");
+                  // Fluttertoast.showToast(msg: "No info for now!");
                 },
                 child: Container(
                   height: 60,

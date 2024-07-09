@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:divine_astrologer/model/performance_response.dart';
 import 'package:divine_astrologer/utils/utils.dart';
@@ -43,9 +44,12 @@ class PerformanceRepository extends ApiProvider {
 
   Future<PerformanceResponse> getPerformance(Map<String, dynamic> param) async {
     try {
-      final response = await post(getPerformanceData,
-          body: jsonEncode(param).toString(),
-          headers: await getJsonHeaderURL());
+      final response = await post(getPerformanceData);
+          // body: jsonEncode(param).toString(),
+          // headers: await getJsonHeaderURL());
+      print(response);
+      print('😂😂😂😂😂😂😂😂');
+      print(response.statusCode);
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
       } else if (response.statusCode == HttpStatus.badRequest) {
@@ -59,6 +63,7 @@ class PerformanceRepository extends ApiProvider {
         } else {
           final performanceResponse =
           PerformanceResponse.fromJson(json.decode(response.body));
+          print('😂😂😂😂😂😂😂😂');
           return performanceResponse;
         }
       } else {
