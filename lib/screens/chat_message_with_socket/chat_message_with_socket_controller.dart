@@ -365,7 +365,7 @@ class ChatMessageWithSocketController extends GetxController
     Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
     var chatMessage = ChatMessage.fromOfflineJson(values);
     int index = chatMessages.indexWhere((element) {
-      return element.id == chatMessage.id;
+      return element.time == chatMessage.time;
     });
     print("Message.fromOffli-1 ${index}");
     if (index == -1 || index == AppFirebaseService().orderData.value['userId'] || index == AppFirebaseService().orderData.value['astroId']) {
