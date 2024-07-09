@@ -430,74 +430,76 @@ class ChatMessageWithSocketController extends GetxController
     //stateHandling();
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) async {
-      if(fireChat.value == 1){
-        return;
-      }
-      if (event.name == 'messageReceive') {
-        if (!chatIdList.contains(event.data!["chatId"].toString())) {
-          chatIdList.add(event.data!["chatId"].toString());
-          if (event.data!["msg_type"].toString() == "0") {
-            final String time =
-                "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-            ChatMessage chatMessage = ChatMessage(
-              orderId: AppFirebaseService().orderData.value["orderId"],
-              id: int.parse(time),
-              message: event.data!["message"],
-              // createdAt: DateTime.now().toIso8601String(),
-              receiverId: int.parse(
-                  AppFirebaseService().orderData.value["userId"].toString()),
-              senderId: preference.getUserDetail()!.id,
-              time: int.parse(time),
-              msgSendBy: "0",
-              awsUrl: event.data!["message"],
-              base64Image: null,
-              downloadedPath: null,
-              msgType: MsgType.text,
-              kundliId: null,
-              productPrice: null,
-              type: 0,
-              userType: "customer",
-            );
-            chatMessages.add(chatMessage);
-            scrollToBottomFunc();
-          } else {
-            getChatList();
-          }
-          updateReadMessage();
-        }
-      } else if (event.name == 'deliveredMsg') {
-        print('deliveredData-Key:${event.data}');
-        var response = event.data?['deliveredMsgList'];
-        print('deliveredData Outer Key:${response.toString()}');
-        response.forEach((key, value) {
-          print('deliveredRes:$key - $value');
-          value.forEach((innerKey, innerValue) {
-            print('deliveredRes1:$innerKey - $innerValue');
-            var index = chatMessages
-                .indexWhere((element) => innerKey == element.id.toString());
-            if (index >= 0) {
-              chatMessages[index].type = 1;
-              chatMessages[index].seenStatus = 1;
-              chatMessages.refresh();
+      if(fireChat.value == 0) {
+        if (event.name == 'messageReceive') {
+          if (!chatIdList.contains(event.data!["chatId"].toString())) {
+            chatIdList.add(event.data!["chatId"].toString());
+            if (event.data!["msg_type"].toString() == "0") {
+              final String time =
+                  "${DateTime
+                  .now()
+                  .millisecondsSinceEpoch ~/ 1000}";
+              ChatMessage chatMessage = ChatMessage(
+                orderId: AppFirebaseService().orderData.value["orderId"],
+                id: int.parse(time),
+                message: event.data!["message"],
+                // createdAt: DateTime.now().toIso8601String(),
+                receiverId: int.parse(
+                    AppFirebaseService().orderData.value["userId"].toString()),
+                senderId: preference.getUserDetail()!.id,
+                time: int.parse(time),
+                msgSendBy: "0",
+                awsUrl: event.data!["message"],
+                base64Image: null,
+                downloadedPath: null,
+                msgType: MsgType.text,
+                kundliId: null,
+                productPrice: null,
+                type: 0,
+                userType: "customer",
+              );
+              chatMessages.add(chatMessage);
+              scrollToBottomFunc();
+            } else {
+              getChatList();
             }
+            updateReadMessage();
+          }
+        } else if (event.name == 'deliveredMsg') {
+          print('deliveredData-Key:${event.data}');
+          var response = event.data?['deliveredMsgList'];
+          print('deliveredData Outer Key:${response.toString()}');
+          response.forEach((key, value) {
+            print('deliveredRes:$key - $value');
+            value.forEach((innerKey, innerValue) {
+              print('deliveredRes1:$innerKey - $innerValue');
+              var index = chatMessages
+                  .indexWhere((element) => innerKey == element.id.toString());
+              if (index >= 0) {
+                chatMessages[index].type = 1;
+                chatMessages[index].seenStatus = 1;
+                chatMessages.refresh();
+              }
+            });
           });
-        });
 
-        int userId = 0;
-        String userIdString =
-            AppFirebaseService().orderData.value["userId"].toString();
-        print('User ID String: $userIdString');
-        if (int.tryParse(userIdString) != null) {
-          userId = int.parse(userIdString);
-        } else {
-          print('Invalid userIdString: $userIdString');
-          //throw message to user
+          int userId = 0;
+          String userIdString =
+          AppFirebaseService().orderData.value["userId"].toString();
+          print('User ID String: $userIdString');
+          if (int.tryParse(userIdString) != null) {
+            userId = int.parse(userIdString);
+          } else {
+            print('Invalid userIdString: $userIdString');
+            //throw message to user
+          }
+
+          FirebaseDatabase.instance
+              .ref(
+              "astrologer/${preferenceService.getUserDetail()!
+                  .id}/realTime/deliveredMsg/${userId}")
+              .remove();
         }
-
-        FirebaseDatabase.instance
-            .ref(
-                "astrologer/${preferenceService.getUserDetail()!.id}/realTime/deliveredMsg/${userId}")
-            .remove();
       }
     });
     messageController.addListener(_onMessageChanged);
