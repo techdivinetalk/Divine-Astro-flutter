@@ -686,12 +686,16 @@ class MessageView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Flexible(
-                child: Text(
-                  "${customerName.capitalizeFirst} have sent ${chatMessage.message!.contains("https") ? "" : chatMessage.message ?? ""}",
-                  style: const TextStyle(
-                      color: Colors.red,
-                      fontFamily: FontFamily.metropolis,
-                      fontWeight: FontWeight.w500),
+                child: SizedBox(
+                  width: ScreenUtil().screenWidth * 0.6,
+                  child: Text(
+                    "${customerName.capitalizeFirst} have sent ${chatMessage.message!.contains("https") ? "" : chatMessage.message ?? ""}",
+                    maxLines: 2,
+                    style: const TextStyle(
+                        color: Colors.red,
+                        fontFamily: FontFamily.metropolis,
+                        fontWeight: FontWeight.w500),
+                  ),
                 ),
               ),
               SizedBox(width: 10.h),
