@@ -399,7 +399,7 @@ class MessageView extends StatelessWidget {
                         );
                       },
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
               const SizedBox(width: 5),
               Container(
                 padding:
@@ -408,12 +408,12 @@ class MessageView extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: Border.all(
                       color:
-                          yourMessage ? Color(0xffFFEEF0) : Color(0xffDCDCDC)),
-                  color: yourMessage ? Color(0xffFFF9FA) : appColors.white,
+                          yourMessage ? const Color(0xffFFEEF0) : const Color(0xffDCDCDC)),
+                  color: yourMessage ? const Color(0xffFFF9FA) : appColors.white,
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
+                    bottomLeft: const Radius.circular(10),
                     topLeft: Radius.circular(yourMessage ? 10 : 0),
-                    bottomRight: Radius.circular(10),
+                    bottomRight: const Radius.circular(10),
                     topRight: Radius.circular(!yourMessage ? 10 : 0),
                   ),
                 ),

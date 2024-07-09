@@ -146,7 +146,7 @@ class ChatMessage {
     this.getCustomProduct,
   });
 
-  ChatMessage.fromOfflineJson(Map<String, dynamic> json) {
+  ChatMessage.fromOfflineJson(Map<dynamic, dynamic> json) {
     id = json['chatMessageId'];
     orderId = json['order_id'];
     memberId = json['member_id'];

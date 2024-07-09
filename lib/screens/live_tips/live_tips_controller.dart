@@ -76,9 +76,7 @@ class LiveTipsController extends GetxController {
   @override
   void dispose() {
     streamController.close();
-    if (controller != null) {
-      controller!.dispose();
-    }
+
     super.dispose();
   }
 
@@ -137,6 +135,9 @@ class LiveTipsController extends GetxController {
       }).then((value) async {
         print("successfully added");
         LiveGlobalSingleton().isInLiveScreen = true;
+        if (controller != null) {
+          controller!.dispose();
+        }
         await Get.offNamed(RouteName.liveDharamScreen, arguments: userId);
         LiveGlobalSingleton().isInLiveScreen = false;
       });
