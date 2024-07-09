@@ -430,6 +430,9 @@ class ChatMessageWithSocketController extends GetxController
     //stateHandling();
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) async {
+      if(fireChat.value == 1){
+        return;
+      }
       if (event.name == 'messageReceive') {
         if (!chatIdList.contains(event.data!["chatId"].toString())) {
           chatIdList.add(event.data!["chatId"].toString());
