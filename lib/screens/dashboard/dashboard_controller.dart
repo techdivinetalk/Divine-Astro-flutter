@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
-import 'package:awesome_notifications/awesome_notifications.dart';
+// import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
@@ -1096,16 +1096,16 @@ class DashboardController extends GetxController
     isChecked.value = !isChecked.value;
   }
 
-  notificationTwoInit() async {
-    ReceivedAction? receivedAction = await AwesomeNotifications()
-        .getInitialNotificationAction(removeFromActionEvents: false);
-    Map<String, String?>? payload = receivedAction?.payload;
+  // notificationTwoInit() async {
+  //   ReceivedAction? receivedAction = await AwesomeNotifications()
+  //       .getInitialNotificationAction(removeFromActionEvents: false);
+  //   Map<String, String?>? payload = receivedAction?.payload;
 
-    if (payload != null && payload["type"] == "2") {
-      furtherProcedure(
-        orderId: payload["order_id"],
-        queueId: payload["queue_id"],
-      );
-    }
-  }
+  //   if (payload != null && payload["type"] == "2") {
+  //     furtherProcedure(
+  //       orderId: payload["order_id"],
+  //       queueId: payload["queue_id"],
+  //     );
+  //   }
+  // }
 }
