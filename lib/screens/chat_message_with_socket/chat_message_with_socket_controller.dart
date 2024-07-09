@@ -43,8 +43,10 @@ import "package:path_provider/path_provider.dart";
 import "package:permission_handler/permission_handler.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:socket_io_client/socket_io_client.dart";
+import "package:svgaplayer_flutter/svgaplayer_flutter.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 
+import "../../cache/custom_cache_manager.dart";
 import "../../common/MiddleWare.dart";
 import "../../common/app_exception.dart";
 import "../../common/ask_for_gift_bottom_sheet.dart";
@@ -71,10 +73,8 @@ import "../chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/get_s
 import "../live_dharam/gifts_singleton.dart";
 
 class ChatMessageWithSocketController extends GetxController
-    with WidgetsBindingObserver {
-
-
-
+    with WidgetsBindingObserver, GetTickerProviderStateMixin {
+  late SVGAAnimationController svgController;
 
   var pref = Get.find<SharedPreferenceService>();
   final UserRepository userRepository = Get.find<UserRepository>();
@@ -132,9 +132,6 @@ class ChatMessageWithSocketController extends GetxController
   Rx<bool> isCardBotOpen = false.obs;
   bool isGalleryOpen = false;
 
-
-
-
   void startTimer() {
     int _start = 5;
     if (_timer2 != null) {
@@ -180,8 +177,6 @@ class ChatMessageWithSocketController extends GetxController
   void dispose() {
     // TODO: implement dispose
 
-
-
     _appLinkingStreamSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     ZegoGiftPlayer().clear();
@@ -189,6 +184,7 @@ class ChatMessageWithSocketController extends GetxController
     chatTimer?.cancel();
     print("WentBack dispose-5");
     extraTimer?.cancel();
+    svgController.dispose();
     super.dispose();
   }
 
@@ -372,6 +368,13 @@ class ChatMessageWithSocketController extends GetxController
   @override
   void onInit() {
     super.onInit();
+    svgController = SVGAAnimationController(vsync: this);
+    svgController.addListener(() {
+      if (svgController.isCompleted) {
+        svgController.reset();
+        svgController.stop();
+      }
+    });
     //print("AppFirebaseService().watcher.nameStream");
     //print(AppFirebaseService().watcher.currentName);
     if (kDebugMode) {
@@ -423,7 +426,7 @@ class ChatMessageWithSocketController extends GetxController
     AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
       if (p0["status"] == null || p0["astroId"] == null) {
         backFunction();
-       // AppFirebaseService().database.child("order/${p0["orderId"]}").remove();
+        // AppFirebaseService().database.child("order/${p0["orderId"]}").remove();
       } else {
         print("orderData Changed");
 
@@ -540,7 +543,6 @@ class ChatMessageWithSocketController extends GetxController
     getChatList();
     socketReconnect();
     initTask(AppFirebaseService().orderData.value);
-
   }
 
   navigateToOtherScreen() async {
@@ -910,7 +912,7 @@ class ChatMessageWithSocketController extends GetxController
     });
   }
 
-  void playAnimation({required String id}) {
+  void playAnimation({required String id}) async {
     print("playAnimation string id $id");
     List<GiftData> data = GiftsSingleton().gifts.data?.where(
           (element) {
@@ -921,14 +923,20 @@ class ChatMessageWithSocketController extends GetxController
     if (data.isNotEmpty) {
       print("playAnimation string id 2111 $id");
       print("data.first.animation ${data.first.animation}");
-      print("GiftPlayerSource.url ${GiftPlayerSource.url}");
-      ZegoGiftPlayer().play(
-        Get.context!,
-        GiftPlayerData(
-          GiftPlayerSource.url,
-          data.first.animation,
-        ),
-      );
+      // print("GiftPlayerSource.url ${GiftPlayerSource.url}");
+      // ZegoGiftPlayer().play(
+      //   Get.context!,
+      //   GiftPlayerData(
+      //     GiftPlayerSource.url,
+      //     data.first.animation,
+      //   ),
+      // );
+      const SVGAParser parser = SVGAParser();
+      File file =
+          await CustomCacheManager().getFile(data.first.animation ?? '');
+      var videoItem = await parser.decodeFromBuffer(file.readAsBytesSync());
+      svgController.videoItem = videoItem;
+      svgController.forward();
     } else {
       print("playAnimation string id 3333 $id");
     }
@@ -1495,11 +1503,8 @@ class ChatMessageWithSocketController extends GetxController
       Get.put(CallChatHistoryRepository());
 
   getChatList() async {
-
     update();
     try {
-
-
       var userId = int.parse(AppFirebaseService().orderData.value["userId"]);
       var astroId = int.parse(AppFirebaseService().orderData.value["astroId"]);
 
