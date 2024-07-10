@@ -62,6 +62,7 @@ import "../../repository/chat_repository.dart";
 import "../../repository/notice_repository.dart";
 import "../../tarotCard/FlutterCarousel.dart";
 import "../../utils/enum.dart";
+import "../../utils/is_bad_word.dart";
 import "../chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/get_single_pooja_response.dart";
 import "../live_dharam/gifts_singleton.dart";
 
@@ -368,6 +369,16 @@ class ChatMessageWithSocketController extends GetxController
   Future<void> receiveMessage(DataSnapshot snapshot) async {
     Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
     var chatMessage = ChatMessage.fromOfflineJson(values);
+    if(!isBadWord(chatMessage.title ?? "")){
+      int index = chatMessages.indexWhere((element) {
+        return element.time == chatMessage.time;
+      });
+      if (index == -1) {
+        chatMessages.add(chatMessage);
+        chatMessages.refresh();
+        scrollToBottomFunc();
+      }
+    }
     int index = chatMessages.indexWhere((element) {
       return element.time == chatMessage.time;
     });
