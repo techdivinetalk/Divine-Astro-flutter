@@ -399,7 +399,7 @@ class MessageView extends StatelessWidget {
                         );
                       },
                     )
-                  : SizedBox(),
+                  : const SizedBox(),
               const SizedBox(width: 5),
               Container(
                 padding:
@@ -408,12 +408,12 @@ class MessageView extends StatelessWidget {
                 decoration: BoxDecoration(
                   border: Border.all(
                       color:
-                          yourMessage ? Color(0xffFFEEF0) : Color(0xffDCDCDC)),
-                  color: yourMessage ? Color(0xffFFF9FA) : appColors.white,
+                          yourMessage ? const Color(0xffFFEEF0) : const Color(0xffDCDCDC)),
+                  color: yourMessage ? const Color(0xffFFF9FA) : appColors.white,
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
+                    bottomLeft: const Radius.circular(10),
                     topLeft: Radius.circular(yourMessage ? 10 : 0),
-                    bottomRight: Radius.circular(10),
+                    bottomRight: const Radius.circular(10),
                     topRight: Radius.circular(!yourMessage ? 10 : 0),
                   ),
                 ),
@@ -686,12 +686,16 @@ class MessageView extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
               Flexible(
-                child: Text(
-                  "${customerName.capitalizeFirst} have sent ${chatMessage.message!.contains("https") ? "" : chatMessage.message ?? ""}",
-                  style: const TextStyle(
-                      color: Colors.red,
-                      fontFamily: FontFamily.metropolis,
-                      fontWeight: FontWeight.w500),
+                child: SizedBox(
+                  width: ScreenUtil().screenWidth * 0.6,
+                  child: Text(
+                    "${customerName.capitalizeFirst} have sent ${chatMessage.message!.contains("https") ? "" : chatMessage.message ?? ""}",
+                    maxLines: 2,
+                    style: const TextStyle(
+                        color: Colors.red,
+                        fontFamily: FontFamily.metropolis,
+                        fontWeight: FontWeight.w500),
+                  ),
                 ),
               ),
               SizedBox(width: 10.h),
