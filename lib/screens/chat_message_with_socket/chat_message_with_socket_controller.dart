@@ -369,7 +369,7 @@ class ChatMessageWithSocketController extends GetxController
   Future<void> receiveMessage(DataSnapshot snapshot) async {
     Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
     var chatMessage = ChatMessage.fromOfflineJson(values);
-    if(!isBadWord(chatMessage.title ?? "")){
+    if(!isBadWord(chatMessage.message ?? "")){
       int index = chatMessages.indexWhere((element) {
         return element.time == chatMessage.time;
       });
