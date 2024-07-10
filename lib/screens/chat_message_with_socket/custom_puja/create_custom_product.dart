@@ -1,28 +1,26 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
-import 'package:divine_astrologer/common/SvgIconButton.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
-import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/add_puja/add_puja_controller.dart';
 import 'package:divine_astrologer/screens/chat_assistance/chat_message/chat_assistant_message_controller.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/chat_message_with_socket_controller.dart';
-import 'package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_list_model.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_model.dart';
 import 'package:divine_astrologer/screens/puja/widget/remedy_text_filed.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -225,7 +223,7 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
                       children: [
                         CustomButton(
                           onTap: () async {
-                            Get.back();
+                            // Get.back();
                             await getImage(true);
                           },
                           child: Column(
@@ -242,7 +240,7 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
                         SizedBox(width: 64.w),
                         CustomButton(
                           onTap: () async {
-                            Get.back();
+                            // Get.back();
                             await getImage(false);
                           },
                           child: Column(
@@ -342,15 +340,16 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
   }
 
   Future<void> uploadImage(File imageFile) async {
-    var uri = Uri.parse(
-        "${ApiProvider.imageBaseUrl}uploadImage");
- 
+    log("uploading images 1");
+    var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+
     var request = http.MultipartRequest('POST', uri);
 
     request.headers.addAll({
       'Content-type': 'application/json',
       'Accept': 'application/json',
     });
+    log("uploading images 2");
 
     // Attach the image file to the request
     request.files.add(await http.MultipartFile.fromPath(
@@ -360,6 +359,7 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
     request.fields.addAll({"module_name": "pooja"});
 
     var response = await request.send();
+    log("uploading images 3");
 
     // Listen for the response
 
@@ -367,12 +367,23 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
       print(jsonDecode(value)["data"]);
       productApiPath = jsonDecode(value)["data"]["path"];
       productImageUrl = jsonDecode(value)["data"]["full_path"];
+      log("uploading images 4");
+      log("uploading images 5 - $productApiPath");
+
       setState(() {});
       print("valuevaluevaluevaluevaluevaluevalue");
     });
 
     if (response.statusCode == 200) {
       print("Image uploaded successfully.");
+      log("uploading images 6 - $productApiPath");
+
+      // Get.bottomSheet(
+      //     CreateCustomProductSheet(
+      //       controller: widget.controller,
+      //       chatMessageController: widget.chatMessageController,
+      //     ),
+      //     isScrollControlled: true);
       // if (image.isNotEmpty) {
       //   poojaImageUrl = image;
       // }
@@ -415,12 +426,15 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
             ),
           );
         } else if (widget.chatMessageController != null) {
-          widget.chatMessageController!.sendMsg(MsgType.customProduct, {
-            'title': productName.text,
-            'image': productApiPath.toString(),
-            'product_price': productPrice.text.toString(),
-            'product_id': customProductData!.id.toString(),
-          },false);
+          widget.chatMessageController!.sendMsg(
+              MsgType.customProduct,
+              {
+                'title': productName.text,
+                'image': productApiPath.toString(),
+                'product_price': productPrice.text.toString(),
+                'product_id': customProductData!.id.toString(),
+              },
+              false);
         }
 
         Get.back();
