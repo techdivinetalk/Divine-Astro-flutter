@@ -369,29 +369,24 @@ class ChatMessageWithSocketController extends GetxController
   Future<void> receiveMessage(DataSnapshot snapshot) async {
     Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
     var chatMessage = ChatMessage.fromOfflineJson(values);
+    print("chatMessage.title");
+    print(chatMessage.message);
     if(!isBadWord(chatMessage.message ?? "")){
       int index = chatMessages.indexWhere((element) {
         return element.time == chatMessage.time;
       });
-      if (index == -1) {
+      if (index == -1 || index == AppFirebaseService().orderData.value['userId'] || index == AppFirebaseService().orderData.value['astroId']) {
         chatMessages.add(chatMessage);
         chatMessages.refresh();
         scrollToBottomFunc();
-      }
-    }
-    int index = chatMessages.indexWhere((element) {
-      return element.time == chatMessage.time;
-    });
-    print("Message.fromOffli-1 ${index}");
-    if (index == -1 || index == AppFirebaseService().orderData.value['userId'] || index == AppFirebaseService().orderData.value['astroId']) {
-      chatMessages.add(chatMessage);
-      chatMessages.refresh();
-      scrollToBottomFunc();
-      if (chatMessage.msgType == MsgType.sendgifts) {
-        if (chatMessage.productId != null) {
-          playAnimation(id: chatMessage.productId ?? "");
+        if (chatMessage.msgType == MsgType.sendgifts) {
+          if (chatMessage.productId != null) {
+            playAnimation(id: chatMessage.productId ?? "");
+          }
         }
       }
+    }else{
+      print("BadWordDetected ${chatMessage.message}");
     }
     print("Message.fromOffli2");
     AppFirebaseService()
@@ -1251,14 +1246,19 @@ class ChatMessageWithSocketController extends GetxController
         userType: "astrologer",
       );
     }
-    if (fireChat.value == 1) {
-      firebaseDatabase
-          .ref()
-          .child(
-          "chatMessages/${AppFirebaseService().orderData.value["orderId"]}/$time")
-          .update(
-        newMessage.toOfflineJson(),
-      );
+    if(!isBadWord(newMessage.message ?? "")) {
+      if (fireChat.value == 1) {
+        firebaseDatabase
+            .ref()
+            .child(
+            "chatMessages/${AppFirebaseService().orderData
+                .value["orderId"]}/$time")
+            .update(
+          newMessage.toOfflineJson(),
+        );
+      }
+    }else{
+      print("BadWord detected  ${chatMessages.last.message}");
     }
     print("last message  ${chatMessages.last.message}");
 
