@@ -287,6 +287,74 @@ class ChatMessage {
     data['kundliPlace'] = kundliPlace;
     data['gender'] = gender;
     data['userType'] = userType;
+    data['kundli'] = kundli?.toJson();
+    return data;
+  }
+  Map<String, dynamic> chatToJson() {
+    final Map<String, dynamic> data = <String, dynamic>{};
+    data['chatMessageId'] = id;
+    data['order_id'] = orderId;
+    data['get_pooja'] = getPooja?.toJson();
+    data['get_custom_product'] = getCustomProduct?.toString();
+    data['member_id'] = memberId;
+    data['productPrice'] = productPrice;
+    data['role_id'] = roleId;
+    data['latitude'] = latitude;
+    data['longitude'] = longitude;
+    data['get_product'] = getProduct?.toJson();
+    data['title'] = title;
+    data['customer_id'] = customerId;
+    data['msg_sequence'] = msgSequence;
+    data['msg_type'] = msgTypeValues.reverse[msgType];
+    data['message'] = message;
+    data['multiimage'] = multiImage;
+    data['suggested_remedies_id'] = suggestedId;
+    data['msg_time'] = msgTime;
+    //  data['created_at'] = createdAt;
+    data['updated_at'] = updatedAt;
+    data['msg_send_by'] = msgSendBy;
+    data['shop_id'] = shopId;
+    data['product_id'] = productId;
+    data['is_suspicious'] = isSuspicious;
+    data['is_email_sent'] = isEmailSent;
+    data['kundli_id'] = kundliId;
+    data['seen_status'] = seenStatus;
+    data['base64image'] = base64Image;
+    data['deleted_at'] = deletedAt;
+    data['chat_msg_id'] = chatMsgId;
+    data['is_pooja_product'] = isPoojaProduct == true ? "1" : "0";
+
+    data['astrologer_id'] = astrologerId;
+    data['call_initiate'] = callInitiate;
+    data['exotel_initiate_response'] = exotelInitiateResponse;
+    data['call_started_at'] = callStartedAt;
+    data['call_ended_at'] = callEndedAt;
+    data['call_duration'] = callDuration;
+
+    data['exotel_end_response'] = exotelEndResponse;
+    data['exotel_call_sid'] = exotelCallSid;
+    data['call_status'] = callStatus;
+    data['call_reject_reason'] = callRejectReason;
+    data['call_end'] = callEnd;
+    data['call_recording'] = callRecording;
+    data['order_id'] = orderId;
+
+    data['customer_call_status'] = customerCallStatus;
+    data['member_call_status'] = memberCallStatus;
+    data['api_call_from'] = apiCallFrom;
+    data['receiverId'] = receiverId;
+    data['senderId'] = senderId;
+    data['orderId'] = orderId;
+    data['time'] = time;
+    data['type'] = type;
+    data['awsUrl'] = awsUrl;
+    data['downloadedPath'] = downloadedPath;
+    data['kundliId'] = kundliId;
+    data['kundliName'] = kundliName;
+    data['kundliDateTime'] = kundliDateTime;
+    data['kundliPlace'] = kundliPlace;
+    data['gender'] = gender;
+    data['userType'] = userType;
     data['kundli'] = kundli;
     return data;
   }

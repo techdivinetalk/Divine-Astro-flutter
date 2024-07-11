@@ -376,10 +376,10 @@ class ChatMessageWithSocketController extends GetxController
     print("chatMessage.title");
     print(chatMessage.message);
     if(!isBadWord(chatMessage.message ?? "")){
-      int index = chatMessages.indexWhere((element) {
-        return element.time == chatMessage.time;
-      });
-      if (index == -1 || index == AppFirebaseService().orderData.value['userId'] || index == AppFirebaseService().orderData.value['astroId']) {
+      // int index = chatMessages.indexWhere((element) {
+      //   return element.time == chatMessage.time;
+      // });
+   //   if (index == -1 || index == AppFirebaseService().orderData.value['userId'] || index == AppFirebaseService().orderData.value['astroId']) {
         chatMessages.add(chatMessage);
         chatMessages.refresh();
         scrollToBottomFunc();
@@ -388,7 +388,7 @@ class ChatMessageWithSocketController extends GetxController
             playAnimation(id: chatMessage.productId ?? "");
           }
         }
-      }
+  //    }
     }else{
       print("BadWordDetected ${chatMessage.message}");
     }
@@ -1279,7 +1279,7 @@ class ChatMessageWithSocketController extends GetxController
             "chatMessages/${AppFirebaseService().orderData
                 .value["orderId"]}/$time")
             .update(
-          newMessage.toOfflineJson(),
+          newMessage.chatToJson(),
         );
       }
     }else{
