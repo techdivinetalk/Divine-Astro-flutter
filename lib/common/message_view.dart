@@ -781,7 +781,8 @@ class MessageView extends StatelessWidget {
                                   child: CachedNetworkImage(
                                     imageUrl: chatDetail.message ?? '',
                                     fit: BoxFit.cover,
-                                    height: 200.h,
+                                    height: 200,
+                                    width:200,
                                   ),
                                 ),
                                 Positioned(
@@ -1139,8 +1140,15 @@ class MessageView extends StatelessWidget {
         width: 165,
         height: 220,
         decoration: BoxDecoration(
+          border: Border.all(
+              color:const Color(0xffDCDCDC)),
           color: appColors.white,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(10),
+            topLeft: Radius.circular(0),
+            bottomRight: Radius.circular(10),
+            topRight: Radius.circular(10),
+          ),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,

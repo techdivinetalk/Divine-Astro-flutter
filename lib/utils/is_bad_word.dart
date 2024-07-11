@@ -34,7 +34,12 @@ bool isBadWord(String sentence) {
           'Time taken to check for 10 digit number: ${end.difference(start).inMilliseconds} ms');
       return true;
     }
-
+    if (RegExp(r'\d{5,}').hasMatch(sentence)) {
+      DateTime end = DateTime.now();
+      print(
+          'Time taken to check for more than 5 consecutive digits: ${end.difference(start).inMilliseconds} ms');
+      return true;
+    }
     // Check for email
     if (RegExp(r'[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}')
         .hasMatch(word)) {
