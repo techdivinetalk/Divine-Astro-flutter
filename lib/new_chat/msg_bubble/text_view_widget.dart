@@ -17,6 +17,7 @@ import '../../gen/fonts.gen.dart';
 import '../../screens/home_screen_options/check_kundli/kundli_controller.dart';
 import '../../screens/order_chat_call_feedback/widget/chat_history_widget.dart';
 import '../new_chat_controller.dart';
+import '../widget/common_read_function.dart';
 
 class TextViewWidget extends StatelessWidget {
   final NewChatController? controller;
@@ -180,18 +181,19 @@ class TextViewWidget extends StatelessWidget {
                                 fontFamily: FontFamily.metropolis,
                                 fontWeight: FontWeight.w500),
                           ),
-                          if (yourMessage) SizedBox(width: 8.w),
+                          if (yourMessage) SizedBox(width: 3.w),
                           if (yourMessage)
-                            chatDetail.type == 0
-                                ? Assets.images.icSingleTick.svg()
-                                : chatDetail.type == 1
-                                ? Assets.images.icDoubleTick.svg(
-                                colorFilter: ColorFilter.mode(
-                                    appColors.disabledGrey,
-                                    BlendMode.srcIn))
-                                :chatDetail.type == 3
-                                ? Assets.images.icDoubleTick.svg()
-                                : Assets.images.icSingleTick.svg()
+                            CommonReadWidget(chatDetail: chatDetail),
+   //                          chatDetail.type == 0
+   //                              ? Assets.images.icSingleTick.svg()
+   //                              : chatDetail.type == 1
+   //                              ? Assets.images.icDoubleTick.svg(
+   //                              colorFilter: ColorFilter.mode(
+   //                                  appColors.disabledGrey,
+   //                                  BlendMode.srcIn))
+   //                              :chatDetail.type == 3
+   //                              ? Assets.images.icDoubleTick.svg()
+   //                              : Assets.images.icSingleTick.svg()
                         ],
                       ),
                     ),
@@ -211,3 +213,5 @@ class TextViewWidget extends StatelessWidget {
     return DateFormat('hh:mm a').format(dt);
   }
 }
+
+

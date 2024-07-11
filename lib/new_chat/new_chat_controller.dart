@@ -58,7 +58,7 @@ import '../model/res_product_detail.dart';
 import '../screens/live_page/constant.dart';
 
 class NewChatController extends GetxController
-    with GetTickerProviderStateMixin {
+    with GetTickerProviderStateMixin, WidgetsBindingObserver {
   late SVGAAnimationController svgaController;
   TextEditingController messageController = TextEditingController();
   TextEditingController reportMessageController = TextEditingController();
@@ -79,9 +79,10 @@ class NewChatController extends GetxController
   RxString customerName = "".obs;
   AppSocket appSocket = AppSocket();
   Duration? timeDifference;
-  AppLifecycleState? _state;
-  final List<String> _states = <String>[];
-  late AppLifecycleListener _listener;
+
+  // AppLifecycleState? _state;
+  // final List<String> _states = <String>[];
+  // late AppLifecycleListener _listener;
   StreamSubscription? msgAddSubscription;
   StreamSubscription? msgUpdateSubscription;
   List<ChatMessage> localChatList = <ChatMessage>[];
@@ -129,7 +130,6 @@ class NewChatController extends GetxController
 
         chatMessage.id = int.parse(event.snapshot.key ?? "0");
         chatMessages.insert(0, chatMessage);
-        scrollToBottomFunc();
 
         if (MiddleWare.instance.currentPage == RouteName.newChat) {
           if (chatMessage.animation != null &&
@@ -185,7 +185,7 @@ class NewChatController extends GetxController
         },
       );
     }
-    _state = scheduler.SchedulerBinding.instance.lifecycleState;
+    /*_state = scheduler.SchedulerBinding.instance.lifecycleState;
     _listener = AppLifecycleListener(
       onShow: () {},
       onResume: () {
@@ -225,12 +225,12 @@ class NewChatController extends GetxController
     );
     if (_state != null) {
       _states.add(_state!.name);
-    }
+    }*/
 
-    broadcastReceiver.start();
+    /*broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) async {
       if (event.name == 'messageReceive') {
-        /*if (!chatIdList.contains(event.data!["chatId"].toString())) {
+        */ /*if (!chatIdList.contains(event.data!["chatId"].toString())) {
           chatIdList.add(event.data!["chatId"].toString());
           if (event.data!["msg_type"].toString() == "0") {
             final String time =
@@ -260,7 +260,7 @@ class NewChatController extends GetxController
             getChatList();
           }
           updateReadMessage();
-        }*/
+        }*/ /*
       } else if (event.name == 'deliveredMsg') {
         print('deliveredData-Key:${event.data}');
         var response = event.data?['deliveredMsgList'];
@@ -284,7 +284,7 @@ class NewChatController extends GetxController
                 "astrologer/${preferenceService.getUserDetail()!.id}/realTime/deliveredMsg/${AppFirebaseService().orderData.value["userId"]}")
             .remove();
       }
-    });
+    });*/
   }
 
   saveAndGetMessage({List<ChatMessage>? chatMessages}) async {
@@ -340,6 +340,22 @@ class NewChatController extends GetxController
     super.onClose();
   }
 
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      joinRoomSocketEvent();
+      onInit();
+    } else if (state == AppLifecycleState.paused) {
+      leaveRoomSocketEvent();
+      unsubscribeFromMessageUpdates();
+      print("app is background 2");
+    } else if (state == AppLifecycleState.detached) {
+      leaveRoomSocketEvent();
+      unsubscribeFromMessageUpdates();
+      print("app is background 2");
+    }
+  }
+
   /// ------------ timer functions -------------- ///
   Timer? extraTimer;
   Timer? chatTimer;
@@ -377,17 +393,6 @@ class NewChatController extends GetxController
     //     p0["isCustEntered"] > DateTime.now().microsecondsSinceEpoch) {
     //   updateReadMessage();
     // }
-    print("extraTime ${p0["status"]}");
-
-    isCardVisible.value =
-        p0["card"] != null ? (p0["card"]["isCardVisible"] ?? false) : false;
-
-    if (isCardBotOpen == true &&
-        p0["card"] != null &&
-        !(p0["card"]["isCardVisible"])) {
-      // "Picking tarot card...";
-      update();
-    }
   }
 
   void startExtraTimer(int futureTimeInEpochMillis, String status) {
@@ -544,14 +549,14 @@ class NewChatController extends GetxController
     appSocket.socket!.on(ApiProvider.activity, (data) {
       isTyping.value = true;
       typingTimer();
-      // scrollToBottomFunc();
+
       update();
       debugPrint("typingListenerSocket $data");
     });
   }
 
   void typingTimer() {
-    int _start = 5;
+    int _start = 3;
     if (_timer2 != null) {
       _timer2!.cancel();
     }
@@ -584,19 +589,14 @@ class NewChatController extends GetxController
 
   /// ------------------ scroll to bottom  ----------------------- ///
   scrollToBottomFunc() {
-    // Future.delayed(
-    //   const Duration(milliseconds: 500),
-    //   () {
-    //     if (messageScrollController.hasClients) {
-    //       print("messageScrollController");
-    //       messageScrollController.animateTo(
-    //         messageScrollController.position.maxScrollExtent,
-    //         duration: const Duration(milliseconds: 300),
-    //         curve: Curves.easeOut,
-    //       );
-    //     }
-    //   },
-    // );
+    if (messageScrollController.hasClients) {
+      print("messageScrollController");
+      messageScrollController.animateTo(
+        0.0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
   }
 
   /// ------------------ download image  ----------------------- ///
@@ -1116,12 +1116,6 @@ class NewChatController extends GetxController
           // chatMessages.reversed;
           print("preference.getMessages");
           update();
-          Future.delayed(
-            const Duration(milliseconds: 200),
-            () {
-              scrollToBottomFunc();
-            },
-          );
         }
       } else {
         throw CustomException(response.message ?? 'Failed to get chat history');
@@ -1317,6 +1311,7 @@ class NewChatController extends GetxController
     print(
         "last message ----- ${jsonDecode(jsonEncode(newMessage)).runtimeType}");
     sendMessageInSocket(newMessage);
+    scrollToBottomFunc();
   }
 
   playGift(String? url) async {

@@ -131,13 +131,13 @@ Future<void> main() async {
 
       print("test_notification: Enable fullscreen incoming call notification");
 
-      FirebaseDatabase.instance
-          .ref("user")
-          .child(
-              "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
-          .update(updateData);
-      sendBroadcast(
-          BroadcastMessage(name: "messageReceive", data: message.data));
+      // FirebaseDatabase.instance
+      //     .ref("user")
+      //     .child(
+      //         "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
+      //     .update(updateData);
+      // sendBroadcast(
+      //     BroadcastMessage(name: "messageReceive", data: message.data));
     } else if (message.data["type"] == "8") {
       print(
           "inside page for realtime notification ${message.data} ${MiddleWare.instance.currentPage}");

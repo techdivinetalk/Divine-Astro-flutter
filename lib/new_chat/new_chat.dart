@@ -32,10 +32,7 @@ class NewChatScreen extends GetView<NewChatController> {
       assignId: true,
       init: NewChatController(),
       builder: (controller) {
-        if (keyboardVisible) {
-          print("keyboardVisible");
-          controller.scrollToBottomFunc();
-        }
+
         return Stack(
           children: [
             Scaffold(

@@ -12,6 +12,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:voice_message_package/voice_message_package.dart';
 
 import '../../gen/assets.gen.dart';
+import '../widget/common_read_function.dart';
 
 class AudioViewWidget extends StatelessWidget {
   final NewChatController? controller;
@@ -80,6 +81,9 @@ class AudioViewWidget extends StatelessWidget {
                         style: AppTextStyle.textStyle10(
                             fontColor: appColors.black),
                       ),
+                      if (yourMessage) SizedBox(width: 3.w),
+                      if (yourMessage)
+                        CommonReadWidget(chatDetail: chatDetail),
                       // if (yourMessage) SizedBox(width: 8.w),
                       // if (yourMessage)
                       //   chatDetail.type == 0

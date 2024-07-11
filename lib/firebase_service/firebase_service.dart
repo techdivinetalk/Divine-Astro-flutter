@@ -245,8 +245,8 @@ class AppFirebaseService {
         callSwitch(value > 0);
         break;
       case "deliveredMsg":
-        sendBroadcast(BroadcastMessage(
-            name: "deliveredMsg", data: {'deliveredMsgList': value}));
+        // sendBroadcast(BroadcastMessage(
+        //     name: "deliveredMsg", data: {'deliveredMsgList': value}));
         break;
       case "uniqueId":
         String uniqueId = await getDeviceId() ?? "";

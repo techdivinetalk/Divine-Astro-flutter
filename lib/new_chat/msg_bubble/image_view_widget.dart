@@ -17,6 +17,7 @@ import 'package:intl/intl.dart';
 import '../../common/colors.dart';
 import '../../gen/assets.gen.dart';
 import '../../screens/order_chat_call_feedback/widget/chat_history_widget.dart';
+import '../widget/common_read_function.dart';
 
 class ImageViewWidget extends StatelessWidget {
   final NewChatController? controller;
@@ -127,6 +128,9 @@ class ImageViewWidget extends StatelessWidget {
                                 style: AppTextStyle.textStyle10(
                                     fontColor: appColors.white),
                               ),
+                              if (yourMessage) SizedBox(width: 3.w),
+                              if (yourMessage)
+                                CommonReadWidget(chatDetail: chatDetail),
                               // if (yourMessage) SizedBox(width: 8.w),
                               // if (yourMessage)
                               //   chatDetail.type == 0
@@ -269,6 +273,9 @@ class ImageViewWidget extends StatelessWidget {
                                         style: AppTextStyle.textStyle10(
                                             fontColor: appColors.white),
                                       ),
+                                      if (yourMessage) SizedBox(width: 3.w),
+                                      if (yourMessage)
+                                        CommonReadWidget(chatDetail: chatDetail),
                                       // if (yourMessage) SizedBox(width: 8.w),
                                       // if (yourMessage)
                                       //   chatDetail.type == 0
