@@ -77,8 +77,9 @@ class _ChatBottomBarWidgetState extends State<ChatBottomBarWidget> {
                               controller:
                                   widget.controller?.messageController,
                               keyboardType: TextInputType.text,
-                              // expands: true,
+
                               minLines: 1,
+
                               maxLines: 3,
                               style: const TextStyle(
                                 fontFamily: FontFamily.metropolis,
@@ -100,7 +101,7 @@ class _ChatBottomBarWidgetState extends State<ChatBottomBarWidget> {
                                 hintText: "Type something".tr,
                                 isDense: true,
                                 helperStyle: AppTextStyle.textStyle16(),
-                                fillColor: Color(0xffF3F3F3),
+                                fillColor: const Color(0xffF3F3F3),
                                 hintStyle: AppTextStyle.textStyle16(
                                     fontColor: appColors.grey),
                                 hoverColor: appColors.white,

@@ -39,6 +39,8 @@ import 'package:divine_astrologer/utils/utils.dart';
 import 'package:divine_astrologer/zego_call/zego_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import "package:http/http.dart" as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -83,6 +85,8 @@ class NewChatController extends GetxController
   StreamSubscription? msgAddSubscription;
   StreamSubscription? msgUpdateSubscription;
   List<ChatMessage> localChatList = <ChatMessage>[];
+  BroadcastReceiver broadcastReceiver =
+      BroadcastReceiver(names: <String>["deliveredMsg", "messageReceive"]);
 
   @override
   void onInit() {
@@ -112,7 +116,6 @@ class NewChatController extends GetxController
       timer.startMinuteTimer(astroChatWatcher.value.talktime ?? 0,
           astroChatWatcher.value.orderId!);
     }
-
     initTask(AppFirebaseService().orderData);
     msgAddSubscription = FirebaseDatabase.instance
         .ref("chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
@@ -125,9 +128,9 @@ class NewChatController extends GetxController
             jsonDecode(jsonEncode(event.snapshot.value)));
 
         chatMessage.id = int.parse(event.snapshot.key ?? "0");
-        chatMessages.add(chatMessage);
-
+        chatMessages.insert(0, chatMessage);
         scrollToBottomFunc();
+
         if (MiddleWare.instance.currentPage == RouteName.newChat) {
           if (chatMessage.animation != null &&
               chatMessage.userType == "customer") {
@@ -142,7 +145,8 @@ class NewChatController extends GetxController
             }
           }
         }
-        localChatList.add(chatMessage);
+        // localChatList.add(chatMessage);
+        localChatList.insert(0, chatMessage);
         saveAndGetMessage(chatMessages: localChatList);
         update();
         if (MiddleWare.instance.currentPage == RouteName.newChat) {
@@ -222,6 +226,65 @@ class NewChatController extends GetxController
     if (_state != null) {
       _states.add(_state!.name);
     }
+
+    broadcastReceiver.start();
+    broadcastReceiver.messages.listen((BroadcastMessage event) async {
+      if (event.name == 'messageReceive') {
+        /*if (!chatIdList.contains(event.data!["chatId"].toString())) {
+          chatIdList.add(event.data!["chatId"].toString());
+          if (event.data!["msg_type"].toString() == "0") {
+            final String time =
+                "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+            ChatMessage chatMessage = ChatMessage(
+              orderId: AppFirebaseService().orderData.value["orderId"],
+              id: int.parse(time),
+              message: event.data!["message"],
+              // createdAt: DateTime.now().toIso8601String(),
+              receiverId: int.parse(
+                  AppFirebaseService().orderData.value["userId"].toString()),
+              senderId: preference.getUserDetail()!.id,
+              time: int.parse(time),
+              msgSendBy: "0",
+              awsUrl: event.data!["message"],
+              base64Image: null,
+              downloadedPath: null,
+              msgType: MsgType.text,
+              kundliId: null,
+              productPrice: null,
+              type: 0,
+              userType: "customer",
+            );
+            chatMessages.add(chatMessage);
+            scrollToBottomFunc();
+          } else {
+            getChatList();
+          }
+          updateReadMessage();
+        }*/
+      } else if (event.name == 'deliveredMsg') {
+        print('deliveredData-Key:${event.data}');
+        var response = event.data?['deliveredMsgList'];
+        print('deliveredData Outer Key:${response.toString()}');
+        response.forEach((key, value) {
+          print('deliveredRes:$key - $value');
+          value.forEach((innerKey, innerValue) {
+            print('deliveredRes1:$innerKey - $innerValue');
+            var index = chatMessages
+                .indexWhere((element) => innerKey == element.id.toString());
+            if (index >= 0) {
+              chatMessages[index].type = 1;
+              chatMessages[index].seenStatus = 1;
+              chatMessages.refresh();
+            }
+          });
+        });
+
+        FirebaseDatabase.instance
+            .ref(
+                "astrologer/${preferenceService.getUserDetail()!.id}/realTime/deliveredMsg/${AppFirebaseService().orderData.value["userId"]}")
+            .remove();
+      }
+    });
   }
 
   saveAndGetMessage({List<ChatMessage>? chatMessages}) async {
@@ -464,8 +527,8 @@ class NewChatController extends GetxController
   sendMessageInSocket(ChatMessage? newMessage) {
     // log(jsonEncode(newMessage));
     // log(jsonEncode(newMessage).runtimeType.toString());
-    print("jsonEncode(newMessage)");
-    log(newMessage!.toJson().toString());
+
+    log("jsonEncode(newMessage)--- ${newMessage!.toJson()}");
     print("newMessage!.toJson()");
     appSocket.socket!.emit(
       ApiProvider.sendNewMessage,
@@ -481,7 +544,7 @@ class NewChatController extends GetxController
     appSocket.socket!.on(ApiProvider.activity, (data) {
       isTyping.value = true;
       typingTimer();
-      scrollToBottomFunc();
+      // scrollToBottomFunc();
       update();
       debugPrint("typingListenerSocket $data");
     });
@@ -521,18 +584,19 @@ class NewChatController extends GetxController
 
   /// ------------------ scroll to bottom  ----------------------- ///
   scrollToBottomFunc() {
-    if (messageScrollController.hasClients) {
-      print("messageScrollController.hasClients");
-      Timer(
-        const Duration(milliseconds: 150),
-        () => messageScrollController.animateTo(
-          messageScrollController.position.maxScrollExtent,
-          duration: const Duration(milliseconds: 150),
-          curve: Curves.easeOut,
-        ),
-      );
-    }
-    // update();
+    // Future.delayed(
+    //   const Duration(milliseconds: 500),
+    //   () {
+    //     if (messageScrollController.hasClients) {
+    //       print("messageScrollController");
+    //       messageScrollController.animateTo(
+    //         messageScrollController.position.maxScrollExtent,
+    //         duration: const Duration(milliseconds: 300),
+    //         curve: Curves.easeOut,
+    //       );
+    //     }
+    //   },
+    // );
   }
 
   /// ------------------ download image  ----------------------- ///
@@ -1046,7 +1110,7 @@ class NewChatController extends GetxController
       if (response.success ?? false) {
         if (response.chatMessages!.isNotEmpty) {
           chatMessages.clear();
-          chatMessages.addAll(response.chatMessages!.reversed);
+          chatMessages.addAll(response.chatMessages ?? []);
           var data = await preference.getMessages();
           chatMessages.addAll(data);
           // chatMessages.reversed;
@@ -1129,6 +1193,7 @@ class NewChatController extends GetxController
     if (msgType == MsgType.customProduct) {
       newMessage = ChatMessage(
         message: messageText,
+        id: int.parse(time),
         receiverId: int.parse(
             AppFirebaseService().orderData.value["userId"].toString()),
         senderId: preference.getUserDetail()!.id,
@@ -1138,6 +1203,7 @@ class NewChatController extends GetxController
         base64Image: base64Image,
         downloadedPath: downloadedPath,
         msgType: msgType,
+        orderId: AppFirebaseService().orderData.value["orderId"],
         kundliId: kundliId,
         productPrice: productPrice,
         title: giftId ?? "${userData?.name} sent you a message.",
@@ -1156,7 +1222,9 @@ class NewChatController extends GetxController
           message: productDetails.poojaName,
           astrologerId: userData?.id,
           time: int.parse(time),
+          id: int.parse(time),
           isSuspicious: 0,
+          orderId: AppFirebaseService().orderData.value["orderId"],
           isPoojaProduct: true,
           awsUrl: productDetails.poojaImg ?? '',
           msgType: MsgType.pooja,
@@ -1186,9 +1254,11 @@ class NewChatController extends GetxController
         newMessage = ChatMessage(
             message: productDetails.prodName,
             title: productDetails.prodName,
+            orderId: AppFirebaseService().orderData.value["orderId"],
             astrologerId: preferenceService.getUserDetail()!.id,
             time: int.parse(time),
             isSuspicious: 0,
+            id: int.parse(time),
             userType: "astrologer",
             isPoojaProduct: false,
             awsUrl: userData?.image ?? '',
@@ -1215,6 +1285,8 @@ class NewChatController extends GetxController
       newMessage = ChatMessage(
         message: messageText,
         animation: animation,
+        id: int.parse(time),
+        orderId: AppFirebaseService().orderData.value["orderId"],
         receiverId: int.parse(
             AppFirebaseService().orderData.value["userId"].toString()),
         senderId: preference.getUserDetail()!.id,
@@ -1241,10 +1313,10 @@ class NewChatController extends GetxController
           jsonDecode(jsonEncode(newMessage)),
         );
     update();
-    log("last message ----- ${jsonDecode(jsonEncode(newMessage))}");
+    log("last message ----- ${newMessage.toJson()}");
     print(
         "last message ----- ${jsonDecode(jsonEncode(newMessage)).runtimeType}");
-    // sendMessageInSocket(newMessage);
+    sendMessageInSocket(newMessage);
   }
 
   playGift(String? url) async {

@@ -33,12 +33,14 @@ class NewChatScreen extends GetView<NewChatController> {
       init: NewChatController(),
       builder: (controller) {
         if (keyboardVisible) {
+          print("keyboardVisible");
           controller.scrollToBottomFunc();
         }
         return Stack(
           children: [
             Scaffold(
               appBar: ChatAppBarWidget(controller: controller),
+
               body: Column(
                 children: [
                   NoticeBoardWidget(controller: controller),
@@ -48,7 +50,7 @@ class NewChatScreen extends GetView<NewChatController> {
                       itemCount: controller.chatMessages.length,
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       shrinkWrap: true,
-                      // reverse: true,
+                      reverse: true,
                       itemBuilder: (context, index) {
                         ChatMessage data = controller.chatMessages[index];
                         return Column(
@@ -59,7 +61,7 @@ class NewChatScreen extends GetView<NewChatController> {
                               chatMessage: data,
                               index: index,
                             ),
-                            if (index == (controller.chatMessages.length - 1))
+                            if (index ==0)
                               TypingWidget(
                                 controller: controller,
                                 yourMessage: data.msgSendBy == "1",

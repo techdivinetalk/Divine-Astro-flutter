@@ -23,7 +23,7 @@ class TextViewWidget extends StatelessWidget {
   final ChatMessage chatDetail;
   final bool yourMessage;
 
-  TextViewWidget({
+  const TextViewWidget({
     required this.chatDetail,
     required this.yourMessage,
     this.controller,
@@ -75,16 +75,16 @@ class TextViewWidget extends StatelessWidget {
                           : yourMessage
                               ? const Color(0xffFFEEF0)
                               : const Color(0xffDCDCDC)),
-                  color: yourMessage ? Color(0xffFFF9FA) : appColors.white,
+                  color: yourMessage ? const Color(0xffFFF9FA) : appColors.white,
                   borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(10),
+                    bottomLeft: const Radius.circular(10),
                     topLeft: Radius.circular(yourMessage ? 10 : 0),
-                    bottomRight: Radius.circular(10),
+                    bottomRight: const Radius.circular(10),
                     topRight: Radius.circular(!yourMessage ? 10 : 0),
                   ),
                 ),
                 constraints: BoxConstraints(
-                    maxWidth: ScreenUtil().screenWidth * 0.8,
+                    maxWidth: ScreenUtil().screenWidth * 0.78,
                     minWidth: ScreenUtil().screenWidth * 0.27),
                 child: Stack(
                   alignment: yourMessage
