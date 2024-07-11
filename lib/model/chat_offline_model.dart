@@ -287,7 +287,7 @@ class ChatMessage {
     data['kundliPlace'] = kundliPlace;
     data['gender'] = gender;
     data['userType'] = userType;
-    data['kundli'] = kundli?.toJson();
+    data['kundli'] = kundli;
     return data;
   }
   Map<String, dynamic> chatToJson() {
@@ -295,7 +295,7 @@ class ChatMessage {
     data['chatMessageId'] = id;
     data['order_id'] = orderId;
     data['get_pooja'] = getPooja?.toJson();
-    data['get_custom_product'] = getCustomProduct?.toString();
+    data['get_custom_product'] = getCustomProduct?.toJson();
     data['member_id'] = memberId;
     data['productPrice'] = productPrice;
     data['role_id'] = roleId;
@@ -355,7 +355,7 @@ class ChatMessage {
     data['kundliPlace'] = kundliPlace;
     data['gender'] = gender;
     data['userType'] = userType;
-    data['kundli'] = kundli;
+    data['kundli'] = kundli?.toJson();
     return data;
   }
 }

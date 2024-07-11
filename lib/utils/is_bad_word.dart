@@ -28,8 +28,7 @@ bool isBadWord(String sentence) {
     }
 
     // Check for 10 digit number
-    print("phoneNNumber ${pref.getUserDetail()!.phoneNo!}");
-    if (word.contains(pref.getUserDetail()!.phoneNo!)) {
+    if (word.length == 10 && RegExp(r'^[0-9]').hasMatch(word)) {
       DateTime end = DateTime.now();
       print(
           'Time taken to check for 10 digit number: ${end.difference(start).inMilliseconds} ms');
