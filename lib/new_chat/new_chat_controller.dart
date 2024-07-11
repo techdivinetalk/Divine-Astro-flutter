@@ -92,6 +92,7 @@ class NewChatController extends GetxController
   @override
   void onInit() {
     super.onInit();
+    WidgetsBinding.instance.addObserver(this);
     svgaController = SVGAAnimationController(vsync: this);
     svgaController.addListener(() {
       if (svgaController.isCompleted == true) {
@@ -99,6 +100,7 @@ class NewChatController extends GetxController
         svgaController.stop();
       }
     });
+    messageScrollController.addListener(scrollListener);
     if (AppFirebaseService().orderData.isNotEmpty) {
       initialiseControllers();
       joinRoomSocketEvent();
@@ -287,6 +289,14 @@ class NewChatController extends GetxController
     });*/
   }
 
+  RxBool isLoading = false.obs;
+  scrollListener(){
+    if (messageScrollController.position.extentAfter <= 0 && !isLoading.value) {
+      isLoading.value = true;
+      getChatList();
+    }
+  }
+
   saveAndGetMessage({List<ChatMessage>? chatMessages}) async {
     await preference.saveMessages(chatMessages!);
   }
@@ -331,6 +341,7 @@ class NewChatController extends GetxController
 
   @override
   void onClose() {
+    WidgetsBinding.instance.removeObserver(this);
     if (recorderController != null) {
       recorderController?.dispose();
     }
@@ -340,19 +351,32 @@ class NewChatController extends GetxController
     super.onClose();
   }
 
+  bool hasResumed = false;
+  bool hasPaused = false;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    log("State : $state");
     if (state == AppLifecycleState.resumed) {
-      joinRoomSocketEvent();
-      onInit();
+      if(hasResumed){
+        log("app Resumed");
+        hasResumed = false;
+        hasPaused = false;
+        preference.clearPreferencesMessages();
+        onInit();
+      }
     } else if (state == AppLifecycleState.paused) {
-      leaveRoomSocketEvent();
-      unsubscribeFromMessageUpdates();
-      print("app is background 2");
+      hasResumed = true;
+      if(!hasPaused){
+        log("app Paused");
+        hasPaused = true;
+        preference.clearPreferencesMessages();
+        leaveRoomSocketEvent();
+        unsubscribeFromMessageUpdates();
+      }
     } else if (state == AppLifecycleState.detached) {
+      log("app Killed");
       leaveRoomSocketEvent();
       unsubscribeFromMessageUpdates();
-      print("app is background 2");
     }
   }
 
@@ -1092,31 +1116,29 @@ class NewChatController extends GetxController
 
   /// -------------------------- chat history API ------------------------ ///
   RxList<ChatMessage> chatMessages = <ChatMessage>[].obs;
-  CallChatHistoryRepository callChatFeedBackRepository =
-      CallChatHistoryRepository();
+  CallChatHistoryRepository callChatFeedBackRepository = CallChatHistoryRepository();
+  int page = 1;
 
   getChatList() async {
     try {
-      print(AppFirebaseService().orderData.value["orderId"]);
-      print("AppFirebaseService().orderData.value");
-      // endChatLoader.value = chatMessages.isEmpty;
       var userId = int.parse(AppFirebaseService().orderData.value["userId"]);
       var astroId = int.parse(AppFirebaseService().orderData.value["astroId"]);
 
       var response = await callChatFeedBackRepository.getAstrologerChats(
         userId,
         astroId,
+        page,
       );
       if (response.success ?? false) {
         if (response.chatMessages!.isNotEmpty) {
-          chatMessages.clear();
+          // chatMessages.clear();
           chatMessages.addAll(response.chatMessages ?? []);
-          var data = await preference.getMessages();
-          chatMessages.addAll(data);
-          // chatMessages.reversed;
-          print("preference.getMessages");
+          // var data = await preference.getMessages();
+          // chatMessages.addAll(data);
           update();
         }
+        page++;
+        isLoading.value = false;
       } else {
         throw CustomException(response.message ?? 'Failed to get chat history');
       }

@@ -12,9 +12,13 @@ import 'package:get/get_connect/http/src/status/http_status.dart';
 
 class CallChatHistoryRepository extends ApiProvider {
 
-  Future<ChatHistoryResponse> getAstrologerChats(int customerId, int partnerId) async {
+  Future<ChatHistoryResponse> getAstrologerChats(int customerId, int partnerId, int page) async {
     try {
-      final response = await post(viewChatHistory, body: json.encode({"customer_id" : customerId, "partner_id" : partnerId}));
+      final response = await post(viewChatHistory, body: json.encode({
+        "customer_id" : customerId,
+        "partner_id" : partnerId,
+        "page" : page,
+      }));
       log('response --- ${response.body}');
 
       if (response.statusCode == HttpStatus.unauthorized) {

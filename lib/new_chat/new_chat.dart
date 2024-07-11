@@ -13,6 +13,7 @@ import 'package:divine_astrologer/new_chat/widget/typing_widget.dart';
 import 'package:divine_astrologer/new_chat/widget/visible_tarrot_card.dart';
 import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'widget/chat_app_bar_widget.dart';
@@ -52,6 +53,14 @@ class NewChatScreen extends GetView<NewChatController> {
                         ChatMessage data = controller.chatMessages[index];
                         return Column(
                           children: [
+                            Obx(()=>controller.isLoading.value && (controller.chatMessages.length-1 == index) ? Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10.0),
+                              child: CircularProgressIndicator(
+                                strokeWidth: 1.5,
+                                color: Colors.grey.withOpacity(0.6),
+                              ),
+                            )
+                            : const SizedBox()),
                             socketMessageView(
                               controller: controller,
                               yourMessage: data.msgSendBy == "1",
@@ -62,7 +71,7 @@ class NewChatScreen extends GetView<NewChatController> {
                               TypingWidget(
                                 controller: controller,
                                 yourMessage: data.msgSendBy == "1",
-                              )
+                              ),
                           ],
                         );
                       },

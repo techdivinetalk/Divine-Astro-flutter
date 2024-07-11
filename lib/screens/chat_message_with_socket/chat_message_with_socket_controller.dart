@@ -133,9 +133,6 @@ class ChatMessageWithSocketController extends GetxController
   Rx<bool> isCardBotOpen = false.obs;
   bool isGalleryOpen = false;
 
-
-
-
   void startTimer() {
     int _start = 5;
     if (_timer2 != null) {
@@ -180,9 +177,6 @@ class ChatMessageWithSocketController extends GetxController
   @override
   void dispose() {
     // TODO: implement dispose
-
-
-
     _appLinkingStreamSubscription?.cancel();
     WidgetsBinding.instance.removeObserver(this);
     ZegoGiftPlayer().clear();
@@ -377,8 +371,6 @@ class ChatMessageWithSocketController extends GetxController
   @override
   void onInit() {
     super.onInit();
-    //print("AppFirebaseService().watcher.nameStream");
-    //print(AppFirebaseService().watcher.currentName);
     if (kDebugMode) {
       FirebaseDatabase.instance
           .ref()
@@ -388,8 +380,6 @@ class ChatMessageWithSocketController extends GetxController
         final key = event.snapshot.key; // Get the key of the changed child
         final value = event.snapshot.value;
         if (event.snapshot.value != null) {
-          print("onChildChanged-2 $key");
-          print("onChildChanged $value");
           updateOrderInfo(key!, value, false);
         }
       });
@@ -401,8 +391,6 @@ class ChatMessageWithSocketController extends GetxController
         final key = event.snapshot.key; // Get the key of the changed child
         final value = event.snapshot.value;
         if (event.snapshot.value != null) {
-          print("onChildAdded $key");
-          print("onChildAdded $value");
           updateOrderInfo(key!, value, false);
         }
       });
@@ -414,8 +402,6 @@ class ChatMessageWithSocketController extends GetxController
         final key = event.snapshot.key; // Get the key of the changed child
         final value = event.snapshot.value;
         if (event.snapshot.value != null) {
-          print("onChildRemoved $key");
-          print("onChildRemoved $value");
           updateOrderInfo(key!, value, true);
         }
       });
@@ -1507,7 +1493,7 @@ class ChatMessageWithSocketController extends GetxController
       var astroId = int.parse(AppFirebaseService().orderData.value["astroId"]);
 
       var response =
-          await callChatFeedBackRepository.getAstrologerChats(userId, astroId);
+          await callChatFeedBackRepository.getAstrologerChats(userId, astroId, 1);
 
       if (response.success ?? false) {
         List<ChatMessage> fetchedMessages = response.chatMessages ?? [];
