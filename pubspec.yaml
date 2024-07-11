@@ -133,6 +133,7 @@ dependencies:
 
 
 
+
 dependency_overrides:
 #  zego_uikit: ^2.23.0
   fading_edge_scrollview: ^4.1.1
