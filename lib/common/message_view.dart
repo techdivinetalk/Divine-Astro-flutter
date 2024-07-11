@@ -781,8 +781,8 @@ class MessageView extends StatelessWidget {
                                   child: CachedNetworkImage(
                                     imageUrl: chatDetail.message ?? '',
                                     fit: BoxFit.cover,
-                                    height: 200,
-                                    width:200,
+                                    height: 200.h,
+                                    width: 200.h,
                                   ),
                                 ),
                                 Positioned(
@@ -841,6 +841,7 @@ class MessageView extends StatelessWidget {
                                   : "${chatMessage.awsUrl}",
                               fit: BoxFit.cover,
                               height: 200.h,
+                              width: 200.h,
                             ),
                           ),
                           Positioned(
@@ -909,6 +910,7 @@ class MessageView extends StatelessWidget {
                                 "${chatDetail.message}",
                                 fit: BoxFit.cover,
                                 height: 200.h,
+                                width: 200.h,
                               ),
                             ),
                           ),
@@ -986,12 +988,14 @@ class MessageView extends StatelessWidget {
                                   ? Image.network(
                                       "${chatDetail.message}",
                                       fit: BoxFit.cover,
-                                      height: 200.h,
+                                height: 200.h,
+                                width: 200.h,
                                     )
                                   : Image.file(
                                       File(chatDetail.downloadedPath ?? ""),
                                       fit: BoxFit.cover,
-                                      height: 200.h,
+                                height: 200.h,
+                                width: 200.h,
                                     ),
                             ),
                           ],
