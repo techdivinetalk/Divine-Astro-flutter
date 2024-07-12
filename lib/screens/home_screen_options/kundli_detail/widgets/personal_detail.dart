@@ -27,15 +27,11 @@ class PersonalDetailUi extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
-              SizedBox(height: kToolbarHeight.h * 4.5),
-              SizedBox(height: 110.h),
               const LoadingWidget(),
             ],
           ),
           firstChild: Column(
             children: [
-              SizedBox(height: kToolbarHeight.h * 2.5),
-              SizedBox(height: 40.h),
               detailTile(
                 "name".tr,
                 controller.kundliParams.value.name == null

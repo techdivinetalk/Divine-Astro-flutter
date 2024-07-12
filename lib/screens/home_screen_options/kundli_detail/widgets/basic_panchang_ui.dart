@@ -19,31 +19,28 @@ class BasicPanchangUi extends StatelessWidget {
       child: Obx(
         () => AnimatedCrossFade(
           duration: const Duration(milliseconds: 200),
-          crossFadeState: (controller.birthDetails.value.data?.day == null && controller.astroDetails.value.data?.tithi == null)
+          crossFadeState: (controller.birthDetails.value.data?.day == null &&
+                  controller.astroDetails.value.data?.tithi == null)
               ? CrossFadeState.showSecond
               : CrossFadeState.showFirst,
           secondChild: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
-              SizedBox(height: kToolbarHeight.h * 2.5),
-              SizedBox(height: 150.h),
               const LoadingWidget(),
             ],
           ),
           firstChild: Column(
             children: [
-              SizedBox(height: kToolbarHeight.h * 2.5),
-              SizedBox(height: 40.h),
               detailTile(
                 "day".tr,
                 controller.birthDetails.value.data?.day == null
                     ? ""
                     : DateFormat("EEEE")
                         .format(DateTime(
-                            controller.birthDetails.value.data?.year??0,
-                            controller.birthDetails.value.data?.month??0,
-                            controller.birthDetails.value.data?.day??0))
+                            controller.birthDetails.value.data?.year ?? 0,
+                            controller.birthDetails.value.data?.month ?? 0,
+                            controller.birthDetails.value.data?.day ?? 0))
                         .toString(),
               ),
               detailTile(
@@ -62,25 +59,25 @@ class BasicPanchangUi extends StatelessWidget {
                 "nakshatra".tr,
                 controller.astroDetails.value.data?.naksahtra == null
                     ? ""
-                    : controller.astroDetails.value.data?.naksahtra??'',
+                    : controller.astroDetails.value.data?.naksahtra ?? '',
               ),
               detailTile(
                 "sunrise".tr,
                 controller.birthDetails.value.data?.sunrise == null
                     ? ""
-                    : controller.birthDetails.value.data?.sunrise??'',
+                    : controller.birthDetails.value.data?.sunrise ?? '',
               ),
               detailTile(
                 "sunset".tr,
                 controller.birthDetails.value.data?.sunset == null
                     ? ""
-                    : controller.birthDetails.value.data?.sunset??'',
+                    : controller.birthDetails.value.data?.sunset ?? '',
               ),
               detailTile(
                 "karana".tr,
                 controller.astroDetails.value.data?.karan == null
                     ? ""
-                    : controller.astroDetails.value.data?.karan??'',
+                    : controller.astroDetails.value.data?.karan ?? '',
               ),
             ],
           ),

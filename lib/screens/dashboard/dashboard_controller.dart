@@ -17,6 +17,7 @@ import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/screens/dashboard/widgets/terms_and_condition_popup.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/force_update_sheet.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -36,6 +37,7 @@ import '../../di/fcm_notification.dart';
 import '../../model/astrologer_gift_response.dart';
 import '../../model/chat/req_common_chat_model.dart';
 import '../../model/chat/res_common_chat_success.dart';
+import '../../model/chat_assistant/chat_assistant_astrologer_response.dart';
 import '../../model/res_login.dart';
 import '../../repository/astrologer_profile_repository.dart';
 import '../../repository/chat_repository.dart';
@@ -220,8 +222,8 @@ class DashboardController extends GetxController
   }
 
   Future<void> furtherProcedure({String? orderId, String? queueId}) async {
-    String? order_id = AppFirebaseService().payload["order_id"];
-    String? queue_id = AppFirebaseService().payload["queue_id"];
+    String? order_id = AppFirebaseService().payload?["order_id"];
+    String? queue_id = AppFirebaseService().payload?["queue_id"];
     if (orderId != null && queueId != null) {
       order_id = orderId;
       queue_id = queueId;
@@ -259,7 +261,34 @@ class DashboardController extends GetxController
   @override
   Future<void> onInit() async {
     super.onInit();
-    if(appFirebaseService.astroMsg != null){serverUnderMaintenancePopup(appFirebaseService.astroMsg);}
+    FirebaseMessaging.instance.getInitialMessage().then((v) {
+      RemoteMessage? remoteMessage = v;
+      if (remoteMessage != null) {
+        Future.delayed(Duration(seconds: 3), () async {
+          if (remoteMessage.data["type"] == "8") {
+            final senderId = remoteMessage.data["sender_id"];
+            DataList dataList = DataList();
+            dataList.id = int.parse(senderId);
+            dataList.name = remoteMessage.data["title"];
+            Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
+          }
+        });
+      }
+    });
+
+    FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      if (message.data["type"] == "8") {
+        final senderId = message.data["sender_id"];
+        DataList dataList = DataList();
+        dataList.id = int.parse(senderId);
+        dataList.name = message.data["title"];
+        Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
+      }
+    });
+
+    if (appFirebaseService.astroMsg != null) {
+      serverUnderMaintenancePopup(appFirebaseService.astroMsg);
+    }
     WidgetsBinding.instance.addObserver(this);
     //  checkPermissions();
     getOrderFromApi();
@@ -1014,6 +1043,7 @@ class DashboardController extends GetxController
           ]),
     ];
   }
+
   void serverUnderMaintenancePopup(String? message) {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       print("$message🤑🤑🤑🤑🤑🤑🤑🤑🤑🤑");
@@ -1023,7 +1053,7 @@ class DashboardController extends GetxController
         // Prevents closing the popup by tapping outside
         builder: (BuildContext context) {
           return PopScope(
-            canPop:false,
+            canPop: false,
             child: AlertDialog(
               title: const Text('Notification'),
               content: Text(message!),

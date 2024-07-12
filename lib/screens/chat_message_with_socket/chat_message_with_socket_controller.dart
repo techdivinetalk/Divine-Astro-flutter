@@ -40,10 +40,6 @@ import "package:permission_handler/permission_handler.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:socket_io_client/socket_io_client.dart";
 import "package:svgaplayer_flutter/svgaplayer_flutter.dart";
-import "package:velocity_x/velocity_x.dart";
-import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
-import "package:svgaplayer_flutter/parser.dart";
-import "package:svgaplayer_flutter/player.dart";
 
 import "../../cache/custom_cache_manager.dart";
 import "../../common/MiddleWare.dart";
@@ -375,31 +371,32 @@ class ChatMessageWithSocketController extends GetxController
     var chatMessage = ChatMessage.fromOfflineJson(values);
     print("chatMessage.title");
     print(chatMessage.message);
-    if(!isBadWord(chatMessage.message ?? "")){
+    if (!isBadWord(chatMessage.message ?? "")) {
       // int index = chatMessages.indexWhere((element) {
       //   return element.time == chatMessage.time;
       // });
-   //   if (index == -1 || index == AppFirebaseService().orderData.value['userId'] || index == AppFirebaseService().orderData.value['astroId']) {
-        chatMessages.add(chatMessage);
-        chatMessages.refresh();
-        scrollToBottomFunc();
-        if (chatMessage.msgType == MsgType.sendgifts) {
-          if (chatMessage.productId != null) {
-            playAnimation(id: chatMessage.productId ?? "");
-          }
+      //   if (index == -1 || index == AppFirebaseService().orderData.value['userId'] || index == AppFirebaseService().orderData.value['astroId']) {
+      chatMessages.add(chatMessage);
+      chatMessages.refresh();
+      scrollToBottomFunc();
+      if (chatMessage.msgType == MsgType.sendgifts) {
+        if (chatMessage.productId != null) {
+          playAnimation(id: chatMessage.productId ?? "");
         }
-  //    }
-    }else{
+      }
+      //    }
+    } else {
       print("BadWordDetected ${chatMessage.message}");
     }
     print("Message.fromOffli2");
     AppFirebaseService()
         .database
         .child(
-        "chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
+            "chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
         .child(snapshot.key!)
         .remove();
   }
+
   var isHistoryLoading = false;
 
   void _scrollListener() {
@@ -418,6 +415,7 @@ class ChatMessageWithSocketController extends GetxController
       }
     }
   }
+
   @override
   void onInit() {
     super.onInit();
@@ -431,7 +429,7 @@ class ChatMessageWithSocketController extends GetxController
     AppFirebaseService()
         .database
         .child(
-        "chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
+            "chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
         .orderByChild("msg_send_by")
         .equalTo("0")
         .onChildAdded
@@ -459,15 +457,13 @@ class ChatMessageWithSocketController extends GetxController
     //stateHandling();
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) async {
-      if(fireChat.value == 0) {
+      if (fireChat.value == 0) {
         if (event.name == 'messageReceive') {
           if (!chatIdList.contains(event.data!["chatId"].toString())) {
             chatIdList.add(event.data!["chatId"].toString());
             if (event.data!["msg_type"].toString() == "0") {
               final String time =
-                  "${DateTime
-                  .now()
-                  .millisecondsSinceEpoch ~/ 1000}";
+                  "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
               ChatMessage chatMessage = ChatMessage(
                 orderId: AppFirebaseService().orderData.value["orderId"],
                 id: int.parse(time),
@@ -514,7 +510,7 @@ class ChatMessageWithSocketController extends GetxController
 
           int userId = 0;
           String userIdString =
-          AppFirebaseService().orderData.value["userId"].toString();
+              AppFirebaseService().orderData.value["userId"].toString();
           print('User ID String: $userIdString');
           if (int.tryParse(userIdString) != null) {
             userId = int.parse(userIdString);
@@ -525,8 +521,7 @@ class ChatMessageWithSocketController extends GetxController
 
           FirebaseDatabase.instance
               .ref(
-              "astrologer/${preferenceService.getUserDetail()!
-                  .id}/realTime/deliveredMsg/${userId}")
+                  "astrologer/${preferenceService.getUserDetail()!.id}/realTime/deliveredMsg/${userId}")
               .remove();
         }
       }
@@ -926,10 +921,9 @@ class ChatMessageWithSocketController extends GetxController
         if (data is Map<String, dynamic>) {
           isTyping.value = false;
           final ChatMessage chatMessage =
-          ChatMessage.fromOfflineJson(data["data"]);
-          final String time = "${DateTime
-              .now()
-              .millisecondsSinceEpoch ~/ 1000}";
+              ChatMessage.fromOfflineJson(data["data"]);
+          final String time =
+              "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
           log('chatMessage.msgType ${chatMessage.msgType}');
           if (chatMessage.msgType == MsgType.sendgifts) {
             if (chatMessage.productId != null) {
@@ -943,8 +937,8 @@ class ChatMessageWithSocketController extends GetxController
               chatMessageId: chatMessage.id.toString(),
               chatStatus: "read",
               time: time,
-              orderId: AppFirebaseService().orderData.value["orderId"]
-                  .toString(),
+              orderId:
+                  AppFirebaseService().orderData.value["orderId"].toString(),
             );
           }
           updateChatMessages(chatMessage, false, isSendMessage: false);
@@ -960,9 +954,9 @@ class ChatMessageWithSocketController extends GetxController
     print("playAnimation string id $id");
     List<GiftData> data = GiftsSingleton().gifts.data?.where(
           (element) {
-        return element.id == int.parse(id);
-      },
-    ).toList() ??
+            return element.id == int.parse(id);
+          },
+        ).toList() ??
         <GiftData>[];
     if (data.isNotEmpty) {
       print("playAnimation string id 2111 $id");
@@ -977,7 +971,7 @@ class ChatMessageWithSocketController extends GetxController
       // );
       const SVGAParser parser = SVGAParser();
       File file =
-      await CustomCacheManager().getFile(data.first.animation ?? '');
+          await CustomCacheManager().getFile(data.first.animation ?? '');
       var videoItem = await parser.decodeFromBuffer(file.readAsBytesSync());
       svgController.videoItem = videoItem;
       svgController.forward();
@@ -1130,7 +1124,7 @@ class ChatMessageWithSocketController extends GetxController
     }
   }
 
-   addNewMessage(
+  addNewMessage(
     String time,
     MsgType? msgType, {
     Map? data,
@@ -1269,21 +1263,22 @@ class ChatMessageWithSocketController extends GetxController
         userType: "astrologer",
       );
     }
-    if(!isBadWord(newMessage.message ?? "")) {
+    if (!isBadWord(newMessage.message ?? "")) {
+      HashMap<dynamic, dynamic> hashMap =
+          HashMap<dynamic, dynamic>.from(newMessage.toOfflineJson());
       if (fireChat.value == 1) {
         print("SendingMessageToFireBase");
         print("${newMessage.message}");
         await firebaseDatabase
             .ref()
             .child(
-            "chatMessages/${AppFirebaseService().orderData
-                .value["orderId"]}/$time")
+                "chatMessages/${AppFirebaseService().orderData.value["orderId"]}/$time")
             .update(
-          newMessage.chatToJson(),
-        );
+              newMessage.chatToJson(),
+            );
       }
-    }else{
-      if(kDebugMode){
+    } else {
+      if (kDebugMode) {
         Fluttertoast.showToast(msg: "Bad word detected ${newMessage.message}");
       }
       print("SendingMessageToFireBase Failed");
@@ -1294,7 +1289,7 @@ class ChatMessageWithSocketController extends GetxController
     update();
     scrollToBottomFunc();
     socket.sendMessageSocket(newMessage);
-   // updateChatMessages(newMessage, false, isSendMessage: true);
+    // updateChatMessages(newMessage, false, isSendMessage: true);
     print("last message---  ${chatMessages.last.message}");
   }
 
@@ -1574,8 +1569,8 @@ class ChatMessageWithSocketController extends GetxController
       var userId = int.parse(AppFirebaseService().orderData.value["userId"]);
       var astroId = int.parse(AppFirebaseService().orderData.value["astroId"]);
 
-      var response =
-          await callChatFeedBackRepository.getAstrologerChats(userId, astroId,currentPage.value);
+      var response = await callChatFeedBackRepository.getAstrologerChats(
+          userId, astroId, currentPage.value);
 
       if (response.success ?? false) {
         List<ChatMessage> fetchedMessages = response.chatMessages ?? [];
@@ -1585,7 +1580,7 @@ class ChatMessageWithSocketController extends GetxController
             chatMessages.clear();
             chatMessages.addAll(response.chatMessages!.reversed);
             scrollToBottomFunc();
-          }else{
+          } else {
             chatMessages.insertAll(0, response.chatMessages!.reversed);
           }
 

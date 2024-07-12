@@ -64,7 +64,7 @@ class AppFirebaseService {
   var imagePath = "";
   RxMap<String, dynamic> orderData = <String, dynamic>{}.obs;
   final DatabaseReference database = FirebaseDatabase.instance.ref();
-  Map<String, dynamic> payload = {};
+  Map<String, dynamic>? payload = {};
 
   Future<void> writeData(String path, Map<String, dynamic> data) async {
     try {

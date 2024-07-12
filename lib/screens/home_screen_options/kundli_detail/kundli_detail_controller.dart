@@ -38,12 +38,25 @@ class KundliDetailController extends GetxController {
     Assets.images.icGanesh.svg(width: 87.w, height: 87.h),
     Assets.images.icEye.svg(width: 87.w, height: 87.h),
   ];
+  List<String> detailsPagesNames = [
+    "Lagna",
+    "Dasha",
+    "Navamasha",
+    "Sun",
+    "Moon",
+    "Kp",
+    "Dosha",
+    "Personal Details",
+    "Prediction",
+    "Basic Panchang",
+  ];
 
   final _kundliController = Get.put(KundliController());
 
   late final TabController tabController;
 
   KundliController get kundliController => _kundliController;
+  ScrollController scrollController = ScrollController();
 
   late final KundliRepository kundliRepository;
 
@@ -80,10 +93,11 @@ class KundliDetailController extends GetxController {
   String? kundaliId;
   Map<String, dynamic> kundaliIdParms = {};
 
+  var args;
   @override
   void onInit() {
     super.onInit();
-    var args = Get.arguments;
+    args = Get.arguments;
 
     if (args != null) {
       if (args['from_kundli']) {
@@ -96,6 +110,21 @@ class KundliDetailController extends GetxController {
         getNewKundliData(args);
       }
     }
+  }
+
+  String selectedTab = "Lagna";
+  changingTab(value) {
+    selectedTab = value;
+    if (args != null) {
+      if (args['from_kundli']) {
+        //From Previous Kundlis
+        getDataFromKundli(args);
+      } else {
+        //New Kundli
+        getNewKundliData(args);
+      }
+    }
+    update();
   }
 
   getDataFromKundli(dynamic args) async {
@@ -111,7 +140,7 @@ class KundliDetailController extends GetxController {
       location: args["birth_place"].toString(),
     );
     log("Kundli===>$kundaliId");
-    getApiData(true, tab: 0);
+    getApiData(true);
   }
 
   getNewKundliData(dynamic args) async {
@@ -143,7 +172,7 @@ class KundliDetailController extends GetxController {
       "tzone": 5.30,
       // "tzone": args['params'].tzone,
     };
-    getApiData(false, tab: 0);
+    getApiData(false);
   }
 
   /*getApiData(bool fromKundali) async {
@@ -161,10 +190,13 @@ class KundliDetailController extends GetxController {
       chalitChartApi(fromKundali),
     ]);
   }*/
-  getApiData(bool fromKundali, {int tab = 0}) async {
+  getApiData(bool fromKundali) async {
     log(preference.getAmazonUrl().toString());
-    switch (tab) {
-      case 0:
+    log(preference.getAmazonUrl().toString());
+    // lagnaChartApi(fromKundali);
+
+    switch (selectedTab) {
+      case "Personal Details":
         if (astroDetails.value.data == null) {
           astroDetailsApi(fromKundali);
         }
@@ -172,51 +204,51 @@ class KundliDetailController extends GetxController {
           birthDetailsApi(fromKundali);
         }
         break;
-      case 1:
+      case "Lagna":
         if (lagnaChart.value.data == null) {
           lagnaChartApi(fromKundali);
         }
 
         break;
-      case 2:
+      case "Moon":
         if (moonChart.value.data == null) {
           moonChartApi(fromKundali);
         }
         break;
-      case 3:
+      case "Sun":
         if (sunChart.value.data == null) {
           sunChartApi(fromKundali);
         }
         break;
-      case 4:
+      case "Navamasha":
         if (navamashaChart.value.data == null) {
           navamashaChartApi(fromKundali);
         }
         break;
-      case 5:
+      case "Dosha":
         if (manglikDoshData.value.data == null) {
           manglikDetails(fromKundali);
         }
         break;
-      case 6:
+      case "Kp":
         if (kpTableData.value.data == null) {
           getKpTableDataListAPI(fromKundali);
         }
         break;
-      case 7:
+      case "Dasha":
         // getKpTableDataListAPI(fromKundali);
         if (dashaTableData.value.data == null) {
           getDashaTableDataListAPI(fromKundali);
         }
 
         break;
-      case 8:
+      case "Basic Panchang":
         if (birthDetails.value.data == null) {
           birthDetailsApi(fromKundali);
         }
 
         break;
-      case 9:
+      case "Prediction":
         if (kundliPrediction.value.data == null) {
           kundliPredictionApi(fromKundali);
         }
