@@ -198,7 +198,6 @@ class AppSocket {
   }
 
   void sendMessageSocket(ChatMessage newMessage) {
-    debugPrint('newMessage.toOfflineJson() ${newMessage.toOfflineJson()}');
     socket?.emit(ApiProvider().sendMessage, newMessage.toOfflineJson());
   }
 

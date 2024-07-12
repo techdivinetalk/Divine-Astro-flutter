@@ -31,11 +31,11 @@ class HomePageModelClass {
       );
 
   Map<String, dynamic> toJson() => {
-    "data": data?.toJson(),
-    "success": success,
-    "status_code": statusCode,
-    "message": message,
-  };
+        "data": data?.toJson(),
+        "success": success,
+        "status_code": statusCode,
+        "message": message,
+      };
 }
 
 class HomeData {
@@ -100,80 +100,80 @@ class HomeData {
   });
 
   factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
-    noticeBoard: json["notice_board"] == null
-        ? null
-        : NoticeBoard.fromJson(json["notice_board"]),
-    feedback: json["feedback"] == null
-        ? null
-        : FeedbackData.fromJson(json["feedback"]),
-    totalEarning: json["total_earning"]?.toDouble(),
-    todaysEarning: json["todays_earning"],
-    onGoingCall: OnGoingCall.fromJson(json["on_going_call"] ?? {}),
-    wallet: Wallet.fromJson(json["wallet"] ?? {}),
-    payoutPending: json["payout_pending"]?.toDouble(),
-    tds: json["tds"]?.toDouble(),
-    totalPaymentGatewayCharges: json["total_payment_gateway_charges"] ?? 0,
-    totalOrderPayout: json["total_order_payout"] ?? 0,
-    totalFinePayout: json["total_fine_payout"] ?? 0,
-    totalDivineWalletPayout: json["total_divine_wallet_payout"] ?? 0,
-    totalRefundPayout: json["total_refund_payout"] ?? 0,
-    totalTax: json["total_tax"] ?? 0,
-    sessionType: SessionType.fromJson(json["session_type"] ?? {}),
-    offerType: json["offer_type"] == null
-        ? []
-        : List<OfferType>.from(
-        json["offer_type"].map((x) => OfferType.fromJson(x))),
-    trainingVideo: json["training_video"] == null
-        ? []
-        : List<TrainingVideoData>.from(
-        json["training_video"].map((x) => TrainingVideoData.fromJson(x))),
-    offers: json["offers"] == null ? null : Offers.fromJson(json["offers"]),
-    inAppChatPrevStatus: json["chat_previous_status"] ?? 0,
-    audioCallPrevStatus: json["call_previous_status"] ?? 0,
-    videoCallPrevStatus: json["video_call_previous_status"] ?? 0,
-    paidWallet: json["paid_wallet"] ?? 0,
-    bonusWallet: json["bonus_wallet"] ??0,
-    ecommerceWallet: json["ecommerce_wallet"] ?? 0,
-    retention: json["retention"] ,
-    repurchaseRate: json["repurchase_rate"] ?? 0,
-    minimumRetention: json["minimum_retention"] ?? 0,
-    minimumRepurchaseRate: json["minimum_repurchase_rate"] ?? 0,
-  );
+        noticeBoard: json["notice_board"] == null
+            ? null
+            : NoticeBoard.fromJson(json["notice_board"]),
+        feedback: json["feedback"] == null
+            ? null
+            : FeedbackData.fromJson(json["feedback"]),
+        totalEarning: json["total_earning"]?.toDouble(),
+        todaysEarning: json["todays_earning"],
+        onGoingCall: OnGoingCall.fromJson(json["on_going_call"] ?? {}),
+        wallet: Wallet.fromJson(json["wallet"] ?? {}),
+        payoutPending: json["payout_pending"]?.toDouble(),
+        tds: json["tds"]?.toDouble(),
+        totalPaymentGatewayCharges: json["total_payment_gateway_charges"] ?? 0,
+        totalOrderPayout: json["total_order_payout"] ?? 0,
+        totalFinePayout: json["total_fine_payout"] ?? 0,
+        totalDivineWalletPayout: json["total_divine_wallet_payout"] ?? 0,
+        totalRefundPayout: json["total_refund_payout"] ?? 0,
+        totalTax: json["total_tax"] ?? 0,
+        sessionType: SessionType.fromJson(json["session_type"] ?? {}),
+        offerType: json["offer_type"] == null
+            ? []
+            : List<OfferType>.from(
+                json["offer_type"].map((x) => OfferType.fromJson(x))),
+        trainingVideo: json["training_video"] == null
+            ? []
+            : List<TrainingVideoData>.from(json["training_video"]
+                .map((x) => TrainingVideoData.fromJson(x))),
+        offers: json["offers"] == null ? null : Offers.fromJson(json["offers"]),
+        inAppChatPrevStatus: json["chat_previous_status"] ?? 0,
+        audioCallPrevStatus: json["call_previous_status"] ?? 0,
+        videoCallPrevStatus: json["video_call_previous_status"] ?? 0,
+        paidWallet: json["paid_wallet"] ?? 0,
+        bonusWallet: json["bonus_wallet"] ?? 0,
+        ecommerceWallet: json["ecommerce_wallet"] ?? 0,
+        retention: json["retention"],
+        repurchaseRate: json["repurchase_rate"] ?? 0,
+        minimumRetention: json["minimum_retention"] ?? 0,
+        minimumRepurchaseRate: json["minimum_repurchase_rate"] ?? 0,
+      );
 
   Map<String, dynamic> toJson() => {
-    "notice_board": noticeBoard?.toJson(),
-    "feedback": feedback?.toJson(),
-    "total_earning": totalEarning,
-    "todays_earning": todaysEarning,
-    "total_fine_payout": totalFinePayout,
-    "on_going_call": onGoingCall?.toJson(),
-    "session_type": sessionType?.toJson(),
-    "wallet": wallet?.toJson(),
-    "payout_pending": payoutPending,
-    "total_order_payout": totalOrderPayout,
-    "tds": tds,
-    "total_divine_wallet_payout": totalDivineWalletPayout,
-    "total_refund_payout": totalRefundPayout,
-    "total_tax": totalTax,
-    "total_payment_gateway_charges": totalPaymentGatewayCharges,
-    "offer_type": offerType == null
-        ? []
-        : List<dynamic>.from(offerType!.map((x) => x.toJson())),
-    "training_video": trainingVideo == null
-        ? []
-        : List<dynamic>.from(trainingVideo!.map((x) => x.toJson())),
-    "offers": offers?.toJson(),
-    "chat_previous_status": inAppChatPrevStatus,
-    "call_previous_status": audioCallPrevStatus,
-    "video_call_previous_status": videoCallPrevStatus,
-    "paid_wallet": paidWallet,
-    "bonus_wallet": bonusWallet,
-    "ecommerce_wallet": ecommerceWallet,
-    "retention": retention,
-    "repurchase_rate": repurchaseRate,
-    "minimum_retention": minimumRetention,
-    "minimum_repurchase_rate": minimumRepurchaseRate,
-  };
+        "notice_board": noticeBoard?.toJson(),
+        "feedback": feedback?.toJson(),
+        "total_earning": totalEarning,
+        "todays_earning": todaysEarning,
+        "total_fine_payout": totalFinePayout,
+        "on_going_call": onGoingCall?.toJson(),
+        "session_type": sessionType?.toJson(),
+        "wallet": wallet?.toJson(),
+        "payout_pending": payoutPending,
+        "total_order_payout": totalOrderPayout,
+        "tds": tds,
+        "total_divine_wallet_payout": totalDivineWalletPayout,
+        "total_refund_payout": totalRefundPayout,
+        "total_tax": totalTax,
+        "total_payment_gateway_charges": totalPaymentGatewayCharges,
+        "offer_type": offerType == null
+            ? []
+            : List<dynamic>.from(offerType!.map((x) => x.toJson())),
+        "training_video": trainingVideo == null
+            ? []
+            : List<dynamic>.from(trainingVideo!.map((x) => x.toJson())),
+        "offers": offers?.toJson(),
+        "chat_previous_status": inAppChatPrevStatus,
+        "call_previous_status": audioCallPrevStatus,
+        "video_call_previous_status": videoCallPrevStatus,
+        "paid_wallet": paidWallet,
+        "bonus_wallet": bonusWallet,
+        "ecommerce_wallet": ecommerceWallet,
+        "retention": retention,
+        "repurchase_rate": repurchaseRate,
+        "minimum_retention": minimumRetention,
+        "minimum_repurchase_rate": minimumRepurchaseRate,
+      };
 }
 
 /*class FeedbackData {
@@ -203,7 +203,6 @@ class HomeData {
     "created_at": createdAt.toIso8601String(),
   };
 }*/
-
 
 class Offers {
   List<OrderOffer>? orderOffer;
@@ -269,7 +268,8 @@ class OrderOffer {
   int? freeMinutes;
   bool? isOn;
 
-  OrderOffer({this.id, this.offerName, this.callRate, this.isOn, this.freeMinutes});
+  OrderOffer(
+      {this.id, this.offerName, this.callRate, this.isOn, this.freeMinutes});
 
   OrderOffer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -296,7 +296,8 @@ class DiscountOffer {
   int? toggle;
   bool? isOn;
 
-  DiscountOffer({this.id, this.offerName, this.offerPercentage, this.toggle, this.isOn});
+  DiscountOffer(
+      {this.id, this.offerName, this.offerPercentage, this.toggle, this.isOn});
 
   DiscountOffer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -457,5 +458,3 @@ class SessionType {
         "video_schedual_at": videoSchedualAt,
       };
 }
-
-

@@ -30,6 +30,7 @@ import "package:flutter/material.dart";
 import "package:flutter/scheduler.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
+import "package:fluttertoast/fluttertoast.dart";
 import "package:get/get.dart";
 import "package:http/http.dart" as http;
 import "package:image_cropper/image_cropper.dart";
@@ -39,9 +40,6 @@ import "package:permission_handler/permission_handler.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:socket_io_client/socket_io_client.dart";
 import "package:svgaplayer_flutter/svgaplayer_flutter.dart";
-import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
-import "package:svgaplayer_flutter/parser.dart";
-import "package:svgaplayer_flutter/player.dart";
 
 import "../../cache/custom_cache_manager.dart";
 import "../../common/MiddleWare.dart";
@@ -187,6 +185,8 @@ class ChatMessageWithSocketController extends GetxController
     print("WentBack dispose-5");
     extraTimer?.cancel();
     svgController.dispose();
+    messgeScrollController.removeListener(_scrollListener);
+    messgeScrollController.dispose();
     super.dispose();
   }
 
@@ -371,31 +371,51 @@ class ChatMessageWithSocketController extends GetxController
     var chatMessage = ChatMessage.fromOfflineJson(values);
     print("chatMessage.title");
     print(chatMessage.message);
-    if(!isBadWord(chatMessage.message ?? "")){
-      int index = chatMessages.indexWhere((element) {
-        return element.time == chatMessage.time;
-      });
-      if (index == -1 || index == AppFirebaseService().orderData.value['userId'] || index == AppFirebaseService().orderData.value['astroId']) {
-        chatMessages.add(chatMessage);
-        chatMessages.refresh();
-        scrollToBottomFunc();
-        if (chatMessage.msgType == MsgType.sendgifts) {
-          if (chatMessage.productId != null) {
-            playAnimation(id: chatMessage.productId ?? "");
-          }
+    if (!isBadWord(chatMessage.message ?? "")) {
+      // int index = chatMessages.indexWhere((element) {
+      //   return element.time == chatMessage.time;
+      // });
+      //   if (index == -1 || index == AppFirebaseService().orderData.value['userId'] || index == AppFirebaseService().orderData.value['astroId']) {
+      chatMessages.add(chatMessage);
+      chatMessages.refresh();
+      scrollToBottomFunc();
+      if (chatMessage.msgType == MsgType.sendgifts) {
+        if (chatMessage.productId != null) {
+          playAnimation(id: chatMessage.productId ?? "");
         }
       }
-    }else{
+      //    }
+    } else {
       print("BadWordDetected ${chatMessage.message}");
     }
     print("Message.fromOffli2");
     AppFirebaseService()
         .database
         .child(
-        "chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
+            "chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
         .child(snapshot.key!)
         .remove();
   }
+
+  var isHistoryLoading = false;
+
+  void _scrollListener() {
+    if (messgeScrollController.hasClients) {
+      final double maxScrollExtent =
+          messgeScrollController.position.maxScrollExtent;
+      final double currentScrollPosition =
+          messgeScrollController.position.pixels;
+      final double threshold = maxScrollExtent * 0.1;
+
+      if (currentScrollPosition <= threshold && !isHistoryLoading) {
+        isHistoryLoading = true;
+        print('Reached the top 90% of the ListView');
+        currentPage.value = currentPage.value + 1;
+        getChatList();
+      }
+    }
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -409,7 +429,7 @@ class ChatMessageWithSocketController extends GetxController
     AppFirebaseService()
         .database
         .child(
-        "chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
+            "chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
         .orderByChild("msg_send_by")
         .equalTo("0")
         .onChildAdded
@@ -433,18 +453,17 @@ class ChatMessageWithSocketController extends GetxController
         initTask(p0);
       }
     });
+    messgeScrollController.addListener(_scrollListener);
     //stateHandling();
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) async {
-      if(fireChat.value == 0) {
+      if (fireChat.value == 0) {
         if (event.name == 'messageReceive') {
           if (!chatIdList.contains(event.data!["chatId"].toString())) {
             chatIdList.add(event.data!["chatId"].toString());
             if (event.data!["msg_type"].toString() == "0") {
               final String time =
-                  "${DateTime
-                  .now()
-                  .millisecondsSinceEpoch ~/ 1000}";
+                  "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
               ChatMessage chatMessage = ChatMessage(
                 orderId: AppFirebaseService().orderData.value["orderId"],
                 id: int.parse(time),
@@ -491,7 +510,7 @@ class ChatMessageWithSocketController extends GetxController
 
           int userId = 0;
           String userIdString =
-          AppFirebaseService().orderData.value["userId"].toString();
+              AppFirebaseService().orderData.value["userId"].toString();
           print('User ID String: $userIdString');
           if (int.tryParse(userIdString) != null) {
             userId = int.parse(userIdString);
@@ -502,8 +521,7 @@ class ChatMessageWithSocketController extends GetxController
 
           FirebaseDatabase.instance
               .ref(
-              "astrologer/${preferenceService.getUserDetail()!
-                  .id}/realTime/deliveredMsg/${userId}")
+                  "astrologer/${preferenceService.getUserDetail()!.id}/realTime/deliveredMsg/${userId}")
               .remove();
         }
       }
@@ -903,10 +921,9 @@ class ChatMessageWithSocketController extends GetxController
         if (data is Map<String, dynamic>) {
           isTyping.value = false;
           final ChatMessage chatMessage =
-          ChatMessage.fromOfflineJson(data["data"]);
-          final String time = "${DateTime
-              .now()
-              .millisecondsSinceEpoch ~/ 1000}";
+              ChatMessage.fromOfflineJson(data["data"]);
+          final String time =
+              "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
           log('chatMessage.msgType ${chatMessage.msgType}');
           if (chatMessage.msgType == MsgType.sendgifts) {
             if (chatMessage.productId != null) {
@@ -920,8 +937,8 @@ class ChatMessageWithSocketController extends GetxController
               chatMessageId: chatMessage.id.toString(),
               chatStatus: "read",
               time: time,
-              orderId: AppFirebaseService().orderData.value["orderId"]
-                  .toString(),
+              orderId:
+                  AppFirebaseService().orderData.value["orderId"].toString(),
             );
           }
           updateChatMessages(chatMessage, false, isSendMessage: false);
@@ -937,9 +954,9 @@ class ChatMessageWithSocketController extends GetxController
     print("playAnimation string id $id");
     List<GiftData> data = GiftsSingleton().gifts.data?.where(
           (element) {
-        return element.id == int.parse(id);
-      },
-    ).toList() ??
+            return element.id == int.parse(id);
+          },
+        ).toList() ??
         <GiftData>[];
     if (data.isNotEmpty) {
       print("playAnimation string id 2111 $id");
@@ -954,7 +971,7 @@ class ChatMessageWithSocketController extends GetxController
       // );
       const SVGAParser parser = SVGAParser();
       File file =
-      await CustomCacheManager().getFile(data.first.animation ?? '');
+          await CustomCacheManager().getFile(data.first.animation ?? '');
       var videoItem = await parser.decodeFromBuffer(file.readAsBytesSync());
       svgController.videoItem = videoItem;
       svgController.forward();
@@ -1087,7 +1104,8 @@ class ChatMessageWithSocketController extends GetxController
     final XFile? result = await FlutterImageCompress.compressAndGetFile(
       filePath,
       outPath,
-      minWidth: 20,
+      minWidth: 10,
+      quality: 1,
     );
     final List<int> imageBytes = File(result!.path).readAsBytesSync();
     final String base64Image = base64Encode(imageBytes);
@@ -1239,39 +1257,40 @@ class ChatMessageWithSocketController extends GetxController
         base64Image: base64Image,
         downloadedPath: downloadedPath,
         msgType: msgType,
-
         kundliId: kundliId,
         title: giftId ?? "${userData?.name} sent you a message.",
         type: 0,
         userType: "astrologer",
       );
     }
-    if(!isBadWord(newMessage.message ?? "")) {
+    if (!isBadWord(newMessage.message ?? "")) {
+      HashMap<dynamic, dynamic> hashMap =
+          HashMap<dynamic, dynamic>.from(newMessage.toOfflineJson());
       if (fireChat.value == 1) {
-        firebaseDatabase
+        print("SendingMessageToFireBase");
+        print("${newMessage.message}");
+        await firebaseDatabase
             .ref()
             .child(
-            "chatMessages/${AppFirebaseService().orderData
-                .value["orderId"]}/$time")
+                "chatMessages/${AppFirebaseService().orderData.value["orderId"]}/$time")
             .update(
-          newMessage.toOfflineJson(),
-        );
+              newMessage.chatToJson(),
+            );
       }
-    }else{
-      print("BadWord detected  ${chatMessages.last.message}");
+    } else {
+      if (kDebugMode) {
+        Fluttertoast.showToast(msg: "Bad word detected ${newMessage.message}");
+      }
+      print("SendingMessageToFireBase Failed");
+      print("${newMessage.message}");
     }
-    print("last message  ${chatMessages.last.message}");
-
-    socket.sendMessageSocket(newMessage);
+    chatMessages.add(newMessage);
+    chatMessages.refresh();
+    update();
     scrollToBottomFunc();
-    print("newMessage10909");
-    print(newMessage.toOfflineJson());
-    // chatMessages.add(newMessage);
-    // chatMessages.refresh();
-    // scrollToBottomFunc();
-
-    updateChatMessages(newMessage, false, isSendMessage: true);
-    print("last message  ${chatMessages.last.message}");
+    socket.sendMessageSocket(newMessage);
+    // updateChatMessages(newMessage, false, isSendMessage: true);
+    print("last message---  ${chatMessages.last.message}");
   }
 
   updateChatMessages(ChatMessage newMessage, bool isFromNotification,
@@ -1413,6 +1432,7 @@ class ChatMessageWithSocketController extends GetxController
 
   sendMsg() {
     if (messageController.text.trim().isNotEmpty) {
+      Future.delayed(const Duration(milliseconds: 500));
       final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       // type 1= New chat message, 2 = Delivered, 3= Msg read, 4= Other messages
       unreadMessageIndex.value = -1;
@@ -1541,6 +1561,7 @@ class ChatMessageWithSocketController extends GetxController
 
   final CallChatHistoryRepository callChatFeedBackRepository =
       Get.put(CallChatHistoryRepository());
+  RxInt currentPage = 1.obs;
 
   getChatList() async {
     update();
@@ -1548,15 +1569,20 @@ class ChatMessageWithSocketController extends GetxController
       var userId = int.parse(AppFirebaseService().orderData.value["userId"]);
       var astroId = int.parse(AppFirebaseService().orderData.value["astroId"]);
 
-      var response =
-          await callChatFeedBackRepository.getAstrologerChats(userId, astroId);
+      var response = await callChatFeedBackRepository.getAstrologerChats(
+          userId, astroId, currentPage.value);
 
       if (response.success ?? false) {
         List<ChatMessage> fetchedMessages = response.chatMessages ?? [];
 
         if (fetchedMessages.isNotEmpty) {
-          chatMessages.clear();
-          chatMessages.addAll(fetchedMessages.reversed);
+          if (currentPage.value.toString() == "1") {
+            chatMessages.clear();
+            chatMessages.addAll(response.chatMessages!.reversed);
+            scrollToBottomFunc();
+          } else {
+            chatMessages.insertAll(0, response.chatMessages!.reversed);
+          }
 
           scrollToBottomFunc();
           chatMessages.refresh();

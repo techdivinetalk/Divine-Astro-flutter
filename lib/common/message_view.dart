@@ -782,6 +782,7 @@ class MessageView extends StatelessWidget {
                                     imageUrl: chatDetail.message ?? '',
                                     fit: BoxFit.cover,
                                     height: 200.h,
+                                    width: 200.h,
                                   ),
                                 ),
                                 Positioned(
@@ -840,6 +841,7 @@ class MessageView extends StatelessWidget {
                                   : "${chatMessage.awsUrl}",
                               fit: BoxFit.cover,
                               height: 200.h,
+                              width: 200.h,
                             ),
                           ),
                           Positioned(
@@ -908,6 +910,7 @@ class MessageView extends StatelessWidget {
                                 "${chatDetail.message}",
                                 fit: BoxFit.cover,
                                 height: 200.h,
+                                width: 200.h,
                               ),
                             ),
                           ),
@@ -985,12 +988,14 @@ class MessageView extends StatelessWidget {
                                   ? Image.network(
                                       "${chatDetail.message}",
                                       fit: BoxFit.cover,
-                                      height: 200.h,
+                                height: 200.h,
+                                width: 200.h,
                                     )
                                   : Image.file(
                                       File(chatDetail.downloadedPath ?? ""),
                                       fit: BoxFit.cover,
-                                      height: 200.h,
+                                height: 200.h,
+                                width: 200.h,
                                     ),
                             ),
                           ],
@@ -1139,8 +1144,15 @@ class MessageView extends StatelessWidget {
         width: 165,
         height: 220,
         decoration: BoxDecoration(
+          border: Border.all(
+              color:const Color(0xffDCDCDC)),
           color: appColors.white,
-          borderRadius: BorderRadius.circular(10),
+          borderRadius: const BorderRadius.only(
+            bottomLeft: Radius.circular(10),
+            topLeft: Radius.circular(0),
+            bottomRight: Radius.circular(10),
+            topRight: Radius.circular(10),
+          ),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
