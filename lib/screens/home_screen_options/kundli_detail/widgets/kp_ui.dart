@@ -20,8 +20,6 @@ class KpUI extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: kToolbarHeight.h * 2.5),
-          SizedBox(height: 40.h),
           Obx(
             () => AnimatedCrossFade(
               duration: const Duration(milliseconds: 200),
@@ -32,8 +30,6 @@ class KpUI extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  SizedBox(height: kToolbarHeight.h * 2.5),
-                  SizedBox(height: 50.h),
                   const LoadingWidget(),
                 ],
               ),

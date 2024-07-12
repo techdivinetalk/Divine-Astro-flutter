@@ -17,20 +17,18 @@ class PredictionUi extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          SizedBox(height: kToolbarHeight.h * 2.5),
-          SizedBox(height: 40.h),
           Obx(
             () => AnimatedCrossFade(
               duration: const Duration(milliseconds: 200),
-              crossFadeState: (controller.kundliPrediction.value.data?.physical?.first == null)
-                  ? CrossFadeState.showSecond
-                  : CrossFadeState.showFirst,
+              crossFadeState:
+                  (controller.kundliPrediction.value.data?.physical?.first ==
+                          null)
+                      ? CrossFadeState.showSecond
+                      : CrossFadeState.showFirst,
               secondChild: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  SizedBox(height: kToolbarHeight.h * 2.5),
-                  SizedBox(height: 50.h),
                   const LoadingWidget(),
                 ],
               ),
@@ -46,8 +44,8 @@ class PredictionUi extends StatelessWidget {
                     // .join("\n")),
                     details(
                         title: "character".tr,
-                        details: controller
-                                .kundliPrediction.value.data?.character?.first ??
+                        details: controller.kundliPrediction.value.data
+                                ?.character?.first ??
                             ''),
                     // .join("\n")),
                     details(
@@ -58,8 +56,8 @@ class PredictionUi extends StatelessWidget {
                     // .join("\n")),
                     details(
                         title: "education".tr,
-                        details: controller
-                                .kundliPrediction.value.data?.education?.first ??
+                        details: controller.kundliPrediction.value.data
+                                ?.education?.first ??
                             ''),
                     // .join("\n")),
                     details(
@@ -84,8 +82,7 @@ class PredictionUi extends StatelessWidget {
       children: [
         Text(title.tr,
             style: AppTextStyle.textStyle20(
-                fontWeight: FontWeight.w500,
-                fontColor: appColors.textColor)),
+                fontWeight: FontWeight.w500, fontColor: appColors.textColor)),
         SizedBox(height: 5.h),
         Text(
           details,

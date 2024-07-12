@@ -17,25 +17,27 @@ class DoshaUi extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          SizedBox(height: kToolbarHeight.h * 2.5),
-          SizedBox(height: 40.h),
           Obx(
             () => AnimatedCrossFade(
               duration: const Duration(milliseconds: 200),
-              crossFadeState: (controller.manglikDosh.value.data?.manglik
-                  ?.manglikReport ==
-                  null && controller.manglikDosh.value.data
-                  ?.kalsarpaDetails?.oneLine ==
-                  null && controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.isUndergoingSadhesati ==
-                  null && controller.manglikDosh.value.data?.pitraDoshaReport?.conclusion == null)
+              crossFadeState: (controller
+                              .manglikDosh.value.data?.manglik?.manglikReport ==
+                          null &&
+                      controller.manglikDosh.value.data?.kalsarpaDetails
+                              ?.oneLine ==
+                          null &&
+                      controller.manglikDosh.value.data?.sadhesatiCurrentStatus
+                              ?.isUndergoingSadhesati ==
+                          null &&
+                      controller.manglikDosh.value.data?.pitraDoshaReport
+                              ?.conclusion ==
+                          null)
                   ? CrossFadeState.showSecond
                   : CrossFadeState.showFirst,
               secondChild: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  SizedBox(height: kToolbarHeight.h * 2.5),
-                  SizedBox(height: 50.h),
                   const LoadingWidget(),
                 ],
               ),
@@ -72,13 +74,12 @@ class DoshaUi extends StatelessWidget {
                                   ?.isUndergoingSadhesati ==
                               null
                           ? ""
-                          :
-                      "${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.isUndergoingSadhesati} ${(controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.sadhesatiStatus ?? false) ? " ${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.sadhesatiPhase ?? ''} of Sadesathi from ${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.startDate ?? ''} to ${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.endDate ?? ''}." : ""}",
+                          : "${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.isUndergoingSadhesati} ${(controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.sadhesatiStatus ?? false) ? " ${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.sadhesatiPhase ?? ''} of Sadesathi from ${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.startDate ?? ''} to ${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.endDate ?? ''}." : ""}",
                     ),
                     details(
                       title: "pitriDosha".tr,
-                      details: controller.manglikDosh.value.data?.pitraDoshaReport
-                                  ?.conclusion ==
+                      details: controller.manglikDosh.value.data
+                                  ?.pitraDoshaReport?.conclusion ==
                               null
                           ? ""
                           : controller.manglikDosh.value.data?.pitraDoshaReport
@@ -101,8 +102,7 @@ class DoshaUi extends StatelessWidget {
       children: [
         Text(title.tr,
             style: AppTextStyle.textStyle20(
-                fontWeight: FontWeight.w500,
-                fontColor: appColors.textColor)),
+                fontWeight: FontWeight.w500, fontColor: appColors.textColor)),
         SizedBox(height: 5.h),
         Text(
           details,
