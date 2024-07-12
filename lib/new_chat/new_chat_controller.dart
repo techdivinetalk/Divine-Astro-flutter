@@ -122,6 +122,8 @@ class NewChatController extends GetxController
     initTask(AppFirebaseService().orderData);
     msgAddSubscription = FirebaseDatabase.instance
         .ref("chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
+        .orderByChild("msg_send_by")
+        .equalTo("0")
         .onChildAdded
         .listen(
       (event) {
@@ -131,7 +133,6 @@ class NewChatController extends GetxController
             jsonDecode(jsonEncode(event.snapshot.value)));
 
         chatMessage.id = int.parse(event.snapshot.key ?? "0");
-        chatMessages.insert(0, chatMessage);
 
         if (MiddleWare.instance.currentPage == RouteName.newChat) {
           if (chatMessage.animation != null &&
@@ -187,110 +188,11 @@ class NewChatController extends GetxController
         },
       );
     }
-    /*_state = scheduler.SchedulerBinding.instance.lifecycleState;
-    _listener = AppLifecycleListener(
-      onShow: () {},
-      onResume: () {
-        print("when app is resume from background");
-        if (!isGalleryOpen) {
-          getChatList();
-        }
-        joinRoomSocketEvent();
-        initTask(AppFirebaseService().orderData);
-        isGalleryOpen = false;
-      },
-      onHide: () {
-        print("when app is in background");
-      },
-      onInactive: () {
-        print("when app is in onInactive");
-        leaveRoomSocketEvent();
-      },
-      onPause: () {
-        print("when app is in onPause");
-      },
-      onDetach: () async {
-        leaveRoomSocketEvent();
-        WidgetsBinding.instance.removeObserver(_listener);
-        await preference.clearPreferencesMessages();
-        Get.until(
-          (route) {
-            return Get.currentRoute == RouteName.dashboard;
-          },
-        );
-        //  Get.find<SocketChatWithAstrologerController>().dispose();
-      },
-      onRestart: () {},
-      onStateChange: (value) {
-        print("on state changed called ${value.name}");
-      },
-    );
-    if (_state != null) {
-      _states.add(_state!.name);
-    }*/
-
-    /*broadcastReceiver.start();
-    broadcastReceiver.messages.listen((BroadcastMessage event) async {
-      if (event.name == 'messageReceive') {
-        */ /*if (!chatIdList.contains(event.data!["chatId"].toString())) {
-          chatIdList.add(event.data!["chatId"].toString());
-          if (event.data!["msg_type"].toString() == "0") {
-            final String time =
-                "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-            ChatMessage chatMessage = ChatMessage(
-              orderId: AppFirebaseService().orderData.value["orderId"],
-              id: int.parse(time),
-              message: event.data!["message"],
-              // createdAt: DateTime.now().toIso8601String(),
-              receiverId: int.parse(
-                  AppFirebaseService().orderData.value["userId"].toString()),
-              senderId: preference.getUserDetail()!.id,
-              time: int.parse(time),
-              msgSendBy: "0",
-              awsUrl: event.data!["message"],
-              base64Image: null,
-              downloadedPath: null,
-              msgType: MsgType.text,
-              kundliId: null,
-              productPrice: null,
-              type: 0,
-              userType: "customer",
-            );
-            chatMessages.add(chatMessage);
-            scrollToBottomFunc();
-          } else {
-            getChatList();
-          }
-          updateReadMessage();
-        }*/ /*
-      } else if (event.name == 'deliveredMsg') {
-        print('deliveredData-Key:${event.data}');
-        var response = event.data?['deliveredMsgList'];
-        print('deliveredData Outer Key:${response.toString()}');
-        response.forEach((key, value) {
-          print('deliveredRes:$key - $value');
-          value.forEach((innerKey, innerValue) {
-            print('deliveredRes1:$innerKey - $innerValue');
-            var index = chatMessages
-                .indexWhere((element) => innerKey == element.id.toString());
-            if (index >= 0) {
-              chatMessages[index].type = 1;
-              chatMessages[index].seenStatus = 1;
-              chatMessages.refresh();
-            }
-          });
-        });
-
-        FirebaseDatabase.instance
-            .ref(
-                "astrologer/${preferenceService.getUserDetail()!.id}/realTime/deliveredMsg/${AppFirebaseService().orderData.value["userId"]}")
-            .remove();
-      }
-    });*/
   }
 
   RxBool isLoading = false.obs;
-  scrollListener(){
+
+  scrollListener() {
     if (messageScrollController.position.extentAfter <= 0 && !isLoading.value) {
       isLoading.value = true;
       getChatList();
@@ -353,11 +255,12 @@ class NewChatController extends GetxController
 
   bool hasResumed = false;
   bool hasPaused = false;
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     log("State : $state");
     if (state == AppLifecycleState.resumed) {
-      if(hasResumed){
+      if (hasResumed) {
         log("app Resumed");
         hasResumed = false;
         hasPaused = false;
@@ -366,7 +269,7 @@ class NewChatController extends GetxController
       }
     } else if (state == AppLifecycleState.paused) {
       hasResumed = true;
-      if(!hasPaused){
+      if (!hasPaused) {
         log("app Paused");
         hasPaused = true;
         preference.clearPreferencesMessages();
@@ -559,6 +462,7 @@ class NewChatController extends GetxController
 
     log("jsonEncode(newMessage)--- ${newMessage!.toJson()}");
     print("newMessage!.toJson()");
+
     appSocket.socket!.emit(
       ApiProvider.sendNewMessage,
       newMessage!.toJson(),
@@ -1116,7 +1020,8 @@ class NewChatController extends GetxController
 
   /// -------------------------- chat history API ------------------------ ///
   RxList<ChatMessage> chatMessages = <ChatMessage>[].obs;
-  CallChatHistoryRepository callChatFeedBackRepository = CallChatHistoryRepository();
+  CallChatHistoryRepository callChatFeedBackRepository =
+      CallChatHistoryRepository();
   int page = 1;
 
   getChatList() async {
@@ -1321,6 +1226,7 @@ class NewChatController extends GetxController
       );
     }
     newMessage.isSuspicious = isBadWord(messageText ?? "") ? 1 : 0;
+    chatMessages.insert(0, newMessage);
     firebaseDatabase
         .ref()
         .child(
@@ -1332,6 +1238,7 @@ class NewChatController extends GetxController
     log("last message ----- ${newMessage.toJson()}");
     print(
         "last message ----- ${jsonDecode(jsonEncode(newMessage)).runtimeType}");
+
     sendMessageInSocket(newMessage);
     scrollToBottomFunc();
   }
