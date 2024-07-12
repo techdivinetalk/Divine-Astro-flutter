@@ -29,8 +29,7 @@ RxBool callSwitch = false.obs;
 RxBool videoSwitch = false.obs;
 RxString userImage = ''.obs;
 RxString imageUploadBaseUrl = ''.obs;
-
-
+RxInt fireChat = 1.obs;
 RxInt isEngagedStatus = 0.obs;
 RxInt dasboardCurrentIndex = 0.obs;
 

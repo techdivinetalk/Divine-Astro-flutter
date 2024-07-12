@@ -476,6 +476,9 @@ class AppFirebaseService {
       case "queue":
         isQueue(int.parse(dataSnapshot.value.toString()));
         break;
+      case "fire_chat":
+        fireChat(int.parse(dataSnapshot.value.toString()));
+        break;
       // case "tarrotCard":
       //   isRemidies(int.parse(dataSnapshot.value.toString()));
       //   break;

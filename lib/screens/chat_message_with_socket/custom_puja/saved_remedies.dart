@@ -1,6 +1,5 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/new_chat/new_chat_controller.dart';
@@ -99,17 +98,21 @@ class SavedRemediesBottomSheet extends StatelessWidget {
                                           id: data.id,
                                           name: data.name,
                                           image: data.image,
-                                          amount: int.parse("${data.amount.toString()}"),
+                                          amount: int.parse(
+                                              "${data.amount.toString()}"),
                                           desc: "",
                                         ));
                                   } else if (chatMessageController != null) {
-                                    chatMessageController!
-                                        .sendMsg(MsgType.customProduct, {
-                                      'title': data.name,
-                                      'image': data.image.toString(),
-                                      'product_price': data.amount.toString(),
-                                      'product_id': data.id,
-                                    },false);
+                                    chatMessageController!.sendMsg(
+                                        MsgType.customProduct,
+                                        {
+                                          'title': data.name,
+                                          'image': data.image.toString(),
+                                          'product_price':
+                                              data.amount.toString(),
+                                          'product_id': data.id,
+                                        },
+                                        false);
                                   }
                                   Get.back();
                                 },

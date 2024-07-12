@@ -66,6 +66,13 @@ import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy
 import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy/final_remedies_sub_ui.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggest_remedies_sub/suggest_remedies_sub_binding.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggest_remedies_sub/suggest_remedies_sub_ui.dart';
+import 'package:divine_astrologer/screens/support/chat_support/chat_support_binding.dart';
+import 'package:divine_astrologer/screens/support/chat_support/chat_support_screen.dart';
+import 'package:divine_astrologer/screens/support/help_support/help_support_binding.dart';
+import 'package:divine_astrologer/screens/support/help_support/widgets/problem_answer_screen.dart';
+import 'package:divine_astrologer/screens/support/help_support/widgets/problem_questions_screen.dart';
+import 'package:divine_astrologer/screens/support/support_binding.dart';
+import 'package:divine_astrologer/screens/support/support_screen.dart';
 import 'package:divine_astrologer/screens/video_call_page/video_call_page.dart';
 import 'package:divine_astrologer/screens/video_call_page/video_call_page_binding.dart';
 import 'package:get/get.dart';
@@ -123,6 +130,7 @@ import '../screens/side_menu/wait_list/wait_list_binding.dart';
 import '../screens/side_menu/wait_list/wait_list_ui.dart';
 import '../screens/splash/splash_binding.dart';
 import '../screens/splash/splash_ui.dart';
+import '../screens/support/help_support/help_support_screen.dart';
 
 class RouteName {
   static const initial = root;
@@ -198,6 +206,11 @@ class RouteName {
   static const String remediesDetail = "/RemediesDetailsView";
   static const String acceptChatRequestScreen = "/AcceptChatRequestScreen";
   static const String liveLogsScreen = "/LiveLogsScreen";
+  static const String supportScreen = "/SupportScreen";
+  static const String helpSupportScreen = "/HelpSupportScreen";
+  static const String supportQuestionScreen = "/SupportQuestionScreen";
+  static const String supportAnswerScreen = "/SupportAnswerScreen";
+  static const String chatSupportScreen = "/ChatSupportScreen";
 }
 
 final Set<String> validRoutes = {
@@ -239,6 +252,29 @@ class Routes {
       page: () => leaveAndResignationTab(),
       name: RouteName.resignation,
       // binding: RegistrationBinding()
+    ),
+    GetPage(
+        page: () => SupportScreen(),
+        name: RouteName.supportScreen,
+        binding: SupportBinding()),
+    GetPage(
+        page: () => HelpSupportScreen(),
+        name: RouteName.helpSupportScreen,
+        binding: HelpSupportBinding()),
+    GetPage(
+      page: () => ProblemQuestionsScreen(),
+      name: RouteName.supportQuestionScreen,
+      binding: HelpSupportBinding(),
+    ),
+    GetPage(
+      page: () => ProblemAnswersScreen(),
+      name: RouteName.supportAnswerScreen,
+      binding: ProblemAnswerBinding(),
+    ),
+    GetPage(
+      page: () => ChatSupportScreen(),
+      name: RouteName.chatSupportScreen,
+      binding: ChatSupportBinding(),
     ),
     GetPage(
         page: () => const BlockedUserUI(),

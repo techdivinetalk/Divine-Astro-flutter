@@ -409,118 +409,114 @@ class _PoojaDharamMainScreenState extends State<PoojaDharamMainScreen>
 
   Widget gridWidget() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16.0),
-      child: _controller.getPooja.data!.pooja!.isEmpty
-          ? CustomText(
-              "Nothing here!",
-              fontSize: 20,
-              fontColor: appColors.textColor,
-              textAlign: TextAlign.center,
-              fontWeight: FontWeight.w500,
-            ).centered()
-          : DynamicHeightGridView(
-              shrinkWrap: true,
-              itemCount: _controller.getPooja.data?.pooja?.length ?? 0,
-              crossAxisCount: 2,
-              crossAxisSpacing: 10,
-              mainAxisSpacing: 10,
-              rowCrossAxisAlignment: CrossAxisAlignment.center,
-              builder: (BuildContext context, int index) {
-                final GetPoojaResponse resp = _controller.getPooja;
-                final GetPoojaResponseData data =
-                    resp.data ?? GetPoojaResponseData();
-                final Pooja pooja = data.pooja?[index] ?? Pooja();
-                final startPoint = pref.getAmazonUrl() ?? "";
-                final endPoint = pooja.poojaImg ?? "";
-                final String poojaImg = "$startPoint$endPoint";
-                print(pooja.cashbackType);
-                print("pooja.cashbackType");
-                return Card(
-                  clipBehavior: Clip.hardEdge,
-                  child: InkWell(
-                    onTap: () async {
-                      var route = RouteName.poojaDharamDetailsScreen;
-                      var arguments = pooja.id;
-                      await Get.toNamed(route, arguments: {
-                        'detailOnly': false,
-                        'data': arguments
-                      });
-                      await getPoojaCall();
-                      // await getBookedPoojaCall();
-                    },
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: <Widget>[
-                        SizedBox(
-                          // height: Get.height / 6,
-                          width: double.infinity,
-                          child: CustomImageWidget(
-                            imageUrl: poojaImg,
-                            rounded: false,
-                            typeEnum: TypeEnum.pooja,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 10
-                        ),
-                        Container(
-                          width: 100,
-                          child: Text(
-                            pooja.poojaName ?? "",
-                            style: TextStyle(
-                              color: appColors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.bold,
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
+        child: _controller.getPooja.data!.pooja!.isEmpty
+            ? CustomText(
+                "Nothing here!",
+                fontSize: 20,
+                fontColor: appColors.textColor,
+                textAlign: TextAlign.center,
+                fontWeight: FontWeight.w500,
+              ).centered()
+            : DynamicHeightGridView(
+                shrinkWrap: true,
+                itemCount: _controller.getPooja.data?.pooja?.length ?? 0,
+                crossAxisCount: 2,
+                crossAxisSpacing: 10,
+                mainAxisSpacing: 10,
+                rowCrossAxisAlignment: CrossAxisAlignment.center,
+                builder: (BuildContext context, int index) {
+                  final GetPoojaResponse resp = _controller.getPooja;
+                  final GetPoojaResponseData data =
+                      resp.data ?? GetPoojaResponseData();
+                  final Pooja pooja = data.pooja?[index] ?? Pooja();
+                  final startPoint = pref.getAmazonUrl() ?? "";
+                  final endPoint = pooja.poojaImg ?? "";
+                  final String poojaImg = "$startPoint$endPoint";
+                  print(pooja.cashbackType);
+                  print("pooja.cashbackType");
+                  return Card(
+                    clipBehavior: Clip.hardEdge,
+                    child: InkWell(
+                      onTap: () async {
+                        var route = RouteName.poojaDharamDetailsScreen;
+                        var arguments = pooja.id;
+                        await Get.toNamed(route, arguments: {
+                          'detailOnly': false,
+                          'data': arguments
+                        });
+                        await getPoojaCall();
+                        // await getBookedPoojaCall();
+                      },
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: <Widget>[
+                          SizedBox(
+                            // height: Get.height / 6,
+                            width: double.infinity,
+                            child: CustomImageWidget(
+                              imageUrl: poojaImg,
+                              rounded: false,
+                              typeEnum: TypeEnum.pooja,
                             ),
-                            maxLines: 2,
+                          ),
+                          SizedBox(height: 10),
+                          Container(
+                            width: 100,
+                            child: Text(
+                              pooja.poojaName ?? "",
+                              style: TextStyle(
+                                color: appColors.black,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
+                              ),
+                              maxLines: 2,
+                              textAlign: TextAlign.center,
+                            ),
+                          ),
+                          SizedBox(height: 5),
+                          Text(
+                            "Starting from ₹${pooja.poojaStartingPriceInr ?? ""}",
+                            style: TextStyle(
+                              color: appColors.grey,
+                              fontSize: 12,
+                            ),
+                            maxLines: 1,
                             textAlign: TextAlign.center,
                           ),
-                        ),
-                        SizedBox(
-                            height: 5
-                        ),
-                        Text(
-                          "Starting from ₹${pooja.poojaStartingPriceInr ?? ""}",
-                          style: TextStyle(
-                            color: appColors.grey,
-                            fontSize: 12,
-                          ),
-                          maxLines: 1,
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(
-                            height: 5
-                        ),
-                        !(pooja.cashbackValue == 0) ?    Container(
-                          padding: const EdgeInsets.symmetric(vertical: 8),
-                          color: const Color(0xff5F3C08),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text(
-                                ((pooja.cashbackType ?? 0) == 1)
-                                    ? "Upto ${pooja.cashbackValue}% Cashback"
-                                    : ((pooja.cashbackType ?? 0) == 2)
-                                        ? "Upto ${pooja.cashbackValue}₹ Cashback"
-                                        : "",
-                                style: TextStyle(
-                                  color: appColors.white,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                maxLines: 1,
-                                textAlign: TextAlign.center,
-                              ),
-                            ],
-                          ),
-                        ):SizedBox(),
-                      ],
+                          SizedBox(height: 5),
+                          !(pooja.cashbackValue == 0)
+                              ? Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  color: const Color(0xff5F3C08),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        ((pooja.cashbackType ?? 0) == 1)
+                                            ? "Upto ${pooja.cashbackValue}% Cashback"
+                                            : ((pooja.cashbackType ?? 0) == 2)
+                                                ? "Upto ${pooja.cashbackValue}₹ Cashback"
+                                                : "",
+                                        style: TextStyle(
+                                          color: appColors.white,
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                        maxLines: 1,
+                                        textAlign: TextAlign.center,
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : SizedBox(),
+                        ],
+                      ),
                     ),
-                  ),
-                );
-              },
-            ),
-    );
+                  );
+                },
+              ));
   }
 
   Future<void> navigateToWhatsapp() async {

@@ -13,7 +13,6 @@ import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/gen/assets.gen.dart";
 import "package:divine_astrologer/gen/fonts.gen.dart";
 import "package:divine_astrologer/model/chat_offline_model.dart";
-import "package:divine_astrologer/new_chat/new_chat_controller.dart";
 import "package:divine_astrologer/zego_call/zego_service.dart";
 import "package:emoji_picker_flutter/emoji_picker_flutter.dart";
 import "package:firebase_database/firebase_database.dart";
@@ -25,6 +24,7 @@ import "package:intl/intl.dart";
 import "package:lottie/lottie.dart";
 import "package:permission_handler/permission_handler.dart";
 import "package:simple_html_css/simple_html_css.dart";
+import "package:svgaplayer_flutter/svgaplayer_flutter.dart";
 
 import "../../common/common_bottomsheet.dart";
 import "../../model/message_template_response.dart";
@@ -39,513 +39,577 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   Widget build(BuildContext context) {
     bool keyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
     List<String> myList = [];
-    return Scaffold(
-      // resizeToAvoidBottomInset: true,
+    return WillPopScope(
+      onWillPop: () => controller.checkIfEmojisOpen(),
+      child: Scaffold(
+        // resizeToAvoidBottomInset: true,
 
-      body: GetBuilder<ChatMessageWithSocketController>(
-          init: ChatMessageWithSocketController(),
-          builder: (controller) {
-            if (keyboardVisible) {
-              controller.scrollToBottomFunc();
-            }
-            return Stack(
-              children: [
-                Assets.images.bgChatWallpaper.image(
-                  width: MediaQuery.of(context).size.width,
-                  height: double.infinity,
-                  fit: BoxFit.cover,
-                  color: appColors.white,
-                ),
-                Column(
-                  children: [
-                    AstrologerChatAppBar(),
-                    controller.noticeDataChat.isNotEmpty
-                        ? CarouselSlider(
-                            options: CarouselOptions(
-                              height: 50,
-                              autoPlay: true,
-                              aspectRatio: 1,
-                              viewportFraction: 1,
+        body: SizedBox(
+          width: double.infinity,
+          height: double.infinity,
+          child: Stack(
+            children: [
+              GetBuilder<ChatMessageWithSocketController>(
+                  init: ChatMessageWithSocketController(),
+                  builder: (controller) {
+                    if (keyboardVisible) {
+                      controller.scrollToBottomFunc();
+                    }
+                    return Stack(
+                      children: [
+                        Assets.images.bgChatWallpaper.image(
+                          width: MediaQuery.of(context).size.width,
+                          height: double.infinity,
+                          fit: BoxFit.cover,
+                          color: appColors.white,
+                        ),
+                        Column(
+                          children: [
+                            AstrologerChatAppBar(),
+                            controller.noticeDataChat.isNotEmpty
+                                ? CarouselSlider(
+                                    options: CarouselOptions(
+                                      height: 50,
+                                      autoPlay: true,
+                                      aspectRatio: 1,
+                                      viewportFraction: 1,
+                                    ),
+                                    items: controller.noticeDataChat.map((i) {
+                                      return Builder(
+                                        builder: (BuildContext context) {
+                                          return Container(
+                                            width: double.infinity,
+                                            margin: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 10),
+                                            decoration: BoxDecoration(
+                                              border: Border.all(
+                                                  color:
+                                                      const Color(0xffDA2439)),
+                                              borderRadius:
+                                                  BorderRadius.circular(10),
+                                            ),
+                                            alignment: Alignment.center,
+                                            child: RichText(
+                                              textAlign: TextAlign.center,
+                                              text: HTML.toTextSpan(
+                                                  context, i.description ?? ""),
+                                              maxLines: 2,
+                                            ),
+                                          );
+                                        },
+                                      );
+                                    }).toList(),
+                                  )
+                                : const SizedBox.shrink(),
+                            Expanded(
+                              child: Stack(
+                                children: [
+                                  Obx(
+                                    () => ListView.builder(
+                                      controller:
+                                          controller.messgeScrollController,
+                                      itemCount: controller.chatMessages.length,
+                                      shrinkWrap: true,
+                                      reverse: false,
+                                      itemBuilder: (context, index) {
+                                        var chatMessage =
+                                            controller.chatMessages[index];
+                                        print(
+                                            "${myList.length < 3 && chatMessage.msgType == MsgType.text && chatMessage.orderId == AppFirebaseService().orderData["orderId"]}");
+                                        print(
+                                            "${AppFirebaseService().orderData["orderId"]}");
+                                        if (myList.length < 3 &&
+                                            chatMessage.msgType ==
+                                                MsgType.text &&
+                                            chatMessage.orderId ==
+                                                AppFirebaseService()
+                                                    .orderData["orderId"]) {
+                                          myList
+                                              .add(chatMessage.time.toString());
+                                          print("timeSet ${chatMessage.time}");
+                                          print("${chatMessage.msgType}");
+                                          print("${chatMessage.msgType}");
+                                        }
+                                        return Column(
+                                          children: [
+                                            Padding(
+                                              padding: EdgeInsets.symmetric(
+                                                  vertical: 4.h,
+                                                  horizontal: 10.w),
+                                              child: MessageView(
+                                                index: index,
+                                                nextChatMessage: index ==
+                                                        controller.chatMessages
+                                                                .length -
+                                                            1
+                                                    ? controller
+                                                        .chatMessages[index]
+                                                    : controller.chatMessages[
+                                                        index + 1],
+                                                chatMessage: chatMessage,
+                                                yourMessage:
+                                                    chatMessage.msgSendBy ==
+                                                        "1",
+                                                userName: controller
+                                                    .customerName.value,
+                                                unreadMessage: controller
+                                                    .unreadMessageIndex.value,
+                                                myList: myList,
+                                              ),
+                                            ),
+                                            if (index ==
+                                                (controller
+                                                        .chatMessages.length -
+                                                    1))
+                                              typingWidget()
+                                          ],
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                  Positioned(
+                                    bottom: 4.h,
+                                    right: 25.w,
+                                    child: Obx(
+                                        () => controller.scrollToBottom.value
+                                            ? InkWell(
+                                                onTap: () {
+                                                  //  controller.scrollToBottomFunc();
+                                                  //  controller.updateReadMessageStatus();
+                                                },
+                                                child: Badge(
+                                                  backgroundColor:
+                                                      appColors.darkBlue,
+                                                  offset: const Offset(4, -2),
+                                                  isLabelVisible: (controller
+                                                          .unreadMsgCount
+                                                          .value >
+                                                      0),
+                                                  label: Text(
+                                                      "${controller.unreadMsgCount.value}"),
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 6.w),
+                                                  smallSize: 14.sp,
+                                                  largeSize: 20.sp,
+                                                  child: Icon(
+                                                      Icons
+                                                          .arrow_drop_down_circle_outlined,
+                                                      color:
+                                                          appColors.guideColor,
+                                                      size: 40.h),
+                                                ),
+                                              )
+                                            : const SizedBox()),
+                                  ),
+                                ],
+                              ),
                             ),
-                            items: controller.noticeDataChat.map((i) {
-                              return Builder(
-                                builder: (BuildContext context) {
-                                  return Container(
-                                    width: double.infinity,
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
+                            Obx(() {
+                              return Visibility(
+                                  visible: AppFirebaseService()
+                                              .orderData
+                                              .value["card"] !=
+                                          null &&
+                                      controller.getListOfCardLength(context) >
+                                          0,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(10),
+                                      decoration: BoxDecoration(
+                                        color: const Color(0xFF2F2F2F),
+                                        borderRadius: BorderRadius.circular(
+                                            14), // First container border radius
+                                      ), // First container color
+                                      child: !controller.isCardVisible.value
+                                          ? Text(
+                                              "${AppFirebaseService().orderData.value["customerName"]} is picking tarot cards...",
+                                              maxLines: 2,
+                                              textAlign: TextAlign.center,
+                                              style: AppTextStyle.textStyle15(
+                                                fontColor: appColors.white,
+                                              ),
+                                            )
+                                          : Column(
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        FirebaseDatabase
+                                                            .instance
+                                                            .ref(
+                                                                "order/${AppFirebaseService().orderData.value["orderId"]}/card")
+                                                            .remove();
+                                                        controller.isCardVisible
+                                                            .value = false;
+                                                      },
+                                                      child: Icon(Icons.cancel,
+                                                          color:
+                                                              appColors.white),
+                                                    ),
+                                                    const Text(
+                                                      "Chosen cards",
+                                                      style: TextStyle(
+                                                          color: Color(
+                                                              0x00ffffff)),
+                                                    ),
+                                                  ],
+                                                ),
+                                                const SizedBox(height: 10),
+                                                Obx(() {
+                                                  return Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: List.generate(
+                                                      controller
+                                                          .getListOfCardLength(
+                                                              context),
+                                                      (index) => Expanded(
+                                                        flex: 1,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal:
+                                                                      4),
+                                                          child: Container(
+                                                            width:
+                                                                double.infinity,
+                                                            height: 120,
+                                                            // Adjust the height as needed
+                                                            decoration:
+                                                                BoxDecoration(
+                                                              color: const Color(
+                                                                  0xFF212121),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          10), // Second container border radius
+                                                            ),
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .all(5.0),
+                                                              child:
+                                                                  Image.network(
+                                                                "${controller.pref.getAmazonUrl() ?? ""}/${controller.getValueByPosition(index)}",
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                }),
+                                                Obx(() {
+                                                  return Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .spaceBetween,
+                                                    children: List.generate(
+                                                      controller
+                                                          .getListOfCardLength(
+                                                              context),
+                                                      (index) => Expanded(
+                                                        flex: 1,
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal:
+                                                                      2),
+                                                          child: Center(
+                                                              child: Text(
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            // Add this line for text alignment
+                                                            controller
+                                                                .getKeyByPosition(
+                                                                    index),
+                                                            style: TextStyle(
+                                                              color: appColors
+                                                                  .white,
+                                                              fontSize:
+                                                                  12, // Adjust the font size as needed
+                                                            ),
+                                                            softWrap: true,
+                                                            maxLines: 3,
+                                                            // Maximum lines allowed
+                                                            overflow: TextOverflow
+                                                                .ellipsis, // Optional: use ellipsis to indicate text overflow
+                                                          )),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                }),
+                                                const SizedBox(height: 10),
+                                              ],
+                                            ),
+                                    ),
+                                  ));
+                            }),
+                            SizedBox(height: 10.h),
+                            Obx(
+                              () => Visibility(
+                                visible: controller.showTalkTime.value == "-1",
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
                                     decoration: BoxDecoration(
                                       border: Border.all(
-                                          color: const Color(0xffDA2439)),
-                                      borderRadius: BorderRadius.circular(10),
+                                          color: appColors.grey, width: 2),
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(10.0)),
+                                      color: appColors.white,
                                     ),
-                                    alignment: Alignment.center,
-                                    child: RichText(
-                                      textAlign: TextAlign.center,
-                                      text: HTML.toTextSpan(
-                                          context, i.description ?? ""),
-                                      maxLines: 2,
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                          "Chat Ended you can still send message till ${controller.extraTalkTime.value}",
+                                          style: const TextStyle(
+                                              color: Colors.red, fontSize: 11),
+                                          textAlign: TextAlign.center),
                                     ),
-                                  );
-                                },
-                              );
-                            }).toList(),
-                          )
-                        : const SizedBox.shrink(),
-                    Expanded(
-                      child: Stack(
-                        children: [
-                          Obx(
-                            () => ListView.builder(
-                              controller: controller.messgeScrollController,
-                              itemCount: controller.chatMessages.length,
-                              shrinkWrap: true,
-                              reverse: false,
-                              itemBuilder: (context, index) {
-                                var chatMessage =
-                                    controller.chatMessages[index];
-                                print(
-                                    "${myList.length < 3 && chatMessage.msgType == MsgType.text && chatMessage.orderId == AppFirebaseService().orderData["orderId"]}");
-                                print(
-                                    "${AppFirebaseService().orderData["orderId"]}");
-                                if (myList.length < 3 &&
-                                    chatMessage.msgType == MsgType.text &&
-                                    chatMessage.orderId ==
-                                        AppFirebaseService()
-                                            .orderData["orderId"]) {
-                                  myList.add(chatMessage.time.toString());
-                                  print("timeSet ${chatMessage.time}");
-                                  print("${chatMessage.msgType}");
-                                  print("${chatMessage.msgType}");
-                                }
-                                return Column(
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.symmetric(
-                                          vertical: 4.h, horizontal: 10.w),
-                                      child: MessageView(
-                                        index: index,
-                                        nextChatMessage: index ==
-                                                controller.chatMessages.length -
-                                                    1
-                                            ? controller.chatMessages[index]
-                                            : controller
-                                                .chatMessages[index + 1],
-                                        chatMessage: chatMessage,
-                                        yourMessage:
-                                            chatMessage.msgSendBy == "1",
-                                        userName: controller.customerName.value,
-                                        unreadMessage:
-                                            controller.unreadMessageIndex.value,
-                                        myList: myList,
-                                      ),
-                                    ),
-                                    if (index ==
-                                        (controller.chatMessages.length - 1))
-                                      typingWidget()
-                                  ],
-                                );
-                              },
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
-                          Positioned(
-                            bottom: 4.h,
-                            right: 25.w,
-                            child: Obx(() => controller.scrollToBottom.value
-                                ? InkWell(
-                                    onTap: () {
-                                      //  controller.scrollToBottomFunc();
-                                      //  controller.updateReadMessageStatus();
-                                    },
-                                    child: Badge(
-                                      backgroundColor: appColors.darkBlue,
-                                      offset: const Offset(4, -2),
-                                      isLabelVisible:
-                                          (controller.unreadMsgCount.value > 0),
-                                      label: Text(
-                                          "${controller.unreadMsgCount.value}"),
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 6.w),
-                                      smallSize: 14.sp,
-                                      largeSize: 20.sp,
-                                      child: Icon(
-                                          Icons.arrow_drop_down_circle_outlined,
-                                          color: appColors.guideColor,
-                                          size: 40.h),
-                                    ),
-                                  )
-                                : const SizedBox()),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Obx(() {
-                      return Visibility(
-                          visible:
-                              AppFirebaseService().orderData.value["card"] !=
-                                  null,
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Container(
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                color: const Color(0xFF2F2F2F),
-                                borderRadius: BorderRadius.circular(
-                                    14), // First container border radius
-                              ), // First container color
-                              child: !controller.isCardVisible.value
-                                  ? Text(
-                                      "${AppFirebaseService().orderData.value["customerName"]} is picking tarot cards...",
-                                      maxLines: 2,
-                                      textAlign: TextAlign.center,
-                                      style: AppTextStyle.textStyle15(
-                                        fontColor: appColors.white,
-                                      ),
-                                    )
-                                  : Column(
-                                      children: [
-                                        Row(
+                            // Obx(
+                            //   () => Column(
+                            //     children: [
+                            //       messageTemplateRow(),
+                            //       SizedBox(height: 15.h),
+                            //     ],
+                            //   ),
+                            // ),
+                            /*Obx(() {
+                          return Visibility(
+                            visible: !controller.isKeyboardVisible.value,
+                            child: Column(
+                              children: [
+                                messageTemplateRow(),
+                                SizedBox(height: 15.h),
+                                Row(
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        controller.openShowDeck(context, controller);
+                                      },
+                                      child: Container(
+                                        margin: EdgeInsets.only(left: 12.h),
+                                        width: 70.h,
+                                        height: 90.h,
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 5.h,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: appColors.red,
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(15),
+                                          ),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            GestureDetector(
-                                              onTap: () {
-                                                FirebaseDatabase.instance
-                                                    .ref(
-                                                        "order/${AppFirebaseService().orderData.value["orderId"]}/card")
-                                                    .remove();
-                                                controller.isCardVisible.value =
-                                                    false;
-                                              },
-                                              child: Icon(Icons.cancel,
-                                                  color: appColors.white),
+                                            SizedBox(
+                                              width: 25.h,
+                                              height: 25.h,
+                                              child: Assets.images.chatTarotCards.svg(),
                                             ),
-                                            const Text(
-                                              "Chosen cards",
-                                              style: TextStyle(
-                                                  color: Color(0x00ffffff)),
+                                            SizedBox(height: 5.h),
+                                            Text(
+                                              'tarotNCards'.tr,
+                                              maxLines: 2,
+                                              style: AppTextStyle.textStyle12(
+                                                  fontColor: appColors.white),
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(height: 10),
-                                        Obx(() {
-                                          return Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: List.generate(
-                                              controller
-                                                  .getListOfCardLength(context),
-                                              (index) => Expanded(
-                                                flex: 1,
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(horizontal: 4),
-                                                  child: Container(
-                                                    width: double.infinity,
-                                                    height: 120,
-                                                    // Adjust the height as needed
-                                                    decoration: BoxDecoration(
-                                                      color: const Color(
-                                                          0xFF212121),
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10), // Second container border radius
-                                                    ),
-                                                    child: Padding(
+                                      ),
+                                    ),
+                                    Expanded(
+                                      child: Container(
+                                        height: 90.h,
+                                        margin: EdgeInsets.only(
+                                          left: 10.h,
+                                          right: 12.h,
+                                        ),
+                                        padding: EdgeInsets.symmetric(
+                                          vertical: 8.h,
+                                          horizontal: 8.h,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          color: appColors.white,
+                                          borderRadius: const BorderRadius.all(
+                                            Radius.circular(15),
+                                          ),
+                                        ),
+                                        child: Column(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          crossAxisAlignment: CrossAxisAlignment.center,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: GestureDetector(
+                                                    onTap: () async {
+                                                      controller
+                                                          .openProduct(controller);
+                                                    },
+                                                    child: Container(
                                                       padding:
-                                                          const EdgeInsets.all(
-                                                              5.0),
-                                                      child: Image.network(
-                                                        "${controller.pref.getAmazonUrl() ?? ""}/${controller.getValueByPosition(index)}",
+                                                          const EdgeInsets.symmetric(
+                                                              horizontal: 12,
+                                                              vertical: 8),
+                                                      decoration: BoxDecoration(
+                                                        color: appColors.red,
+                                                        borderRadius:
+                                                            const BorderRadius.all(
+                                                                Radius.circular(18)),
+                                                      ),
+                                                      alignment:
+                                                          AlignmentDirectional.center,
+                                                      child: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment.center,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment.center,
+                                                        children: [
+                                                          SizedBox(
+                                                            width: 20.h,
+                                                            height: 20.h,
+                                                            child: Assets
+                                                                .images.chatProduct
+                                                                .svg(),
+                                                          ),
+                                                          SizedBox(width: 5.h),
+                                                          Text(
+                                                            'product'.tr,
+                                                            style: AppTextStyle
+                                                                .textStyle10(
+                                                                    fontColor: appColors
+                                                                        .white),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                            ),
-                                          );
-                                        }),
-                                        Obx(() {
-                                          return Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: List.generate(
-                                              controller
-                                                  .getListOfCardLength(context),
-                                              (index) => Expanded(
-                                                flex: 1,
-                                                child: Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(horizontal: 2),
-                                                  child: Center(
-                                                      child: Text(
-                                                    textAlign: TextAlign.center,
-                                                    // Add this line for text alignment
-                                                    controller.getKeyByPosition(
-                                                        index),
-                                                    style: TextStyle(
-                                                      color: appColors.white,
-                                                      fontSize:
-                                                          12, // Adjust the font size as needed
+                                                SizedBox(width: 10.h),
+                                                /*Expanded(
+                                                  child: GestureDetector(
+                                                    onTap: () async {
+                                                      controller
+                                                          .openCustomShop(controller);
+                                                    },
+                                                    child: Container(
+                                                      padding:
+                                                          const EdgeInsets.symmetric(
+                                                              horizontal: 12,
+                                                              vertical: 8),
+                                                      decoration: BoxDecoration(
+                                                        color: appColors.red,
+                                                        borderRadius:
+                                                            const BorderRadius.all(
+                                                                Radius.circular(18)),
+                                                      ),
+                                                      alignment:
+                                                          AlignmentDirectional.center,
+                                                      child: Row(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment.center,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment.center,
+                                                        children: [
+                                                          SizedBox(
+                                                            width: 18.h,
+                                                            height: 18.h,
+                                                            child: Assets
+                                                                .images.chatCustomShop
+                                                                .svg(),
+                                                          ),
+                                                          SizedBox(width: 5.h),
+                                                          Text(
+                                                            'customShop'.tr,
+                                                            maxLines: 2,
+                                                            style: AppTextStyle
+                                                                .textStyle10(
+                                                                    fontColor: appColors
+                                                                        .white),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
-                                                    softWrap: true,
-                                                    maxLines: 3,
-                                                    // Maximum lines allowed
-                                                    overflow: TextOverflow
-                                                        .ellipsis, // Optional: use ellipsis to indicate text overflow
-                                                  )),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        }),
-                                        const SizedBox(height: 10),
-                                      ],
-                                    ),
-                            ),
-                          ));
-                    }),
-                    SizedBox(height: 10.h),
-                    Obx(
-                      () => Visibility(
-                        visible: controller.showTalkTime.value == "-1",
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              border:
-                                  Border.all(color: appColors.grey, width: 2),
-                              borderRadius:
-                                  const BorderRadius.all(Radius.circular(10.0)),
-                              color: appColors.white,
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Text(
-                                  "Chat Ended you can still send message till ${controller.extraTalkTime.value}",
-                                  style: const TextStyle(
-                                      color: Colors.red, fontSize: 11),
-                                  textAlign: TextAlign.center),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                    // Obx(
-                    //   () => Column(
-                    //     children: [
-                    //       messageTemplateRow(),
-                    //       SizedBox(height: 15.h),
-                    //     ],
-                    //   ),
-                    // ),
-                    /*Obx(() {
-                  return Visibility(
-                    visible: !controller.isKeyboardVisible.value,
-                    child: Column(
-                      children: [
-                        messageTemplateRow(),
-                        SizedBox(height: 15.h),
-                        Row(
-                          children: [
-                            GestureDetector(
-                              onTap: () {
-                                controller.openShowDeck(context, controller);
-                              },
-                              child: Container(
-                                margin: EdgeInsets.only(left: 12.h),
-                                width: 70.h,
-                                height: 90.h,
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 5.h,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: appColors.red,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(15),
-                                  ),
-                                ),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    SizedBox(
-                                      width: 25.h,
-                                      height: 25.h,
-                                      child: Assets.images.chatTarotCards.svg(),
-                                    ),
-                                    SizedBox(height: 5.h),
-                                    Text(
-                                      'tarotNCards'.tr,
-                                      maxLines: 2,
-                                      style: AppTextStyle.textStyle12(
-                                          fontColor: appColors.white),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Expanded(
-                              child: Container(
-                                height: 90.h,
-                                margin: EdgeInsets.only(
-                                  left: 10.h,
-                                  right: 12.h,
-                                ),
-                                padding: EdgeInsets.symmetric(
-                                  vertical: 8.h,
-                                  horizontal: 8.h,
-                                ),
-                                decoration: BoxDecoration(
-                                  color: appColors.white,
-                                  borderRadius: const BorderRadius.all(
-                                    Radius.circular(15),
-                                  ),
-                                ),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                          child: GestureDetector(
-                                            onTap: () async {
-                                              controller
-                                                  .openProduct(controller);
-                                            },
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 12,
-                                                      vertical: 8),
-                                              decoration: BoxDecoration(
-                                                color: appColors.red,
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(18)),
-                                              ),
-                                              alignment:
-                                                  AlignmentDirectional.center,
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  SizedBox(
-                                                    width: 20.h,
-                                                    height: 20.h,
-                                                    child: Assets
-                                                        .images.chatProduct
-                                                        .svg(),
                                                   ),
-                                                  SizedBox(width: 5.h),
-                                                  Text(
-                                                    'product'.tr,
-                                                    style: AppTextStyle
-                                                        .textStyle10(
-                                                            fontColor: appColors
-                                                                .white),
-                                                  ),
-                                                ],
-                                              ),
+                                                ),*/
+                                              ],
                                             ),
-                                          ),
+                                            SizedBox(height: 8.h),
+                                            Text(
+                                              'useTheseOptionsToSellECommerceProducts'
+                                                  .tr,
+                                              style: AppTextStyle.textStyle10(
+                                                  fontColor: appColors.black),
+                                            ),
+                                          ],
                                         ),
-                                        SizedBox(width: 10.h),
-                                        /*Expanded(
-                                          child: GestureDetector(
-                                            onTap: () async {
-                                              controller
-                                                  .openCustomShop(controller);
-                                            },
-                                            child: Container(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 12,
-                                                      vertical: 8),
-                                              decoration: BoxDecoration(
-                                                color: appColors.red,
-                                                borderRadius:
-                                                    const BorderRadius.all(
-                                                        Radius.circular(18)),
-                                              ),
-                                              alignment:
-                                                  AlignmentDirectional.center,
-                                              child: Row(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  SizedBox(
-                                                    width: 18.h,
-                                                    height: 18.h,
-                                                    child: Assets
-                                                        .images.chatCustomShop
-                                                        .svg(),
-                                                  ),
-                                                  SizedBox(width: 5.h),
-                                                  Text(
-                                                    'customShop'.tr,
-                                                    maxLines: 2,
-                                                    style: AppTextStyle
-                                                        .textStyle10(
-                                                            fontColor: appColors
-                                                                .white),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ),*/
-                                      ],
-                                    ),
-                                    SizedBox(height: 8.h),
-                                    Text(
-                                      'useTheseOptionsToSellECommerceProducts'
-                                          .tr,
-                                      style: AppTextStyle.textStyle10(
-                                          fontColor: appColors.black),
+                                      ),
                                     ),
                                   ],
                                 ),
-                              ),
+                                SizedBox(height: 15.h),
+                              ],
                             ),
+                          );
+                        }),*/
+                            Visibility(
+                                visible: !keyboardVisible,
+                                child: messageTemplateRow()),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            chatBottomBar(context, controller),
+                            Obx(() => AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  height:
+                                      controller.isEmojiShowing.value ? 300 : 0,
+                                  child: SizedBox(
+                                    height: 300,
+                                    child: EmojiPicker(
+                                        onBackspacePressed: () {
+                                          _onBackspacePressed();
+                                        },
+                                        textEditingController:
+                                            controller.messageController,
+                                        config: const Config()),
+                                  ),
+                                )),
                           ],
                         ),
-                        SizedBox(height: 15.h),
                       ],
-                    ),
-                  );
-                }),*/
-                    Visibility(
-                        visible: !keyboardVisible, child: messageTemplateRow()),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    // chatBottomBar(context, controller),
-                    Obx(() => AnimatedContainer(
-                          duration: const Duration(milliseconds: 200),
-                          height: controller.isEmojiShowing.value ? 300 : 0,
-                          child: SizedBox(
-                            height: 300,
-                            child: EmojiPicker(
-                                onBackspacePressed: () {
-                                  _onBackspacePressed();
-                                },
-                                textEditingController:
-                                    controller.messageController,
-                                config: const Config()),
-                          ),
-                        )),
-                  ],
+                    );
+                  }),
+              Center(
+                child: Container(
+                  height: Get.height,
+                  width: Get.width,
+                  child: SVGAImage(
+                    controller.svgController,
+                    fit: BoxFit.fitHeight,
+                  ),
                 ),
-              ],
-            );
-          }),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -847,7 +911,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   }
 
   Widget chatBottomBar(
-      BuildContext context, NewChatController? controller) {
+      BuildContext context, ChatMessageWithSocketController? controller) {
     return Obx(
       () {
         debugPrint('is recording value ${controller!.isRecording.value}');
@@ -1159,7 +1223,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   else
                     InkWell(
                         onTap: () {
-                          // controller!.sendMsg();
+                          controller.sendMsg();
                         },
                         child: Center(
                           child: SvgPicture.asset(
@@ -1188,7 +1252,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         : SizedBox(),
                     GestureDetector(
                       onTap: () {
-                        // controller.openProduct(controller);
+                        controller.openProduct(controller);
                       },
                       child: Center(
                           child: SvgPicture.asset(
@@ -1196,7 +1260,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // controller.openCustomShop(controller);
+                        controller.openCustomShop(controller);
                       },
                       child: Center(
                           child: SvgPicture.asset(
@@ -1204,7 +1268,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // controller.openShowDeck(context, controller);
+                        controller.openShowDeck(context, controller);
                       },
                       child: Center(
                         child: SvgPicture.asset(
@@ -1238,7 +1302,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   String message =
                                       "$name wants to start a call, please allow all required permissions";
                                   controller.messageController.text = message;
-                                  // controller.sendMsg();
+                                  controller.sendMsg();
                                 },
                                 customData: {
                                   "astr_id": orderData["astroId"] ?? "",
@@ -1286,7 +1350,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   String message =
                                       "$name wants to start a call, please allow all required permissions";
                                   controller.messageController.text = message;
-                                  // controller.sendMsg();
+                                  controller.sendMsg();
                                 },
                                 customData: {
                                   "astr_id": orderData["astroId"] ?? "",
@@ -1524,7 +1588,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         // controller.isCardBotOpen.value = true;
                         // showCardChoiceBottomSheet(context, controller);
 
-                        // controller.openShowDeck(context, controller);
+                        controller.openShowDeck(context, controller);
                         break;
                       case "product":
                         // var result = await Get.toNamed(

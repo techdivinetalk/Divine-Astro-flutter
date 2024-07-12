@@ -218,18 +218,16 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
                     ),
                   ),
                   const SizedBox(height: 16),
+                  ExpandableHtml(
+                    htmlData: pooja.poojaDesc ?? "",
+                    trimLength: 500,
+                    // color: appColors.guideColor,
+                  ),
                   // ExpandableHtml(
                   //   htmlData: pooja.poojaDesc ?? "",
                   //   trimLength: 500,
                   //   // color: appColors.guideColor,
                   // ),
-                  Html(
-                    shrinkWrap: true,
-                    data: pooja.poojaDesc ?? "",
-                    onLinkTap: (url, attributes, element) {
-                      launchUrl(Uri.parse(url ?? ''));
-                    },
-                  ),
                   const SizedBox(height: 16),
                   // Text(
                   //   "Select Pooja Date and Timing.",
