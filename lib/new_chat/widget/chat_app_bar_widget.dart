@@ -118,7 +118,6 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
             Map orderData = AppFirebaseService().orderData.value;
             final String astrImage = orderData["astroImage"] ?? "";
             final String custImage = orderData["customerImage"] ?? "";
-
             String appendedAstrImage =
                 "${preferenceService.getAmazonUrl()}/$astrImage";
             String appendedCustImage =

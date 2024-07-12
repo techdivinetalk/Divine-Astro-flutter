@@ -88,7 +88,7 @@ class NewChatController extends GetxController
   List<ChatMessage> localChatList = <ChatMessage>[];
   BroadcastReceiver broadcastReceiver =
       BroadcastReceiver(names: <String>["deliveredMsg", "messageReceive"]);
-
+  bool isFirstLoad = true;
   @override
   void onInit() {
     super.onInit();
@@ -133,7 +133,12 @@ class NewChatController extends GetxController
             jsonDecode(jsonEncode(event.snapshot.value)));
 
         chatMessage.id = int.parse(event.snapshot.key ?? "0");
+        if (isFirstLoad) {
 
+          isFirstLoad = false;
+        } else {
+          chatMessages.insert(0, chatMessage);
+        }
         if (MiddleWare.instance.currentPage == RouteName.newChat) {
           if (chatMessage.animation != null &&
               chatMessage.userType == "customer") {
@@ -149,8 +154,8 @@ class NewChatController extends GetxController
           }
         }
         // localChatList.add(chatMessage);
-        localChatList.insert(0, chatMessage);
-        saveAndGetMessage(chatMessages: localChatList);
+        // localChatList.insert(0, chatMessage);
+        // saveAndGetMessage(chatMessages: localChatList);
         update();
         if (MiddleWare.instance.currentPage == RouteName.newChat) {
           if (chatMessage.userType == "customer") {
@@ -161,6 +166,15 @@ class NewChatController extends GetxController
                 .update({
               "type": 3,
             });
+            Future.delayed(
+              const Duration(milliseconds: 200),
+              () {
+                FirebaseDatabase.instance
+                    .ref(
+                        "chatMessages/${AppFirebaseService().orderData.value["orderId"]}/${chatMessage.id}")
+                    .remove();
+              },
+            );
           }
         }
       },

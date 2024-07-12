@@ -32,6 +32,8 @@ class TextViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print(chatDetail.msgId);
+    print("chatDetail.msgId");
     return SizedBox(
       width: double.maxFinite,
       child: Column(

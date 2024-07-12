@@ -320,7 +320,7 @@ class ChatMessageWithSocketController extends GetxController
   void openShowDeck(
       BuildContext context, ChatMessageWithSocketController controller) {
     isCardBotOpen.value = true;
-    showCardChoiceBottomSheet(context, controller);
+    // showCardChoiceBottomSheet(context, controller);
   }
 
   Future<void> openRemedies() async {
@@ -358,7 +358,7 @@ class ChatMessageWithSocketController extends GetxController
     print("controller.customProductData");
     Get.bottomSheet(
       SavedRemediesBottomSheet(
-        controller: controller,
+        // controller: controller,
         customProductData: controller.customProductData,
       ),
     );
@@ -372,7 +372,7 @@ class ChatMessageWithSocketController extends GetxController
   // }
   Future<void> receiveMessage(DataSnapshot snapshot) async {
     Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
-    var chatMessage = ChatMessage.fromOfflineJson(values);
+    var chatMessage = ChatMessage.fromOfflineJson({});
     print("chatMessage.title");
     print(chatMessage.message);
     if(!isBadWord(chatMessage.message ?? "")){
@@ -1193,7 +1193,7 @@ class ChatMessageWithSocketController extends GetxController
           msgSendBy: "1",
           orderId: AppFirebaseService().orderData.value["orderId"],
           userType: "astrologer",
-          memberId: saveRemediesData.data!.id,
+          // memberId: saveRemediesData.data!.id,
           productId: productDetails.id.toString(),
           shopId: productDetails.id.toString(),
           // msgStatus: MsgStatus.sent,
@@ -1230,7 +1230,7 @@ class ChatMessageWithSocketController extends GetxController
             msgSendBy: "1",
             type: 0,
             orderId: AppFirebaseService().orderData.value["orderId"],
-            memberId: productData.data?.id ?? 0,
+            // memberId: productData.data?.id ?? 0,
             productId: productData.data?.productId.toString(),
             shopId: productData.data?.shopId.toString(),
             receiverId: int.parse(
@@ -1279,7 +1279,7 @@ class ChatMessageWithSocketController extends GetxController
             "chatMessages/${AppFirebaseService().orderData
                 .value["orderId"]}/$time")
             .update(
-          newMessage.chatToJson(),
+          newMessage.toJson(),
         );
       }
     }else{
