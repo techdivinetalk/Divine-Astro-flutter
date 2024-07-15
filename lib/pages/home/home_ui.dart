@@ -5,6 +5,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
+import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
@@ -923,7 +924,7 @@ class HomeUI extends GetView<HomeController> {
                         ))
                   ]);
                 } else {
-                  return Container(color: Colors.white);
+                  return const GenericLoadingWidget();
                 }
               }));
         });
@@ -1660,24 +1661,69 @@ class HomeUI extends GetView<HomeController> {
           color: appColors.white,
           borderRadius: const BorderRadius.all(Radius.circular(20)),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Column(
           children: [
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+            Row(
+              children: [
+                Expanded(
+                  flex: 2,
+                  child: Text(
+                    "sessionType".tr,
+                    style: AppTextStyle.textStyle10(
+                      fontWeight: FontWeight.w500,
+                      fontColor: appColors.darkBlue,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: Text(
+                    "status".tr,
+                    style: AppTextStyle.textStyle10(
+                        fontWeight: FontWeight.w500,
+                        fontColor: appColors.darkBlue),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                Expanded(
+                  flex: 2,
+                  child: Row(
+                    children: [
+                      CustomText(
+                        "nextOnlineTiming".tr,
+                        fontWeight: FontWeight.w500,
+                        fontColor: appColors.darkBlue,
+                        textAlign: TextAlign.center,
+                        fontSize: 10.sp,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      SizedBox(
+                        width: 5.w,
+                      ),
+                      GestureDetector(
+                          onTap: () {
+                            Get.bottomSheet(CommonInfoSheet(
+                              title: "nextOnlineTime".tr,
+                              subTitle: "nextOnlineTimeDes".tr,
+                            ));
+                          },
+                          child: Assets.images.icInfo
+                              .svg(height: 16.h, width: 16.h)),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            cond2
+                ? Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "sessionType".tr,
-                  style: AppTextStyle.textStyle10(
-                      fontWeight: FontWeight.w500,
-                      fontColor: appColors.darkBlue),
-                ),
-                SizedBox(height: 16.h),
-                cond2
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Container(
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
@@ -1695,284 +1741,172 @@ class HomeUI extends GetView<HomeController> {
                             ),
                           ],
                         ),
-                      )
-                    : const SizedBox(),
-                cond1
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "call".tr.toUpperCase(),
-                              style: AppTextStyle.textStyle12(
-                                  fontColor: appColors.darkBlue,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                            Text(
-                              "₹${controller.homeData?.sessionType?.callAmount}/Min",
+                      ),
+                    ),
+                    Obx(
+                          () => Expanded(
+                        flex: 2,
+                        child: SwitchWidget(
+                          onTap: () async {
+                            if (chatSwitch.value) {
+                              controller.selectDateTimePopupForChat(true);
+                            } else {
+                              await controller.chatSwitchFN(
+                                onComplete: () {
+                                  // if (controller.chatSwitch.value) {
+                                  // } else {
+                                  //   selectDateTimePopupForChat();
+                                  // }
+                                },
+                              );
+                            }
+                          },
+                          switchValue: chatSwitch.value,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(width: 15),
+                    Obx(() => Expanded(
+                      flex: 3,
+                      child: controller
+                          .selectedChatTime.value.isEmpty ||
+                          chatSwitch.value
+                          ? InkWell(
+                        onTap: () => controller
+                            .selectDateTimePopupForChat(false),
+                        child: Container(
+                          height: 31.h,
+                          decoration: BoxDecoration(
+                            color: appColors.guideColor,
+                            borderRadius:
+                            const BorderRadius.all(
+                                Radius.circular(20)),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "scheduleNow".tr,
                               style: AppTextStyle.textStyle10(
-                                  fontColor: appColors.darkBlue,
+                                  fontColor: appColors.white,
                                   fontWeight: FontWeight.w400),
                             ),
-                          ],
+                          ).pSymmetric(h: 16),
                         ),
                       )
-                    : const SizedBox(),
-                // cond3
-                //     ? Padding(
-                //         padding: const EdgeInsets.symmetric(vertical: 4.0),
-                //         child: Column(
-                //           crossAxisAlignment: CrossAxisAlignment.start,
-                //           children: [
-                //             Text(
-                //               "videoCall".tr.toUpperCase(),
-                //               style: AppTextStyle.textStyle12(
-                //                   fontColor: appColors.darkBlue,
-                //                   fontWeight: FontWeight.w700),
-                //             ),
-                //             Text(
-                //               "₹${controller.homeData?.sessionType?.videoCallAmount}/Min",
-                //               style: AppTextStyle.textStyle10(
-                //                   fontColor: appColors.darkBlue,
-                //                   fontWeight: FontWeight.w400),
-                //             ),
-                //           ],
-                //         ),
-                //       )
-                //     : const SizedBox(),
-              ],
-            ),
-            //SizedBox(width: 20.h),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  "status".tr,
-                  style: AppTextStyle.textStyle10(
-                      fontWeight: FontWeight.w500,
-                      fontColor: appColors.darkBlue),
-                ),
-                SizedBox(height: 18.h),
-                cond2
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Column(
-                          children: [
-                            Obx(
-                              () => SwitchWidget(
-                                onTap: () async {
-                                  if (chatSwitch.value) {
-                                    controller.selectDateTimePopupForChat(true);
-                                  } else {
-                                    await controller.chatSwitchFN(
-                                      onComplete: () {
-                                        // if (controller.chatSwitch.value) {
-                                        // } else {
-                                        //   selectDateTimePopupForChat();
-                                        // }
-                                      },
-                                    );
-                                  }
-                                },
-                                switchValue: chatSwitch.value,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : const SizedBox(),
-                cond1
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Column(
-                          children: [
-                            Obx(
-                              () => SwitchWidget(
-                                onTap: () async {
-                                  if (callSwitch.value) {
-                                    controller.selectDateTimePopupForCall(true);
-                                  } else {
-                                    await controller.callSwitchFN(
-                                      onComplete: () {
-                                        // if (controller.callSwitch.value) {
-                                        // } else {
-                                        //   selectDateTimePopupForCall();
-                                        // }
-                                      },
-                                    );
-                                  }
-                                },
-                                switchValue: callSwitch.value,
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    : const SizedBox(),
-                // cond3
-                //     ? Padding(
-                //         padding: const EdgeInsets.symmetric(vertical: 4.0),
-                //         child: Column(
-                //           children: [
-                //             Obx(
-                //               () => SwitchWidget(
-                //                 onTap: () async {
-                //                   await controller.videoCallSwitchFN(
-                //                     onComplete: () {
-                //                       // if (controller.videoSwitch.value) {
-                //                       // } else {
-                //                       //   selectDateTimePopupForVideo();
-                //                       // }
-                //                     },
-                //                   );
-                //                 },
-                //                 switchValue: videoSwitch.value,
-                //               ),
-                //             ),
-                //           ],
-                //         ),
-                //       )
-                //     : const SizedBox(),
-              ],
-            ),
-            //SizedBox(width: 15.h),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    CustomText(
-                      "nextOnlineTiming".tr,
-                      fontWeight: FontWeight.w500,
-                      fontColor: appColors.darkBlue,
-                      textAlign: TextAlign.center,
-                      fontSize: 10.sp,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(
-                      width: 5.w,
-                    ),
-                    GestureDetector(
-                        onTap: () {
-                          Get.bottomSheet(CommonInfoSheet(
-                            title: "nextOnlineTime".tr,
-                            subTitle: "nextOnlineTimeDes".tr,
-                          ));
-                        },
-                        child: Assets.images.icInfo
-                            .svg(height: 16.h, width: 16.h)),
+                          : SelectedTimeForChat(
+                          controller: controller),
+                    )),
                   ],
                 ),
-                SizedBox(height: 15.h),
-                cond2
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Column(
-                          children: [
-                            Obx(() => controller
-                                        .selectedChatTime.value.isEmpty ||
-                                    chatSwitch.value
-                                ? InkWell(
-                                    onTap: () => controller
-                                        .selectDateTimePopupForChat(false),
-                                    child: Container(
-                                      // width: 128.w,
-                                      height: 31.h,
-                                      decoration: BoxDecoration(
-                                        color: appColors.guideColor,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(20)),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "scheduleNow".tr,
-                                          style: AppTextStyle.textStyle10(
-                                              fontColor: appColors.white,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                      ).pSymmetric(h: 16),
-                                    ),
-                                  )
-                                : SelectedTimeForChat(controller: controller)),
-                          ],
-                        ),
-                      )
-                    : const SizedBox(),
-                cond1
-                    ? Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 4.0),
-                        child: Column(
-                          children: [
-                            Obx(() => controller
-                                        .selectedCallTime.value.isEmpty ||
-                                    callSwitch.value
-                                ? InkWell(
-                                    onTap: () => controller
-                                        .selectDateTimePopupForCall(false),
-                                    child: Container(
-                                      // width: 128.w,
-                                      height: 31.h,
-                                      decoration: BoxDecoration(
-                                        color: appColors.guideColor,
-                                        borderRadius: const BorderRadius.all(
-                                            Radius.circular(20)),
-                                      ),
-                                      child: Center(
-                                        child: Text(
-                                          "scheduleNow".tr,
-                                          style: AppTextStyle.textStyle10(
-                                              fontColor: appColors.white,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                      ).pSymmetric(h: 16),
-                                    ),
-                                  )
-                                : SelectedTimeForCall(controller: controller)),
-                          ],
-                        ),
-                      )
-                    : const SizedBox(),
-                // cond3
-                //     ? Padding(
-                //         padding: const EdgeInsets.symmetric(vertical: 4.0),
-                //         child: Column(
-                //           children: [
-                //             Obx(() => controller.selectedVideoTime.value.isEmpty
-                //                 ? InkWell(
-                //                     onTap:
-                //                         controller.selectDateTimePopupForVideo,
-                //                     child: Container(
-                //                       // width: 128.w,
-                //                       height: 31.h,
-                //                       decoration: BoxDecoration(
-                //                         color: appColors.guideColor,
-                //                         borderRadius: const BorderRadius.all(
-                //                             Radius.circular(20)),
-                //                       ),
-                //                       child: Center(
-                //                         child: Text(
-                //                           "scheduleNow".tr,
-                //                           style: AppTextStyle.textStyle10(
-                //                             fontColor: appColors.white,
-                //                             fontWeight: FontWeight.w400,
-                //                           ),
-                //                         ),
-                //                       ).pSymmetric(h: 16),
-                //                     ),
-                //                   )
-                //                 : SelectedTimeForVideoCall(
-                //                     controller: controller)),
-                //           ],
-                //         ),
-                //       )
-                //     : const SizedBox(),
+                controller.chatMessage.isNotEmpty
+                    ? Text(
+                  controller.chatMessage,
+                  style: AppTextStyle.textStyle10(
+                    fontWeight: FontWeight.w500,
+                    fontColor: Color(int.parse(controller
+                        .chatMessageColor
+                        .replaceAll("#", "0xff"))),
+                  ),
+                )
+                    : SizedBox(),
               ],
-            ),
+            )
+                : const SizedBox(),
+            const SizedBox(height: 10),
+            cond1
+                ? Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  children: [
+                    Expanded(
+                      flex: 3,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            "call".tr.toUpperCase(),
+                            style: AppTextStyle.textStyle12(
+                                fontColor: appColors.darkBlue,
+                                fontWeight: FontWeight.w700),
+                          ),
+                          Text(
+                            "₹${controller.homeData?.sessionType?.callAmount}/Min",
+                            style: AppTextStyle.textStyle10(
+                                fontColor: appColors.darkBlue,
+                                fontWeight: FontWeight.w400),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Obx(
+                          () => Expanded(
+                        flex: 2,
+                        child: SwitchWidget(
+                          onTap: () async {
+                            if (callSwitch.value) {
+                              controller.selectDateTimePopupForCall(true);
+                            } else {
+                              await controller.callSwitchFN(
+                                onComplete: () {
+                                  // if (controller.callSwitch.value) {
+                                  // } else {
+                                  //   selectDateTimePopupForCall();
+                                  // }
+                                },
+                              );
+                            }
+                          },
+                          switchValue: callSwitch.value,
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: 15),
+                    Obx(() => Expanded(
+                      flex: 3,
+                      child: controller
+                          .selectedCallTime.value.isEmpty ||
+                          callSwitch.value
+                          ? InkWell(
+                        onTap: () => controller
+                            .selectDateTimePopupForCall(false),
+                        child: Container(
+                          // width: 128.w,
+                          height: 31.h,
+                          decoration: BoxDecoration(
+                            color: appColors.guideColor,
+                            borderRadius:
+                            const BorderRadius.all(
+                                Radius.circular(20)),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "scheduleNow".tr,
+                              style: AppTextStyle.textStyle10(
+                                  fontColor: appColors.white,
+                                  fontWeight: FontWeight.w400),
+                            ),
+                          ).pSymmetric(h: 16),
+                        ),
+                      )
+                          : SelectedTimeForCall(
+                          controller: controller),
+                    )),
+                  ],
+                ),
+                controller.callMessage.isNotEmpty
+                    ? Text(
+                  controller.callMessage,
+                  style: AppTextStyle.textStyle10(
+                    fontWeight: FontWeight.w500,
+                    fontColor: Color(int.parse(controller
+                        .callMessageColor
+                        .replaceAll("#", "0xff"))),
+                  ),
+                )
+                    : SizedBox(),
+              ],
+            )
+                : SizedBox(),
           ],
         ),
       );
