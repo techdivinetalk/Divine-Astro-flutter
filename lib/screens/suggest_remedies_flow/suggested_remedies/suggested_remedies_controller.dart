@@ -7,8 +7,7 @@ import 'package:divine_astrologer/repository/order_history_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class SuggestedRemediesController extends GetxController{
-
+class SuggestedRemediesController extends GetxController {
   var suggestApiCalling = false.obs;
   final scrollController = ScrollController();
   var allPageCount = 1;
@@ -24,7 +23,8 @@ class SuggestedRemediesController extends GetxController{
     super.onInit();
   }
 
-  Future<dynamic> getOrderHistory({int? type, int? page, String? startDate, endDate}) async {
+  Future<dynamic> getOrderHistory(
+      {int? type, int? page, String? startDate, endDate}) async {
     Map<String, dynamic> params = {
       /// role id should be 7 in whole project
       "role_id": 7,
@@ -38,7 +38,8 @@ class SuggestedRemediesController extends GetxController{
     try {
       suggestApiCalling.value = true;
       update();
-      RemedySuggestedOrderHistoryModelClass data = await OrderHistoryRepository().getRemedySuggestedOrderHistory(params);
+      RemedySuggestedOrderHistoryModelClass data =
+          await OrderHistoryRepository().getRemedySuggestedOrderHistory(params);
       suggestApiCalling.value = false;
       var history = data.data;
       if (history!.isNotEmpty && data.data != null) {
@@ -62,8 +63,7 @@ class SuggestedRemediesController extends GetxController{
   }
 
   Widget paginationLoadingWidget() => Padding(
-    padding: const EdgeInsets.symmetric(vertical: 10),
-    child: CircularProgressIndicator(color: appColors.guideColor),
-  );
-
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: CircularProgressIndicator(color: appColors.guideColor),
+      );
 }

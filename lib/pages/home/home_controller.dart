@@ -24,6 +24,7 @@ import 'package:divine_astrologer/model/update_offer_type_response.dart';
 import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/model/wallet_deatils_response.dart';
 import 'package:divine_astrologer/pages/home/home_ui.dart';
+import 'package:divine_astrologer/pages/home/widgets/common_info_sheet.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/product/pooja/widgets/custom_widget/pooja_common_list.dart';
 import 'package:divine_astrologer/screens/dashboard/model/astrologer_nord_data_model.dart';
@@ -192,6 +193,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     getAstrologerTrainingSession();
     getAstrologerLiveData();
     getAstrologerStatus();
+
     print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
     Future.delayed(const Duration(seconds: 3), () {
       print("isLogged");
@@ -625,14 +627,25 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       var response = await HomePageRepository().getDashboardData(params);
       isFeedbackAvailable.value = response.success ?? false;
       homeData = response.data;
-      print(homeData!.offers!.customOffer!.length);
-      print("homeData!.offers!.orderOffer!.length");
+
       loading = Loading.loaded;
       updateCurrentData();
       shopDataSync.value = true;
 
       showOnceInDay();
       update();
+      if (homeData?.retention < 10) {
+        print("homeData.retention----${homeData?.retention}");
+        Get.bottomSheet(CommonInfoSheet(
+          title: "⚠ Warning Astrologer ⚠".tr,
+          subTitle:
+              "Your user retention is below industry standard. Your retention is less than 10% Your are not eligible for Bonus wallet. Please review and improve strategies promptly to increase User retention rate. Thank you. 🌟"
+                  .tr,
+          onTap: () {
+            Get.back();
+          },
+        ));
+      }
       //getFeedbackData();
       //log("DashboardData==>${jsonEncode(homeData)}");
     } catch (error) {

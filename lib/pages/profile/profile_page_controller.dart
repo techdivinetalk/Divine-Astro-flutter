@@ -114,7 +114,7 @@ class ProfilePageController extends GetxController {
           '/languagePopup'),
       ProfileOptionModelClass(
           "faq".tr, Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
-/*      ProfileOptionModelClass(
+      /*      ProfileOptionModelClass(
           "priceChange".tr,
           Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
           '/priceHistoryUI'),*/
