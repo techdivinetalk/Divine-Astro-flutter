@@ -874,7 +874,7 @@ class HomeUI extends GetView<HomeController> {
                               },
                               onTap: () {
                                 // Get.toNamed(
-                                //   RouteName.supportScreen,
+                                //   RouteName.technicalIssues,
                                 // );
                                 controller.whatsapp();
                               },

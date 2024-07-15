@@ -25,7 +25,7 @@ class SunChartUi extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  const LoadingWidget(),
+                  const KundliLoading(),
                 ],
               ),
               firstChild: controller.sunChart.value.data?.svg != null

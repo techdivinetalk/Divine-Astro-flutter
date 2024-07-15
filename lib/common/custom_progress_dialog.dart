@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:lottie/lottie.dart';
 
 import 'app_theme.dart';
 import 'colors.dart';
@@ -17,8 +18,8 @@ class CustomProgressDialog extends StatelessWidget {
       height: 200.w,
       decoration: BoxDecoration(
           color: _appTheme.blackColor.withOpacity(0.5),
-          borderRadius: BorderRadius.all(
-              Radius.circular(_appTheme.getHeight(10)))),
+          borderRadius:
+              BorderRadius.all(Radius.circular(_appTheme.getHeight(10)))),
       child: Center(
         child: SizedBox(
           width: 100.w,
@@ -38,7 +39,7 @@ class LoadingWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return   Column(
+    return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         SizedBox(width: double.maxFinite),
@@ -53,6 +54,49 @@ class LoadingWidget extends StatelessWidget {
         SizedBox(height: 10),
         CustomText('Getting data'),
       ],
+    );
+  }
+}
+
+class KundliLoading extends StatelessWidget {
+  const KundliLoading({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(20.0),
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Lottie.asset(
+              "assets/lottie/kundali_loading.json",
+              height: 100.h,
+              width: 100.w,
+              repeat: true,
+              frameRate: FrameRate.max,
+              options: LottieOptions(),
+              delegates: const LottieDelegates(),
+              onWarning: (p0) {},
+              alignment: Alignment.center,
+              onLoaded: (p0) {
+                print(p0);
+                print("on loaded");
+              },
+              errorBuilder: (
+                BuildContext context,
+                Object error,
+                StackTrace? stackTrace,
+              ) {
+                return const Center(
+                  child: Icon(Icons.error),
+                );
+              },
+            ),
+            Text("pleaseWait".tr),
+          ],
+        ),
+      ),
     );
   }
 }

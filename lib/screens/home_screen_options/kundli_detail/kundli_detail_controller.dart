@@ -23,6 +23,7 @@ import '../../../model/internal/planet_detail_model.dart';
 import '../../../model/internal/pran_dasha_model.dart';
 import '../../../model/internal/pratyantar_dasha_model.dart';
 import '../../../model/internal/sookshma_dasha_model.dart';
+import '../../../model/kundli/KundaliPlanetDataModel.dart';
 
 class KundliDetailController extends GetxController {
   RxInt currentIndex = 0.obs;
@@ -50,6 +51,30 @@ class KundliDetailController extends GetxController {
     "Prediction",
     "Basic Panchang",
   ];
+  List<String> dropdownData = [
+    "All Charts Available Here",
+    "Chalit Chart",
+    "Sun Chart",
+    "Moon Chart",
+    "D1 : For Brith Chart",
+    "D2 : For Hora Chart",
+    "D3 : For Dreshkan Chart",
+    "D4 : For Chathurthamasha Chart",
+    "D5 : For Panchmansha Chart",
+    "D7 : For Saptamansha Chart",
+    "D8 : For Ashtamansha Chart",
+    "D9 : For Navamansha Chart",
+    "D10 : For Dashamansha Chart",
+    "D12 : For Dwadashamsha Chart",
+    "D16 : For Shodashamsha Chart",
+    "D20 : For Vishamansha Chart",
+    "D24 : For Chaturvimshamsha Chart",
+    "D27 : For Bhamsha Chart",
+    "D30 : For Trishamansha Chart",
+    "D40 : For Khavedamsha Chart",
+    "D45 : For Akshvedansha Chart",
+    "D60 : For Shashtymsha Chart",
+  ];
 
   final _kundliController = Get.put(KundliController());
 
@@ -64,11 +89,33 @@ class KundliDetailController extends GetxController {
   RxString subDashaPlanetName = ''.obs;
 
   Rx<AstroDetailsModel> astroDetails = AstroDetailsModel().obs;
+  Rx<KundaliPlanetDataModel> kundaliPlanetDetails =
+      KundaliPlanetDataModel().obs;
+
   Rx<BirthDetailsModel> birthDetails = BirthDetailsModel().obs;
   Rx<HoroChartModel> lagnaChart = HoroChartModel().obs,
       moonChart = HoroChartModel().obs,
       sunChart = HoroChartModel().obs,
-      navamashaChart = HoroChartModel().obs;
+      navamashaChart = HoroChartModel().obs,
+      // chalitChart = HoroChartModel().obs,
+      brithChart = HoroChartModel().obs,
+      horaChart = HoroChartModel().obs,
+      dreshkanChart = HoroChartModel().obs,
+      chathurthamashChart = HoroChartModel().obs,
+      panchmanshaChart = HoroChartModel().obs,
+      saptamanshaChart = HoroChartModel().obs,
+      ashtamanshaChart = HoroChartModel().obs,
+      navamanshaChart = HoroChartModel().obs,
+      dashamanshaChart = HoroChartModel().obs,
+      dwadashamshaChart = HoroChartModel().obs,
+      shodashamshaChart = HoroChartModel().obs,
+      vishamanshaChart = HoroChartModel().obs,
+      chaturvimshamshaChart = HoroChartModel().obs,
+      bhamshaChart = HoroChartModel().obs,
+      trishamanshaChart = HoroChartModel().obs,
+      khavedamshaChart = HoroChartModel().obs,
+      akshvedanshaChart = HoroChartModel().obs,
+      shashtymshaChart = HoroChartModel().obs;
   Rx<ManglikDoshModel> manglikDosh = ManglikDoshModel().obs;
   Rx<HoroChartModel> chalitChart = HoroChartModel().obs;
   Rx<KpDataModel> kpTableData = KpDataModel().obs;
@@ -112,9 +159,31 @@ class KundliDetailController extends GetxController {
     }
   }
 
+  String selectedDrop = "All Charts Available Here";
+  changeMaintap(value) {
+    selectedTab = "null";
+    selectedDrop = value;
+    appBarName = value;
+    if (args != null) {
+      if (args['from_kundli']) {
+        //From Previous Kundlis
+        getDataFromKundli(args);
+      } else {
+        //New Kundli
+        getNewKundliData(args);
+      }
+    }
+    update();
+  }
+
   String selectedTab = "Lagna";
+  String appBarName = "Lagna";
   changingTab(value) {
     selectedTab = value;
+
+    selectedDrop = "All Charts Available Here";
+
+    appBarName = value;
     if (args != null) {
       if (args['from_kundli']) {
         //From Previous Kundlis
@@ -141,6 +210,7 @@ class KundliDetailController extends GetxController {
     );
     log("Kundli===>$kundaliId");
     getApiData(true);
+    getPlanetsDetails(true);
   }
 
   getNewKundliData(dynamic args) async {
@@ -173,6 +243,7 @@ class KundliDetailController extends GetxController {
       // "tzone": args['params'].tzone,
     };
     getApiData(false);
+    getPlanetsDetails(false);
   }
 
   /*getApiData(bool fromKundali) async {
@@ -195,7 +266,7 @@ class KundliDetailController extends GetxController {
     log(preference.getAmazonUrl().toString());
     // lagnaChartApi(fromKundali);
 
-    switch (selectedTab) {
+    switch (appBarName) {
       case "Personal Details":
         if (astroDetails.value.data == null) {
           astroDetailsApi(fromKundali);
@@ -221,7 +292,7 @@ class KundliDetailController extends GetxController {
         }
         break;
       case "Navamasha":
-        if (navamashaChart.value.data == null) {
+        if (navamanshaChart.value.data == null) {
           navamashaChartApi(fromKundali);
         }
         break;
@@ -253,6 +324,112 @@ class KundliDetailController extends GetxController {
           kundliPredictionApi(fromKundali);
         }
         break;
+      ///////////////
+      case "Chalit Chart":
+        if (chalitChart.value.data == null) {
+          chalitChartApi(fromKundali);
+        }
+        break;
+      case "Sun Chart":
+        if (sunChart.value.data == null) {
+          sunChartApi(fromKundali);
+        }
+        break;
+      case "Moon Chart":
+        if (moonChart.value.data == null) {
+          moonChartApi(fromKundali);
+        }
+        break;
+      case "D1 : For Brith Chart":
+        if (brithChart.value.data == null) {
+          brithChartApi(fromKundali);
+        }
+        break;
+      case "D2 : For Hora Chart":
+        if (horaChart.value.data == null) {
+          horaChartApi(fromKundali);
+        }
+        break;
+      case "D3 : For Dreshkan Chart":
+        if (dreshkanChart.value.data == null) {
+          dreshkanChartApi(fromKundali);
+        }
+        break;
+      case "D4 : For Chathurthamasha Chart":
+        if (chathurthamashChart.value.data == null) {
+          chathurthamashChartApi(fromKundali);
+        }
+        break;
+      case "D5 : For Panchmansha Chart":
+        if (panchmanshaChart.value.data == null) {
+          panchmanshaChartApi(fromKundali);
+        }
+        break;
+      case "D7 : For Saptamansha Chart":
+        if (saptamanshaChart.value.data == null) {
+          saptamanshaChartApi(fromKundali);
+        }
+        break;
+      case "D8 : For Ashtamansha Chart":
+        if (ashtamanshaChart.value.data == null) {
+          ashtamanshaChartApi(fromKundali);
+        }
+        break;
+      case "D9 : For Navamansha Chart":
+        if (navamanshaChart.value.data == null) {
+          navamashaChartApi(fromKundali);
+        }
+        break;
+      case "D10 : For Dashamansha Chart":
+        if (dashamanshaChart.value.data == null) {
+          dashamanshaChartApi(fromKundali);
+        }
+        break;
+      case "D12 : For Dwadashamsha Chart":
+        if (dwadashamshaChart.value.data == null) {
+          dwadashamshaChartApi(fromKundali);
+        }
+        break;
+      case "D16 : For Shodashamsha Chart":
+        if (shodashamshaChart.value.data == null) {
+          shodashamshaChartApi(fromKundali);
+        }
+        break;
+      case "D20 : For Vishamansha Chart":
+        if (vishamanshaChart.value.data == null) {
+          vishamanshaChartApi(fromKundali);
+        }
+        break;
+      case "D24 : For Chaturvimshamsha Chart":
+        if (chaturvimshamshaChart.value.data == null) {
+          chaturvimshamshaChartApi(fromKundali);
+        }
+        break;
+      case "D27 : For Bhamsha Chart":
+        if (bhamshaChart.value.data == null) {
+          bhamshaChartApi(fromKundali);
+        }
+        break;
+      case "D30 : For Trishamansha Chart":
+        if (trishamanshaChart.value.data == null) {
+          trishamanshaChartApi(fromKundali);
+        }
+        break;
+      case "D40 : For Khavedamsha Chart":
+        if (akshvedanshaChart.value.data == null) {
+          khavedamshaChartApi(fromKundali);
+        }
+        break;
+      case "D45 : For Akshvedansha Chart":
+        if (akshvedanshaChart.value.data == null) {
+          akshvedanshaChartApi(fromKundali);
+        }
+        break;
+      case "D60 : For Shashtymsha Chart":
+        if (shashtymshaChart.value.data == null) {
+          shashtymshaChartApi(fromKundali);
+        }
+        break;
     }
   }
 
@@ -270,7 +447,34 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+      }
+    }
+    update();
+  }
+
+  Future<void> getPlanetsDetails(bool fromKundali) async {
+    // [log] response: {"data":null,"success":false,"error":"Method App\\Http\\Controllers\\Api\\v7\\AstrologerController::astroApiCall does not exist.","status_code":500,"errors":[]}
+    // [log] planetDetails==>{"success":false,"status_code":500,"message":null}
+
+    try {
+      KundaliPlanetDataModel response = await kundliRepository
+          .getPlanetDetails(fromKundali ? kundaliIdParms : params);
+      kundaliPlanetDetails.value = response;
+      debugPrint("Body==> $kundaliIdParms");
+      log("planetDetails==>${jsonEncode(kundaliPlanetDetails.value)}");
+    } catch (error) {
+      debugPrint("astroDetailsError $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
       }
     }
     update();
@@ -293,7 +497,10 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
       }
     }
     update();
@@ -312,7 +519,10 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
       }
     }
     update();
@@ -329,7 +539,10 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
       }
     }
     update();
@@ -349,7 +562,10 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
       }
     }
     update();
@@ -366,7 +582,10 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
       }
     }
     update();
@@ -382,7 +601,10 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
       }
     }
     update();
@@ -402,7 +624,10 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
       }
     }
     update();
@@ -424,7 +649,10 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
       }
     }
     update();
@@ -443,7 +671,10 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
       }
     }
     update();
@@ -462,12 +693,425 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
       }
     }
     update();
   }
 
+  ///
+
+  Future<void> brithChartApi(bool fromKundali) async {
+    try {
+      HoroChartModel response = await kundliRepository.getHoroChart(
+          fromKundali ? kundaliIdParms : params, 'D1');
+      brithChart.value = response;
+      log("brithChart==>${jsonEncode(brithChart.value)}");
+      log("------------------------------${preference.getAmazonUrl()}${sunChart.value.data!.svg}");
+
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+      }
+    }
+
+    update();
+  }
+
+  Future<void> horaChartApi(bool fromKundali) async {
+    try {
+      HoroChartModel response = await kundliRepository.getHoroChart(
+          fromKundali ? kundaliIdParms : params, 'D2');
+      horaChart.value = response;
+      log("horaChart==>${jsonEncode(horaChart.value)}");
+      log("------------------------------${preference.getAmazonUrl()}${sunChart.value.data!.svg}");
+
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+      }
+    }
+
+    update();
+  }
+
+  Future<void> dreshkanChartApi(bool fromKundali) async {
+    try {
+      HoroChartModel response = await kundliRepository.getHoroChart(
+          fromKundali ? kundaliIdParms : params, 'D3');
+      dreshkanChart.value = response;
+      log("dreshkanChart==>${jsonEncode(dreshkanChart.value)}");
+      log("------------------------------${preference.getAmazonUrl()}${sunChart.value.data!.svg}");
+
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+      }
+    }
+
+    update();
+  }
+
+  Future<void> chathurthamashChartApi(bool fromKundali) async {
+    try {
+      HoroChartModel response = await kundliRepository.getHoroChart(
+          fromKundali ? kundaliIdParms : params, 'D4');
+      chathurthamashChart.value = response;
+      log("chathurthamashChart==>${jsonEncode(chathurthamashChart.value)}");
+      log("------------------------------${preference.getAmazonUrl()}${sunChart.value.data!.svg}");
+
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+      }
+    }
+
+    update();
+  }
+
+  Future<void> panchmanshaChartApi(bool fromKundali) async {
+    try {
+      HoroChartModel response = await kundliRepository.getHoroChart(
+          fromKundali ? kundaliIdParms : params, 'D5');
+      panchmanshaChart.value = response;
+      log("panchmanshaChart==>${jsonEncode(panchmanshaChart.value)}");
+      log("------------------------------${preference.getAmazonUrl()}${sunChart.value.data!.svg}");
+
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+      }
+    }
+
+    update();
+  }
+
+  Future<void> saptamanshaChartApi(bool fromKundali) async {
+    try {
+      HoroChartModel response = await kundliRepository.getHoroChart(
+          fromKundali ? kundaliIdParms : params, 'D7');
+      saptamanshaChart.value = response;
+      log("saptamanshaChart==>${jsonEncode(saptamanshaChart.value)}");
+      log("------------------------------${preference.getAmazonUrl()}${sunChart.value.data!.svg}");
+
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+      }
+    }
+
+    update();
+  }
+
+  Future<void> ashtamanshaChartApi(bool fromKundali) async {
+    try {
+      HoroChartModel response = await kundliRepository.getHoroChart(
+          fromKundali ? kundaliIdParms : params, 'D8');
+      ashtamanshaChart.value = response;
+      log("ashtamanshaChart==>${jsonEncode(ashtamanshaChart.value)}");
+      log("------------------------------${preference.getAmazonUrl()}${sunChart.value.data!.svg}");
+
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+      }
+    }
+
+    update();
+  }
+
+  Future<void> dashamanshaChartApi(bool fromKundali) async {
+    try {
+      HoroChartModel response = await kundliRepository.getHoroChart(
+          fromKundali ? kundaliIdParms : params, 'D10');
+      dashamanshaChart.value = response;
+      log("dashamanshaChart==>${jsonEncode(dashamanshaChart.value)}");
+      log("------------------------------${preference.getAmazonUrl()}${sunChart.value.data!.svg}");
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+      }
+    }
+
+    update();
+  }
+
+  Future<void> dwadashamshaChartApi(bool fromKundali) async {
+    try {
+      HoroChartModel response = await kundliRepository.getHoroChart(
+          fromKundali ? kundaliIdParms : params, 'D12');
+      dwadashamshaChart.value = response;
+      log("dwadashamshaChart==>${jsonEncode(dwadashamshaChart.value)}");
+      log("------------------------------${preference.getAmazonUrl()}${sunChart.value.data!.svg}");
+
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+      }
+    }
+
+    update();
+  }
+
+  Future<void> shodashamshaChartApi(bool fromKundali) async {
+    try {
+      HoroChartModel response = await kundliRepository.getHoroChart(
+          fromKundali ? kundaliIdParms : params, 'D16');
+      shodashamshaChart.value = response;
+      log("shodashamshaChart==>${jsonEncode(shodashamshaChart.value)}");
+      log("------------------------------${preference.getAmazonUrl()}${sunChart.value.data!.svg}");
+
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+      }
+    }
+
+    update();
+  }
+
+  Future<void> vishamanshaChartApi(bool fromKundali) async {
+    try {
+      HoroChartModel response = await kundliRepository.getHoroChart(
+          fromKundali ? kundaliIdParms : params, 'D20');
+      vishamanshaChart.value = response;
+      log("vishamanshaChart==>${jsonEncode(vishamanshaChart.value)}");
+      log("------------------------------${preference.getAmazonUrl()}${sunChart.value.data!.svg}");
+
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+      }
+    }
+
+    update();
+  }
+
+  Future<void> chaturvimshamshaChartApi(bool fromKundali) async {
+    try {
+      HoroChartModel response = await kundliRepository.getHoroChart(
+          fromKundali ? kundaliIdParms : params, 'D24');
+      chaturvimshamshaChart.value = response;
+      log("chaturvimshamshaChart==>${jsonEncode(chaturvimshamshaChart.value)}");
+      log("------------------------------${preference.getAmazonUrl()}${sunChart.value.data!.svg}");
+
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+      }
+    }
+
+    update();
+  }
+
+  Future<void> bhamshaChartApi(bool fromKundali) async {
+    try {
+      HoroChartModel response = await kundliRepository.getHoroChart(
+          fromKundali ? kundaliIdParms : params, 'D27');
+      bhamshaChart.value = response;
+      log("bhamshaChart==>${jsonEncode(bhamshaChart.value)}");
+      log("------------------------------${preference.getAmazonUrl()}${sunChart.value.data!.svg}");
+
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+      }
+    }
+
+    update();
+  }
+
+  Future<void> trishamanshaChartApi(bool fromKundali) async {
+    try {
+      HoroChartModel response = await kundliRepository.getHoroChart(
+          fromKundali ? kundaliIdParms : params, 'D30');
+      trishamanshaChart.value = response;
+      log("trishamanshaChart==>${jsonEncode(trishamanshaChart.value)}");
+      log("------------------------------${preference.getAmazonUrl()}${sunChart.value.data!.svg}");
+
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+      }
+    }
+
+    update();
+  }
+
+  Future<void> khavedamshaChartApi(bool fromKundali) async {
+    try {
+      HoroChartModel response = await kundliRepository.getHoroChart(
+          fromKundali ? kundaliIdParms : params, 'D40');
+      khavedamshaChart.value = response;
+      log("khavedamshaChart==>${jsonEncode(khavedamshaChart.value)}");
+      log("------------------------------${preference.getAmazonUrl()}${sunChart.value.data!.svg}");
+
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+      }
+    }
+
+    update();
+  }
+
+  Future<void> akshvedanshaChartApi(bool fromKundali) async {
+    try {
+      HoroChartModel response = await kundliRepository.getHoroChart(
+          fromKundali ? kundaliIdParms : params, 'D45');
+      akshvedanshaChart.value = response;
+      log("akshvedanshaChart==>${jsonEncode(akshvedanshaChart.value)}");
+      log("------------------------------${preference.getAmazonUrl()}${sunChart.value.data!.svg}");
+
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+      }
+    }
+
+    update();
+  }
+
+  Future<void> shashtymshaChartApi(bool fromKundali) async {
+    try {
+      HoroChartModel response = await kundliRepository.getHoroChart(
+          fromKundali ? kundaliIdParms : params, 'D60');
+      shashtymshaChart.value = response;
+      log("shashtymshaChart==>${jsonEncode(shashtymshaChart.value)}");
+      log("------------------------------${preference.getAmazonUrl()}${sunChart.value.data!.svg}");
+
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
+      }
+    }
+
+    update();
+  }
+
+  /// //
   Future<void> kundliPredictionApi(bool fromKundali) async {
     try {
       KundliPredictionModel response = await kundliRepository
@@ -479,7 +1123,10 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
       }
     }
     update();
@@ -504,7 +1151,10 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
       }
     }
     update();
@@ -530,7 +1180,10 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
       }
     }
     update();
@@ -555,7 +1208,10 @@ class KundliDetailController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        if (error.toString() == "Null check operator used on a null value") {
+        } else {
+          divineSnackBar(data: error.toString(), color: appColors.red);
+        }
       }
     }
     update();

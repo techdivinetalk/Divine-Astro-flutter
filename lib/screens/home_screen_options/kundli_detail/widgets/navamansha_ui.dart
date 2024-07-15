@@ -25,7 +25,7 @@ class NavamanshaUi extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  const LoadingWidget(),
+                  const KundliLoading(),
                 ],
               ),
               firstChild: controller.navamashaChart.value.data?.svg != null

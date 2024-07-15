@@ -38,7 +38,7 @@ class DoshaUi extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  const LoadingWidget(),
+                  const KundliLoading(),
                 ],
               ),
               firstChild: Padding(

@@ -22,7 +22,8 @@ class ApiProvider {
   static const String socketUrl = "https://list.divinetalk.live";
 
   static String debugingUrl = "http://13.235.46.27/api/astro/$version/";
-  static String baseUrl = "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+  static String baseUrl =
+      "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
 
   // kDebugMode
   // ? "http://172.172.246.49/api/astro/$version/"
@@ -146,6 +147,7 @@ class ApiProvider {
   final String getAstroDetailsInt = "getAstroDetails";
   final String getBirthDetailsInt = "getBirthDetails";
   final String getManglikDetailsInt = "getManglikDetails";
+  final String getPlanets = "getPlanets";
   final String getGeneralNakshatraReportInt = "getGeneralNakshatraReport";
   final String getKpDetails = "getKpDetails";
   final String getPlanetlDetails = "getPlanetlDetails/";
@@ -220,6 +222,9 @@ class ApiProvider {
   final String submitLeave = "submit-leave"; //Post Api
   final String leaveStatus = "leave-status"; //Get Api
   final String cancelLeave = "cancel-leave"; //Get Api
+
+  //Technical Support
+  final String technicalSupport = "addTechnicalSupport"; //Post Api
 
   //privacy policy & terms
   final String termsAndCondition = "termsAndCondition";

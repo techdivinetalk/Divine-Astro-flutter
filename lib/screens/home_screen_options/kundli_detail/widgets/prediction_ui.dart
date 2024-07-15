@@ -29,7 +29,7 @@ class PredictionUi extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  const LoadingWidget(),
+                  const KundliLoading(),
                 ],
               ),
               firstChild: Padding(
