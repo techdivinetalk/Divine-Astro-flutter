@@ -6,7 +6,6 @@ import 'package:camera/camera.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
-import 'package:divine_astrologer/di/notification_two.dart';
 import 'package:divine_astrologer/firebase_options.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
@@ -49,7 +48,6 @@ import 'di/shared_preference_service.dart';
 import 'firebase_service/firebase_service.dart';
 import 'gen/fonts.gen.dart';
 import 'localization/translations.dart';
-import 'maintenance_msg.dart';
 import 'screens/live_page/constant.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -71,6 +69,7 @@ Future<void> main() async {
   AppFirebaseService().masterData("masters");
   cameras = await availableCameras();
   Get.put(AppColors());
+
   // await RemoteConfigService.instance.initFirebaseRemoteConfig();
   final remoteConfig = FirebaseRemoteConfig.instance;
 
@@ -283,7 +282,6 @@ Future<void> initServices() async {
   await Get.putAsync(() => FirebaseNetworkService().init());
   await Hive.initFlutter();
 }
-
 
 Future<void> showNotification(String title, String message, String type,
     Map<String, dynamic> data) async {

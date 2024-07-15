@@ -13,8 +13,11 @@ import '../../common/app_exception.dart';
 import '../../common/colors.dart';
 import '../../common/common_functions.dart';
 import '../../common/custom_widgets.dart';
+import '../../common/routes.dart';
 import '../../di/api_provider.dart';
 import '../../gen/assets.gen.dart';
+import '../../model/TechnicalIssuesData.dart';
+import '../../model/TechnicalSupport.dart';
 import '../../repository/user_repository.dart';
 
 class TechnicalIssueController extends GetxController {
@@ -24,10 +27,33 @@ class TechnicalIssueController extends GetxController {
   TextEditingController descriptionController = TextEditingController();
   List<String> dropDownItems = ["Issue", "Suggestion"];
   var isLoading = false.obs;
+  var isTechnicalLoading = false.obs;
+  TechnicalSupport? technicalSupport;
+  TechnicalIssuesData? technicalIssuesList;
 
   var selected;
   String poojaImageUrl = "";
-
+  String htmlCode = '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Image</title>
+    <style>
+        /* Optional: CSS to style the image */
+        .center {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+            width: 50%;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="text-align: center;">My Image</h1>
+    <img src="https://img.freepik.com/free-photo/colorful-design-with-spiral-design_188544-9588.jpg" alt="My Image" class="center">
+</body>
+</html>''';
   selectedDropDown(value) {
     selected = value;
     update();
@@ -40,6 +66,7 @@ class TechnicalIssueController extends GetxController {
   XFile? pickedFile;
   File? uploadFile;
   List<String> selectedImages = [];
+  List<File> selectedFiles = [];
   List<String> uploadedImagesList = [];
 
   updateProfileImage() {
@@ -153,6 +180,7 @@ class TechnicalIssueController extends GetxController {
       );
       if (pickedFile != null) {
         selectedImages.add(pickedFile.path);
+        selectedFiles.add(File(pickedFile.path));
       }
     } else {
       // Pick multiple images from the gallery
@@ -162,13 +190,15 @@ class TechnicalIssueController extends GetxController {
       );
       if (pickedFiles != null && pickedFiles.isNotEmpty) {
         selectedImages.addAll(pickedFiles.map((pickedFile) => pickedFile.path));
+        selectedFiles.addAll(
+            pickedFiles.map((pickedFile) => File(pickedFile.path)).toList());
       }
     }
     log("selectedImages - $selectedImages");
     update();
   }
 
-  Future<void> uploadImage(File imageFile) async {
+  Future<void> uploadImage(imageFile) async {
     var token = await preferenceService.getToken();
 
     var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
@@ -196,9 +226,8 @@ class TechnicalIssueController extends GetxController {
     response.stream.transform(utf8.decoder).listen((value) {
       print(jsonDecode(value)["data"]);
       uploadedImagesList.add(jsonDecode(value)["data"]["path"]);
-      // poojaApiPath = jsonDecode(value)["data"]["path"];
-      poojaImageUrl = jsonDecode(value)["data"]["full_path"];
       update();
+      log(uploadedImagesList.toString());
       print("valuevaluevaluevaluevaluevaluevalue");
     });
 
@@ -212,18 +241,29 @@ class TechnicalIssueController extends GetxController {
     }
   }
 
+// Function to upload a list of images one by one
+  Future<void> uploadImagesListsFun() async {
+    for (var imageFile in selectedFiles) {
+      await uploadImage(imageFile);
+    }
+  }
+
   submitIssues() async {
+    // isLoading(true);
     if (selected == null) {
       divineSnackBar(data: "Please select type", color: appColors.redColor);
     } else if (descriptionController.text.isEmpty) {
       divineSnackBar(data: "Description is empty", color: appColors.redColor);
     } else {
+      isLoading(true);
+
       Map<String, dynamic> param = {
         "description": descriptionController.text,
         "ticket_type": selected,
         "images": uploadedImagesList
       };
 
+      log("paramssss${param.toString()}");
       isLoading(true);
 
       try {
@@ -231,7 +271,17 @@ class TechnicalIssueController extends GetxController {
 
         final response = await userRepository.submitTechnicalIssues(param);
         if (response.success == true) {
-          var d = response;
+          technicalSupport = response;
+          divineSnackBar(
+              data: response.message.toString(), color: appColors.green);
+          descriptionController.clear();
+          uploadedImagesList.clear();
+          selectedImages.clear();
+          selectedFiles.clear();
+          selected = null;
+          Get.toNamed(RouteName.allTechnicalIssues);
+
+          isLoading(false);
         } else {
           log(3.toString());
 

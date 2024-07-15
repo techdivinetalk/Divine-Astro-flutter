@@ -48,21 +48,28 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
             ),
             // centerTitle: true,
             actions: [
-              // IconButton(
-              //   iconSize: 20,
-              //   onPressed: () {
-              //     Get.toNamed(RouteName.allTechnicalIssues);
-              //   },
-              //   icon: Icon(Icons.history),
-              // ),
-              InkWell(
-                onTap: () {
-                  Get.toNamed(RouteName.allTechnicalIssues);
-                },
-                child: Text(
-                  "Tickets",
-                  style: TextStyle(
-                    color: AppColors().black,
+              Padding(
+                padding: const EdgeInsets.only(right: 10),
+                child: InkWell(
+                  onTap: () {
+                    Get.toNamed(RouteName.allTechnicalIssues);
+                  },
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(width: 1, color: AppColors().red),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.all(6.0),
+                      child: Text(
+                        "Current Tickets",
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors().black,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -166,7 +173,7 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
                     height: 20,
                   ),
                   PoojaRemedyTextFiled(
-                    title: "Description",
+                    title: "Please explain your issue in detail",
                     maxLines: 5,
                     textInputFormatter: [CustomSpaceInputFormatter()],
                     controller: controller.descriptionController,
@@ -201,9 +208,7 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
                                     }
                                   },
                                   child: CommonImageView(
-                                    imagePath: controller.poojaImageUrl.isEmpty
-                                        ? Assets.images.icUploadStory.path
-                                        : controller.poojaImageUrl,
+                                    imagePath: Assets.images.icUploadStory.path,
                                     fit: BoxFit.cover,
                                     height: 90.h,
                                     width: 90.h,
@@ -285,7 +290,9 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
                         splashColor: Colors.red.withOpacity(0.5),
                         highlightColor: Colors.transparent,
                         onTap: () {
-                          controller.submitIssues();
+                          controller.uploadImagesListsFun().whenComplete(() {
+                            controller.submitIssues();
+                          });
                         },
                         child: Center(
                           child: controller.isLoading.value == true
@@ -304,16 +311,22 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
                       ),
                     ),
                   ),
-                  Container(
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    height: 300,
-                    decoration: BoxDecoration(
-                      border: Border.all(
-                          color: appColors.textColor.withOpacity(0.2)),
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    // child:Text("Ticket"),
-                  ),
+                  // Container(
+                  //   width: MediaQuery.of(context).size.width * 0.9,
+                  //   height: 300,
+                  //   decoration: BoxDecoration(
+                  //     border: Border.all(
+                  //         color: appColors.textColor.withOpacity(0.2)),
+                  //     borderRadius: BorderRadius.circular(14),
+                  //   ),
+                  //   child: Html(
+                  //     shrinkWrap: true,
+                  //     data: controller.htmlCode,
+                  //     onLinkTap: (url, attributes, element) {
+                  //       launchUrl(Uri.parse(url ?? ''));
+                  //     },
+                  //   ),
+                  // ),
                 ],
               ),
             ),

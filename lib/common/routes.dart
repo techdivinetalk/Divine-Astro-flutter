@@ -286,7 +286,7 @@ class Routes {
     GetPage(
       page: () => AllTechnicalIssueScreen(),
       name: RouteName.allTechnicalIssues,
-      binding: TechnicalBinding(),
+      binding: TechnicalIssuesBinding(),
     ),
     GetPage(
         page: () => const BlockedUserUI(),

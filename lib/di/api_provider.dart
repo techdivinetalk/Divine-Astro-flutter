@@ -230,6 +230,7 @@ class ApiProvider {
 
   //Technical Support
   final String technicalSupport = "addTechnicalSupport"; //Post Api
+  final String getTechnicalSupportlist = "getTechnicalSupportlist"; //Get Api
 
   //privacy policy & terms
   final String termsAndCondition = "termsAndCondition";
