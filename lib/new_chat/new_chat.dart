@@ -38,7 +38,6 @@ class NewChatScreen extends GetView<NewChatController> {
           children: [
             Scaffold(
               appBar: ChatAppBarWidget(controller: controller),
-
               body: Column(
                 children: [
                   NoticeBoardWidget(controller: controller),
@@ -51,28 +50,33 @@ class NewChatScreen extends GetView<NewChatController> {
                       reverse: true,
                       itemBuilder: (context, index) {
                         ChatMessage data = controller.chatMessages[index];
-                        return Column(
-                          children: [
-                            Obx(()=>controller.isLoading.value && (controller.chatMessages.length-1 == index) ? Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10.0),
-                              child: CircularProgressIndicator(
-                                strokeWidth: 1.5,
-                                color: Colors.grey.withOpacity(0.6),
-                              ),
-                            )
-                            : const SizedBox()),
-                            socketMessageView(
-                              controller: controller,
-                              yourMessage: data.msgSendBy == "1",
-                              chatMessage: data,
-                              index: index,
-                            ),
-                            if (index ==0)
-                              TypingWidget(
+                        return GestureDetector(
+                          onLongPressDown: (details) {
+                            // showOverlay(context, details.globalPosition);
+                          },
+                          child: Column(
+                            children: [
+                              Obx(()=>controller.isLoading.value && (controller.chatMessages.length-1 == index) ? Padding(
+                                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 1.5,
+                                  color: Colors.grey.withOpacity(0.6),
+                                ),
+                              )
+                              : const SizedBox()),
+                              socketMessageView(
                                 controller: controller,
                                 yourMessage: data.msgSendBy == "1",
+                                chatMessage: data,
+                                index: index,
                               ),
-                          ],
+                              if (index ==0)
+                                TypingWidget(
+                                  controller: controller,
+                                  yourMessage: data.msgSendBy == "1",
+                                ),
+                            ],
+                          ),
                         );
                       },
                       separatorBuilder: (context, index) =>
@@ -124,6 +128,36 @@ class NewChatScreen extends GetView<NewChatController> {
         );
       },
     );
+  }
+
+  void showOverlay(BuildContext context, Offset position) {
+    _removeOverlay();
+    print("position ---dx---> ${position.dx}");
+    print("position ---dy---> ${position.dy}");
+    controller.overlayEntry = OverlayEntry(
+      builder: (context) => Positioned(
+        left: position.dx,
+        top: position.dy,
+        child: Material(
+          color: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.all(10),
+            color: Colors.red.withOpacity(0.8),
+            child: Text(
+              'Overlay Widget',
+              style: TextStyle(color: Colors.white, fontSize: 16),
+            ),
+          ),
+        ),
+      ),
+    );
+
+    Overlay.of(context).insert(controller.overlayEntry!);
+  }
+
+  void _removeOverlay() {
+    controller.overlayEntry?.remove();
+    controller.overlayEntry = null;
   }
 
   Widget socketMessageView(

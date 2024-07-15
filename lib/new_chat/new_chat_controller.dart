@@ -69,6 +69,7 @@ class NewChatController extends GetxController
   RxString showTalkTime = "".obs;
   RxString extraTalkTime = "".obs;
   RecorderController? recorderController;
+  OverlayEntry? overlayEntry;
 
   RxBool isRecording = false.obs;
   RxBool hasMessage = false.obs;
