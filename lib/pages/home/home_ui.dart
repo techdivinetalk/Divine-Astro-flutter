@@ -681,7 +681,7 @@ class HomeUI extends GetView<HomeController> {
                               ),
                             );
                           }),
-                          scheduledTrainingWidgetUpdated(),
+                          scheduledTrainingWidgetUpdated(controller: controller),
                           // viewKundliWidget(),
                           viewKundliWidgetUpdated(),
                           Obx(() {
@@ -812,7 +812,7 @@ class HomeUI extends GetView<HomeController> {
                                       child: sessionTypeWidget(
                                           controller: controller))
                                   : const SizedBox();
-                            },
+                            }, 
                           ),
                           // if (controller.homeData?.offerType != null &&
                           //     controller.homeData?.offerType != [])
@@ -1202,11 +1202,10 @@ class HomeUI extends GetView<HomeController> {
         : const SizedBox();
   }
 
-  Widget scheduledTrainingWidgetUpdated() {
-    Get.put(HomeController());
+  Widget scheduledTrainingWidgetUpdated({HomeController? controller}) {
 
     return Visibility(
-      visible: controller.astrologerTrainingSessionLst.isNotEmpty,
+      visible: controller!.astrologerTrainingSessionLst.isNotEmpty,
       child: ListView.builder(
         itemCount: controller.astrologerTrainingSessionLst.length,
         shrinkWrap: true,
@@ -2334,7 +2333,7 @@ class HomeUI extends GetView<HomeController> {
     //     (controller.homeData?.trainingVideo ?? []).isEmpty) {
     //   return const SizedBox.shrink();
     // }
-    return Container(
+    return controller!.astrologerTrainingSessionLst.isNotEmpty ? Container(
       width: double.infinity,
       margin: EdgeInsets.only(
         top: 10.h,
@@ -2445,7 +2444,7 @@ class HomeUI extends GetView<HomeController> {
           SizedBox(height: 15.h),
         ],
       ),
-    );
+    ):SizedBox();
   }
 
   Widget feedbackWidget({HomeController? controller}) {
