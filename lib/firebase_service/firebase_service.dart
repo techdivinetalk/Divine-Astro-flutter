@@ -56,6 +56,7 @@ class AppFirebaseService {
   factory AppFirebaseService() {
     return _instance;
   }
+
   String? astroMsg;
   var watcher = RealTimeWatcher();
   var acceptBottomWatcher = RealTimeWatcher();
@@ -98,7 +99,7 @@ class AppFirebaseService {
   // }
   Future<void> userRealTime(String key, dynamic value, String path,
       [bool isRemoved = false]) async {
-    debugPrint("test_userRealTime: value: $value");
+    debugPrint("test_userRealTime: value removed: $value");
     switch (key) {
       case "order_id":
         if (value != null && !isRemoved) {
@@ -208,12 +209,18 @@ class AppFirebaseService {
         isEngagedStatus(value);
         break;
       case "callKundli":
-        Map<String, dynamic>? callKundli =
-            Map<String, dynamic>.from(value as Map<Object?, Object?>);
-        print(callKundli);
-        print("realTimeData['callKundli']");
-        callKunadliUpdated(callKundli);
-        sendBroadcast(BroadcastMessage(name: "callKundli", data: callKundli));
+        if (isRemoved) {
+          callKunadliUpdated({});
+          sendBroadcast(BroadcastMessage(name: "callKundli", data: {}));
+        } else {
+          Map<String, dynamic>? callKundli =
+              Map<String, dynamic>.from(value as Map<Object?, Object?>);
+          print(callKundli);
+          print("realTimeData['callKundli']");
+          callKunadliUpdated(callKundli);
+          sendBroadcast(BroadcastMessage(name: "callKundli", data: callKundli));
+        }
+
         break;
       case "giftCount":
         giftCountUpdate(value["giftCount"]);
@@ -493,8 +500,8 @@ class AppFirebaseService {
         break;
 
       default:
-        preferenceService.setStringPref(
-            dataSnapshot.key.toString(), dataSnapshot.value.toString());
+        // preferenceService.setStringPref(
+        //     dataSnapshot.key.toString(), dataSnapshot.value.toString());
         break;
     }
   }
