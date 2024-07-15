@@ -189,6 +189,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     getSampleText();
     getAstrologerTrainingSession();
     getAstrologerLiveData();
+    getOnlineOfflineStatus();
     print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
     Future.delayed(const Duration(seconds: 3), () {
       print("isLogged");
@@ -752,6 +753,26 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
       print("response.data");
       if (response.statusCode == 200) {}
+    } catch (e) {
+      print("getting error --- getAstroCustOfferData ${e}");
+    }
+  }
+
+  String astrologerStatus = "";
+
+  getOnlineOfflineStatus() async {
+    try {
+      dio.options.headers = {
+        'Connection': 'keep-alive',
+        'Keep-Alive': 'timeout=5, max=1000',
+      };
+      final response = await dio
+          .get("${ApiProvider.onlineOfflineStatus}/${userData.uniqueNo}");
+
+      if (response.statusCode == 200) {
+        log("response.data.toString()------>>>${response.data.toString()}");
+
+      }
     } catch (e) {
       print("getting error --- getAstroCustOfferData ${e}");
     }

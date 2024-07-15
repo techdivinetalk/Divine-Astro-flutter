@@ -52,6 +52,7 @@ class HomeUI extends GetView<HomeController> {
   Widget build(BuildContext context) {
     Get.put(HomeController());
     print("beforeGoing 5 - ${preferenceService.getUserDetail()?.id}");
+
     return GetBuilder<HomeController>(
         assignId: true,
         init: HomeController(),
@@ -73,12 +74,29 @@ class HomeUI extends GetView<HomeController> {
                 backgroundColor: appColors.white,
                 elevation: 0,
                 centerTitle: false,
-                title: Text(
-                  controller.appbarTitle.value,
-                  style: AppTextStyle.textStyle15(
-                    fontWeight: FontWeight.w400,
-                    fontColor: appColors.darkBlue,
-                  ),
+                title: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      controller.appbarTitle.value,
+                      style: AppTextStyle.textStyle15(
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.darkBlue,
+                      ),
+                    ),
+                    StreamBuilder(
+                        stream: Stream.periodic(const Duration(seconds: 1)),
+                        builder: (context, snapshot) {
+                          return Text(
+                            DateFormat("dd/MM/yyyy hh:mm:ss")
+                                .format(DateTime.now()),
+                            style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w400,
+                              fontColor: appColors.darkBlue,
+                            ),
+                          );
+                        }),
+                  ],
                 ),
                 actions: [
                   Column(

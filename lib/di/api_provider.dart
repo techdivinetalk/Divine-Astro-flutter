@@ -33,6 +33,8 @@ class ApiProvider {
 
   static const String astOnlineOffline =
       "https://list.divinetalk.live/api/v3/updateAstroStatusV2?unique_no=";
+  static const String onlineOfflineStatus =
+      "https://list.divinetalk.live/api/v3/getAstrologersData";
 
   // final String baseUrl = "http://13.235.46.27/admin/$version/";
 
@@ -95,6 +97,7 @@ class ApiProvider {
   final String astroNoticeBoard = "astroNoticeBoard";
   final String getAstroAllNotice = "getAstroAllNotice";
   final String getSpecialityList = "getSpecialityList";
+  final String getAstrologerCategory = "getAstrologerCategory";
   final String addNoticeToAstrologer = "addNoticeToAstrologer";
   final String updateProfileDetails = "updateProfileDetails";
   final String getAstrologerImages = "getAstrologerImages";

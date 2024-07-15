@@ -267,7 +267,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                 ),
                 SizedBox(height: 20.h),*/
                     Text(
-                      "Select Speciality".tr,
+                      "Select Skills".tr,
                       style: AppTextStyle.textStyle14(),
                     ),
                     SizedBox(height: 5.h),
@@ -290,11 +290,12 @@ class EditProfileUI extends GetView<EditProfileController> {
                                 ]),
                             child: Wrap(
                               direction: Axis.horizontal,
+
                               children: controller.tags
                                   .map<Widget>((element) =>
                                   Padding(
                                     padding: EdgeInsets.symmetric(
-                                        horizontal: 4.w, vertical: 6.h),
+                                        horizontal: 0, vertical: 6.h),
                                     child: Wrap(
                                       crossAxisAlignment: WrapCrossAlignment
                                           .center,
@@ -355,7 +356,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                                         context, functionalityWidget:
                                     StatefulBuilder(builder: (context, state) {
                                       return Padding(
-                                        padding: const EdgeInsets.all(20),
+                                        padding: const EdgeInsets.all(8),
                                         child: Column(
                                           crossAxisAlignment: CrossAxisAlignment
                                               .start,
@@ -429,7 +430,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                                     padding: EdgeInsets.only(
                                         left: 8.h, top: 4.h),
                                     child: Container(
-                                      width: ScreenUtil().screenWidth / 2.8,
+                                      width: ScreenUtil().screenWidth / 3.2,
                                       decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(
                                               20),
@@ -453,7 +454,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                                             ),
                                             SizedBox(width: 5.w),
                                             Text(
-                                              "addSpeciality".tr,
+                                              "Add Skills".tr,
                                               style: AppTextStyle.textStyle12(
                                                   fontColor: appColors.darkBlue,
                                                   fontWeight: FontWeight.w400),
