@@ -79,7 +79,7 @@ class Data {
     String? description,
     dynamic suggestion,
     String? ticketType,
-    num? status,
+    String? status,
     String? status_text,
     num? isViewed,
     dynamic assignedTo,
@@ -128,7 +128,7 @@ class Data {
   String? _description;
   dynamic _suggestion;
   String? _ticketType;
-  num? _status;
+  String? _status;
   String? _status_text;
   num? _isViewed;
   dynamic _assignedTo;
@@ -142,7 +142,7 @@ class Data {
     String? description,
     dynamic suggestion,
     String? ticketType,
-    num? status,
+    String? status,
     String? status_text,
     num? isViewed,
     dynamic assignedTo,
@@ -171,7 +171,7 @@ class Data {
   String? get description => _description;
   dynamic get suggestion => _suggestion;
   String? get ticketType => _ticketType;
-  num? get status => _status;
+  String? get status => _status;
   String? get status_text => _status_text;
   num? get isViewed => _isViewed;
   dynamic get assignedTo => _assignedTo;
