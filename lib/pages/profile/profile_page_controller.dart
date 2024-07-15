@@ -172,11 +172,11 @@ class ProfilePageController extends GetxController {
         '/blockedUser'),
     ProfileOptionModelClass("eCommerce".tr,
         Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja'),
-    ProfileOptionModelClass(
-        "Custom product".tr,
-        SvgPicture.asset("assets/svg/chat_new_custom_product.svg",
-            width: 30.h, height: 30.h),
-        '/customProduct'),
+    // ProfileOptionModelClass(
+    //     "Custom product".tr,
+    //     SvgPicture.asset("assets/svg/store.svg",
+    //         width: 30.h, height: 30.h),
+    //     '/customProduct'),
     // ProfileOptionModelClass(
     //     "leaveresignation".tr,
     //     Assets.images.resignation.svg(width: 30.h, height: 30.h),
