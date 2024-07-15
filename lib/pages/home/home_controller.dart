@@ -758,20 +758,35 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  String astrologerStatus = "";
 
-  getOnlineOfflineStatus() async {
+  String chatMessage = "";
+  String callMessage = "";
+  String chatMessageColor = "";
+  String callMessageColor = "";
+
+  getAstrologerStatus() async {
+
+
     try {
+      // Configure the default headers for all requests
       dio.options.headers = {
         'Connection': 'keep-alive',
         'Keep-Alive': 'timeout=5, max=1000',
       };
-      final response = await dio
-          .get("${ApiProvider.onlineOfflineStatus}/${userData.uniqueNo}");
+      final response = await dio.get(
+        "${ApiProvider.getOnlineOfflineStatus}${userData.uniqueNo}",
+      );
 
-      if (response.statusCode == 200) {
-        log("response.data.toString()------>>>${response.data.toString()}");
-
+      AstrologerNordModel astrologerNordModel =
+      AstrologerNordModel.fromJson(response.data);
+      if (astrologerNordModel.status!.code == 200) {
+        if (astrologerNordModel.data != null) {
+          chatMessage = astrologerNordModel.data!.chatMsg ?? "";
+          callMessage = astrologerNordModel.data!.callMsg ?? "";
+          chatMessageColor = astrologerNordModel.data!.chatColor ?? "";
+          callMessageColor = astrologerNordModel.data!.callColor ?? "";
+          update();
+        }
       }
     } catch (e) {
       print("getting error --- getAstroCustOfferData ${e}");
