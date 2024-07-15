@@ -533,7 +533,7 @@ class AssistMessageView extends StatelessWidget {
   }
 
   Widget chatSeenStatusWidget({required SeenStatus seenStatus}) {
-    return GetBuilder<ChatMessageController>(
+    return /*GetBuilder<ChatMessageController>(
       builder: (controller) {
         print('msg status ${seenStatus} ${controller.isCustomerOnline.value}');
         if (controller.isCustomerOnline.value == true) {
@@ -557,7 +557,7 @@ class AssistMessageView extends StatelessWidget {
             return const SizedBox();
         }
       },
-    );
+    )*/SizedBox();
   }
 
   Widget unreadMessageView() {
