@@ -38,6 +38,8 @@ class OrderHistoryRepository extends ApiProvider {
               orderHistoryModel.success!) {
             return orderHistoryModel;
           } else {
+            print(json.decode(response.body));
+            print("json.decode(response.body)");
             throw CustomException(json.decode(response.body)["message"]);
           }
         }

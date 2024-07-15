@@ -14,6 +14,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
@@ -131,6 +132,7 @@ class ProfilePageController extends GetxController {
           "resignation".tr,
           Assets.svg.resignation.svg(width: 30.h, height: 30.h),
           '/resignation'),
+
     ].obs;
   }
 
@@ -170,6 +172,11 @@ class ProfilePageController extends GetxController {
         '/blockedUser'),
     ProfileOptionModelClass("eCommerce".tr,
         Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja'),
+    ProfileOptionModelClass(
+        "Custom product".tr,
+        SvgPicture.asset("assets/svg/chat_new_custom_product.svg",
+            width: 30.h, height: 30.h),
+        '/customProduct'),
     // ProfileOptionModelClass(
     //     "leaveresignation".tr,
     //     Assets.images.resignation.svg(width: 30.h, height: 30.h),
@@ -217,6 +224,7 @@ class ProfilePageController extends GetxController {
   String? baseAmazonUrl;
 
   bool isInit = false;
+
   @override
   void onReady() {
     isInit = false;

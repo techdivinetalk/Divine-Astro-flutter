@@ -22,8 +22,9 @@ class ApiProvider {
   static const String socketUrl = "https://list.divinetalk.live";
 
   static String debugingUrl = "http://13.235.46.27/api/astro/$version/";
-  static String baseUrl =
-      "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+  static String baseUrl = "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+  static const String getOnlineOfflineStatus =
+      "http://4.240.97.131:8081/api/v3/getAstroStatus?uniqueNo=";
 
   // kDebugMode
   // ? "http://172.172.246.49/api/astro/$version/"
@@ -34,6 +35,8 @@ class ApiProvider {
 
   static const String astOnlineOffline =
       "https://list.divinetalk.live/api/v3/updateAstroStatusV2?unique_no=";
+  static const String onlineOfflineStatus =
+      "https://list.divinetalk.live/api/v3/getAstrologersData";
 
   // final String baseUrl = "http://13.235.46.27/admin/$version/";
 
@@ -96,6 +99,7 @@ class ApiProvider {
   final String astroNoticeBoard = "astroNoticeBoard";
   final String getAstroAllNotice = "getAstroAllNotice";
   final String getSpecialityList = "getSpecialityList";
+  final String getAstrologerCategory = "getAstrologerCategory";
   final String addNoticeToAstrologer = "addNoticeToAstrologer";
   final String updateProfileDetails = "updateProfileDetails";
   final String getAstrologerImages = "getAstrologerImages";

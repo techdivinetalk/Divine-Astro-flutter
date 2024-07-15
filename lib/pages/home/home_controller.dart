@@ -25,6 +25,8 @@ import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/model/wallet_deatils_response.dart';
 import 'package:divine_astrologer/pages/home/home_ui.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
+import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/product/pooja/widgets/custom_widget/pooja_common_list.dart';
+import 'package:divine_astrologer/screens/dashboard/model/astrologer_nord_data_model.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
@@ -189,6 +191,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     getSampleText();
     getAstrologerTrainingSession();
     getAstrologerLiveData();
+    getAstrologerStatus();
     print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
     Future.delayed(const Duration(seconds: 3), () {
       print("isLogged");
@@ -757,6 +760,41 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  String chatMessage = "";
+  String callMessage = "";
+  String chatMessageColor = "";
+  String callMessageColor = "";
+
+  getAstrologerStatus() async {
+    UserData? userData = await pref.getUserDetail();
+    try {
+      dio.options.headers = {
+        'Connection': 'keep-alive',
+        'Keep-Alive': 'timeout=5, max=1000',
+      };
+      final response = await dio.get(
+        "${ApiProvider.getOnlineOfflineStatus}${userData!.uniqueNo}",
+      );
+      print("response.dataresponse.data${response.data}");
+
+      AstrologerNordModel astrologerNordModel =
+          AstrologerNordModel.fromJson(response.data);
+      if (astrologerNordModel.status!.code == 200) {
+        if (astrologerNordModel.data != null) {
+          chatMessage = astrologerNordModel.data!.chatMsg ?? "";
+          callMessage = astrologerNordModel.data!.callMsg ?? "";
+          chatMessageColor = astrologerNordModel.data!.chatColor ?? "";
+          callMessageColor = astrologerNordModel.data!.callColor ?? "";
+          print(
+              "chatMessage----${chatMessage}--chatMessageColor---${chatMessageColor}--callMessage-----${callMessage}--callMessageColor--${callMessageColor}");
+          update();
+        }
+      }
+    } catch (e) {
+      print("getting error --- getAstroCustOfferData ${e}");
+    }
+  }
+
   getConstantDetailsData() async {
     try {
       var data = await userRepository.constantDetailsData();
@@ -967,6 +1005,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           await userRepository.astroOnlineAPIForLive(
         params: params,
         successCallBack: (message) {
+          getAstrologerStatus();
+
           /// o offline
           /// 1 online
           // socket.updateChatCallSocketEvent(
