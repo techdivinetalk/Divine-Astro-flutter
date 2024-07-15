@@ -239,7 +239,13 @@ class SuggestedRemediesScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            Row(
+            Text("(Click to connect with user and try to increase your Ecom on chat assistance)",
+                textAlign: TextAlign.center,
+                style: AppTextStyle.textStyle12(
+                    fontWeight: FontWeight.w400,
+
+                    fontColor: appColors.guideColor))
+           /* Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("${"clientPaid".tr} :",
@@ -294,7 +300,7 @@ class SuggestedRemediesScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 8),*/
           ],
         ),
       ),
