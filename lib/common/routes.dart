@@ -46,6 +46,7 @@ import 'package:divine_astrologer/screens/order_chat_call_feedback/feedback.dart
 import 'package:divine_astrologer/screens/order_chat_call_feedback/feedback_binding.dart';
 import 'package:divine_astrologer/screens/order_feedback/order_feedback_binding.dart';
 import 'package:divine_astrologer/screens/order_feedback/order_feedback_ui.dart';
+import 'package:divine_astrologer/screens/order_history/Widget/suggest_remedies_history.dart';
 import 'package:divine_astrologer/screens/otp_verification/otp_verification_binding.dart';
 import 'package:divine_astrologer/screens/otp_verification/otp_verification_ui.dart';
 import 'package:divine_astrologer/screens/puja/puja_binding.dart';
@@ -64,6 +65,7 @@ import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy
 import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy/final_remedies_sub_ui.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggest_remedies_sub/suggest_remedies_sub_binding.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggest_remedies_sub/suggest_remedies_sub_ui.dart';
+import 'package:divine_astrologer/screens/suggest_remedies_flow/suggested_remedies/suggested_ramedies_screen.dart';
 import 'package:divine_astrologer/screens/support/chat_support/chat_support_binding.dart';
 import 'package:divine_astrologer/screens/support/chat_support/chat_support_screen.dart';
 import 'package:divine_astrologer/screens/support/help_support/help_support_binding.dart';
@@ -71,6 +73,8 @@ import 'package:divine_astrologer/screens/support/help_support/widgets/problem_a
 import 'package:divine_astrologer/screens/support/help_support/widgets/problem_questions_screen.dart';
 import 'package:divine_astrologer/screens/support/support_binding.dart';
 import 'package:divine_astrologer/screens/support/support_screen.dart';
+import 'package:divine_astrologer/screens/terms_and_condition/terms_and_condition_binding.dart';
+import 'package:divine_astrologer/screens/terms_and_condition/terms_and_condition_screen.dart';
 import 'package:divine_astrologer/screens/video_call_page/video_call_page.dart';
 import 'package:divine_astrologer/screens/video_call_page/video_call_page_binding.dart';
 import 'package:get/get.dart';
@@ -208,6 +212,7 @@ class RouteName {
   static const String supportQuestionScreen = "/SupportQuestionScreen";
   static const String supportAnswerScreen = "/SupportAnswerScreen";
   static const String chatSupportScreen = "/ChatSupportScreen";
+  static const String termsAndConditionScreen = "/TermsAndConditionScreen";
 }
 
 final Set<String> validRoutes = {
@@ -373,9 +378,9 @@ class Routes {
         page: () => ChatMessageWithSocketUI(),
         name: RouteName.chatMessageWithSocketUI,
         binding: ChatMessageWithSocketBinding()),
-    /* GetPage(
-        page: () => const SuggestRemediesView(),
-        name: RouteName.suggestRemediesView),*/
+     GetPage(
+        page: () => SuggestedRemediesScreen(),
+        name: RouteName.suggestRemediesView),
     GetPage(
         page: () => const SuggestRemediesSubUI(),
         name: RouteName.suggestRemediesSubUI,
@@ -539,6 +544,12 @@ class Routes {
       name: RouteName.liveLogsScreen,
       page: LiveLogsUI.new,
       binding: LiveLogsBinding(),
+    ),
+
+    GetPage(
+      page: () => TermsAndConditionScreen(),
+      name: RouteName.termsAndConditionScreen,
+      binding: TermsAndConditionBinding(),
     ),
   ];
 }

@@ -121,7 +121,8 @@ class OtpVerificationController extends GetxController {
       enableSubmit.value = false;
       VerifyOtpModel data = await userRepository.verifyOtp(params);
 
-      await astroLogin();
+      // await astroLogin();
+      Get.offAllNamed(RouteName.termsAndConditionScreen, arguments: {"mobile" : number.value});
       enableSubmit.value = true;
     } catch (error) {
       enableSubmit.value = true;
@@ -152,16 +153,11 @@ class OtpVerificationController extends GetxController {
       await preferenceService.setToken(data.token!);
       await preferenceService.setDeviceToken(deviceToken ?? "");
       log('😈😈😈😈😈😈😈😈');
-      print(data.token);
       log(jsonEncode(data.data));
-      print("jsonEncode(data.data)");
       if (data.data != null) {
         var commonConstants = await userRepository.constantDetailsData();
-        if(commonConstants?.data != null){
-
-          imageUploadBaseUrl.value = commonConstants?.data?.imageUploadBaseUrl ?? "";
-
-
+        if(commonConstants.data != null){
+          imageUploadBaseUrl.value = commonConstants.data?.imageUploadBaseUrl ?? "";
         }
         if (commonConstants.data!.token != null) {
           customTokenWithFirebase(
@@ -175,10 +171,7 @@ class OtpVerificationController extends GetxController {
           }
         }
         updateLoginDataInFirebase(data);
-        print("resultresultresultresult2");
-        // print("astrologer/${preferenceService.getUserDetail()!.id}/realTime");
       }
-      // await updateLoginDataInFirebase(data);
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
