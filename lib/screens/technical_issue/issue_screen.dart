@@ -3,14 +3,14 @@ import 'dart:io';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_state_manager/src/simple/get_state.dart';
-import 'package:get/get_state_manager/src/simple/get_view.dart';
+import 'package:get/get.dart';
 
 import '../../common/SvgIconButton.dart';
 import '../../common/app_textstyle.dart';
 import '../../common/common_image_view.dart';
 import '../../common/custom_widgets.dart';
 import '../../common/permission_handler.dart';
+import '../../common/routes.dart';
 import '../../gen/assets.gen.dart';
 import '../../repository/user_repository.dart';
 import '../add_puja/add_puja_controller.dart';
@@ -47,104 +47,119 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
               style: AppTextStyle.textStyle16(),
             ),
             // centerTitle: true,
-            actions: [IconButton(onPressed: () {}, icon: Icon(Icons.history))],
+            actions: [
+              // IconButton(
+              //   iconSize: 20,
+              //   onPressed: () {
+              //     Get.toNamed(RouteName.allTechnicalIssues);
+              //   },
+              //   icon: Icon(Icons.history),
+              // ),
+              InkWell(
+                onTap: () {
+                  Get.toNamed(RouteName.allTechnicalIssues);
+                },
+                child: Text(
+                  "Tickets",
+                  style: TextStyle(
+                    color: AppColors().black,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+            ],
           ),
           body: Padding(
             padding: const EdgeInsets.all(14.0),
             child: SingleChildScrollView(
               child: Column(
                 children: [
-                  Container(
-                    // decoration: BoxDecoration(
-                    //     borderRadius: BorderRadius.circular(14),
-                    //     border: Border.all(
-                    //       color: appColors.red,
-                    //     )),
-                    child: Padding(
-                      padding: const EdgeInsets.only(),
-                      child: DropdownButtonFormField<String>(
-                        isExpanded: true,
-                        menuMaxHeight: 200,
-                        borderRadius: BorderRadius.circular(14),
-                        disabledHint: Text(
-                          'Please select',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12.sp,
-                            color: appColors.black,
-                          ),
+                  Padding(
+                    padding: const EdgeInsets.only(),
+                    child: DropdownButtonFormField<String>(
+                      isExpanded: true,
+                      menuMaxHeight: 200,
+                      borderRadius: BorderRadius.circular(14),
+                      disabledHint: Text(
+                        'Please select',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12.sp,
+                          color: appColors.black,
                         ),
-                        // underline: SizedBox(),
-                        decoration: InputDecoration(
-                          floatingLabelAlignment: FloatingLabelAlignment.start,
-                          contentPadding: EdgeInsets.fromLTRB(15, 0, 15, 0),
-                          // labelText: widget.labelText,
-                          labelStyle: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12.sp,
-                            color: appColors.black,
-                          ),
-                          // prefixIcon: widget.prefixIcon,
-                          enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            borderSide: BorderSide(
-                                color: appColors.textColor.withOpacity(0.2)),
-                          ),
-                          disabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                                color: appColors.textColor.withOpacity(0.2)),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                                color: appColors.textColor.withOpacity(0.2)),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                                color: appColors.textColor.withOpacity(0.2)),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12),
-                            borderSide: BorderSide(
-                                color: appColors.textColor.withOpacity(0.2)),
-                          ),
+                      ),
+                      // underline: SizedBox(),
+                      decoration: InputDecoration(
+                        floatingLabelAlignment: FloatingLabelAlignment.start,
+                        contentPadding: EdgeInsets.fromLTRB(15, 0, 15, 0),
+                        // labelText: widget.labelText,
+                        labelStyle: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12.sp,
+                          color: appColors.black,
                         ),
-                        hint: Text(
-                          'Please select Types',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12.sp,
-                            color: appColors.black,
-                          ),
-                        ), // Not necessary for Option 1
-                        value: controller.selected != ''
-                            ? controller.selected
-                            : null,
-                        // value: controller.selected,
-                        onChanged: (newValue) {
-                          controller.selectedDropDown(newValue);
-                        },
-                        items: controller.dropDownItems.map((location) {
-                          return DropdownMenuItem(
-                            value: location,
-                            child: Padding(
-                              padding: const EdgeInsets.only(left: 10),
-                              child: Text(
-                                location,
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontSize: 12.sp,
-                                  color: appColors.black,
-                                ),
+                        // prefixIcon: widget.prefixIcon,
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: BorderSide(
+                              color: appColors.textColor.withOpacity(0.2)),
+                        ),
+                        disabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                              color: appColors.textColor.withOpacity(0.2)),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                              color: appColors.textColor.withOpacity(0.2)),
+                        ),
+                        errorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                              color: appColors.textColor.withOpacity(0.2)),
+                        ),
+                        focusedErrorBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                              color: appColors.textColor.withOpacity(0.2)),
+                        ),
+                      ),
+                      hint: Text(
+                        'Please select Types',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12.sp,
+                          color: appColors.black,
+                        ),
+                      ), // Not necessary for Option 1
+                      value: controller.selected != ''
+                          ? controller.selected
+                          : null,
+                      // value: controller.selected,
+                      onChanged: (newValue) {
+                        controller.selectedDropDown(newValue);
+                      },
+                      items: controller.dropDownItems.map((location) {
+                        return DropdownMenuItem(
+                          value: location,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Text(
+                              location,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 12.sp,
+                                color: appColors.black,
                               ),
                             ),
-                          );
-                        }).toList(),
-                      ),
+                          ),
+                        );
+                      }).toList(),
                     ),
                   ),
                   const SizedBox(

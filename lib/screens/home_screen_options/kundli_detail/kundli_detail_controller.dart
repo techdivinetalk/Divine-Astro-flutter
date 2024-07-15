@@ -615,7 +615,7 @@ class KundliDetailController extends GetxController {
       HoroChartModel response = await kundliRepository.getHoroChart(
           fromKundali ? kundaliIdParms : params, ':chartId');
       lagnaChart.value = response;
-      log("------------------------------${preference.getAmazonUrl()}/${lagnaChart.value.data!.svg}");
+      log("------------------------------${preference.getAmazonUrl()}${lagnaChart.value.data!.svg}");
       log("------------------------------${lagnaChart.value.data!.svg}");
 
       update();
@@ -642,7 +642,7 @@ class KundliDetailController extends GetxController {
       HoroChartModel response = await kundliRepository.getHoroChart(
           fromKundali ? kundaliIdParms : params, 'MOON');
       moonChart.value = response;
-      log("------------------------------${preference.getAmazonUrl()}/${moonChart.value.data!.svg}");
+      log("------------------------------${preference.getAmazonUrl()}${moonChart.value.data!.svg}");
       update();
     } catch (error) {
       debugPrint("error $error");
@@ -663,7 +663,7 @@ class KundliDetailController extends GetxController {
       HoroChartModel response = await kundliRepository.getHoroChart(
           fromKundali ? kundaliIdParms : params, 'SUN');
       sunChart.value = response;
-      log("------------------------------${preference.getAmazonUrl()}/${sunChart.value.data!.svg}");
+      log("------------------------------${preference.getAmazonUrl()}${sunChart.value.data!.svg}");
 
       update();
     } catch (error) {
@@ -685,7 +685,7 @@ class KundliDetailController extends GetxController {
       HoroChartModel response = await kundliRepository.getHoroChart(
           fromKundali ? kundaliIdParms : params, 'D9');
       navamashaChart.value = response;
-      log("------------------------------${preference.getAmazonUrl()}/${navamashaChart.value.data!.svg}");
+      log("------------------------------${preference.getAmazonUrl()}${navamashaChart.value.data!.svg}");
 
       update();
     } catch (error) {

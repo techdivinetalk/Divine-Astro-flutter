@@ -82,14 +82,14 @@ class SideMenuDrawer extends GetView<HomeController> {
                 }
               },
             ),
-            // ListTile(
-            //   leading: Icon(Icons.bug_report),
-            //   title: Text('Technical Issues'.tr),
-            //   onTap: () async {
-            //     Navigator.of(context).pop();
-            //     Get.toNamed(RouteName.technicalIssues);
-            //   },
-            // ),
+            ListTile(
+              leading: Icon(Icons.bug_report),
+              title: Text('Technical Issues'.tr),
+              onTap: () async {
+                Navigator.of(context).pop();
+                Get.toNamed(RouteName.technicalIssues);
+              },
+            ),
             // ListTile(
             //   leading: Assets.images.icImportContact.svg(),
             //   title: Text("leaveresignation".tr),
