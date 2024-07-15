@@ -818,6 +818,83 @@ class HomeUI extends GetView<HomeController> {
                           // if (controller.homeData?.offerType != null &&
                           //     controller.homeData?.offerType != [])
                           //   offerTypeWidget(),
+                          SizedBox(height: 20.h),
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 20.0),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () => Get.toNamed(RouteName.messageTemplate),
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      height: 55,
+                                      decoration: BoxDecoration(
+                                        color: appColors.guideColor,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black
+                                                .withOpacity(0.2),
+                                            blurRadius: 1.0,
+                                            offset: const Offset(
+                                                0.0, 3.0),
+                                          ),
+                                        ],
+                                        borderRadius:
+                                        BorderRadius.circular(
+                                            10.0),
+                                      ),
+                                      child: Text(
+                                        "Message Template",
+                                        style: AppTextStyle
+                                            .textStyle14(
+                                          fontWeight:
+                                          FontWeight.w500,
+                                          fontColor:
+                                          appColors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 5.w,),
+                                Expanded(
+                                  child: GestureDetector(
+                                    onTap: () => Get.toNamed(RouteName.suggestRemediesView),
+                                    child: Container(
+                                      alignment: Alignment.center,
+                                      height: 55,
+                                      decoration: BoxDecoration(
+                                        color: appColors.guideColor,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.black
+                                                .withOpacity(0.2),
+                                            blurRadius: 1.0,
+                                            offset: const Offset(
+                                                0.0, 3.0),
+                                          ),
+                                        ],
+                                        borderRadius:
+                                        BorderRadius.circular(
+                                            10.0),
+                                      ),
+                                      child: Text(
+                                        "Suggested Remedies",
+                                        style: AppTextStyle
+                                            .textStyle14(
+                                          fontWeight:
+                                          FontWeight.w500,
+                                          fontColor:
+                                          appColors.white,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
                           controller.homeData?.offers?.orderOffer!.length != 0
                               ? Container(
                                   margin:
@@ -927,7 +1004,8 @@ class HomeUI extends GetView<HomeController> {
                 } else {
                   return const GenericLoadingWidget();
                 }
-              }));
+              }),
+          );
         });
   }
 
