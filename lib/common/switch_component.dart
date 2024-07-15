@@ -35,6 +35,7 @@ class SwitchWidget extends StatelessWidget {
       padding: 2.0,
       activeText: onText ?? "On",
       inactiveText: offText ?? "Off",
+
       valueFontSize: 12.0,
       activeTextFontWeight: FontWeight.w400,
       inactiveTextFontWeight: FontWeight.w400,

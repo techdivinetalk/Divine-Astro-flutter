@@ -23,6 +23,8 @@ class ApiProvider {
       "${imageUploadBaseUrl.value}/api/astro/$version/";
   static const String astOnlineOffline =
       "http://4.240.97.131:8081/api/v3/updateAstroStatusV2?unique_no=";
+  static const String getOnlineOfflineStatus =
+      "http://4.240.97.131:8081/api/v3/getAstroStatus?uniqueNo=";
   final String deleteSession = "deleteSession";
   final String deleteSessionResponse = "deleteSessionResponse";
   static String playStoreLiveUrl =
