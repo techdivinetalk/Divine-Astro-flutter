@@ -31,6 +31,7 @@ class ChatAppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         onPressed: () {
           /// back method
           controller!.backFunction();
+          controller?.overlayEntry?.remove();
         },
         icon: Icon(
           Icons.arrow_back_ios_new_rounded,

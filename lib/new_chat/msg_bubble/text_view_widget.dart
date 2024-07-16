@@ -37,15 +37,12 @@ class TextViewWidget extends StatelessWidget {
     return SizedBox(
       width: double.maxFinite,
       child: Column(
-        crossAxisAlignment:
-            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+        crossAxisAlignment: yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Row(
-            mainAxisAlignment:
-                yourMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+            mainAxisAlignment: yourMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
-              !yourMessage
-                  ? Obx(
+              !yourMessage ? Obx(
                       () {
                         Map<String, dynamic> order = {};
                         order = AppFirebaseService().orderData.value;
@@ -65,8 +62,8 @@ class TextViewWidget extends StatelessWidget {
                           ),
                         );
                       },
-                    )
-                  : const SizedBox(),
+                )
+              : const SizedBox(),
               Container(
                 padding:
                     const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

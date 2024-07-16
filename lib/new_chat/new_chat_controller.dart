@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:divine_astrologer/utils/is_bad_word.dart';
+import 'package:flutter/gestures.dart';
 import "package:flutter/scheduler.dart" as scheduler;
 import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:camera/camera.dart';
@@ -70,6 +71,7 @@ class NewChatController extends GetxController
   RxString extraTalkTime = "".obs;
   RecorderController? recorderController;
   OverlayEntry? overlayEntry;
+  List<String> emojiList = ["👍","❤","😀","😢","😯","🙏"];
 
   RxBool isRecording = false.obs;
   RxBool hasMessage = false.obs;
@@ -80,6 +82,7 @@ class NewChatController extends GetxController
   RxString customerName = "".obs;
   AppSocket appSocket = AppSocket();
   Duration? timeDifference;
+  LongPressDownDetails? longPressDownDetails;
 
   // AppLifecycleState? _state;
   // final List<String> _states = <String>[];

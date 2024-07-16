@@ -33,54 +33,65 @@ class NewChatScreen extends GetView<NewChatController> {
       assignId: true,
       init: NewChatController(),
       builder: (controller) {
-
         return Stack(
           children: [
             Scaffold(
-              appBar: ChatAppBarWidget(controller: controller),
+              appBar: ChatAppBarWidget(
+                  controller: controller,
+              ),
               body: Column(
                 children: [
                   NoticeBoardWidget(controller: controller),
                   Expanded(
-                    child: ListView.separated(
-                      controller: controller.messageScrollController,
-                      itemCount: controller.chatMessages.length,
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      shrinkWrap: true,
-                      reverse: true,
-                      itemBuilder: (context, index) {
-                        ChatMessage data = controller.chatMessages[index];
-                        return GestureDetector(
-                          onLongPressDown: (details) {
-                            // showOverlay(context, details.globalPosition);
-                          },
-                          child: Column(
-                            children: [
-                              Obx(()=>controller.isLoading.value && (controller.chatMessages.length-1 == index) ? Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 1.5,
-                                  color: Colors.grey.withOpacity(0.6),
-                                ),
-                              )
-                              : const SizedBox()),
-                              socketMessageView(
-                                controller: controller,
-                                yourMessage: data.msgSendBy == "1",
-                                chatMessage: data,
-                                index: index,
-                              ),
-                              if (index ==0)
-                                TypingWidget(
+                    child: GestureDetector(
+                      onPanDown: (details) {
+                        if(controller.overlayEntry!.mounted){
+                          controller.overlayEntry?.remove();
+                        }
+                      },
+                      child: ListView.separated(
+                        controller: controller.messageScrollController,
+                        itemCount: controller.chatMessages.length,
+                        padding: const EdgeInsets.symmetric(horizontal: 15),
+                        shrinkWrap: true,
+                        reverse: true,
+                        itemBuilder: (context, index) {
+                          ChatMessage data = controller.chatMessages[index];
+                          return GestureDetector(
+                            onLongPress: () {
+                              showReactionPopup(context, controller.longPressDownDetails!.globalPosition);
+                            },
+                            onLongPressDown: (details) {
+                              controller.longPressDownDetails = details;
+                            },
+                            child: Column(
+                              children: [
+                                Obx(()=>controller.isLoading.value && (controller.chatMessages.length-1 == index) ? Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 1.5,
+                                    color: Colors.grey.withOpacity(0.6),
+                                  ),
+                                )
+                                : const SizedBox()),
+                                socketMessageView(
                                   controller: controller,
                                   yourMessage: data.msgSendBy == "1",
+                                  chatMessage: data,
+                                  index: index,
                                 ),
-                            ],
-                          ),
-                        );
-                      },
-                      separatorBuilder: (context, index) =>
-                          const SizedBox(height: 15),
+                                if (index ==0)
+                                  TypingWidget(
+                                    controller: controller,
+                                    yourMessage: data.msgSendBy == "1",
+                                  ),
+                              ],
+                            ),
+                          );
+                        },
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 15),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 15),
@@ -130,34 +141,18 @@ class NewChatScreen extends GetView<NewChatController> {
     );
   }
 
-  void showOverlay(BuildContext context, Offset position) {
-    _removeOverlay();
-    print("position ---dx---> ${position.dx}");
-    print("position ---dy---> ${position.dy}");
+  void showReactionPopup(BuildContext context, Offset position) {
     controller.overlayEntry = OverlayEntry(
-      builder: (context) => Positioned(
-        left: position.dx,
-        top: position.dy,
-        child: Material(
-          color: Colors.transparent,
-          child: Container(
-            padding: EdgeInsets.all(10),
-            color: Colors.red.withOpacity(0.8),
-            child: Text(
-              'Overlay Widget',
-              style: TextStyle(color: Colors.white, fontSize: 16),
-            ),
-          ),
-        ),
+      builder: (context) => ReactionPopup(
+        onReactionSelected: (reaction) {
+          controller.overlayEntry?.remove();
+          },
+        position: position,
+        controller: controller,
       ),
     );
 
     Overlay.of(context).insert(controller.overlayEntry!);
-  }
-
-  void _removeOverlay() {
-    controller.overlayEntry?.remove();
-    controller.overlayEntry = null;
   }
 
   Widget socketMessageView(
@@ -223,3 +218,53 @@ class NewChatScreen extends GetView<NewChatController> {
     }
   }
 }
+
+class ReactionPopup extends StatelessWidget {
+  final Function(String) onReactionSelected;
+  final Offset position;
+  final NewChatController controller;
+
+  ReactionPopup({required this.onReactionSelected, required this.position, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: position.dy - 60,
+      left: position.dx - 75,
+      child: Material(
+        color: Colors.transparent,
+        child: Container(
+          width: MediaQuery.of(context).size.width * 0.6,
+          padding: const EdgeInsets.symmetric(vertical: 10.0),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(50.0),
+            boxShadow: const [
+              BoxShadow(
+                color: Colors.black26,
+                blurRadius: 4.0,
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              for(int i = 0 ; i < controller.emojiList.length ; i++)
+                Text(
+                  controller.emojiList[i],
+                  softWrap: true,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 22.0,
+                  ),
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
