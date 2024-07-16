@@ -105,7 +105,9 @@ class SuggestedRemediesScreen extends StatelessWidget {
     print(
         "images ${"${preferenceService.getBaseImageURL()}/${data[index].getCustomers?.avatar}"}");
     return InkWell(
-      onTap: () {},
+      onTap: () {
+
+      },
       child: Container(
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(

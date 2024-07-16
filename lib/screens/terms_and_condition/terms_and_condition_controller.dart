@@ -25,9 +25,12 @@ class TermsAndConditionController extends GetxController{
   String mobile = "";
   String? deviceToken;
   RxBool isLoading = false.obs;
+  RxBool isReadDone = false.obs;
+  ScrollController scrollController = ScrollController();
 
   @override
   void onInit() {
+    scrollController.addListener(scrollListener);
     if(Get.arguments != null){
       mobile = Get.arguments["mobile"];
     }
@@ -41,6 +44,19 @@ class TermsAndConditionController extends GetxController{
       FirebaseCrashlytics.instance.recordError(e, null);
     }
     super.onInit();
+  }
+
+  void scrollListener() {
+    if (scrollController.position.atEdge) {
+      bool isTop = scrollController.position.pixels == 0;
+      if (!isTop) {
+        isReadDone.value = true;
+      } else {
+        isReadDone.value = false;
+      }
+    } else {
+      isReadDone.value = false;
+    }
   }
 
   Future<PrivacyPolicyModel> getPrivacyPolicy() async {
@@ -157,5 +173,17 @@ class TermsAndConditionController extends GetxController{
     isLoading.value = false;
   }
 
+  @override
+  void dispose() {
+
+    super.dispose();
+  }
+
+  @override
+  void onClose() {
+    scrollController.removeListener(scrollListener);
+    scrollController.dispose();
+    super.onClose();
+  }
 
 }

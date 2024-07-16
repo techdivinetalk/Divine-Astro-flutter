@@ -1,12 +1,10 @@
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:math';
-
 import 'package:camera/camera.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
-import 'package:divine_astrologer/di/notification_two.dart';
 import 'package:divine_astrologer/firebase_options.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
