@@ -1,12 +1,7 @@
-import 'dart:developer';
-
 import 'package:custom_rating_bar/custom_rating_bar.dart';
-import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
-
-import 'package:divine_astrologer/common/permission_handler.dart';
-import 'package:divine_astrologer/model/custom_product/custom_product__list_binding.dart';
+import 'package:divine_astrologer/common/permission_handler';
 import 'package:divine_astrologer/model/custom_product/custom_product_list_view.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 
@@ -519,7 +514,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                       } else if (index == 9) {
                         log("index ----");
                         Get.toNamed(RouteName.customProduct);
-                      }else if (index == 10) {
+                      } else if (index == 10) {
                         log("index ----");
                         Get.toNamed(RouteName.passbook);
                       }
