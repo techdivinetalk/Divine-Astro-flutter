@@ -189,51 +189,24 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
 
     WidgetsBinding.instance.addObserver(this);
-
-    print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
-    Future.delayed(const Duration(seconds: 3), () {
-      print("isLogged");
-      print(" ${preferenceService.getUserDetail()}");
-
-      if (preferenceService.getUserDetail() != null) {
-        // Check for null user details
-        AppFirebaseService().readData(
-            'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
-      } else {
-        divineSnackBar(data: "User Not Found");
-      }
-      //appFirebaseService.masterData('masters');
-    });
-    broadcastReceiver.start();
-    broadcastReceiver.messages.listen((event) {
-      debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
-      if (event.name == "giftCount") {
-        if (int.parse(event.data!["giftCount"].toString()) > 0) {
-          if (MiddleWare.instance.currentPage != RouteName.chatMessageUI) {
-            showGiftBottomSheet(event.data?["giftCount"], contextDetail,
-                baseUrl: preferenceService.getBaseImageURL());
-          }
-        }
-      }
-    });
     if (preferenceService.getUserDetail() != null) {
       getAllDashboardData();
       userData = preferenceService.getUserDetail()!;
       appbarTitle.value =
-          "${userData.name.toString().capitalizeFirst} (${userData.uniqueNo})";
+      "${userData.name.toString().capitalizeFirst} (${userData.uniqueNo})";
 
       print("${preferenceService.getBaseImageURL()}/${userData.image}");
 
       final String path = "astrologer/${(userData.id ?? 0)}/realTime";
       FirebaseDatabase.instance.ref().child(path).onValue.listen(
-        (event) async {
+            (event) async {
           final DataSnapshot dataSnapshot = event.snapshot;
 
           if (dataSnapshot.exists) {
             if (dataSnapshot.value is Map<dynamic, dynamic>) {
               Map<dynamic, dynamic> map = <dynamic, dynamic>{};
               map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-                  as Map<dynamic, dynamic>;
+              as Map<dynamic, dynamic>;
               print("Home Realtime DB Listener: $map");
 
               // final isCallSwitchRes = map["voiceCallStatus"] ?? 0;
@@ -277,8 +250,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               if (offers != null) {
                 if (homeData != null) {
                   for (int i = 0;
-                      i < homeData!.offers!.orderOffer!.length;
-                      i++) {
+                  i < homeData!.offers!.orderOffer!.length;
+                  i++) {
                     for (int j = 0; j < offers.keys.toList().length; j++) {
                       if ("${homeData!.offers!.orderOffer![i].id}" ==
                           "${offers.keys.toList()[j]}") {
@@ -299,6 +272,33 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         },
       );
     }
+    print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
+    Future.delayed(const Duration(seconds: 3), () {
+      print("isLogged");
+      print(" ${preferenceService.getUserDetail()}");
+
+      if (preferenceService.getUserDetail() != null) {
+        // Check for null user details
+        AppFirebaseService().readData(
+            'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
+      } else {
+        divineSnackBar(data: "User Not Found");
+      }
+      //appFirebaseService.masterData('masters');
+    });
+    broadcastReceiver.start();
+    broadcastReceiver.messages.listen((event) {
+      debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
+      if (event.name == "giftCount") {
+        if (int.parse(event.data!["giftCount"].toString()) > 0) {
+          if (MiddleWare.instance.currentPage != RouteName.chatMessageUI) {
+            showGiftBottomSheet(event.data?["giftCount"], contextDetail,
+                baseUrl: preferenceService.getBaseImageURL());
+          }
+        }
+      }
+    });
+
     getSampleText();
     getAstrologerTrainingSession();
     getAstrologerLiveData();
