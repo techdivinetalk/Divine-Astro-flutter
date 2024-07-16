@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/new_chat/msg_bubble/audio_view_widget.dart';
 import 'package:divine_astrologer/new_chat/msg_bubble/custom_product_widget.dart';
@@ -59,7 +60,7 @@ class NewChatScreen extends GetView<NewChatController> {
                           ChatMessage data = controller.chatMessages[index];
                           return GestureDetector(
                             onLongPress: () {
-                              showReactionPopup(context, controller.longPressDownDetails!.globalPosition);
+                              showReactionPopup(context, controller.longPressDownDetails!.globalPosition, index);
                             },
                             onLongPressDown: (details) {
                               controller.longPressDownDetails = details;
@@ -74,12 +75,43 @@ class NewChatScreen extends GetView<NewChatController> {
                                   ),
                                 )
                                 : const SizedBox()),
-                                socketMessageView(
-                                  controller: controller,
-                                  yourMessage: data.msgSendBy == "1",
-                                  chatMessage: data,
-                                  index: index,
-                                ),
+                                Obx(() => Stack(
+                                  alignment: data.msgSendBy == "1" ? Alignment.bottomRight : Alignment.bottomLeft,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.only(bottom: (controller.tempEmoji.value != "" && controller.tempIndex.value == index) ? 10.h : 0.0),
+                                      child: socketMessageView(
+                                        controller: controller,
+                                        yourMessage: data.msgSendBy == "1",
+                                        chatMessage: data,
+                                        index: index,
+                                      ),
+                                    ),
+                                    (controller.tempEmoji.value != "" && controller.tempIndex.value == index) ? Positioned(
+                                      right: data.msgSendBy == "1" ? 15.0 : null,
+                                      left: data.msgSendBy == "1" ? null : 55.0,
+                                      child: Container(
+                                        margin: const EdgeInsets.only(top: 10.0),
+                                        padding: const EdgeInsets.symmetric(horizontal: 5),
+                                        decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(50.0),
+                                            border: Border.all(color: const Color(0xffDCDCDC)),
+                                            color: appColors.white
+                                        ),
+                                        child: Text(
+                                          controller.tempEmoji.value,
+                                          softWrap: true,
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 15.0,
+                                          ),
+                                        ),
+                                      ),
+                                    ) : const SizedBox(),
+                                  ],
+                                )),
                                 if (index ==0)
                                   TypingWidget(
                                     controller: controller,
@@ -141,10 +173,12 @@ class NewChatScreen extends GetView<NewChatController> {
     );
   }
 
-  void showReactionPopup(BuildContext context, Offset position) {
+  void showReactionPopup(BuildContext context, Offset position, int index) {
     controller.overlayEntry = OverlayEntry(
       builder: (context) => ReactionPopup(
         onReactionSelected: (reaction) {
+          controller.tempEmoji.value = reaction;
+          controller.tempIndex.value = index;
           controller.overlayEntry?.remove();
           },
         position: position,
@@ -223,14 +257,26 @@ class ReactionPopup extends StatelessWidget {
   final Function(String) onReactionSelected;
   final Offset position;
   final NewChatController controller;
+  // final Size screenSize;
 
   ReactionPopup({required this.onReactionSelected, required this.position, required this.controller});
 
   @override
   Widget build(BuildContext context) {
+    double left = position.dx;
+    double top = position.dy;
+    final screenSize = MediaQuery.of(context).size;
+    if (left + 150 > screenSize.width) {
+      left = (screenSize.width/2) - 150;
+    }
+    if (top + 60 > screenSize.height) {
+      top = (screenSize.height/2) - 60;
+    }
     return Positioned(
-      top: position.dy - 60,
-      left: position.dx - 75,
+      // top: position.dy - 60,
+      top: top,
+      // left: position.dx - 75,
+      left: left,
       child: Material(
         color: Colors.transparent,
         child: Container(
@@ -250,14 +296,19 @@ class ReactionPopup extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               for(int i = 0 ; i < controller.emojiList.length ; i++)
-                Text(
-                  controller.emojiList[i],
-                  softWrap: true,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w500,
-                    fontSize: 22.0,
+                GestureDetector(
+                  onTap: () {
+                    onReactionSelected(controller.emojiList[i]);
+                  },
+                  child: Text(
+                    controller.emojiList[i],
+                    softWrap: true,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 22.0,
+                    ),
                   ),
                 ),
             ],

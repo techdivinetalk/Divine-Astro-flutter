@@ -183,16 +183,16 @@ class TextViewWidget extends StatelessWidget {
                           if (yourMessage) SizedBox(width: 3.w),
                           if (yourMessage)
                             CommonReadWidget(chatDetail: chatDetail),
-   //                          chatDetail.type == 0
-   //                              ? Assets.images.icSingleTick.svg()
-   //                              : chatDetail.type == 1
-   //                              ? Assets.images.icDoubleTick.svg(
-   //                              colorFilter: ColorFilter.mode(
-   //                                  appColors.disabledGrey,
-   //                                  BlendMode.srcIn))
-   //                              :chatDetail.type == 3
-   //                              ? Assets.images.icDoubleTick.svg()
-   //                              : Assets.images.icSingleTick.svg()
+         //                          chatDetail.type == 0
+         //                              ? Assets.images.icSingleTick.svg()
+         //                              : chatDetail.type == 1
+         //                              ? Assets.images.icDoubleTick.svg(
+         //                              colorFilter: ColorFilter.mode(
+         //                                  appColors.disabledGrey,
+         //                                  BlendMode.srcIn))
+         //                              :chatDetail.type == 3
+         //                              ? Assets.images.icDoubleTick.svg()
+         //                              : Assets.images.icSingleTick.svg()
                         ],
                       ),
                     ),

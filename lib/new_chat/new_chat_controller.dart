@@ -42,6 +42,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
+import 'package:get/get_rx/get_rx.dart';
 import "package:http/http.dart" as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -72,6 +73,8 @@ class NewChatController extends GetxController
   RecorderController? recorderController;
   OverlayEntry? overlayEntry;
   List<String> emojiList = ["👍","❤","😀","😢","😯","🙏"];
+  RxString tempEmoji = "".obs;
+  RxInt tempIndex = 0.obs;
 
   RxBool isRecording = false.obs;
   RxBool hasMessage = false.obs;
