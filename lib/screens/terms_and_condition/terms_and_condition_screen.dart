@@ -39,6 +39,7 @@ class TermsAndConditionScreen extends GetView<TermsAndConditionController> {
               children: [
                 Expanded(
                   child: SingleChildScrollView(
+                    controller: controller.scrollController,
                     child: Container(
                       margin: EdgeInsets.symmetric(horizontal: 20.h),
                       child: Html(data: snapshot.data!.data.privacyPolicy, onLinkTap: (url, attributes, element) {
@@ -53,10 +54,17 @@ class TermsAndConditionScreen extends GetView<TermsAndConditionController> {
                   child: Row(
                     children: [
                       GestureDetector(
-                        onTap: () => controller.isIAgree.value = !controller.isIAgree.value,
+                        onTap: () {
+                          if(controller.isReadDone.value){
+                            controller.isIAgree.value = !controller.isIAgree.value;
+                          }
+                        },
                         child: Transform.scale(
                           scale: 0.8,
-                            child: Obx(() => !controller.isIAgree.value ? SvgPicture.asset(Assets.svgIcUnCheck) : SvgPicture.asset(Assets.svgIcCheck),)),
+                            child: Obx(() => !controller.isIAgree.value ? SvgPicture.asset(
+                                Assets.svgIcUnCheck,
+                              color: controller.isReadDone.value ? AppColors().darkBlue : AppColors().darkBlue.withOpacity(0.5),
+                            ) : SvgPicture.asset(Assets.svgIcCheck),)),
                       ),
                       const SizedBox(width: 5.0,),
                       Text("I agree to our privacy policy.",

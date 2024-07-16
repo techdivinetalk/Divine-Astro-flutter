@@ -45,8 +45,6 @@ class PerformanceRepository extends ApiProvider {
   Future<PerformanceResponse> getPerformance(Map<String, dynamic> param) async {
     try {
       final response = await post(getPerformanceData);
-          // body: jsonEncode(param).toString(),
-          // headers: await getJsonHeaderURL());
       print(response);
       print('😂😂😂😂😂😂😂😂');
       print(response.statusCode);

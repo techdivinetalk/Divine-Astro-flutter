@@ -116,6 +116,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                     child: Column(
                       children: [
                         Stack(
+                          alignment: Alignment.center,
                           children: [
                             Assets.images.bgMeterFinal.svg(
                               height: 135.h,
@@ -123,7 +124,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                             ),
                             Positioned(
                               left: 32.h,
-                              top: 40.h,
+                              top: 50.h,
                               child: CustomText(
                                 // "25",
                                 '${item?.performance?.marks?[1].min ?? 0}',
@@ -133,7 +134,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                             ),
                             Positioned(
                               right: 32.h,
-                              top: 42.h,
+                              top: 50.h,
                               child: CustomText(
                                 // "50",
                                 '${item?.performance?.marks?[1].max ?? 0}',
@@ -142,7 +143,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                             ),
                             Positioned(
                               left: 5.h,
-                              top: 105.h,
+                              top: 110.h,
                               child: CustomText(
                                 //0
                                 '${item?.performance?.marks?[0].min ?? 0}',
@@ -151,13 +152,25 @@ class YourScoreWidget extends GetView<PerformanceController> {
                             ),
                             Positioned(
                               right: 0.h,
-                              top: 105.h,
+                              top: 110.h,
                               child: CustomText(
                                 //100
                                 '${item?.performance?.marks?[2].max ?? 0}',
                                 fontSize: 8.sp,
                               ),
                             ),
+                            /*Padding(
+                              padding: EdgeInsets.only(top: 15.h),
+                              child: CustomText(
+                                //100
+                                'Average',
+                                // fontColor: Colors.amber,
+                                // fontColor: Colors.green,
+                                fontColor: Colors.red,
+                                fontSize: 8.sp,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),*/
                             SizedBox(
                               height: 150.h,
                               width: 270.h,
