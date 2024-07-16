@@ -234,7 +234,7 @@ class _DashaUIState extends State<DashaUI> {
                           padding: const EdgeInsets.symmetric(horizontal: 5.0),
                           child: Center(
                             child: Text(
-                              "planet".tr,
+                              "Planet".tr,
                               style: AppTextStyle.textStyle14(
                                   fontWeight: FontWeight.w500,
                                   fontColor: appColors.brown),
@@ -291,7 +291,7 @@ class _DashaUIState extends State<DashaUI> {
                                 textAlign: TextAlign.center,
                                 style: AppTextStyle.textStyle16(
                                   fontColor: appColors.black,
-                                  fontWeight: FontWeight.w700,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
@@ -303,19 +303,19 @@ class _DashaUIState extends State<DashaUI> {
                               children: [
                                 GestureDetector(
                                   onTap: () {
-                                    controller.subDashaLevel.value = 1;
-                                    if (controller.subDashaPlanetName.value ==
-                                        vimshottariData?.planet.toString()) {
-                                    } else {
-                                      controller.subDashaPlanetName.value =
-                                          vimshottariData?.planet.toString() ??
-                                              '';
-                                      controller.planetDataDetail.value.data =
-                                          null;
-                                      controller.getAntraDataApiList(
-                                          vimshottariData?.planet.toString() ??
-                                              '');
-                                    }
+                                    // controller.subDashaLevel.value = 1;
+                                    // if (controller.subDashaPlanetName.value ==
+                                    //     vimshottariData?.planet.toString()) {
+                                    // } else {
+                                    //   controller.subDashaPlanetName.value =
+                                    //       vimshottariData?.planet.toString() ??
+                                    //           '';
+                                    //   controller.planetDataDetail.value.data =
+                                    //       null;
+                                    //   controller.getAntraDataApiList(
+                                    //       vimshottariData?.planet.toString() ??
+                                    //           '');
+                                    // }
                                   },
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -325,7 +325,7 @@ class _DashaUIState extends State<DashaUI> {
                                             vimshottariData?.end),
                                         style: AppTextStyle.textStyle16(
                                           fontColor: appColors.black,
-                                          fontWeight: FontWeight.w700,
+                                          fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                     ],
@@ -542,7 +542,7 @@ class _DashaUIState extends State<DashaUI> {
           children: [
             // SizedBox(height: kToolbarHeight.h * 2.5),
             // SizedBox(height: 40.h),
-            const LoadingWidget(),
+            const KundliLoading(),
           ],
         ),
         firstChild: Column(
@@ -603,7 +603,7 @@ class _DashaUIState extends State<DashaUI> {
                                 const EdgeInsets.symmetric(horizontal: 4.0),
                             child: Center(
                               child: Text(
-                                "planet".tr,
+                                "Planet".tr,
                                 style: AppTextStyle.textStyle14(
                                     fontWeight: FontWeight.w500,
                                     fontColor: appColors.brown),
@@ -656,7 +656,7 @@ class _DashaUIState extends State<DashaUI> {
                                   textAlign: TextAlign.center,
                                   style: AppTextStyle.textStyle16(
                                     fontColor: appColors.black,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
@@ -668,12 +668,12 @@ class _DashaUIState extends State<DashaUI> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      controller.subDashaLevel.value = 2;
-                                      controller.getPratyantarDashaApiList(
-                                        vimshottariData?.planet.toString() ??
-                                            '',
-                                        subModel?.planet.toString() ?? '',
-                                      );
+                                      // controller.subDashaLevel.value = 2;
+                                      // controller.getPratyantarDashaApiList(
+                                      //   vimshottariData?.planet.toString() ??
+                                      //       '',
+                                      //   subModel?.planet.toString() ?? '',
+                                      // );
                                     },
                                     child: Row(
                                       mainAxisAlignment:
@@ -684,7 +684,7 @@ class _DashaUIState extends State<DashaUI> {
                                               vimshottariData?.end),
                                           style: AppTextStyle.textStyle16(
                                             fontColor: appColors.black,
-                                            fontWeight: FontWeight.w700,
+                                            fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ],
@@ -897,9 +897,7 @@ class _DashaUIState extends State<DashaUI> {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            SizedBox(height: kToolbarHeight.h * 2.5),
-            SizedBox(height: 10.h, width: double.maxFinite),
-            const LoadingWidget(),
+            const KundliLoading(),
           ],
         ),
         firstChild: Column(
@@ -980,7 +978,7 @@ class _DashaUIState extends State<DashaUI> {
                                 const EdgeInsets.symmetric(horizontal: 4.0),
                             child: Center(
                               child: Text(
-                                "planet".tr,
+                                "Planet".tr,
                                 style: AppTextStyle.textStyle14(
                                     fontWeight: FontWeight.w500,
                                     fontColor: appColors.brown),
@@ -1035,7 +1033,7 @@ class _DashaUIState extends State<DashaUI> {
                                   textAlign: TextAlign.center,
                                   style: AppTextStyle.textStyle16(
                                     fontColor: appColors.black,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
@@ -1047,12 +1045,12 @@ class _DashaUIState extends State<DashaUI> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      controller.subDashaLevel.value = 2;
-                                      controller.getPratyantarDashaApiList(
-                                        vimshottariData?.planet.toString() ??
-                                            '',
-                                        subModel?.planet.toString() ?? '',
-                                      );
+                                      // controller.subDashaLevel.value = 2;
+                                      // controller.getPratyantarDashaApiList(
+                                      //   vimshottariData?.planet.toString() ??
+                                      //       '',
+                                      //   subModel?.planet.toString() ?? '',
+                                      // );
                                     },
                                     child: Row(
                                       mainAxisAlignment:
@@ -1063,7 +1061,7 @@ class _DashaUIState extends State<DashaUI> {
                                               pratyantarModel?.end),
                                           style: AppTextStyle.textStyle16(
                                             fontColor: appColors.black,
-                                            fontWeight: FontWeight.w700,
+                                            fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ],
@@ -1273,9 +1271,7 @@ class _DashaUIState extends State<DashaUI> {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            SizedBox(height: kToolbarHeight.h * 2.5),
-            SizedBox(height: 10.h, width: double.maxFinite),
-            const LoadingWidget(),
+            const KundliLoading(),
           ],
         ),
         firstChild: Column(
@@ -1371,7 +1367,7 @@ class _DashaUIState extends State<DashaUI> {
                                 const EdgeInsets.symmetric(horizontal: 4.0),
                             child: Center(
                               child: Text(
-                                "planet".tr,
+                                "Planet".tr,
                                 style: AppTextStyle.textStyle14(
                                     fontWeight: FontWeight.w500,
                                     fontColor: appColors.brown),
@@ -1429,7 +1425,7 @@ class _DashaUIState extends State<DashaUI> {
                                   textAlign: TextAlign.center,
                                   style: AppTextStyle.textStyle16(
                                     fontColor: appColors.black,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
@@ -1441,12 +1437,12 @@ class _DashaUIState extends State<DashaUI> {
                                 children: [
                                   GestureDetector(
                                     onTap: () {
-                                      controller.subDashaLevel.value = 2;
-                                      controller.getPratyantarDashaApiList(
-                                        vimshottariData?.planet.toString() ??
-                                            '',
-                                        subModel?.planet.toString() ?? '',
-                                      );
+                                      // controller.subDashaLevel.value = 2;
+                                      // controller.getPratyantarDashaApiList(
+                                      //   vimshottariData?.planet.toString() ??
+                                      //       '',
+                                      //   subModel?.planet.toString() ?? '',
+                                      // );
                                     },
                                     child: Row(
                                       mainAxisAlignment:
@@ -1457,7 +1453,7 @@ class _DashaUIState extends State<DashaUI> {
                                               sookshmaData?.end),
                                           style: AppTextStyle.textStyle16(
                                             fontColor: appColors.black,
-                                            fontWeight: FontWeight.w700,
+                                            fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ],
@@ -1672,9 +1668,7 @@ class _DashaUIState extends State<DashaUI> {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            SizedBox(height: kToolbarHeight.h * 2.5),
-            SizedBox(height: 10.h, width: double.maxFinite),
-            const LoadingWidget(),
+            const KundliLoading(),
           ],
         ),
         firstChild: Column(
@@ -1832,7 +1826,7 @@ class _DashaUIState extends State<DashaUI> {
                               ),
                               child: Center(
                                 child: Text(
-                                  "planet".tr,
+                                  "Planet".tr,
                                   style: AppTextStyle.textStyle14(
                                       fontWeight: FontWeight.w500,
                                       fontColor: appColors.brown),
@@ -1894,7 +1888,7 @@ class _DashaUIState extends State<DashaUI> {
                                   textAlign: TextAlign.center,
                                   style: AppTextStyle.textStyle16(
                                     fontColor: appColors.black,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
@@ -1917,7 +1911,7 @@ class _DashaUIState extends State<DashaUI> {
                                               pranDashaData?.end),
                                           style: AppTextStyle.textStyle16(
                                             fontColor: appColors.black,
-                                            fontWeight: FontWeight.w700,
+                                            fontWeight: FontWeight.w500,
                                           ),
                                         ),
                                       ],
@@ -2110,9 +2104,7 @@ class _DashaUIState extends State<DashaUI> {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            SizedBox(height: kToolbarHeight.h * 2.5),
-            SizedBox(height: 50.h),
-            const LoadingWidget(),
+            const KundliLoading(),
           ],
         ),
         firstChild: Column(
@@ -2194,7 +2186,7 @@ class _DashaUIState extends State<DashaUI> {
                                   textAlign: TextAlign.center,
                                   style: AppTextStyle.textStyle16(
                                     fontColor: appColors.black,
-                                    fontWeight: FontWeight.w700,
+                                    fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
@@ -2212,7 +2204,7 @@ class _DashaUIState extends State<DashaUI> {
                                             yoginiData?.endDate),
                                         style: AppTextStyle.textStyle16(
                                           fontColor: appColors.black,
-                                          fontWeight: FontWeight.w700,
+                                          fontWeight: FontWeight.w500,
                                         ),
                                       ),
                                     ],

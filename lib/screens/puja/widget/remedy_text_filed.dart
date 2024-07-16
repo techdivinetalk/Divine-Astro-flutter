@@ -13,10 +13,18 @@ class PoojaRemedyTextFiled extends StatelessWidget {
   final Function(String)? onChanged;
   final List<TextInputFormatter>? textInputFormatter;
 
-
   final String? Function(String?)? validator;
 
-  const PoojaRemedyTextFiled({super.key, this.controller, this.maxLines = 1, this.maxLength, this.validator, this.title, this.onChanged, this.textInputFormatter, this.isSuffix = true});
+  const PoojaRemedyTextFiled(
+      {super.key,
+      this.controller,
+      this.maxLines = 1,
+      this.maxLength,
+      this.validator,
+      this.title,
+      this.onChanged,
+      this.textInputFormatter,
+      this.isSuffix = true});
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +32,7 @@ class PoojaRemedyTextFiled extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          title ??"",
+          title ?? "",
           style: AppTextStyle.textStyle14(
             fontColor: appColors.textColor,
           ),
@@ -37,18 +45,21 @@ class PoojaRemedyTextFiled extends StatelessWidget {
           validator: validator,
           onChanged: onChanged,
           inputFormatters: textInputFormatter,
-
           decoration: InputDecoration(
-            suffixIcon:isSuffix! ? Center(
-              child: Text(
-                "${controller!.text.length}/${maxLength}",
-                style: AppTextStyle.textStyle14(
-                  fontColor: appColors.textColor.withOpacity(0.5),
-                ),
-              ),
-            ):const SizedBox(),
-            suffixIconConstraints: const BoxConstraints(maxHeight: 50,maxWidth: 60),
-              contentPadding: EdgeInsets.symmetric(vertical: 10.h,horizontal: 15.h),
+              suffixIcon: isSuffix!
+                  ? Center(
+                      child: Text(
+                        "${controller!.text.length}/${maxLength}",
+                        style: AppTextStyle.textStyle14(
+                          fontColor: appColors.textColor.withOpacity(0.5),
+                        ),
+                      ),
+                    )
+                  : const SizedBox(),
+              suffixIconConstraints:
+                  const BoxConstraints(maxHeight: 50, maxWidth: 60),
+              contentPadding:
+                  EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.h),
               counterText: "",
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10),

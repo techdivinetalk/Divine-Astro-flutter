@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:divine_astrologer/common/app_exception.dart';
@@ -15,6 +16,28 @@ class PreDefineRepository extends ApiProvider {
       final response =
           await get(getSpecialityList, headers: await getJsonHeaderURL());
 
+      if (response.statusCode == 200) {
+        final specialityResponse = specialityListFromJson(response.body);
+        if (specialityResponse.statusCode == successResponse &&
+            specialityResponse.success!) {
+          return specialityResponse;
+        } else {
+          throw CustomException(json.decode(response.body));
+        }
+      } else {
+        throw CustomException(json.decode(response.body));
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<SpecialityList> getAstrologerCategoryApi() async {
+    try {
+      final response =
+          await get(getAstrologerCategory, headers: await getJsonHeaderURL());
+      log("response of ${response.body}");
       if (response.statusCode == 200) {
         final specialityResponse = specialityListFromJson(response.body);
         if (specialityResponse.statusCode == successResponse &&

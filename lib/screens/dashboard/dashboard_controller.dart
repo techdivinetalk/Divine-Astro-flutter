@@ -507,7 +507,7 @@ class DashboardController extends GetxController
   }
 
   void loadPreDefineData() async {
-    SpecialityList response = await repository.loadPreDefineData();
+    SpecialityList response = await repository.getAstrologerCategoryApi();
     await preferenceService.setSpecialAbility(response.toPrettyJson());
   }
 

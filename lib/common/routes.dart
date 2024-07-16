@@ -133,6 +133,9 @@ import '../screens/side_menu/wait_list/wait_list_ui.dart';
 import '../screens/splash/splash_binding.dart';
 import '../screens/splash/splash_ui.dart';
 import '../screens/support/help_support/help_support_screen.dart';
+import '../screens/technical_issue/issue_binding.dart';
+import '../screens/technical_issue/issue_screen.dart';
+import '../screens/technical_issue/issues_screen/all_isssue_screen.dart';
 
 class RouteName {
   static const initial = root;
@@ -212,6 +215,8 @@ class RouteName {
   static const String supportQuestionScreen = "/SupportQuestionScreen";
   static const String supportAnswerScreen = "/SupportAnswerScreen";
   static const String chatSupportScreen = "/ChatSupportScreen";
+  static const String technicalIssues = "/technicalIssues";
+  static const String allTechnicalIssues = "/AllTechnicalIssues";
   static const String termsAndConditionScreen = "/TermsAndConditionScreen";
 }
 
@@ -277,6 +282,16 @@ class Routes {
       page: () => ChatSupportScreen(),
       name: RouteName.chatSupportScreen,
       binding: ChatSupportBinding(),
+    ),
+    GetPage(
+      page: () => TechnicalIssueScreen(),
+      name: RouteName.technicalIssues,
+      binding: TechnicalBinding(),
+    ),
+    GetPage(
+      page: () => AllTechnicalIssueScreen(),
+      name: RouteName.allTechnicalIssues,
+      binding: TechnicalIssuesBinding(),
     ),
     GetPage(
         page: () => const BlockedUserUI(),
