@@ -25,6 +25,7 @@ import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/model/wallet_deatils_response.dart';
 import 'package:divine_astrologer/pages/home/home_ui.dart';
 import 'package:divine_astrologer/pages/home/widgets/common_info_sheet.dart';
+import 'package:divine_astrologer/pages/home/widgets/technical_popup.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/product/pooja/widgets/custom_widget/pooja_common_list.dart';
 import 'package:divine_astrologer/screens/dashboard/model/astrologer_nord_data_model.dart';
@@ -187,8 +188,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     super.onInit();
     debugPrint("test_onInit: call");
     isInit = true;
-
     WidgetsBinding.instance.addObserver(this);
+
     getSampleText();
     getAstrologerTrainingSession();
     getAstrologerLiveData();
@@ -198,6 +199,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     Future.delayed(const Duration(seconds: 3), () {
       print("isLogged");
       print(" ${preferenceService.getUserDetail()}");
+
       if (preferenceService.getUserDetail() != null) {
         // Check for null user details
         AppFirebaseService().readData(
@@ -645,6 +647,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
             Get.back();
           },
         ));
+      }
+      if (homeData?.technical_support == null ||
+          homeData?.technical_support == [] ||
+          homeData?.technical_support!.isEmpty) {
+      } else {
+        log("Technical_Support -- ${homeData?.technical_support.toString()}");
+        showTechnicalPopupAlert();
       }
       //getFeedbackData();
       //log("DashboardData==>${jsonEncode(homeData)}");

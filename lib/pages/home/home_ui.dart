@@ -1072,6 +1072,12 @@ class HomeUI extends GetView<HomeController> {
                         ),
                         GestureDetector(
                           onTap: () {
+                            log("kundlii");
+                            log("kundlii");
+                            log("kundlii");
+                            log("kundlii");
+                            log("kundlii");
+                            log("kundlii");
                             DateTime time = DateFormat('d MMMM yyyy h:mm a')
                                 .parse('${data["dob"]} ${data["tob"]}');
                             print(data);
@@ -1088,7 +1094,7 @@ class HomeUI extends GetView<HomeController> {
                               name: data["userName"],
                             );
                             Get.toNamed(
-                              RouteName.checkKundli,
+                              RouteName.kundliDetail,
                               arguments: {
                                 "kundli_id": data["kundli_id"],
                                 "from_kundli": false,
