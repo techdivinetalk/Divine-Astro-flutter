@@ -1,7 +1,9 @@
+import 'dart:developer';
+
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
-import 'package:divine_astrologer/common/permission_handler';
+
 import 'package:divine_astrologer/model/custom_product/custom_product_list_view.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 import 'package:divine_astrologer/pages/profile/widget/report_post_reason_widget.dart';
@@ -21,6 +23,7 @@ import '../../../common/routes.dart';
 import '../../../gen/assets.gen.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../common/custom_widgets.dart';
+import '../../common/permission_handler.dart';
 import '../../di/shared_preference_service.dart';
 import '../../repository/user_repository.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
@@ -505,10 +508,10 @@ class ProfileUI extends GetView<ProfilePageController> {
                       } else if (index == 9) {
                         log("index ----");
                         Get.toNamed(RouteName.customProduct);
-                      } else if (index == 10) {
+                      } /*else if (index == 10) {
                         log("index ----");
                         Get.toNamed(RouteName.passbook);
-                      }
+                      }*/
                     },
                     child: Container(
                       padding: const EdgeInsets.all(10),
