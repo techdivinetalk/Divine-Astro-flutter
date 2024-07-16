@@ -32,11 +32,13 @@ import '../../model/res_review_ratings.dart';
 import '../../model/res_user_profile.dart';
 import '../../repository/user_repository.dart';
 import '../../screens/live_page/constant.dart';
+import 'widget/thank_you_report_widget.dart';
 
 class ProfilePageController extends GetxController {
-  final UserRepository userRepository;
 
-  ProfilePageController(this.userRepository);
+   UserRepository userRepository = UserRepository();
+
+
 
   UserData? userData;
   GetUserProfile? userProfile;

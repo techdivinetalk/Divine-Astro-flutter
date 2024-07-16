@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
-class AddCustomProductController extends GetxController{
+class AddCustomProductController extends GetxController {
   TextEditingController productName = TextEditingController();
   TextEditingController productPrice = TextEditingController();
 
@@ -18,7 +18,11 @@ class AddCustomProductController extends GetxController{
   final picker = ImagePicker();
   XFile? pickedFile;
   File? uploadFile;
+  bool isLoading = false;
+
   addCustomProduct() async {
+    isLoading = true;
+    update();
     try {
       Map<String, dynamic> body = {
         "prod_name": productName.text,
@@ -28,6 +32,8 @@ class AddCustomProductController extends GetxController{
       final response = await userRepository.customeEcommerceApi(body);
 
       if (response.data != null) {
+        isLoading = false;
+        await Future.delayed(const Duration(milliseconds: 200));
         Get.back();
         update();
       }

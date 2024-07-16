@@ -278,11 +278,11 @@ class AppFirebaseService {
         Get.put(DashboardController(Get.put(PreDefineRepository())))
             .userProfileImage
             .value = "$baseAmazonUrl/${userData.image!}";
-        Get.put(ProfilePageController(Get.put(UserRepository())))
+        Get.put(ProfilePageController()
             .userProfileImage
-            .value = "$baseAmazonUrl/${userData.image!}";
+            .value = "$baseAmazonUrl/${userData.image!}");
         Get.put(DashboardController(Get.put(PreDefineRepository()))).update();
-        Get.put(ProfilePageController(Get.put(UserRepository()))).update();
+        Get.put(ProfilePageController()).update();
         break;
       case "totalGift":
         sendBroadcast(

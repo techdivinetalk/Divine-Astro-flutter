@@ -181,19 +181,14 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  bool isInit = false;
 
   @override
   void onInit() async {
     super.onInit();
     debugPrint("test_onInit: call");
-    isInit = true;
-    WidgetsBinding.instance.addObserver(this);
 
-    getSampleText();
-    getAstrologerTrainingSession();
-    getAstrologerLiveData();
-    getAstrologerStatus();
+
+    WidgetsBinding.instance.addObserver(this);
 
     print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
     Future.delayed(const Duration(seconds: 3), () {
@@ -304,7 +299,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         },
       );
     }
-
+    getSampleText();
+    getAstrologerTrainingSession();
+    getAstrologerLiveData();
+    getAstrologerStatus();
     // cron.schedule(Schedule.parse('*/5 * * * * *'), checkForScheduleUpdate);
   }
 
@@ -328,48 +326,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       print("getConstantDetails is null");
     }
     update();
-  }
-
-  void checkForScheduleUpdate() {
-    DateTime chatChatDateAndTime = DateTime(2050);
-    final String dateStringForChat = selectedChatDate.value.toString();
-    final String timeStringForChat = selectedChatTime.value.toString();
-    if (dateStringForChat.isNotEmpty && timeStringForChat.isNotEmpty) {
-      chatChatDateAndTime = getChatDateAndTime(
-        dateString: dateStringForChat,
-        timeString: timeStringForChat,
-      );
-    } else {}
-
-    DateTime callChatDateAndTime = DateTime(2050);
-    final String dateStringForCall = selectedCallDate.value.toString();
-    final String timeStringForCall = selectedCallTime.value.toString();
-    if (dateStringForCall.isNotEmpty && timeStringForCall.isNotEmpty) {
-      callChatDateAndTime = getChatDateAndTime(
-        dateString: dateStringForCall,
-        timeString: timeStringForCall,
-      );
-    } else {}
-
-    DateTime videoChatDateAndTime = DateTime(2050);
-    final String dateStringForVideoDate = selectedVideoDate.value.toString();
-    final String timeStringForVideoTime = selectedVideoTime.value.toString();
-    if (dateStringForVideoDate.isNotEmpty &&
-        timeStringForVideoTime.isNotEmpty) {
-      videoChatDateAndTime = getChatDateAndTime(
-        dateString: dateStringForVideoDate,
-        timeString: timeStringForVideoTime,
-      );
-    } else {}
-
-    final bool isBeforeChat = chatChatDateAndTime.isBefore(DateTime.now());
-    final bool isBeforeCall = callChatDateAndTime.isBefore(DateTime.now());
-    final bool isVideo = videoChatDateAndTime.isBefore(DateTime.now());
-
-    if (!isBeforeChat || !isBeforeCall || !isVideo) {
-      getDashboardDetail();
-    } else {}
-    return;
   }
 
   DateTime getChatDateAndTime({
@@ -1165,6 +1121,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       } else {
         homeData!.offers!.orderOffer![index].isOn = !value;
       }
+
       update();
     } catch (error) {
       homeData!.offers!.orderOffer![index].isOn = !value;

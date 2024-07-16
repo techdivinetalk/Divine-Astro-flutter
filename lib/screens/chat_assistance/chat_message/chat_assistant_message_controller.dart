@@ -249,6 +249,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   void onReady() {
     super.onReady();
     Future.delayed(const Duration(milliseconds: 600)).then((value) {
+      print("calling after milliseconds: 600");
       scrollToBottomFunc();
     });
   }

@@ -51,7 +51,7 @@ class HomeUI extends GetView<HomeController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(HomeController());
+    // Get.put(HomeController());
     print("beforeGoing 5 - ${preferenceService.getUserDetail()?.id}");
 
     return GetBuilder<HomeController>(
@@ -313,9 +313,7 @@ class HomeUI extends GetView<HomeController> {
                                 ),*/
                                 // SizedBox(width: 10.w),
                                 InkWell(
-
                                   onTap: () {
-
                                     showModalBottomSheet(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -324,8 +322,7 @@ class HomeUI extends GetView<HomeController> {
                                           width: double.infinity,
                                           color: appColors.white,
                                           child: Image.asset(
-                                              "assets/images/coming-soon-red-blue-3d-text-white-surface-clear-lighting.jpg"
-                                          ),
+                                              "assets/images/coming-soon-red-blue-3d-text-white-surface-clear-lighting.jpg"),
                                         );
                                       },
                                     );
@@ -893,6 +890,36 @@ class HomeUI extends GetView<HomeController> {
                             ],
                           ),
                         ),
+                        SizedBox(height: 10.h),
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(RouteName.customProduct);
+                          },
+                          child: Container(
+                            margin:
+                                const EdgeInsets.symmetric(horizontal: 20.0),
+                            alignment: Alignment.center,
+                            height: 55,
+                            decoration: BoxDecoration(
+                              color: appColors.guideColor,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.2),
+                                  blurRadius: 1.0,
+                                  offset: const Offset(0.0, 3.0),
+                                ),
+                              ],
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Text(
+                              "Custom Product",
+                              style: AppTextStyle.textStyle14(
+                                fontWeight: FontWeight.w500,
+                                fontColor: appColors.white,
+                              ),
+                            ),
+                          ),
+                        ),
                         controller.homeData?.offers?.orderOffer!.length != 0
                             ? Container(
                                 margin: EdgeInsets.symmetric(horizontal: 20.w),
@@ -930,7 +957,7 @@ class HomeUI extends GetView<HomeController> {
                       ],
                     ),
                   ),
-                  Positioned(
+                  /*Positioned(
                       top: controller.yPosition,
                       left: controller.xPosition + 10,
                       child: Container(
@@ -992,7 +1019,7 @@ class HomeUI extends GetView<HomeController> {
                                     ],
                                   ),
                                 ))),
-                      ))
+                      ))*/
                 ]);
               } else {
                 return const GenericLoadingWidget();
@@ -1270,6 +1297,7 @@ class HomeUI extends GetView<HomeController> {
                         htmlData:
                             controller.homeData?.noticeBoard?.description ?? "",
                         trimLength: 100,
+                        isExpanded: true,
                       ),
                     ],
                   ),
@@ -2136,6 +2164,7 @@ class HomeUI extends GetView<HomeController> {
         borderRadius: const BorderRadius.all(Radius.circular(20)),
       ),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -2147,6 +2176,7 @@ class HomeUI extends GetView<HomeController> {
                   fontColor: appColors.darkBlue,
                 ),
               ),
+
               /*InkWell(
                 onTap: () {
                   Get.toNamed(RouteName.discountOffers)!.then((value) {
@@ -2164,6 +2194,13 @@ class HomeUI extends GetView<HomeController> {
               ),*/
             ],
           ),
+          Text(
+            "(You can Apply offer only one time in one day)",
+            style: AppTextStyle.textStyle10(
+              fontWeight: FontWeight.w500,
+              fontColor: appColors.guideColor,
+            ),
+          ),
           SizedBox(height: 10.h),
           ListView.separated(
             shrinkWrap: true,
@@ -2173,8 +2210,7 @@ class HomeUI extends GetView<HomeController> {
             itemBuilder: (context, index) {
               DiscountOffer data =
                   controller.homeData!.offers!.customOffer![index];
-              print(data.isOn);
-              print("data.isOn");
+
               return Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -2567,8 +2603,7 @@ class HomeUI extends GetView<HomeController> {
               child: TextFormField(
                 scrollPadding: EdgeInsets.only(
                     bottom:
-                    MediaQuery.of(Get.context!).viewInsets.bottom +
-                        160),
+                        MediaQuery.of(Get.context!).viewInsets.bottom + 160),
                 maxLines: 6,
                 maxLength: 96,
                 keyboardType: TextInputType.text,
