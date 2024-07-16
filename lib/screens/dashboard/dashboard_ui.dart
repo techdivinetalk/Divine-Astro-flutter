@@ -11,7 +11,6 @@ import 'package:divine_astrologer/screens/dashboard/widgets/rejoin_widget.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart';
 import 'package:divine_astrologer/screens/side_menu/wait_list/wait_list_controller.dart';
 import 'package:divine_astrologer/screens/side_menu/wait_list/wait_list_ui.dart';
-import 'package:firebase_in_app_messaging/firebase_in_app_messaging.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
@@ -35,9 +34,7 @@ class DashboardScreen extends GetView<DashboardController> {
 
   @override
   Widget build(BuildContext context) {
-    FirebaseInAppMessaging.instance
-        .triggerEvent('your_event_name')
-        .then((_) => print('Event triggered'));
+
     print("beforeGoing 4 - ${preferenceService.getUserDetail()?.id}");
     // FirebaseMessaging.instance.getToken().then((value) {
     //   print("FirebaseMessagingToken: $value");

@@ -12,15 +12,17 @@ class CustomText extends StatelessWidget {
   final TextAlign? textAlign;
   final TextOverflow? overflow;
 
-  const CustomText(this.text,
-      {super.key,
-      this.fontColor,
-      this.maxLines,
-      this.overflow,
-      this.fontSize,
-      this.fontWeight,
-      this.textAlign,
-      this.textDecoration});
+  const CustomText(
+    this.text, {
+    super.key,
+    this.fontColor,
+    this.maxLines,
+    this.overflow,
+    this.fontSize,
+    this.fontWeight,
+    this.textAlign,
+    this.textDecoration,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -32,7 +34,7 @@ class CustomText extends StatelessWidget {
       style: TextStyle(
         color: fontColor ?? appColors.darkBlue,
         fontSize: fontSize ?? 15.sp,
-        fontWeight: fontWeight ?? FontWeight.normal,
+        fontWeight: fontWeight ?? FontWeight.w500,
         decoration: textDecoration ?? TextDecoration.none,
       ),
     );
@@ -47,7 +49,6 @@ class CustomTextStyle extends StatelessWidget {
     return const Placeholder();
   }
 }
-
 
 class CustomButton extends StatelessWidget {
   final Function onTap;
@@ -75,7 +76,8 @@ class CustomButton extends StatelessWidget {
         child: InkWell(
           onTap: () => onTap(),
           child: Ink(
-            padding: padding ?? EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
+            padding: padding ??
+                EdgeInsets.symmetric(horizontal: 10.w, vertical: 5.h),
             decoration: BoxDecoration(
               color: color ?? Colors.transparent,
               borderRadius: BorderRadius.circular(radius ?? 5.sp),

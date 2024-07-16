@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
 
 import 'package:divine_astrologer/common/permission_handler.dart';
+import 'package:divine_astrologer/model/custom_product/custom_product__list_binding.dart';
+import 'package:divine_astrologer/model/custom_product/custom_product_list_view.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 
 import 'package:file_picker/file_picker.dart';
@@ -46,52 +50,51 @@ class ProfileUI extends GetView<ProfilePageController> {
                 style: TextStyle(
                   fontWeight: FontWeight.w400,
                   fontSize: 16.sp,
-                  color: appColors.darkBlue, 
+                  color: appColors.darkBlue,
                 )),
           ),
           // drawer: const SideMenuDrawer(),
           body: ListView(
             padding: const EdgeInsets.all(15.0),
             children: <Widget>[
-          Container(
-          padding: EdgeInsets.all(12.h),
-            decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 3.0,
-                  offset: const Offset(0.0, 3.0),
-                ),
-              ],
-              color: Colors.white,
-              borderRadius: const BorderRadius.all(
-                Radius.circular(20),
-              ),
-            ),
-            child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Column(
-                    children: [
-                      SizedBox(height: 10.h),
-                      Container(
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            width: 6,
-                            color: appColors.guideColor,
-                          ),
-                          borderRadius: BorderRadius.circular(80),
-                        ),
-                        child: InkWell(
-                            onTap: () async {
-
-                              /// Told to remove
-                             /* if (await PermissionHelper()
+              Container(
+                  padding: EdgeInsets.all(12.h),
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.2),
+                        blurRadius: 3.0,
+                        offset: const Offset(0.0, 3.0),
+                      ),
+                    ],
+                    color: Colors.white,
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(20),
+                    ),
+                  ),
+                  child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          children: [
+                            SizedBox(height: 10.h),
+                            Container(
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  width: 6,
+                                  color: appColors.guideColor,
+                                ),
+                                borderRadius: BorderRadius.circular(80),
+                              ),
+                              child: InkWell(
+                                  onTap: () async {
+                                    /// Told to remove
+                                    /* if (await PermissionHelper()
                                   .askMediaPermission()) {
                                 controller.updateProfileImage();
                               }*/
-                            },
-                            child: /*ClipRRect(
+                                  },
+                                  child: /*ClipRRect(
                                     borderRadius: BorderRadius.circular(80),
                                     child: Obx(
                                           () =>
@@ -103,113 +106,107 @@ class ProfileUI extends GetView<ProfilePageController> {
                                             width: 70.h,
                                           ),
                                     ),*/
-                            controller.userProfileImage
-                                .contains("null") ||
-                                controller
-                                    .userProfileImage.value.isEmpty
-                                ? SizedBox(
-                              height: 70.h,
-                              width: 70.h,
-                              child: ClipRRect(
-                                  borderRadius:
-                                  BorderRadius.circular(
-                                      100.h),
-                                  child: Image.asset(Assets.images
-                                      .defaultProfile.path)),
-                            )
-                                : CommonImageView(
-                              imagePath: controller
-                                  .userProfileImage.value,
-                              fit: BoxFit.cover,
-                              height: 70.h,
-                              width: 70.h,
-                              placeHolder: Assets
-                                  .images.defaultProfile.path,
-                              radius:
-                              BorderRadius.circular(100.h),
-                            )),
-                      ),
-                    ],
-                  ),
-                  SizedBox(width: 10.h),
-                  Expanded(
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment
-                            .start,
-                        children: [
-                          SizedBox(height: 10.h),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment
-                                .end,
-                            children: [
-                              InkWell(
-                                onTap: () {
-                                  Get.toNamed(
-                                      RouteName.editProfileUI);
-                                },
-                                child: Row(children: [
-                                  Text(
-                                    'editProfile'.tr,
-                                    style: AppTextStyle.textStyle10(
-                                        fontWeight: FontWeight.w500,
-                                        fontColor: appColors
-                                            .textColor),
-                                  ),
-                                  Icon(
-                                    Icons.arrow_right,
-                                    size: 18.h,
-                                    color: appColors.guideColor,
-                                  )
-                                ]),
-                              ),
-                            ],
-                          ),
-                          Row(
-                              mainAxisAlignment:
-                              MainAxisAlignment.spaceBetween,
+                                      controller.userProfileImage
+                                                  .contains("null") ||
+                                              controller.userProfileImage.value
+                                                  .isEmpty
+                                          ? SizedBox(
+                                              height: 70.h,
+                                              width: 70.h,
+                                              child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          100.h),
+                                                  child: Image.asset(Assets
+                                                      .images
+                                                      .defaultProfile
+                                                      .path)),
+                                            )
+                                          : CommonImageView(
+                                              imagePath: controller
+                                                  .userProfileImage.value,
+                                              fit: BoxFit.cover,
+                                              height: 70.h,
+                                              width: 70.h,
+                                              placeHolder: Assets
+                                                  .images.defaultProfile.path,
+                                              radius:
+                                                  BorderRadius.circular(100.h),
+                                            )),
+                            ),
+                          ],
+                        ),
+                        SizedBox(width: 10.h),
+                        Expanded(
+                          child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Flexible(
-                                  child: Text(
-                                    controller.userData?.name ?? "",
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    softWrap: true,
-                                    style: AppTextStyle.textStyle20(
-                                        fontWeight: FontWeight.w600,
-                                        fontColor: appColors
-                                            .darkBlue),
-                                  ),
+                                SizedBox(height: 10.h),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    InkWell(
+                                      onTap: () {
+                                        Get.toNamed(RouteName.editProfileUI);
+                                      },
+                                      child: Row(children: [
+                                        Text(
+                                          'editProfile'.tr,
+                                          style: AppTextStyle.textStyle10(
+                                              fontWeight: FontWeight.w500,
+                                              fontColor: appColors.textColor),
+                                        ),
+                                        Icon(
+                                          Icons.arrow_right,
+                                          size: 18.h,
+                                          color: appColors.guideColor,
+                                        )
+                                      ]),
+                                    ),
+                                  ],
                                 ),
-                                // const SizedBox(width: 5),
-                              ]),
-                          /*SizedBox(height: 3.h),
+                                Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Flexible(
+                                        child: Text(
+                                          controller.userData?.name ?? "",
+                                          maxLines: 1,
+                                          overflow: TextOverflow.ellipsis,
+                                          softWrap: true,
+                                          style: AppTextStyle.textStyle20(
+                                              fontWeight: FontWeight.w600,
+                                              fontColor: appColors.darkBlue),
+                                        ),
+                                      ),
+                                      // const SizedBox(width: 5),
+                                    ]),
+                                /*SizedBox(height: 3.h),
                                   Text(
                                     '+91- ${controller.userData?.phoneNo ?? ""}',
                                     style: AppTextStyle.textStyle14(
                                         fontWeight: FontWeight.w400,
                                         fontColor: appColors.darkBlue),
                                   ),*/
-                          // SizedBox(height: 3.h),
-                          Row(children: [
-                            Text("${"astrologerId".tr}-",
-                                style: AppTextStyle.textStyle14(
-                                    fontWeight: FontWeight.w400,
-                                    fontColor: appColors.darkBlue)),
-                            SizedBox(width: 5.h),
-                            Expanded(
-                              child: Text(
-                                  "${controller.userData?.uniqueNo ??
-                                      ""}",
-                                  style: AppTextStyle.textStyle14(
-                                      fontWeight: FontWeight.w400,
-                                      fontColor: appColors
-                                          .darkBlue)),
-                            ),
-                          ]),
-                        ]),
-                  )
-                ])),
-
+                                // SizedBox(height: 3.h),
+                                Row(children: [
+                                  Text("${"astrologerId".tr}-",
+                                      style: AppTextStyle.textStyle14(
+                                          fontWeight: FontWeight.w400,
+                                          fontColor: appColors.darkBlue)),
+                                  SizedBox(width: 5.h),
+                                  Expanded(
+                                    child: Text(
+                                        "${controller.userData?.uniqueNo ?? ""}",
+                                        style: AppTextStyle.textStyle14(
+                                            fontWeight: FontWeight.w400,
+                                            fontColor: appColors.darkBlue)),
+                                  ),
+                                ]),
+                              ]),
+                        )
+                      ])),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 20.h),
                 child: Text(
@@ -221,47 +218,42 @@ class ProfileUI extends GetView<ProfilePageController> {
               ),
               profileOptions(controller: controller),
               SizedBox(height: 10.h),
-              Obx(() =>
-              controller.reviewDataSync.value == true
+              Obx(() => controller.reviewDataSync.value == true
                   ? controller.ratingsData?.data?.totalRating != 0
-                  ? ratingsView(controller: controller)
-                  : const SizedBox()
+                      ? ratingsView(controller: controller)
+                      : const SizedBox()
                   : const SizedBox()),
               SizedBox(height: 20.h),
-              Obx(() =>
-              controller.reviewDataSync.value == true
+              Obx(() => controller.reviewDataSync.value == true
                   ? (controller.ratingsData?.data?.allReviews?.isNotEmpty ??
-                  false)
-                  ? Container(
-                width: MediaQuery
-                    .of(context)
-                    .size
-                    .width,
-                padding: EdgeInsets.all(16.w),
-                decoration: BoxDecoration(
-                  boxShadow: [
-                    BoxShadow(
-                        color: appColors.blackColor.withOpacity(0.2),
-                        blurRadius: 1.0,
-                        offset: const Offset(0.0, 3.0)),
-                  ],
-                  color: appColors.white,
-                  borderRadius:
-                  const BorderRadius.all(Radius.circular(10)),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      "userReview".tr,
-                      style: AppTextStyle.textStyle20(),
-                    ),
-                    SizedBox(height: 10.h),
-                    listOfReviews(controller: controller),
-                  ],
-                ),
-              )
-                  : const SizedBox()
+                          false)
+                      ? Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: EdgeInsets.all(16.w),
+                          decoration: BoxDecoration(
+                            boxShadow: [
+                              BoxShadow(
+                                  color: appColors.blackColor.withOpacity(0.2),
+                                  blurRadius: 1.0,
+                                  offset: const Offset(0.0, 3.0)),
+                            ],
+                            color: appColors.white,
+                            borderRadius:
+                                const BorderRadius.all(Radius.circular(10)),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "userReview".tr,
+                                style: AppTextStyle.textStyle20(),
+                              ),
+                              SizedBox(height: 10.h),
+                              listOfReviews(controller: controller),
+                            ],
+                          ),
+                        )
+                      : const SizedBox()
                   : const SizedBox()),
             ],
           ),
@@ -307,7 +299,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                   color: appColors.transparent,
                   child: InkWell(
                     onTap: () async {
-
+                      print("objectobjectobjectobjectobject----${index}");
                       if (index == 4) {
                         openBottomSheet(
                           context,
@@ -353,56 +345,56 @@ class ProfileUI extends GetView<ProfilePageController> {
                                           padding: EdgeInsets.zero,
                                           shrinkWrap: true,
                                           physics:
-                                          const NeverScrollableScrollPhysics(),
+                                              const NeverScrollableScrollPhysics(),
                                           gridDelegate:
-                                          SliverGridDelegateWithFixedCrossAxisCount(
+                                              SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 3,
                                             mainAxisSpacing: 30.h,
                                             crossAxisSpacing: 30.h,
                                           ),
                                           itemCount:
-                                          controller.languageList.length,
+                                              controller.languageList.length,
                                           itemBuilder: (context, index) {
                                             ChangeLanguageModelClass item =
-                                            controller.languageList[index];
+                                                controller.languageList[index];
                                             return GetBuilder<
-                                                ProfilePageController>(
+                                                    ProfilePageController>(
                                                 id: "set_language",
                                                 builder: (controller) {
                                                   return GestureDetector(
                                                     onTap: () {
                                                       controller
                                                           .selectedLanguageData(
-                                                          item);
+                                                              item);
                                                     },
                                                     child: Container(
                                                       decoration: BoxDecoration(
                                                           shape:
-                                                          BoxShape.circle,
+                                                              BoxShape.circle,
                                                           border: item
-                                                              .isSelected
+                                                                  .isSelected
                                                               ? Border.all(
-                                                              width: 1,
-                                                              color: Colors
-                                                                  .grey)
+                                                                  width: 1,
+                                                                  color: Colors
+                                                                      .grey)
                                                               : Border.all(
-                                                              width: 0,
-                                                              color: Colors
-                                                                  .white)),
+                                                                  width: 0,
+                                                                  color: Colors
+                                                                      .white)),
                                                       child: Container(
                                                         decoration:
-                                                        BoxDecoration(
+                                                            BoxDecoration(
                                                           shape:
-                                                          BoxShape.circle,
+                                                              BoxShape.circle,
                                                           gradient:
-                                                          LinearGradient(
+                                                              LinearGradient(
                                                             colors: [
                                                               item.colors!
                                                                   .withOpacity(
-                                                                  0),
+                                                                      0),
                                                               item.colors!
                                                                   .withOpacity(
-                                                                  0.2),
+                                                                      0.2),
                                                             ],
                                                             begin: Alignment
                                                                 .topLeft,
@@ -412,30 +404,29 @@ class ProfileUI extends GetView<ProfilePageController> {
                                                         ),
                                                         child: ClipRRect(
                                                           borderRadius:
-                                                          BorderRadius
-                                                              .circular(
-                                                              10.r),
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      10.r),
                                                           child: Material(
                                                             color: Colors
                                                                 .transparent,
                                                             child: Column(
                                                               mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
+                                                                  MainAxisAlignment
+                                                                      .center,
                                                               children: [
                                                                 CustomText(
-                                                                  item
-                                                                      .languagesMain
+                                                                  item.languagesMain
                                                                       .toString(),
                                                                   fontSize:
-                                                                  18.5.sp,
+                                                                      18.5.sp,
                                                                   fontWeight:
-                                                                  FontWeight
-                                                                      .w600,
+                                                                      FontWeight
+                                                                          .w600,
                                                                 ),
                                                                 SizedBox(
                                                                     height:
-                                                                    10.h),
+                                                                        10.h),
                                                                 Text(
                                                                   item.languages
                                                                       .toString(),
@@ -462,28 +453,27 @@ class ProfileUI extends GetView<ProfilePageController> {
                                               Get.back();
                                             },
                                             child: Container(
-                                              width: MediaQuery
-                                                  .of(context)
+                                              width: MediaQuery.of(context)
                                                   .size
                                                   .width,
                                               decoration: BoxDecoration(
                                                   color: appColors.guideColor,
                                                   borderRadius:
-                                                  BorderRadius.circular(
-                                                      10)),
+                                                      BorderRadius.circular(
+                                                          10)),
                                               child: Padding(
                                                 padding:
-                                                const EdgeInsets.symmetric(
-                                                    vertical: 15.0),
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 15.0),
                                                 child: Center(
                                                   child: Text(
                                                     'okay'.tr,
                                                     style: AppTextStyle
                                                         .textStyle16(
-                                                        fontWeight:
-                                                        FontWeight.w600,
-                                                        fontColor: appColors
-                                                            .white),
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontColor: appColors
+                                                                .white),
                                                   ),
                                                 ),
                                               ),
@@ -500,7 +490,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                         if (await PermissionHelper()
                             .askStoragePermission(Permission.videos)) {
                           FilePickerResult? result =
-                          await FilePicker.platform.pickFiles(
+                              await FilePicker.platform.pickFiles(
                             type: FileType.video,
                             allowCompression: false,
                           );
@@ -511,7 +501,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                         }
                       } else if (index == 3) {
                         controller.whatsapp();
-                      } else if (item.nav != "") {
+                      } else if (item.nav != "" && index == 2) {
                         if (item.name == "uploadYourPhotosUi") {
                           if (await PermissionHelper()
                               .askStoragePermission(Permission.photos)) {
@@ -520,17 +510,19 @@ class ProfileUI extends GetView<ProfilePageController> {
                         } else {
                           Get.toNamed(item.nav.toString());
                         }
-                      } else if(index == 0){
+                      } else if (index == 0) {
                         Get.toNamed(RouteName.bankDetailsUI);
-                      }
-                      else if (index == 5) {
+                      } else if (index == 5) {
                         Get.toNamed(RouteName.faq);
                       } else if (index == 8) {
-                        print("index ---- ${index == 8}");
                         Get.toNamed(RouteName.puja);
-                      } /*else if (index == 10) {
-                        Get.toNamed(RouteName.remedies);
-                      }*/
+                      } else if (index == 9) {
+                        log("index ----");
+                        Get.toNamed(RouteName.customProduct);
+                      }else if (index == 10) {
+                        log("index ----");
+                        Get.toNamed(RouteName.passbook);
+                      }
                     },
                     child: Container(
                       padding: const EdgeInsets.all(10),
@@ -591,8 +583,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                         Padding(
                           padding: EdgeInsets.only(left: 20.h),
                           child: Text(
-                            "${controller!.ratingsData?.data?.totalRating ??
-                                "0.0"}",
+                            "${controller!.ratingsData?.data?.totalRating ?? "0.0"}",
                             style: TextStyle(
                                 fontSize: 17.sp, fontWeight: FontWeight.w400),
                           ),
@@ -613,7 +604,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                         Text(
                           "total".trParams({
                             "count":
-                            "${controller.ratingsData?.data?.totalReviews}"
+                                "${controller.ratingsData?.data?.totalReviews}"
                           }),
                           style: AppTextStyle.textStyle14(),
                         ),
@@ -638,11 +629,11 @@ class ProfileUI extends GetView<ProfilePageController> {
                         animationDuration: 2000,
                         percent: controller.getReviewPercentage(
                             ratingNumbers:
-                            controller.ratingsData?.data?.i5Rating ?? 0,
+                                controller.ratingsData?.data?.i5Rating ?? 0,
                             totalReviews:
-                            ((controller.ratingsData?.data?.totalReviews ??
-                                0)
-                                .toDouble())),
+                                ((controller.ratingsData?.data?.totalReviews ??
+                                        0)
+                                    .toDouble())),
                         backgroundColor: appColors.guideColor.withOpacity(0.4),
                         progressColor: appColors.guideColor,
                       ),
@@ -662,11 +653,11 @@ class ProfileUI extends GetView<ProfilePageController> {
                         animationDuration: 2000,
                         percent: controller.getReviewPercentage(
                             ratingNumbers:
-                            controller.ratingsData?.data?.i4Rating ?? 0,
+                                controller.ratingsData?.data?.i4Rating ?? 0,
                             totalReviews:
-                            (controller.ratingsData?.data?.totalReviews ??
-                                0)
-                                .toDouble()),
+                                (controller.ratingsData?.data?.totalReviews ??
+                                        0)
+                                    .toDouble()),
                         backgroundColor: appColors.guideColor.withOpacity(0.4),
                         progressColor: appColors.guideColor,
                       ),
@@ -686,11 +677,11 @@ class ProfileUI extends GetView<ProfilePageController> {
                         animationDuration: 2000,
                         percent: controller.getReviewPercentage(
                             ratingNumbers:
-                            controller.ratingsData?.data?.i3Rating ?? 0,
+                                controller.ratingsData?.data?.i3Rating ?? 0,
                             totalReviews:
-                            (controller.ratingsData?.data?.totalReviews ??
-                                0)
-                                .toDouble()),
+                                (controller.ratingsData?.data?.totalReviews ??
+                                        0)
+                                    .toDouble()),
                         backgroundColor: appColors.guideColor.withOpacity(0.4),
                         progressColor: appColors.guideColor,
                       ),
@@ -710,11 +701,11 @@ class ProfileUI extends GetView<ProfilePageController> {
                         animationDuration: 2000,
                         percent: controller.getReviewPercentage(
                             ratingNumbers:
-                            controller.ratingsData?.data?.i2Rating ?? 0,
+                                controller.ratingsData?.data?.i2Rating ?? 0,
                             totalReviews:
-                            (controller.ratingsData?.data?.totalReviews ??
-                                0)
-                                .toDouble()),
+                                (controller.ratingsData?.data?.totalReviews ??
+                                        0)
+                                    .toDouble()),
                         backgroundColor: appColors.guideColor.withOpacity(0.4),
                         progressColor: appColors.guideColor,
                       ),
@@ -734,11 +725,11 @@ class ProfileUI extends GetView<ProfilePageController> {
                         animationDuration: 2000,
                         percent: controller.getReviewPercentage(
                             ratingNumbers:
-                            controller.ratingsData?.data?.i1Rating ?? 0,
+                                controller.ratingsData?.data?.i1Rating ?? 0,
                             totalReviews:
-                            (controller.ratingsData?.data?.totalReviews ??
-                                0)
-                                .toDouble()),
+                                (controller.ratingsData?.data?.totalReviews ??
+                                        0)
+                                    .toDouble()),
                         backgroundColor: appColors.guideColor.withOpacity(0.4),
                         progressColor: appColors.guideColor,
                       ),
@@ -758,11 +749,10 @@ class ProfileUI extends GetView<ProfilePageController> {
       itemCount: controller!.ratingsData?.data?.allReviews?.length ?? 0,
       primary: false,
       shrinkWrap: true,
-      separatorBuilder: (context, index) =>
-          Padding(
-            padding: EdgeInsets.all(8.h),
-            child: Divider(color: appColors.extraLightGrey),
-          ),
+      separatorBuilder: (context, index) => Padding(
+        padding: EdgeInsets.all(8.h),
+        child: Divider(color: appColors.extraLightGrey),
+      ),
       itemBuilder: (context, index) {
         TextEditingController replyController = TextEditingController();
         var reviewData = controller.ratingsData?.data?.allReviews?[index];
@@ -784,8 +774,7 @@ class ProfileUI extends GetView<ProfilePageController> {
               borderRadius: BorderRadius.circular(40),
               child: CachedNetworkPhoto(
                 url: reviewData?.customerImage != null
-                    ? "${controller.preference
-                    .getBaseImageURL()}/${reviewData?.customerImage}"
+                    ? "${controller.preference.getBaseImageURL()}/${reviewData?.customerImage}"
                     : "",
                 height: 40,
                 width: 40,
@@ -809,12 +798,10 @@ class ProfileUI extends GetView<ProfilePageController> {
                           RatingBar.readOnly(
                             filledIcon: Icons.star,
                             emptyIcon: Icons.star,
-                            emptyColor:
-                            appColors.guideColor.withOpacity(0.3),
+                            emptyColor: appColors.guideColor.withOpacity(0.3),
                             filledColor: appColors.guideColor,
                             initialRating:
-                            double.tryParse("${reviewData?.rating}") ??
-                                0,
+                                double.tryParse("${reviewData?.rating}") ?? 0,
                             size: 15.h,
                             maxRating: 5,
                           ),
@@ -822,30 +809,29 @@ class ProfileUI extends GetView<ProfilePageController> {
                           PopupMenuButton(
                             surfaceTintColor: Colors.transparent,
                             color: Colors.white,
-                            itemBuilder: (context) =>
-                            [
+                            itemBuilder: (context) => [
                               PopupMenuItem(
                                   child: InkWell(
-                                    onTap: () {
-                                      Navigator.pop(context);
+                                onTap: () {
+                                  Navigator.pop(context);
 
-                                      showCupertinoModalPopup(
-                                        barrierColor:
+                                  showCupertinoModalPopup(
+                                    barrierColor:
                                         appColors.darkBlue.withOpacity(0.5),
-                                        context: context,
-                                        builder: (context) =>
-                                            ReportPostReasons(
-                                                reviewData?.id.toString() ??
-                                                    '',controller: controller,),
-
-                                        // builder: (context) => ReportPostReasons(reviewData?.id.),
-                                      );
-                                    },
-                                    child: Text(
-                                      "reportComment".tr,
-                                      style: AppTextStyle.textStyle13(),
+                                    context: context,
+                                    builder: (context) => ReportPostReasons(
+                                      reviewData?.id.toString() ?? '',
+                                      controller: controller,
                                     ),
-                                  )),
+
+                                    // builder: (context) => ReportPostReasons(reviewData?.id.),
+                                  );
+                                },
+                                child: Text(
+                                  "reportComment".tr,
+                                  style: AppTextStyle.textStyle13(),
+                                ),
+                              )),
                             ],
                             child: const Icon(Icons.more_vert_rounded),
                           )
@@ -856,11 +842,10 @@ class ProfileUI extends GetView<ProfilePageController> {
                   SizedBox(height: 3.h),
                   Text(
                     "${reviewData?.reviewDate}",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w500),
+                    style:
+                        AppTextStyle.textStyle12(fontWeight: FontWeight.w500),
                   ),
-                  if (reviewData?.comment != null)
-                    const SizedBox(height: 5),
+                  if (reviewData?.comment != null) const SizedBox(height: 5),
                   if (reviewData?.comment != null)
                     Text(
                       "${reviewData?.comment}",
@@ -902,9 +887,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                               borderRadius: BorderRadius.circular(40),
                               child: CachedNetworkPhoto(
                                 url:
-                                "${controller.preference
-                                    .getBaseImageURL()}/${reviewData
-                                    ?.replyData?.astrologerImage}",
+                                    "${controller.preference.getBaseImageURL()}/${reviewData?.replyData?.astrologerImage}",
                                 height: 40,
                                 width: 40,
                                 fit: BoxFit.cover,
@@ -913,8 +896,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                             SizedBox(width: 10.h),
                             Expanded(
                               child: Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     controller.userData?.name != null
@@ -949,12 +931,11 @@ class ProfileUI extends GetView<ProfilePageController> {
     );
   }
 
-
   Widget replyTextView({
     required TextEditingController textController,
     required int reviewId,
     required VoidCallback
-    onSendPressed, // Callback for handling send button press
+        onSendPressed, // Callback for handling send button press
   }) {
     return Container(
       decoration: BoxDecoration(
@@ -977,7 +958,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                 hintText: "${'replyHere'.tr}...",
                 isDense: true,
                 hintStyle:
-                TextStyle(color: appColors.greyColor, fontSize: 12.sp),
+                    TextStyle(color: appColors.greyColor, fontSize: 12.sp),
                 border: InputBorder.none,
               ),
             ),
@@ -1036,7 +1017,7 @@ class _ReportPostReasonsState extends State<ReportPostReasons> {
             padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
             decoration: BoxDecoration(
               borderRadius:
-              const BorderRadius.vertical(top: Radius.circular(50.0)),
+                  const BorderRadius.vertical(top: Radius.circular(50.0)),
               color: appColors.white,
             ),
             child: Column(
@@ -1130,7 +1111,7 @@ class ThankYouReportUI extends GetView<ProfilePageController> {
             padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
             decoration: BoxDecoration(
               borderRadius:
-              const BorderRadius.vertical(top: Radius.circular(50.0)),
+                  const BorderRadius.vertical(top: Radius.circular(50.0)),
               color: appColors.white,
             ),
             child: Column(
