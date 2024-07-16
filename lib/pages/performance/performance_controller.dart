@@ -80,7 +80,7 @@ class PerformanceController extends GetxController {
     await getPerformance();
   }
 
-  RxList<dynamic> overAllScoreList = <dynamic?>[].obs;
+  RxList<dynamic> overAllScoreList = <dynamic>[].obs;
 
   Future<void> getPerformance() async {
     loading.value = Loading.loading;
