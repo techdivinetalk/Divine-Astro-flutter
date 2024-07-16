@@ -96,25 +96,16 @@ class TermsAndConditionScreen extends GetView<TermsAndConditionController> {
         children: [
           GestureDetector(
             onTap: () {
-              if(!controller.isLoading.value){
+              if(!controller.isLoading.value && controller.isReadDone.value){
                 controller.astroLogin();
               }
             },
-            child: Container(
+            child: Obx(() => Container(
               margin: const EdgeInsets.symmetric(horizontal: 20.0),
               alignment: Alignment.center,
               height: 55,
               decoration: BoxDecoration(
-                color: appColors.guideColor,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black
-                        .withOpacity(0.2),
-                    blurRadius: 1.0,
-                    offset: const Offset(
-                        0.0, 3.0),
-                  ),
-                ],
+                color: controller.isReadDone.value ? appColors.guideColor : appColors.guideColor.withOpacity(0.5),
                 borderRadius:
                 BorderRadius.circular(
                     10.0),
@@ -132,7 +123,7 @@ class TermsAndConditionScreen extends GetView<TermsAndConditionController> {
                   appColors.white,
                 ),
               )),
-            ),
+            )),
           ),
           SizedBox(height: MediaQuery.of(context).padding.bottom + 10.0),
         ],
