@@ -54,6 +54,38 @@ class Utils {
     divineSnackBar(data: message, color: appColors.redColor);
   }
 
+  flutterDatePicker({String? dateFormat, DateTime? lastDate, firstDate,DateTime? initialDate}) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: Get.context!,
+      initialDate:initialDate ?? DateTime.now(),
+      firstDate: firstDate ?? DateTime.now(),
+      lastDate: lastDate ?? DateTime(2500),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme:  ColorScheme.light(
+              primary: appColors.guideColor,
+              onPrimary: Colors.white,
+              onSurface: appColors.guideColor,
+            ),
+            textButtonTheme: TextButtonThemeData(
+
+              style: TextButton.styleFrom(
+                foregroundColor: appColors.guideColor,
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    String? formattedDate;
+    if (pickedDate != null) {
+      formattedDate = DateFormat(dateFormat ?? "dd/MM/yyyy").format(pickedDate);
+    }
+    return formattedDate;
+  }
+
   Future<void> handleStatusCodeUnauthorizedBackend() async {
     debugPrint("test_handleStatusCodeUnauthorized: Backend");
 

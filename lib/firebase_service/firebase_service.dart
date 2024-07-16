@@ -41,6 +41,7 @@ RxInt isLive = 1.obs;
 RxInt isQueue = 1.obs;
 RxInt isGifts = 1.obs;
 RxInt isTime = 0.obs;
+RxInt isCustomToken = 0.obs;
 // RxInt isTruecaller = 1.obs;
 RxInt isLiveCall = 1.obs;
 RxInt homePage = 1.obs;
@@ -476,6 +477,9 @@ class AppFirebaseService {
         break;
       case "kundli":
         isKundli(int.parse(dataSnapshot.value.toString()));
+        break;
+     case "isCustomToken":
+       isCustomToken(int.parse(dataSnapshot.value.toString()));
         break;
       case "live":
         isLive(int.parse(dataSnapshot.value.toString()));

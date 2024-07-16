@@ -34,7 +34,7 @@ class DashboardScreen extends GetView<DashboardController> {
 
   @override
   Widget build(BuildContext context) {
-    // controller.getConstantDetailsData(context);
+
     print("beforeGoing 4 - ${preferenceService.getUserDetail()?.id}");
     // FirebaseMessaging.instance.getToken().then((value) {
     //   print("FirebaseMessagingToken: $value");

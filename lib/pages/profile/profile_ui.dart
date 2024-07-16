@@ -1,8 +1,15 @@
+import 'dart:developer';
+
 import 'package:custom_rating_bar/custom_rating_bar.dart';
+import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
+
 import 'package:divine_astrologer/common/permission_handler.dart';
+import 'package:divine_astrologer/model/custom_product/custom_product__list_binding.dart';
+import 'package:divine_astrologer/model/custom_product/custom_product_list_view.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +17,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
@@ -19,6 +27,7 @@ import '../../common/common_bottomsheet.dart';
 import '../../common/custom_widgets.dart';
 import '../../di/shared_preference_service.dart';
 import '../../repository/user_repository.dart';
+import '../../screens/side_menu/side_menu_ui.dart';
 
 class ProfileUI extends GetView<ProfilePageController> {
   final preference = Get.find<SharedPreferenceService>();
@@ -290,6 +299,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                   color: appColors.transparent,
                   child: InkWell(
                     onTap: () async {
+                      print("objectobjectobjectobjectobject----${index}");
                       if (index == 4) {
                         openBottomSheet(
                           context,
@@ -491,7 +501,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                         }
                       } else if (index == 3) {
                         controller.whatsapp();
-                      } else if (item.nav != "") {
+                      } else if (item.nav != "" && index == 2) {
                         if (item.name == "uploadYourPhotosUi") {
                           if (await PermissionHelper()
                               .askStoragePermission(Permission.photos)) {
@@ -505,11 +515,14 @@ class ProfileUI extends GetView<ProfilePageController> {
                       } else if (index == 5) {
                         Get.toNamed(RouteName.faq);
                       } else if (index == 8) {
-                        print("index ---- ${index == 8}");
                         Get.toNamed(RouteName.puja);
-                      } /*else if (index == 10) {
-                        Get.toNamed(RouteName.remedies);
-                      }*/
+                      } else if (index == 9) {
+                        log("index ----");
+                        Get.toNamed(RouteName.customProduct);
+                      }else if (index == 10) {
+                        log("index ----");
+                        Get.toNamed(RouteName.passbook);
+                      }
                     },
                     child: Container(
                       padding: const EdgeInsets.all(10),

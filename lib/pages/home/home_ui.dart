@@ -228,7 +228,7 @@ class HomeUI extends GetView<HomeController> {
                                         ),
                                 ),
                                 // SizedBox(width: 15.w),
-                                Expanded(
+                                /*Expanded(
                                   key: Get.find<DashboardController>()
                                       .keyTotalAmount,
                                   child: controller.isShowTitle.value
@@ -310,8 +310,47 @@ class HomeUI extends GetView<HomeController> {
                                             ],
                                           ),
                                         ),
-                                ),
+                                ),*/
                                 // SizedBox(width: 10.w),
+                                InkWell(
+
+                                  onTap: () {
+
+                                    showModalBottomSheet(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return Container(
+                                          height: 250,
+                                          width: double.infinity,
+                                          color: appColors.white,
+                                          child: Image.asset(
+                                              "assets/images/coming-soon-red-blue-3d-text-white-surface-clear-lighting.jpg"
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  },
+                                  child: Ink(
+                                    height: 50.h,
+                                    decoration: BoxDecoration(
+                                      color: appColors.guideColor,
+                                      borderRadius: const BorderRadius.all(
+                                          Radius.circular(10)),
+                                    ),
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 10.w),
+                                    // alignment: Alignment.center,
+                                    child: Center(
+                                      child: Text(
+                                        "PassBook".tr,
+                                        style: AppTextStyle.textStyle12(
+                                            fontColor: appColors.white,
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                SizedBox(width: 10.w),
                                 InkWell(
                                   key: Get.find<DashboardController>()
                                       .keyCheckKundli,
@@ -2526,6 +2565,10 @@ class HomeUI extends GetView<HomeController> {
               decoration:
                   BoxDecoration(borderRadius: BorderRadius.circular(10)),
               child: TextFormField(
+                scrollPadding: EdgeInsets.only(
+                    bottom:
+                    MediaQuery.of(Get.context!).viewInsets.bottom +
+                        160),
                 maxLines: 6,
                 maxLength: 96,
                 keyboardType: TextInputType.text,
