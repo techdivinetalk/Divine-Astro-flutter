@@ -159,18 +159,17 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                 fontSize: 8.sp,
                               ),
                             ),
-                            /*Padding(
+                            Padding(
                               padding: EdgeInsets.only(top: 15.h),
                               child: CustomText(
-                                //100
-                                'Average',
+                                item?.performance?.result ?? "",
                                 // fontColor: Colors.amber,
                                 // fontColor: Colors.green,
                                 fontColor: Colors.red,
                                 fontSize: 8.sp,
                                 fontWeight: FontWeight.w600,
                               ),
-                            ),*/
+                            ),
                             SizedBox(
                               height: 150.h,
                               width: 270.h,
@@ -401,25 +400,35 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                       ));
                                 },
                                 child: Container(
-                                    padding: EdgeInsets.all(12.h),
+                                    padding: EdgeInsets.all(8.h),
                                     decoration: BoxDecoration(
                                         boxShadow: [
                                           BoxShadow(
                                               color:
-                                                  Colors.black.withOpacity(0.2),
+                                              Colors.black.withOpacity(0.2),
                                               blurRadius: 3.0,
                                               offset: const Offset(0.0, 3.0)),
                                         ],
                                         color: appColors.white,
                                         borderRadius: const BorderRadius.all(
                                             Radius.circular(10))),
-                                    child: Text(
-                                      item?.label ?? '',
-                                      textAlign: TextAlign.center,
-                                      style: AppTextStyle.textStyle12(
-                                          fontColor: appColors.darkBlue),
-                                      overflow: TextOverflow.ellipsis,
-                                      maxLines: 2,
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                           item?.label ?? "",
+                                          textAlign: TextAlign.center,
+                                          style: AppTextStyle.textStyle12(
+                                              fontColor: appColors.darkBlue),
+                                          // overflow: TextOverflow.ellipsis,
+                                        ),
+                                        Text(
+                                           "(Click here to know the criteria)",
+                                          textAlign: TextAlign.center,
+                                          style: AppTextStyle.textStyle9(
+                                              fontColor: appColors.darkBlue),
+                                          overflow: TextOverflow.visible,
+                                        ),
+                                      ],
                                     )),
                               ),
                             ),

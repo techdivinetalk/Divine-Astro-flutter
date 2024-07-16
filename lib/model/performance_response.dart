@@ -388,13 +388,15 @@ class RankDetail {
 class Performance {
   dynamic marksObtains;
   dynamic totalMarks;
+  dynamic result;
   List<Marks>? marks;
 
-  Performance({this.marksObtains, this.totalMarks, this.marks});
+  Performance({this.marksObtains, this.totalMarks, this.marks, this.result});
 
   Performance.fromJson(Map<String, dynamic> json) {
     marksObtains = json['marks_obtains'];
     totalMarks = json['total_marks'];
+    result = json['result'];
     if (json['marks'] != null) {
       marks = <Marks>[];
       json['marks'].forEach((v) {
@@ -407,6 +409,7 @@ class Performance {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['marks_obtains'] = this.marksObtains;
     data['total_marks'] = this.totalMarks;
+    data['result'] = this.result;
     if (this.marks != null) {
       data['marks'] = this.marks!.map((v) => v.toJson()).toList();
     }
