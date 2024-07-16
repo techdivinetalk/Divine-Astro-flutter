@@ -11,8 +11,9 @@ class CommonInfoSheet extends StatelessWidget {
   final String? title;
   final String? subTitle;
   final dynamic argument;
+  final Function()? onTap;
 
-  const CommonInfoSheet({this.title, this.subTitle, this.argument});
+  const CommonInfoSheet({this.title, this.subTitle, this.argument, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +61,7 @@ class CommonInfoSheet extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               GestureDetector(
-                onTap: () {
+                onTap: onTap ??() {
                   Get.back();
                   if (argument != null){
                     Get.toNamed(RouteName.noticeDetail,

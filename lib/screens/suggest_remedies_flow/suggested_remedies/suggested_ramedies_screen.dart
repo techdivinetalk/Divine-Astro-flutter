@@ -4,6 +4,8 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/generic_loading_widget.dart';
+import 'package:divine_astrologer/common/routes.dart';
+import 'package:divine_astrologer/model/chat_assistant/chat_assistant_astrologer_response.dart';
 import 'package:divine_astrologer/model/order_history_model/remedy_suggested_order_history.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggested_remedies/suggested_remedies_controller.dart';
 import 'package:flutter/material.dart';
@@ -105,7 +107,13 @@ class SuggestedRemediesScreen extends StatelessWidget {
     print(
         "images ${"${preferenceService.getBaseImageURL()}/${data[index].getCustomers?.avatar}"}");
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        DataList dataList = DataList();
+        dataList.name = data[index].getCustomers!.name;
+        dataList.id =data[index].getCustomers!.id;
+        dataList.image = data[index].getCustomers!.avatar;
+        Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
+      },
       child: Container(
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
@@ -231,7 +239,13 @@ class SuggestedRemediesScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            Row(
+            Text("(Click to connect with user and try to increase your Ecom on chat assistance)",
+                textAlign: TextAlign.center,
+                style: AppTextStyle.textStyle12(
+                    fontWeight: FontWeight.w400,
+
+                    fontColor: appColors.guideColor))
+           /* Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("${"clientPaid".tr} :",
@@ -286,7 +300,7 @@ class SuggestedRemediesScreen extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 8),*/
           ],
         ),
       ),
