@@ -165,7 +165,13 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                 item?.performance?.result ?? "",
                                 // fontColor: Colors.amber,
                                 // fontColor: Colors.green,
-                                fontColor: Colors.red,
+                                fontColor: item?.performance?.result == "Poor"
+                                    ? Colors.red
+                                    : item?.performance?.result == "Average"
+                                        ? Colors.amber
+                                        : item?.performance?.result == "Good"
+                                            ? Colors.green
+                                            : Colors.black,
                                 fontSize: 8.sp,
                                 fontWeight: FontWeight.w600,
                               ),
@@ -405,7 +411,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                         boxShadow: [
                                           BoxShadow(
                                               color:
-                                              Colors.black.withOpacity(0.2),
+                                                  Colors.black.withOpacity(0.2),
                                               blurRadius: 3.0,
                                               offset: const Offset(0.0, 3.0)),
                                         ],
@@ -415,14 +421,14 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                     child: Column(
                                       children: [
                                         Text(
-                                           item?.label ?? "",
+                                          item?.label ?? "",
                                           textAlign: TextAlign.center,
                                           style: AppTextStyle.textStyle12(
                                               fontColor: appColors.darkBlue),
                                           // overflow: TextOverflow.ellipsis,
                                         ),
                                         Text(
-                                           "(Click here to know the criteria)",
+                                          "(Click here to know the criteria)",
                                           textAlign: TextAlign.center,
                                           style: AppTextStyle.textStyle9(
                                               fontColor: appColors.darkBlue),
@@ -658,7 +664,8 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
   @override
   Widget build(BuildContext context) {
     debugPrint('😇😇😇😇😇😇😇😇😇');
-    debugPrint('Today\'s Availability Data: ${todaysAvailiblity.toString()}');  // Print the todaysAvailiblity data
+    debugPrint(
+        'Today\'s Availability Data: ${todaysAvailiblity.toString()}'); // Print the todaysAvailiblity data
 
     return Container(
       padding: EdgeInsets.all(12.h),
@@ -839,7 +846,6 @@ class TodayAvailabilityWidget extends GetView<PerformanceController> {
     );
   }
 }
-
 
 class OverAllScoreData extends GetView<PerformanceController> {
   final Overall? performanceResponse;
