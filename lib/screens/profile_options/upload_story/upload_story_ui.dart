@@ -29,9 +29,9 @@ class UploadStoryUi extends GetView<UploadStoryController> {
                     Fluttertoast.showToast(msg: "${'uploadStory'.tr}..");
                     controller.saveVideo();
 
-                    // controller.encodedURLFunction();
-                    // String fullEncodeURL = controller.encodedURLFunction();
-                    // print("fullEncodeURL: $fullEncodeURL");
+                    controller.encodedURLFunction();
+                    String fullEncodeURL = controller.encodedURLFunction();
+                    print("fullEncodeURL: $fullEncodeURL");
                   },
                   child: const Text("Upload"),
                 ),

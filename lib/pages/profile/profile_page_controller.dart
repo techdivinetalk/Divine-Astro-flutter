@@ -9,7 +9,6 @@ import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/constant_details_model_class.dart';
 import 'package:divine_astrologer/model/res_reply_review.dart';
-import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -35,10 +34,7 @@ import '../../screens/live_page/constant.dart';
 import 'widget/thank_you_report_widget.dart';
 
 class ProfilePageController extends GetxController {
-
-   UserRepository userRepository = UserRepository();
-
-
+  UserRepository userRepository = UserRepository();
 
   UserData? userData;
   GetUserProfile? userProfile;

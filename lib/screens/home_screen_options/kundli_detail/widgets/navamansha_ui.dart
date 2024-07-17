@@ -17,7 +17,7 @@ class NavamanshaUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState: controller.navamashaChart.value.data?.svg == null
                   ? CrossFadeState.showSecond
                   : CrossFadeState.showFirst,

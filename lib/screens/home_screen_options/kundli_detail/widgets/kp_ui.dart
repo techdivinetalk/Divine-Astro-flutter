@@ -22,7 +22,7 @@ class KpUI extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState: controller.kpTableData.value.data == null
                   ? CrossFadeState.showSecond
                   : CrossFadeState.showFirst,
