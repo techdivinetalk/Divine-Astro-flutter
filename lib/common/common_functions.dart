@@ -13,7 +13,6 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 
-import '../di/hive_services.dart';
 import '../di/shared_preference_service.dart';
 import '../model/chat/res_common_chat_success.dart';
 import '../model/chat_offline_model.dart';
@@ -121,32 +120,7 @@ void checkNotification(
   //  removeNotificationNode();
 }
 
-void setHiveDatabase(String userDataKey, ChatMessage newMessage) async {
-  var databaseMessage = ChatMessagesOffline();
-  HiveServices hiveServices = HiveServices(boxName: userChatData);
-  await hiveServices.initialize();
-  String? res = await hiveServices.getData(key: userDataKey);
 
-  if (res != null) {
-    var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
-    databaseMessage = msg;
-  }
-  List<ChatMessage>? chatMessages = databaseMessage.chatMessages ?? [];
-
-  var index = chatMessages.indexWhere((element) => newMessage.id == element.id);
-  if (index >= 0) {
-    chatMessages[index].type = newMessage.type;
-  } else {
-    chatMessages.add(newMessage);
-  }
-  databaseMessage.chatMessages = chatMessages;
-
-  await hiveServices.addData(
-      key: userDataKey, data: jsonEncode(databaseMessage.toOfflineJson()));
-  Future.delayed(const Duration(seconds: 5)).then((value) async {
-    await hiveServices.close();
-  });
-}
 
 void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   // type 1= New chat message, 2 = Delievered, 3= Msg read, 4= Other messages

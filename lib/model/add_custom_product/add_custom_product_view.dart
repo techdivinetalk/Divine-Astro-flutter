@@ -1,9 +1,8 @@
-
-
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
@@ -16,7 +15,7 @@ import 'package:divine_astrologer/model/add_custom_product/add_custom_product_co
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide FormData, MultipartFile;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -45,27 +44,33 @@ class AddCustomProductView extends GetView<AddCustomProductController> {
             title: CustomText('Add Custom Product'.tr),
           ),
           body: ListView(
+            padding: const EdgeInsets.symmetric(horizontal: 15),
             children: [
-              InkWell(
-                  onTap: () async {
-                    if (await PermissionHelper().askMediaPermission()) {
-                      updateProfileImage();
-                    }
-                  },
-                  child: CommonImageView(
-                    imagePath: controller.productImageUrl.isEmpty
-                        ? Assets.images.icUploadStory.path
-                        : controller.productImageUrl,
-                    fit: BoxFit.cover,
-                    height: 90.h,
-                    width: 90.h,
-                    placeHolder: Assets.images.defaultProfile.path,
-                    radius: BorderRadius.circular(100.h),
-                  )),
+              SizedBox(height: 10.h),
+              Align(
+                alignment: Alignment.center,
+                child: InkWell(
+                    onTap: () async {
+                      if (await PermissionHelper().askMediaPermission()) {
+                        updateProfileImage();
+                      }
+                    },
+                    child: CommonImageView(
+                      imagePath: controller.productImageUrl.isEmpty
+                          ? Assets.images.icUploadStory.path
+                          : controller.productImageUrl,
+                      fit: BoxFit.cover,
+                      height: 90.h,
+                      width: 90.h,
+                      placeHolder: Assets.images.defaultProfile.path,
+                      radius: BorderRadius.circular(100.h),
+                    )),
+              ),
               SizedBox(height: 10.h),
               CustomText(
                 'Upload Product Image',
                 fontColor: appColors.textColor,
+                textAlign: TextAlign.center,
               ),
               SizedBox(height: 20.h),
               PoojaRemedyTextFiled(
@@ -122,12 +127,16 @@ class AddCustomProductView extends GetView<AddCustomProductController> {
                     borderRadius: BorderRadius.circular(10),
                     color: appColors.guideColor,
                   ),
-                  child: CustomText(
-                    'Save',
-                    fontColor: appColors.white,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
-                  ),
+                  child: controller.isLoading
+                      ? CircularProgressIndicator(
+                          color: appColors.white,
+                        )
+                      : CustomText(
+                          'Save',
+                          fontColor: appColors.white,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 16,
+                        ),
                 ),
               )
             ],
@@ -192,7 +201,7 @@ class AddCustomProductView extends GetView<AddCustomProductController> {
                       children: [
                         CustomButton(
                           onTap: () async {
-                            // Get.back();
+                            Get.back();
                             await getImage(true, controller: controller);
                           },
                           child: Column(
@@ -209,7 +218,7 @@ class AddCustomProductView extends GetView<AddCustomProductController> {
                         SizedBox(width: 64.w),
                         CustomButton(
                           onTap: () async {
-                            // Get.back();
+                            Get.back();
                             await getImage(false, controller: controller);
                           },
                           child: Column(
@@ -246,107 +255,57 @@ class AddCustomProductView extends GetView<AddCustomProductController> {
 
     if (controller.pickedFile != null) {
       controller.image = controller!.pickedFile;
-
-      await cropImage();
+      uploadImage(File(controller.image!.path), controller: controller);
     }
   }
 
-  cropImage() async {
-    CroppedFile? croppedFile = await ImageCropper().cropImage(
-      sourcePath: controller.image!.path,
-      aspectRatioPresets: [
-        CropAspectRatioPreset.square,
-        CropAspectRatioPreset.ratio3x2,
-        CropAspectRatioPreset.original,
-        CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9,
-      ],
-      uiSettings: [
-        AndroidUiSettings(
-          toolbarTitle: 'Update image',
-          toolbarColor: appColors.white,
-          toolbarWidgetColor: appColors.blackColor,
-          initAspectRatio: CropAspectRatioPreset.original,
-          lockAspectRatio: false,
-        ),
-        IOSUiSettings(
-          title: 'Update image',
-        ),
-      ],
-    );
-    if (croppedFile != null) {
-      // final file = File(croppedFile.path);
+  // 0 poor
+  // 1 avarage
+  // 2 good
 
-      controller.uploadFile = File(croppedFile.path);
-      final filePath = controller.uploadFile!.absolute.path;
-      final lastIndex = filePath.lastIndexOf(RegExp(r'.png|.jp'));
-      final splitted = filePath.substring(0, (lastIndex));
-      final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
-      var result = await FlutterImageCompress.compressAndGetFile(
-        filePath,
-        outPath,
-        minWidth: 500,
-      );
-      if (result != null) {
-        uploadImage(File(result.path));
-        controller.update();
-        print("imageimageimageimage");
+  Future<void> uploadImage(File imageFile,
+      {AddCustomProductController? controller}) async {
+    try {
+      var uri = "${ApiProvider.imageBaseUrl}uploadImage";
+      var data = await Dio().post(uri,
+          data: FormData.fromMap({
+            "module_name": "pooja",
+            "image": imageFile != null
+                ? await MultipartFile.fromFile(imageFile!.path,
+                    filename: imageFile!.path.split('/').last)
+                : null,
+          }));
+      print(data);
+      print("datadatadatadatadata");
+      if (data.statusCode == 200) {
+        controller!.productApiPath = data.data["data"]["path"];
+        controller!.productImageUrl = data.data["data"]["full_path"];
+        controller!.update();
       }
-    } else {
-      debugPrint("Image is not cropped.");
+    } on DioException catch (e) {
+      print("objectobjectobjectobject----${e}");
     }
   }
 
-  Future<void> uploadImage(File imageFile,{AddCustomProductController? controller}) async {
-    log("uploading images 1");
-    var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
-
-    var request = http.MultipartRequest('POST', uri);
-
-    request.headers.addAll({
-      'Content-type': 'application/json',
-      'Accept': 'application/json',
-    });
-    log("uploading images 2");
-
-    // Attach the image file to the request
-    request.files.add(await http.MultipartFile.fromPath(
-      'image',
-      imageFile.path,
-    ));
-    request.fields.addAll({"module_name": "pooja"});
-
-    var response = await request.send();
-    log("uploading images 3");
-
-    // Listen for the response
-
-    response.stream.transform(utf8.decoder).listen((value) {
-      print(jsonDecode(value)["data"]);
-      controller!.productApiPath = jsonDecode(value)["data"]["path"];
-      controller.productImageUrl = jsonDecode(value)["data"]["full_path"];
-      log("uploading images 4");
-      log("uploading images 5 - ${controller.productApiPath}");
-
-      controller.update();
-      print("valuevaluevaluevaluevaluevaluevalue");
-    });
-
-    if (response.statusCode == 200) {
-      print("Image uploaded successfully.");
-      log("uploading images 6 - ${controller!.productApiPath}");
-
-      // Get.bottomSheet(
-      //     CreateCustomProductSheet(
-      //       controller: widget.controller,
-      //       chatMessageController: widget.chatMessageController,
-      //     ),
-      //     isScrollControlled: true);
-      // if (image.isNotEmpty) {
-      //   poojaImageUrl = image;
-      // }
-    } else {
-      print("Failed to upload image.");
+  upload({File? imageFile, AddCustomProductController? controller}) async {
+    try {
+      var uri = "${ApiProvider.imageBaseUrl}uploadImage";
+      var data = await Dio().post(uri,
+          data: FormData.fromMap({
+            "module_name": "pooja",
+            "image": imageFile != null
+                ? await MultipartFile.fromFile(imageFile!.path,
+                    filename: imageFile!.path.split('/').last)
+                : null,
+          }));
+      print(data);
+      print("datadatadatadatadata");
+      if (data.statusCode == 200) {
+        print(data.data);
+        print("data.datadata.datadata.data");
+      }
+    } on DioException catch (e) {
+      print("objectobjectobjectobject");
     }
   }
 }

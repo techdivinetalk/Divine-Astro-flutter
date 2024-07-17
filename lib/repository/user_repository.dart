@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -594,18 +595,27 @@ class UserRepository extends ApiProvider {
       String version = packageInfo.version;
       String buildNumber = packageInfo.buildNumber;
       DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      print('Running on ${androidInfo.model}'); // e.g., "Pixel 3"
-      print('App Version: $version');
+      AndroidDeviceInfo? androidInfo;
+      IosDeviceInfo iosDeviceInfo;
+      if (Platform.isAndroid) {
+        androidInfo = await deviceInfo.androidInfo;
+        print('Running on ${androidInfo!.model}'); // e.g., "Pixel 3"
+        print('App Version: $version');
+      } else {
+        iosDeviceInfo = await deviceInfo.iosInfo;
+      }
+
       Map<String, dynamic> param = new Map();
-      param["device_brand"] = androidInfo.brand;
-      param["device_model"] = androidInfo.model;
-      param["device_manufacture"] = androidInfo.manufacturer;
-      param["device_sdk_code"] = buildNumber;
-      param["appCurrentVersion"] = version;
-      print('🥹🥹🥹🥹🥹🥹🥹🥹');
-      print(jsonEncode(param).toString());
-      print('🥹🥹🥹🥹🥹🥹🥹🥹');
+      if (Platform.isAndroid) {
+        param["device_brand"] = androidInfo!.brand;
+        param["device_model"] = androidInfo.model;
+        param["device_manufacture"] = androidInfo.manufacturer;
+        param["device_sdk_code"] = buildNumber;
+        param["appCurrentVersion"] = version;
+        print('🥹🥹🥹🥹🥹🥹🥹🥹');
+        print(jsonEncode(param).toString());
+        print('🥹🥹🥹🥹🥹🥹🥹🥹');
+      }
 
       final response = await post(
         constantDetails,
@@ -1510,42 +1520,7 @@ class UserRepository extends ApiProvider {
     }
   }
 
-  Future<UpdateSessionTypeResponse> updateSessionTypeApi(
-      Map<String, dynamic> params) async {
-    try {
-      final response = await post(astroOnline,
-          body: jsonEncode(params), headers: await getJsonHeaderURL());
-      if (response.statusCode == HttpStatus.unauthorized) {
-        Utils().handleStatusCodeUnauthorizedServer();
-      } else if (response.statusCode == HttpStatus.badRequest) {
-        Utils().handleStatusCode400(response.body);
-      }
 
-      if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] ==
-            HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorizedBackend();
-          throw CustomException(json.decode(response.body)["error"]);
-        } else {
-          final updateSessionTypeResponse =
-              updateSessionTypeResponseFromJson(response.body);
-          print(jsonEncode(updateSessionTypeResponse));
-          print("jsonEncode(updateSessionTypeResponse)");
-          if (updateSessionTypeResponse.statusCode == successResponse &&
-              (updateSessionTypeResponse.success ?? false)) {
-            return updateSessionTypeResponse;
-          } else {
-            throw CustomException(updateSessionTypeResponse.message ?? '');
-          }
-        }
-      } else {
-        throw CustomException(json.decode(response.body)["message"]);
-      }
-    } catch (e, s) {
-      debugPrint("we got $e $s");
-      rethrow;
-    }
-  }
 
   Future<UpdateOfferResponse> updateOfferTypeApi(
       Map<String, dynamic> params) async {

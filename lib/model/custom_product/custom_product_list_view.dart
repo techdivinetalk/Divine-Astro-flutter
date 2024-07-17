@@ -34,7 +34,12 @@ class CustomProductListView extends GetView<CustomProductListController> {
             actions: [
               GestureDetector(
                 onTap: () {
-                  Get.toNamed(RouteName.addCustomProduct);
+                  Get.toNamed(RouteName.addCustomProduct)!.then(
+                    (value) {
+                      print("added custom product");
+                      controller.getSavedRemedies();
+                    },
+                  );
                 },
                 child: SvgPicture.asset(
                   "assets/svg/chat_new_custom_product.svg",

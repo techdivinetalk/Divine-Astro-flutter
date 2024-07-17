@@ -32,9 +32,9 @@ class PassbookScreen extends GetView<PassbookController> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
-                        String startDate = await Utils()
-                            .flutterDatePicker(firstDate: DateTime(1950));
-                        if (startDate.isNotEmpty) {}
+                        // String startDate = await Utils()
+                        //     .flutterDatePicker(firstDate: DateTime(1950));
+                        // if (startDate.isNotEmpty) {}
                       },
                       child: Container(
                         height: 50,
@@ -58,9 +58,9 @@ class PassbookScreen extends GetView<PassbookController> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () async {
-                        String endDate = await Utils()
-                            .flutterDatePicker(firstDate: DateTime(1950));
-                        if (endDate.isNotEmpty) {}
+                        // String endDate = await Utils()
+                        //     .flutterDatePicker(firstDate: DateTime(1950));
+                        // if (endDate.isNotEmpty) {}
                       },
                       child: Container(
                         height: 50,

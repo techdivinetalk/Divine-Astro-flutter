@@ -10,7 +10,7 @@ import "package:device_info_plus/device_info_plus.dart";
 import "package:divine_astrologer/app_socket/app_socket.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/routes.dart";
-import "package:divine_astrologer/di/hive_services.dart";
+
 import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/model/chat_histroy_response.dart";
 import "package:divine_astrologer/model/chat_offline_model.dart";
@@ -518,11 +518,6 @@ class ChatMessageWithSocketController extends GetxController
             print('Invalid userIdString: $userIdString');
             //throw message to user
           }
-
-          FirebaseDatabase.instance
-              .ref(
-                  "astrologer/${preferenceService.getUserDetail()!.id}/realTime/deliveredMsg/${userId}")
-              .remove();
         }
       }
     });
@@ -1351,23 +1346,15 @@ class ChatMessageWithSocketController extends GetxController
             .id ??
         -1;
     chatMessages.refresh();
-    setHiveDataDatabase();
+
     if (!isFromNotification) {
-      print("isFromNotification-->>${isFromNotification}");
+      print("isFromNotification-->>$isFromNotification");
       updateReadMessageStatus();
       // scrollToBottomFunc();
     }
   }
 
-  Future<void> setHiveDataDatabase() async {
-    final HiveServices hiveServices = HiveServices(boxName: userChatData);
-    await hiveServices.initialize();
-    databaseMessage.value.chatMessages = chatMessages;
-    await hiveServices.addData(
-      key: userDataKey,
-      data: jsonEncode(databaseMessage.value.toOfflineJson()),
-    );
-  }
+
 
   scrollToBottomFunc() {
     if (messgeScrollController.hasClients) {
@@ -1647,7 +1634,7 @@ class ChatMessageWithSocketController extends GetxController
     });
     chatMessages[index2].downloadedPath = filePathAndName;
     chatMessages.refresh();
-    setHiveDataDatabase();
+
     update();
   }
 

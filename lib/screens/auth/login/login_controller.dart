@@ -1,4 +1,3 @@
-
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/constants.dart';
@@ -7,6 +6,7 @@ import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:divine_astrologer/model/login_images.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -39,22 +39,6 @@ class LoginController extends GetxController {
   String? deviceToken;
   FocusNode numberFocus = FocusNode();
   RxBool hasError = false.obs;
-
-  final List<Widget> imgList = [
-    Assets.images.bgRegisterLogo.image(
-        width: ScreenUtil().screenWidth * 0.9,
-        height: ScreenUtil().screenHeight * 0.25,
-        fit: BoxFit.contain),
-    Assets.images.bgServiceLogo.image(
-        width: ScreenUtil().screenWidth * 0.9,
-        height: ScreenUtil().screenHeight * 0.25,
-        fit: BoxFit.contain),
-  ];
-
-  final List<String> infoList = [
-    "Please Enter your Registered mobile number to proceed as an astrologer to the platform.",
-    "You will get a call on the registered mobile number for verification.",
-  ];
 
   void setCode(String value) {
     if (!value.contains("+")) value = "+$value";
@@ -154,8 +138,6 @@ class LoginController extends GetxController {
   static const platform = MethodChannel('app.divine.astrologer/sim_info');
   List<String> simNumbers = [];
 
-
-
   Future<void> getSimNumbers() async {
     debugPrint("test_simNumbers: _getSimNumbers");
 
@@ -165,9 +147,8 @@ class LoginController extends GetxController {
       List<String> simNoLst = [];
       simNoLst = result.cast<String>();
 
-
-
-      debugPrint("test_simNumbers: simNoLst.isNotEmpty: ${simNoLst.isNotEmpty}");
+      debugPrint(
+          "test_simNumbers: simNoLst.isNotEmpty: ${simNoLst.isNotEmpty}");
 
       if (simNoLst.isNotEmpty) {
         for (int i = 0; i < simNoLst.length; i++) {
@@ -205,7 +186,7 @@ class LoginController extends GetxController {
   }
 
   void showSimNumbersPopup() {
-    if(simNumbers.isNotEmpty) {
+    if (simNumbers.isNotEmpty) {
       showDialog(
         context: Get.context!,
         builder: (BuildContext context) {
@@ -273,10 +254,12 @@ class LoginController extends GetxController {
 
   @override
   void onInit() {
-    if(Constants.isUploadMode) {
+    if (Constants.isUploadMode) {
       debugPrint("test_stopListening: call");
       AppFirebaseService().stopListening();
     }
+
+
     // isLogOut = false;
     super.onInit();
     // maintenanceCheck();
@@ -555,15 +538,15 @@ class LoginController extends GetxController {
     "You will get a call on the registered mobile number for verification."
   ];
 
-  // void getLoginImages() async {
-  //   if (preferenceService.getLoginImages() != null) {
-  //     loginImages = preferenceService.getLoginImages()!;
-  //     update();
-  //   } else {
-  //     // loginImages = await getInitialLoginImages();
-  //     update();
-  //   }
-  // }
+// void getLoginImages() async {
+//   if (preferenceService.getLoginImages() != null) {
+//     loginImages = preferenceService.getLoginImages()!;
+//     update();
+//   } else {
+//     // loginImages = await getInitialLoginImages();
+//     update();
+//   }
+// }
 
 // Future<LoginImages> getInitialLoginImages() async {
 //   final response = await userRepository.getInitialLoginImages();

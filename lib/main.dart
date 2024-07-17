@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'package:camera/camera.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
@@ -26,7 +27,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+
 import 'package:in_app_update/in_app_update.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -99,6 +100,33 @@ Future<void> main() async {
     });
   }
 
+  Future<void> showFlutterNotification(RemoteMessage message) async {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+    if (notification != null && android != null && Platform.isAndroid) {
+      flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        payload: jsonEncode(message.data),
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            channelDescription: channel.description,
+            icon: '@mipmap/ic_launcher',
+          ),
+        ),
+      );
+    }
+
+    // Constants.isNotificationBadge.value = true;
+    // if(message.data["badge"] != null){
+    //   FlutterAppBadger.updateBadgeCount(int.parse(message.data["badge"]));
+    //   await SharedPreference().setNotificationBadge(true);
+    // }
+  }
+
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("pushNotification1 ${message.notification?.title ?? ""}");
     print('Message data-: dasboardCurrentIndex---${message.data}');
@@ -113,6 +141,7 @@ Future<void> main() async {
       //       message.notification!.body ?? '', payload);
       //   return;
       // }
+      showFlutterNotification(message);
       return;
     }
 
@@ -130,14 +159,7 @@ Future<void> main() async {
       HashMap<String, dynamic> updateData = HashMap();
       updateData[message.data["chatId"] ?? "0"] = 1;
       print('Message data-:-users ${message.data}');
-
       print("test_notification: Enable fullscreen incoming call notification");
-
-      FirebaseDatabase.instance
-          .ref("user")
-          .child(
-              "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
-          .update(updateData);
       sendBroadcast(
           BroadcastMessage(name: "messageReceive", data: message.data));
     } else if (message.data["type"] == "8") {
@@ -279,7 +301,6 @@ Future<void> initServices() async {
   await Get.putAsync(() => SharedPreferenceService().init());
   await Get.putAsync(() => NetworkService().init());
   await Get.putAsync(() => FirebaseNetworkService().init());
-  await Hive.initFlutter();
 }
 
 Future<void> showNotification(String title, String message, String type,

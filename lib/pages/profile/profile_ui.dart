@@ -3,7 +3,11 @@ import 'dart:developer';
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
+
+import 'package:divine_astrologer/model/custom_product/custom_product_list_view.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
+import 'package:divine_astrologer/pages/profile/widget/report_post_reason_widget.dart';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -26,13 +30,12 @@ import '../../repository/user_repository.dart';
 class ProfileUI extends GetView<ProfilePageController> {
   final preference = Get.find<SharedPreferenceService>();
 
-  // var homeController = Get.find<HomeController>();
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<ProfilePageController>(
       assignId: true,
-      init: Get.put(ProfilePageController(Get.put(UserRepository()))),
+      init: ProfilePageController(),
       builder: (controller) {
         return Scaffold(
           backgroundColor: appColors.white,
@@ -354,129 +357,120 @@ class ProfileUI extends GetView<ProfilePageController> {
                                           itemBuilder: (context, index) {
                                             ChangeLanguageModelClass item =
                                                 controller.languageList[index];
-                                            return GetBuilder<
-                                                    ProfilePageController>(
-                                                id: "set_language",
-                                                builder: (controller) {
-                                                  return GestureDetector(
-                                                    onTap: () {
-                                                      controller
-                                                          .selectedLanguageData(
-                                                              item);
-                                                    },
-                                                    child: Container(
-                                                      decoration: BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          border: item
-                                                                  .isSelected
-                                                              ? Border.all(
-                                                                  width: 1,
-                                                                  color: Colors
-                                                                      .grey)
-                                                              : Border.all(
-                                                                  width: 0,
-                                                                  color: Colors
-                                                                      .white)),
-                                                      child: Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          shape:
-                                                              BoxShape.circle,
-                                                          gradient:
-                                                              LinearGradient(
-                                                            colors: [
-                                                              item.colors!
-                                                                  .withOpacity(
-                                                                      0),
-                                                              item.colors!
-                                                                  .withOpacity(
-                                                                      0.2),
-                                                            ],
-                                                            begin: Alignment
-                                                                .topLeft,
-                                                            end: Alignment
-                                                                .bottomRight,
+                                            return GestureDetector(
+                                              onTap: () {
+                                                controller
+                                                    .selectedLanguageData(
+                                                    item);
+                                              },
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                    shape:
+                                                    BoxShape.circle,
+                                                    border: item
+                                                        .isSelected
+                                                        ? Border.all(
+                                                        width: 1,
+                                                        color: Colors
+                                                            .grey)
+                                                        : Border.all(
+                                                        width: 0,
+                                                        color: Colors
+                                                            .white)),
+                                                child: Container(
+                                                  decoration:
+                                                  BoxDecoration(
+                                                    shape:
+                                                    BoxShape.circle,
+                                                    gradient:
+                                                    LinearGradient(
+                                                      colors: [
+                                                        item.colors!
+                                                            .withOpacity(
+                                                            0),
+                                                        item.colors!
+                                                            .withOpacity(
+                                                            0.2),
+                                                      ],
+                                                      begin: Alignment
+                                                          .topLeft,
+                                                      end: Alignment
+                                                          .bottomRight,
+                                                    ),
+                                                  ),
+                                                  child: ClipRRect(
+                                                    borderRadius:
+                                                    BorderRadius
+                                                        .circular(
+                                                        10.r),
+                                                    child: Material(
+                                                      color: Colors
+                                                          .transparent,
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                        children: [
+                                                          CustomText(
+                                                            item.languagesMain
+                                                                .toString(),
+                                                            fontSize:
+                                                            18.5.sp,
+                                                            fontWeight:
+                                                            FontWeight
+                                                                .w600,
                                                           ),
-                                                        ),
-                                                        child: ClipRRect(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(
-                                                                      10.r),
-                                                          child: Material(
-                                                            color: Colors
-                                                                .transparent,
-                                                            child: Column(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                CustomText(
-                                                                  item.languagesMain
-                                                                      .toString(),
-                                                                  fontSize:
-                                                                      18.5.sp,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                ),
-                                                                SizedBox(
-                                                                    height:
-                                                                        10.h),
-                                                                Text(
-                                                                  item.languages
-                                                                      .toString(),
-                                                                  style: AppTextStyle
-                                                                      .textStyle16(),
-                                                                ),
-                                                              ],
-                                                            ),
+                                                          SizedBox(
+                                                              height:
+                                                              10.h),
+                                                          Text(
+                                                            item.languages
+                                                                .toString(),
+                                                            style: AppTextStyle
+                                                                .textStyle16(),
                                                           ),
-                                                        ),
+                                                        ],
                                                       ),
                                                     ),
-                                                  );
-                                                });
-                                          }),
-                                    ),
-                                    SizedBox(height: 30.h),
-                                    GetBuilder<ProfilePageController>(
-                                        id: "set_lang",
-                                        builder: (controller1) {
-                                          return InkWell(
-                                            onTap: () {
-                                              controller1.getSelectedLanguage();
-                                              Get.back();
-                                            },
-                                            child: Container(
-                                              width: MediaQuery.of(context)
-                                                  .size
-                                                  .width,
-                                              decoration: BoxDecoration(
-                                                  color: appColors.guideColor,
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10)),
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.symmetric(
-                                                        vertical: 15.0),
-                                                child: Center(
-                                                  child: Text(
-                                                    'okay'.tr,
-                                                    style: AppTextStyle
-                                                        .textStyle16(
-                                                            fontWeight:
-                                                                FontWeight.w600,
-                                                            fontColor: appColors
-                                                                .white),
                                                   ),
                                                 ),
                                               ),
+                                            );
+                                          }),
+                                    ),
+                                    SizedBox(height: 30.h),
+                                    InkWell(
+                                      onTap: () {
+                                        controller.getSelectedLanguage();
+                                        Get.back();
+                                      },
+                                      child: Container(
+                                        width: MediaQuery.of(context)
+                                            .size
+                                            .width,
+                                        decoration: BoxDecoration(
+                                            color: appColors.guideColor,
+                                            borderRadius:
+                                            BorderRadius.circular(
+                                                10)),
+                                        child: Padding(
+                                          padding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 15.0),
+                                          child: Center(
+                                            child: Text(
+                                              'okay'.tr,
+                                              style: AppTextStyle
+                                                  .textStyle16(
+                                                  fontWeight:
+                                                  FontWeight.w600,
+                                                  fontColor: appColors
+                                                      .white),
                                             ),
-                                          );
-                                        }),
+                                          ),
+                                        ),
+                                      ),
+                                    ),
                                   ],
                                 ),
                               ),
@@ -516,10 +510,10 @@ class ProfileUI extends GetView<ProfilePageController> {
                       } else if (index == 9) {
                         log("index ----");
                         Get.toNamed(RouteName.customProduct);
-                      } else if (index == 10) {
+                      } /*else if (index == 10) {
                         log("index ----");
                         Get.toNamed(RouteName.passbook);
-                      }
+                      }*/
                     },
                     child: Container(
                       padding: const EdgeInsets.all(10),
@@ -1007,179 +1001,6 @@ class ProfileUI extends GetView<ProfilePageController> {
   }
 }
 
-class ReportPostReasons extends StatefulWidget {
-  final String reviewID;
-  final ProfilePageController? controller;
 
-  const ReportPostReasons(this.reviewID, {super.key, this.controller});
 
-  @override
-  State<ReportPostReasons> createState() => _ReportPostReasonsState();
-}
 
-class _ReportPostReasonsState extends State<ReportPostReasons> {
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: appColors.transparent,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GestureDetector(
-            onTap: () {
-              Get.back();
-            },
-            child: Container(
-              padding: const EdgeInsets.all(15.0),
-              decoration: BoxDecoration(
-                  border: Border.all(color: appColors.white, width: 1.5),
-                  borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                  color: appColors.white.withOpacity(0.1)),
-              child: const Icon(
-                Icons.close,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Container(
-            width: double.maxFinite,
-            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
-            decoration: BoxDecoration(
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(50.0)),
-              color: appColors.white,
-            ),
-            child: Column(
-              children: [
-                Assets.images.report.svg(),
-                SizedBox(height: 20.h),
-                CustomText("${'reportingQue'.tr}?",
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w700,
-                    fontColor: appColors.darkBlue),
-                SizedBox(height: 20.h),
-                MediaQuery.removePadding(
-                  context: context,
-                  removeBottom: true,
-                  removeRight: true,
-                  removeLeft: true,
-                  removeTop: true,
-                  child: ListView.builder(
-                    itemCount: widget.controller!.reportReason.length,
-                    shrinkWrap: true,
-                    reverse: true,
-                    itemBuilder: (context, index) {
-                      var report = widget.controller!.reportReason[index];
-                      return Padding(
-                        padding: EdgeInsets.all(12.h),
-                        child: Column(
-                          children: [
-                            GestureDetector(
-                                onTap: () {
-                                  Get.back();
-                                  widget.controller!.reportReviews(
-                                      report.first, widget.reviewID);
-                                },
-                                child: Text(
-                                  report.first.tr,
-                                  textAlign: TextAlign.center,
-                                  style: AppTextStyle.textStyle15(
-                                      fontColor: appColors.darkBlue,
-                                      fontWeight: FontWeight.w400),
-                                )),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                ),
-                SizedBox(height: 15.h),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ThankYouReportUI extends GetView<ProfilePageController> {
-  const ThankYouReportUI({
-    Key? key,
-    required this.onPressed,
-  }) : super(key: key);
-
-  final void Function() onPressed;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: appColors.transparent,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GestureDetector(
-            onTap: () {
-              Get.back();
-            },
-            child: Container(
-              padding: const EdgeInsets.all(15.0),
-              decoration: BoxDecoration(
-                  border: Border.all(color: appColors.white, width: 1.5),
-                  borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                  color: appColors.white.withOpacity(0.1)),
-              child: const Icon(
-                Icons.close,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          const SizedBox(height: 10),
-          Container(
-            width: double.maxFinite,
-            padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 24.h),
-            decoration: BoxDecoration(
-              borderRadius:
-                  const BorderRadius.vertical(top: Radius.circular(50.0)),
-              color: appColors.white,
-            ),
-            child: Column(
-              children: [
-                SizedBox(height: 20.h),
-                CustomText("thankYouForReporting".tr,
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w700,
-                    fontColor: appColors.darkBlue),
-                SizedBox(height: 20.h),
-                Text(
-                  "thankYouDes".tr,
-                  textAlign: TextAlign.center,
-                  style: AppTextStyle.textStyle16(fontWeight: FontWeight.w400),
-                ),
-                SizedBox(height: 30.h),
-                MaterialButton(
-                    elevation: 0,
-                    height: 56,
-                    minWidth: Get.width,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(30)),
-                    ),
-                    onPressed: onPressed,
-                    color: appColors.guideColor,
-                    child: Text(
-                      "okay".tr,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.sp,
-                        color: appColors.brownColour,
-                      ),
-                    ))
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
