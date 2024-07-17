@@ -1,4 +1,7 @@
 import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
+import 'package:divine_astrologer/model/add_custom_product/add_custom_product_binding.dart';
+import 'package:divine_astrologer/model/add_custom_product/add_custom_product_view.dart';
+import 'package:divine_astrologer/model/custom_product/custom_product__list_binding.dart';
 import 'package:divine_astrologer/pages/profile/profile_binding.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_binding.dart';
@@ -49,6 +52,8 @@ import 'package:divine_astrologer/screens/order_feedback/order_feedback_ui.dart'
 import 'package:divine_astrologer/screens/order_history/Widget/suggest_remedies_history.dart';
 import 'package:divine_astrologer/screens/otp_verification/otp_verification_binding.dart';
 import 'package:divine_astrologer/screens/otp_verification/otp_verification_ui.dart';
+import 'package:divine_astrologer/screens/passbook/passbook_binding.dart';
+import 'package:divine_astrologer/screens/passbook/passbook_screen.dart';
 import 'package:divine_astrologer/screens/puja/puja_binding.dart';
 import 'package:divine_astrologer/screens/puja/puja_view.dart';
 import 'package:divine_astrologer/screens/remedies/binding/add_remedies_binding.dart';
@@ -79,6 +84,7 @@ import 'package:divine_astrologer/screens/video_call_page/video_call_page.dart';
 import 'package:divine_astrologer/screens/video_call_page/video_call_page_binding.dart';
 import 'package:get/get.dart';
 
+import '../model/custom_product/custom_product_list_view.dart';
 import '../screens/add_message_template/add_message_template_binding.dart';
 import '../screens/add_message_template/add_message_template_ui.dart';
 import '../screens/bank_details/bank_detail_binding.dart';
@@ -218,15 +224,21 @@ class RouteName {
   static const String technicalIssues = "/technicalIssues";
   static const String allTechnicalIssues = "/AllTechnicalIssues";
   static const String termsAndConditionScreen = "/TermsAndConditionScreen";
+  static const String addCustomProduct = "/addCustomProduct";
+  static const String customProduct = "/customProduct";
+  static const String passbook = "/passbook";
 }
 
 final Set<String> validRoutes = {
   RouteName.chatMessageUI,
   RouteName.faq,
   RouteName.puja,
+  RouteName.passbook,
+  RouteName.customProduct,
   RouteName.addPuja,
   RouteName.remedies,
   RouteName.addRemedies,
+  RouteName.addCustomProduct,
   RouteName.remediesDetail,
   RouteName.acceptChatRequestScreen,
 };
@@ -256,7 +268,19 @@ class Routes {
         name: RouteName.dashboard,
         binding: DashboardBinding()),
     GetPage(
-      page: () => leaveAndResignationTab(),
+        page: () => const CustomProductListView(),
+        name: RouteName.customProduct,
+        binding: CustomProductListBinding()),
+    GetPage(
+        page: () => const PassbookScreen(),
+        name: RouteName.passbook,
+        binding: PassbookBinding()),
+    GetPage(
+        page: () =>  AddCustomProductView(),
+        name: RouteName.addCustomProduct,
+        binding: AddCustomProductBinding()),
+    GetPage(
+      page: () => const leaveAndResignationTab(),
       name: RouteName.resignation,
       // binding: RegistrationBinding()
     ),

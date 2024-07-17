@@ -466,13 +466,11 @@ class ApiProvider {
     endPoint ??= //kDebugMode == true ? debugingUrl :
         baseUrl;
     headers ??= await getAuthorisedHeader();
-    log("urllllllll: ${endPoint + url}");
+    log("Api url: ${endPoint + url}");
+    log('body: $body');
+    log("headers: $headers");
 
     if (await networkManager.isConnected() ?? false) {
-      log('url: $endPoint$url');
-      log('body: $body');
-      log("headers: $headers");
-      log("urllllllll: ${endPoint + url}");
       var response = await http
           .post(
         Uri.parse(endPoint + url),
@@ -495,7 +493,6 @@ class ApiProvider {
       }
 
       if (url != constantDetails) {
-        log(endPoint + url);
         log('response: ${response.body}');
       }
       await doLiveStreamPendingTasks(response);

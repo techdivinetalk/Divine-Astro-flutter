@@ -18,7 +18,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../common/app_exception.dart';
 import '../../common/colors.dart';
@@ -154,16 +153,19 @@ class OtpVerificationController extends GetxController {
       await preferenceService.setDeviceToken(deviceToken ?? "");
       log('😈😈😈😈😈😈😈😈');
       log(jsonEncode(data.data));
+      print("jsonEncode(data.data)");
       if (data.data != null) {
         var commonConstants = await userRepository.constantDetailsData();
         if(commonConstants.data != null){
           imageUploadBaseUrl.value = commonConstants.data?.imageUploadBaseUrl ?? "";
         }
-        if (commonConstants.data!.token != null) {
+        if (isCustomToken.value.toString() == "1") {
+          print("firebaseAuthEmail");
           customTokenWithFirebase(
             token: commonConstants.data!.token,
           );
         } else {
+          print("firebaseAuthPassword");
           if (commonConstants.data!.firebaseAuthEmail != null &&
               commonConstants.data!.firebaseAuthPassword != null) {
             Auth().handleSignInEmail(commonConstants.data!.firebaseAuthEmail!,
@@ -315,7 +317,6 @@ class OtpVerificationController extends GetxController {
       await Get.putAsync(() => SharedPreferenceService().init());
       await Get.putAsync(() => NetworkService().init());
       await Get.putAsync(() => FirebaseNetworkService().init());
-      await Hive.initFlutter();
       debugPrint("test_initServices: called");
     }
   }

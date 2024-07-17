@@ -25,6 +25,7 @@ import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/model/wallet_deatils_response.dart';
 import 'package:divine_astrologer/pages/home/home_ui.dart';
 import 'package:divine_astrologer/pages/home/widgets/common_info_sheet.dart';
+import 'package:divine_astrologer/pages/home/widgets/technical_popup.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/product/pooja/widgets/custom_widget/pooja_common_list.dart';
 import 'package:divine_astrologer/screens/dashboard/model/astrologer_nord_data_model.dart';
@@ -180,63 +181,32 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  bool isInit = false;
 
   @override
   void onInit() async {
     super.onInit();
     debugPrint("test_onInit: call");
-    isInit = true;
+
 
     WidgetsBinding.instance.addObserver(this);
-    getSampleText();
-    getAstrologerTrainingSession();
-    getAstrologerLiveData();
-    getAstrologerStatus();
-
-    print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
-    Future.delayed(const Duration(seconds: 3), () {
-      print("isLogged");
-      print(" ${preferenceService.getUserDetail()}");
-      if (preferenceService.getUserDetail() != null) {
-        // Check for null user details
-        AppFirebaseService().readData(
-            'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
-      } else {
-        divineSnackBar(data: "User Not Found");
-      }
-      //appFirebaseService.masterData('masters');
-    });
-    broadcastReceiver.start();
-    broadcastReceiver.messages.listen((event) {
-      debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
-      if (event.name == "giftCount") {
-        if (int.parse(event.data!["giftCount"].toString()) > 0) {
-          if (MiddleWare.instance.currentPage != RouteName.chatMessageUI) {
-            showGiftBottomSheet(event.data?["giftCount"], contextDetail,
-                baseUrl: preferenceService.getBaseImageURL());
-          }
-        }
-      }
-    });
     if (preferenceService.getUserDetail() != null) {
       getAllDashboardData();
       userData = preferenceService.getUserDetail()!;
       appbarTitle.value =
-          "${userData.name.toString().capitalizeFirst} (${userData.uniqueNo})";
+      "${userData.name.toString().capitalizeFirst} (${userData.uniqueNo})";
 
       print("${preferenceService.getBaseImageURL()}/${userData.image}");
 
       final String path = "astrologer/${(userData.id ?? 0)}/realTime";
       FirebaseDatabase.instance.ref().child(path).onValue.listen(
-        (event) async {
+            (event) async {
           final DataSnapshot dataSnapshot = event.snapshot;
 
           if (dataSnapshot.exists) {
             if (dataSnapshot.value is Map<dynamic, dynamic>) {
               Map<dynamic, dynamic> map = <dynamic, dynamic>{};
               map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-                  as Map<dynamic, dynamic>;
+              as Map<dynamic, dynamic>;
               print("Home Realtime DB Listener: $map");
 
               // final isCallSwitchRes = map["voiceCallStatus"] ?? 0;
@@ -280,8 +250,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               if (offers != null) {
                 if (homeData != null) {
                   for (int i = 0;
-                      i < homeData!.offers!.orderOffer!.length;
-                      i++) {
+                  i < homeData!.offers!.orderOffer!.length;
+                  i++) {
                     for (int j = 0; j < offers.keys.toList().length; j++) {
                       if ("${homeData!.offers!.orderOffer![i].id}" ==
                           "${offers.keys.toList()[j]}") {
@@ -302,7 +272,37 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         },
       );
     }
+    print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
+    Future.delayed(const Duration(seconds: 3), () {
+      print("isLogged");
+      print(" ${preferenceService.getUserDetail()}");
 
+      if (preferenceService.getUserDetail() != null) {
+        // Check for null user details
+        AppFirebaseService().readData(
+            'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
+      } else {
+        divineSnackBar(data: "User Not Found");
+      }
+      //appFirebaseService.masterData('masters');
+    });
+    broadcastReceiver.start();
+    broadcastReceiver.messages.listen((event) {
+      debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
+      if (event.name == "giftCount") {
+        if (int.parse(event.data!["giftCount"].toString()) > 0) {
+          if (MiddleWare.instance.currentPage != RouteName.chatMessageUI) {
+            showGiftBottomSheet(event.data?["giftCount"], contextDetail,
+                baseUrl: preferenceService.getBaseImageURL());
+          }
+        }
+      }
+    });
+
+    getSampleText();
+    getAstrologerTrainingSession();
+    getAstrologerLiveData();
+    getAstrologerStatus();
     // cron.schedule(Schedule.parse('*/5 * * * * *'), checkForScheduleUpdate);
   }
 
@@ -326,48 +326,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       print("getConstantDetails is null");
     }
     update();
-  }
-
-  void checkForScheduleUpdate() {
-    DateTime chatChatDateAndTime = DateTime(2050);
-    final String dateStringForChat = selectedChatDate.value.toString();
-    final String timeStringForChat = selectedChatTime.value.toString();
-    if (dateStringForChat.isNotEmpty && timeStringForChat.isNotEmpty) {
-      chatChatDateAndTime = getChatDateAndTime(
-        dateString: dateStringForChat,
-        timeString: timeStringForChat,
-      );
-    } else {}
-
-    DateTime callChatDateAndTime = DateTime(2050);
-    final String dateStringForCall = selectedCallDate.value.toString();
-    final String timeStringForCall = selectedCallTime.value.toString();
-    if (dateStringForCall.isNotEmpty && timeStringForCall.isNotEmpty) {
-      callChatDateAndTime = getChatDateAndTime(
-        dateString: dateStringForCall,
-        timeString: timeStringForCall,
-      );
-    } else {}
-
-    DateTime videoChatDateAndTime = DateTime(2050);
-    final String dateStringForVideoDate = selectedVideoDate.value.toString();
-    final String timeStringForVideoTime = selectedVideoTime.value.toString();
-    if (dateStringForVideoDate.isNotEmpty &&
-        timeStringForVideoTime.isNotEmpty) {
-      videoChatDateAndTime = getChatDateAndTime(
-        dateString: dateStringForVideoDate,
-        timeString: timeStringForVideoTime,
-      );
-    } else {}
-
-    final bool isBeforeChat = chatChatDateAndTime.isBefore(DateTime.now());
-    final bool isBeforeCall = callChatDateAndTime.isBefore(DateTime.now());
-    final bool isVideo = videoChatDateAndTime.isBefore(DateTime.now());
-
-    if (!isBeforeChat || !isBeforeCall || !isVideo) {
-      getDashboardDetail();
-    } else {}
-    return;
   }
 
   DateTime getChatDateAndTime({
@@ -645,6 +603,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
             Get.back();
           },
         ));
+      }
+      if (homeData?.technical_support == null ||
+          homeData?.technical_support == [] ||
+          homeData?.technical_support!.isEmpty) {
+      } else {
+        log("Technical_Support -- ${homeData?.technical_support.toString()}");
+        showTechnicalPopupAlert();
       }
       //getFeedbackData();
       //log("DashboardData==>${jsonEncode(homeData)}");
@@ -1156,6 +1121,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       } else {
         homeData!.offers!.orderOffer![index].isOn = !value;
       }
+
       update();
     } catch (error) {
       homeData!.offers!.orderOffer![index].isOn = !value;

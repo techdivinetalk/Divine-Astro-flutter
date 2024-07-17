@@ -518,11 +518,6 @@ class ChatMessageWithSocketController extends GetxController
             print('Invalid userIdString: $userIdString');
             //throw message to user
           }
-
-          FirebaseDatabase.instance
-              .ref(
-                  "astrologer/${preferenceService.getUserDetail()!.id}/realTime/deliveredMsg/${userId}")
-              .remove();
         }
       }
     });
@@ -1351,22 +1346,11 @@ class ChatMessageWithSocketController extends GetxController
             .id ??
         -1;
     chatMessages.refresh();
-    setHiveDataDatabase();
     if (!isFromNotification) {
-      print("isFromNotification-->>${isFromNotification}");
+      print("isFromNotification-->>$isFromNotification");
       updateReadMessageStatus();
       // scrollToBottomFunc();
     }
-  }
-
-  Future<void> setHiveDataDatabase() async {
-    final HiveServices hiveServices = HiveServices(boxName: userChatData);
-    await hiveServices.initialize();
-    databaseMessage.value.chatMessages = chatMessages;
-    await hiveServices.addData(
-      key: userDataKey,
-      data: jsonEncode(databaseMessage.value.toOfflineJson()),
-    );
   }
 
   scrollToBottomFunc() {
@@ -1647,7 +1631,6 @@ class ChatMessageWithSocketController extends GetxController
     });
     chatMessages[index2].downloadedPath = filePathAndName;
     chatMessages.refresh();
-    setHiveDataDatabase();
     update();
   }
 

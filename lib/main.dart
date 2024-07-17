@@ -27,7 +27,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -159,14 +158,7 @@ Future<void> main() async {
       HashMap<String, dynamic> updateData = HashMap();
       updateData[message.data["chatId"] ?? "0"] = 1;
       print('Message data-:-users ${message.data}');
-
       print("test_notification: Enable fullscreen incoming call notification");
-
-      FirebaseDatabase.instance
-          .ref("user")
-          .child(
-              "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
-          .update(updateData);
       sendBroadcast(
           BroadcastMessage(name: "messageReceive", data: message.data));
     } else if (message.data["type"] == "8") {
@@ -308,7 +300,6 @@ Future<void> initServices() async {
   await Get.putAsync(() => SharedPreferenceService().init());
   await Get.putAsync(() => NetworkService().init());
   await Get.putAsync(() => FirebaseNetworkService().init());
-  await Hive.initFlutter();
 }
 
 Future<void> showNotification(String title, String message, String type,

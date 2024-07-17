@@ -67,6 +67,7 @@ class HomeData {
   dynamic repurchaseRate;
   dynamic minimumRetention;
   dynamic minimumRepurchaseRate;
+  dynamic technical_support;
 
   HomeData({
     this.noticeBoard,
@@ -97,6 +98,7 @@ class HomeData {
     this.repurchaseRate,
     this.minimumRetention,
     this.minimumRepurchaseRate,
+    this.technical_support,
   });
 
   factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
@@ -138,6 +140,7 @@ class HomeData {
         repurchaseRate: json["repurchase_rate"] ?? 0,
         minimumRetention: json["minimum_retention"] ?? 0,
         minimumRepurchaseRate: json["minimum_repurchase_rate"] ?? 0,
+        technical_support: json["technical_support"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -173,6 +176,7 @@ class HomeData {
         "repurchase_rate": repurchaseRate,
         "minimum_retention": minimumRetention,
         "minimum_repurchase_rate": minimumRepurchaseRate,
+        "technical_support": technical_support,
       };
 }
 

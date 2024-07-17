@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
 
-import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/model/astrologer_training_session_response.dart';
 import 'package:divine_astrologer/model/home_model/astrologer_live_data_response.dart';
 import 'package:divine_astrologer/model/home_model/training_video_model.dart';
@@ -34,6 +33,8 @@ class HomePageRepository extends ApiProvider {
       } else if (response.statusCode == HttpStatus.badRequest) {
         Utils().handleStatusCode400(response.body);
       }
+      log("Dashboard:: chat_previous_status:: ${json.decode(response.body)["data"]["technical_support"]}");
+      log("Dashboard:: chat_previous_status:: ${json.decode(response.body)["data"]}");
       log("Dashboard:: chat_previous_status:: ${json.decode(response.body)["data"]["chat_previous_status"]}");
       log("Dashboard:: call_previous_status:: ${json.decode(response.body)["data"]["call_previous_status"]}");
       log("Dashboard:: video_call_previous_status:: ${json.decode(response.body)["data"]["video_call_previous_status"]}");
