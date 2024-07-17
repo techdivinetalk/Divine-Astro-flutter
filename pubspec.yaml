@@ -47,7 +47,6 @@ dependencies:
   simple_html_css: ^5.0.0
   get: ^4.6.5
   get_storage: ^2.1.1
-  hive_flutter: ^1.1.0
   #html: ^0.15.4
   image_cropper: null
   image_picker: ^1.1.1

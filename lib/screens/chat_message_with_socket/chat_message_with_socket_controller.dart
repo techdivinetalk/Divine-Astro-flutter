@@ -518,11 +518,6 @@ class ChatMessageWithSocketController extends GetxController
             print('Invalid userIdString: $userIdString');
             //throw message to user
           }
-
-          FirebaseDatabase.instance
-              .ref(
-                  "astrologer/${preferenceService.getUserDetail()!.id}/realTime/deliveredMsg/${userId}")
-              .remove();
         }
       }
     });

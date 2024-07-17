@@ -13,7 +13,6 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 
-import '../di/hive_services.dart';
 import '../di/shared_preference_service.dart';
 import '../model/chat/res_common_chat_success.dart';
 import '../model/chat_offline_model.dart';

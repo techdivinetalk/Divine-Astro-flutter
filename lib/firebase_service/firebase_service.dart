@@ -19,6 +19,7 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
+import "package:get/get_rx/get_rx.dart";
 
 import "../common/MiddleWare.dart";
 import "../maintenance_msg.dart";
@@ -64,6 +65,7 @@ class AppFirebaseService {
   final appSocket = AppSocket();
   var openChatUserId = "";
   var imagePath = "";
+  RxBool isInterNetConnected = true.obs;
   RxMap<String, dynamic> orderData = <String, dynamic>{}.obs;
   final DatabaseReference database = FirebaseDatabase.instance.ref();
   Map<String, dynamic>? payload = {};

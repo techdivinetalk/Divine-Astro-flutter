@@ -26,6 +26,7 @@ import "package:get/get_connect/http/src/status/http_status.dart";
 import "package:http/http.dart" as http;
 
 import "../../common/common_functions.dart";
+import "../../common/routes.dart";
 import "../../repository/home_page_repository.dart";
 
 class LiveDharamController extends GetxController {
@@ -124,6 +125,31 @@ class LiveDharamController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    ever(
+      AppFirebaseService().isInterNetConnected,
+      (bool value) {
+        if(!value) {
+          showDialog(
+              context: Get.context!,
+              builder: (BuildContext context) {
+                return AlertDialog(
+                  title: const Text('Your Internet was interrupted'),
+                  content: const Text('Click to reload'),
+                  actions: <Widget>[
+                    TextButton(
+                      child: const Text('Reload'),
+                      onPressed: () {
+                        Get.back();
+                        Get.toNamed(RouteName.liveDharamScreen);
+                      },
+                    ),
+                  ],
+                );
+              });
+          dispose();
+        }
+      },
+    );
     tarotCardInit();
     initData();
   }
