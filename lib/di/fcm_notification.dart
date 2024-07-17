@@ -328,20 +328,8 @@ Future<void> showNotificationWithActions(
       final Map<String, dynamic> chatListMap = jsonDecode(payload["chatList"]);
       final ChatMessage chatMessage = ChatMessage.fromOfflineJson(chatListMap);
       final String tableName = "chat_${chatMessage.senderId}";
-
       final databaseMessage = ChatMessagesOffline().obs;
-      final res = await hiveServices?.getData(key: tableName);
-      var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
-      var chatMessages = msg.chatMessages ?? [];
-      chatMessages.add(chatMessage);
-      databaseMessage.value.chatMessages = chatMessages;
       log('data message ${databaseMessage.value.toOfflineJson()}');
-      await hiveServices?.addData(
-          key: tableName,
-          data: jsonEncode(databaseMessage.value.toOfflineJson()));
-      final newRes = await hiveServices?.getData(key: tableName);
-      log("this is my tableName $tableName");
-      log("enter in if condition $newRes");
     }
   }
 

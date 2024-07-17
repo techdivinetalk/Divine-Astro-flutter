@@ -18,7 +18,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 
 import '../../common/app_exception.dart';
 import '../../common/colors.dart';
@@ -318,7 +317,6 @@ class OtpVerificationController extends GetxController {
       await Get.putAsync(() => SharedPreferenceService().init());
       await Get.putAsync(() => NetworkService().init());
       await Get.putAsync(() => FirebaseNetworkService().init());
-      await Hive.initFlutter();
       debugPrint("test_initServices: called");
     }
   }

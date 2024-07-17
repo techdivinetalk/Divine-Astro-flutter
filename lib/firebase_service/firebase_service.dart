@@ -43,6 +43,7 @@ RxInt isQueue = 1.obs;
 RxInt isGifts = 1.obs;
 RxInt isTime = 0.obs;
 RxInt isCustomToken = 0.obs;
+RxInt isNetworkPopup = 0.obs;
 // RxInt isTruecaller = 1.obs;
 RxInt isLiveCall = 1.obs;
 RxInt homePage = 1.obs;
@@ -254,6 +255,9 @@ class AppFirebaseService {
       case "totalGift":
         callSwitch(value > 0);
         break;
+      case "isNetworkPopup":
+        isNetworkPopup(value);
+        break;
       case "deliveredMsg":
         sendBroadcast(BroadcastMessage(
             name: "deliveredMsg", data: {'deliveredMsgList': value}));
@@ -280,9 +284,8 @@ class AppFirebaseService {
         Get.put(DashboardController(Get.put(PreDefineRepository())))
             .userProfileImage
             .value = "$baseAmazonUrl/${userData.image!}";
-        Get.put(ProfilePageController()
-            .userProfileImage
-            .value = "$baseAmazonUrl/${userData.image!}");
+        Get.put(ProfilePageController().userProfileImage.value =
+            "$baseAmazonUrl/${userData.image!}");
         Get.put(DashboardController(Get.put(PreDefineRepository()))).update();
         Get.put(ProfilePageController()).update();
         break;
@@ -480,8 +483,8 @@ class AppFirebaseService {
       case "kundli":
         isKundli(int.parse(dataSnapshot.value.toString()));
         break;
-     case "isCustomToken":
-       isCustomToken(int.parse(dataSnapshot.value.toString()));
+      case "isCustomToken":
+        isCustomToken(int.parse(dataSnapshot.value.toString()));
         break;
       case "live":
         isLive(int.parse(dataSnapshot.value.toString()));
