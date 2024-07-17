@@ -29,8 +29,7 @@ class ImportantNumbersController extends GetxController {
   }
 
   bool checkForContactExist(MobileNumber numbers) {
-    Item item =
-        Item(label: numbers.title ?? "", value: numbers.mobileNumber ?? "");
+    Item item = Item(label: numbers.title ?? "", value: numbers.mobileNumber ?? "");
     List<String> numberList = [];
     if (item.value != null && item.value!.contains(",")) {
       numberList = item.value!.split(",").toList();
@@ -55,6 +54,12 @@ class ImportantNumbersController extends GetxController {
 
   getContactList() async {
     PermissionStatus contact = await Permission.contacts.status;
+    /*if(contact.isDenied){
+      PermissionStatus askPermission = await Permission.contacts.request();
+      if(askPermission.isDenied){
+        divineSnackBar(data: 'contactPermissionRequired'.tr);
+      }
+    }*/
     if (contact.isGranted) {
       allContacts = await ContactsService.getContacts();
     } else {
