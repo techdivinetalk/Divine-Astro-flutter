@@ -80,8 +80,9 @@ class AssistMessageView extends StatelessWidget {
     final isYesterday = (DateTime.now().day - currentMsgDate.day) == 2;
 
     Widget messageWidget;
+    print("chatMessage.msgType ----->${chatMessage.msgType}");
     switch (chatMessage.msgType) {
-      case MsgType.gift:
+      case MsgType.gift || MsgType.sendgifts:
         messageWidget = giftMsgView(context, chatMessage, yourMessage);
         break;
       case MsgType.image:

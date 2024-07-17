@@ -530,7 +530,7 @@ enum MsgType {
   limit,
   customProduct,
   voucher,
-  error
+  error,
 }
 
 final msgTypeValues = EnumValues({

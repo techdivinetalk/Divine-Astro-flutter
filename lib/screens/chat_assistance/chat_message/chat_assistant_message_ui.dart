@@ -357,30 +357,16 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                                                 : index + 1;
                                         print(
                                             "chat assist msg data:${currentMsg.toJson()}");
+                                        print("controller.chatMessageList.length ------> ${controller.chatMessageList.length}");
+                                        print("=== ------> ${controller.chatMessageList[0]}");
+                                        print("currentMsg type ------> ${currentMsg.msgType}");
                                         return AssistMessageView(
                                           index: index,
                                           chatMessage: currentMsg,
-                                          nextMessage: index ==
-                                                  controller.chatMessageList
-                                                          .length -
-                                                      1
-                                              ? controller
-                                                  .chatMessageList[index]
-                                              : controller
-                                                  .chatMessageList[index + 1],
-                                          yourMessage: currentMsg.sendBy ==
-                                              SendBy.astrologer,
-                                          unreadMessage: controller
-                                                  .unreadMessageList.isNotEmpty
-                                              ? controller
-                                                      .chatMessageList[index]
-                                                      .id ==
-                                                  controller.unreadMessageList
-                                                      .first.id
-                                              : false,
-                                          baseImageUrl: controller.preference
-                                                  .getBaseImageURL() ??
-                                              '',
+                                          nextMessage: index == controller.chatMessageList.length - 1 ? controller.chatMessageList[index] : controller.chatMessageList[index + 1],
+                                          yourMessage: currentMsg.sendBy == SendBy.astrologer,
+                                          unreadMessage: controller.unreadMessageList.isNotEmpty ? controller.chatMessageList[index].id == controller.unreadMessageList.first.id : false,
+                                          baseImageUrl: controller.preference.getBaseImageURL() ?? '',
                                         );
                                       },
                                     ),

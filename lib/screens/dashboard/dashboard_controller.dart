@@ -280,7 +280,6 @@ class DashboardController extends GetxController
     super.onInit();
     FirebaseMessaging.instance.getInitialMessage().then((v) {
       RemoteMessage? remoteMessage = v;
-      print("remoteMessage ------>${remoteMessage}");
       if (remoteMessage != null) {
         Future.delayed(Duration(seconds: 3), () async {
           if (remoteMessage.data["type"] == "8") {
@@ -292,6 +291,13 @@ class DashboardController extends GetxController
           } else if(remoteMessage.data["type"] == "2"){
             print("remoteMessage.data ------>${remoteMessage.data}");
             acceptOrRejectChat(orderId: int.parse(remoteMessage.data["order_id"]), queueId: int.parse(remoteMessage.data["queue_id"]));
+          } else if (remoteMessage.data["type"] == "8") {
+            final senderId = remoteMessage.data["sender_id"];
+            DataList dataList = DataList();
+            dataList.id = int.parse(senderId);
+            dataList.name = remoteMessage.data["title"];
+            print("333333" + remoteMessage.data.toString());
+            Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
           }
         });
       }
@@ -306,6 +312,13 @@ class DashboardController extends GetxController
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
       } else if(message.data["type"] == "2"){
         acceptOrRejectChat(orderId: int.parse(message.data["order_id"]), queueId: int.parse(message.data["queue_id"]));
+      } else if (message.data["type"] == "8") {
+        final senderId = message.data["sender_id"];
+        DataList dataList = DataList();
+        dataList.id = int.parse(senderId);
+        dataList.name = message.data["title"];
+        print("333333" + message.data.toString());
+        Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
       }
     });
 
@@ -459,45 +472,9 @@ class DashboardController extends GetxController
     );
   }
 
-
-  firebaseNotificationInit() async {
-    final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
-    const DarwinInitializationSettings initializationSettingsIOS = DarwinInitializationSettings(
-      defaultPresentAlert: true,
-      defaultPresentBadge: true,
-      defaultPresentSound: true,
-    );
-    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
-    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
-
-    notificationPermission();
-    var initializationSettings = const InitializationSettings(iOS: initializationSettingsIOS, android: initializationSettingsAndroid);
-
-    flutterLocalNotificationsPlugin.initialize(
-      initializationSettings,
-      onDidReceiveNotificationResponse: (details) async {
-        print("details -------> ${details}");
-      },
-    );
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      /*Get.delete<NotificationController>();
-      Get.toNamed(Routes.NOTIFICATION);*/
-      if(message.notification?.title != null){}
-    });
-
-    // todo: click event of notification when application is on kill(terminated)
-    firebaseMessaging.getInitialMessage().then((value) {
-      if(value?.notification?.title != null){
-        /*Get.delete<NotificationController>();
-        Get.toNamed(Routes.NOTIFICATION);*/
-      }
-    });
-  }
-
   @override
   void onReady() {
-    firebaseNotificationInit();
+    notificationPermission();
     final socket = AppSocket();
     socket.socketConnect();
     super.onReady();

@@ -22,8 +22,8 @@ class ImportantNumbersController extends GetxController {
   void onInit() async {
     super.onInit();
     loading = Loading.loading;
-    await getContactList();
-    fetchImportantNumbers();
+    await fetchImportantNumbers();
+    getContactList();
     // getContactList();
     update();
   }
@@ -62,6 +62,10 @@ class ImportantNumbersController extends GetxController {
     }*/
     if (contact.isGranted) {
       allContacts = await ContactsService.getContacts();
+      for(int i = 0 ; i < importantNumbers.length ; i++){
+        importantNumbers[i].isExist = checkForContactExist(importantNumbers[i]);
+        update();
+      }
     } else {
       divineSnackBar(data: 'contactPermissionRequired'.tr);
     }
@@ -81,7 +85,14 @@ class ImportantNumbersController extends GetxController {
           phones: phoneItems);
       await ContactsService.addContact(newContact);
       divineSnackBar(data: "contactSaved".tr);
-      fetchImportantNumbers();
+      // fetchImportantNumbers();
+      for(int i = 0 ; i < importantNumbers.length ; i++){
+        if(contactNumbers.join(",") == importantNumbers[i].mobileNumber){
+          importantNumbers[i].isExist = true;
+          update();
+          break;
+        }
+      }
     } else {
       openAppSettings();
     }

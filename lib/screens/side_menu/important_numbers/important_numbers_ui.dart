@@ -76,8 +76,6 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                     itemBuilder: (context, index) {
                       MobileNumber phoneNumber =
                           controller.importantNumbers[index];
-                      var exist = controller.checkForContactExist(phoneNumber);
-
                       return SingleChildScrollView(
                         child: Column(
                           children: [
@@ -104,7 +102,8 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                                 ),
                                 SizedBox(width: 10.w),
                                 AddContactButton(
-                                    exist: exist, phoneNumber: phoneNumber)
+                                    exist: controller.importantNumbers[index].isExist, phoneNumber: phoneNumber,
+                                )
                                 /* GestureDetector(
                                       onTap: () {
                                         if (!exist) {
@@ -177,11 +176,11 @@ class _AddContactButtonState extends State<AddContactButton> {
 
   @override
   Widget build(BuildContext context) {
+    isButtonTap = widget.exist;
     return GetBuilder<ImportantNumbersController>(
         builder: (controller) => GestureDetector(
               onTap: () async {
-                if (await PermissionHelper()
-                    .askCustomPermission(Permission.contacts)) {
+                if (await PermissionHelper().askCustomPermission(Permission.contacts)) {
                   if (!isButtonTap) {
                     List<String> phoneNumbers =
                         widget.phoneNumber.mobileNumber?.split(",").toList() ??
@@ -220,7 +219,7 @@ class _AddContactButtonState extends State<AddContactButton> {
                         fontWeight: FontWeight.w600,
                         fontColor: isButtonTap
                             ? appColors.grey
-                            : appColors.brownColour),
+                            : appColors.whiteGuidedColor),
                   ),
                 ),
               ),
