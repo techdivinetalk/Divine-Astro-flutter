@@ -22,6 +22,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -258,11 +259,28 @@ class DashboardController extends GetxController
     }
   }
 
+  void notificationPermission() async {
+    NotificationSettings settings  = await FirebaseMessaging.instance.requestPermission(
+      sound: true,
+      badge: true,
+      alert: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+      print('User grander provisional permission');
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
   @override
   Future<void> onInit() async {
     super.onInit();
     FirebaseMessaging.instance.getInitialMessage().then((v) {
       RemoteMessage? remoteMessage = v;
+      print("remoteMessage ------>${remoteMessage}");
       if (remoteMessage != null) {
         Future.delayed(Duration(seconds: 3), () async {
           if (remoteMessage.data["type"] == "8") {
@@ -271,6 +289,9 @@ class DashboardController extends GetxController
             dataList.id = int.parse(senderId);
             dataList.name = remoteMessage.data["title"];
             Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
+          } else if(remoteMessage.data["type"] == "2"){
+            print("remoteMessage.data ------>${remoteMessage.data}");
+            acceptOrRejectChat(orderId: int.parse(remoteMessage.data["order_id"]), queueId: int.parse(remoteMessage.data["queue_id"]));
           }
         });
       }
@@ -283,6 +304,8 @@ class DashboardController extends GetxController
         dataList.id = int.parse(senderId);
         dataList.name = message.data["title"];
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
+      } else if(message.data["type"] == "2"){
+        acceptOrRejectChat(orderId: int.parse(message.data["order_id"]), queueId: int.parse(message.data["queue_id"]));
       }
     });
 
@@ -436,8 +459,45 @@ class DashboardController extends GetxController
     );
   }
 
+
+  firebaseNotificationInit() async {
+    final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
+    const DarwinInitializationSettings initializationSettingsIOS = DarwinInitializationSettings(
+      defaultPresentAlert: true,
+      defaultPresentBadge: true,
+      defaultPresentSound: true,
+    );
+    const AndroidInitializationSettings initializationSettingsAndroid = AndroidInitializationSettings('@mipmap/ic_launcher');
+    final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    notificationPermission();
+    var initializationSettings = const InitializationSettings(iOS: initializationSettingsIOS, android: initializationSettingsAndroid);
+
+    flutterLocalNotificationsPlugin.initialize(
+      initializationSettings,
+      onDidReceiveNotificationResponse: (details) async {
+        print("details -------> ${details}");
+      },
+    );
+
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
+      /*Get.delete<NotificationController>();
+      Get.toNamed(Routes.NOTIFICATION);*/
+      if(message.notification?.title != null){}
+    });
+
+    // todo: click event of notification when application is on kill(terminated)
+    firebaseMessaging.getInitialMessage().then((value) {
+      if(value?.notification?.title != null){
+        /*Get.delete<NotificationController>();
+        Get.toNamed(Routes.NOTIFICATION);*/
+      }
+    });
+  }
+
   @override
   void onReady() {
+    firebaseNotificationInit();
     final socket = AppSocket();
     socket.socketConnect();
     super.onReady();

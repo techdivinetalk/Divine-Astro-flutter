@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
 import 'package:camera/camera.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
@@ -99,6 +100,33 @@ Future<void> main() async {
     });
   }
 
+  Future<void> showFlutterNotification(RemoteMessage message) async {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+    if (notification != null && android != null && Platform.isAndroid) {
+      flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        payload: jsonEncode(message.data),
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            channelDescription: channel.description,
+            icon: '@mipmap/ic_launcher',
+          ),
+        ),
+      );
+    }
+
+    // Constants.isNotificationBadge.value = true;
+    // if(message.data["badge"] != null){
+    //   FlutterAppBadger.updateBadgeCount(int.parse(message.data["badge"]));
+    //   await SharedPreference().setNotificationBadge(true);
+    // }
+  }
+
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("pushNotification1 ${message.notification?.title ?? ""}");
     print('Message data-: dasboardCurrentIndex---${message.data}');
@@ -113,6 +141,7 @@ Future<void> main() async {
       //       message.notification!.body ?? '', payload);
       //   return;
       // }
+      showFlutterNotification(message);
       return;
     }
 

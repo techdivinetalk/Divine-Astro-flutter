@@ -128,11 +128,7 @@ void initMessaging() async {
           (NotificationResponse notificationResponse) async {
     final String? payload = notificationResponse.payload;
     print(payload);
-    print("payloadpayloadpayloadpayloadpayloadpayload");
     if (payload != null) {
-      ///// redirect to bottom sheet of accept the request
-      print(notificationResponse.payload);
-      print("notificationResponse.payload");
       final Map<String, dynamic> payloadMap =
           jsonDecode(notificationResponse.payload!);
       debugPrint('notification payload: -- ${payloadMap}');
@@ -144,7 +140,9 @@ void initMessaging() async {
         Get.toNamed(RouteName.chatMessageWithSocketUI);
       } else if (payloadMap["type"] == "2") {
         print(" 1111111111111" + payloadMap.toString());
-        Future<bool> acceptOrRejectChat(
+        acceptOrRejectChat(orderId: int.parse(payloadMap["order_id"]), queueId: int.parse(payloadMap["queue_id"]));
+
+        /*Future<bool> acceptOrRejectChat(
             {required int? orderId, required int? queueId}) async {
 // *accept_or_reject: 1 = accept, 3 = chat reject by timeout
 // * is_timeout: should be 1 when reject by timeout"
@@ -164,9 +162,9 @@ void initMessaging() async {
             print("chat_reject 4");
             return false;
           }
-        }
+        }*/
 
-        Get.toNamed(RouteName.liveDharamScreen);
+        // Get.toNamed(RouteName.liveDharamScreen);
       } else if (payloadMap["type"] == "8") {
         final senderId = payloadMap["sender_id"];
         DataList dataList = DataList();
