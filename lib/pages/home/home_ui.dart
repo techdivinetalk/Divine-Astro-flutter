@@ -313,9 +313,7 @@ class HomeUI extends GetView<HomeController> {
                                 ),*/
                                 // SizedBox(width: 10.w),
                                 InkWell(
-
                                   onTap: () {
-
                                     showModalBottomSheet(
                                       context: context,
                                       builder: (BuildContext context) {
@@ -324,8 +322,7 @@ class HomeUI extends GetView<HomeController> {
                                           width: double.infinity,
                                           color: appColors.white,
                                           child: Image.asset(
-                                              "assets/images/coming-soon-red-blue-3d-text-white-surface-clear-lighting.jpg"
-                                          ),
+                                              "assets/images/coming-soon-red-blue-3d-text-white-surface-clear-lighting.jpg"),
                                         );
                                       },
                                     );
@@ -2567,8 +2564,7 @@ class HomeUI extends GetView<HomeController> {
               child: TextFormField(
                 scrollPadding: EdgeInsets.only(
                     bottom:
-                    MediaQuery.of(Get.context!).viewInsets.bottom +
-                        160),
+                        MediaQuery.of(Get.context!).viewInsets.bottom + 160),
                 maxLines: 6,
                 maxLength: 96,
                 keyboardType: TextInputType.text,

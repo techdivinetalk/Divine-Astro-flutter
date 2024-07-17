@@ -41,10 +41,14 @@ class ProfilePageController extends GetxController {
   UserData? userData;
   GetUserProfile? userProfile;
   RxString userProfileImage = "".obs;
-  ResReviewRatings? ratingsData;
+  Rx<ResReviewRatings> ratingsData = ResReviewRatings().obs;
+
+  RxList<AllReviews> allReviews = <AllReviews>[].obs;
+  List<AllReviews> astrologerProfileReview = <AllReviews>[];
+
   ResReviewReply? reviewReply;
   var preference = Get.find<SharedPreferenceService>();
-
+  ScrollController scrollController = ScrollController();
   // var dashboardController = Get.find<DashboardController>();
   RxBool profileDataSync = false.obs;
   RxBool reviewDataSync = false.obs;
@@ -238,6 +242,8 @@ class ProfilePageController extends GetxController {
     super.onInit();
     debugPrint("test_onInit: call");
     isInit = true;
+    // scrollController.l
+
     userData = preference.getUserDetail();
     baseAmazonUrl = preference.getBaseImageURL();
     userProfileImage.value = "$baseAmazonUrl/${userData?.image}";
@@ -281,9 +287,46 @@ class ProfilePageController extends GetxController {
     try {
       Map<String, dynamic> params = {"role_id": userData?.roleId, "page": 1};
       var response = await userRepository.getReviewRatings(params);
-      ratingsData = response;
+      ratingsData.value = response;
+      astrologerProfileReview.addAll(response.data!.allReviews ?? []);
+      allReviews.value = response.data!.allReviews ?? [];
+
       update();
-      log("Data==>${jsonEncode(ratingsData!.data)}");
+      log("Data==>${jsonEncode(ratingsData.value.data)}");
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+    reviewDataSync.value = true;
+  }
+
+  int pageCount = 1;
+
+  getMoreReviewRating() async {
+    pageCount++;
+    try {
+      Map<String, dynamic> params = {
+        "role_id": userData?.roleId,
+        "page": pageCount
+      };
+      var response = await userRepository.getReviewRatings(params);
+
+      if (response.data?.allReviews?.isNotEmpty == true) {
+        ratingsData.value = response;
+        allReviews.addAll(response.data!.allReviews!);
+        // Print reviews for debugging purposes
+        print("ViewAllReview:: $allReviews");
+
+        update();
+        log("Data==>${jsonEncode(ratingsData)}");
+      } else {
+        // No more data to load, show a toast message
+        divineSnackBar(data: "No more reviews to load");
+      }
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {

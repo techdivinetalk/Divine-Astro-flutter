@@ -1,10 +1,9 @@
+import 'dart:developer';
+
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
-import 'package:divine_astrologer/common/permission_handler';
-import 'package:divine_astrologer/model/custom_product/custom_product_list_view.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +11,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
@@ -20,9 +18,10 @@ import '../../../common/routes.dart';
 import '../../../gen/assets.gen.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../common/custom_widgets.dart';
+import '../../common/permission_handler.dart';
 import '../../di/shared_preference_service.dart';
+import '../../model/res_review_ratings.dart';
 import '../../repository/user_repository.dart';
-import '../../screens/side_menu/side_menu_ui.dart';
 
 class ProfileUI extends GetView<ProfilePageController> {
   final preference = Get.find<SharedPreferenceService>();
@@ -50,6 +49,7 @@ class ProfileUI extends GetView<ProfilePageController> {
           ),
           // drawer: const SideMenuDrawer(),
           body: ListView(
+            controller: controller.scrollController,
             padding: const EdgeInsets.all(15.0),
             children: <Widget>[
               Container(
@@ -214,13 +214,14 @@ class ProfileUI extends GetView<ProfilePageController> {
               profileOptions(controller: controller),
               SizedBox(height: 10.h),
               Obx(() => controller.reviewDataSync.value == true
-                  ? controller.ratingsData?.data?.totalRating != 0
+                  ? controller.ratingsData.value.data?.totalRating != 0
                       ? ratingsView(controller: controller)
                       : const SizedBox()
                   : const SizedBox()),
               SizedBox(height: 20.h),
               Obx(() => controller.reviewDataSync.value == true
-                  ? (controller.ratingsData?.data?.allReviews?.isNotEmpty ??
+                  ? (controller
+                              .ratingsData.value.data?.allReviews?.isNotEmpty ??
                           false)
                       ? Container(
                           width: MediaQuery.of(context).size.width,
@@ -267,7 +268,8 @@ class ProfileUI extends GetView<ProfilePageController> {
       child: GridView.builder(
         shrinkWrap: true,
         primary: false,
-        itemCount: controller!.profileList.length,
+        controller: controller!.scrollController,
+        itemCount: controller.profileList.length,
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3, crossAxisSpacing: 20.h, mainAxisSpacing: 15.h),
         itemBuilder: (BuildContext context, int index) {
@@ -578,7 +580,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                         Padding(
                           padding: EdgeInsets.only(left: 20.h),
                           child: Text(
-                            "${controller!.ratingsData?.data?.totalRating ?? "0.0"}",
+                            "${controller!.ratingsData.value.data?.totalRating ?? "0.0"}",
                             style: TextStyle(
                                 fontSize: 17.sp, fontWeight: FontWeight.w400),
                           ),
@@ -599,7 +601,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                         Text(
                           "total".trParams({
                             "count":
-                                "${controller.ratingsData?.data?.totalReviews}"
+                                "${controller.ratingsData.value.data?.totalReviews}"
                           }),
                           style: AppTextStyle.textStyle14(),
                         ),
@@ -624,11 +626,12 @@ class ProfileUI extends GetView<ProfilePageController> {
                         animationDuration: 2000,
                         percent: controller.getReviewPercentage(
                             ratingNumbers:
-                                controller.ratingsData?.data?.i5Rating ?? 0,
-                            totalReviews:
-                                ((controller.ratingsData?.data?.totalReviews ??
-                                        0)
-                                    .toDouble())),
+                                controller.ratingsData.value.data?.i5Rating ??
+                                    0,
+                            totalReviews: ((controller
+                                        .ratingsData.value.data?.totalReviews ??
+                                    0)
+                                .toDouble())),
                         backgroundColor: appColors.guideColor.withOpacity(0.4),
                         progressColor: appColors.guideColor,
                       ),
@@ -648,11 +651,12 @@ class ProfileUI extends GetView<ProfilePageController> {
                         animationDuration: 2000,
                         percent: controller.getReviewPercentage(
                             ratingNumbers:
-                                controller.ratingsData?.data?.i4Rating ?? 0,
-                            totalReviews:
-                                (controller.ratingsData?.data?.totalReviews ??
-                                        0)
-                                    .toDouble()),
+                                controller.ratingsData.value.data?.i4Rating ??
+                                    0,
+                            totalReviews: (controller
+                                        .ratingsData.value.data?.totalReviews ??
+                                    0)
+                                .toDouble()),
                         backgroundColor: appColors.guideColor.withOpacity(0.4),
                         progressColor: appColors.guideColor,
                       ),
@@ -672,11 +676,12 @@ class ProfileUI extends GetView<ProfilePageController> {
                         animationDuration: 2000,
                         percent: controller.getReviewPercentage(
                             ratingNumbers:
-                                controller.ratingsData?.data?.i3Rating ?? 0,
-                            totalReviews:
-                                (controller.ratingsData?.data?.totalReviews ??
-                                        0)
-                                    .toDouble()),
+                                controller.ratingsData.value.data?.i3Rating ??
+                                    0,
+                            totalReviews: (controller
+                                        .ratingsData.value.data?.totalReviews ??
+                                    0)
+                                .toDouble()),
                         backgroundColor: appColors.guideColor.withOpacity(0.4),
                         progressColor: appColors.guideColor,
                       ),
@@ -696,11 +701,12 @@ class ProfileUI extends GetView<ProfilePageController> {
                         animationDuration: 2000,
                         percent: controller.getReviewPercentage(
                             ratingNumbers:
-                                controller.ratingsData?.data?.i2Rating ?? 0,
-                            totalReviews:
-                                (controller.ratingsData?.data?.totalReviews ??
-                                        0)
-                                    .toDouble()),
+                                controller.ratingsData.value.data?.i2Rating ??
+                                    0,
+                            totalReviews: (controller
+                                        .ratingsData.value.data?.totalReviews ??
+                                    0)
+                                .toDouble()),
                         backgroundColor: appColors.guideColor.withOpacity(0.4),
                         progressColor: appColors.guideColor,
                       ),
@@ -720,11 +726,12 @@ class ProfileUI extends GetView<ProfilePageController> {
                         animationDuration: 2000,
                         percent: controller.getReviewPercentage(
                             ratingNumbers:
-                                controller.ratingsData?.data?.i1Rating ?? 0,
-                            totalReviews:
-                                (controller.ratingsData?.data?.totalReviews ??
-                                        0)
-                                    .toDouble()),
+                                controller.ratingsData.value.data?.i1Rating ??
+                                    0,
+                            totalReviews: (controller
+                                        .ratingsData.value.data?.totalReviews ??
+                                    0)
+                                .toDouble()),
                         backgroundColor: appColors.guideColor.withOpacity(0.4),
                         progressColor: appColors.guideColor,
                       ),
@@ -741,187 +748,215 @@ class ProfileUI extends GetView<ProfilePageController> {
 
   listOfReviews({ProfilePageController? controller}) {
     return ListView.separated(
-      itemCount: controller!.ratingsData?.data?.allReviews?.length ?? 0,
+      itemCount: controller!.allReviews.length + 1 ?? 0,
       primary: false,
       shrinkWrap: true,
+      controller: controller.scrollController,
       separatorBuilder: (context, index) => Padding(
         padding: EdgeInsets.all(8.h),
         child: Divider(color: appColors.extraLightGrey),
       ),
       itemBuilder: (context, index) {
-        TextEditingController replyController = TextEditingController();
-        var reviewData = controller.ratingsData?.data?.allReviews?[index];
+        if (index < controller.allReviews.length) {
+          TextEditingController replyController = TextEditingController();
+          AllReviews reviewData = controller.allReviews[index];
 
-        String shortenName(reviewData) {
-          if (reviewData == null || reviewData.customerName == null) {
-            return "";
-          } else {
-            return reviewData.customerName.length > 15
-                ? "${reviewData.customerName.substring(0, 15)}..."
-                : reviewData.customerName;
+          String shortenName(reviewData) {
+            if (reviewData == null || reviewData.customerName == null) {
+              return "";
+            } else {
+              return reviewData.customerName.length > 15
+                  ? "${reviewData.customerName.substring(0, 15)}..."
+                  : reviewData.customerName;
+            }
           }
-        }
 
-        return Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(40),
-              child: CachedNetworkPhoto(
-                url: reviewData?.customerImage != null
-                    ? "${controller.preference.getBaseImageURL()}/${reviewData?.customerImage}"
-                    : "",
-                height: 40,
-                width: 40,
-                fit: BoxFit.cover,
+          return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ClipRRect(
+                borderRadius: BorderRadius.circular(40),
+                child: CachedNetworkPhoto(
+                  url: reviewData?.customerImage != null
+                      ? "${controller.preference.getBaseImageURL()}/${reviewData?.customerImage}"
+                      : "",
+                  height: 40,
+                  width: 40,
+                  fit: BoxFit.cover,
+                ),
               ),
-            ),
-            SizedBox(width: 10.h),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        shortenName(reviewData),
-                        style: AppTextStyle.textStyle14(),
-                      ),
-                      Row(
-                        children: [
-                          RatingBar.readOnly(
-                            filledIcon: Icons.star,
-                            emptyIcon: Icons.star,
-                            emptyColor: appColors.guideColor.withOpacity(0.3),
-                            filledColor: appColors.guideColor,
-                            initialRating:
-                                double.tryParse("${reviewData?.rating}") ?? 0,
-                            size: 15.h,
-                            maxRating: 5,
-                          ),
-                          const SizedBox(width: 10),
-                          PopupMenuButton(
-                            surfaceTintColor: Colors.transparent,
-                            color: Colors.white,
-                            itemBuilder: (context) => [
-                              PopupMenuItem(
-                                  child: InkWell(
-                                onTap: () {
-                                  Navigator.pop(context);
-
-                                  showCupertinoModalPopup(
-                                    barrierColor:
-                                        appColors.darkBlue.withOpacity(0.5),
-                                    context: context,
-                                    builder: (context) => ReportPostReasons(
-                                      reviewData?.id.toString() ?? '',
-                                      controller: controller,
-                                    ),
-
-                                    // builder: (context) => ReportPostReasons(reviewData?.id.),
-                                  );
-                                },
-                                child: Text(
-                                  "reportComment".tr,
-                                  style: AppTextStyle.textStyle13(),
-                                ),
-                              )),
-                            ],
-                            child: const Icon(Icons.more_vert_rounded),
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 3.h),
-                  Text(
-                    "${reviewData?.reviewDate}",
-                    style:
-                        AppTextStyle.textStyle12(fontWeight: FontWeight.w500),
-                  ),
-                  if (reviewData?.comment != null) const SizedBox(height: 5),
-                  if (reviewData?.comment != null)
-                    Text(
-                      "${reviewData?.comment}",
-                      style: AppTextStyle.textStyle12(),
-                    ),
-                  SizedBox(height: 15.h),
-                  if (reviewData?.replyData == null &&
-                      reviewData?.comment != null)
-                    Stack(
+              SizedBox(width: 10.h),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Visibility(
-                          visible: !controller.isLoading.value,
-                          child: replyTextView(
-                            textController: replyController,
-                            reviewId: reviewData?.id ?? 0,
-                            onSendPressed: () {
-                              controller.getReplyOnReview(
-                                  reviewId: reviewData?.id ?? 0,
-                                  textMsg: replyController.text.trim());
-                              controller.reviewDataSync.value = true;
-                            },
-                          ),
+                        Text(
+                          shortenName(reviewData),
+                          style: AppTextStyle.textStyle14(),
                         ),
-                        Visibility(
-                          visible: controller.isLoading.value,
-                          child: CircularProgressIndicator(
-                              color: appColors.guideColor),
+                        Row(
+                          children: [
+                            RatingBar.readOnly(
+                              filledIcon: Icons.star,
+                              emptyIcon: Icons.star,
+                              emptyColor: appColors.guideColor.withOpacity(0.3),
+                              filledColor: appColors.guideColor,
+                              initialRating:
+                                  double.tryParse("${reviewData?.rating}") ?? 0,
+                              size: 15.h,
+                              maxRating: 5,
+                            ),
+                            const SizedBox(width: 10),
+                            PopupMenuButton(
+                              surfaceTintColor: Colors.transparent,
+                              color: Colors.white,
+                              itemBuilder: (context) => [
+                                PopupMenuItem(
+                                    child: InkWell(
+                                  onTap: () {
+                                    Navigator.pop(context);
+
+                                    showCupertinoModalPopup(
+                                      barrierColor:
+                                          appColors.darkBlue.withOpacity(0.5),
+                                      context: context,
+                                      builder: (context) => ReportPostReasons(
+                                        reviewData?.id.toString() ?? '',
+                                        controller: controller,
+                                      ),
+
+                                      // builder: (context) => ReportPostReasons(reviewData?.id.),
+                                    );
+                                  },
+                                  child: Text(
+                                    "reportComment".tr,
+                                    style: AppTextStyle.textStyle13(),
+                                  ),
+                                )),
+                              ],
+                              child: const Icon(Icons.more_vert_rounded),
+                            )
+                          ],
                         ),
                       ],
                     ),
-                  if (reviewData?.replyData != null)
-                    Obx(() {
-                      return Visibility(
-                        visible: controller.reviewDataSync.value,
-                        child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            ClipRRect(
-                              borderRadius: BorderRadius.circular(40),
-                              child: CachedNetworkPhoto(
-                                url:
-                                    "${controller.preference.getBaseImageURL()}/${reviewData?.replyData?.astrologerImage}",
-                                height: 40,
-                                width: 40,
-                                fit: BoxFit.cover,
-                              ),
+                    SizedBox(height: 3.h),
+                    Text(
+                      "${reviewData?.reviewDate}",
+                      style:
+                          AppTextStyle.textStyle12(fontWeight: FontWeight.w500),
+                    ),
+                    if (reviewData?.comment != null) const SizedBox(height: 5),
+                    if (reviewData?.comment != null)
+                      Text(
+                        "${reviewData?.comment}",
+                        style: AppTextStyle.textStyle12(),
+                      ),
+                    SizedBox(height: 15.h),
+                    if (reviewData?.replyData == null &&
+                        reviewData?.comment != null)
+                      Stack(
+                        children: [
+                          Visibility(
+                            visible: !controller.isLoading.value,
+                            child: replyTextView(
+                              textController: replyController,
+                              reviewId: reviewData?.id ?? 0,
+                              onSendPressed: () {
+                                controller.getReplyOnReview(
+                                    reviewId: reviewData?.id ?? 0,
+                                    textMsg: replyController.text.trim());
+                                controller.reviewDataSync.value = true;
+                              },
                             ),
-                            SizedBox(width: 10.h),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    controller.userData?.name != null
-                                        ? (controller.userData?.name ?? "")
-                                        : "",
-                                    style: AppTextStyle.textStyle14(
-                                      fontWeight: FontWeight.w700,
+                          ),
+                          Visibility(
+                            visible: controller.isLoading.value,
+                            child: CircularProgressIndicator(
+                                color: appColors.guideColor),
+                          ),
+                        ],
+                      ),
+                    if (reviewData?.replyData != null)
+                      Obx(() {
+                        return Visibility(
+                          visible: controller.reviewDataSync.value,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ClipRRect(
+                                borderRadius: BorderRadius.circular(40),
+                                child: CachedNetworkPhoto(
+                                  url:
+                                      "${controller.preference.getBaseImageURL()}/${reviewData?.replyData?.astrologerImage}",
+                                  height: 40,
+                                  width: 40,
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                              SizedBox(width: 10.h),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      controller.userData?.name != null
+                                          ? (controller.userData?.name ?? "")
+                                          : "",
+                                      style: AppTextStyle.textStyle14(
+                                        fontWeight: FontWeight.w700,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    "${reviewData?.replyData?.replyDate}",
-                                    style: AppTextStyle.textStyle12(),
-                                  ),
-                                  SizedBox(height: 8.h),
-                                  Text(
-                                    "${reviewData?.replyData?.reply}",
-                                    style: AppTextStyle.textStyle12(),
-                                  ),
-                                ],
+                                    Text(
+                                      "${reviewData?.replyData?.replyDate}",
+                                      style: AppTextStyle.textStyle12(),
+                                    ),
+                                    SizedBox(height: 8.h),
+                                    Text(
+                                      "${reviewData?.replyData?.reply}",
+                                      style: AppTextStyle.textStyle12(),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
-                      );
-                    }),
-                ],
+                            ],
+                          ),
+                        );
+                      }),
+                  ],
+                ),
               ),
-            ),
-          ],
-        );
+            ],
+          );
+        } else {
+          return Row(
+            mainAxisAlignment: MainAxisAlignment.end,
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 20.h,
+                ),
+                child: CustomButton(
+                  onTap: () {
+                    controller.getMoreReviewRating();
+                  },
+                  child: Text(
+                    "loadMoreReviews".tr,
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      decoration: TextDecoration.underline,
+                      decorationColor: appColors.textColor,
+                      color: appColors.textColor,
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        }
       },
     );
   }
