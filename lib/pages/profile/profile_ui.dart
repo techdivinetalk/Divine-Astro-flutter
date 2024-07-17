@@ -3,11 +3,8 @@ import 'dart:developer';
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
-
-import 'package:divine_astrologer/model/custom_product/custom_product_list_view.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 import 'package:divine_astrologer/pages/profile/widget/report_post_reason_widget.dart';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -25,11 +22,9 @@ import '../../common/custom_widgets.dart';
 import '../../common/permission_handler.dart';
 import '../../di/shared_preference_service.dart';
 import '../../model/res_review_ratings.dart';
-import '../../repository/user_repository.dart';
 
 class ProfileUI extends GetView<ProfilePageController> {
   final preference = Get.find<SharedPreferenceService>();
-
 
   @override
   Widget build(BuildContext context) {
@@ -360,69 +355,54 @@ class ProfileUI extends GetView<ProfilePageController> {
                                             return GestureDetector(
                                               onTap: () {
                                                 controller
-                                                    .selectedLanguageData(
-                                                    item);
+                                                    .selectedLanguageData(item);
                                               },
                                               child: Container(
                                                 decoration: BoxDecoration(
-                                                    shape:
-                                                    BoxShape.circle,
-                                                    border: item
-                                                        .isSelected
+                                                    shape: BoxShape.circle,
+                                                    border: item.isSelected
                                                         ? Border.all(
-                                                        width: 1,
-                                                        color: Colors
-                                                            .grey)
+                                                            width: 1,
+                                                            color: Colors.grey)
                                                         : Border.all(
-                                                        width: 0,
-                                                        color: Colors
-                                                            .white)),
+                                                            width: 0,
+                                                            color:
+                                                                Colors.white)),
                                                 child: Container(
-                                                  decoration:
-                                                  BoxDecoration(
-                                                    shape:
-                                                    BoxShape.circle,
-                                                    gradient:
-                                                    LinearGradient(
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    gradient: LinearGradient(
                                                       colors: [
                                                         item.colors!
-                                                            .withOpacity(
-                                                            0),
+                                                            .withOpacity(0),
                                                         item.colors!
-                                                            .withOpacity(
-                                                            0.2),
+                                                            .withOpacity(0.2),
                                                       ],
-                                                      begin: Alignment
-                                                          .topLeft,
-                                                      end: Alignment
-                                                          .bottomRight,
+                                                      begin: Alignment.topLeft,
+                                                      end:
+                                                          Alignment.bottomRight,
                                                     ),
                                                   ),
                                                   child: ClipRRect(
                                                     borderRadius:
-                                                    BorderRadius
-                                                        .circular(
-                                                        10.r),
+                                                        BorderRadius.circular(
+                                                            10.r),
                                                     child: Material(
-                                                      color: Colors
-                                                          .transparent,
+                                                      color: Colors.transparent,
                                                       child: Column(
                                                         mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
+                                                            MainAxisAlignment
+                                                                .center,
                                                         children: [
                                                           CustomText(
                                                             item.languagesMain
                                                                 .toString(),
-                                                            fontSize:
-                                                            18.5.sp,
+                                                            fontSize: 18.5.sp,
                                                             fontWeight:
-                                                            FontWeight
-                                                                .w600,
+                                                                FontWeight.w600,
                                                           ),
                                                           SizedBox(
-                                                              height:
-                                                              10.h),
+                                                              height: 10.h),
                                                           Text(
                                                             item.languages
                                                                 .toString(),
@@ -445,27 +425,21 @@ class ProfileUI extends GetView<ProfilePageController> {
                                         Get.back();
                                       },
                                       child: Container(
-                                        width: MediaQuery.of(context)
-                                            .size
-                                            .width,
+                                        width:
+                                            MediaQuery.of(context).size.width,
                                         decoration: BoxDecoration(
                                             color: appColors.guideColor,
                                             borderRadius:
-                                            BorderRadius.circular(
-                                                10)),
+                                                BorderRadius.circular(10)),
                                         child: Padding(
-                                          padding:
-                                          const EdgeInsets.symmetric(
+                                          padding: const EdgeInsets.symmetric(
                                               vertical: 15.0),
                                           child: Center(
                                             child: Text(
                                               'okay'.tr,
-                                              style: AppTextStyle
-                                                  .textStyle16(
-                                                  fontWeight:
-                                                  FontWeight.w600,
-                                                  fontColor: appColors
-                                                      .white),
+                                              style: AppTextStyle.textStyle16(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontColor: appColors.white),
                                             ),
                                           ),
                                         ),
@@ -1000,7 +974,3 @@ class ProfileUI extends GetView<ProfilePageController> {
     );
   }
 }
-
-
-
-
