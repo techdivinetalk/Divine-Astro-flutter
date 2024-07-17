@@ -81,6 +81,14 @@ class LiveTipsController extends GetxController {
   }
 
   @override
+  void onClose() {
+    if (controller != null) {
+      controller!.dispose();
+    }
+    super.onClose();
+  }
+
+  @override
   void onReady() {
     var data = pref.getUserDetail();
     astroId = data!.id.toString();
@@ -109,6 +117,7 @@ class LiveTipsController extends GetxController {
   }
 
   Future<void> furtherProcedure() async {
+    print("furtherProcedure");
     final String userId = (pref.getUserDetail()?.id ?? "").toString();
     final String userName = pref.getUserDetail()?.name ?? "";
     final String awsURL = pref.getAmazonUrl() ?? "";

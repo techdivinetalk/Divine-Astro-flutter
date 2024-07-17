@@ -19,8 +19,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class TermsAndConditionController extends GetxController{
-
+class TermsAndConditionController extends GetxController {
   RxBool isIAgree = false.obs;
   String mobile = "";
   String? deviceToken;
@@ -31,7 +30,7 @@ class TermsAndConditionController extends GetxController{
   @override
   void onInit() {
     scrollController.addListener(scrollListener);
-    if(Get.arguments != null){
+    if (Get.arguments != null) {
       mobile = Get.arguments["mobile"];
     }
     try {
@@ -64,12 +63,14 @@ class TermsAndConditionController extends GetxController{
   }
 
   Future<void> astroLogin() async {
-    if(isIAgree.value){
+    if (isIAgree.value) {
       isLoading.value = true;
-      print("UserStatus login api ${await FirebaseMessaging.instance.getToken()}");
+      print(
+          "UserStatus login api ${await FirebaseMessaging.instance.getToken()}");
       Map<String, dynamic> params = {
         "mobile_no": mobile,
-        "device_token": deviceToken ?? await FirebaseMessaging.instance.getToken()
+        "device_token":
+            deviceToken ?? await FirebaseMessaging.instance.getToken()
       };
       try {
         ResLogin data = await userRepository.userLogin(params);
@@ -82,10 +83,12 @@ class TermsAndConditionController extends GetxController{
         log(jsonEncode(data.data));
         if (data.data != null) {
           var commonConstants = await userRepository.constantDetailsData();
-          if(commonConstants.data != null){
-            imageUploadBaseUrl.value = commonConstants.data?.imageUploadBaseUrl ?? "";
+          if (commonConstants.data != null) {
+            imageUploadBaseUrl.value =
+                commonConstants.data?.imageUploadBaseUrl ?? "";
           }
           if (commonConstants.data!.token != null) {
+            print("commonConstants.data!.token----->>>>${commonConstants.data!.token}");
             customTokenWithFirebase(
               token: commonConstants.data!.token,
             );
@@ -100,6 +103,7 @@ class TermsAndConditionController extends GetxController{
         }
       } catch (error) {
         isLoading.value = false;
+        update();
         debugPrint("error $error");
         if (error is AppException) {
           error.onException();
@@ -107,15 +111,18 @@ class TermsAndConditionController extends GetxController{
           divineSnackBar(data: error.toString(), color: appColors.redColor);
         }
       }
-    } else{
-      divineSnackBar(data: "Please agree to our privacy policy.", color: appColors.redColor);
+    } else {
+      update();
+      divineSnackBar(
+          data: "Please agree to our privacy policy.",
+          color: appColors.redColor);
     }
   }
 
   customTokenWithFirebase({String? token}) async {
     try {
       final userCredential =
-      await FirebaseAuth.instance.signInWithCustomToken(token!);
+          await FirebaseAuth.instance.signInWithCustomToken(token!);
       print(userCredential);
       print("Sign-in successful.");
     } on FirebaseAuthException catch (e) {
@@ -168,14 +175,13 @@ class TermsAndConditionController extends GetxController{
     }
     Future.delayed(
       const Duration(seconds: 1),
-          () => Get.offAllNamed(RouteName.dashboard),
+      () => Get.offAllNamed(RouteName.dashboard),
     );
     isLoading.value = false;
   }
 
   @override
   void dispose() {
-
     super.dispose();
   }
 
@@ -185,5 +191,4 @@ class TermsAndConditionController extends GetxController{
     scrollController.dispose();
     super.onClose();
   }
-
 }
