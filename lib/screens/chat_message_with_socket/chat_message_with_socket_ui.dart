@@ -1299,7 +1299,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         ),
                         const SizedBox(height: 5.0,),
                         Text(
-                          "Shop",
+                          "Remedy",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
