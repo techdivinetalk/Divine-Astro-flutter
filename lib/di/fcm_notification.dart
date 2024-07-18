@@ -166,6 +166,7 @@ void initMessaging() async {
 
         // Get.toNamed(RouteName.liveDharamScreen);
       } else if (payloadMap["type"] == "8") {
+        print("payloadMap -----> ${payloadMap}");
         final senderId = payloadMap["sender_id"];
         DataList dataList = DataList();
         dataList.id = int.parse(senderId);

@@ -2,6 +2,8 @@
 
 import 'dart:convert';
 
+import 'package:get/get.dart';
+
 ImportantNumberModel importantNumberModelFromJson(String str) => ImportantNumberModel.fromJson(json.decode(str));
 
 String importantNumberModelToJson(ImportantNumberModel data) => json.encode(data.toJson());
@@ -39,12 +41,14 @@ class MobileNumber {
   String? type;
   String? title;
   String? mobileNumber;
+  bool isExist;
 
   MobileNumber({
     this.id,
     this.type,
     this.title,
     this.mobileNumber,
+    this.isExist = false,
   });
 
   factory MobileNumber.fromJson(Map<String, dynamic> json) => MobileNumber(
