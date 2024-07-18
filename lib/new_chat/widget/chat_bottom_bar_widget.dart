@@ -1,4 +1,5 @@
 import 'package:audio_waveforms/audio_waveforms.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/routes.dart';
@@ -12,6 +13,7 @@ import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/zego_call/zego_service.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -43,6 +45,43 @@ class _ChatBottomBarWidgetState extends State<ChatBottomBarWidget> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
+            Obx(() => widget.controller?.isReplay.value == true ? Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 2.0),
+                      Text(
+                        "Replying to ${AppFirebaseService().orderData.value["customerName"] ?? ''}",
+                        softWrap: true,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12.0,
+                        ),
+                      ),
+                      const SizedBox(height: 1.0),
+                      buildReplayMsgWidget(),
+                      const SizedBox(height: 8.0),
+                    ],
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () => widget.controller?.isReplay.value = false,
+                  child: CircleAvatar(
+                    radius: 12.0,
+                    backgroundColor: appColors.bannerTitleColor,
+                    child: Icon(
+                      Icons.close,
+                      size: 20.0,
+                      color: appColors.whiteGuidedColor,
+                    ),
+                  ),
+                ),
+              ],
+            ) : const SizedBox()),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -185,13 +224,13 @@ class _ChatBottomBarWidgetState extends State<ChatBottomBarWidget> {
                   InkWell(
                       onTap: () {
                         // write  logic for send msg code
-
                         widget.controller!.addNewMessage(
                             msgType: MsgType.text,
                             messageText: widget
                                 .controller!.messageController.text
                                 .trim());
                         widget.controller!.messageController.clear();
+                        widget.controller?.isReplay.value = false;
                         widget.controller!.update();
                       },
                       child: Center(
@@ -397,5 +436,35 @@ class _ChatBottomBarWidgetState extends State<ChatBottomBarWidget> {
         ),
       );
     });
+  }
+
+  Widget buildReplayMsgWidget() {
+    print("widget.controller?.replayChatMessage.value?.base64Image ---->${widget.controller?.replayChatMessage.value?.base64Image}");
+    Uint8List? bytes;
+    if(widget.controller?.replayChatMessage.value?.msgType == MsgType.image){
+      List<int> list = widget.controller!.replayChatMessage.value!.base64Image!.codeUnits;
+      bytes = Uint8List.fromList(list);
+    }
+    return widget.controller?.replayChatMessage.value?.msgType == MsgType.text ? Text(
+      widget.controller?.replayChatMessage.value?.message ?? "",
+      softWrap: true,
+      maxLines: 1,
+      overflow: TextOverflow.ellipsis,
+      style: TextStyle(
+        fontWeight: FontWeight.w400,
+        fontSize: 10.0,
+        color: appColors.lightGrey,
+      ),
+    ) : widget.controller?.replayChatMessage.value?.msgType == MsgType.image ? Row(
+      children: [
+        const Expanded(child: SizedBox()),
+        SizedBox(
+          child: Image.network(
+            "${widget.controller?.replayChatMessage.value?.awsUrl}",
+            fit: BoxFit.cover,
+          ),
+        ),
+      ],
+    ) : SizedBox();
   }
 }

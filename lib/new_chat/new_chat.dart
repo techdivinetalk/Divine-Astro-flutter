@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/new_chat/msg_bubble/audio_view_widget.dart';
@@ -17,6 +19,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
+import 'package:swipe_to/swipe_to.dart';
 import 'widget/chat_app_bar_widget.dart';
 import 'widget/chat_bottom_bar_widget.dart';
 import 'widget/end_chat_timer.dart';
@@ -46,7 +49,7 @@ class NewChatScreen extends GetView<NewChatController> {
                   Expanded(
                     child: GestureDetector(
                       onPanDown: (details) {
-                        if(controller.overlayEntry!.mounted){
+                        if(controller.overlayEntry != null && controller.overlayEntry!.mounted){
                           controller.overlayEntry?.remove();
                         }
                       },
@@ -58,66 +61,76 @@ class NewChatScreen extends GetView<NewChatController> {
                         reverse: true,
                         itemBuilder: (context, index) {
                           ChatMessage data = controller.chatMessages[index];
-                          return GestureDetector(
-                            onLongPress: () {
-                              showReactionPopup(context, controller.longPressDownDetails!.globalPosition, index);
+                          return SwipeTo(
+                            key: UniqueKey(),
+                            iconOnLeftSwipe: Icons.arrow_forward,
+                            iconOnRightSwipe: Icons.replay,
+                            onRightSwipe: (details) {
+                              controller.isReplay.value = true;
+                              controller.replayChatMessage.value = data;
                             },
-                            onLongPressDown: (details) {
-                              controller.longPressDownDetails = details;
-                            },
-                            child: Column(
-                              children: [
-                                Obx(()=>controller.isLoading.value && (controller.chatMessages.length-1 == index) ? Padding(
-                                  padding: const EdgeInsets.symmetric(vertical: 10.0),
-                                  child: CircularProgressIndicator(
-                                    strokeWidth: 1.5,
-                                    color: Colors.grey.withOpacity(0.6),
-                                  ),
-                                )
-                                : const SizedBox()),
-                                Obx(() => Stack(
-                                  alignment: data.msgSendBy == "1" ? Alignment.bottomRight : Alignment.bottomLeft,
-                                  children: [
-                                    Padding(
-                                      padding: EdgeInsets.only(bottom: (controller.tempEmoji.value != "" && controller.tempIndex.value == index) ? 10.h : 0.0),
-                                      child: socketMessageView(
-                                        controller: controller,
-                                        yourMessage: data.msgSendBy == "1",
-                                        chatMessage: data,
-                                        index: index,
-                                      ),
+                            swipeSensitivity: 5,
+                            child: GestureDetector(
+                              onLongPress: () {
+                                showReactionPopup(context, controller.longPressDownDetails!.globalPosition, index);
+                              },
+                              onLongPressDown: (details) {
+                                controller.longPressDownDetails = details;
+                              },
+                              child: Column(
+                                children: [
+                                  Obx(()=>controller.isLoading.value && (controller.chatMessages.length-1 == index) ? Padding(
+                                    padding: const EdgeInsets.symmetric(vertical: 10.0),
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 1.5,
+                                      color: Colors.grey.withOpacity(0.6),
                                     ),
-                                    (controller.tempEmoji.value != "" && controller.tempIndex.value == index) ? Positioned(
-                                      right: data.msgSendBy == "1" ? 15.0 : null,
-                                      left: data.msgSendBy == "1" ? null : 55.0,
-                                      child: Container(
-                                        margin: const EdgeInsets.only(top: 10.0),
-                                        padding: const EdgeInsets.symmetric(horizontal: 5),
-                                        decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(50.0),
-                                            border: Border.all(color: const Color(0xffDCDCDC)),
-                                            color: appColors.white
+                                  )
+                                      : const SizedBox()),
+                                  Obx(() => Stack(
+                                    alignment: data.msgSendBy == "1" ? Alignment.bottomRight : Alignment.bottomLeft,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(bottom: (controller.tempEmoji.value != "" && controller.tempIndex.value == index) ? 10.h : 0.0),
+                                        child: socketMessageView(
+                                          controller: controller,
+                                          yourMessage: data.msgSendBy == "1",
+                                          chatMessage: data,
+                                          index: index,
                                         ),
-                                        child: Text(
-                                          controller.tempEmoji.value,
-                                          softWrap: true,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 15.0,
+                                      ),
+                                      (controller.tempEmoji.value != "" && controller.tempIndex.value == index) ? Positioned(
+                                        right: data.msgSendBy == "1" ? 15.0 : null,
+                                        left: data.msgSendBy == "1" ? null : 55.0,
+                                        child: Container(
+                                          margin: const EdgeInsets.only(top: 10.0),
+                                          padding: const EdgeInsets.symmetric(horizontal: 5),
+                                          decoration: BoxDecoration(
+                                              borderRadius: BorderRadius.circular(50.0),
+                                              border: Border.all(color: const Color(0xffDCDCDC)),
+                                              color: appColors.white
+                                          ),
+                                          child: Text(
+                                            controller.tempEmoji.value,
+                                            softWrap: true,
+                                            maxLines: 1,
+                                            overflow: TextOverflow.ellipsis,
+                                            style: const TextStyle(
+                                              fontWeight: FontWeight.w500,
+                                              fontSize: 15.0,
+                                            ),
                                           ),
                                         ),
-                                      ),
-                                    ) : const SizedBox(),
-                                  ],
-                                )),
-                                if (index ==0)
-                                  TypingWidget(
-                                    controller: controller,
-                                    yourMessage: data.msgSendBy == "1",
-                                  ),
-                              ],
+                                      ) : const SizedBox(),
+                                    ],
+                                  )),
+                                  if (index ==0)
+                                    TypingWidget(
+                                      controller: controller,
+                                      yourMessage: data.msgSendBy == "1",
+                                    ),
+                                ],
+                              ),
                             ),
                           );
                         },

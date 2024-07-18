@@ -75,6 +75,8 @@ class NewChatController extends GetxController
   List<String> emojiList = ["👍","❤","😀","😢","😯","🙏"];
   RxString tempEmoji = "".obs;
   RxInt tempIndex = 0.obs;
+  RxBool isReplay = false.obs;
+  Rxn<ChatMessage> replayChatMessage = Rxn<ChatMessage>();
 
   RxBool isRecording = false.obs;
   RxBool hasMessage = false.obs;
