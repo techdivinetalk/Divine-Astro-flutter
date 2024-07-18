@@ -105,7 +105,7 @@ class _DashaUIState extends State<DashaUI> {
                   ),
                   Obx(
                     () => AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 200),
+                      duration: const Duration(milliseconds: 100),
                       child: controller.isVimshottari.value == true
                           ? ((controller.subDashaLevel.value == 4)
                               ? pranDashaWidget()

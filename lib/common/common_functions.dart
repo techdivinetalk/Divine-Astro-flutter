@@ -120,9 +120,7 @@ void checkNotification(
   //  removeNotificationNode();
 }
 
-void setHiveDatabase(String userDataKey, ChatMessage newMessage) async {
 
-}
 
 void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   // type 1= New chat message, 2 = Delievered, 3= Msg read, 4= Other messages

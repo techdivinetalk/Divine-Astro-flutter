@@ -22,7 +22,7 @@ class PersonalDetailUi extends StatelessWidget {
                   controller.astroDetails.value.data?.gan == null)
               ? CrossFadeState.showSecond
               : CrossFadeState.showFirst,
-          duration: const Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 100),
           secondChild: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,

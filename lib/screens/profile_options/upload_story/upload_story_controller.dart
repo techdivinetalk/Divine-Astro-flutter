@@ -1,13 +1,16 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:aws_s3_upload/aws_s3_upload.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:path/path.dart' as p;
 import 'package:video_trimmer/video_trimmer.dart';
 
 import '../../../common/app_exception.dart';
+import '../../../common/common_functions.dart';
 import '../../../di/shared_preference_service.dart';
 import '../../../model/res_login.dart';
 import '../../../repository/user_repository.dart';
@@ -53,10 +56,13 @@ class UploadStoryController extends GetxController {
   }
 
   uploadImageToS3Bucket(File? selectedFile, {String? duration}) async {
+    log("1");
     var commonConstants = await userRepository.constantDetailsData();
+    log("2");
     var dataString = commonConstants.data!.awsCredentails.baseurl?.split(".");
+    log("3");
     var extension = p.extension(selectedFile!.path);
-
+    log("4");
     var response = await AwsS3.uploadFile(
       accessKey: commonConstants.data!.awsCredentails.accesskey!,
       secretKey: commonConstants.data!.awsCredentails.secretKey!,
@@ -66,6 +72,8 @@ class UploadStoryController extends GetxController {
       filename: '${DateTime.now().millisecondsSinceEpoch.toString()}$extension',
       region: dataString[2],
     );
+    log(response.toString());
+
     if (response != null) {
       debugPrint("Uploaded Url : $response");
       await uploadStory(response, duration: duration);
@@ -94,22 +102,22 @@ class UploadStoryController extends GetxController {
   Future<void> uploadStory(String url, {String? duration}) async {
     String fullEncodeURL = encodedURLFunction();
     print("fullEncodeURL: $fullEncodeURL");
-    //
-    // try {
-    //   Map<String, dynamic> param = {
-    //     "media_url": url,
-    //     "astrologer_id": userData?.id,
-    //     "duration": duration,
-    //     "link": fullEncodeURL,
-    //   };
-    //   final response = await userRepository.uploadAstroStory(param);
-    //   if (response.statusCode == 200 && response.success == true) {
-    //     Get.back();
-    //     divineSnackBar(data: "Story Uploaded Successfully");
-    //   }
-    // } catch (err) {
-    //   Fluttertoast.showToast(msg: "Something went wrong");
-    //   log(err.toString());
-    // }
+
+    try {
+      Map<String, dynamic> param = {
+        "media_url": url,
+        "astrologer_id": userData?.id,
+        "duration": duration,
+        "link": fullEncodeURL,
+      };
+      final response = await userRepository.uploadAstroStory(param);
+      if (response.statusCode == 200 && response.success == true) {
+        Get.back();
+        divineSnackBar(data: "Story Uploaded Successfully");
+      }
+    } catch (err) {
+      Fluttertoast.showToast(msg: "Something went wrong");
+      log(err.toString());
+    }
   }
 }

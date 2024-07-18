@@ -41,9 +41,9 @@ class CustomImageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return alignment != null
         ? Align(
-      alignment: alignment!,
-      child: _buildWidget(),
-    )
+            alignment: alignment!,
+            child: _buildWidget(),
+          )
         : _buildWidget();
   }
 
@@ -97,7 +97,7 @@ class CustomImageView extends StatelessWidget {
               width: width,
               fit: fit ?? BoxFit.contain,
               colorFilter:
-              ColorFilter.mode(color ?? Colors.black, BlendMode.srcIn),
+                  ColorFilter.mode(color ?? Colors.black, BlendMode.srcIn),
             ),
           );
         case ImageType.file:
@@ -123,12 +123,14 @@ class CustomImageView extends StatelessWidget {
                 backgroundColor: Colors.grey.shade100,
               ),
             ),
-            errorWidget: (context, url, error) =>placeHolder.contains(".svg") ? SvgPicture.asset(placeHolder): Image.asset(
-              placeHolder,
-              height: height,
-              width: width,
-              fit: fit ?? BoxFit.cover,
-            ),
+            errorWidget: (context, url, error) => placeHolder.contains(".svg")
+                ? SvgPicture.asset(placeHolder)
+                : Image.asset(
+                    placeHolder,
+                    height: height,
+                    width: width,
+                    fit: fit ?? BoxFit.cover,
+                  ),
           );
         case ImageType.png:
         default:

@@ -18,7 +18,7 @@ class BasicPanchangUi extends StatelessWidget {
     return SingleChildScrollView(
       child: Obx(
         () => AnimatedCrossFade(
-          duration: const Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 100),
           crossFadeState: (controller.birthDetails.value.data?.day == null &&
                   controller.astroDetails.value.data?.tithi == null)
               ? CrossFadeState.showSecond

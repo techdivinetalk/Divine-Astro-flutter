@@ -17,7 +17,7 @@ class ChalitChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState: controller.chalitChart.value.data?.svg == null
                   ? CrossFadeState.showSecond
                   : CrossFadeState.showFirst,
@@ -59,7 +59,7 @@ class BrithChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState: controller.brithChart.value.data?.svg == null
                   ? CrossFadeState.showSecond
                   : CrossFadeState.showFirst,
@@ -101,7 +101,7 @@ class HoraChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState: controller.horaChart.value.data?.svg == null
                   ? CrossFadeState.showSecond
                   : CrossFadeState.showFirst,
@@ -143,7 +143,7 @@ class DreshkanChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState: controller.dreshkanChart.value.data?.svg == null
                   ? CrossFadeState.showSecond
                   : CrossFadeState.showFirst,
@@ -186,7 +186,7 @@ class ChathurthamashaChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState:
                   controller.chathurthamashChart.value.data?.svg == null
                       ? CrossFadeState.showSecond
@@ -230,7 +230,7 @@ class PanchmanshaChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState:
                   controller.panchmanshaChart.value.data?.svg == null
                       ? CrossFadeState.showSecond
@@ -274,7 +274,7 @@ class SaptamanshaChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState:
                   controller.saptamanshaChart.value.data?.svg == null
                       ? CrossFadeState.showSecond
@@ -318,7 +318,7 @@ class AshtamanshaChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState:
                   controller.ashtamanshaChart.value.data?.svg == null
                       ? CrossFadeState.showSecond
@@ -362,7 +362,7 @@ class NavamanshaChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState: controller.navamanshaChart.value.data?.svg == null
                   ? CrossFadeState.showSecond
                   : CrossFadeState.showFirst,
@@ -405,7 +405,7 @@ class DashamanshaChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState:
                   controller.dashamanshaChart.value.data?.svg == null
                       ? CrossFadeState.showSecond
@@ -449,7 +449,7 @@ class DwadashamshaChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState:
                   controller.dwadashamshaChart.value.data?.svg == null
                       ? CrossFadeState.showSecond
@@ -493,7 +493,7 @@ class ShodashamshaChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState:
                   controller.shodashamshaChart.value.data?.svg == null
                       ? CrossFadeState.showSecond
@@ -537,7 +537,7 @@ class VishamanshaChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState:
                   controller.vishamanshaChart.value.data?.svg == null
                       ? CrossFadeState.showSecond
@@ -581,7 +581,7 @@ class ChaturvimshamshaChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState:
                   controller.chaturvimshamshaChart.value.data?.svg == null
                       ? CrossFadeState.showSecond
@@ -625,7 +625,7 @@ class BhamshaChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState: controller.bhamshaChart.value.data?.svg == null
                   ? CrossFadeState.showSecond
                   : CrossFadeState.showFirst,
@@ -668,7 +668,7 @@ class TrishamanshaChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState:
                   controller.trishamanshaChart.value.data?.svg == null
                       ? CrossFadeState.showSecond
@@ -712,7 +712,7 @@ class KhavedamshaChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState:
                   controller.khavedamshaChart.value.data?.svg == null
                       ? CrossFadeState.showSecond
@@ -756,7 +756,7 @@ class AkshvedanshaChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState:
                   controller.akshvedanshaChart.value.data?.svg == null
                       ? CrossFadeState.showSecond
@@ -800,7 +800,7 @@ class ShashtymshaChartUi extends StatelessWidget {
         children: [
           Obx(
             () => AnimatedCrossFade(
-              duration: const Duration(milliseconds: 200),
+              duration: const Duration(milliseconds: 100),
               crossFadeState:
                   controller.shashtymshaChart.value.data?.svg == null
                       ? CrossFadeState.showSecond
