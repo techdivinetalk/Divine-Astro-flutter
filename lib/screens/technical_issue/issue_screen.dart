@@ -290,7 +290,9 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
                         splashColor: Colors.red.withOpacity(0.5),
                         highlightColor: Colors.transparent,
                         onTap: () {
-                          controller.uploadImagesListsFun();
+                          controller.uploadImagesListsFun().whenComplete(() {
+                            controller.submitIssues();
+                          });
                         },
                         child: Center(
                           child: controller.isLoading.value == true

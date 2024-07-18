@@ -484,6 +484,10 @@ class ProfileUI extends GetView<ProfilePageController> {
                       } else if (index == 9) {
                         log("index ----");
                         Get.toNamed(RouteName.customProduct);
+                      } else if (index == 6) {
+                        Get.toNamed(RouteName.numberChangeReqUI);
+                      }  else if (index == 7) {
+                        Get.toNamed(RouteName.blockedUser);
                       } /*else if (index == 10) {
                         log("index ----");
                         Get.toNamed(RouteName.passbook);

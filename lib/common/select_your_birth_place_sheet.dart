@@ -29,65 +29,68 @@ class SelectPlaceOfBirth extends StatelessWidget {
       padding: EdgeInsets.only(
         bottom: MediaQuery.of(context).viewInsets.bottom,
       ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GestureDetector(
-            onTap: () => Get.back(),
-            child: Container(
-              padding: const EdgeInsets.all(15.0),
+      child: SingleChildScrollView(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            GestureDetector(
+              onTap: () => Get.back(),
+              child: Container(
+                padding: const EdgeInsets.all(15.0),
+                decoration: BoxDecoration(
+                  border: Border.all(color: appColors.white),
+                  borderRadius: const BorderRadius.all(
+                    Radius.circular(50.0),
+                  ),
+                  color: appColors.white.withOpacity(0.2),
+                ),
+                child: const Icon(
+                  Icons.close,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+            const SizedBox(height: 10),
+            Container(
+              width: context.width,
+              height: context.height / 2,
               decoration: BoxDecoration(
-                border: Border.all(color: appColors.white),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(50.0),
-                ),
-                color: appColors.white.withOpacity(0.2),
+                borderRadius:
+                    const BorderRadius.vertical(top: Radius.circular(50.0)),
+                color: appColors.white,
               ),
-              child: const Icon(
-                Icons.close,
-                color: Colors.white,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  SizedBox(height: 10.h),
+                  Container(
+                    margin: EdgeInsets.symmetric(vertical: 20.h),
+                    child: Assets.images.createAccLocation.svg(
+                      width: 66.w,
+                      height: 50.h,
+                    ),
+                  ),
+                  Material(
+                    color: appColors.transparent,
+                    child: Text(
+                      "Select Place Of Birth".tr,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w700,
+                        color: appColors.darkBlue,
+                        fontSize: 20.0.sp,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 20.sp),
+                  Expanded(
+                      child: AllCitiesList(
+                    onSelect: onSelect,
+                  )),
+                ],
               ),
             ),
-          ),
-          const SizedBox(height: 10),
-          Container(
-            width: context.width,
-            height: context.height / 2,
-            decoration:  BoxDecoration(
-              borderRadius:const BorderRadius.vertical(top: Radius.circular(50.0)),
-              color: appColors.white,
-            ),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                SizedBox(height: 10.h),
-                Container(
-                  margin: EdgeInsets.symmetric(vertical: 20.h),
-                  child: Assets.images.createAccLocation.svg(
-                    width: 66.w,
-                    height: 50.h,
-                  ),
-                ),
-                Material(
-                  color: appColors.transparent,
-                  child: Text(
-                    "Select Place Of Birth".tr,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w700,
-                      color: appColors.darkBlue,
-                      fontSize: 20.0.sp,
-                    ), 
-                  ),
-                ),
-                SizedBox(height: 20.sp),
-                Expanded(
-                    child: AllCitiesList(
-                  onSelect: onSelect,
-                )),
-              ],
-            ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -204,7 +207,7 @@ class _AllCitiesListState extends State<AllCitiesList> {
                 return Center(
                   child: CircularProgressIndicator.adaptive(
                     strokeWidth: 2.sp,
-                    valueColor:  AlwaysStoppedAnimation(appColors.guideColor),
+                    valueColor: AlwaysStoppedAnimation(appColors.guideColor),
                   ),
                 );
               },
