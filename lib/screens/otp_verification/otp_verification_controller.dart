@@ -19,6 +19,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
+
 import '../../common/app_exception.dart';
 import '../../common/colors.dart';
 import '../../common/common_functions.dart';
@@ -317,6 +318,7 @@ class OtpVerificationController extends GetxController {
       await Get.putAsync(() => SharedPreferenceService().init());
       await Get.putAsync(() => NetworkService().init());
       await Get.putAsync(() => FirebaseNetworkService().init());
+
       debugPrint("test_initServices: called");
     }
   }

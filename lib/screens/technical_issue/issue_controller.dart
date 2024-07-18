@@ -195,16 +195,17 @@ class TechnicalIssueController extends GetxController {
       }
     }
     log("selectedImages - $selectedImages");
+    log("selectedImages - $selectedFiles");
     update();
   }
 
   Future<void> uploadImage(imageFile) async {
     var token = await preferenceService.getToken();
+    log("image length - ${imageFile.path}");
 
     var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
 
     var request = http.MultipartRequest('POST', uri);
-
     request.headers.addAll({
       'Authorization': 'Bearer $token',
       'Content-type': 'application/json',
@@ -227,12 +228,19 @@ class TechnicalIssueController extends GetxController {
       print(jsonDecode(value)["data"]);
       uploadedImagesList.add(jsonDecode(value)["data"]["path"]);
       update();
-      log(uploadedImagesList.toString());
+      if (selectedFiles.length == uploadedImagesList.length) {
+        log("222");
+
+        submitIssues();
+      }
+      log("img-- ${uploadedImagesList.toString()}");
       print("valuevaluevaluevaluevaluevaluevalue");
     });
+    log("uploadedImages -- ${uploadedImagesList.toString()}");
 
     if (response.statusCode == 200) {
       print("Image uploaded successfully.");
+
       // if (image.isNotEmpty) {
       //   poojaImageUrl = image;
       // }
@@ -243,61 +251,71 @@ class TechnicalIssueController extends GetxController {
 
 // Function to upload a list of images one by one
   Future<void> uploadImagesListsFun() async {
-    for (var imageFile in selectedFiles) {
-      await uploadImage(imageFile);
-    }
-  }
-
-  submitIssues() async {
-    // isLoading(true);
     if (selected == null) {
       divineSnackBar(data: "Please select type", color: appColors.redColor);
     } else if (descriptionController.text.isEmpty) {
       divineSnackBar(data: "Description is empty", color: appColors.redColor);
     } else {
-      isLoading(true);
+      log("111");
+      for (var imageFile in selectedFiles) {
+        log("111");
 
-      Map<String, dynamic> param = {
-        "description": descriptionController.text,
-        "ticket_type": selected,
-        "images": uploadedImagesList
-      };
+        await uploadImage(imageFile);
+        log("111");
 
-      log("paramssss${param.toString()}");
-      isLoading(true);
+        update();
+      }
+      log("111");
+    }
+    log("uploadedImages -- ${uploadedImagesList.toString()}");
+  }
 
-      try {
-        log(222.toString());
+  submitIssues() async {
+    isLoading(true);
+    log("uploadedImages -- ${uploadedImagesList.toString()}");
+    isLoading(true);
+    log("uploadedImages -- ${uploadedImagesList.toString()}");
 
-        final response = await userRepository.submitTechnicalIssues(param);
-        if (response.success == true) {
-          technicalSupport = response;
-          divineSnackBar(
-              data: response.message.toString(), color: appColors.green);
-          descriptionController.clear();
-          uploadedImagesList.clear();
-          selectedImages.clear();
-          selectedFiles.clear();
-          selected = null;
-          Get.toNamed(RouteName.allTechnicalIssues);
+    Map<String, dynamic> param = {
+      "description": descriptionController.text,
+      "ticket_type": selected,
+      "images": uploadedImagesList
+    };
 
-          isLoading(false);
-        } else {
-          log(3.toString());
+    log("paramssss${param.toString()}");
+    isLoading(true);
 
-          isLoading(false);
-        }
-        log("Data Of submit ==> ${jsonEncode(response.data)}");
-      } catch (error) {
-        log(33.toString());
+    try {
+      log(222.toString());
+
+      final response = await userRepository.submitTechnicalIssues(param);
+      if (response.success == true) {
+        technicalSupport = response;
+        divineSnackBar(
+            data: response.message.toString(), color: appColors.green);
+        descriptionController.clear();
+        uploadedImagesList.clear();
+        selectedImages.clear();
+        selectedFiles.clear();
+        selected = null;
+        Get.toNamed(RouteName.allTechnicalIssues);
 
         isLoading(false);
-        debugPrint("error $error");
-        if (error is AppException) {
-          error.onException();
-        } else {
-          divineSnackBar(data: error.toString(), color: appColors.redColor);
-        }
+      } else {
+        log(3.toString());
+
+        isLoading(false);
+      }
+      log("Data Of submit ==> ${jsonEncode(response.data)}");
+    } catch (error) {
+      log(33.toString());
+
+      isLoading(false);
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     update();
