@@ -196,8 +196,10 @@ Future<bool> acceptOrRejectChat(
   print("chat_reject 2");
   if (response.statusCode == 200) {
     print("chat_reject 3");
+    // divineSnackBar(data: message, color: appColors.redColor);
     return true;
   } else {
+    divineSnackBar(data: response.message ?? "", color: appColors.redColor);
     print("chat_reject 4");
     return false;
   }

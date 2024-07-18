@@ -281,7 +281,7 @@ class DashboardController extends GetxController
     FirebaseMessaging.instance.getInitialMessage().then((v) {
       RemoteMessage? remoteMessage = v;
       if (remoteMessage != null) {
-        Future.delayed(Duration(seconds: 3), () async {
+        Future.delayed(const Duration(seconds: 3), () async {
           if (remoteMessage.data["type"] == "8") {
             final senderId = remoteMessage.data["sender_id"];
             DataList dataList = DataList();
