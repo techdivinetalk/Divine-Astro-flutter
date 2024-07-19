@@ -677,11 +677,6 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                           .value["queue_id"] ??
                                                       0,
                                                 );
-                                                AppFirebaseService()
-                                                    .database
-                                                    .child(
-                                                        "order/${AppFirebaseService().orderData.value["orderId"]}")
-                                                    .update({"status": "1"});
                                               },
                                               // widget.onPressed
                                             )

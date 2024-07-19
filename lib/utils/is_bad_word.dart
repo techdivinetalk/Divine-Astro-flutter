@@ -28,12 +28,12 @@ bool isBadWord(String sentence) {
     }
 
     // Check for 10 digit number
-    if (word.length == 10 && RegExp(r'^[0-9]').hasMatch(word)) {
-      DateTime end = DateTime.now();
-      print(
-          'Time taken to check for 10 digit number: ${end.difference(start).inMilliseconds} ms');
-      return true;
-    }
+    // if (word.length == 10 && RegExp(r'^[0-9]').hasMatch(word)) {
+    //   DateTime end = DateTime.now();
+    //   print(
+    //       'Time taken to check for 10 digit number: ${end.difference(start).inMilliseconds} ms');
+    //   return true;
+    // }
     if (RegExp(r'\d{5,}').hasMatch(sentence)) {
       DateTime end = DateTime.now();
       print(

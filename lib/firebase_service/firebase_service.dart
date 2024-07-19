@@ -19,6 +19,7 @@ import "package:flutter/material.dart";
 import "package:flutter/services.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
+import "package:get/get_rx/get_rx.dart";
 
 import "../common/MiddleWare.dart";
 import "../maintenance_msg.dart";
@@ -41,6 +42,8 @@ RxInt isLive = 1.obs;
 RxInt isQueue = 1.obs;
 RxInt isGifts = 1.obs;
 RxInt isTime = 0.obs;
+RxInt isCustomToken = 0.obs;
+RxInt isNetworkPopup = 0.obs;
 // RxInt isTruecaller = 1.obs;
 RxInt isLiveCall = 1.obs;
 RxInt homePage = 1.obs;
@@ -56,15 +59,17 @@ class AppFirebaseService {
   factory AppFirebaseService() {
     return _instance;
   }
+
   String? astroMsg;
   var watcher = RealTimeWatcher();
   var acceptBottomWatcher = RealTimeWatcher();
   final appSocket = AppSocket();
   var openChatUserId = "";
   var imagePath = "";
+  RxBool isInterNetConnected = true.obs;
   RxMap<String, dynamic> orderData = <String, dynamic>{}.obs;
   final DatabaseReference database = FirebaseDatabase.instance.ref();
-  Map<String, dynamic> payload = {};
+  Map<String, dynamic>? payload = {};
 
   Future<void> writeData(String path, Map<String, dynamic> data) async {
     try {
@@ -98,7 +103,7 @@ class AppFirebaseService {
   // }
   Future<void> userRealTime(String key, dynamic value, String path,
       [bool isRemoved = false]) async {
-    debugPrint("test_userRealTime: value: $value");
+    debugPrint("test_userRealTime: value removed: $value");
     switch (key) {
       case "order_id":
         if (value != null && !isRemoved) {
@@ -208,12 +213,18 @@ class AppFirebaseService {
         isEngagedStatus(value);
         break;
       case "callKundli":
-        Map<String, dynamic>? callKundli =
-            Map<String, dynamic>.from(value as Map<Object?, Object?>);
-        print(callKundli);
-        print("realTimeData['callKundli']");
-        callKunadliUpdated(callKundli);
-        sendBroadcast(BroadcastMessage(name: "callKundli", data: callKundli));
+        if (isRemoved) {
+          callKunadliUpdated({});
+          sendBroadcast(BroadcastMessage(name: "callKundli", data: {}));
+        } else {
+          Map<String, dynamic>? callKundli =
+              Map<String, dynamic>.from(value as Map<Object?, Object?>);
+          print(callKundli);
+          print("realTimeData['callKundli']");
+          callKunadliUpdated(callKundli);
+          sendBroadcast(BroadcastMessage(name: "callKundli", data: callKundli));
+        }
+
         break;
       case "giftCount":
         giftCountUpdate(value["giftCount"]);
@@ -244,6 +255,9 @@ class AppFirebaseService {
       case "totalGift":
         callSwitch(value > 0);
         break;
+      case "isNetworkPopup":
+        isNetworkPopup(value);
+        break;
       case "deliveredMsg":
         // sendBroadcast(BroadcastMessage(
         //     name: "deliveredMsg", data: {'deliveredMsgList': value}));
@@ -270,11 +284,10 @@ class AppFirebaseService {
         Get.put(DashboardController(Get.put(PreDefineRepository())))
             .userProfileImage
             .value = "$baseAmazonUrl/${userData.image!}";
-        Get.put(ProfilePageController(Get.put(UserRepository())))
-            .userProfileImage
-            .value = "$baseAmazonUrl/${userData.image!}";
+        Get.put(ProfilePageController().userProfileImage.value =
+            "$baseAmazonUrl/${userData.image!}");
         Get.put(DashboardController(Get.put(PreDefineRepository()))).update();
-        Get.put(ProfilePageController(Get.put(UserRepository()))).update();
+        Get.put(ProfilePageController()).update();
         break;
       case "totalGift":
         sendBroadcast(
@@ -469,6 +482,9 @@ class AppFirebaseService {
         break;
       case "kundli":
         isKundli(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isCustomToken":
+        isCustomToken(int.parse(dataSnapshot.value.toString()));
         break;
       case "live":
         isLive(int.parse(dataSnapshot.value.toString()));

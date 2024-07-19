@@ -1,18 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
-import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/model/master_data_response.dart';
-import 'package:divine_astrologer/pages/home/home_controller.dart';
-import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:socket_io_client/socket_io_client.dart';
-
 import '../firebase_service/firebase_service.dart';
 
 class AppSocket {

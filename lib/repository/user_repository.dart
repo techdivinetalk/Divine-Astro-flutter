@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -32,6 +33,8 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../common/app_exception.dart';
 import '../common/common_functions.dart';
 import '../di/api_provider.dart';
+import '../model/TechnicalIssuesData.dart';
+import '../model/TechnicalSupport.dart';
 import "../model/blocked_customers_response.dart";
 import '../model/constant_details_model_class.dart';
 import '../model/delete_customer_model_class.dart';
@@ -547,7 +550,6 @@ class UserRepository extends ApiProvider {
     }
   }
 
-
   Future<ChatOrderResponse> getChatOrderDetails() async {
     try {
       Map<String, dynamic> param = new Map();
@@ -593,18 +595,27 @@ class UserRepository extends ApiProvider {
       String version = packageInfo.version;
       String buildNumber = packageInfo.buildNumber;
       DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      print('Running on ${androidInfo.model}'); // e.g., "Pixel 3"
-      print('App Version: $version');
+      AndroidDeviceInfo? androidInfo;
+      IosDeviceInfo iosDeviceInfo;
+      if (Platform.isAndroid) {
+        androidInfo = await deviceInfo.androidInfo;
+        print('Running on ${androidInfo!.model}'); // e.g., "Pixel 3"
+        print('App Version: $version');
+      } else {
+        iosDeviceInfo = await deviceInfo.iosInfo;
+      }
+
       Map<String, dynamic> param = new Map();
-      param["device_brand"] = androidInfo.brand;
-      param["device_model"] = androidInfo.model;
-      param["device_manufacture"] = androidInfo.manufacturer;
-      param["device_sdk_code"] = buildNumber;
-      param["appCurrentVersion"] = version;
-      print('🥹🥹🥹🥹🥹🥹🥹🥹');
-      print(jsonEncode(param).toString());
-      print('🥹🥹🥹🥹🥹🥹🥹🥹');
+      if (Platform.isAndroid) {
+        param["device_brand"] = androidInfo!.brand;
+        param["device_model"] = androidInfo.model;
+        param["device_manufacture"] = androidInfo.manufacturer;
+        param["device_sdk_code"] = buildNumber;
+        param["appCurrentVersion"] = version;
+        print('🥹🥹🥹🥹🥹🥹🥹🥹');
+        print(jsonEncode(param).toString());
+        print('🥹🥹🥹🥹🥹🥹🥹🥹');
+      }
 
       final response = await post(
         constantDetails,
@@ -1063,6 +1074,107 @@ class UserRepository extends ApiProvider {
     }
   }
 
+  ///
+
+  Future<TechnicalSupport> submitTechnicalIssues(
+      Map<String, dynamic> param) async {
+    log(1.toString());
+
+    try {
+      log(11.toString());
+
+      final response = await post(technicalSupport,
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
+      log(111.toString());
+
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+        throw CustomException('Unauthorized access');
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+        throw CustomException('Bad request');
+      }
+
+      if (response.statusCode == HttpStatus.ok ||
+          response.statusCode == HttpStatus.created) {
+        log(1111.toString());
+
+        final responseBody = json.decode(response.body);
+        if (responseBody["status_code"] == HttpStatus.unauthorized) {
+          log(2.toString());
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(responseBody["error"] ?? 'Unauthorized access');
+        } else {
+          log(11111.toString());
+
+          final submitResignation = TechnicalSupport.fromJson(responseBody);
+          return submitResignation;
+        }
+      } else {
+        log(22.toString());
+
+        final errorBody = json.decode(response.body);
+        throw CustomException(
+            errorBody["message"]?.toString() ?? 'Unknown error');
+      }
+    } catch (e, s) {
+      log(222.toString());
+
+      debugPrint("Exception occurred: $e\nStack trace: $s");
+      rethrow;
+    }
+  }
+
+  Future<TechnicalIssuesData> getTechnicalIssuesApi() async {
+    log(1.toString());
+
+    try {
+      log(11.toString());
+
+      final response =
+          await get(getTechnicalSupportlist, headers: await getJsonHeaderURL());
+      log(111.toString());
+
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+        throw CustomException('Unauthorized access');
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+        throw CustomException('Bad request');
+      }
+
+      if (response.statusCode == HttpStatus.ok ||
+          response.statusCode == HttpStatus.created) {
+        log(1111.toString());
+
+        final responseBody = json.decode(response.body);
+        if (responseBody["status_code"] == HttpStatus.unauthorized) {
+          log(2.toString());
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(responseBody["error"] ?? 'Unauthorized access');
+        } else {
+          log(11111.toString());
+          log(responseBody.toString());
+
+          final submitResignation = TechnicalIssuesData.fromJson(responseBody);
+          return submitResignation;
+        }
+      } else {
+        log(22.toString());
+
+        final errorBody = json.decode(response.body);
+        throw CustomException(
+            errorBody["message"]?.toString() ?? 'Unknown error');
+      }
+    } catch (e, s) {
+      log(222.toString());
+
+      debugPrint("Exception occurred: $e\nStack trace: $s");
+      rethrow;
+    }
+  }
+
   Future<PujaProductCategoriesModel> getTagProductAndPooja(
       Map<String, dynamic> param) async {
     try {
@@ -1408,42 +1520,7 @@ class UserRepository extends ApiProvider {
     }
   }
 
-  Future<UpdateSessionTypeResponse> updateSessionTypeApi(
-      Map<String, dynamic> params) async {
-    try {
-      final response = await post(astroOnline,
-          body: jsonEncode(params), headers: await getJsonHeaderURL());
-      if (response.statusCode == HttpStatus.unauthorized) {
-        Utils().handleStatusCodeUnauthorizedServer();
-      } else if (response.statusCode == HttpStatus.badRequest) {
-        Utils().handleStatusCode400(response.body);
-      }
 
-      if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] ==
-            HttpStatus.unauthorized) {
-          Utils().handleStatusCodeUnauthorizedBackend();
-          throw CustomException(json.decode(response.body)["error"]);
-        } else {
-          final updateSessionTypeResponse =
-              updateSessionTypeResponseFromJson(response.body);
-          print(jsonEncode(updateSessionTypeResponse));
-          print("jsonEncode(updateSessionTypeResponse)");
-          if (updateSessionTypeResponse.statusCode == successResponse &&
-              (updateSessionTypeResponse.success ?? false)) {
-            return updateSessionTypeResponse;
-          } else {
-            throw CustomException(updateSessionTypeResponse.message ?? '');
-          }
-        }
-      } else {
-        throw CustomException(json.decode(response.body)["message"]);
-      }
-    } catch (e, s) {
-      debugPrint("we got $e $s");
-      rethrow;
-    }
-  }
 
   Future<UpdateOfferResponse> updateOfferTypeApi(
       Map<String, dynamic> params) async {

@@ -1,13 +1,11 @@
- import 'dart:collection';
+import 'dart:collection';
 import 'dart:convert';
+import 'dart:io';
 import 'dart:math';
-
 import 'package:camera/camera.dart';
-import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
-import 'package:divine_astrologer/di/notification_two.dart';
 import 'package:divine_astrologer/firebase_options.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
@@ -29,7 +27,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:hive_flutter/hive_flutter.dart';
+
 import 'package:in_app_update/in_app_update.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -50,12 +48,10 @@ import 'di/shared_preference_service.dart';
 import 'firebase_service/firebase_service.dart';
 import 'gen/fonts.gen.dart';
 import 'localization/translations.dart';
-import 'maintenance_msg.dart';
 import 'screens/live_page/constant.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 late List<CameraDescription>? cameras;
-
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print('Handling a background message: ${message.messageId}');
@@ -73,6 +69,7 @@ Future<void> main() async {
   AppFirebaseService().masterData("masters");
   cameras = await availableCameras();
   Get.put(AppColors());
+
   // await RemoteConfigService.instance.initFirebaseRemoteConfig();
   final remoteConfig = FirebaseRemoteConfig.instance;
 
@@ -103,6 +100,33 @@ Future<void> main() async {
     });
   }
 
+  Future<void> showFlutterNotification(RemoteMessage message) async {
+    RemoteNotification? notification = message.notification;
+    AndroidNotification? android = message.notification?.android;
+    if (notification != null && android != null && Platform.isAndroid) {
+      flutterLocalNotificationsPlugin.show(
+        notification.hashCode,
+        notification.title,
+        notification.body,
+        payload: jsonEncode(message.data),
+        NotificationDetails(
+          android: AndroidNotificationDetails(
+            channel.id,
+            channel.name,
+            channelDescription: channel.description,
+            icon: '@mipmap/ic_launcher',
+          ),
+        ),
+      );
+    }
+
+    // Constants.isNotificationBadge.value = true;
+    // if(message.data["badge"] != null){
+    //   FlutterAppBadger.updateBadgeCount(int.parse(message.data["badge"]));
+    //   await SharedPreference().setNotificationBadge(true);
+    // }
+  }
+
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("pushNotification1 ${message.notification?.title ?? ""}");
     print('Message data-: dasboardCurrentIndex---${message.data}');
@@ -117,6 +141,7 @@ Future<void> main() async {
       //       message.notification!.body ?? '', payload);
       //   return;
       // }
+      showFlutterNotification(message);
       return;
     }
 
@@ -125,7 +150,8 @@ Future<void> main() async {
     //   return;
     // }
     if (message.data["type"].toString() == "1") {
-      if (MiddleWare.instance.currentPage != RouteName.newChat) {
+      if (MiddleWare.instance.currentPage !=
+          RouteName.chatMessageWithSocketUI) {
         print("messageReceive21 ${MiddleWare.instance.currentPage}");
         showNotification(message.data["title"], message.data["message"],
             message.data['type'], message.data);
@@ -133,16 +159,9 @@ Future<void> main() async {
       HashMap<String, dynamic> updateData = HashMap();
       updateData[message.data["chatId"] ?? "0"] = 1;
       print('Message data-:-users ${message.data}');
-
       print("test_notification: Enable fullscreen incoming call notification");
-
-      // FirebaseDatabase.instance
-      //     .ref("user")
-      //     .child(
-      //         "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
-      //     .update(updateData);
-      // sendBroadcast(
-      //     BroadcastMessage(name: "messageReceive", data: message.data));
+      sendBroadcast(
+          BroadcastMessage(name: "messageReceive", data: message.data));
     } else if (message.data["type"] == "8") {
       print(
           "inside page for realtime notification ${message.data} ${MiddleWare.instance.currentPage}");
@@ -282,36 +301,7 @@ Future<void> initServices() async {
   await Get.putAsync(() => SharedPreferenceService().init());
   await Get.putAsync(() => NetworkService().init());
   await Get.putAsync(() => FirebaseNetworkService().init());
-  await Hive.initFlutter();
 }
-
-// @pragma('vm:entry-point')
-// Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-//   print("Background-Called");
-//   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-//
-//   // FirebaseDatabase.instance.ref().child("pushR").set(DateTime.now());
-//
-//   if (message.data["type"] == "8" &&
-//       MiddleWare.instance.currentPage == RouteName.chatMessageUI &&
-//       chatAssistantCurrentUserId.value.toString() ==
-//           message.data['sender_id'].toString()) {
-//     assistChatNewMsg([...assistChatNewMsg, message.data]);
-//     assistChatNewMsg.refresh();
-//   }
-//
-//   if (message.data['type'] == "1") {
-//     HashMap<String, dynamic> updateData = HashMap();
-//     updateData[message.data["chatId"]] = 1;
-//     FirebaseDatabase.instance
-//         .ref("user")
-//         .child(
-//             "${message.data['sender_id']}/realTime/deliveredMsg/${message.data["userid"]}")
-//         .update(updateData);
-//   }
-//   showNotification(message.data["title"], message.data["message"],
-//       message.data['type'], message.data);
-// }
 
 Future<void> showNotification(String title, String message, String type,
     Map<String, dynamic> data) async {
@@ -380,8 +370,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-
-    AppSocket().socketConnect();
     checkForUpdate();
   }
 

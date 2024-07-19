@@ -1,8 +1,10 @@
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
+import 'package:divine_astrologer/model/categories_list.dart';
 import 'package:divine_astrologer/model/res_login.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
+import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -13,7 +15,7 @@ import 'package:html/parser.dart';
 class EditProfileController extends GetxController {
   final state = EditProfileState();
   final UserRepository repository;
-
+  PreDefineRepository preDefineRepository = PreDefineRepository();
   final pref = Get.find<SharedPreferenceService>();
 
   EditProfileController(this.repository);
@@ -23,8 +25,8 @@ class EditProfileController extends GetxController {
   RxInt tag = (-0).obs;
   RxList<int> tagIndexes = <int>[].obs;
 
-  RxList<SpecialityData> tags = <SpecialityData>[].obs;
-  List<SpecialityData> options = <SpecialityData>[].obs;
+  RxList<CategoriesData> tags = <CategoriesData>[].obs;
+  List<CategoriesData> options = <CategoriesData>[].obs;
 
   UserData? userData;
 
@@ -33,13 +35,13 @@ class EditProfileController extends GetxController {
     super.onInit();
     state.init();
     userData = pref.getUserDetail();
-    if (userData != null) {
-      userData?.astrologerSpeciality?.asMap().entries.forEach((element) {
+     if (userData != null) {
+      userData?.astroCatPivot?.asMap().entries.forEach((element) {
         tagIndexes.add(element.key);
-        tags.add(SpecialityData.fromAstrologerSpeciality(element.value));
+        tags.add(CategoriesData.fromAstrologerSpeciality(element.value));
       });
     }
-    options = reorderList(state.specialityList.data, tags);
+    options = reorderList(state.categoriesList.data, tags);
   }
 
   @override
@@ -47,10 +49,11 @@ class EditProfileController extends GetxController {
     super.dispose();
     state.dispose();
   }
-
   void editProfile() async {
+    print(tags.map((element) => element.id).toList().join(","));
+    print("tags.map((element) => element.id).toList()");
     if (tags.isEmpty) {
-      divineSnackBar(data: "specialityNotEmpty".tr);
+      divineSnackBar(data: "Skills can't be empty".tr);
       return;
     }
     if (formState.currentState!.validate()) {
@@ -59,7 +62,7 @@ class EditProfileController extends GetxController {
         "name": state.nameController.text.trim(),
         "experiance": state.experienceController.text.trim(),
         "description": state.descriptionController.text.trim(),
-        "astrologer_speciality_id":
+        "astrologer_category_id":
             tags.map((element) => element.id).toList().join(",")
       };
       final response = await repository.updateProfile(param);
@@ -80,15 +83,15 @@ class EditProfileController extends GetxController {
     }
   }
 
-  List<SpecialityData> reorderList(
-    List<SpecialityData> originalList,
-    List<SpecialityData> selectedItems,
+  List<CategoriesData> reorderList(
+    List<CategoriesData> originalList,
+    List<CategoriesData> selectedItems,
   ) {
     // Create a copy of the original list
-    List<SpecialityData> resultList = List.from(originalList);
+    List<CategoriesData> resultList = List.from(originalList);
 
     // Remove the selected items from the copy
-    for (SpecialityData item in selectedItems) {
+    for (CategoriesData item in selectedItems) {
       resultList.removeWhere(
         (element) => element.id == item.id,
       );
@@ -105,7 +108,7 @@ class EditProfileState {
   late TextEditingController nameController;
   late TextEditingController experienceController;
   late TextEditingController descriptionController;
-  late SpecialityList specialityList;
+  late CategoriesList categoriesList;
 
   final preferenceService = Get.find<SharedPreferenceService>();
 
@@ -129,7 +132,7 @@ class EditProfileState {
     Document description = parse(userData?.description ?? "");
     descriptionController.text = description.documentElement!.text;
     String specialityString = preferenceService.getSpecialAbility()!;
-    specialityList = specialityListFromJson(specialityString);
+    categoriesList = categoriesDataFromJson(specialityString);
   }
 
   void dispose() {

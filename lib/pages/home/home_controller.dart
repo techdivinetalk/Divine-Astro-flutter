@@ -24,7 +24,11 @@ import 'package:divine_astrologer/model/update_offer_type_response.dart';
 import 'package:divine_astrologer/model/update_session_type_response.dart';
 import 'package:divine_astrologer/model/wallet_deatils_response.dart';
 import 'package:divine_astrologer/pages/home/home_ui.dart';
+import 'package:divine_astrologer/pages/home/widgets/common_info_sheet.dart';
+import 'package:divine_astrologer/pages/home/widgets/technical_popup.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
+import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/product/pooja/widgets/custom_widget/pooja_common_list.dart';
+import 'package:divine_astrologer/screens/dashboard/model/astrologer_nord_data_model.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
@@ -55,7 +59,6 @@ import "../../repository/important_number_repository.dart";
 import '../../repository/notice_repository.dart';
 import '../../repository/performance_repository.dart';
 import '../../repository/user_repository.dart';
-import '../../screens/dashboard/model/astrologer_nord_data_model.dart';
 import 'widgets/can_not_online.dart';
 
 class HomeController extends GetxController with WidgetsBindingObserver {
@@ -178,62 +181,32 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-  bool isInit = false;
 
   @override
   void onInit() async {
     super.onInit();
     debugPrint("test_onInit: call");
-    isInit = true;
+
 
     WidgetsBinding.instance.addObserver(this);
-    getSampleText();
-    getAstrologerTrainingSession();
-    getAstrologerLiveData();
-    getAstrologerStatus();
-     print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
-    Future.delayed(const Duration(seconds: 3), () {
-      print("isLogged");
-      print(" ${preferenceService.getUserDetail()}");
-      if (preferenceService.getUserDetail() != null) {
-        // Check for null user details
-        AppFirebaseService().readData(
-            'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
-      } else {
-        divineSnackBar(data: "User Not Found");
-      }
-      //appFirebaseService.masterData('masters');
-    });
-    broadcastReceiver.start();
-    broadcastReceiver.messages.listen((event) {
-      debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
-      if (event.name == "giftCount") {
-        if (int.parse(event.data!["giftCount"].toString()) > 0) {
-          if (MiddleWare.instance.currentPage != RouteName.chatMessageUI) {
-            showGiftBottomSheet(event.data?["giftCount"], contextDetail,
-                baseUrl: preferenceService.getBaseImageURL());
-          }
-        }
-      }
-    });
     if (preferenceService.getUserDetail() != null) {
       getAllDashboardData();
       userData = preferenceService.getUserDetail()!;
       appbarTitle.value =
-          "${userData.name.toString().capitalizeFirst} (${userData.uniqueNo})";
+      "${userData.name.toString().capitalizeFirst} (${userData.uniqueNo})";
 
       print("${preferenceService.getBaseImageURL()}/${userData.image}");
 
       final String path = "astrologer/${(userData.id ?? 0)}/realTime";
       FirebaseDatabase.instance.ref().child(path).onValue.listen(
-        (event) async {
+            (event) async {
           final DataSnapshot dataSnapshot = event.snapshot;
 
           if (dataSnapshot.exists) {
             if (dataSnapshot.value is Map<dynamic, dynamic>) {
               Map<dynamic, dynamic> map = <dynamic, dynamic>{};
               map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-                  as Map<dynamic, dynamic>;
+              as Map<dynamic, dynamic>;
               print("Home Realtime DB Listener: $map");
 
               // final isCallSwitchRes = map["voiceCallStatus"] ?? 0;
@@ -277,8 +250,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               if (offers != null) {
                 if (homeData != null) {
                   for (int i = 0;
-                      i < homeData!.offers!.orderOffer!.length;
-                      i++) {
+                  i < homeData!.offers!.orderOffer!.length;
+                  i++) {
                     for (int j = 0; j < offers.keys.toList().length; j++) {
                       if ("${homeData!.offers!.orderOffer![i].id}" ==
                           "${offers.keys.toList()[j]}") {
@@ -299,7 +272,37 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         },
       );
     }
+    print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
+    Future.delayed(const Duration(seconds: 3), () {
+      print("isLogged");
+      print(" ${preferenceService.getUserDetail()}");
 
+      if (preferenceService.getUserDetail() != null) {
+        // Check for null user details
+        AppFirebaseService().readData(
+            'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
+      } else {
+        divineSnackBar(data: "User Not Found");
+      }
+      //appFirebaseService.masterData('masters');
+    });
+    broadcastReceiver.start();
+    broadcastReceiver.messages.listen((event) {
+      debugPrint('broadcastReceiver ${event.name} ---- ${event.data}');
+      if (event.name == "giftCount") {
+        if (int.parse(event.data!["giftCount"].toString()) > 0) {
+          if (MiddleWare.instance.currentPage != RouteName.chatMessageUI) {
+            showGiftBottomSheet(event.data?["giftCount"], contextDetail,
+                baseUrl: preferenceService.getBaseImageURL());
+          }
+        }
+      }
+    });
+
+    getSampleText();
+    getAstrologerTrainingSession();
+    getAstrologerLiveData();
+    getAstrologerStatus();
     // cron.schedule(Schedule.parse('*/5 * * * * *'), checkForScheduleUpdate);
   }
 
@@ -323,48 +326,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       print("getConstantDetails is null");
     }
     update();
-  }
-
-  void checkForScheduleUpdate() {
-    DateTime chatChatDateAndTime = DateTime(2050);
-    final String dateStringForChat = selectedChatDate.value.toString();
-    final String timeStringForChat = selectedChatTime.value.toString();
-    if (dateStringForChat.isNotEmpty && timeStringForChat.isNotEmpty) {
-      chatChatDateAndTime = getChatDateAndTime(
-        dateString: dateStringForChat,
-        timeString: timeStringForChat,
-      );
-    } else {}
-
-    DateTime callChatDateAndTime = DateTime(2050);
-    final String dateStringForCall = selectedCallDate.value.toString();
-    final String timeStringForCall = selectedCallTime.value.toString();
-    if (dateStringForCall.isNotEmpty && timeStringForCall.isNotEmpty) {
-      callChatDateAndTime = getChatDateAndTime(
-        dateString: dateStringForCall,
-        timeString: timeStringForCall,
-      );
-    } else {}
-
-    DateTime videoChatDateAndTime = DateTime(2050);
-    final String dateStringForVideoDate = selectedVideoDate.value.toString();
-    final String timeStringForVideoTime = selectedVideoTime.value.toString();
-    if (dateStringForVideoDate.isNotEmpty &&
-        timeStringForVideoTime.isNotEmpty) {
-      videoChatDateAndTime = getChatDateAndTime(
-        dateString: dateStringForVideoDate,
-        timeString: timeStringForVideoTime,
-      );
-    } else {}
-
-    final bool isBeforeChat = chatChatDateAndTime.isBefore(DateTime.now());
-    final bool isBeforeCall = callChatDateAndTime.isBefore(DateTime.now());
-    final bool isVideo = videoChatDateAndTime.isBefore(DateTime.now());
-
-    if (!isBeforeChat || !isBeforeCall || !isVideo) {
-      getDashboardDetail();
-    } else {}
-    return;
   }
 
   DateTime getChatDateAndTime({
@@ -624,14 +585,32 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       var response = await HomePageRepository().getDashboardData(params);
       isFeedbackAvailable.value = response.success ?? false;
       homeData = response.data;
-      print(homeData!.offers!.customOffer!.length);
-      print("homeData!.offers!.orderOffer!.length");
+
       loading = Loading.loaded;
       updateCurrentData();
       shopDataSync.value = true;
 
       showOnceInDay();
       update();
+      if (homeData?.retention < 10) {
+        print("homeData.retention----${homeData?.retention}");
+        Get.bottomSheet(CommonInfoSheet(
+          title: "⚠ Warning Astrologer ⚠".tr,
+          subTitle:
+              "Your user retention is below industry standard. Your retention is less than 10% Your are not eligible for Bonus wallet. Please review and improve strategies promptly to increase User retention rate. Thank you. 🌟"
+                  .tr,
+          onTap: () {
+            Get.back();
+          },
+        ));
+      }
+      if (homeData?.technical_support == null ||
+          homeData?.technical_support == [] ||
+          homeData?.technical_support!.isEmpty) {
+      } else {
+        log("Technical_Support -- ${homeData?.technical_support.toString()}");
+        showTechnicalPopupAlert();
+      }
       //getFeedbackData();
       //log("DashboardData==>${jsonEncode(homeData)}");
     } catch (error) {
@@ -685,6 +664,17 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     print("updateCurrentData Audio ${homeData?.audioCallPrevStatus}");
     print("updateCurrentData Video ${homeData?.videoCallPrevStatus}");
 
+    // socket.updateChatCallSocketEvent(
+    //     //   call: callSwitch.value ? "1" : "0",
+    //     //   chat: chatSwitch.value ? "1" : "0",
+    //     //   video: videoSwitch.value ? "1" : "0",
+    //     // );
+
+    // if (Constants.isTestingMode) {
+    //   // astroOnlineOffline(status: "chat_status=${chatSwitch.value ? "1" : "0"}");
+    //   // astroOnlineOffline(status: "call_status=${callSwitch.value ? "1" : "0"}");
+    // }
+
     if (homeData?.sessionType?.chatSchedualAt != null &&
         homeData?.sessionType?.chatSchedualAt != '') {
       DateTime formattedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
@@ -737,10 +727,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         'Keep-Alive': 'timeout=5, max=1000',
       };
       final response = await dio.get(
-          /*Constants.isTestingMode?"http://15.206.23.215:8081/api/v3/updateAstroStatusV2?unique_no=${userData.uniqueNo}&${status}&android=android":*/
-          "${ApiProvider.astOnlineOffline}${userData.uniqueNo}&$status");
+          "${ApiProvider.astOnlineOffline}${userData.uniqueNo}&$status"); 
       log(response.data.toString());
-
       print("response.data");
       if (response.statusCode == 200) {}
     } catch (e) {
@@ -754,17 +742,16 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   String callMessageColor = "";
 
   getAstrologerStatus() async {
-
-
+    UserData? userData = await pref.getUserDetail();
     try {
-      // Configure the default headers for all requests
       dio.options.headers = {
         'Connection': 'keep-alive',
         'Keep-Alive': 'timeout=5, max=1000',
       };
       final response = await dio.get(
-        "${ApiProvider.getOnlineOfflineStatus}${userData.uniqueNo}",
+        "${ApiProvider.getOnlineOfflineStatus}${userData!.uniqueNo}",
       );
+      print("response.dataresponse.data${response.data}");
 
       AstrologerNordModel astrologerNordModel =
           AstrologerNordModel.fromJson(response.data);
@@ -774,6 +761,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           callMessage = astrologerNordModel.data!.callMsg ?? "";
           chatMessageColor = astrologerNordModel.data!.chatColor ?? "";
           callMessageColor = astrologerNordModel.data!.callColor ?? "";
+          print(
+              "chatMessage----${chatMessage}--chatMessageColor---${chatMessageColor}--callMessage-----${callMessage}--callMessageColor--${callMessageColor}");
           update();
         }
       }
@@ -992,6 +981,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           await userRepository.astroOnlineAPIForLive(
         params: params,
         successCallBack: (message) {
+          getAstrologerStatus();
+
           /// o offline
           /// 1 online
           // socket.updateChatCallSocketEvent(
@@ -1011,7 +1002,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           //   default:
           //     break;
           // }
-          getAstrologerStatus();
           divineSnackBar(data: message);
         },
         failureCallBack: (message) {
@@ -1129,6 +1119,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       } else {
         homeData!.offers!.orderOffer![index].isOn = !value;
       }
+
       update();
     } catch (error) {
       homeData!.offers!.orderOffer![index].isOn = !value;

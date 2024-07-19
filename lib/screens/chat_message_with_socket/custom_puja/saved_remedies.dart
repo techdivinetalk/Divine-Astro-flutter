@@ -136,9 +136,8 @@ class SavedRemediesBottomSheet extends StatelessWidget {
                                         height: 65,
                                         width: 65,
                                         imagePath:
-                                            Get.find<SharedPreferenceService>()
-                                                    .getAmazonUrl()! +
-                                                "/${data.image!}",
+                                            "${Get.find<SharedPreferenceService>()
+                                                    .getAmazonUrl()!}/${data.image!}",
                                         radius: BorderRadius.circular(10),
                                         placeHolder:
                                             "assets/images/default_profiles.svg",

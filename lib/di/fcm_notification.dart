@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'dart:math' as math;
 
 import 'package:divine_astrologer/common/routes.dart';
-import "package:divine_astrologer/di/hive_services.dart";
+
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import "package:divine_astrologer/model/chat_offline_model.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
@@ -128,11 +128,7 @@ void initMessaging() async {
           (NotificationResponse notificationResponse) async {
     final String? payload = notificationResponse.payload;
     print(payload);
-    print("payloadpayloadpayloadpayloadpayloadpayload");
     if (payload != null) {
-      ///// redirect to bottom sheet of accept the request
-      print(notificationResponse.payload);
-      print("notificationResponse.payload");
       final Map<String, dynamic> payloadMap =
           jsonDecode(notificationResponse.payload!);
       debugPrint('notification payload: -- ${payloadMap}');
@@ -144,7 +140,9 @@ void initMessaging() async {
         Get.toNamed(RouteName.newChat);
       } else if (payloadMap["type"] == "2") {
         print(" 1111111111111" + payloadMap.toString());
-        Future<bool> acceptOrRejectChat(
+        acceptOrRejectChat(orderId: int.parse(payloadMap["order_id"]), queueId: int.parse(payloadMap["queue_id"]));
+
+        /*Future<bool> acceptOrRejectChat(
             {required int? orderId, required int? queueId}) async {
 // *accept_or_reject: 1 = accept, 3 = chat reject by timeout
 // * is_timeout: should be 1 when reject by timeout"
@@ -164,10 +162,11 @@ void initMessaging() async {
             print("chat_reject 4");
             return false;
           }
-        }
+        }*/
 
-        Get.toNamed(RouteName.liveDharamScreen);
+        // Get.toNamed(RouteName.liveDharamScreen);
       } else if (payloadMap["type"] == "8") {
+        print("payloadMap -----> ${payloadMap}");
         final senderId = payloadMap["sender_id"];
         DataList dataList = DataList();
         dataList.id = int.parse(senderId);
@@ -318,8 +317,7 @@ Future<void> chatInit(String requestId) async {
 Future<void> showNotificationWithActions(
     {required String title,
     required String message,
-    dynamic payload,
-    HiveServices? hiveServices}) async {
+    dynamic payload}) async {
   debugPrint("enter in showNotificationWithActions --> $message");
   String? jsonEncodePayload;
   if (payload != null) {
@@ -330,18 +328,14 @@ Future<void> showNotificationWithActions(
       final String tableName = "chat_${chatMessage.senderId}";
 
       final databaseMessage = ChatMessagesOffline().obs;
-      final res = await hiveServices?.getData(key: tableName);
-      var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
-      var chatMessages = msg.chatMessages ?? [];
-      chatMessages.add(chatMessage);
-      databaseMessage.value.chatMessages = chatMessages;
+
+
+
+
+
       log('data message ${databaseMessage.value.toOfflineJson()}');
-      await hiveServices?.addData(
-          key: tableName,
-          data: jsonEncode(databaseMessage.value.toOfflineJson()));
-      final newRes = await hiveServices?.getData(key: tableName);
       log("this is my tableName $tableName");
-      log("enter in if condition $newRes");
+
     }
   }
 
