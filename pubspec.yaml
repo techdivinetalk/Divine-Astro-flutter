@@ -27,9 +27,9 @@ dependencies:
   dropdown_button2: ^2.3.7
   emoji_picker_flutter: ^1.6.1
   file_picker: ^6.1.1
-  firebase_core: ^2.15.0
-  firebase_database: ^10.2.3
-  firebase_messaging: ^14.6.5
+  firebase_database: ^11.0.3
+  firebase_core: ^3.2.0
+  firebase_messaging: ^15.0.3
   android_intent_plus: ^2.0.2
   flutter:
     sdk: flutter
@@ -71,8 +71,8 @@ dependencies:
   video_trimmer: ^3.0.1
   voice_message_package: ^2.1.2
   youtube_player_flutter: ^8.1.2
-  firebase_remote_config: ^4.3.13
-  firebase_crashlytics: ^3.3.5
+  firebase_remote_config: ^5.0.3
+  firebase_crashlytics: ^4.0.3
 
   dynamic_height_grid_view: ^0.0.4
   dio: ^5.4.0
@@ -85,7 +85,7 @@ dependencies:
   dio_cache_interceptor: ^3.3.0
   dio_cache_interceptor_hive_store: ^3.2.0
   flutter_cache_manager: ^3.3.1
-  firebase_auth: any
+  firebase_auth: ^5.1.2
   package_info_plus:
 
   flutter_timer_countdown: ^1.0.7
