@@ -181,32 +181,38 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-
   @override
   void onInit() async {
     super.onInit();
     debugPrint("test_onInit: call");
+    FirebaseDatabase.instance
+        .ref()
+        .child("iosTesting")
+        .onValue
+        .listen((event) async {
 
+      print("ios---is---working${event.snapshot.value}");
+    });
 
     WidgetsBinding.instance.addObserver(this);
     if (preferenceService.getUserDetail() != null) {
       getAllDashboardData();
       userData = preferenceService.getUserDetail()!;
       appbarTitle.value =
-      "${userData.name.toString().capitalizeFirst} (${userData.uniqueNo})";
+          "${userData.name.toString().capitalizeFirst} (${userData.uniqueNo})";
 
       print("${preferenceService.getBaseImageURL()}/${userData.image}");
 
       final String path = "astrologer/${(userData.id ?? 0)}/realTime";
       FirebaseDatabase.instance.ref().child(path).onValue.listen(
-            (event) async {
+        (event) async {
           final DataSnapshot dataSnapshot = event.snapshot;
 
           if (dataSnapshot.exists) {
             if (dataSnapshot.value is Map<dynamic, dynamic>) {
               Map<dynamic, dynamic> map = <dynamic, dynamic>{};
               map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-              as Map<dynamic, dynamic>;
+                  as Map<dynamic, dynamic>;
               print("Home Realtime DB Listener: $map");
 
               // final isCallSwitchRes = map["voiceCallStatus"] ?? 0;
@@ -250,8 +256,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               if (offers != null) {
                 if (homeData != null) {
                   for (int i = 0;
-                  i < homeData!.offers!.orderOffer!.length;
-                  i++) {
+                      i < homeData!.offers!.orderOffer!.length;
+                      i++) {
                     for (int j = 0; j < offers.keys.toList().length; j++) {
                       if ("${homeData!.offers!.orderOffer![i].id}" ==
                           "${offers.keys.toList()[j]}") {
@@ -726,8 +732,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         'Connection': 'keep-alive',
         'Keep-Alive': 'timeout=5, max=1000',
       };
-      final response = await dio.get(
-          "${ApiProvider.astOnlineOffline}${userData.uniqueNo}&$status"); 
+      final response = await dio
+          .get("${ApiProvider.astOnlineOffline}${userData.uniqueNo}&$status");
       log(response.data.toString());
       print("response.data");
       if (response.statusCode == 200) {}

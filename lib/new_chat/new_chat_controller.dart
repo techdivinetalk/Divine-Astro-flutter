@@ -175,15 +175,15 @@ class NewChatController extends GetxController
                 .update({
               "type": 3,
             });
-            Future.delayed(
-              const Duration(milliseconds: 200),
-              () {
-                FirebaseDatabase.instance
-                    .ref(
-                        "chatMessages/${AppFirebaseService().orderData.value["orderId"]}/${chatMessage.id}")
-                    .remove();
-              },
-            );
+            // Future.delayed(
+            //   const Duration(milliseconds: 200),
+            //   () {
+            //     FirebaseDatabase.instance
+            //         .ref(
+            //             "chatMessages/${AppFirebaseService().orderData.value["orderId"]}/${chatMessage.id}")
+            //         .remove();
+            //   },
+            // );
           }
         }
       },

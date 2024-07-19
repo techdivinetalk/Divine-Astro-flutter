@@ -59,7 +59,7 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCDS5CxwYMh9O5Ao7bwlYmy4Xu5BUvShKU',
+    apiKey: 'AIzaSyB8qPgVe6EJ2hdsp-FTVBVbP3oOQOK47xs',
     appId: '1:507681862980:ios:3bdbdc4fdc0ae7eae51311',
     messagingSenderId: '507681862980',
     projectId: 'divine-live-f7f79',

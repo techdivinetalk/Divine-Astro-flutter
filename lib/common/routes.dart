@@ -2,6 +2,8 @@ import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
 import 'package:divine_astrologer/model/add_custom_product/add_custom_product_binding.dart';
 import 'package:divine_astrologer/model/add_custom_product/add_custom_product_view.dart';
 import 'package:divine_astrologer/model/custom_product/custom_product__list_binding.dart';
+import 'package:divine_astrologer/new_chat/new_chat.dart';
+import 'package:divine_astrologer/new_chat/new_chat_binding.dart';
 import 'package:divine_astrologer/pages/profile/profile_binding.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_binding.dart';
@@ -173,6 +175,7 @@ class RouteName {
   static const String checkKundli = "/checkKundli";
   static const String rankSystemUI = "/rankSystemUI";
   static const String kundliDetail = "/kundliDetail";
+  static const String newChat = "/newChat";
   static const String discountOffers = "/discountOffers";
   static const String donationUi = "/donationUi";
   static const String donationDetailPage = "/donationDetailPage";
@@ -240,6 +243,7 @@ final Set<String> validRoutes = {
   RouteName.addRemedies,
   RouteName.addCustomProduct,
   RouteName.remediesDetail,
+  RouteName.newChat,
   RouteName.acceptChatRequestScreen,
 };
 
@@ -259,6 +263,11 @@ class Routes {
       page: () => const OtpVerificationUI(),
       name: RouteName.otpVerificationPage,
       binding: OtpVerificationBinding(),
+    ),
+    GetPage(
+      page: () => const NewChatScreen(),
+      name: RouteName.newChat,
+      binding: NewChatBinding(),
     ),
     GetPage(
         page: () => const AcceptChatRequestScreen(),

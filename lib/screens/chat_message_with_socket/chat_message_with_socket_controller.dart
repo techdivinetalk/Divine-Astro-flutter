@@ -316,7 +316,7 @@ class ChatMessageWithSocketController extends GetxController
   void openShowDeck(
       BuildContext context, ChatMessageWithSocketController controller) {
     isCardBotOpen.value = true;
-    showCardChoiceBottomSheet(context, controller);
+    // showCardChoiceBottomSheet(context, controller);
   }
 
   Future<void> openRemedies() async {
@@ -354,7 +354,7 @@ class ChatMessageWithSocketController extends GetxController
     print("controller.customProductData");
     Get.bottomSheet(
       SavedRemediesBottomSheet(
-        controller: controller,
+
         customProductData: controller.customProductData,
       ),
     );
@@ -368,7 +368,7 @@ class ChatMessageWithSocketController extends GetxController
   // }
   Future<void> receiveMessage(DataSnapshot snapshot) async {
     Map<dynamic, dynamic> values = snapshot.value as Map<dynamic, dynamic>;
-    var chatMessage = ChatMessage.fromOfflineJson(values);
+    var chatMessage = ChatMessage.fromOfflineJson({});
     print("chatMessage.title");
     print(chatMessage.message);
     if (!isBadWord(chatMessage.message ?? "")) {
@@ -1181,7 +1181,7 @@ class ChatMessageWithSocketController extends GetxController
           msgSendBy: "1",
           orderId: AppFirebaseService().orderData.value["orderId"],
           userType: "astrologer",
-          memberId: saveRemediesData.data!.id,
+          // memberId: saveRemediesData.data!.id,
           productId: productDetails.id.toString(),
           shopId: productDetails.id.toString(),
           // msgStatus: MsgStatus.sent,
@@ -1218,7 +1218,7 @@ class ChatMessageWithSocketController extends GetxController
             msgSendBy: "1",
             type: 0,
             orderId: AppFirebaseService().orderData.value["orderId"],
-            memberId: productData.data?.id ?? 0,
+            // memberId: productData.data?.id ?? 0,
             productId: productData.data?.productId.toString(),
             shopId: productData.data?.shopId.toString(),
             receiverId: int.parse(
@@ -1259,17 +1259,17 @@ class ChatMessageWithSocketController extends GetxController
     }
     if (!isBadWord(newMessage.message ?? "")) {
       HashMap<dynamic, dynamic> hashMap =
-          HashMap<dynamic, dynamic>.from(newMessage.toOfflineJson());
+          HashMap<dynamic, dynamic>.from(newMessage.toJson());
       if (fireChat.value == 1) {
         print("SendingMessageToFireBase");
         print("${newMessage.message}");
-        await firebaseDatabase
-            .ref()
-            .child(
-                "chatMessages/${AppFirebaseService().orderData.value["orderId"]}/$time")
-            .update(
-              newMessage.chatToJson(),
-            );
+        // await firebaseDatabase
+        //     .ref()
+        //     .child(
+        //         "chatMessages/${AppFirebaseService().orderData.value["orderId"]}/$time")
+        //     .update(
+        //       newMessage.chatToJson(),
+        //     );
       }
     } else {
       if (kDebugMode) {
