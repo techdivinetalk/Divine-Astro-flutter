@@ -279,20 +279,17 @@ class _DashaUIState extends State<DashaUI> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          GestureDetector(
-                            onTap: () {},
-                            child: Padding(
-                              padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
-                              child: Text(
-                                vimshottariData?.planet
-                                        .toString()
-                                        .substring(0, 2) ??
-                                    "",
-                                textAlign: TextAlign.center,
-                                style: AppTextStyle.textStyle16(
-                                  fontColor: appColors.black,
-                                  fontWeight: FontWeight.w500,
-                                ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+                            child: Text(
+                              vimshottariData?.planet
+                                      .toString()
+                                      .substring(0, 2) ??
+                                  "",
+                              textAlign: TextAlign.center,
+                              style: AppTextStyle.textStyle16(
+                                fontColor: appColors.black,
+                                fontWeight: FontWeight.w500,
                               ),
                             ),
                           ),
@@ -301,35 +298,18 @@ class _DashaUIState extends State<DashaUI> {
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    // controller.subDashaLevel.value = 1;
-                                    // if (controller.subDashaPlanetName.value ==
-                                    //     vimshottariData?.planet.toString()) {
-                                    // } else {
-                                    //   controller.subDashaPlanetName.value =
-                                    //       vimshottariData?.planet.toString() ??
-                                    //           '';
-                                    //   controller.planetDataDetail.value.data =
-                                    //       null;
-                                    //   controller.getAntraDataApiList(
-                                    //       vimshottariData?.planet.toString() ??
-                                    //           '');
-                                    // }
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text(
-                                        getDashaFormattedDate(
-                                            vimshottariData?.end),
-                                        style: AppTextStyle.textStyle16(
-                                          fontColor: appColors.black,
-                                          fontWeight: FontWeight.w500,
-                                        ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      getDashaFormattedDate(
+                                          vimshottariData?.end),
+                                      style: AppTextStyle.textStyle16(
+                                        fontColor: appColors.black,
+                                        fontWeight: FontWeight.w500,
                                       ),
-                                    ],
-                                  ),
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -647,17 +627,14 @@ class _DashaUIState extends State<DashaUI> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            GestureDetector(
-                              onTap: () {},
-                              child: Padding(
-                                padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
-                                child: Text(
-                                  "${controller.subDashaPlanetName.value.substring(0, 2).toString()}/${subModel?.planet.toString().substring(0, 2).toString()}",
-                                  textAlign: TextAlign.center,
-                                  style: AppTextStyle.textStyle16(
-                                    fontColor: appColors.black,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+                              child: Text(
+                                "${controller.subDashaPlanetName.value.substring(0, 2).toString()}/${subModel?.planet.toString().substring(0, 2).toString()}",
+                                textAlign: TextAlign.center,
+                                style: AppTextStyle.textStyle16(
+                                  fontColor: appColors.black,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
@@ -666,29 +643,18 @@ class _DashaUIState extends State<DashaUI> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      // controller.subDashaLevel.value = 2;
-                                      // controller.getPratyantarDashaApiList(
-                                      //   vimshottariData?.planet.toString() ??
-                                      //       '',
-                                      //   subModel?.planet.toString() ?? '',
-                                      // );
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          getDashaFormattedDate(
-                                              vimshottariData?.end),
-                                          style: AppTextStyle.textStyle16(
-                                            fontColor: appColors.black,
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        getDashaFormattedDate(
+                                            vimshottariData?.end),
+                                        style: AppTextStyle.textStyle16(
+                                          fontColor: appColors.black,
+                                          fontWeight: FontWeight.w500,
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -1024,17 +990,14 @@ class _DashaUIState extends State<DashaUI> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            GestureDetector(
-                              onTap: () {},
-                              child: Padding(
-                                padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
-                                child: Text(
-                                  "${controller.subDashaPlanetName.value.substring(0, 2).toString()}/${controller.subDashaLevel.value.toString().substring(0, 2).toString()}",
-                                  textAlign: TextAlign.center,
-                                  style: AppTextStyle.textStyle16(
-                                    fontColor: appColors.black,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+                              child: Text(
+                                "${controller.subDashaPlanetName.value.substring(0, 2).toString()}/${controller.subDashaLevel.value.toString().substring(0, 2).toString()}",
+                                textAlign: TextAlign.center,
+                                style: AppTextStyle.textStyle16(
+                                  fontColor: appColors.black,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
@@ -1043,29 +1006,18 @@ class _DashaUIState extends State<DashaUI> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      // controller.subDashaLevel.value = 2;
-                                      // controller.getPratyantarDashaApiList(
-                                      //   vimshottariData?.planet.toString() ??
-                                      //       '',
-                                      //   subModel?.planet.toString() ?? '',
-                                      // );
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          getDashaFormattedDate(
-                                              pratyantarModel?.end),
-                                          style: AppTextStyle.textStyle16(
-                                            fontColor: appColors.black,
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        getDashaFormattedDate(
+                                            pratyantarModel?.end),
+                                        style: AppTextStyle.textStyle16(
+                                          fontColor: appColors.black,
+                                          fontWeight: FontWeight.w500,
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -1416,17 +1368,14 @@ class _DashaUIState extends State<DashaUI> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            GestureDetector(
-                              onTap: () {},
-                              child: Padding(
-                                padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
-                                child: Text(
-                                  "${controller.subDashaPlanetName.value.substring(0, 2).toString()}/${controller.subDashaLevel.value.toString().substring(0, 2).toString()}/${sookshmaData?.planet.toString().substring(0, 2).toString()}",
-                                  textAlign: TextAlign.center,
-                                  style: AppTextStyle.textStyle16(
-                                    fontColor: appColors.black,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+                              child: Text(
+                                "${controller.subDashaPlanetName.value.substring(0, 2).toString()}/${controller.subDashaLevel.value.toString().substring(0, 2).toString()}/${sookshmaData?.planet.toString().substring(0, 2).toString()}",
+                                textAlign: TextAlign.center,
+                                style: AppTextStyle.textStyle16(
+                                  fontColor: appColors.black,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
@@ -1435,29 +1384,18 @@ class _DashaUIState extends State<DashaUI> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      // controller.subDashaLevel.value = 2;
-                                      // controller.getPratyantarDashaApiList(
-                                      //   vimshottariData?.planet.toString() ??
-                                      //       '',
-                                      //   subModel?.planet.toString() ?? '',
-                                      // );
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          getDashaFormattedDate(
-                                              sookshmaData?.end),
-                                          style: AppTextStyle.textStyle16(
-                                            fontColor: appColors.black,
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        getDashaFormattedDate(
+                                            sookshmaData?.end),
+                                        style: AppTextStyle.textStyle16(
+                                          fontColor: appColors.black,
+                                          fontWeight: FontWeight.w500,
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -1879,17 +1817,14 @@ class _DashaUIState extends State<DashaUI> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            GestureDetector(
-                              onTap: () {},
-                              child: Padding(
-                                padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
-                                child: Text(
-                                  "${controller.subDashaPlanetName.value.substring(0, 2).toString()}/${controller.subDashaPlanetName.value.toString().substring(0, 2).toString()}/${pranDashaData?.planet.toString().substring(0, 2).toString()}",
-                                  textAlign: TextAlign.center,
-                                  style: AppTextStyle.textStyle16(
-                                    fontColor: appColors.black,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+                              child: Text(
+                                "${controller.subDashaPlanetName.value.substring(0, 2).toString()}/${controller.subDashaPlanetName.value.toString().substring(0, 2).toString()}/${pranDashaData?.planet.toString().substring(0, 2).toString()}",
+                                textAlign: TextAlign.center,
+                                style: AppTextStyle.textStyle16(
+                                  fontColor: appColors.black,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
@@ -1898,24 +1833,18 @@ class _DashaUIState extends State<DashaUI> {
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      // controller.subDashaLevel.value = 3;
-                                    },
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          getDashaFormattedDate(
-                                              pranDashaData?.end),
-                                          style: AppTextStyle.textStyle16(
-                                            fontColor: appColors.black,
-                                            fontWeight: FontWeight.w500,
-                                          ),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        getDashaFormattedDate(
+                                            pranDashaData?.end),
+                                        style: AppTextStyle.textStyle16(
+                                          fontColor: appColors.black,
+                                          fontWeight: FontWeight.w500,
                                         ),
-                                      ],
-                                    ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -2177,17 +2106,14 @@ class _DashaUIState extends State<DashaUI> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            GestureDetector(
-                              onTap: () {},
-                              child: Padding(
-                                padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
-                                child: Text(
-                                  yoginiData?.dashaName ?? "",
-                                  textAlign: TextAlign.center,
-                                  style: AppTextStyle.textStyle16(
-                                    fontColor: appColors.black,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+                              child: Text(
+                                yoginiData?.dashaName ?? "",
+                                textAlign: TextAlign.center,
+                                style: AppTextStyle.textStyle16(
+                                  fontColor: appColors.black,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),

@@ -24,16 +24,26 @@ class UploadStoryUi extends GetView<UploadStoryController> {
               title: "uploadStory".tr,
               trailingWidget: Padding(
                 padding: const EdgeInsets.only(right: 8),
-                child: InkWell(
-                  onTap: () {
-                    Fluttertoast.showToast(msg: "${'uploadStory'.tr}..");
-                    controller.saveVideo();
-
-                    controller.encodedURLFunction();
-                    String fullEncodeURL = controller.encodedURLFunction();
-                    print("fullEncodeURL: $fullEncodeURL");
-                  },
-                  child: const Text("Upload"),
+                child: Obx(
+                  () => controller.isLoading.value == true
+                      ? const Center(
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                          ),
+                        )
+                      : InkWell(
+                          onTap: () {
+                            Fluttertoast.showToast(
+                                msg: "${'uploadStory'.tr}..");
+                            controller.saveVideo();
+                            controller.update();
+                            controller.encodedURLFunction();
+                            String fullEncodeURL =
+                                controller.encodedURLFunction();
+                            print("fullEncodeURL: $fullEncodeURL");
+                          },
+                          child: const Text("Upload"),
+                        ),
                 ),
               )),
           body: Column(

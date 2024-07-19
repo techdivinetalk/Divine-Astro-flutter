@@ -185,6 +185,15 @@ class _LivePage extends State<LiveDharamScreen>
     );
 
     _startTimer();
+    if(kDebugMode) {
+      _controller.isCamOn = false;
+      zegoController.audioVideo.camera
+          .turnOn(_controller.isCamOn, userID: _controller.userId);
+      _controller.isCamOn = !_controller.isCamOn;
+      zegoController.audioVideo.camera
+          .turnOn(_controller.isCamOn, userID: _controller.userId);
+      _controller.update();
+    }
   }
 
   Future<void> _showOverlay() async {
@@ -3175,8 +3184,9 @@ class _LivePage extends State<LiveDharamScreen>
               message: message, isForSuccess: true, isForFailure: false);
           await _controller.removeFromOrder();
         },
-        failureCallBack: (String message) {
+        failureCallBack: (String message) async {
           _controller.isEndCallLoading.value = false;
+          await _controller.removeFromOrder();
           successAndFailureCallBack(
             message: message,
             isForSuccess: false,

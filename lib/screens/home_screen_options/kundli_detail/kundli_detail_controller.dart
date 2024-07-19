@@ -6,6 +6,7 @@ import 'package:divine_astrologer/repository/kundli_repository.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../../common/colors.dart';
@@ -1142,7 +1143,8 @@ class KundliDetailController extends GetxController {
         pratyantarDataDetail.value = response;
       } else {
         subDashaLevel.value = 1;
-        divineSnackBar(data: "noDataPratyantarDasha".tr);
+        // divineSnackBar(data: "noDataPratyantarDasha".tr);
+        Fluttertoast.showToast(msg: "noDataPratyantarDasha".tr);
       }
       log("pratyantarDataDetail-->${jsonEncode(pratyantarDataDetail.value.data)}");
       update();
