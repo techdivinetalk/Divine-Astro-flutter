@@ -78,26 +78,26 @@ Future<void> main() async {
   remoteConfigHelper.updateGlobalConstantWithFirebaseData();
   await GetStorage.init();
   if (!kDebugMode) {
-    InAppUpdate.checkForUpdate().then((updateInfo) {
-      if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
-        if (updateInfo.immediateUpdateAllowed) {
-          // Perform immediate update
-          InAppUpdate.performImmediateUpdate().then((appUpdateResult) {
-            if (appUpdateResult == AppUpdateResult.success) {
-              Fluttertoast.showToast(msg: "AppUpdated lets Re-start");
-            }
-          });
-        } else if (updateInfo.flexibleUpdateAllowed) {
-          //Perform flexible update
-          InAppUpdate.startFlexibleUpdate().then((appUpdateResult) {
-            if (appUpdateResult == AppUpdateResult.success) {
-              //App Update successful
-              InAppUpdate.completeFlexibleUpdate();
-            }
-          });
-        }
-      }
-    });
+    // InAppUpdate.checkForUpdate().then((updateInfo) {
+    //   if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
+    //     if (updateInfo.immediateUpdateAllowed) {
+    //       // Perform immediate update
+    //       InAppUpdate.startFlexibleUpdate().then((appUpdateResult) {
+    //         if (appUpdateResult == AppUpdateResult.success) {
+    //           Fluttertoast.showToast(msg: "AppUpdated lets Re-start");
+    //         }
+    //       });
+    //     } else if (updateInfo.flexibleUpdateAllowed) {
+    //       //Perform flexible update
+    //       InAppUpdate.startFlexibleUpdate().then((appUpdateResult) {
+    //         if (appUpdateResult == AppUpdateResult.success) {
+    //           //App Update successful
+    //           InAppUpdate.completeFlexibleUpdate();
+    //         }
+    //       });
+    //     }
+    //   }
+    // });
   }
 
   Future<void> showFlutterNotification(RemoteMessage message) async {
