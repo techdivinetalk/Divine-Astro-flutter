@@ -124,11 +124,17 @@ class LiveDharamController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    Future.delayed(const Duration(seconds: 15), () {
+      print("AppFirebaseService().isInterNetConnected");
+      AppFirebaseService().isInterNetConnected.value = !AppFirebaseService().isInterNetConnected.value;
+    });
     ever(
       AppFirebaseService().isInterNetConnected,
       (bool value) {
-        if (!value) {
-          if (isNetworkPopup.value.toString() == "1") {
+        print("AppFirebaseService().isInterNetConnected");
+        if(!value) {
+          print("AppFirebaseService().isInterNetConnected-1");
+          if(isNetworkPopup.value.toString() == "1") {
             showDialog(
                 context: Get.context!,
                 builder: (BuildContext context) {

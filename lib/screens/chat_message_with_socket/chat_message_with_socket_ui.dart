@@ -1238,7 +1238,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
               ),
               const SizedBox(height: 10.0,),
               SizedBox(
-                height: 60,
+                height: 45,
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
@@ -1254,7 +1254,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                         "assets/svg/new_chat_kundli.svg"))),
                             const SizedBox(height: 5.0,),
                             Text(
-                              "Add\nKundli",
+                              "Kundli",
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 fontWeight: FontWeight.w400,
@@ -1277,7 +1277,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         ),
                         const SizedBox(height: 5.0,),
                         Text(
-                          "Divine\nShop",
+                          "Product",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
@@ -1299,7 +1299,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         ),
                         const SizedBox(height: 5.0,),
                         Text(
-                          "Custom\nRemedies",
+                          "Remedy",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
@@ -1322,7 +1322,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         ),
                         const SizedBox(height: 5.0,),
                         Text(
-                          "Tarot\nCard",
+                          "Tarot",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,
@@ -1604,7 +1604,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   ],
                 ),
               ),
-              SizedBox(height: 20.h),
+              SizedBox(height: 10.h),
             ],
           ),
         );

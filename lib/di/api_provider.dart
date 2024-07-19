@@ -25,21 +25,13 @@ class ApiProvider {
   static String baseUrl =
       "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
   static const String getOnlineOfflineStatus =
-      "http://4.240.97.131:8081/api/v3/getAstroStatus?uniqueNo=";
-
-  // kDebugMode
-  // ? "http://172.172.246.49/api/astro/$version/"
-  //     :
-
+      "https://list.divinetalk.live/api/v3/getAstroStatus?uniqueNo=";
   static String imageBaseUrl =
       "${imageUploadBaseUrl.value}/api/astro/$version/";
-
   static const String astOnlineOffline =
       "https://list.divinetalk.live/api/v3/updateAstroStatusV2?unique_no=";
   static const String onlineOfflineStatus =
       "https://list.divinetalk.live/api/v3/getAstrologersData";
-
-  // final String baseUrl = "http://13.235.46.27/admin/$version/";
 
   //Socket Event
   final String deleteSession = "deleteSession";

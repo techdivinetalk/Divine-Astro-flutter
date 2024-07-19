@@ -2195,7 +2195,7 @@ class HomeUI extends GetView<HomeController> {
             ],
           ),
           Text(
-            "(You can Apply offer only one time in one day)",
+            "(You can apply each offer only once per day)",
             style: AppTextStyle.textStyle10(
               fontWeight: FontWeight.w500,
               fontColor: appColors.guideColor,

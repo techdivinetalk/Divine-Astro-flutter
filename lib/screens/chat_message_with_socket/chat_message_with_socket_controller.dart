@@ -666,8 +666,7 @@ class ChatMessageWithSocketController extends GetxController
         print("chatTimeLeft ${showTalkTime.value}");
         chatTimer?.cancel();
         Future.delayed(const Duration(seconds: 4)).then((value) {
-          if (AppFirebaseService().orderData.value["status"] == "3" &&
-              showTalkTime.value == "-1") {
+          if (showTalkTime.value == "-1") {
             DatabaseReference ref = FirebaseDatabase.instance.ref(
                 "order/${AppFirebaseService().orderData.value["orderId"]}");
             ref.update({
