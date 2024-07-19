@@ -33,7 +33,9 @@ class KundliDetailUi extends GetView<KundliDetailController> {
           appBar: AppBar(
             backgroundColor: appColors.white,
             title: Text(
-              controller.appBarName.tr,
+              controller.appBarName == "null" || controller.appBarName == null
+                  ? ""
+                  : controller.appBarName.tr,
               style: TextStyle(
                 fontWeight: FontWeight.w400,
                 fontSize: 16.sp,

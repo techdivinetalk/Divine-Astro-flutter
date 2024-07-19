@@ -10,6 +10,7 @@ import '../../../common/custom_radio_button.dart';
 import '../../../common/custom_widgets.dart';
 import '../../../common/text_field_custom.dart';
 import '../../../gen/assets.gen.dart';
+import '../../../model/cityDataModel.dart';
 import '../../../utils/utils.dart';
 import 'kundli_controller.dart';
 
@@ -21,7 +22,6 @@ class KundliUi extends GetView<KundliController> {
     controller.keyboardVisible = MediaQuery.of(context).viewInsets.bottom != 0;
 
     return Scaffold(
-
       extendBodyBehindAppBar: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -72,7 +72,7 @@ class KundliUi extends GetView<KundliController> {
             decoration: BoxDecoration(
               borderRadius:
                   BorderRadius.vertical(bottom: Radius.circular(48.r)),
-             color: appColors.guideColor,
+              color: appColors.guideColor,
             ),
             child: Column(
               children: [
@@ -331,15 +331,43 @@ class CheckYours extends GetView<KundliController> {
                   prefixIcon: Assets.images.icLocation.svg(),
                   hintText: "birthPlace".tr,
                   onTap: () {
-                    selectPlaceOfBirth(context, (value) {
-                      controller.yourPlaceController.text = value.name;
-                      controller.yourParams.value.lat =
-                          double.parse(value.latitude ?? '');
-                      controller.yourParams.value.long =
-                          double.parse(value.longitude ?? '');
-                      controller.yourParams.value.location = value.name;
-                      Get.back();
-                    });
+                    // if (controller!.yourCountryController.text.isNotEmpty) {
+                    Get.bottomSheet(Padding(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: AllCityListSheet(
+                        onSelect: (value) {
+                          controller.yourPlaceController.text =
+                              value.cityName ?? "";
+                          controller.yourParams.value.lat =
+                              double.parse(value.latitude ?? '');
+                          controller.yourParams.value.long =
+                              double.parse(value.longitude ?? '');
+                          controller.yourParams.value.location = value.cityName;
+                          controller.cityData.add(CityStateData(
+                            cityName: value.cityName,
+                            latitude: value.latitude,
+                            longitude: value.longitude,
+                          ));
+                          Get.back();
+                        },
+                        country: "India",
+                        cityData: controller.cityData,
+                      ),
+                    ));
+                    // } else {
+                    //   divineSnackBar(data: "Please select first your country");
+                    // }
+
+                    // selectPlaceOfBirth(context, (value) {
+                    //   controller.yourPlaceController.text = value.name!;
+                    //   controller.yourParams.value.lat =
+                    //       double.parse(value.latitude ?? '');
+                    //   controller.yourParams.value.long =
+                    //       double.parse(value.longitude ?? '');
+                    //   controller.yourParams.value.location = value.name;
+                    //   Get.back();
+                    // });
                   },
                   readOnly: true,
                 ),

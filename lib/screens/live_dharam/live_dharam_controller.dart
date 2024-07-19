@@ -20,7 +20,6 @@ import "package:divine_astrologer/screens/live_dharam/live_shared_preferences_si
 import "package:divine_astrologer/screens/live_page/constant.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/material.dart";
-
 import "package:get/get.dart";
 import "package:get/get_connect/http/src/status/http_status.dart";
 import "package:http/http.dart" as http;
@@ -128,8 +127,8 @@ class LiveDharamController extends GetxController {
     ever(
       AppFirebaseService().isInterNetConnected,
       (bool value) {
-        if(!value) {
-          if(isNetworkPopup.value.toString() == "1") {
+        if (!value) {
+          if (isNetworkPopup.value.toString() == "1") {
             showDialog(
                 context: Get.context!,
                 builder: (BuildContext context) {

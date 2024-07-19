@@ -710,7 +710,7 @@ class HomeUI extends GetView<HomeController> {
                         Obx(
                           () {
                             return isLive.value == 1
-                                ? controller.isLiveEnable.value
+                                ? controller.isLiveEnable.value == false
                                     ? Container(
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 20.w),
