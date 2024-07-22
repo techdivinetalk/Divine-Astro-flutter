@@ -12,5 +12,8 @@ class Auth {
 
     return user;
   }
+  handleSignOut() async {
+    auth.signOut();
+  }
   logoutUser(){}
 }
