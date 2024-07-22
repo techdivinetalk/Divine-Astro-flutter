@@ -49,7 +49,6 @@ import 'package:divine_astrologer/screens/order_chat_call_feedback/feedback.dart
 import 'package:divine_astrologer/screens/order_chat_call_feedback/feedback_binding.dart';
 import 'package:divine_astrologer/screens/order_feedback/order_feedback_binding.dart';
 import 'package:divine_astrologer/screens/order_feedback/order_feedback_ui.dart';
-import 'package:divine_astrologer/screens/order_history/Widget/suggest_remedies_history.dart';
 import 'package:divine_astrologer/screens/otp_verification/otp_verification_binding.dart';
 import 'package:divine_astrologer/screens/otp_verification/otp_verification_ui.dart';
 import 'package:divine_astrologer/screens/passbook/passbook_binding.dart';
@@ -134,6 +133,8 @@ import '../screens/side_menu/donation_detail/donation_detail_ui.dart';
 import '../screens/side_menu/important_numbers/important_numbers_binding.dart';
 import '../screens/side_menu/important_numbers/important_numbers_ui.dart';
 import '../screens/side_menu/settings/settings_binding.dart';
+import '../screens/side_menu/testing/testing_binding.dart';
+import '../screens/side_menu/testing/testing_ui.dart';
 import '../screens/side_menu/wait_list/wait_list_binding.dart';
 import '../screens/side_menu/wait_list/wait_list_ui.dart';
 import '../screens/splash/splash_binding.dart';
@@ -222,6 +223,7 @@ class RouteName {
   static const String supportAnswerScreen = "/SupportAnswerScreen";
   static const String chatSupportScreen = "/ChatSupportScreen";
   static const String technicalIssues = "/technicalIssues";
+  static const String testingScreen = "/testingScreen";
   static const String allTechnicalIssues = "/AllTechnicalIssues";
   static const String termsAndConditionScreen = "/TermsAndConditionScreen";
   static const String addCustomProduct = "/addCustomProduct";
@@ -276,7 +278,7 @@ class Routes {
         name: RouteName.passbook,
         binding: PassbookBinding()),
     GetPage(
-        page: () =>  AddCustomProductView(),
+        page: () => AddCustomProductView(),
         name: RouteName.addCustomProduct,
         binding: AddCustomProductBinding()),
     GetPage(
@@ -311,6 +313,11 @@ class Routes {
       page: () => TechnicalIssueScreen(),
       name: RouteName.technicalIssues,
       binding: TechnicalBinding(),
+    ),
+    GetPage(
+      page: () => TestingUI(),
+      name: RouteName.testingScreen,
+      binding: TestingBinding(),
     ),
     GetPage(
       page: () => AllTechnicalIssueScreen(),
@@ -417,7 +424,7 @@ class Routes {
         page: () => ChatMessageWithSocketUI(),
         name: RouteName.chatMessageWithSocketUI,
         binding: ChatMessageWithSocketBinding()),
-     GetPage(
+    GetPage(
         page: () => SuggestedRemediesScreen(),
         name: RouteName.suggestRemediesView),
     GetPage(
