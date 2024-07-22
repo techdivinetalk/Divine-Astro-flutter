@@ -403,7 +403,7 @@ class DashboardController extends GetxController
   Future<void> checkForUpdate() async {
     InAppUpdate.checkForUpdate().then((info) {
       if (info.updateAvailability == UpdateAvailability.updateAvailable) {
-        update();
+        playStoreUpdate();
       }
       update();
     }).catchError((e) {
