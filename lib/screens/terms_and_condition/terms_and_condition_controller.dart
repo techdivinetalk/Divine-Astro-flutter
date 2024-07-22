@@ -88,7 +88,8 @@ class TermsAndConditionController extends GetxController {
                 commonConstants.data?.imageUploadBaseUrl ?? "";
           }
           if (commonConstants.data!.token != null) {
-            print("commonConstants.data!.token----->>>>${commonConstants.data!.token}");
+            print(
+                "commonConstants.data!.token----->>>>${commonConstants.data!.token}");
             customTokenWithFirebase(
               token: commonConstants.data!.token,
             );
@@ -146,6 +147,10 @@ class TermsAndConditionController extends GetxController {
     final String uniqueId = await getDeviceId() ?? '';
     final String firebaseNodeUrl = 'astrologer/${data.data?.id}';
     final FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
+    await firebaseDatabase
+        .ref()
+        .child("$firebaseNodeUrl/realTime/uniqueId")
+        .remove();
     //final DatabaseReference ref = firebaseDatabase.ref();
     // final DataSnapshot dataSnapshot = await ref.child(firebaseNodeUrl).get();
     // if (dataSnapshot.exists) {
