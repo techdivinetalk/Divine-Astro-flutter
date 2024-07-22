@@ -413,11 +413,39 @@ class DashboardController extends GetxController
 
   void playStoreUpdate() async {
     await InAppUpdate.startFlexibleUpdate();
-    InAppUpdate.completeFlexibleUpdate().whenComplete(() {
-      divineSnackBar(data:"update success",color: Colors.green);
-    },).catchError((e) {
+    InAppUpdate.completeFlexibleUpdate().whenComplete(
+      () {
+        divineSnackBar(data: "update success", color: Colors.green);
+      },
+    ).catchError((e) {
+      divineSnackBar(
+          data: "Please restart your app to apply the updates.",
+          color: Colors.green);
+      _showUpdateDialog();
       print(e.toString());
     });
+  }
+
+  void _showUpdateDialog() {
+    showDialog(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('App Updated'),
+          content: Text('Please restart your app to apply the updates.'),
+          actions: <Widget>[
+            TextButton(
+              child: Text('Restart'),
+              onPressed: () {
+                // Logic to restart the app
+                Navigator.of(context).pop();
+                // Optionally, close the app programmatically or navigate to the initial screen
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   void compareTimes(int serverTime) {
