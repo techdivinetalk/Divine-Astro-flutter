@@ -121,7 +121,7 @@ class OtpVerificationController extends GetxController {
       enableSubmit.value = false;
       VerifyOtpModel data = await userRepository.verifyOtp(params);
 
-      await astroLogin();
+      isPrivacyPolicy.value == 1 ? Get.offAllNamed(RouteName.termsAndConditionScreen, arguments: {"mobile" : number.value}) : await astroLogin();
       // Get.offAllNamed(RouteName.termsAndConditionScreen, arguments: {"mobile" : number.value});
       enableSubmit.value = true;
     } catch (error) {

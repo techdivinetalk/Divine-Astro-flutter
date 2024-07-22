@@ -40,6 +40,7 @@ RxInt isGifts = 1.obs;
 RxInt isTime = 0.obs;
 RxInt isCustomToken = 0.obs;
 RxInt isNetworkPopup = 0.obs;
+RxInt isPrivacyPolicy = 0.obs;
 // RxInt isTruecaller = 1.obs;
 RxInt isLiveCall = 1.obs;
 RxInt homePage = 1.obs;
@@ -484,6 +485,9 @@ class AppFirebaseService {
         break;
       case "live":
         isLive(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isPrivacyPolicy":
+        isPrivacyPolicy(int.parse(dataSnapshot.value.toString()));
         break;
       case "queue":
         isQueue(int.parse(dataSnapshot.value.toString()));
