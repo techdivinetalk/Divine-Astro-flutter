@@ -38,43 +38,43 @@ class KpUI extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    AnimatedCrossFade(
-                      duration: const Duration(milliseconds: 200),
-                      crossFadeState:
-                          controller.chalitChart.value.data?.svg == null
-                              ? CrossFadeState.showSecond
-                              : CrossFadeState.showFirst,
-                      secondChild: const SizedBox.shrink(),
-                      firstChild: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("bhavChalitChart".tr,
-                              style: AppTextStyle.textStyle20(
-                                  fontWeight: FontWeight.w500,
-                                  fontColor: appColors.textColor)),
-                          SizedBox(height: 15.h),
-                          controller.chalitChart.value.data?.svg != null
-                              ? Center(
-                                  child: CustomImageView(
-                                    // height: 40,
-                                    // width: 40,
-                                    imagePath:
-                                        "${controller.preference.getAmazonUrl()}/${controller.chalitChart.value.data!.svg}",
-                                    radius: BorderRadius.circular(10),
-                                    placeHolder:
-                                        "assets/images/default_profile.png",
-                                    fit: BoxFit.cover,
-                                  ),
-                                )
-
-                              // SvgPicture.string(
-                              //     controller.moonChart.value.data?.svg ?? '',
-                              //   )
-                              : SizedBox(),
-                          SizedBox(height: 15.h),
-                        ],
-                      ),
-                    ),
+                    // AnimatedCrossFade(
+                    //   duration: const Duration(milliseconds: 200),
+                    //   crossFadeState:
+                    //       controller.chalitChart.value.data?.svg == null
+                    //           ? CrossFadeState.showSecond
+                    //           : CrossFadeState.showFirst,
+                    //   secondChild: const SizedBox.shrink(),
+                    //   firstChild: Column(
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: [
+                    //       Text("bhavChalitChart".tr,
+                    //           style: AppTextStyle.textStyle20(
+                    //               fontWeight: FontWeight.w500,
+                    //               fontColor: appColors.textColor)),
+                    //       SizedBox(height: 15.h),
+                    //       controller.chalitChart.value.data?.svg != null
+                    //           ? Center(
+                    //               child: CustomImageView(
+                    //                 // height: 40,
+                    //                 // width: 40,
+                    //                 imagePath:
+                    //                     "${controller.preference.getAmazonUrl()}/${controller.chalitChart.value.data!.svg}",
+                    //                 radius: BorderRadius.circular(10),
+                    //                 placeHolder:
+                    //                     "assets/images/default_profile.png",
+                    //                 fit: BoxFit.cover,
+                    //               ),
+                    //             )
+                    //
+                    //           // SvgPicture.string(
+                    //           //     controller.moonChart.value.data?.svg ?? '',
+                    //           //   )
+                    //           : SizedBox(),
+                    //       SizedBox(height: 15.h),
+                    //     ],
+                    //   ),
+                    // ),
                     Visibility(
                         visible: (controller
                                 .kpTableData.value.data?.planets?.isNotEmpty ??

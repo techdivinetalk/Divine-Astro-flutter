@@ -4,6 +4,8 @@ import 'package:divine_astrologer/model/res_login.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../model/cityDataModel.dart';
+
 enum TabEnum { checkYours, checkOther }
 
 enum Gender { none, male, female }
@@ -21,6 +23,7 @@ class KundliController extends GetxController {
   TextEditingController yourTimeController = TextEditingController();
   TextEditingController yourPlaceController = TextEditingController();
   Rx<Params> yourParams = Params().obs;
+  List<CityStateData> cityData = [];
 
   final otherFormKey = GlobalKey<FormState>();
   Rx<Gender> otherGender = Gender.male.obs;

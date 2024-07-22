@@ -36,6 +36,7 @@ import '../di/api_provider.dart';
 import '../model/TechnicalIssuesData.dart';
 import '../model/TechnicalSupport.dart';
 import "../model/blocked_customers_response.dart";
+import '../model/cityDataModel.dart';
 import '../model/constant_details_model_class.dart';
 import '../model/delete_customer_model_class.dart';
 import '../model/leave/LeaveCancelModel.dart';
@@ -1520,8 +1521,6 @@ class UserRepository extends ApiProvider {
     }
   }
 
-
-
   Future<UpdateOfferResponse> updateOfferTypeApi(
       Map<String, dynamic> params) async {
     try {
@@ -1595,6 +1594,36 @@ class UserRepository extends ApiProvider {
       failureCallBack("Unknown Error Occurred");
     }
     return Future<UpdateSessionTypeResponse>.value(data);
+  }
+
+  Future<NewCityStateModel> cityApi(Map<String, dynamic> param) async {
+    try {
+      final response =
+          await post(getCityAstrology, body: jsonEncode(param).toString());
+      log('login response ==> ${response.body}');
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final cityModel =
+              NewCityStateModel.fromJson(jsonDecode(response.body));
+          if (cityModel.statusCode == successResponse && cityModel.success!) {
+            return cityModel;
+          } else {
+            throw CustomException("Unknown Error");
+          }
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      //progressService.showProgressDialog(false);
+      debugPrint("we got $e $s");
+      rethrow;
+    }
   }
 
   Future<CustomProductModel> customeEcommerceApi(

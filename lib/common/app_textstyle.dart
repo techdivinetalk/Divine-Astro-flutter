@@ -15,18 +15,18 @@ class AppTextStyle {
 
   static TextStyle textStyle10({Color? fontColor, FontWeight? fontWeight}) {
     return TextStyle(
-        fontSize: 10.sp,
-        fontWeight: fontWeight ?? FontWeight.w400,
-        color: fontColor ?? appColors.textColor,
-        );
+      fontSize: 10.sp,
+      fontWeight: fontWeight ?? FontWeight.w400,
+      color: fontColor ?? appColors.textColor,
+    );
   }
 
   static TextStyle textStyle12({Color? fontColor, FontWeight? fontWeight}) {
     return TextStyle(
-        fontSize: 12.sp,
-        fontWeight: fontWeight ?? FontWeight.w400,
-        color: fontColor ?? appColors.textColor,
-        );
+      fontSize: 12.sp,
+      fontWeight: fontWeight ?? FontWeight.w400,
+      color: fontColor ?? appColors.textColor,
+    );
   }
 
   static TextStyle textStyle13({Color? fontColor, FontWeight? fontWeight}) {
@@ -39,10 +39,10 @@ class AppTextStyle {
 
   static TextStyle textStyle14({Color? fontColor, FontWeight? fontWeight}) {
     return TextStyle(
-        fontSize: 14.sp,
-        fontWeight: fontWeight ?? FontWeight.w400,
-        color: fontColor ?? appColors.textColor,
-        );
+      fontSize: 14.sp,
+      fontWeight: fontWeight ?? FontWeight.w400,
+      color: fontColor ?? appColors.textColor,
+    );
   }
 
   static TextStyle textStyle15({Color? fontColor, FontWeight? fontWeight}) {
@@ -53,12 +53,22 @@ class AppTextStyle {
         overflow: TextOverflow.ellipsis);
   }
 
-  static TextStyle textStyle16({Color? fontColor, FontWeight? fontWeight, double? fontSize}) {
+  static TextStyle textStyle16(
+      {Color? fontColor, FontWeight? fontWeight, double? fontSize}) {
     return TextStyle(
-        fontSize: fontSize ?? 16.sp,
-        fontWeight: fontWeight ?? FontWeight.w400,
-        color: fontColor ?? appColors.textColor,
-        );
+      fontSize: fontSize ?? 16.sp,
+      fontWeight: fontWeight ?? FontWeight.w400,
+      color: fontColor ?? appColors.textColor,
+    );
+  }
+
+  static TextStyle textStyle18(
+      {Color? fontColor, FontWeight? fontWeight, double? fontSize}) {
+    return TextStyle(
+      fontSize: fontSize ?? 18.sp,
+      fontWeight: fontWeight ?? FontWeight.w400,
+      color: fontColor ?? appColors.textColor,
+    );
   }
 
   static TextStyle textStyle24({Color? fontColor, FontWeight? fontWeight}) {
@@ -69,12 +79,13 @@ class AppTextStyle {
         overflow: TextOverflow.ellipsis);
   }
 
-  static TextStyle textStyle20({Color? fontColor, FontWeight? fontWeight, double? fontSize}) {
+  static TextStyle textStyle20(
+      {Color? fontColor, FontWeight? fontWeight, double? fontSize}) {
     return TextStyle(
-        fontSize: fontSize ?? 20.sp,
-        fontWeight: fontWeight ?? FontWeight.w400,
-        color: fontColor ?? appColors.textColor,
-        );
+      fontSize: fontSize ?? 20.sp,
+      fontWeight: fontWeight ?? FontWeight.w400,
+      color: fontColor ?? appColors.textColor,
+    );
   }
 
   static TextStyle textStyleStatic20(

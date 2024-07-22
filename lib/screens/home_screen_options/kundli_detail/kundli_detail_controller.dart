@@ -88,6 +88,9 @@ class KundliDetailController extends GetxController {
 
   Map<String, dynamic> params = {};
   RxString subDashaPlanetName = ''.obs;
+  RxString subDashaPlanetName2 = ''.obs;
+  RxString subDashaLevelName3 = ''.obs;
+  RxString subDashaLevelName4 = ''.obs;
 
   Rx<AstroDetailsModel> astroDetails = AstroDetailsModel().obs;
   Rx<KundaliPlanetDataModel> kundaliPlanetDetails =
@@ -1173,7 +1176,7 @@ class KundliDetailController extends GetxController {
         sookshmaDataDetail.value = response;
       } else {
         subDashaLevel.value = 2;
-        divineSnackBar(data: "noDataSookshmaDasha".tr);
+        Fluttertoast.showToast(msg: "noDataSookshmaDasha".tr);
       }
       log("sookshmaDataDetail-->${jsonEncode(sookshmaDataDetail.value.data)}");
       update();

@@ -2,6 +2,7 @@ import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
+
 import 'package:camera/camera.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
@@ -16,7 +17,6 @@ import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
@@ -27,7 +27,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-
 import 'package:in_app_update/in_app_update.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -78,26 +77,26 @@ Future<void> main() async {
   remoteConfigHelper.updateGlobalConstantWithFirebaseData();
   await GetStorage.init();
   if (!kDebugMode) {
-    InAppUpdate.checkForUpdate().then((updateInfo) {
-      if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
-        if (updateInfo.immediateUpdateAllowed) {
-          // Perform immediate update
-          InAppUpdate.performImmediateUpdate().then((appUpdateResult) {
-            if (appUpdateResult == AppUpdateResult.success) {
-              Fluttertoast.showToast(msg: "AppUpdated lets Re-start");
-            }
-          });
-        } else if (updateInfo.flexibleUpdateAllowed) {
-          //Perform flexible update
-          InAppUpdate.startFlexibleUpdate().then((appUpdateResult) {
-            if (appUpdateResult == AppUpdateResult.success) {
-              //App Update successful
-              InAppUpdate.completeFlexibleUpdate();
-            }
-          });
-        }
-      }
-    });
+    // InAppUpdate.checkForUpdate().then((updateInfo) {
+    //   if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
+    //     if (updateInfo.immediateUpdateAllowed) {
+    //       // Perform immediate update
+    //       InAppUpdate.startFlexibleUpdate().then((appUpdateResult) {
+    //         if (appUpdateResult == AppUpdateResult.success) {
+    //           Fluttertoast.showToast(msg: "AppUpdated lets Re-start");
+    //         }
+    //       });
+    //     } else if (updateInfo.flexibleUpdateAllowed) {
+    //       //Perform flexible update
+    //       InAppUpdate.startFlexibleUpdate().then((appUpdateResult) {
+    //         if (appUpdateResult == AppUpdateResult.success) {
+    //           //App Update successful
+    //           InAppUpdate.completeFlexibleUpdate();
+    //         }
+    //       });
+    //     }
+    //   }
+    // });
   }
 
   Future<void> showFlutterNotification(RemoteMessage message) async {

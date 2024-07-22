@@ -8,7 +8,6 @@ import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/model/res_login.dart";
 import "package:divine_astrologer/pages/profile/profile_page_controller.dart";
 import "package:divine_astrologer/repository/pre_defind_repository.dart";
-import "package:divine_astrologer/repository/user_repository.dart";
 import "package:divine_astrologer/screens/dashboard/dashboard_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/live_global_singleton.dart";
 import "package:divine_astrologer/screens/side_menu/settings/settings_controller.dart";
@@ -16,13 +15,10 @@ import "package:divine_astrologer/watcher/real_time_watcher.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:flutter/services.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
-import "package:get/get_rx/get_rx.dart";
 
 import "../common/MiddleWare.dart";
-import "../maintenance_msg.dart";
 import "../screens/live_page/constant.dart";
 
 bool isLogOut = false;
@@ -494,6 +490,11 @@ class AppFirebaseService {
         break;
       case "fire_chat":
         fireChat(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isNetworkPopup":
+        isNetworkPopup(int.parse(dataSnapshot.value.toString()));
+        print(
+            "internet checker -- ${int.parse(dataSnapshot.value.toString())}");
         break;
       // case "tarrotCard":
       //   isRemidies(int.parse(dataSnapshot.value.toString()));
