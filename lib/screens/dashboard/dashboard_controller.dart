@@ -291,13 +291,6 @@ class DashboardController extends GetxController
           } else if(remoteMessage.data["type"] == "2"){
             print("remoteMessage.data ------>${remoteMessage.data}");
             acceptOrRejectChat(orderId: int.parse(remoteMessage.data["order_id"]), queueId: int.parse(remoteMessage.data["queue_id"]));
-          } else if (remoteMessage.data["type"] == "8") {
-            final senderId = remoteMessage.data["sender_id"];
-            DataList dataList = DataList();
-            dataList.id = int.parse(senderId);
-            dataList.name = remoteMessage.data["title"];
-            print("333333" + remoteMessage.data.toString());
-            Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
           }
         });
       }
@@ -312,13 +305,6 @@ class DashboardController extends GetxController
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
       } else if(message.data["type"] == "2"){
         acceptOrRejectChat(orderId: int.parse(message.data["order_id"]), queueId: int.parse(message.data["queue_id"]));
-      } else if (message.data["type"] == "8") {
-        final senderId = message.data["sender_id"];
-        DataList dataList = DataList();
-        dataList.id = int.parse(senderId);
-        dataList.name = message.data["title"];
-        print("333333" + message.data.toString());
-        Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
       }
     });
 
