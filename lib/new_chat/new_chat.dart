@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/new_chat/msg_bubble/audio_view_widget.dart';
@@ -18,8 +16,10 @@ import 'package:emoji_picker_flutter/emoji_picker_flutter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 import 'package:swipe_to/swipe_to.dart';
+import '../common/app_textstyle.dart';
 import 'widget/chat_app_bar_widget.dart';
 import 'widget/chat_bottom_bar_widget.dart';
 import 'widget/end_chat_timer.dart';
@@ -67,6 +67,14 @@ class NewChatScreen extends GetView<NewChatController> {
                             iconOnRightSwipe: Icons.replay,
                             onRightSwipe: (details) {
                               controller.isReplay.value = true;
+                              controller.captureImage(
+                                socketMessageView(
+                                  controller: controller,
+                                  yourMessage: data.msgSendBy == "1",
+                                  chatMessage: data,
+                                  index: index,
+                                )
+                              );
                               controller.replayChatMessage.value = data;
                             },
                             swipeSensitivity: 5,
@@ -139,6 +147,7 @@ class NewChatScreen extends GetView<NewChatController> {
                       ),
                     ),
                   ),
+                  ReplayMessage(controller: controller),
                   const SizedBox(height: 15),
                   VisibleTarrotCard(controller: controller),
                   EndChatTimer(controller: controller),
@@ -331,4 +340,81 @@ class ReactionPopup extends StatelessWidget {
     );
   }
 }
+
+class ReplayMessage extends StatelessWidget {
+
+  final NewChatController? controller;
+
+  ReplayMessage({super.key, this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.bottomRight,
+      child: Column(
+        children: [
+          const SizedBox(height: 10.0,),
+          Text(
+              "You replied yourself",
+              style: AppTextStyle.textStyle12(
+                fontColor: appColors.greyColour,
+              )),
+          const SizedBox(height: 3.0,),
+          Container(
+              margin: const EdgeInsets.only(right: 30.0),
+              height: 160.0,
+              width: 100.0,
+              padding: const EdgeInsets.all(8.0),
+              clipBehavior: Clip.antiAlias,
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.black.withOpacity(0.2),
+                      blurRadius: 3.0,
+                      offset: const Offset(0.0, 3.0)),
+                ],
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(8.r)),
+              ),
+              // constraints: BoxConstraints(
+              //     maxWidth: ScreenUtil().screenWidth * 0.7,
+              //     minWidth: ScreenUtil().screenWidth * 0.27),
+              child: Image.network(
+                "https://cdn-gechc5fehbbwemes.z03.azurefd.net/divineprod/images/chat/July2024/E7BuqJvCMIIBPehwYFlvpRbGhwXxmMKNW62rKJaW.jpg",
+                fit: BoxFit.cover,
+              )),
+        ],
+      ),
+    );
+  }
+
+  /// Text Widget
+  /*
+  Container(
+            margin: const EdgeInsets.only(right: 30.0),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+            clipBehavior: Clip.antiAlias,
+            decoration: BoxDecoration(
+              border: Border.all(
+                  color: const Color(0xffFFEEF0)),
+              color: const Color(0xffFFF9FA),
+              borderRadius: const BorderRadius.only(
+                bottomLeft: Radius.circular(0),
+                topLeft: Radius.circular(10),
+                bottomRight: Radius.circular(10),
+                topRight: Radius.circular(10),
+              ),
+            ),
+            constraints: BoxConstraints(
+                maxWidth: ScreenUtil().screenWidth * 0.78,
+                minWidth: ScreenUtil().screenWidth * 0.27),
+            child: Text(
+                "Replay message",
+                style: AppTextStyle.textStyle14(
+                  fontColor: appColors.black,
+                )),
+          )
+   */
+}
+
 

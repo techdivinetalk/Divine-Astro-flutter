@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
+import 'package:screenshot/screenshot.dart';
 
 import '../di/hive_services.dart';
 import '../di/shared_preference_service.dart';

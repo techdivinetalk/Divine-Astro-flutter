@@ -84,6 +84,7 @@ class ImageViewWidget extends StatelessWidget {
                   ? Stack(children: [
                       GestureDetector(
                         onTap: () {
+                          print("call this ne -------> ${chatDetail.message}");
                           Get.toNamed(RouteName.imagePreviewUi,
                               arguments: chatDetail.message == null
                                   ? "${chatDetail.awsUrl}"
@@ -148,8 +149,7 @@ class ImageViewWidget extends StatelessWidget {
                         ),
                       ),
                     ])
-                  : (chatDetail.downloadedPath == "" ||
-                          chatDetail.downloadedPath == null)
+                  : (chatDetail.downloadedPath == "" || chatDetail.downloadedPath == null)
                       ? Stack(
                           alignment: Alignment.center,
                           children: [

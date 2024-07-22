@@ -41,8 +41,10 @@ import 'package:divine_astrologer/zego_call/zego_service.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:get/get_rx/get_rx.dart';
+import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import "package:http/http.dart" as http;
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -51,6 +53,7 @@ import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:svgaplayer_flutter/svgaplayer_flutter.dart';
 
@@ -71,12 +74,16 @@ class NewChatController extends GetxController
   RxString showTalkTime = "".obs;
   RxString extraTalkTime = "".obs;
   RecorderController? recorderController;
+
   OverlayEntry? overlayEntry;
   List<String> emojiList = ["👍","❤","😀","😢","😯","🙏"];
   RxString tempEmoji = "".obs;
   RxInt tempIndex = 0.obs;
   RxBool isReplay = false.obs;
   Rxn<ChatMessage> replayChatMessage = Rxn<ChatMessage>();
+  ScreenshotController screenshotController = ScreenshotController();
+  RxString replyScreenshot = "".obs;
+  Rxn<Uint8List> replyScreenshotUnit8List = Rxn<Uint8List>();
 
   RxBool isRecording = false.obs;
   RxBool hasMessage = false.obs;
@@ -224,6 +231,13 @@ class NewChatController extends GetxController
 
   saveAndGetMessage({List<ChatMessage>? chatMessages}) async {
     await preference.saveMessages(chatMessages!);
+  }
+
+  captureImage(Widget widget){
+    screenshotController.captureFromWidget(widget).then((capturedImage) {
+      replyScreenshot.value = base64.encode(capturedImage);
+      replyScreenshotUnit8List.value = capturedImage;
+    });
   }
 
   getAllApiDataInChat() async {
@@ -1222,7 +1236,8 @@ class NewChatController extends GetxController
               prodImage: productDetails.prodImage,
               productLongDesc: productDetails.productLongDesc,
               productPriceInr: productDetails.productPriceInr,
-            ));
+            ),
+        );
       }
     } else {
       print("new message added text type");

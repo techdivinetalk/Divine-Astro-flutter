@@ -37,6 +37,7 @@ import "package:image_cropper/image_cropper.dart";
 import "package:image_picker/image_picker.dart";
 import "package:path_provider/path_provider.dart";
 import "package:permission_handler/permission_handler.dart";
+import "package:screenshot/screenshot.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:socket_io_client/socket_io_client.dart";
 import "package:svgaplayer_flutter/svgaplayer_flutter.dart";
@@ -1151,6 +1152,7 @@ class ChatMessageWithSocketController extends GetxController
     late ChatMessage newMessage;
     if (msgType == MsgType.customProduct) {
       newMessage = ChatMessage(
+
         orderId: AppFirebaseService().orderData.value["orderId"],
         id: int.parse(time),
         message: messageText,
@@ -1179,6 +1181,7 @@ class ChatMessageWithSocketController extends GetxController
         final saveRemediesData =
             data?['data']['saveRemediesData'] as SaveRemediesResponse;
         newMessage = ChatMessage(
+
           message: productDetails.poojaName,
           astrologerId: userData?.id,
           // createdAt: DateTime.now().toIso8601String(),
@@ -1215,6 +1218,7 @@ class ChatMessageWithSocketController extends GetxController
         final productDetails = data?['data']['product_detail'] as Products;
         print("going in");
         newMessage = ChatMessage(
+
             message: productDetails.prodName,
             title: productDetails.prodName,
             astrologerId: preferenceService.getUserDetail()!.id,

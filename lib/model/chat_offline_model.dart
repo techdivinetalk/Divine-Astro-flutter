@@ -1,3 +1,5 @@
+import 'package:screenshot/screenshot.dart';
+
 import 'chat_assistant/chat_assistant_chats_response.dart';
 
 class ChatMessagesOffline {

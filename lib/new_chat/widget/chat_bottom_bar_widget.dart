@@ -2,6 +2,7 @@ import 'package:audio_waveforms/audio_waveforms.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/message_view.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/fonts.gen.dart';
@@ -45,43 +46,7 @@ class _ChatBottomBarWidgetState extends State<ChatBottomBarWidget> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Obx(() => widget.controller?.isReplay.value == true ? Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const SizedBox(height: 2.0),
-                      Text(
-                        "Replying to ${AppFirebaseService().orderData.value["customerName"] ?? ''}",
-                        softWrap: true,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          fontWeight: FontWeight.w500,
-                          fontSize: 12.0,
-                        ),
-                      ),
-                      const SizedBox(height: 1.0),
-                      buildReplayMsgWidget(),
-                      const SizedBox(height: 8.0),
-                    ],
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () => widget.controller?.isReplay.value = false,
-                  child: CircleAvatar(
-                    radius: 12.0,
-                    backgroundColor: appColors.bannerTitleColor,
-                    child: Icon(
-                      Icons.close,
-                      size: 20.0,
-                      color: appColors.whiteGuidedColor,
-                    ),
-                  ),
-                ),
-              ],
-            ) : const SizedBox()),
+            Obx(() => widget.controller?.isReplay.value == true ? buildReplayMsgWidget() : const SizedBox()),
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
@@ -206,8 +171,7 @@ class _ChatBottomBarWidgetState extends State<ChatBottomBarWidget> {
                             child: Center(
                               child: Assets.images.icClose.svg(
                                   height: 24,
-                                  color: const Color(0xff0E2339)
-                                      .withOpacity(0.5)),
+                                  color: const Color(0xff0E2339).withOpacity(0.5)),
                             )),
                       )
                     : const SizedBox(width: 5),
@@ -439,32 +403,97 @@ class _ChatBottomBarWidgetState extends State<ChatBottomBarWidget> {
   }
 
   Widget buildReplayMsgWidget() {
-    print("widget.controller?.replayChatMessage.value?.base64Image ---->${widget.controller?.replayChatMessage.value?.base64Image}");
-    Uint8List? bytes;
-    if(widget.controller?.replayChatMessage.value?.msgType == MsgType.image){
-      List<int> list = widget.controller!.replayChatMessage.value!.base64Image!.codeUnits;
-      bytes = Uint8List.fromList(list);
-    }
-    return widget.controller?.replayChatMessage.value?.msgType == MsgType.text ? Text(
-      widget.controller?.replayChatMessage.value?.message ?? "",
-      softWrap: true,
-      maxLines: 1,
-      overflow: TextOverflow.ellipsis,
-      style: TextStyle(
-        fontWeight: FontWeight.w400,
-        fontSize: 10.0,
-        color: appColors.lightGrey,
-      ),
-    ) : widget.controller?.replayChatMessage.value?.msgType == MsgType.image ? Row(
+    print("photo url : ${widget.controller?.replayChatMessage.value?.message}");
+    return Row(
       children: [
-        const Expanded(child: SizedBox()),
-        SizedBox(
-          child: Image.network(
-            "${widget.controller?.replayChatMessage.value?.awsUrl}",
-            fit: BoxFit.cover,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 2.0),
+              Row(
+                children: [
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          widget.controller?.replayChatMessage.value?.msgSendBy == "1" ? "You" : "Replying to ${AppFirebaseService().orderData.value["customerName"] ?? ''}",
+                          softWrap: true,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                            fontSize: 12.0,
+                          ),
+                        ),
+                        const SizedBox(height: 5.0),
+                        widget.controller!.replyScreenshotUnit8List.value != null ? SizedBox(
+                          height: 100.0,
+                          width: MediaQuery.of(context).size.width * 0.5,
+                          child: Image.memory(
+                              widget.controller!.replyScreenshotUnit8List.value!,
+                            fit: BoxFit.cover,
+                          ),
+                        )
+                        : const SizedBox(),
+                        /*Text(
+                          widget.controller?.replayChatMessage.value?.msgType == MsgType.text ? widget.controller?.replayChatMessage.value?.message ?? ""
+                          : widget.controller?.replayChatMessage.value?.msgType == MsgType.image ? "Photo"
+                          : widget.controller?.replayChatMessage.value?.msgType == MsgType.remedies ? "Remedy"
+                          : widget.controller?.replayChatMessage.value?.msgType == MsgType.product ? "Product"
+                          : widget.controller?.replayChatMessage.value?.msgType == MsgType.customProduct ? "Custom Product"
+                          : widget.controller?.replayChatMessage.value?.msgType == MsgType.pooja ? "Pooja"
+                          : widget.controller?.replayChatMessage.value?.msgType == MsgType.kundli ? "Kundli"
+                          : widget.controller?.replayChatMessage.value?.msgType == MsgType.sendgifts || widget.controller?.replayChatMessage.value?.msgType == MsgType.gift ? "Gift"
+                          : "",
+                          softWrap: true,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 10.0,
+                            color: appColors.lightGrey,
+                          ),
+                        )*/
+                      ],
+                    ),
+                  ),
+                  widget.controller?.replayChatMessage.value?.msgType == MsgType.gift || widget.controller?.replayChatMessage.value?.msgType == MsgType.sendgifts || widget.controller?.replayChatMessage.value?.msgType == MsgType.customProduct || widget.controller?.replayChatMessage.value?.msgType == MsgType.image || widget.controller?.replayChatMessage.value?.msgType == MsgType.product || widget.controller?.replayChatMessage.value?.msgType == MsgType.pooja ? ClipRRect(
+                    borderRadius: BorderRadius.circular(5.0),
+                    child: SizedBox(
+                      height: 40.0,
+                      width: 30.0,
+                      child: Image.network(
+                        widget.controller?.replayChatMessage.value?.msgType == MsgType.product ? "${preferenceService.getAmazonUrl()}/${widget.controller?.replayChatMessage.value?.getProduct?.prodImage ?? ""}"
+                        : widget.controller?.replayChatMessage.value?.msgType == MsgType.pooja ? "${preferenceService.getAmazonUrl()}/${widget.controller?.replayChatMessage.value?.getPooja?.poojaImage ?? ""}"
+                        : widget.controller?.replayChatMessage.value?.msgType == MsgType.customProduct ? "${preferenceService.getAmazonUrl()}/${widget.controller?.replayChatMessage.value?.getCustomProduct?.image ?? ""}"
+                        : widget.controller?.replayChatMessage.value?.msgType == MsgType.sendgifts || widget.controller?.replayChatMessage.value?.msgType == MsgType.gift ? widget.controller?.replayChatMessage.value?.awsUrl ?? ""
+                        : widget.controller?.replayChatMessage.value?.message == null ? widget.controller?.replayChatMessage.value?.awsUrl ?? "" : widget.controller?.replayChatMessage.value?.message ?? "",
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ) : const SizedBox(),
+                ],
+              ),
+              const SizedBox(height: 8.0),
+            ],
+          ),
+        ),
+        const SizedBox(width: 10.0,),
+        GestureDetector(
+          onTap: () => widget.controller?.isReplay.value = false,
+          child: CircleAvatar(
+            radius: 12.0,
+            backgroundColor: appColors.bannerTitleColor,
+            child: Icon(
+              Icons.close,
+              size: 20.0,
+              color: appColors.whiteGuidedColor,
+            ),
           ),
         ),
       ],
-    ) : SizedBox();
+    );
   }
 }
