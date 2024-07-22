@@ -22,20 +22,16 @@ class PersonalDetailUi extends StatelessWidget {
                   controller.astroDetails.value.data?.gan == null)
               ? CrossFadeState.showSecond
               : CrossFadeState.showFirst,
-          duration: const Duration(milliseconds: 200),
+          duration: const Duration(milliseconds: 100),
           secondChild: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             mainAxisSize: MainAxisSize.max,
             children: [
-              SizedBox(height: kToolbarHeight.h * 4.5),
-              SizedBox(height: 110.h),
-              const LoadingWidget(),
+              const KundliLoading(),
             ],
           ),
           firstChild: Column(
             children: [
-              SizedBox(height: kToolbarHeight.h * 2.5),
-              SizedBox(height: 40.h),
               detailTile(
                 "name".tr,
                 controller.kundliParams.value.name == null

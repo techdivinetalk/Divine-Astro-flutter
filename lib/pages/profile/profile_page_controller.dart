@@ -9,11 +9,11 @@ import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/constant_details_model_class.dart';
 import 'package:divine_astrologer/model/res_reply_review.dart';
-import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
@@ -31,19 +31,22 @@ import '../../model/res_review_ratings.dart';
 import '../../model/res_user_profile.dart';
 import '../../repository/user_repository.dart';
 import '../../screens/live_page/constant.dart';
+import 'widget/thank_you_report_widget.dart';
 
 class ProfilePageController extends GetxController {
-  final UserRepository userRepository;
-
-  ProfilePageController(this.userRepository);
+  UserRepository userRepository = UserRepository();
 
   UserData? userData;
   GetUserProfile? userProfile;
   RxString userProfileImage = "".obs;
-  ResReviewRatings? ratingsData;
+  Rx<ResReviewRatings> ratingsData = ResReviewRatings().obs;
+
+  RxList<AllReviews> allReviews = <AllReviews>[].obs;
+  List<AllReviews> astrologerProfileReview = <AllReviews>[];
+
   ResReviewReply? reviewReply;
   var preference = Get.find<SharedPreferenceService>();
-
+  ScrollController scrollController = ScrollController();
   // var dashboardController = Get.find<DashboardController>();
   RxBool profileDataSync = false.obs;
   RxBool reviewDataSync = false.obs;
@@ -113,7 +116,7 @@ class ProfilePageController extends GetxController {
           '/languagePopup'),
       ProfileOptionModelClass(
           "faq".tr, Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
-/*      ProfileOptionModelClass(
+      /*      ProfileOptionModelClass(
           "priceChange".tr,
           Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
           '/priceHistoryUI'),*/
@@ -170,6 +173,14 @@ class ProfilePageController extends GetxController {
         '/blockedUser'),
     ProfileOptionModelClass("eCommerce".tr,
         Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja'),
+    ProfileOptionModelClass(
+        "Custom product".tr,
+        SvgPicture.asset("assets/svg/store.svg", width: 30.h, height: 30.h),
+        '/customProduct'),
+    // ProfileOptionModelClass(
+    //     "Passbook".tr,
+    //     SvgPicture.asset("assets/svg/store.svg", width: 30.h, height: 30.h),
+    //     '/passbook'),
     // ProfileOptionModelClass(
     //     "leaveresignation".tr,
     //     Assets.images.resignation.svg(width: 30.h, height: 30.h),
@@ -217,6 +228,7 @@ class ProfilePageController extends GetxController {
   String? baseAmazonUrl;
 
   bool isInit = false;
+
   @override
   void onReady() {
     isInit = false;
@@ -228,6 +240,8 @@ class ProfilePageController extends GetxController {
     super.onInit();
     debugPrint("test_onInit: call");
     isInit = true;
+    // scrollController.l
+
     userData = preference.getUserDetail();
     baseAmazonUrl = preference.getBaseImageURL();
     userProfileImage.value = "$baseAmazonUrl/${userData?.image}";
@@ -271,9 +285,46 @@ class ProfilePageController extends GetxController {
     try {
       Map<String, dynamic> params = {"role_id": userData?.roleId, "page": 1};
       var response = await userRepository.getReviewRatings(params);
-      ratingsData = response;
+      ratingsData.value = response;
+      astrologerProfileReview.addAll(response.data!.allReviews ?? []);
+      allReviews.value = response.data!.allReviews ?? [];
+
       update();
-      log("Data==>${jsonEncode(ratingsData!.data)}");
+      log("Data==>${jsonEncode(ratingsData.value.data)}");
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+    reviewDataSync.value = true;
+  }
+
+  int pageCount = 1;
+
+  getMoreReviewRating() async {
+    pageCount++;
+    try {
+      Map<String, dynamic> params = {
+        "role_id": userData?.roleId,
+        "page": pageCount
+      };
+      var response = await userRepository.getReviewRatings(params);
+
+      if (response.data?.allReviews?.isNotEmpty == true) {
+        ratingsData.value = response;
+        allReviews.addAll(response.data!.allReviews!);
+        // Print reviews for debugging purposes
+        print("ViewAllReview:: $allReviews");
+
+        update();
+        log("Data==>${jsonEncode(ratingsData)}");
+      } else {
+        // No more data to load, show a toast message
+        divineSnackBar(data: "No more reviews to load");
+      }
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {

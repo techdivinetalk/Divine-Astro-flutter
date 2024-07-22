@@ -1236,44 +1236,101 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   // const SizedBox(width: 10),
                 ],
               ),
+              const SizedBox(height: 10.0,),
               SizedBox(
-                height: 40,
+                height: 45,
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     isKundli.value == 1
-                        ? GestureDetector(
-                            onTap: () {
-                              Get.toNamed(RouteName.checkKundli);
-                            },
-                            child: Center(
-                                child: SvgPicture.asset(
-                                    "assets/svg/new_chat_kundli.svg")))
-                        : SizedBox(),
-                    GestureDetector(
-                      onTap: () {
-                        controller.openProduct(controller);
-                      },
-                      child: Center(
-                          child: SvgPicture.asset(
-                              "assets/svg/chat_new_product.svg")),
+                        ? Column(
+                          children: [
+                            GestureDetector(
+                                onTap: () {
+                                  Get.toNamed(RouteName.checkKundli);
+                                },
+                                child: Center(
+                                    child: SvgPicture.asset(
+                                        "assets/svg/new_chat_kundli.svg"))),
+                            const SizedBox(height: 5.0,),
+                            Text(
+                              "Kundli",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 10.sp,
+                                color: appColors.black,
+                              ),
+                            )
+                          ],
+                        )
+                        : const SizedBox(),
+                    Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            controller.openProduct(controller);
+                          },
+                          child: Center(
+                              child: SvgPicture.asset(
+                                  "assets/svg/chat_new_product.svg")),
+                        ),
+                        const SizedBox(height: 5.0,),
+                        Text(
+                          "Product",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 10.sp,
+                            color: appColors.black,
+                          ),
+                        )
+                      ],
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        controller.openCustomShop(controller);
-                      },
-                      child: Center(
-                          child: SvgPicture.asset(
-                              "assets/svg/chat_new_custom_product.svg")),
+                    Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            controller.openCustomShop(controller);
+                          },
+                          child: Center(
+                              child: SvgPicture.asset(
+                                  "assets/svg/chat_new_custom_product.svg")),
+                        ),
+                        const SizedBox(height: 5.0,),
+                        Text(
+                          "Remedy",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 10.sp,
+                            color: appColors.black,
+                          ),
+                        )
+                      ],
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        controller.openShowDeck(context, controller);
-                      },
-                      child: Center(
-                        child: SvgPicture.asset(
-                            "assets/svg/new_chat_tarrot_card.svg"),
-                      ),
+                    Column(
+                      children: [
+                        GestureDetector(
+                          onTap: () {
+                            controller.openShowDeck(context, controller);
+                          },
+                          child: Center(
+                            child: SvgPicture.asset(
+                                "assets/svg/new_chat_tarrot_card.svg"),
+                          ),
+                        ),
+                        const SizedBox(height: 5.0,),
+                        Text(
+                          "Tarot",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 10.sp,
+                            color: appColors.black,
+                          ),
+                        )
+                      ],
                     ),
                     Obx(
                       () {
@@ -1291,38 +1348,52 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
                         return isVOIP.toString() == "0"
                             ? const SizedBox()
-                            : ZegoService().buttonUI(
-                                isVideoCall: false,
-                                targetUserID: orderData["userId"] ?? "",
-                                targetUserName: orderData["customerName"] ?? "",
-                                checkOppositeSidePermGranted: () {
-                                  String name =
-                                      preferenceService.getUserDetail()?.name ??
-                                          "";
-                                  String message =
-                                      "$name wants to start a call, please allow all required permissions";
-                                  controller.messageController.text = message;
-                                  controller.sendMsg();
-                                },
-                                customData: {
-                                  "astr_id": orderData["astroId"] ?? "",
-                                  "astr_name":
-                                      orderData["astrologerName"] ?? "",
-                                  "astr_image": appendedAstrImage,
-                                  "cust_id": orderData["userId"] ?? "",
-                                  "cust_name": orderData["customerName"] ?? "",
-                                  "cust_image": appendedCustImage,
-                                  // "time": "00:20:00",
-                                  "time": controller.showTalkTime.value,
-                                },
-                                isAstrologer: true,
-                                astrologerDisabledCalls: () {
-                                  astroNotAcceptingCallsSnackBar(
-                                    context: context,
+                            : Column(
+                              children: [
+                                ZegoService().buttonUI(
                                     isVideoCall: false,
-                                  );
-                                },
-                              );
+                                    targetUserID: orderData["userId"] ?? "",
+                                    targetUserName: orderData["customerName"] ?? "",
+                                    checkOppositeSidePermGranted: () {
+                                      String name =
+                                          preferenceService.getUserDetail()?.name ??
+                                              "";
+                                      String message =
+                                          "$name wants to start a call, please allow all required permissions";
+                                      controller.messageController.text = message;
+                                      controller.sendMsg();
+                                    },
+                                    customData: {
+                                      "astr_id": orderData["astroId"] ?? "",
+                                      "astr_name":
+                                          orderData["astrologerName"] ?? "",
+                                      "astr_image": appendedAstrImage,
+                                      "cust_id": orderData["userId"] ?? "",
+                                      "cust_name": orderData["customerName"] ?? "",
+                                      "cust_image": appendedCustImage,
+                                      // "time": "00:20:00",
+                                      "time": controller.showTalkTime.value,
+                                    },
+                                    isAstrologer: true,
+                                    astrologerDisabledCalls: () {
+                                      astroNotAcceptingCallsSnackBar(
+                                        context: context,
+                                        isVideoCall: false,
+                                      );
+                                    },
+                                  ),
+                                const SizedBox(height: 5.0,),
+                                Text(
+                                  "Audio",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 10.sp,
+                                    color: appColors.black,
+                                  ),
+                                )
+                              ],
+                            );
                       },
                     ),
                     Obx(
@@ -1339,173 +1410,201 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
 
                         return isVOIP.toString() == "0"
                             ? const SizedBox()
-                            : ZegoService().buttonUI(
-                                isVideoCall: true,
-                                targetUserID: orderData["userId"] ?? "",
-                                targetUserName: orderData["customerName"] ?? "",
-                                checkOppositeSidePermGranted: () {
-                                  String name =
-                                      preferenceService.getUserDetail()?.name ??
-                                          "";
-                                  String message =
-                                      "$name wants to start a call, please allow all required permissions";
-                                  controller.messageController.text = message;
-                                  controller.sendMsg();
-                                },
-                                customData: {
-                                  "astr_id": orderData["astroId"] ?? "",
-                                  "astr_name":
-                                      orderData["astrologerName"] ?? "",
-                                  "astr_image": appendedAstrImage,
-                                  "cust_id": orderData["userId"] ?? "",
-                                  "cust_name": orderData["customerName"] ?? "",
-                                  "cust_image": appendedCustImage,
-                                  // "time": "00:20:00",
-                                  "time": controller.showTalkTime.value,
-                                },
-                                isAstrologer: true,
-                                astrologerDisabledCalls: () {
-                                  astroNotAcceptingCallsSnackBar(
-                                    context: context,
+                            : Column(
+                              children: [
+                                ZegoService().buttonUI(
                                     isVideoCall: true,
-                                  );
-                                },
-                              );
+                                    targetUserID: orderData["userId"] ?? "",
+                                    targetUserName: orderData["customerName"] ?? "",
+                                    checkOppositeSidePermGranted: () {
+                                      String name =
+                                          preferenceService.getUserDetail()?.name ??
+                                              "";
+                                      String message =
+                                          "$name wants to start a call, please allow all required permissions";
+                                      controller.messageController.text = message;
+                                      controller.sendMsg();
+                                    },
+                                    customData: {
+                                      "astr_id": orderData["astroId"] ?? "",
+                                      "astr_name":
+                                          orderData["astrologerName"] ?? "",
+                                      "astr_image": appendedAstrImage,
+                                      "cust_id": orderData["userId"] ?? "",
+                                      "cust_name": orderData["customerName"] ?? "",
+                                      "cust_image": appendedCustImage,
+                                      // "time": "00:20:00",
+                                      "time": controller.showTalkTime.value,
+                                    },
+                                    isAstrologer: true,
+                                    astrologerDisabledCalls: () {
+                                      astroNotAcceptingCallsSnackBar(
+                                        context: context,
+                                        isVideoCall: true,
+                                      );
+                                    },
+                                  ),
+                                const SizedBox(height: 5.0,),
+                                Text(
+                                  "Video",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 10.sp,
+                                    color: appColors.black,
+                                  ),
+                                )
+                              ],
+                            );
                       },
                     ),
                     Obx(() {
                       return isCamera.value == 1
-                          ? GestureDetector(
-                              onTap: () async {
-                                if (await PermissionHelper()
-                                    .askStoragePermission(Permission.photos)) {
-                                  openBottomSheet(Get.context!,
-                                      functionalityWidget: Column(
-                                        children: [
-                                          Text("Choose Options",
-                                              style: TextStyle(
-                                                  color: appColors.textColor,
-                                                  fontFamily:
-                                                      FontFamily.metropolis,
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.w600)),
-                                          Text("Only photos can be shared",
-                                              style: TextStyle(
-                                                  color: appColors.disabledGrey,
-                                                  fontFamily:
-                                                      FontFamily.metropolis,
-                                                  fontSize: 14,
-                                                  fontWeight: FontWeight.w400)),
-                                          SizedBox(height: 20.w),
-                                          Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
+                          ? Column(
+                            children: [
+                              GestureDetector(
+                                  onTap: () async {
+                                    if (await PermissionHelper()
+                                        .askStoragePermission(Permission.photos)) {
+                                      openBottomSheet(Get.context!,
+                                          functionalityWidget: Column(
                                             children: [
-                                              InkWell(
-                                                onTap: () {
-                                                  Get.back();
-                                                  controller.getImage(true);
-                                                },
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          right: 30),
-                                                  child: Column(
-                                                    children: [
-                                                      Icon(Icons.camera_alt,
-                                                          color: appColors
-                                                              .disabledGrey,
-                                                          size: 50),
-                                                      Text("Camera",
-                                                          style: TextStyle(
-                                                              color: appColors
-                                                                  .textColor,
-                                                              fontFamily:
-                                                                  FontFamily
-                                                                      .metropolis,
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400)),
-                                                      Text(
-                                                          "Capture an image\nfrom your camera",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
+                                              Text("Choose Options",
+                                                  style: TextStyle(
+                                                      color: appColors.textColor,
+                                                      fontFamily:
+                                                          FontFamily.metropolis,
+                                                      fontSize: 16,
+                                                      fontWeight: FontWeight.w600)),
+                                              Text("Only photos can be shared",
+                                                  style: TextStyle(
+                                                      color: appColors.disabledGrey,
+                                                      fontFamily:
+                                                          FontFamily.metropolis,
+                                                      fontSize: 14,
+                                                      fontWeight: FontWeight.w400)),
+                                              SizedBox(height: 20.w),
+                                              Row(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  InkWell(
+                                                    onTap: () {
+                                                      Get.back();
+                                                      controller.getImage(true);
+                                                    },
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              right: 30),
+                                                      child: Column(
+                                                        children: [
+                                                          Icon(Icons.camera_alt,
                                                               color: appColors
                                                                   .disabledGrey,
-                                                              fontFamily:
-                                                                  FontFamily
-                                                                      .metropolis,
-                                                              fontSize: 10,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400)),
-                                                    ],
+                                                              size: 50),
+                                                          Text("Camera",
+                                                              style: TextStyle(
+                                                                  color: appColors
+                                                                      .textColor,
+                                                                  fontFamily:
+                                                                      FontFamily
+                                                                          .metropolis,
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400)),
+                                                          Text(
+                                                              "Capture an image\nfrom your camera",
+                                                              textAlign:
+                                                                  TextAlign.center,
+                                                              style: TextStyle(
+                                                                  color: appColors
+                                                                      .disabledGrey,
+                                                                  fontFamily:
+                                                                      FontFamily
+                                                                          .metropolis,
+                                                                  fontSize: 10,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400)),
+                                                        ],
+                                                      ),
+                                                    ),
                                                   ),
-                                                ),
+                                                  InkWell(
+                                                    onTap: () {
+                                                      Get.back();
+                                                      controller.getImage(false);
+                                                    },
+                                                    child: Padding(
+                                                      padding:
+                                                          const EdgeInsets.only(
+                                                              left: 30),
+                                                      child: Column(
+                                                        children: [
+                                                          Icon(Icons.image,
+                                                              color: appColors
+                                                                  .disabledGrey,
+                                                              size: 50),
+                                                          Text("Gallery",
+                                                              style: TextStyle(
+                                                                  color: appColors
+                                                                      .textColor,
+                                                                  fontFamily:
+                                                                      FontFamily
+                                                                          .metropolis,
+                                                                  fontSize: 16,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400)),
+                                                          Text(
+                                                              "Select an image\nfrom your gallery",
+                                                              textAlign:
+                                                                  TextAlign.center,
+                                                              style: TextStyle(
+                                                                  color: appColors
+                                                                      .disabledGrey,
+                                                                  fontFamily:
+                                                                      FontFamily
+                                                                          .metropolis,
+                                                                  fontSize: 10,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400)),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  )
+                                                ],
                                               ),
-                                              InkWell(
-                                                onTap: () {
-                                                  Get.back();
-                                                  controller.getImage(false);
-                                                },
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                          left: 30),
-                                                  child: Column(
-                                                    children: [
-                                                      Icon(Icons.image,
-                                                          color: appColors
-                                                              .disabledGrey,
-                                                          size: 50),
-                                                      Text("Gallery",
-                                                          style: TextStyle(
-                                                              color: appColors
-                                                                  .textColor,
-                                                              fontFamily:
-                                                                  FontFamily
-                                                                      .metropolis,
-                                                              fontSize: 16,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400)),
-                                                      Text(
-                                                          "Select an image\nfrom your gallery",
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          style: TextStyle(
-                                                              color: appColors
-                                                                  .disabledGrey,
-                                                              fontFamily:
-                                                                  FontFamily
-                                                                      .metropolis,
-                                                              fontSize: 10,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400)),
-                                                    ],
-                                                  ),
-                                                ),
-                                              )
                                             ],
-                                          ),
-                                        ],
-                                      ));
-                                }
-                              },
-                              child: Center(
-                                  child: SvgPicture.asset(
-                                      "assets/svg/new_chat_camera.svg")))
+                                          ));
+                                    }
+                                  },
+                                  child: Center(
+                                      child: SvgPicture.asset(
+                                          "assets/svg/new_chat_camera.svg"))),
+                              const SizedBox(height: 5.0,),
+                              Text(
+                                "Media",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 10.sp,
+                                  color: appColors.black,
+                                ),
+                              )
+                            ],
+                          )
                           : SizedBox();
                     }),
                   ],
                 ),
               ),
-              SizedBox(height: 20.h),
+              SizedBox(height: 10.h),
             ],
           ),
         );

@@ -17,7 +17,7 @@ class LanguageBottomSheetWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(ProfilePageController(Get.put(UserRepository())));
+
 
     return Column(
       mainAxisSize: MainAxisSize.min,

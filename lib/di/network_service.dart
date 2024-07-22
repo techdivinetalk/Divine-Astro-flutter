@@ -1,14 +1,15 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:divine_astrologer/common/constants.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:overlay_support/overlay_support.dart';
 
 ///
 /// This class checks if device has internet connectivity or not
 ///
+///
+
 class NetworkService extends GetxService {
   final StreamController<bool?> _onInternetConnected =
       StreamController.broadcast();

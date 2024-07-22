@@ -1,13 +1,14 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'dart:io';
 
-import 'package:aws_s3_upload/aws_s3_upload.dart';
-import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:path/path.dart' as p;
+import 'package:http/http.dart' as http;
 import 'package:video_trimmer/video_trimmer.dart';
 
-import '../../../common/app_exception.dart';
+import '../../../common/common_functions.dart';
+import '../../../di/api_provider.dart';
 import '../../../di/shared_preference_service.dart';
 import '../../../model/res_login.dart';
 import '../../../repository/user_repository.dart';
@@ -18,7 +19,7 @@ class UploadStoryController extends GetxController {
 
   double startValue = 0.0;
   double endValue = 0.0;
-
+  RxBool isLoading = false.obs;
   RxBool isPlaying = false.obs;
   RxBool progressVisibility = false.obs;
   UserData? userData;
@@ -45,33 +46,85 @@ class UploadStoryController extends GetxController {
       endValue: endValue,
       onSave: (outputPath) async {
         progressVisibility.value = false;
-
-        uploadImageToS3Bucket(File(outputPath!),
-            duration: ((endValue - startValue) / 1000).toString());
+        await uploadImage(File(outputPath!));
+        // uploadImageToS3Bucket(File(outputPath!),
+        //     duration: ((endValue - startValue) / 1000).toString());
       },
     );
   }
 
   uploadImageToS3Bucket(File? selectedFile, {String? duration}) async {
-    var commonConstants = await userRepository.constantDetailsData();
-    var dataString = commonConstants.data!.awsCredentails.baseurl?.split(".");
-    var extension = p.extension(selectedFile!.path);
+    log("1");
+    // var commonConstants = await userRepository.constantDetailsData();
+    log("2");
+    // var dataString = commonConstants.data!.awsCredentails.baseurl?.split(".");
+    log("3");
+    // var extension = p.extension(selectedFile!.path);
+    log("4");
+    // var response = await AwsS3.uploadFile(
+    //   accessKey: commonConstants.data!.awsCredentails.accesskey!,
+    //   secretKey: commonConstants.data!.awsCredentails.secretKey!,
+    //   file: selectedFile,
+    //   bucket: dataString![0].split("//")[1],
+    //   destDir: 'astrologer/${userData?.id}',
+    //   filename: '${DateTime.now().millisecondsSinceEpoch.toString()}$extension',
+    //   region: dataString[2],
+    // );
+    // if (response != null) {
+    //   debugPrint("Uploaded Url : $response");
+    //   // await uploadStory(response, duration: duration);
+    //   CustomException("Video uploaded successfully");
+    // } else {
+    //   CustomException("Something went wrong");
+    // }
+  }
 
-    var response = await AwsS3.uploadFile(
-      accessKey: commonConstants.data!.awsCredentails.accesskey!,
-      secretKey: commonConstants.data!.awsCredentails.secretKey!,
-      file: selectedFile,
-      bucket: dataString![0].split("//")[1],
-      destDir: 'astrologer/${userData?.id}',
-      filename: '${DateTime.now().millisecondsSinceEpoch.toString()}$extension',
-      region: dataString[2],
-    );
-    if (response != null) {
-      debugPrint("Uploaded Url : $response");
-      await uploadStory(response, duration: duration);
-      CustomException("Video uploaded successfully");
+  uploadImage(imageFile) async {
+    var uploadedStory;
+    isLoading(true);
+    var token = await preferenceService.getToken();
+    log("image length - ${imageFile.path}");
+
+    var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+
+    var request = http.MultipartRequest('POST', uri);
+    request.headers.addAll({
+      'Authorization': 'Bearer $token',
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    });
+
+    // Attach the image file to the request
+    request.files.add(await http.MultipartFile.fromPath(
+      'image',
+      imageFile.path,
+    ));
+    request.fields.addAll({"module_name": "astrologer_story"});
+
+    var response = await request.send();
+
+    // Listen for the response
+    log(response.toString());
+    // Listen for the response
+    response.stream.transform(utf8.decoder).listen((value) {
+      if (value.isEmpty) {
+        isLoading(false);
+      }
+      print(value); // Handle the response from the server
+      uploadedStory = jsonDecode(value)["data"]["path"];
+      update();
+      print(
+          "Image uploaded successfully. --  - ${jsonDecode(value)["data"]["path"].toString()}");
+      uploadStory(jsonDecode(value)["data"]["path"].toString());
+      print(
+          "valuevaluevaluevaluevaluevaluevalue"); // Handle the response from the server
+    });
+
+    if (response.statusCode == 200) {
+      print("Image uploaded successfully.");
+      // uploadStory(uploadedStory.toString());
     } else {
-      CustomException("Something went wrong");
+      print("Failed to upload image.");
     }
   }
 
@@ -94,22 +147,26 @@ class UploadStoryController extends GetxController {
   Future<void> uploadStory(String url, {String? duration}) async {
     String fullEncodeURL = encodedURLFunction();
     print("fullEncodeURL: $fullEncodeURL");
-    //
-    // try {
-    //   Map<String, dynamic> param = {
-    //     "media_url": url,
-    //     "astrologer_id": userData?.id,
-    //     "duration": duration,
-    //     "link": fullEncodeURL,
-    //   };
-    //   final response = await userRepository.uploadAstroStory(param);
-    //   if (response.statusCode == 200 && response.success == true) {
-    //     Get.back();
-    //     divineSnackBar(data: "Story Uploaded Successfully");
-    //   }
-    // } catch (err) {
-    //   Fluttertoast.showToast(msg: "Something went wrong");
-    //   log(err.toString());
-    // }
+
+    try {
+      Map<String, dynamic> param = {
+        "media_url": url,
+        "astrologer_id": userData?.id,
+        "duration": duration,
+        "link": fullEncodeURL,
+      };
+      final response = await userRepository.uploadAstroStory(param);
+      if (response.statusCode == 200 && response.success == true) {
+        Get.back();
+        isLoading(false);
+
+        divineSnackBar(data: "Story Uploaded Successfully");
+      }
+    } catch (err) {
+      isLoading(false);
+
+      Fluttertoast.showToast(msg: "Something went wrong");
+      log(err.toString());
+    }
   }
 }

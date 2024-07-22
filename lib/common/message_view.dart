@@ -407,9 +407,11 @@ class MessageView extends StatelessWidget {
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                   border: Border.all(
-                      color:
-                          yourMessage ? const Color(0xffFFEEF0) : const Color(0xffDCDCDC)),
-                  color: yourMessage ? const Color(0xffFFF9FA) : appColors.white,
+                      color: yourMessage
+                          ? const Color(0xffFFEEF0)
+                          : const Color(0xffDCDCDC)),
+                  color:
+                      yourMessage ? const Color(0xffFFF9FA) : appColors.white,
                   borderRadius: BorderRadius.only(
                     bottomLeft: const Radius.circular(10),
                     topLeft: Radius.circular(yourMessage ? 10 : 0),
@@ -457,9 +459,8 @@ class MessageView extends StatelessWidget {
                           child: CustomButton(
                               color: appColors.guideColor,
                               onTap: () {
-                                print(AppFirebaseService().orderData["orderId"]);
-                                print(
-                                    "objectobjectobjectobjectobject${AppFirebaseService().orderData["dob"]}");
+                                print(AppFirebaseService().orderData["lat"]);
+                                log("fjdfkdjfkdjkdjkfjd");
                                 // Parse the date string to DateTime
                                 DateTime date = DateFormat('d MMMM yyyy').parse(
                                     AppFirebaseService().orderData["dob"]);
@@ -470,16 +471,15 @@ class MessageView extends StatelessWidget {
 
                                 final dateData = DateFormat("dd/MM/yyyy")
                                     .parse(formattedDate);
-
                                 DateTime timeData = DateFormat("h:mm a").parse(
                                     AppFirebaseService()
                                         .orderData["timeOfBirth"]);
                                 Params params = Params(
                                   name: AppFirebaseService()
                                       .orderData["customerName"],
-                                  day: parseDate(dateData.toString()).day,
-                                  year: parseDate(dateData.toString()).year,
-                                  month: parseDate(dateData.toString()).month,
+                                  day: dateData.day,
+                                  year: dateData.year,
+                                  month: dateData.month,
                                   hour: timeData.hour,
                                   min: timeData.minute,
                                   lat: double.parse(AppFirebaseService()
@@ -490,6 +490,9 @@ class MessageView extends StatelessWidget {
                                   location: AppFirebaseService()
                                       .orderData["placeOfBirth"],
                                 );
+                                log(params.day.toString());
+                                log(params.month.toString());
+                                log(params.year.toString());
                                 Get.toNamed(RouteName.kundliDetail, arguments: {
                                   "kundli_id": 0,
                                   "from_kundli": false,
@@ -988,14 +991,14 @@ class MessageView extends StatelessWidget {
                                   ? Image.network(
                                       "${chatDetail.message}",
                                       fit: BoxFit.cover,
-                                height: 200.h,
-                                width: 200.h,
+                                      height: 200.h,
+                                      width: 200.h,
                                     )
                                   : Image.file(
                                       File(chatDetail.downloadedPath ?? ""),
                                       fit: BoxFit.cover,
-                                height: 200.h,
-                                width: 200.h,
+                                      height: 200.h,
+                                      width: 200.h,
                                     ),
                             ),
                           ],
@@ -1144,8 +1147,7 @@ class MessageView extends StatelessWidget {
         width: 165,
         height: 220,
         decoration: BoxDecoration(
-          border: Border.all(
-              color:const Color(0xffDCDCDC)),
+          border: Border.all(color: const Color(0xffDCDCDC)),
           color: appColors.white,
           borderRadius: const BorderRadius.only(
             bottomLeft: Radius.circular(10),

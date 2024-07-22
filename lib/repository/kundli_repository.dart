@@ -18,6 +18,7 @@ import '../model/internal/planet_detail_model.dart';
 import '../model/internal/pran_dasha_model.dart';
 import '../model/internal/pratyantar_dasha_model.dart';
 import '../model/internal/sookshma_dasha_model.dart';
+import '../model/kundli/KundaliPlanetDataModel.dart';
 
 class KundliRepository extends ApiProvider {
   //done
@@ -58,6 +59,26 @@ class KundliRepository extends ApiProvider {
       if (response.statusCode == 200) {
         final birthDetails = birthDetailsModelFromJson(response.body);
         return birthDetails;
+      } else {
+        throw CustomException(
+            json.decode(response.body)["error"][0]['message']);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<KundaliPlanetDataModel> getPlanetDetails(
+      Map<String, dynamic> params) async {
+    try {
+      final response = await post(getPlanets,
+          // endPoint: astrologyBaseUrl,
+          // headers: getAstrologyHeader(),
+          body: jsonEncode(params));
+      if (response.statusCode == 200) {
+        final planetDetails = kundaliPlanetsModelFromJson(response.body);
+        return planetDetails;
       } else {
         throw CustomException(
             json.decode(response.body)["error"][0]['message']);

@@ -81,6 +81,7 @@ class ApiProvider {
   final String getOrderHistoryUrl = "getOrderHistory";
   final String reviewReplyUrl = "reviewReply";
   final String astroNoticeBoard = "astroNoticeBoard";
+  final String getAstrologerCategory = "getAstrologerCategory";
   final String getAstroAllNotice = "getAstroAllNotice";
   final String getSpecialityList = "getSpecialityList";
   final String addNoticeToAstrologer = "addNoticeToAstrologer";
@@ -138,10 +139,13 @@ class ApiProvider {
   final String getKpDetails = "getKpDetails";
   final String getPlanetlDetails = "getPlanetlDetails/";
   final String getDasha = "getDasha";
+  final String getPlanets = "getPlanets";
   final String getPratyantarDasha = "getPratyantarDasha/";
   final String getSookshmaDasha = "getSookshmaDasha/";
   final String getPranDasha = "getPranDasha/";
-
+  //Technical Support
+  final String technicalSupport = "addTechnicalSupport"; //Post Api
+  final String getTechnicalSupportlist = "getTechnicalSupportlist"; //Get Api
   //Kundli APIs
   final String astrologyBaseUrl = "https://json.astrologyapi.com/v1/";
   final String astroDetails = "astro_details";

@@ -14,7 +14,6 @@ import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
 import 'package:screenshot/screenshot.dart';
 
-import '../di/hive_services.dart';
 import '../di/shared_preference_service.dart';
 import '../model/chat/res_common_chat_success.dart';
 import '../model/chat_offline_model.dart';
@@ -122,32 +121,7 @@ void checkNotification(
   //  removeNotificationNode();
 }
 
-void setHiveDatabase(String userDataKey, ChatMessage newMessage) async {
-  var databaseMessage = ChatMessagesOffline();
-  HiveServices hiveServices = HiveServices(boxName: userChatData);
-  await hiveServices.initialize();
-  String? res = await hiveServices.getData(key: userDataKey);
 
-  if (res != null) {
-    var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
-    databaseMessage = msg;
-  }
-  List<ChatMessage>? chatMessages = databaseMessage.chatMessages ?? [];
-
-  var index = chatMessages.indexWhere((element) => newMessage.id == element.id);
-  if (index >= 0) {
-    chatMessages[index].type = newMessage.type;
-  } else {
-    chatMessages.add(newMessage);
-  }
-  databaseMessage.chatMessages = chatMessages;
-
-  await hiveServices.addData(
-      key: userDataKey, data: jsonEncode(databaseMessage.toOfflineJson()));
-  Future.delayed(const Duration(seconds: 5)).then((value) async {
-    await hiveServices.close();
-  });
-}
 
 void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   // type 1= New chat message, 2 = Delievered, 3= Msg read, 4= Other messages
@@ -221,8 +195,10 @@ Future<bool> acceptOrRejectChat(
   print("chat_reject 2");
   if (response.statusCode == 200) {
     print("chat_reject 3");
+    // divineSnackBar(data: message, color: appColors.redColor);
     return true;
   } else {
+    divineSnackBar(data: response.message ?? "", color: appColors.redColor);
     print("chat_reject 4");
     return false;
   }

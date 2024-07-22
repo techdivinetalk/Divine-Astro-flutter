@@ -125,11 +125,12 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
 class ExpandableHtml extends StatefulWidget {
   final String htmlData;
   final int trimLength;
+  final bool? isExpanded;
 
   const ExpandableHtml({
     Key? key,
     required this.htmlData,
-    this.trimLength = 100,
+    this.trimLength = 100, this.isExpanded,
   }) : super(key: key);
 
   @override
@@ -144,6 +145,14 @@ class _ExpandableHtmlState extends State<ExpandableHtml>
       _isExpanded || widget.htmlData.length <= widget.trimLength
           ? widget.htmlData
           : '${widget.htmlData.substring(0, widget.trimLength)}...';
+
+  @override
+  void initState() {
+    if(widget.isExpanded != null){
+      _isExpanded = widget.isExpanded?? false;
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {

@@ -80,8 +80,9 @@ class AssistMessageView extends StatelessWidget {
     final isYesterday = (DateTime.now().day - currentMsgDate.day) == 2;
 
     Widget messageWidget;
+    print("chatMessage.msgType ----->${chatMessage.msgType}");
     switch (chatMessage.msgType) {
-      case MsgType.gift:
+      case MsgType.gift || MsgType.sendgifts:
         messageWidget = giftMsgView(context, chatMessage, yourMessage);
         break;
       case MsgType.image:
@@ -533,7 +534,7 @@ class AssistMessageView extends StatelessWidget {
   }
 
   Widget chatSeenStatusWidget({required SeenStatus seenStatus}) {
-    return GetBuilder<ChatMessageController>(
+    return /*GetBuilder<ChatMessageController>(
       builder: (controller) {
         print('msg status ${seenStatus} ${controller.isCustomerOnline.value}');
         if (controller.isCustomerOnline.value == true) {
@@ -557,7 +558,7 @@ class AssistMessageView extends StatelessWidget {
             return const SizedBox();
         }
       },
-    );
+    )*/SizedBox();
   }
 
   Widget unreadMessageView() {

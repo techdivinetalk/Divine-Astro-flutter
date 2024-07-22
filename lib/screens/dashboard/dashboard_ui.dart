@@ -34,7 +34,7 @@ class DashboardScreen extends GetView<DashboardController> {
 
   @override
   Widget build(BuildContext context) {
-    // controller.getConstantDetailsData(context);
+
     print("beforeGoing 4 - ${preferenceService.getUserDetail()?.id}");
     // FirebaseMessaging.instance.getToken().then((value) {
     //   print("FirebaseMessagingToken: $value");
@@ -63,44 +63,44 @@ class DashboardScreen extends GetView<DashboardController> {
                             debugPrint(
                                 "test_selectedIndex: ${controller.selectedIndex.value}");
                             if (controller.selectedIndex.value == 0) {
-                              debugPrint(
-                                  "test_selectedIndex_isRegistered: ${Get.isRegistered<HomeController>()}");
-                              if (Get.isRegistered<HomeController>() &&
-                                  !Get.find<HomeController>().isInit) {
-                                Get.find<HomeController>().onInit();
-                              }
+                              // debugPrint(
+                              //     "test_selectedIndex_isRegistered: ${Get.isRegistered<HomeController>()}");
+                              // if (Get.isRegistered<HomeController>() &&
+                              //     !Get.find<HomeController>().isInit) {
+                              //   Get.find<HomeController>().onInit();
+                              // }
                             } else if (controller.selectedIndex.value == 1) {
-                              debugPrint(
-                                  "test_selectedIndex_isRegistered: ${Get.isRegistered<PerformanceController>()}");
-                              if (Get.isRegistered<PerformanceController>() &&
-                                  !Get.find<PerformanceController>().isInit) {
-                                Get.find<PerformanceController>().onInit();
-                              }
+                              // debugPrint(
+                              //     "test_selectedIndex_isRegistered: ${Get.isRegistered<PerformanceController>()}");
+                              // if (Get.isRegistered<PerformanceController>() &&
+                              //     !Get.find<PerformanceController>().isInit) {
+                              //   Get.find<PerformanceController>().onInit();
+                              // }
                             } else if (controller.selectedIndex.value == 2) {
-                              debugPrint(
-                                  "test_selectedIndex_isRegistered: ${Get.isRegistered<ChatAssistanceController>()}");
-                              if (Get.isRegistered<
-                                      ChatAssistanceController>() &&
-                                  !Get.find<ChatAssistanceController>()
-                                      .isInit) {
-                                Get.find<ChatAssistanceController>().onInit();
-                              }
+                              // debugPrint(
+                              //     "test_selectedIndex_isRegistered: ${Get.isRegistered<ChatAssistanceController>()}");
+                              // if (Get.isRegistered<
+                              //         ChatAssistanceController>() &&
+                              //     !Get.find<ChatAssistanceController>()
+                              //         .isInit) {
+                              //   Get.find<ChatAssistanceController>().onInit();
+                              // }
                             } else if (controller.selectedIndex.value == 3) {
-                              debugPrint(
-                                  "test_selectedIndex_isRegistered: ${Get.isRegistered<WaitListUIController>()}");
-                              if (Get.isRegistered<WaitListUIController>() &&
-                                  !Get.find<WaitListUIController>().isInit) {
-                                Get.find<WaitListUIController>().onInit();
-                                WaitListUIController(WaitingListQueueRepo())
-                                    .getWaitingList();
-                              }
+                              // debugPrint(
+                              //     "test_selectedIndex_isRegistered: ${Get.isRegistered<WaitListUIController>()}");
+                              // if (Get.isRegistered<WaitListUIController>() &&
+                              //     !Get.find<WaitListUIController>().isInit) {
+                              //   Get.find<WaitListUIController>().onInit();
+                              //   WaitListUIController(WaitingListQueueRepo())
+                              //       .getWaitingList();
+                              // }
                             } else if (controller.selectedIndex.value == 4) {
-                              debugPrint(
-                                  "test_selectedIndex_isRegistered: ${Get.isRegistered<ProfilePageController>()}");
-                              if (Get.isRegistered<ProfilePageController>() &&
-                                  !Get.find<ProfilePageController>().isInit) {
-                                Get.find<ProfilePageController>().onInit();
-                              }
+                              // debugPrint(
+                              //     "test_selectedIndex_isRegistered: ${Get.isRegistered<ProfilePageController>()}");
+                              // if (Get.isRegistered<ProfilePageController>() &&
+                              //     !Get.find<ProfilePageController>().isInit) {
+                              //   Get.find<ProfilePageController>().onInit();
+                              // }
                             }
 
                             return AnimatedSwitcher(

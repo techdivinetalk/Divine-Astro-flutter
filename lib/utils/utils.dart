@@ -1,20 +1,21 @@
 import 'package:divine_astrologer/common/common_functions.dart';
-import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:html/parser.dart';
 import 'package:intl/intl.dart';
 
 import '../common/colors.dart';
 import '../common/date_time_picker.dart';
-import 'package:html/parser.dart';
 
 class Utils {
   static const animationDuration = Duration(milliseconds: 200);
 
   String parseHtmlString(String htmlString) {
     final document = parse(htmlString);
-    final String parsedString = parse(document.body?.text).documentElement!.text;
+    final String parsedString =
+        parse(document.body?.text).documentElement!.text;
 
     return parsedString;
   }
@@ -53,6 +54,38 @@ class Utils {
     divineSnackBar(data: message, color: appColors.redColor);
   }
 
+  flutterDatePicker({String? dateFormat, DateTime? lastDate, firstDate,DateTime? initialDate}) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: Get.context!,
+      initialDate:initialDate ?? DateTime.now(),
+      firstDate: firstDate ?? DateTime.now(),
+      lastDate: lastDate ?? DateTime(2500),
+      builder: (context, child) {
+        return Theme(
+          data: Theme.of(context).copyWith(
+            colorScheme:  ColorScheme.light(
+              primary: appColors.guideColor,
+              onPrimary: Colors.white,
+              onSurface: appColors.guideColor,
+            ),
+            textButtonTheme: TextButtonThemeData(
+
+              style: TextButton.styleFrom(
+                foregroundColor: appColors.guideColor,
+              ),
+            ),
+          ),
+          child: child!,
+        );
+      },
+    );
+    String? formattedDate;
+    if (pickedDate != null) {
+      formattedDate = DateFormat(dateFormat ?? "dd/MM/yyyy").format(pickedDate);
+    }
+    return formattedDate;
+  }
+
   Future<void> handleStatusCodeUnauthorizedBackend() async {
     debugPrint("test_handleStatusCodeUnauthorized: Backend");
 
@@ -78,6 +111,18 @@ class Utils {
     /// catch (e, s) { preferenceService.erase(); }
 
     // preferenceService.erase();
+  }
+
+  // Function to convert hex color string to Color object
+  Color hexToColor(String hexColor) {
+    hexColor = hexColor.replaceAll('#', '');
+    if (hexColor.length == 6) {
+      hexColor = 'FF' + hexColor;
+    }
+    if (hexColor.length == 8) {
+      return Color(int.parse('0x$hexColor'));
+    }
+    return Colors.black; // default color if invalid hexColor
   }
 }
 
