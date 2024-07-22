@@ -158,7 +158,10 @@ class TermsAndConditionController extends GetxController {
     realTime["is_chat_enable"] = (data.data?.isChat ?? 0) == 1;
     realTime["is_video_call_enable"] = (data.data?.isVideo ?? 0) == 1;
     realTime["is_live_enable"] = (data.data?.isLive ?? 0) == 1;
+    print(realTime);
+    print("updating in firebase");
     final HashMap<String, dynamic> deviceTokenNode = HashMap();
+
     deviceTokenNode["deviceToken"] =
         deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
     firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
