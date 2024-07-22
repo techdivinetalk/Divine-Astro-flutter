@@ -18,8 +18,10 @@ import 'shared_preference_service.dart';
 class ApiProvider {
   static const String version = 'v7';
 
-  // static const String socketUrl = "http://13.127.116.89:4000";
+  // static const String socketUrl = "http://13.127.116.89:4000"
+  // static const String socketUrl = "https://list.divinetalk.live";
   static const String socketUrl = "https://list.divinetalk.live";
+  // static const String socketUrl = "https://list.divinetalk.live";
 
   static String debugingUrl = "http://13.235.46.27/api/astro/$version/";
   static String baseUrl =

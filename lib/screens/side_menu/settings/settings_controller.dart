@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import '../../../common/app_exception.dart';
 import '../../../common/common_functions.dart';
 import '../../../di/shared_preference_service.dart';
+import '../../../firebase_service/firebase_authentication.dart';
 import '../../../model/delete_customer_model_class.dart';
 
 class SettingsController extends GetxController {
@@ -63,10 +64,8 @@ class SettingsController extends GetxController {
       (value) async {
         if (value.statusCode == 200 && value.success == true) {
           preferenceService.erase().whenComplete(() async {
-            // To disconnect
-            await FirebaseDatabase.instance.goOffline();
+            await Auth().handleSignOut();
             Get.offAllNamed(RouteName.login);
-
             update();
           });
         }
