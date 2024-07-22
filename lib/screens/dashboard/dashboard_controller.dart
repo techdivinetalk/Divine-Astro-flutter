@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
+
 // import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -26,6 +27,7 @@ import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:in_app_update/in_app_update.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
@@ -260,7 +262,8 @@ class DashboardController extends GetxController
   }
 
   void notificationPermission() async {
-    NotificationSettings settings  = await FirebaseMessaging.instance.requestPermission(
+    NotificationSettings settings =
+        await FirebaseMessaging.instance.requestPermission(
       sound: true,
       badge: true,
       alert: true,
@@ -268,7 +271,8 @@ class DashboardController extends GetxController
 
     if (settings.authorizationStatus == AuthorizationStatus.authorized) {
       print('User granted permission');
-    } else if (settings.authorizationStatus == AuthorizationStatus.provisional) {
+    } else if (settings.authorizationStatus ==
+        AuthorizationStatus.provisional) {
       print('User grander provisional permission');
     } else {
       print('User declined or has not accepted permission');
@@ -278,6 +282,9 @@ class DashboardController extends GetxController
   @override
   Future<void> onInit() async {
     super.onInit();
+    if (!kDebugMode) {
+      checkForUpdate();
+    }
     FirebaseMessaging.instance.getInitialMessage().then((v) {
       RemoteMessage? remoteMessage = v;
       if (remoteMessage != null) {
@@ -288,9 +295,11 @@ class DashboardController extends GetxController
             dataList.id = int.parse(senderId);
             dataList.name = remoteMessage.data["title"];
             Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
-          } else if(remoteMessage.data["type"] == "2"){
+          } else if (remoteMessage.data["type"] == "2") {
             print("remoteMessage.data ------>${remoteMessage.data}");
-            acceptOrRejectChat(orderId: int.parse(remoteMessage.data["order_id"]), queueId: int.parse(remoteMessage.data["queue_id"]));
+            acceptOrRejectChat(
+                orderId: int.parse(remoteMessage.data["order_id"]),
+                queueId: int.parse(remoteMessage.data["queue_id"]));
           }
         });
       }
@@ -303,8 +312,10 @@ class DashboardController extends GetxController
         dataList.id = int.parse(senderId);
         dataList.name = message.data["title"];
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
-      } else if(message.data["type"] == "2"){
-        acceptOrRejectChat(orderId: int.parse(message.data["order_id"]), queueId: int.parse(message.data["queue_id"]));
+      } else if (message.data["type"] == "2") {
+        acceptOrRejectChat(
+            orderId: int.parse(message.data["order_id"]),
+            queueId: int.parse(message.data["queue_id"]));
       }
     });
 
@@ -387,6 +398,26 @@ class DashboardController extends GetxController
     // getConstantDetailsData();
     print("currentTime");
     cacheGift();
+  }
+
+  Future<void> checkForUpdate() async {
+    InAppUpdate.checkForUpdate().then((info) {
+      if (info.updateAvailability == UpdateAvailability.updateAvailable) {
+        update();
+      }
+      update();
+    }).catchError((e) {
+      print(e.toString());
+    });
+  }
+
+  void playStoreUpdate() async {
+    await InAppUpdate.startFlexibleUpdate();
+    InAppUpdate.completeFlexibleUpdate().whenComplete(() {
+      divineSnackBar(data:"update success",color: Colors.green);
+    },).catchError((e) {
+      print(e.toString());
+    });
   }
 
   void compareTimes(int serverTime) {
@@ -1150,6 +1181,7 @@ class DashboardController extends GetxController
 
   var isLoading = false.obs;
   var submitTermsAndCondition;
+
   void postAcceptTerms(noticeId) async {
     isLoading(true);
     Map<String, dynamic> param = {
@@ -1179,16 +1211,16 @@ class DashboardController extends GetxController
     isChecked.value = !isChecked.value;
   }
 
-  // notificationTwoInit() async {
-  //   ReceivedAction? receivedAction = await AwesomeNotifications()
-  //       .getInitialNotificationAction(removeFromActionEvents: false);
-  //   Map<String, String?>? payload = receivedAction?.payload;
+// notificationTwoInit() async {
+//   ReceivedAction? receivedAction = await AwesomeNotifications()
+//       .getInitialNotificationAction(removeFromActionEvents: false);
+//   Map<String, String?>? payload = receivedAction?.payload;
 
-  //   if (payload != null && payload["type"] == "2") {
-  //     furtherProcedure(
-  //       orderId: payload["order_id"],
-  //       queueId: payload["queue_id"],
-  //     );
-  //   }
-  // }
+//   if (payload != null && payload["type"] == "2") {
+//     furtherProcedure(
+//       orderId: payload["order_id"],
+//       queueId: payload["queue_id"],
+//     );
+//   }
+// }
 }
