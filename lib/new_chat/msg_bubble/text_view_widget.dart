@@ -11,12 +11,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:screenshot/screenshot.dart';
-
 import '../../common/custom_button.dart';
-import '../../gen/assets.gen.dart';
 import '../../gen/fonts.gen.dart';
 import '../../screens/home_screen_options/check_kundli/kundli_controller.dart';
-import '../../screens/order_chat_call_feedback/widget/chat_history_widget.dart';
 import '../new_chat_controller.dart';
 import '../widget/common_read_function.dart';
 

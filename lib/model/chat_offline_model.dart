@@ -1,5 +1,4 @@
 import 'package:screenshot/screenshot.dart';
-
 import 'chat_assistant/chat_assistant_chats_response.dart';
 
 class ChatMessagesOffline {
@@ -89,6 +88,7 @@ class ChatMessage {
   GetPooja? getPooja;
   CustomProduct? getCustomProduct;
   String? animation;
+  ScreenshotController? screenshotController;
 
   ChatMessage({
     this.id,
@@ -150,6 +150,7 @@ class ChatMessage {
     this.kundli,
     this.getCustomProduct,
     this.animation,
+    this.screenshotController,
   });
 
   ChatMessage.fromOfflineJson(Map<String, dynamic> json) {

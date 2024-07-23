@@ -428,16 +428,12 @@ class _ChatBottomBarWidgetState extends State<ChatBottomBarWidget> {
                           ),
                         ),
                         const SizedBox(height: 5.0),
-                        widget.controller!.replyScreenshotUnit8List.value != null ? SizedBox(
-                          height: 100.0,
-                          width: MediaQuery.of(context).size.width * 0.5,
-                          child: Image.memory(
-                              widget.controller!.replyScreenshotUnit8List.value!,
-                            fit: BoxFit.cover,
-                          ),
+                        /*widget.controller!.replyScreenshotUnit8List.value != null ? Image.memory(
+                            widget.controller!.replyScreenshotUnit8List.value!,
+                          // fit: BoxFit.scaleDown,
                         )
-                        : const SizedBox(),
-                        /*Text(
+                        : const SizedBox(),*/
+                        Text(
                           widget.controller?.replayChatMessage.value?.msgType == MsgType.text ? widget.controller?.replayChatMessage.value?.message ?? ""
                           : widget.controller?.replayChatMessage.value?.msgType == MsgType.image ? "Photo"
                           : widget.controller?.replayChatMessage.value?.msgType == MsgType.remedies ? "Remedy"
@@ -455,7 +451,7 @@ class _ChatBottomBarWidgetState extends State<ChatBottomBarWidget> {
                             fontSize: 10.0,
                             color: appColors.lightGrey,
                           ),
-                        )*/
+                        )
                       ],
                     ),
                   ),

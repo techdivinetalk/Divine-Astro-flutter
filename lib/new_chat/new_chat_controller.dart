@@ -80,9 +80,10 @@ class NewChatController extends GetxController
   RxString tempEmoji = "".obs;
   RxInt tempIndex = 0.obs;
   RxBool isReplay = false.obs;
+  RxBool isScreenshot = false.obs;
   Rxn<ChatMessage> replayChatMessage = Rxn<ChatMessage>();
-  ScreenshotController screenshotController = ScreenshotController();
-  RxString replyScreenshot = "".obs;
+
+  // RxString replyScreenshot = "".obs;
   Rxn<Uint8List> replyScreenshotUnit8List = Rxn<Uint8List>();
 
   RxBool isRecording = false.obs;
@@ -154,6 +155,7 @@ class NewChatController extends GetxController
           isFirstLoad = false;
         } else {
           chatMessages.insert(0, chatMessage);
+          chatMessages[0].screenshotController = ScreenshotController();
         }
         if (MiddleWare.instance.currentPage == RouteName.newChat) {
           if (chatMessage.animation != null &&
@@ -233,11 +235,21 @@ class NewChatController extends GetxController
     await preference.saveMessages(chatMessages!);
   }
 
+  ScreenshotController screenshotController = ScreenshotController();
+  // captureImage(ScreenshotController screenshotController){
   captureImage(Widget widget){
     screenshotController.captureFromWidget(widget).then((capturedImage) {
-      replyScreenshot.value = base64.encode(capturedImage);
+      // replyScreenshot.value = base64.encode(capturedImage);
       replyScreenshotUnit8List.value = capturedImage;
     });
+    // screenshotController.capture().then((Uint8List? image) {
+    //   print("image -----> $image");
+    //   // replyScreenshot.value = base64.encode(image);
+    //   replyScreenshotUnit8List.value = image;
+    // }).catchError((onError) {
+    //   log("screenshot error : $onError");
+    // });
+    isScreenshot.value = false;
   }
 
   getAllApiDataInChat() async {
@@ -1075,6 +1087,9 @@ class NewChatController extends GetxController
         if (response.chatMessages!.isNotEmpty) {
           // chatMessages.clear();
           chatMessages.addAll(response.chatMessages ?? []);
+          for(int i = 0 ; i < chatMessages.length ; i++){
+            chatMessages[i].screenshotController = ScreenshotController();
+          }
           // var data = await preference.getMessages();
           // chatMessages.addAll(data);
           update();
@@ -1265,6 +1280,7 @@ class NewChatController extends GetxController
     }
     newMessage.isSuspicious = isBadWord(messageText ?? "") ? 1 : 0;
     chatMessages.insert(0, newMessage);
+    chatMessages[0].screenshotController = ScreenshotController();
     firebaseDatabase
         .ref()
         .child(

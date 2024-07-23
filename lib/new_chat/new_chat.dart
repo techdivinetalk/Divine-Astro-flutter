@@ -53,7 +53,7 @@ class NewChatScreen extends GetView<NewChatController> {
                           controller.overlayEntry?.remove();
                         }
                       },
-                      child: ListView.separated(
+                      child: controller.chatMessages.isNotEmpty ? ListView.separated(
                         controller: controller.messageScrollController,
                         itemCount: controller.chatMessages.length,
                         padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -67,14 +67,17 @@ class NewChatScreen extends GetView<NewChatController> {
                             iconOnRightSwipe: Icons.replay,
                             onRightSwipe: (details) {
                               controller.isReplay.value = true;
-                              controller.captureImage(
-                                socketMessageView(
+                              // controller.isScreenshot.value = true;
+                              // controller.captureImage(data.screenshotController!);
+                              /*controller.captureImage(SizedBox(
+                                height: 100.0,
+                                child: socketMessageView(
                                   controller: controller,
                                   yourMessage: data.msgSendBy == "1",
                                   chatMessage: data,
                                   index: index,
-                                )
-                              );
+                                ),
+                              ));*/
                               controller.replayChatMessage.value = data;
                             },
                             swipeSensitivity: 5,
@@ -144,10 +147,11 @@ class NewChatScreen extends GetView<NewChatController> {
                         },
                         separatorBuilder: (context, index) =>
                             const SizedBox(height: 15),
-                      ),
+                      )
+                      : SizedBox(),
                     ),
                   ),
-                  ReplayMessage(controller: controller),
+                  // ReplayMessage(controller: controller),
                   const SizedBox(height: 15),
                   VisibleTarrotCard(controller: controller),
                   EndChatTimer(controller: controller),
