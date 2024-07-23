@@ -199,6 +199,7 @@ class TechnicalIssueController extends GetxController {
     update();
   }
 
+  var currentUploadedFile;
   Future<void> uploadImage(imageFile) async {
     var token = await preferenceService.getToken();
     log("image length - ${imageFile.path}");
@@ -228,11 +229,7 @@ class TechnicalIssueController extends GetxController {
       print(jsonDecode(value)["data"]);
       uploadedImagesList.add(jsonDecode(value)["data"]["path"]);
       update();
-      if (selectedFiles.length == uploadedImagesList.length) {
-        log("222");
-
-        submitIssues();
-      }
+      currentUploadedFile = jsonDecode(value)["data"]["path"];
       log("img-- ${uploadedImagesList.toString()}");
       print("valuevaluevaluevaluevaluevaluevalue");
     });
@@ -265,6 +262,13 @@ class TechnicalIssueController extends GetxController {
 
         update();
       }
+      Future.delayed(Duration(seconds: 2)).then((c) {
+        if (selectedFiles.length == uploadedImagesList.length &&
+            uploadedImagesList.contains(currentUploadedFile)) {
+          log("222");
+          submitIssues();
+        }
+      });
       log("111");
     }
     log("uploadedImages -- ${uploadedImagesList.toString()}");

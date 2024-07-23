@@ -209,7 +209,10 @@ class AppFirebaseService {
       case "isEngagedStatus":
         isEngagedStatus(value);
         break;
+
       case "callKundli":
+        callKunadliUpdated({});
+
         if (isRemoved) {
           callKunadliUpdated({});
           sendBroadcast(BroadcastMessage(name: "callKundli", data: {}));
@@ -217,7 +220,7 @@ class AppFirebaseService {
           Map<String, dynamic>? callKundli =
               Map<String, dynamic>.from(value as Map<Object?, Object?>);
           print(callKundli);
-          print("realTimeData['callKundli']");
+          print("realTimeData['callKundli'] ");
           callKunadliUpdated(callKundli);
           sendBroadcast(BroadcastMessage(name: "callKundli", data: callKundli));
         }
@@ -302,6 +305,7 @@ class AppFirebaseService {
     try {
       database.child(path).onChildChanged.listen((event) {
         final key = event.snapshot.key; // Get the key of the changed child
+
         final value =
             event.snapshot.value; // Get the new value of the changed child
         if (event.snapshot.value != null) {

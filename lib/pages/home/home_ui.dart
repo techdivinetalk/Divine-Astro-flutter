@@ -1140,12 +1140,14 @@ class HomeUI extends GetView<HomeController> {
                           onTap: () {
                             log("kundlii");
                             log("kundlii");
-                            log("kundlii");
-                            log("kundlii");
-                            log("kundlii");
-                            log("kundlii");
+                            log("kundlii${double.parse(data["latitude"])}");
+                            log("kundlii${double.parse(data["longitude"])}");
+                            log("open_order -- $data");
+
                             DateTime time = DateFormat('d MMMM yyyy h:mm a')
                                 .parse('${data["dob"]} ${data["tob"]}');
+                            log("kundlii${time.toString()}");
+
                             print(data);
                             print("datadatadatadatadata");
                             Params params = Params(
@@ -1153,18 +1155,22 @@ class HomeUI extends GetView<HomeController> {
                               month: time.month,
                               hour: time.hour,
                               min: time.minute,
-                              lat: double.parse(data["latitude"] ?? "0.0"),
-                              long: double.parse(data["longitude"] ?? "0.0"),
+                              lat: double.parse(data["latitude"]),
+                              long: double.parse(data["longitude"]),
                               location: data["pob"],
                               year: time.year,
                               name: data["userName"],
                             );
+                            log("kundli");
+
                             Get.toNamed(
                               RouteName.kundliDetail,
                               arguments: {
-                                "kundli_id": data["kundli_id"],
+                                "kundli_id": 0,
                                 "from_kundli": false,
                                 "params": params,
+                                "gender":
+                                    AppFirebaseService().orderData["gender"]
                               },
                             );
                           },
@@ -3013,7 +3019,7 @@ class SelectedTimeForChat extends StatelessWidget {
           if (controller?.selectedChatTime.value.isNotEmpty ?? false) {
             return Text(
               "${controller?.selectedChatDate.value.toCustomFormat() ?? ""} ${controller?.selectedChatTime.value ?? ""}",
-              style: AppTextStyle.textStyle10(
+              style: AppTextStyle.textStyle9(
                 fontColor: appColors.darkBlue,
                 fontWeight: FontWeight.w400,
               ),
@@ -3021,7 +3027,7 @@ class SelectedTimeForChat extends StatelessWidget {
           } else {
             return Text(
               controller?.selectedChatDate.value.toCustomFormat() ?? "",
-              style: AppTextStyle.textStyle10(
+              style: AppTextStyle.textStyle9(
                 fontColor: appColors.darkBlue,
                 fontWeight: FontWeight.w400,
               ),
@@ -3347,7 +3353,7 @@ class SelectedTimeForCall extends StatelessWidget {
           if (controller?.selectedCallTime.value.isNotEmpty ?? false) {
             return Text(
               "${controller?.selectedCallDate.value.toCustomFormat() ?? ""} ${controller?.selectedCallTime.value ?? ""}",
-              style: AppTextStyle.textStyle10(
+              style: AppTextStyle.textStyle9(
                 fontColor: appColors.darkBlue,
                 fontWeight: FontWeight.w400,
               ),
@@ -3355,7 +3361,7 @@ class SelectedTimeForCall extends StatelessWidget {
           } else {
             return Text(
               controller?.selectedCallDate.value.toCustomFormat() ?? "",
-              style: AppTextStyle.textStyle10(
+              style: AppTextStyle.textStyle9(
                 fontColor: appColors.darkBlue,
                 fontWeight: FontWeight.w400,
               ),

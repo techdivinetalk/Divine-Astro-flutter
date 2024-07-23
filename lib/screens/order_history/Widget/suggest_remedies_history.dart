@@ -225,10 +225,11 @@ class SuggestRemedies extends StatelessWidget {
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
-                Text( data[index].getOrder?.amount != null &&
-                    data[index].getOrder?.amount != 0
-                    ? "₹${data[index].getOrder?.amount}"
-                    : "₹0",
+                Text(
+                    data[index].getOrder?.amount != null &&
+                            data[index].getOrder?.amount != 0
+                        ? "₹${data[index].getOrder?.amount}"
+                        : "₹0",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
