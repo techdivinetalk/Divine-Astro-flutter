@@ -1135,6 +1135,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                                 .kundliDetail,
                                                             arguments: {
                                                               "params": params,
+                                                              "kundli_id": 0,
+                                                              "from_kundli":
+                                                                  false,
                                                               "gender":
                                                                   AppFirebaseService()
                                                                           .orderData[
