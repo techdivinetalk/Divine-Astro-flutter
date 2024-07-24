@@ -41,6 +41,7 @@ import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../gen/fonts.gen.dart';
 import '../../model/feedback_response.dart';
+import '../../screens/chat_assistance/chat_assistance_ui.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'home_controller.dart';
 import 'widgets/common_info_sheet.dart';
@@ -952,7 +953,43 @@ class HomeUI extends GetView<HomeController> {
                                 }
                               }),*/
                         SizedBox(height: 20.h),
-                        feedbackWidget(controller: controller),
+                        // feedbackWidget(controller: controller),
+                        (controller.customerDetailsResponse == null ||
+                            controller.customerDetailsResponse!.data.isEmpty) ? SizedBox()
+                        : NotificationListener<ScrollNotification>(
+                          onNotification: (ScrollNotification scrollInfo) {
+                            if (scrollInfo.metrics.pixels ==
+                                scrollInfo.metrics.maxScrollExtent) {
+                              print("getConsulation getConsulation getConsulation");
+                              controller.getConsulation();
+                              return true;
+                            }
+                            return false;
+                          },
+                          child: ListView.builder(
+                            shrinkWrap: true,
+                            padding: EdgeInsets.symmetric(horizontal: 10.h),
+                            physics: const NeverScrollableScrollPhysics(),
+                            itemCount: (controller.filteredUserData)
+                                .isNotEmpty ||
+                                controller.searchController.text.isNotEmpty
+                                ? controller.filteredUserData.length
+                                : controller
+                                .customerDetailsResponse?.data.length ??
+                                0,
+                            itemBuilder: (context, index) {
+                              return ChatAssistanceDataTile(
+                                data:
+                                (controller.filteredUserData).isNotEmpty ||
+                                    controller.searchController.text
+                                        .isNotEmpty
+                                    ? controller.filteredUserData[index]
+                                    : controller.customerDetailsResponse!
+                                    .data[index],
+                              );
+                            },
+                          ),
+                        ),
                         SizedBox(height: 20.h),
                       ],
                     ),
