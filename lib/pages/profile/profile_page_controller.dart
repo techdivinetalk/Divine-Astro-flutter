@@ -29,6 +29,7 @@ import '../../gen/assets.gen.dart';
 import '../../model/res_login.dart';
 import '../../model/res_review_ratings.dart';
 import '../../model/res_user_profile.dart';
+import '../../model/send_feed_back_model.dart';
 import '../../repository/user_repository.dart';
 import '../../screens/live_page/constant.dart';
 import 'widget/thank_you_report_widget.dart';
@@ -55,6 +56,7 @@ class ProfilePageController extends GetxController {
   XFile? pickedFile;
   File? uploadFile;
   RxBool isLoading = false.obs;
+  TextEditingController feedBackText = TextEditingController();
 
   List<List<String>> reportReason = <List<String>>[
     ["itSpam", ''],
@@ -617,6 +619,27 @@ class ProfilePageController extends GetxController {
       print("Image uploaded successfully.");
     } else {
       print("Failed to upload image.");
+    }
+  }
+
+  SendFeedBackModel? sendFeedBackModel;
+  sendFeedbackAPI(String text) async {
+    Map<String, dynamic> params = {"comment": text.toString()};
+    try {
+      var data = await userRepository.sendFeedBack(params);
+      sendFeedBackModel = data;
+      feedBackText.clear();
+      divineSnackBar(data: sendFeedBackModel?.message.toString() ?? '');
+      profileDataSync.value = true;
+      log("send FeedBack-->${sendFeedBackModel?.message}");
+      log("params Body-->$text");
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
     }
   }
 

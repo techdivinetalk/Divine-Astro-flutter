@@ -43,7 +43,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
             if (controller.loading == Loading.loaded) {
               return Column(
                 children: [
-                  Padding(
+                  /*Padding(
                     padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
                     child: SizedBox(
                       child: Obx(
@@ -135,7 +135,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                         ),
                       ),
                     ),
-                  ),
+                  ),*/
                   Obx(() {
                     if (isUSerTabSelected.value) {
                       if (controller.chatAssistantAstrologerListResponse ==

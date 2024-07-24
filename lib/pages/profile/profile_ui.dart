@@ -18,6 +18,7 @@ import '../../../common/colors.dart';
 import '../../../common/routes.dart';
 import '../../../gen/assets.gen.dart';
 import '../../common/common_bottomsheet.dart';
+import '../../common/common_functions.dart';
 import '../../common/custom_widgets.dart';
 import '../../common/permission_handler.dart';
 import '../../di/shared_preference_service.dart';
@@ -210,45 +211,48 @@ class ProfileUI extends GetView<ProfilePageController> {
                 ),
               ),
               profileOptions(controller: controller),
-              SizedBox(height: 10.h),
-              Obx(() => controller.reviewDataSync.value == true
-                  ? controller.ratingsData.value.data?.totalRating != 0
-                      ? ratingsView(controller: controller)
+              Obx(() => controller.reviewDataSync.value == true ? controller.ratingsData.value.data?.totalRating != 0 ? ratingsView(controller: controller)
                       : const SizedBox()
                   : const SizedBox()),
-              SizedBox(height: 20.h),
               Obx(() => controller.reviewDataSync.value == true
                   ? (controller
                               .ratingsData.value.data?.allReviews?.isNotEmpty ??
                           false)
-                      ? Container(
-                          width: MediaQuery.of(context).size.width,
-                          padding: EdgeInsets.all(16.w),
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                  color: appColors.blackColor.withOpacity(0.2),
-                                  blurRadius: 1.0,
-                                  offset: const Offset(0.0, 3.0)),
-                            ],
-                            color: appColors.white,
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(10)),
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "userReview".tr,
-                                style: AppTextStyle.textStyle20(),
+                      ? Column(
+                        children: [
+                          SizedBox(height: 20.h),
+                          Container(
+                              width: MediaQuery.of(context).size.width,
+                              padding: EdgeInsets.all(16.w),
+                              decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                      color: appColors.blackColor.withOpacity(0.2),
+                                      blurRadius: 1.0,
+                                      offset: const Offset(0.0, 3.0)),
+                                ],
+                                color: appColors.white,
+                                borderRadius:
+                                    const BorderRadius.all(Radius.circular(10)),
                               ),
-                              SizedBox(height: 10.h),
-                              listOfReviews(controller: controller),
-                            ],
-                          ),
-                        )
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "userReview".tr,
+                                    style: AppTextStyle.textStyle20(),
+                                  ),
+                                  SizedBox(height: 10.h),
+                                  listOfReviews(controller: controller),
+                                ],
+                              ),
+                            ),
+                        ],
+                      )
                       : const SizedBox()
                   : const SizedBox()),
+              SizedBox(height: 20.h),
+              feedbackWidget(controller: controller),
             ],
           ),
         );
@@ -525,197 +529,202 @@ class ProfileUI extends GetView<ProfilePageController> {
   }
 
   ratingsView({ProfilePageController? controller}) {
-    return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
-      decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-                color: appColors.blackColor.withOpacity(0.2),
-                blurRadius: 1.0,
-                offset: const Offset(0.0, 3.0)),
-          ],
-          color: appColors.white,
-          borderRadius: BorderRadius.all(Radius.circular(10.h))),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "ratings".tr,
-            style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w400),
-          ),
-          Row(
+    return Column(
+      children: [
+        SizedBox(height: 10.h,),
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
+          decoration: BoxDecoration(
+              boxShadow: [
+                BoxShadow(
+                    color: appColors.blackColor.withOpacity(0.2),
+                    blurRadius: 1.0,
+                    offset: const Offset(0.0, 3.0)),
+              ],
+              color: appColors.white,
+              borderRadius: BorderRadius.all(Radius.circular(10.h))),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(left: 20.h),
-                          child: Text(
-                            "${controller!.ratingsData.value.data?.totalRating ?? "0.0"}",
-                            style: TextStyle(
-                                fontSize: 17.sp, fontWeight: FontWeight.w400),
-                          ),
-                        ),
-                        Icon(Icons.star, size: 22.h)
-                      ],
-                    ),
-                    SizedBox(height: 5.h),
-                    Row(
-                      children: [
-                        Assets.images.icUser.svg(
-                          height: 20.h,
-                          width: 20.h,
-                          colorFilter: ColorFilter.mode(
-                              appColors.guideColor, BlendMode.srcIn),
-                        ),
-                        SizedBox(width: 8.w),
-                        Text(
-                          "total".trParams({
-                            "count":
-                                "${controller.ratingsData.value.data?.totalReviews}"
-                          }),
-                          style: AppTextStyle.textStyle14(),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+              Text(
+                "ratings".tr,
+                style: TextStyle(fontSize: 20.sp, fontWeight: FontWeight.w400),
               ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+              Row(
                 children: [
-                  //5
-                  Row(
-                    children: [
-                      Assets.images.icFiveStar
-                          .svg(width: 80.w, color: appColors.guideColor),
-                      LinearPercentIndicator(
-                        width: 100.w,
-                        barRadius: const Radius.circular(50),
-                        animation: true,
-                        lineHeight: 6.h,
-                        animationDuration: 2000,
-                        percent: controller.getReviewPercentage(
-                            ratingNumbers:
-                                controller.ratingsData.value.data?.i5Rating ??
-                                    0,
-                            totalReviews: ((controller
-                                        .ratingsData.value.data?.totalReviews ??
-                                    0)
-                                .toDouble())),
-                        backgroundColor: appColors.guideColor.withOpacity(0.4),
-                        progressColor: appColors.guideColor,
-                      ),
-                    ],
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(left: 20.h),
+                              child: Text(
+                                "${controller!.ratingsData.value.data?.totalRating ?? "0.0"}",
+                                style: TextStyle(
+                                    fontSize: 17.sp, fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                            Icon(Icons.star, size: 22.h)
+                          ],
+                        ),
+                        SizedBox(height: 5.h),
+                        Row(
+                          children: [
+                            Assets.images.icUser.svg(
+                              height: 20.h,
+                              width: 20.h,
+                              colorFilter: ColorFilter.mode(
+                                  appColors.guideColor, BlendMode.srcIn),
+                            ),
+                            SizedBox(width: 8.w),
+                            Text(
+                              "total".trParams({
+                                "count":
+                                    "${controller.ratingsData.value.data?.totalReviews}"
+                              }),
+                              style: AppTextStyle.textStyle14(),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                  SizedBox(height: 5.h),
-                  //4
-                  Row(
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Assets.images.icFourStar
-                          .svg(width: 70.w, color: appColors.guideColor),
-                      LinearPercentIndicator(
-                        width: 100.w,
-                        barRadius: const Radius.circular(50),
-                        animation: true,
-                        lineHeight: 6.h,
-                        animationDuration: 2000,
-                        percent: controller.getReviewPercentage(
-                            ratingNumbers:
-                                controller.ratingsData.value.data?.i4Rating ??
-                                    0,
-                            totalReviews: (controller
-                                        .ratingsData.value.data?.totalReviews ??
-                                    0)
-                                .toDouble()),
-                        backgroundColor: appColors.guideColor.withOpacity(0.4),
-                        progressColor: appColors.guideColor,
+                      //5
+                      Row(
+                        children: [
+                          Assets.images.icFiveStar
+                              .svg(width: 80.w, color: appColors.guideColor),
+                          LinearPercentIndicator(
+                            width: 100.w,
+                            barRadius: const Radius.circular(50),
+                            animation: true,
+                            lineHeight: 6.h,
+                            animationDuration: 2000,
+                            percent: controller.getReviewPercentage(
+                                ratingNumbers:
+                                    controller.ratingsData.value.data?.i5Rating ??
+                                        0,
+                                totalReviews: ((controller
+                                            .ratingsData.value.data?.totalReviews ??
+                                        0)
+                                    .toDouble())),
+                            backgroundColor: appColors.guideColor.withOpacity(0.4),
+                            progressColor: appColors.guideColor,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 5.h),
-                  //3
-                  Row(
-                    children: [
-                      Assets.images.icThreeStar
-                          .svg(width: 55.w, color: appColors.guideColor),
-                      LinearPercentIndicator(
-                        width: 100.w,
-                        barRadius: const Radius.circular(50),
-                        animation: true,
-                        lineHeight: 6.h,
-                        animationDuration: 2000,
-                        percent: controller.getReviewPercentage(
-                            ratingNumbers:
-                                controller.ratingsData.value.data?.i3Rating ??
-                                    0,
-                            totalReviews: (controller
-                                        .ratingsData.value.data?.totalReviews ??
-                                    0)
-                                .toDouble()),
-                        backgroundColor: appColors.guideColor.withOpacity(0.4),
-                        progressColor: appColors.guideColor,
+                      SizedBox(height: 5.h),
+                      //4
+                      Row(
+                        children: [
+                          Assets.images.icFourStar
+                              .svg(width: 70.w, color: appColors.guideColor),
+                          LinearPercentIndicator(
+                            width: 100.w,
+                            barRadius: const Radius.circular(50),
+                            animation: true,
+                            lineHeight: 6.h,
+                            animationDuration: 2000,
+                            percent: controller.getReviewPercentage(
+                                ratingNumbers:
+                                    controller.ratingsData.value.data?.i4Rating ??
+                                        0,
+                                totalReviews: (controller
+                                            .ratingsData.value.data?.totalReviews ??
+                                        0)
+                                    .toDouble()),
+                            backgroundColor: appColors.guideColor.withOpacity(0.4),
+                            progressColor: appColors.guideColor,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 5.h),
-                  //2
-                  Row(
-                    children: [
-                      Assets.images.icTwoStar
-                          .svg(width: 35.w, color: appColors.guideColor),
-                      LinearPercentIndicator(
-                        width: 100.w,
-                        barRadius: const Radius.circular(50),
-                        animation: true,
-                        lineHeight: 6.h,
-                        animationDuration: 2000,
-                        percent: controller.getReviewPercentage(
-                            ratingNumbers:
-                                controller.ratingsData.value.data?.i2Rating ??
-                                    0,
-                            totalReviews: (controller
-                                        .ratingsData.value.data?.totalReviews ??
-                                    0)
-                                .toDouble()),
-                        backgroundColor: appColors.guideColor.withOpacity(0.4),
-                        progressColor: appColors.guideColor,
+                      SizedBox(height: 5.h),
+                      //3
+                      Row(
+                        children: [
+                          Assets.images.icThreeStar
+                              .svg(width: 55.w, color: appColors.guideColor),
+                          LinearPercentIndicator(
+                            width: 100.w,
+                            barRadius: const Radius.circular(50),
+                            animation: true,
+                            lineHeight: 6.h,
+                            animationDuration: 2000,
+                            percent: controller.getReviewPercentage(
+                                ratingNumbers:
+                                    controller.ratingsData.value.data?.i3Rating ??
+                                        0,
+                                totalReviews: (controller
+                                            .ratingsData.value.data?.totalReviews ??
+                                        0)
+                                    .toDouble()),
+                            backgroundColor: appColors.guideColor.withOpacity(0.4),
+                            progressColor: appColors.guideColor,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  SizedBox(height: 5.h),
-                  //1
-                  Row(
-                    children: [
-                      Assets.images.icOneStar
-                          .svg(width: 15.w, color: appColors.guideColor),
-                      LinearPercentIndicator(
-                        width: 100.w,
-                        barRadius: const Radius.circular(50),
-                        animation: true,
-                        lineHeight: 6.h,
-                        animationDuration: 2000,
-                        percent: controller.getReviewPercentage(
-                            ratingNumbers:
-                                controller.ratingsData.value.data?.i1Rating ??
-                                    0,
-                            totalReviews: (controller
-                                        .ratingsData.value.data?.totalReviews ??
-                                    0)
-                                .toDouble()),
-                        backgroundColor: appColors.guideColor.withOpacity(0.4),
-                        progressColor: appColors.guideColor,
+                      SizedBox(height: 5.h),
+                      //2
+                      Row(
+                        children: [
+                          Assets.images.icTwoStar
+                              .svg(width: 35.w, color: appColors.guideColor),
+                          LinearPercentIndicator(
+                            width: 100.w,
+                            barRadius: const Radius.circular(50),
+                            animation: true,
+                            lineHeight: 6.h,
+                            animationDuration: 2000,
+                            percent: controller.getReviewPercentage(
+                                ratingNumbers:
+                                    controller.ratingsData.value.data?.i2Rating ??
+                                        0,
+                                totalReviews: (controller
+                                            .ratingsData.value.data?.totalReviews ??
+                                        0)
+                                    .toDouble()),
+                            backgroundColor: appColors.guideColor.withOpacity(0.4),
+                            progressColor: appColors.guideColor,
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 5.h),
+                      //1
+                      Row(
+                        children: [
+                          Assets.images.icOneStar
+                              .svg(width: 15.w, color: appColors.guideColor),
+                          LinearPercentIndicator(
+                            width: 100.w,
+                            barRadius: const Radius.circular(50),
+                            animation: true,
+                            lineHeight: 6.h,
+                            animationDuration: 2000,
+                            percent: controller.getReviewPercentage(
+                                ratingNumbers:
+                                    controller.ratingsData.value.data?.i1Rating ??
+                                        0,
+                                totalReviews: (controller
+                                            .ratingsData.value.data?.totalReviews ??
+                                        0)
+                                    .toDouble()),
+                            backgroundColor: appColors.guideColor.withOpacity(0.4),
+                            progressColor: appColors.guideColor,
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ],
-              ),
+              )
             ],
-          )
-        ],
-      ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -906,24 +915,19 @@ class ProfileUI extends GetView<ProfilePageController> {
           );
         } else {
           return Row(
-            mainAxisAlignment: MainAxisAlignment.end,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Padding(
-                padding: EdgeInsets.symmetric(
-                  vertical: 20.h,
-                ),
-                child: CustomButton(
-                  onTap: () {
-                    controller.getMoreReviewRating();
-                  },
-                  child: Text(
-                    "loadMoreReviews".tr,
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      decoration: TextDecoration.underline,
-                      decorationColor: appColors.textColor,
-                      color: appColors.textColor,
-                    ),
+              CustomButton(
+                onTap: () {
+                  controller.getMoreReviewRating();
+                },
+                child: Text(
+                  "loadMoreReviews".tr,
+                  style: TextStyle(
+                    fontSize: 12.sp,
+                    decoration: TextDecoration.underline,
+                    decorationColor: appColors.textColor,
+                    color: appColors.textColor,
                   ),
                 ),
               ),
@@ -975,6 +979,109 @@ class ProfileUI extends GetView<ProfilePageController> {
             onPressed: onSendPressed,
           ),
         ],
+      ),
+    );
+  }
+
+  Widget feedbackWidget({ProfilePageController? controller}) {
+    return Container(
+      // margin: EdgeInsets.symmetric(horizontal: 20.w),
+      width: ScreenUtil().screenWidth,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        color: const Color(0xffEDEDED),
+        boxShadow: [
+          BoxShadow(
+              color: Colors.black.withOpacity(0.3),
+              blurRadius: 3.0,
+              offset: const Offset(0.3, 3.0)),
+        ],
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "anyFeedbacks".tr,
+              style: AppTextStyle.textStyle16(fontColor: appColors.darkBlue),
+            ),
+            SizedBox(
+              height: 10.h,
+            ),
+            Text(
+              "feedbacksText".tr,
+              style: AppTextStyle.textStyle14(fontColor: appColors.darkBlue),
+            ),
+            SizedBox(height: 10.h),
+            Container(
+              decoration:
+              BoxDecoration(borderRadius: BorderRadius.circular(10)),
+              child: TextFormField(
+                scrollPadding: EdgeInsets.only(
+                    bottom:
+                    MediaQuery.of(Get.context!).viewInsets.bottom + 160),
+                maxLines: 6,
+                maxLength: 96,
+                keyboardType: TextInputType.text,
+                controller: controller!.feedBackText,
+                textInputAction: TextInputAction.done,
+                onTapOutside: (value) => FocusScope.of(Get.context!).unfocus(),
+                decoration: InputDecoration(
+                  hintText: "feedbackHintText".tr,
+                  hintStyle: TextStyle(
+                    fontSize: 12,
+                    color: appColors.lightGrey,
+                  ),
+                  helperStyle: AppTextStyle.textStyle16(),
+                  fillColor: Colors.white,
+                  hoverColor: Colors.white,
+                  filled: true,
+                  enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(
+                        color: appColors.white,
+                        width: 1.0,
+                      )),
+                  focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10.0),
+                      borderSide: BorderSide(
+                        color: appColors.guideColor,
+                        width: 1.0,
+                      )),
+                ),
+              ),
+            ),
+            SizedBox(height: 20.h),
+            GestureDetector(
+              onTap: () {
+                if (controller.feedBackText.text.isEmpty) {
+                  divineSnackBar(
+                      data: "${'feedbackValidation'.tr}.",
+                      color: appColors.redColor);
+                } else {
+                  controller.sendFeedbackAPI(controller.feedBackText.text);
+                }
+              },
+              child: Center(
+                child: Container(
+                    width: ScreenUtil().screenWidth / 1.5,
+                    height: 56,
+                    decoration: BoxDecoration(
+                        color: appColors.guideColor,
+                        borderRadius: BorderRadius.circular(30)),
+                    child: Center(
+                        child: Text(
+                          "submitFeedback".tr,
+                          style: AppTextStyle.textStyle16(
+                              fontWeight: FontWeight.w600,
+                              fontColor: appColors.white),
+                        ))),
+              ),
+            ),
+            SizedBox(height: 20.h),
+          ],
+        ),
       ),
     );
   }
