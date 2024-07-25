@@ -129,35 +129,35 @@ class LiveDharamController extends GetxController {
       AppFirebaseService().isInterNetConnected.value =
           !AppFirebaseService().isInterNetConnected.value;
     });
-    ever(
-      AppFirebaseService().isInterNetConnected,
-      (bool value) {
-        print("AppFirebaseService().isInterNetConnected");
-        if (!value) {
-          print("AppFirebaseService().isInterNetConnected-1");
-          if (isNetworkPopup.value.toString() == "1") {
-            showDialog(
-                context: Get.context!,
-                builder: (BuildContext context) {
-                  return AlertDialog(
-                    title: const Text('Your Internet was interrupted'),
-                    content: const Text('Click to reload'),
-                    actions: <Widget>[
-                      TextButton(
-                        child: const Text('Reload'),
-                        onPressed: () {
-                          Get.back();
-                          Get.toNamed(RouteName.liveDharamScreen);
-                        },
-                      ),
-                    ],
-                  );
-                });
-            dispose();
-          }
-        }
-      },
-    );
+    // ever(
+    //   AppFirebaseService().isInterNetConnected,
+    //   (bool value) {
+    //     print("AppFirebaseService().isInterNetConnected");
+    //     if (!value) {
+    //       print("AppFirebaseService().isInterNetConnected-1");
+    //       if (isNetworkPopup.value.toString() == "1") {
+    //         showDialog(
+    //             context: Get.context!,
+    //             builder: (BuildContext context) {
+    //               return AlertDialog(
+    //                 title: const Text('Your Internet was interrupted'),
+    //                 content: const Text('Click to reload'),
+    //                 actions: <Widget>[
+    //                   TextButton(
+    //                     child: const Text('Reload'),
+    //                     onPressed: () {
+    //                       Get.back();
+    //                       Get.toNamed(RouteName.liveDharamScreen);
+    //                     },
+    //                   ),
+    //                 ],
+    //               );
+    //             });
+    //         dispose();
+    //       }
+    //     }
+    //   },
+    // );
     tarotCardInit();
     initData();
   }

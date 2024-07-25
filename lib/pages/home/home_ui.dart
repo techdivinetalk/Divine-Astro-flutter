@@ -41,6 +41,7 @@ import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../gen/fonts.gen.dart';
 import '../../model/feedback_response.dart';
+import '../../screens/chat_assistance/chat_assistance_ui.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'home_controller.dart';
 import 'widgets/common_info_sheet.dart';
@@ -326,6 +327,9 @@ class HomeUI extends GetView<HomeController> {
                                         );
                                       },
                                     );
+                                    // Get.toNamed(
+                                    //   RouteName.passbookUI,
+                                    // );
                                   },
                                   child: Ink(
                                     height: 50.h,
@@ -953,7 +957,49 @@ class HomeUI extends GetView<HomeController> {
                                 }
                               }),*/
                         SizedBox(height: 20.h),
-                        feedbackWidget(controller: controller),
+                        // feedbackWidget(controller: controller),
+                        (controller.customerDetailsResponse == null ||
+                                controller
+                                    .customerDetailsResponse!.data.isEmpty)
+                            ? SizedBox()
+                            : NotificationListener<ScrollNotification>(
+                                onNotification:
+                                    (ScrollNotification scrollInfo) {
+                                  if (scrollInfo.metrics.pixels ==
+                                      scrollInfo.metrics.maxScrollExtent) {
+                                    print(
+                                        "getConsulation getConsulation getConsulation");
+                                    controller.getConsulation();
+                                    return true;
+                                  }
+                                  return false;
+                                },
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 10.h),
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemCount: (controller.filteredUserData)
+                                              .isNotEmpty ||
+                                          controller
+                                              .searchController.text.isNotEmpty
+                                      ? controller.filteredUserData.length
+                                      : controller.customerDetailsResponse?.data
+                                              .length ??
+                                          0,
+                                  itemBuilder: (context, index) {
+                                    return ChatAssistanceDataTile(
+                                      data: (controller.filteredUserData)
+                                                  .isNotEmpty ||
+                                              controller.searchController.text
+                                                  .isNotEmpty
+                                          ? controller.filteredUserData[index]
+                                          : controller.customerDetailsResponse!
+                                              .data[index],
+                                    );
+                                  },
+                                ),
+                              ),
                         SizedBox(height: 20.h),
                       ],
                     ),
@@ -1141,12 +1187,14 @@ class HomeUI extends GetView<HomeController> {
                           onTap: () {
                             log("kundlii");
                             log("kundlii");
-                            log("kundlii");
-                            log("kundlii");
-                            log("kundlii");
-                            log("kundlii");
+                            log("kundlii${double.parse(data["latitude"])}");
+                            log("kundlii${double.parse(data["longitude"])}");
+                            log("open_order -- $data");
+
                             DateTime time = DateFormat('d MMMM yyyy h:mm a')
                                 .parse('${data["dob"]} ${data["tob"]}');
+                            log("kundlii${time.toString()}");
+
                             print(data);
                             print("datadatadatadatadata");
                             Params params = Params(
@@ -1154,18 +1202,22 @@ class HomeUI extends GetView<HomeController> {
                               month: time.month,
                               hour: time.hour,
                               min: time.minute,
-                              lat: double.parse(data["latitude"] ?? "0.0"),
-                              long: double.parse(data["longitude"] ?? "0.0"),
+                              lat: double.parse(data["latitude"]),
+                              long: double.parse(data["longitude"]),
                               location: data["pob"],
                               year: time.year,
                               name: data["userName"],
                             );
+                            log("kundli");
+
                             Get.toNamed(
                               RouteName.kundliDetail,
                               arguments: {
-                                "kundli_id": data["kundli_id"],
+                                "kundli_id": 0,
                                 "from_kundli": false,
                                 "params": params,
+                                "gender":
+                                    AppFirebaseService().orderData["gender"]
                               },
                             );
                           },
@@ -3021,7 +3073,7 @@ class SelectedTimeForChat extends StatelessWidget {
           if (controller?.selectedChatTime.value.isNotEmpty ?? false) {
             return Text(
               "${controller?.selectedChatDate.value.toCustomFormat() ?? ""} ${controller?.selectedChatTime.value ?? ""}",
-              style: AppTextStyle.textStyle10(
+              style: AppTextStyle.textStyle9(
                 fontColor: appColors.darkBlue,
                 fontWeight: FontWeight.w400,
               ),
@@ -3029,7 +3081,7 @@ class SelectedTimeForChat extends StatelessWidget {
           } else {
             return Text(
               controller?.selectedChatDate.value.toCustomFormat() ?? "",
-              style: AppTextStyle.textStyle10(
+              style: AppTextStyle.textStyle9(
                 fontColor: appColors.darkBlue,
                 fontWeight: FontWeight.w400,
               ),
@@ -3355,7 +3407,7 @@ class SelectedTimeForCall extends StatelessWidget {
           if (controller?.selectedCallTime.value.isNotEmpty ?? false) {
             return Text(
               "${controller?.selectedCallDate.value.toCustomFormat() ?? ""} ${controller?.selectedCallTime.value ?? ""}",
-              style: AppTextStyle.textStyle10(
+              style: AppTextStyle.textStyle9(
                 fontColor: appColors.darkBlue,
                 fontWeight: FontWeight.w400,
               ),
@@ -3363,7 +3415,7 @@ class SelectedTimeForCall extends StatelessWidget {
           } else {
             return Text(
               controller?.selectedCallDate.value.toCustomFormat() ?? "",
-              style: AppTextStyle.textStyle10(
+              style: AppTextStyle.textStyle9(
                 fontColor: appColors.darkBlue,
                 fontWeight: FontWeight.w400,
               ),

@@ -78,6 +78,7 @@ class AppSocket {
     isGifts(int.parse(masterData.gifts.toString()));
     isRemidies(int.parse(masterData.remidies.toString()));
     isEcom(int.parse(masterData.ecom.toString()));
+    isPrivacyPolicy(int.parse(masterData.isPrivacyPolicy.toString()));
     isLiveCall(int.parse(masterData.isLiveCall.toString()));
     isKundli(int.parse(masterData.kundli.toString()));
     isLive(int.parse(masterData.live.toString()));

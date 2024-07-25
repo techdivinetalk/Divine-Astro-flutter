@@ -49,12 +49,14 @@ import '../../common/feedback_bottomsheet.dart';
 import "../../common/important_number_bottomsheet.dart";
 import '../../di/shared_preference_service.dart';
 import '../../model/astro_notice_board_response.dart';
+import '../../model/chat_assistant/CustomerDetailsResponse.dart';
 import '../../model/constant_details_model_class.dart';
 import '../../model/home_page_model_class.dart';
 import "../../model/important_numbers.dart";
 import '../../model/res_login.dart';
 import '../../model/send_feed_back_model.dart';
 import '../../model/view_training_video_model.dart';
+import '../../repository/chat_assistant_repository.dart';
 import '../../repository/home_page_repository.dart';
 import "../../repository/important_number_repository.dart";
 import '../../repository/notice_repository.dart';
@@ -112,6 +114,27 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       scoreIndex--;
       update(['score_update']);
     }
+  }
+
+  final chatAssistantRepository = ChatAssistantRepository();
+  int pageUsersData = 1;
+  CustomerDetailsResponse? customerDetailsResponse;
+  RxList filteredUserData = [].obs;
+  final searchController = TextEditingController();
+  Future<void> getConsulation() async {
+    CustomerDetailsResponse response =
+        await chatAssistantRepository.getConsulation(pageUsersData);
+    if (response.data.isNotEmpty) {
+      if (pageUsersData != 1 &&
+          customerDetailsResponse != null &&
+          customerDetailsResponse!.data.isNotEmpty) {
+        customerDetailsResponse!.data.addAll(response.data);
+      } else {
+        customerDetailsResponse = response;
+      }
+      pageUsersData++;
+    }
+    update();
   }
 
   BroadcastReceiver broadcastReceiver =
@@ -308,6 +331,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     getAstrologerTrainingSession();
     getAstrologerLiveData();
     getAstrologerStatus();
+    getConsulation();
     // cron.schedule(Schedule.parse('*/5 * * * * *'), checkForScheduleUpdate);
   }
 

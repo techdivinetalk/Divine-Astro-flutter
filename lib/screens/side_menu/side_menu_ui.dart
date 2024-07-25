@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -83,13 +84,23 @@ class SideMenuDrawer extends GetView<HomeController> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.bug_report),
+              leading: const Icon(Icons.bug_report),
               title: Text('Technical Issues'.tr),
               onTap: () async {
                 Navigator.of(context).pop();
                 Get.toNamed(RouteName.technicalIssues);
               },
             ),
+            kDebugMode
+                ? ListTile(
+                    leading: const Icon(Icons.check_box_outline_blank),
+                    title: Text('Testing'.tr),
+                    onTap: () async {
+                      Navigator.of(context).pop();
+                      Get.toNamed(RouteName.testingScreen);
+                    },
+                  )
+                : const SizedBox(),
             // ListTile(
             //   leading: Assets.images.icImportContact.svg(),
             //   title: Text("leaveresignation".tr),

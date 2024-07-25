@@ -40,6 +40,7 @@ RxInt isGifts = 1.obs;
 RxInt isTime = 0.obs;
 RxInt isCustomToken = 0.obs;
 RxInt isNetworkPopup = 0.obs;
+RxInt isPrivacyPolicy = 0.obs;
 // RxInt isTruecaller = 1.obs;
 RxInt isLiveCall = 1.obs;
 RxInt homePage = 1.obs;
@@ -208,7 +209,10 @@ class AppFirebaseService {
       case "isEngagedStatus":
         isEngagedStatus(value);
         break;
+
       case "callKundli":
+        callKunadliUpdated({});
+
         if (isRemoved) {
           callKunadliUpdated({});
           sendBroadcast(BroadcastMessage(name: "callKundli", data: {}));
@@ -216,7 +220,7 @@ class AppFirebaseService {
           Map<String, dynamic>? callKundli =
               Map<String, dynamic>.from(value as Map<Object?, Object?>);
           print(callKundli);
-          print("realTimeData['callKundli']");
+          print("realTimeData['callKundli'] ");
           callKunadliUpdated(callKundli);
           sendBroadcast(BroadcastMessage(name: "callKundli", data: callKundli));
         }
@@ -301,6 +305,7 @@ class AppFirebaseService {
     try {
       database.child(path).onChildChanged.listen((event) {
         final key = event.snapshot.key; // Get the key of the changed child
+
         final value =
             event.snapshot.value; // Get the new value of the changed child
         if (event.snapshot.value != null) {
@@ -484,6 +489,9 @@ class AppFirebaseService {
         break;
       case "live":
         isLive(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isPrivacyPolicy":
+        isPrivacyPolicy(int.parse(dataSnapshot.value.toString()));
         break;
       case "queue":
         isQueue(int.parse(dataSnapshot.value.toString()));

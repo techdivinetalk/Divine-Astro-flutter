@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/screens/message_template/message_template_controller.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +10,6 @@ import '../../common/colors.dart';
 import '../../common/routes.dart';
 import '../../common/switch_component.dart';
 import '../../model/message_template_response.dart';
-import '../../model/notice_response.dart';
 import '../../utils/enum.dart';
 
 class MessageTemplateUI extends GetView<MessageTemplateController> {
@@ -85,6 +86,8 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                       itemBuilder: (context, index) {
                         MessageTemplates messageTemplate =
                             controller.messageTemplates[index];
+                        log("messages- -${messageTemplate.toJson().toString()}");
+
                         return GestureDetector(
                           onTap: () {
                             if (messageTemplate.type != 0) {
@@ -158,7 +161,6 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                             //         .messageTemplates[index]
                                             //         .isOn ??
                                             //     true);
-
                                             final result = controller
                                                 .messageLocalTemplates
                                                 .indexWhere(

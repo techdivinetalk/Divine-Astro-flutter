@@ -30,6 +30,7 @@ class MasterData {
   final int? templates;
   final int? truecaller;
   final int? voip;
+  final int? isPrivacyPolicy;
 
   MasterData({
     this.call,
@@ -38,6 +39,7 @@ class MasterData {
     this.chatAssistance,
     this.ecom,
     this.gifts,
+    this.isPrivacyPolicy,
     this.homePage,
     this.isLiveCall,
     this.kundli,
@@ -54,6 +56,7 @@ class MasterData {
       : call = json['call'] as int?,
         camera = json['camera'] as int?,
         chat = json['chat'] as int?,
+        isPrivacyPolicy = json['isPrivacyPolicy'] as int?,
         chatAssistance = json['chat_assistance'] as int?,
         ecom = json['ecom'] as int?,
         gifts = json['gifts'] as int?,
@@ -78,6 +81,7 @@ class MasterData {
     'homePage' : homePage,
     'isLiveCall' : isLiveCall,
     'kundli' : kundli,
+    'isPrivacyPolicy' : isPrivacyPolicy,
     'live' : live,
     'queue' : queue,
     'remidies' : remidies,

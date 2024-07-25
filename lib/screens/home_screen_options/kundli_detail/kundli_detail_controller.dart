@@ -318,6 +318,9 @@ class KundliDetailController extends GetxController {
 
         break;
       case "Basic Panchang":
+        if (astroDetails.value.data == null) {
+          astroDetailsApi(fromKundali);
+        }
         if (birthDetails.value.data == null) {
           birthDetailsApi(fromKundali);
         }
