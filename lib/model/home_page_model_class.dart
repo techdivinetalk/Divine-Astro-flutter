@@ -39,7 +39,6 @@ class HomePageModelClass {
 }
 
 class HomeData {
-  NoticeBoard? noticeBoard;
   FeedbackData? feedback;
   dynamic totalEarning;
   num? todaysEarning;
@@ -70,7 +69,6 @@ class HomeData {
   dynamic technical_support;
 
   HomeData({
-    this.noticeBoard,
     this.feedback,
     this.totalEarning,
     this.todaysEarning,
@@ -102,9 +100,6 @@ class HomeData {
   });
 
   factory HomeData.fromJson(Map<String, dynamic> json) => HomeData(
-        noticeBoard: json["notice_board"] == null
-            ? null
-            : NoticeBoard.fromJson(json["notice_board"]),
         feedback: json["feedback"] == null
             ? null
             : FeedbackData.fromJson(json["feedback"]),
@@ -144,7 +139,6 @@ class HomeData {
       );
 
   Map<String, dynamic> toJson() => {
-        "notice_board": noticeBoard?.toJson(),
         "feedback": feedback?.toJson(),
         "total_earning": totalEarning,
         "todays_earning": todaysEarning,

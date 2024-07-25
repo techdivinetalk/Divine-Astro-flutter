@@ -48,6 +48,7 @@ import '../../common/app_exception.dart';
 import '../../common/feedback_bottomsheet.dart';
 import "../../common/important_number_bottomsheet.dart";
 import '../../di/shared_preference_service.dart';
+import '../../model/astro_notice_board_response.dart';
 import '../../model/chat_assistant/CustomerDetailsResponse.dart';
 import '../../model/constant_details_model_class.dart';
 import '../../model/home_page_model_class.dart';
@@ -64,6 +65,8 @@ import '../../repository/user_repository.dart';
 import 'widgets/can_not_online.dart';
 
 class HomeController extends GetxController with WidgetsBindingObserver {
+  Rx<AstroNoticeBoardResponse> astroNoticeBoardResponse =
+      AstroNoticeBoardResponse().obs;
   RxBool isOpenLivePayment = false.obs;
   bool isOpenBonusSheet = false;
   bool isOpenPaidSheet = false;
@@ -120,7 +123,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   final searchController = TextEditingController();
   Future<void> getConsulation() async {
     CustomerDetailsResponse response =
-    await chatAssistantRepository.getConsulation(pageUsersData);
+        await chatAssistantRepository.getConsulation(pageUsersData);
     if (response.data.isNotEmpty) {
       if (pageUsersData != 1 &&
           customerDetailsResponse != null &&
@@ -204,32 +207,34 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
-
   @override
   void onInit() async {
     super.onInit();
     debugPrint("test_onInit: call");
 
+    initData();
+  }
 
+  initData() {
     WidgetsBinding.instance.addObserver(this);
     if (preferenceService.getUserDetail() != null) {
       getAllDashboardData();
       userData = preferenceService.getUserDetail()!;
       appbarTitle.value =
-      "${userData.name.toString().capitalizeFirst} (${userData.uniqueNo})";
+          "${userData.name.toString().capitalizeFirst} (${userData.uniqueNo})";
 
       print("${preferenceService.getBaseImageURL()}/${userData.image}");
 
       final String path = "astrologer/${(userData.id ?? 0)}/realTime";
       FirebaseDatabase.instance.ref().child(path).onValue.listen(
-            (event) async {
+        (event) async {
           final DataSnapshot dataSnapshot = event.snapshot;
 
           if (dataSnapshot.exists) {
             if (dataSnapshot.value is Map<dynamic, dynamic>) {
               Map<dynamic, dynamic> map = <dynamic, dynamic>{};
               map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-              as Map<dynamic, dynamic>;
+                  as Map<dynamic, dynamic>;
               print("Home Realtime DB Listener: $map");
 
               // final isCallSwitchRes = map["voiceCallStatus"] ?? 0;
@@ -273,8 +278,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               if (offers != null) {
                 if (homeData != null) {
                   for (int i = 0;
-                  i < homeData!.offers!.orderOffer!.length;
-                  i++) {
+                      i < homeData!.offers!.orderOffer!.length;
+                      i++) {
                     for (int j = 0; j < offers.keys.toList().length; j++) {
                       if ("${homeData!.offers!.orderOffer![i].id}" ==
                           "${offers.keys.toList()[j]}") {
@@ -340,6 +345,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       } else {
         print("else----getConstantDetails!.data!.isForceTraningVideo");
         await getDashboardDetail();
+        getAstroNoticeBoardData();
         getFilteredPerformance();
         getFeedbackData();
         tarotCardData();
@@ -646,6 +652,25 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  getAstroNoticeBoardData() async {
+    try {
+      Map<String, dynamic> params = {
+        "role_id": userData.roleId ?? 0,
+        "device_token": userData.deviceToken,
+      };
+      var response = await HomePageRepository().getAstroNoticeBoardData(params);
+      astroNoticeBoardResponse.value = response;
+      log("AstroNoticeBoardData==>${jsonEncode(astroNoticeBoardResponse)}");
+    } catch (error) {
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+    update();
+  }
+
   getWalletPointDetail(wallet) async {
     update();
     try {
@@ -750,8 +775,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         'Connection': 'keep-alive',
         'Keep-Alive': 'timeout=5, max=1000',
       };
-      final response = await dio.get(
-          "${ApiProvider.astOnlineOffline}${userData.uniqueNo}&$status"); 
+      final response = await dio
+          .get("${ApiProvider.astOnlineOffline}${userData.uniqueNo}&$status");
       log(response.data.toString());
       print("response.data");
       if (response.statusCode == 200) {}

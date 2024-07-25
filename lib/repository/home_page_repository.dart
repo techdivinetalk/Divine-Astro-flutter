@@ -15,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../common/app_exception.dart';
 import '../di/api_provider.dart';
+import '../model/astro_notice_board_response.dart';
 import '../model/feedback_response.dart';
 import '../model/home_page_model_class.dart';
 import '../model/tarot_response.dart';
@@ -328,6 +329,34 @@ class HomePageRepository extends ApiProvider {
         }
       } else {
         return null;
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<AstroNoticeBoardResponse> getAstroNoticeBoardData(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await post(
+        getAstroNoticeBoard,
+        body: jsonEncode(param).toString(),
+        headers: await getJsonHeaderURL(),
+      );
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final astroNoticeBoardResponse =
+              AstroNoticeBoardResponse.fromJson(json.decode(response.body));
+          return astroNoticeBoardResponse;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
       }
     } catch (e, s) {
       debugPrint("we got $e $s");
