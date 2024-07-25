@@ -599,7 +599,8 @@ class HomeUI extends GetView<HomeController> {
                         // SizedBox(height: 10.h),
                         // availableFeedbackWidget(controller.feedbackResponse ?? FeedbackData()),
                         // SizedBox(height: 10.h),
-                        controller.homeData?.noticeBoard == null
+                        controller.astroNoticeBoardResponse.value.success !=
+                                true
                             ? const SizedBox()
                             : Container(
                                 padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -1199,7 +1200,7 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget noticeBoardWidget({HomeController? controller}) {
-    return controller!.homeData != null
+    return controller!.astroNoticeBoardResponse.value.success == true
         ? ClipRRect(
             key: Get.find<DashboardController>().keyNoticeBoard,
             borderRadius: BorderRadius.all(Radius.circular(20.r)),
@@ -1208,7 +1209,8 @@ class HomeUI extends GetView<HomeController> {
               child: InkWell(
                 onTap: () {
                   Get.toNamed(RouteName.noticeDetail,
-                      arguments: controller.homeData?.noticeBoard,
+                      arguments: controller
+                          .astroNoticeBoardResponse.value.data?.noticeBoard,
                       parameters: {"from_list": "0"});
                 },
                 child: Ink(
@@ -1232,7 +1234,9 @@ class HomeUI extends GetView<HomeController> {
                           SizedBox(
                             width: 150.w,
                             child: CustomText(
-                              controller.homeData?.noticeBoard!.title ?? '',
+                              controller.astroNoticeBoardResponse.value.data
+                                      ?.noticeBoard?.title ??
+                                  '',
                               fontWeight: FontWeight.w500,
                               fontColor: appColors.darkBlue,
                               maxLines: 2,
@@ -1244,8 +1248,8 @@ class HomeUI extends GetView<HomeController> {
                               SizedBox(
                                 width: 100,
                                 child: Text(
-                                  '${dateToString(controller.homeData?.noticeBoard?.createdAt ?? DateTime.now(), format: "h:mm a")}  '
-                                  '${formatDateTime(controller.homeData?.noticeBoard?.createdAt ?? DateTime.now())} ',
+                                  '${dateToString(DateTime.parse(controller.astroNoticeBoardResponse.value.data?.noticeBoard?.createdAt ?? ''), format: "h:mm a")}  '
+                                  '${formatDateTime(DateTime.parse(controller.astroNoticeBoardResponse.value.data?.noticeBoard?.createdAt ?? ''))}',
                                   textAlign: TextAlign.right,
                                   style: AppTextStyle.textStyle10(
                                       fontWeight: FontWeight.w400,
@@ -1258,8 +1262,11 @@ class HomeUI extends GetView<HomeController> {
                                     Get.bottomSheet(CommonInfoSheet(
                                       title: "noticeBoard".tr,
                                       subTitle: "noticeBoardDes".tr,
-                                      argument:
-                                          controller.homeData?.noticeBoard,
+                                      argument: controller
+                                          .astroNoticeBoardResponse
+                                          .value
+                                          .data
+                                          ?.noticeBoard,
                                     ));
                                   },
                                   child: Assets.images.icInfo
@@ -1294,8 +1301,9 @@ class HomeUI extends GetView<HomeController> {
                   ),
                 ),*/
                       ExpandableHtml(
-                        htmlData:
-                            controller.homeData?.noticeBoard?.description ?? "",
+                        htmlData: controller.astroNoticeBoardResponse.value.data
+                                ?.noticeBoard?.description ??
+                            "",
                         trimLength: 100,
                         isExpanded: true,
                       ),
