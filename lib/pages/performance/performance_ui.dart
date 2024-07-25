@@ -1,7 +1,6 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/generic_loading_widget.dart';
-
 import 'package:divine_astrologer/model/performance_response.dart';
 import 'package:divine_astrologer/pages/home/widgets/common_info_sheet.dart';
 import 'package:divine_astrologer/pages/performance/rank_system_screen.dart';
@@ -9,7 +8,6 @@ import 'package:divine_astrologer/utils/enum.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../common/app_textstyle.dart';
@@ -17,7 +15,6 @@ import '../../common/appbar.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../common/routes.dart';
 import '../../gen/assets.gen.dart';
-import '../../model/filter_performance_response.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'performance_controller.dart';
 
@@ -214,7 +211,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 8.h),
+                        // SizedBox(height: 8.h),
                         Row(
                           children: [
                             Expanded(

@@ -1,24 +1,37 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class Webview extends StatefulWidget {
-  var html;
-  Webview({this.html});
+class WebViewPage extends StatefulWidget {
+  const WebViewPage({required this.url});
+
+  final String url;
+
   @override
-  _WebviewState createState() => _WebviewState();
+  State<WebViewPage> createState() => _WebViewPageState();
 }
 
-class _WebviewState extends State<Webview> {
-  final Completer<WebViewController> _controller =
-      Completer<WebViewController>();
-  late WebViewController _con;
+class _WebViewPageState extends State<WebViewPage> {
+  WebViewController? controller;
+  @override
+  void initState() {
+    super.initState();
+    controller = WebViewController()
+      ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..setNavigationDelegate(
+        NavigationDelegate(
+          onProgress: (int progress) {
+            // Update loading bar.
+          },
+          onPageStarted: (String url) {},
+          onPageFinished: (String url) {},
+          onWebResourceError: (WebResourceError error) {},
+        ),
+      )
+      ..loadHtmlString(widget.url);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Webview(
-      html: widget.html,
-    );
+    return WebViewWidget(controller: controller!);
   }
 }

@@ -1,28 +1,31 @@
 import 'dart:convert';
 import 'dart:developer';
+
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/performance_response.dart';
-import 'package:divine_astrologer/screens/rank_system/rank_system_controller.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+
 import '../../common/app_exception.dart';
-import '../../model/filter_performance_response.dart';
 import '../../repository/performance_repository.dart';
 
 class PerformanceController extends GetxController {
   var percentageSubTitle = <ScoreModelClass>[
     ScoreModelClass("Total user converted from first user offer."),
     ScoreModelClass("Total repeated orders out of total orders received."),
-    ScoreModelClass("Total online hours spent on application on chat and call ."),
+    ScoreModelClass(
+        "Total online hours spent on application on chat and call ."),
     ScoreModelClass("Total duration spent on application over live session."),
     ScoreModelClass("Total revenue generated through product selling."),
-    ScoreModelClass("Total busy hours out of online hours when busy over consultation."),
+    ScoreModelClass(
+        "Total busy hours out of online hours when busy over consultation."),
   ].obs;
 
   Rx<Loading> loading = Loading.initial.obs;
-  var txt = "Lorem Ipsum is simply dummy text of the printing and typesetting industry...";
+  var txt =
+      "Lorem Ipsum is simply dummy text of the printing and typesetting industry...";
 
   var scoreList = <ScoreModelClass>[
     ScoreModelClass("conversionRate".tr),
@@ -51,9 +54,14 @@ class PerformanceController extends GetxController {
 
   void updateDurationValue(String val) {
     if (selectedOption.value != val) {
+      // if(selectedOption.value =="Yesterday"){
+      //   selectedOption.value = val;
+      //
+      // }else{}
       selectedOption.value = val;
       int index = durationOptions.indexOf(val);
       selectedValue.value = durationValue[index];
+      log("=======${selectedValue.value}");
       getPerformance();
     }
   }
@@ -87,6 +95,8 @@ class PerformanceController extends GetxController {
     update();
     try {
       Map<String, dynamic> params = {"filter": selectedValue.value};
+      log('-------${params.toString()}');
+
       var response = await PerformanceRepository().getPerformance(params);
       log('😻😻😻😻😻😻😻😻😻');
       log("Res-->${jsonEncode(response.data)}");

@@ -131,10 +131,11 @@ class PassbookUi extends GetView<PassbooksController> {
                             child: CircularProgressIndicator(),
                           )
                         : SizedBox(
-                            height: 100,
-                            width: 299,
-                            child: Webview(
-                              html: controller.passBookDataModel!.data,
+                            height: 200,
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            child: WebViewPage(
+                              url:
+                                  controller.passBookDataModel!.data.toString(),
                             ),
                           )
                 // : Padding(
