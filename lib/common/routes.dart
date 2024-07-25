@@ -84,6 +84,7 @@ import 'package:divine_astrologer/screens/video_call_page/video_call_page_bindin
 import 'package:get/get.dart';
 
 import '../model/custom_product/custom_product_list_view.dart';
+import '../pages/home/passbook/passbook_ui.dart';
 import '../screens/add_message_template/add_message_template_binding.dart';
 import '../screens/add_message_template/add_message_template_ui.dart';
 import '../screens/bank_details/bank_detail_binding.dart';
@@ -229,6 +230,7 @@ class RouteName {
   static const String addCustomProduct = "/addCustomProduct";
   static const String customProduct = "/customProduct";
   static const String passbook = "/passbook";
+  static const String passbookUI = "/passbookUI";
 }
 
 final Set<String> validRoutes = {
@@ -318,6 +320,11 @@ class Routes {
       page: () => TestingUI(),
       name: RouteName.testingScreen,
       binding: TestingBinding(),
+    ),
+    GetPage(
+      page: () => PassbookUi(),
+      name: RouteName.passbookUI,
+      binding: PassbookBinding(),
     ),
     GetPage(
       page: () => AllTechnicalIssueScreen(),

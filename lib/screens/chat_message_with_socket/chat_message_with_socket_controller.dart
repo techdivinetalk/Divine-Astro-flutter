@@ -10,7 +10,6 @@ import "package:device_info_plus/device_info_plus.dart";
 import "package:divine_astrologer/app_socket/app_socket.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/routes.dart";
-
 import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/model/chat_histroy_response.dart";
 import "package:divine_astrologer/model/chat_offline_model.dart";
@@ -585,6 +584,7 @@ class ChatMessageWithSocketController extends GetxController
     try {
       final data = await sharedPreferencesInstance.getMessageTemplates();
       if (data.isNotEmpty) {
+        log("Adding");
         messageTemplates(data);
       }
     } catch (e) {
@@ -1352,8 +1352,6 @@ class ChatMessageWithSocketController extends GetxController
       // scrollToBottomFunc();
     }
   }
-
-
 
   scrollToBottomFunc() {
     if (messgeScrollController.hasClients) {

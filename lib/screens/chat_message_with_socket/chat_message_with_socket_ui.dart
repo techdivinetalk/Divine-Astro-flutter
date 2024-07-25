@@ -794,8 +794,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
               ? GestureDetector(
                   onTap: () async {
                     await Get.toNamed(RouteName.messageTemplate);
-                    controller.getMessageTemplatesLocally();
-                    controller.update();
+                    // controller.getMessageTemplatesLocally();
+                    // controller.update();
                   },
                   child: Container(
                     padding:

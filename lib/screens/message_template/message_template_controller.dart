@@ -1,10 +1,7 @@
 import 'dart:convert';
 
 import 'package:divine_astrologer/di/shared_preference_service.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 import '../../common/colors.dart';
 import '../../common/common_functions.dart';
@@ -28,7 +25,7 @@ class MessageTemplateController extends GetxController {
     loading = Loading.loading;
     print('called again');
     getMessageTemplates();
-    getMessageTemplatesLocally();
+    // getMessageTemplatesLocally();
     update();
   }
 

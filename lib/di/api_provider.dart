@@ -132,6 +132,7 @@ class ApiProvider {
   final String updateSessionType = "updateSessionType";
   final String astroOnline = "astroOnline";
   final String getCityAstrology = "getCityAstrology";
+  final String getPassbookDetail = "getPassbookDetail";
   final String updateOfferFlag = "updateOfferFlag";
   final String customOfferManage = "customOfferManage";
   final String faq = "faq";
