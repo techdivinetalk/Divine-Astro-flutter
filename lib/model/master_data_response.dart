@@ -31,6 +31,7 @@ class MasterData {
   final int? truecaller;
   final int? voip;
   final int? isPrivacyPolicy;
+  final int? isServerMaintenance;
 
   MasterData({
     this.call,
@@ -50,6 +51,7 @@ class MasterData {
     this.templates,
     this.truecaller,
     this.voip,
+    this.isServerMaintenance,
   });
 
   MasterData.fromJson(Map<String, dynamic> json)
@@ -69,6 +71,7 @@ class MasterData {
         tarrotCard = json['tarrotCard'] as int?,
         templates = json['templates'] as int?,
         truecaller = json['truecaller'] as int?,
+        isServerMaintenance = json['isServerMaintenance'] as int?,
         voip = json['voip'] as int?;
 
   Map<String, dynamic> toJson() => {
@@ -88,6 +91,7 @@ class MasterData {
     'tarrotCard' : tarrotCard,
     'templates' : templates,
     'truecaller' : truecaller,
+    'isServerMaintenance' : isServerMaintenance,
     'voip' : voip
   };
 }

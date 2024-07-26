@@ -9,6 +9,7 @@ import 'package:contacts_service/contacts_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_dialogue.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
@@ -522,6 +523,7 @@ class DashboardController extends GetxController
     notificationPermission();
     final socket = AppSocket();
     socket.socketConnect();
+    isServerMaintenance.value == 1 ? CommonDialogue().serverMaintenancePopUp() : null;
     super.onReady();
   }
 
