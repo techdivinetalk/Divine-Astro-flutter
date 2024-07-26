@@ -489,8 +489,8 @@ class KundliDetailController extends GetxController {
 
   Future<void> getAntraDataApiList(String planetName) async {
     try {
-      PlanetlDetailModel response =
-          await kundliRepository.getPlanetDetailsAPI(params, planetName);
+      PlanetlDetailModel response = await kundliRepository.getPlanetDetailsAPI(
+          args['from_kundli'] ? kundaliIdParms : params, planetName);
       if ((response.data ?? []).isNotEmpty) {
         planetDataDetail.value = response;
       } else {
@@ -1143,8 +1143,11 @@ class KundliDetailController extends GetxController {
   Future<void> getPratyantarDashaApiList(
       String planetName, String atraName) async {
     try {
-      PratyantarDashaModel response = await kundliRepository
-          .getPratyantarDashaDetailsAPI(params, planetName, atraName);
+      PratyantarDashaModel response =
+          await kundliRepository.getPratyantarDashaDetailsAPI(
+              args['from_kundli'] ? kundaliIdParms : params,
+              planetName,
+              atraName);
       if ((response.data ?? []).isNotEmpty) {
         pratyantarDataDetail.value = response;
       } else {
@@ -1174,7 +1177,10 @@ class KundliDetailController extends GetxController {
     try {
       SookshmaDashaModel response =
           await kundliRepository.getSookshmaDashaDetailsAPI(
-              params, planetName, atraName, pratyantarName);
+              args['from_kundli'] ? kundaliIdParms : params,
+              planetName,
+              atraName,
+              pratyantarName);
       if ((response.data ?? []).isNotEmpty) {
         sookshmaDataDetail.value = response;
       } else {
@@ -1202,7 +1208,11 @@ class KundliDetailController extends GetxController {
       String pratyantarName, String sookshmaName) async {
     try {
       PranDashaModel response = await kundliRepository.getPranDashaDetailsAPI(
-          params, planetName, atraName, pratyantarName, sookshmaName);
+          args['from_kundli'] ? kundaliIdParms : params,
+          planetName,
+          atraName,
+          pratyantarName,
+          sookshmaName);
       if ((response.data ?? []).isNotEmpty) {
         pranDataDetail.value = response;
       } else {
