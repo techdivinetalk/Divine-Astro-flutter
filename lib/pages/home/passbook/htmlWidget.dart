@@ -11,6 +11,7 @@ class WebViewPage extends StatefulWidget {
 }
 
 class _WebViewPageState extends State<WebViewPage> {
+  bool isLoading = true;
   WebViewController? controller;
   @override
   void initState() {
@@ -22,7 +23,11 @@ class _WebViewPageState extends State<WebViewPage> {
           onProgress: (int progress) {
             // Update loading bar.
           },
-          onPageStarted: (String url) {},
+          onPageStarted: (String url) {
+            setState(() {
+              isLoading = false;
+            });
+          },
           onPageFinished: (String url) {},
           onWebResourceError: (WebResourceError error) {},
         ),
@@ -32,6 +37,11 @@ class _WebViewPageState extends State<WebViewPage> {
 
   @override
   Widget build(BuildContext context) {
-    return WebViewWidget(controller: controller!);
+    return Container(
+        child: isLoading
+            ? Center(
+                child: CircularProgressIndicator(),
+              )
+            : WebViewWidget(controller: controller!));
   }
 }

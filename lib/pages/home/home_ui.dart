@@ -327,7 +327,7 @@ class HomeUI extends GetView<HomeController> {
                                         );
                                       },
                                     );
-
+                                    //
                                     // Get.toNamed(
                                     //   RouteName.passbookUI,
                                     // );

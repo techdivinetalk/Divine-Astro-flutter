@@ -3,7 +3,6 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/model/home_page_model_class.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
@@ -23,9 +22,9 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
     var data;
 
     if (Get.parameters["from_list"] == "0") {
-      data = Get.arguments as NoticeBoard;
+      data = Get.arguments;
     } else if (Get.parameters["from_list"] == "1") {
-      data = Get.arguments as NoticeDatum;
+      data = Get.arguments;
     }
     return Scaffold(
       appBar: commonDetailAppbar(
@@ -33,8 +32,8 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
         trailingWidget: Container(
           margin: EdgeInsets.only(right: 20.sp),
           child: Text(
-            '${dateToString(data.createdAt ?? DateTime.now(), format: "h:mm a")}  '
-            '${formatDateTime(data.createdAt ?? DateTime.now())} ',
+            '${dateToString(DateTime.parse(data.createdAt.toString()), format: "h:mm a")}  '
+            '${formatDateTime(DateTime.parse(data.createdAt.toString()))} ',
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 10.sp,
@@ -75,7 +74,10 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
       padding: EdgeInsets.all(10.h),
       decoration: BoxDecoration(
           boxShadow: [
-            BoxShadow(color: Colors.black.withOpacity(0.2), blurRadius: 3.0, offset: const Offset(0.0, 3.0)),
+            BoxShadow(
+                color: Colors.black.withOpacity(0.2),
+                blurRadius: 3.0,
+                offset: const Offset(0.0, 3.0)),
           ],
           color: Colors.white,
           borderRadius: const BorderRadius.all(
@@ -89,11 +91,13 @@ class NoticeDetailUi extends GetView<NoticeDetailController> {
             children: [
               Text(
                 title ?? "",
-                style: AppTextStyle.textStyle16(fontWeight: FontWeight.w500, fontColor: appColors.darkBlue),
+                style: AppTextStyle.textStyle16(
+                    fontWeight: FontWeight.w500, fontColor: appColors.darkBlue),
               ),
               Text(
                 date ?? "",
-                style: AppTextStyle.textStyle10(fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
+                style: AppTextStyle.textStyle10(
+                    fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
               )
             ],
           ),

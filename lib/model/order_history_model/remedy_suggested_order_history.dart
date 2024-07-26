@@ -60,6 +60,7 @@ class RemedySuggestedDataList {
   DateTime? updatedAt;
   GetCustomers? getCustomers;
   ProductDetails? productDetails;
+  PoojaDetails? poojaDetails;
   GetOrder? getOrder;
 
   RemedySuggestedDataList(
@@ -75,6 +76,7 @@ class RemedySuggestedDataList {
       this.updatedAt,
       this.getCustomers,
       this.productDetails,
+      this.poojaDetails,
       this.getOrder});
 
   factory RemedySuggestedDataList.fromJson(Map<String, dynamic> json) =>
@@ -99,6 +101,9 @@ class RemedySuggestedDataList {
         productDetails: json["product_details"] == null
             ? null
             : ProductDetails.fromJson(json["product_details"]),
+        poojaDetails: json["pooja_detail"] == null
+            ? null
+            : PoojaDetails.fromJson(json["pooja_detail"]),
         getOrder: json["get_order"] == null
             ? null
             : GetOrder.fromJson(json["get_order"]),
@@ -117,6 +122,7 @@ class RemedySuggestedDataList {
         "updated_at": updatedAt?.toIso8601String(),
         "get_customers": getCustomers?.toJson(),
         "product_details": productDetails?.toJson(),
+        "pooja_detail": poojaDetails?.toJson(),
         "get_order": getOrder?.toJson(),
       };
 }
@@ -153,6 +159,8 @@ class ProductDetails {
   int? id;
   String? prodName;
   String? prodImage;
+  int? prod_starting_price_inr;
+
   int? payoutType;
   int? payoutValue;
 
@@ -161,6 +169,7 @@ class ProductDetails {
     this.prodName,
     this.prodImage,
     this.payoutType,
+    this.prod_starting_price_inr,
     this.payoutValue,
   });
 
@@ -169,6 +178,7 @@ class ProductDetails {
       id: json["id"] as int?,
       prodName: json["prod_name"] as String?,
       prodImage: json["prod_image"] as String?,
+      prod_starting_price_inr: json["product_price_inr"] as int?,
       payoutType: json["payout_type"] as int?,
       payoutValue: json["payout_value"] as int?,
     );
@@ -179,7 +189,50 @@ class ProductDetails {
         "prod_name": prodName,
         "prod_image": prodImage,
         "payout_type": payoutType,
+        "product_price_inr": prod_starting_price_inr,
         "payout_value": payoutValue,
+      };
+}
+
+class PoojaDetails {
+  int? id;
+  String? poojaName;
+  String? pooja_img;
+  int? payoutType;
+  int? payoutValue;
+  int? pooja_starting_price_inr;
+  var gst;
+
+  PoojaDetails({
+    this.id,
+    this.poojaName,
+    this.pooja_img,
+    this.payoutType,
+    this.payoutValue,
+    this.pooja_starting_price_inr,
+    this.gst,
+  });
+
+  factory PoojaDetails.fromJson(Map<String, dynamic> json) {
+    return PoojaDetails(
+      id: json["id"] as int?,
+      poojaName: json["pooja_name"] as String?,
+      pooja_img: json["pooja_img"] as String?,
+      payoutType: json["payout_type"] as int?,
+      payoutValue: json["payout_value"] as int?,
+      pooja_starting_price_inr: json["pooja_starting_price_inr"] as int?,
+      gst: json["gst"],
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "pooja_name": poojaName,
+        "pooja_img": pooja_img,
+        "payout_type": payoutType,
+        "payout_value": payoutValue,
+        "pooja_starting_price_inr": pooja_starting_price_inr,
+        "gst": gst,
       };
 }
 

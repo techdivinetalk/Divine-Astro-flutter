@@ -50,6 +50,9 @@ class OrderHistoryController extends GetxController {
   var liveGiftPageCount = 1;
   var remedyPageCount = 1;
   var feedBackPageCount = 1;
+  double calculatePercentage(double value, double percentage) {
+    return value * (percentage / 100);
+  }
 
   @override
   void onInit() {

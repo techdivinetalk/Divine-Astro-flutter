@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
@@ -27,6 +29,7 @@ class NoticeBoardController extends GetxController {
     try {
       final response = await repository.noticeAPi();
       noticeList = response.data;
+      log(noticeList.toString());
       loading = Loading.loaded;
       update();
     } catch (err) {
