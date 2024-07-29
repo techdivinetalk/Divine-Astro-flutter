@@ -25,38 +25,17 @@ class PassbookUi extends GetView<PassbooksController> {
           body: SingleChildScrollView(
             child: Column(
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    selectWidget("Monthly", context, controller),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    selectWidget("Weekly", context, controller),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    selectTypeWidget("Bonus", context, controller),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    selectTypeWidget("Paid", context, controller),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    selectTypeWidget("Ecomm", context, controller),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   crossAxisAlignment: CrossAxisAlignment.start,
+                //   children: [
+                //     selectWidget("Monthly", context, controller),
+                //     const SizedBox(
+                //       width: 10,
+                //     ),
+                //     selectWidget("Weekly", context, controller),
+                //   ],
+                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -71,6 +50,7 @@ class PassbookUi extends GetView<PassbooksController> {
                           context: Get.context!,
                           builder: (context) {
                             return selectDateWid(
+                              name: "Start Date",
                               looping: true,
                               buttonTitle: "Confirm",
                               initialDate: DateTime.now(),
@@ -96,6 +76,7 @@ class PassbookUi extends GetView<PassbooksController> {
                           context: Get.context!,
                           builder: (context) {
                             return selectDateWid(
+                              name: "End Date",
                               looping: true,
                               buttonTitle: "Confirm",
                               initialDate: DateTime.now(),
@@ -110,6 +91,80 @@ class PassbookUi extends GetView<PassbooksController> {
                     }),
                   ],
                 ),
+                const SizedBox(
+                  height: 10,
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    selectTypeWidget("Bonus", context, controller),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    selectTypeWidget("Paid", context, controller),
+                    const SizedBox(
+                      width: 10,
+                    ),
+                    selectTypeWidget("Ecomm", context, controller),
+                  ],
+                ),
+                // const SizedBox(
+                //   height: 10,
+                // ),
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.center,
+                //   crossAxisAlignment: CrossAxisAlignment.start,
+                //   children: [
+                //     selectDate(
+                //         controller.startDate == null
+                //             ? "Start Date"
+                //             : "${DateTime.parse(controller.startDate).day}-${DateTime.parse(controller.startDate).month}-${DateTime.parse(controller.startDate).year}",
+                //         context,
+                //         controller, () {
+                //       showCupertinoModalPopup(
+                //           context: Get.context!,
+                //           builder: (context) {
+                //             return selectDateWid(
+                //               looping: true,
+                //               buttonTitle: "Confirm",
+                //               initialDate: DateTime.now(),
+                //               onConfirm: (String value) {
+                //                 controller.setStartDate(value);
+                //               },
+                //               onChange: (String value) {
+                //                 controller.setStartDate(value);
+                //               },
+                //             );
+                //           });
+                //     }),
+                //     const SizedBox(
+                //       width: 10,
+                //     ),
+                //     selectDate(
+                //         controller.endDate == null
+                //             ? "End Date"
+                //             : "${DateTime.parse(controller.endDate).day}-${DateTime.parse(controller.endDate).month}-${DateTime.parse(controller.endDate).year}",
+                //         context,
+                //         controller, () {
+                //       showCupertinoModalPopup(
+                //           context: Get.context!,
+                //           builder: (context) {
+                //             return selectDateWid(
+                //               looping: true,
+                //               buttonTitle: "Confirm",
+                //               initialDate: DateTime.now(),
+                //               onConfirm: (String value) {
+                //                 controller.setEndDate(value);
+                //               },
+                //               onChange: (String value) {
+                //                 controller.setEndDate(value);
+                //               },
+                //             );
+                //           });
+                //     }),
+                //   ],
+                // ),
                 // Container(
                 //   child: Html(
                 //     data:
@@ -131,13 +186,13 @@ class PassbookUi extends GetView<PassbooksController> {
                             child: CircularProgressIndicator(),
                           )
                         : SizedBox(
-                            height: 400,
-                            width: MediaQuery.of(context).size.width * 0.9,
+                            height: MediaQuery.of(context).size.height * 0.8,
+                            width: MediaQuery.of(context).size.width,
                             child: WebViewPage(
                               url:
                                   controller.passBookDataModel!.data.toString(),
                             ),
-                          )
+                          ),
                 // : Padding(
                 //     padding: const EdgeInsets.only(
                 //         left: 10, bottom: 5, right: 10),
@@ -278,8 +333,8 @@ class PassbookUi extends GetView<PassbooksController> {
   Widget selectTypeWidget(title, context, controller) {
     return InkWell(
       onTap: () {
-        if (controller.selectedDaysData == null) {
-          Fluttertoast.showToast(msg: "Please select Days type");
+        if (controller.startDate == null || controller.endDate == null) {
+          Fluttertoast.showToast(msg: "Please select Date");
         } else {
           controller.selectEarningType(title);
         }
@@ -377,13 +432,15 @@ class selectDateWid extends StatelessWidget {
       required this.looping,
       required this.onConfirm,
       required this.onChange,
-      required this.buttonTitle})
+      required this.buttonTitle,
+      required this.name})
       : super(key: key);
 
   final String buttonTitle;
   final DateTime? initialDate;
   final bool looping;
   final Function(String) onConfirm, onChange;
+  final String name;
 
   @override
   Widget build(BuildContext context) {
@@ -437,7 +494,7 @@ class selectDateWid extends StatelessWidget {
                   Material(
                     color: appColors.transparent,
                     child: Text(
-                      "Start Date",
+                      name.toString(),
                       style: TextStyle(
                           fontWeight: FontWeight.w600,
                           color: appColors.darkBlue,

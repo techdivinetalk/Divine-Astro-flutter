@@ -38,6 +38,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import "package:permission_handler/permission_handler.dart";
@@ -45,8 +46,10 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/PopupManager.dart';
 import '../../common/app_exception.dart';
+import '../../common/app_textstyle.dart';
 import '../../common/feedback_bottomsheet.dart';
 import "../../common/important_number_bottomsheet.dart";
+import '../../common/switch_component.dart';
 import '../../di/shared_preference_service.dart';
 import '../../model/astro_notice_board_response.dart';
 import '../../model/chat_assistant/CustomerDetailsResponse.dart';
@@ -1022,6 +1025,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
     value ? params["check_in"] = 1 : params["check_out"] = 1;
 
+    print("here is it is comming - ${params.toString()}");
+
     sessionTypeLoading.value = Loading.loading;
     try {
       // UpdateSessionTypeResponse response =
@@ -1074,6 +1079,25 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       Get.back();
 
       if (response.statusCode == 200) {
+        print("here is it is comming - ${callSwitch.value}");
+        print("here is it is comming - ${type}");
+        print("here is it is comming - ${response.message}");
+        print("here is it is comming - ${response.toJson()}");
+
+        if (type == 1 &&
+            response.message == "Successfully Checkin" &&
+            params.containsKey("check_in")) {
+          print("here is it is comming - ${params.containsKey("check_in")}");
+
+          showDiscountPopup();
+        } else {}
+
+        if (type == 2 &&
+            response.message == "Successfully Checkin" &&
+            params.containsKey("check_in")) {
+          print("here is it is comming");
+          showDiscountPopup();
+        } else {}
         if (!videoSwitch.value && type == 3) {
           selectDateTimePopupForVideo();
         } else {
@@ -1412,6 +1436,161 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           : "";
     }
     return "";
+  }
+
+  Future<void> showDiscountPopup() async {
+    return Get.dialog(
+      barrierDismissible: false,
+      AlertDialog(
+        // insetPadding: EdgeInsets.all(16),
+        // contentPadding: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        elevation: 0,
+        content: customerOfferWidget2(Get.context!),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text(
+              "Ok",
+              style: AppTextStyle.textStyle18(
+                fontWeight: FontWeight.w500,
+                fontColor: appColors.darkBlue,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget customerOfferWidget2(BuildContext context) {
+    return GetBuilder<HomeController>(builder: (controller) {
+      return Container(
+        // key: Get.find<DashboardController>().keyManageDiscountOffers,
+        margin: EdgeInsets.only(top: 10.h),
+        // padding: EdgeInsets.all(16.h),
+        // decoration: BoxDecoration(
+        //   boxShadow: [
+        //     BoxShadow(
+        //         color: Colors.black.withOpacity(0.2),
+        //         blurRadius: 1.0,
+        //         offset: const Offset(0.0, 3.0)),
+        //   ],
+        //   color: appColors.white,
+        //   borderRadius: const BorderRadius.all(Radius.circular(20)),
+        // ),
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Discount Offers",
+                    style: AppTextStyle.textStyle12(
+                      fontWeight: FontWeight.w500,
+                      fontColor: appColors.darkBlue,
+                    ),
+                  ),
+
+                  /*InkWell(
+                              onTap: () {
+                                Get.toNamed(RouteName.discountOffers)!.then((value) {
+                                  controller!.homeData?.offers?.customOffer = value;
+                                  controller.update();
+                                });
+                              },
+                              child: Text(
+                                "viewAll".tr,
+                                style: AppTextStyle.textStyle12(
+                                  fontWeight: FontWeight.w500,
+                                  fontColor: appColors.darkBlue,
+                                ),
+                              ),
+                            ),*/
+                ],
+              ),
+              // Text(
+              //   "(You can apply each offer only once per day)",
+              //   style: AppTextStyle.textStyle10(
+              //     fontWeight: FontWeight.w500,
+              //     fontColor: appColors.guideColor,
+              //   ),
+              // ),
+              SizedBox(height: 10.h),
+              ListView.separated(
+                shrinkWrap: true,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: homeData!.offers!.customOffer!.length,
+                separatorBuilder: (context, _) => SizedBox(height: 10.h),
+                itemBuilder: (context, index) {
+                  DiscountOffer data = homeData!.offers!.customOffer![index];
+
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Text(
+                            "${data.offerName}".toUpperCase(),
+                            style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          // if ((controller
+                          //     .homeData?.offers?.customOffer?[index].callRate ??
+                          //     0) >
+                          //     0)
+                          //   CustomText(
+                          //     " (₹${controller.homeData?.offers?.orderOffer?[index].callRate}/min)"
+                          //         .toUpperCase(),
+                          //     fontSize: 10.sp,
+                          //   ),
+                        ],
+                      ),
+                      SwitchWidget(
+                        onTap: () {
+                          if (data.isOn!) {
+                            data.isOn = !data.isOn!;
+                            updateOfferType(
+                                value: data.isOn!,
+                                index: index,
+                                offerId: data.id!,
+                                offerType: 2);
+                          } else if (homeData!.offers!.customOffer!
+                              .any((element) => element.isOn!)) {
+                            divineSnackBar(
+                                data: "Only 1 custom offer is allowed at once",
+                                color: appColors.redColor);
+                          } else {
+                            data.isOn = !data.isOn!;
+                            updateOfferType(
+                                value: data.isOn!,
+                                index: index,
+                                offerId: data.id!,
+                                offerType: 2);
+                          }
+
+                          update();
+                        },
+                        switchValue: data.isOn,
+                      )
+                    ],
+                  );
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    });
   }
 
   void selectDateTimePopupForVideo() {

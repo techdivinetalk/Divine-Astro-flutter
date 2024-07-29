@@ -12,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
 import '../../../common/build_empty.dart';
 import '../../../gen/assets.gen.dart';
 
@@ -34,13 +35,14 @@ class SuggestedRemediesScreen extends StatelessWidget {
               color: appColors.darkBlue,
             )),
       ),
-      body: Obx(() => controller.suggestApiCalling.value && controller.remedyPageCount == 1
-          ? const GenericLoadingWidget()
-          : suggestRemedies()),
+      body: Obx(() =>
+          controller.suggestApiCalling.value && controller.remedyPageCount == 1
+              ? const GenericLoadingWidget()
+              : suggestRemedies()),
     );
   }
 
-  Widget suggestRemedies(){
+  Widget suggestRemedies() {
     return Stack(
       children: [
         RefreshIndicator(
@@ -73,19 +75,19 @@ class SuggestedRemediesScreen extends StatelessWidget {
                 children: [
                   Expanded(
                       child: ListView.separated(
-                        controller: controller.scrollController,
-                        scrollDirection: Axis.vertical,
-                        shrinkWrap: true,
-                        itemCount: controller.remedySuggestedHistoryList.length,
-                        padding: const EdgeInsets.symmetric(horizontal: 10)
-                            .copyWith(top: 30, bottom: 20),
-                        separatorBuilder: (context, index) =>
+                    controller: controller.scrollController,
+                    scrollDirection: Axis.vertical,
+                    shrinkWrap: true,
+                    itemCount: controller.remedySuggestedHistoryList.length,
+                    padding: const EdgeInsets.symmetric(horizontal: 10)
+                        .copyWith(top: 30, bottom: 20),
+                    separatorBuilder: (context, index) =>
                         const SizedBox(height: 10),
-                        itemBuilder: (context, index) {
-                          return remediesDetail(
-                              index, controller.remedySuggestedHistoryList);
-                        },
-                      )),
+                    itemBuilder: (context, index) {
+                      return remediesDetail(
+                          index, controller.remedySuggestedHistoryList);
+                    },
+                  )),
                   if (controller.suggestApiCalling.value &&
                       controller.remedyPageCount > 1)
                     controller.paginationLoadingWidget(),
@@ -110,7 +112,7 @@ class SuggestedRemediesScreen extends StatelessWidget {
       onTap: () {
         DataList dataList = DataList();
         dataList.name = data[index].getCustomers!.name;
-        dataList.id =data[index].getCustomers!.id;
+        dataList.id = data[index].getCustomers!.id;
         dataList.image = data[index].getCustomers!.avatar;
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
       },
@@ -137,16 +139,16 @@ class SuggestedRemediesScreen extends StatelessWidget {
                   children: [
                     data[index].getCustomers != null
                         ? ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: SizedBox(
-                        height: 65,
-                        width: 65,
-                        child: CachedNetworkPhoto(
-                          url: data[index].getCustomers?.avatar,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    )
+                            borderRadius: BorderRadius.circular(10),
+                            child: SizedBox(
+                              height: 65,
+                              width: 65,
+                              child: CachedNetworkPhoto(
+                                url: data[index].getCustomers?.avatar,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          )
                         : Assets.images.bgTmpUser.svg(width: 65),
                     const SizedBox(width: 10),
                     Column(
@@ -190,7 +192,7 @@ class SuggestedRemediesScreen extends StatelessWidget {
                             style: AppTextStyle.textStyle10(
                               fontWeight: FontWeight.w500,
                               fontColor:
-                              getStatusColor("${data[index].status}"),
+                                  getStatusColor("${data[index].status}"),
                             ),
                           ),
                         ],
@@ -211,7 +213,7 @@ class SuggestedRemediesScreen extends StatelessWidget {
                 Text(
                     data[index].createdAt != null
                         ? DateFormat("dd MMM, hh:mm aa")
-                        .format(data[index].createdAt!)
+                            .format(data[index].createdAt!)
                         : "N/A",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
@@ -229,7 +231,10 @@ class SuggestedRemediesScreen extends StatelessWidget {
                           fontColor: appColors.darkBlue)),
                 ),
                 Expanded(
-                  child: Text("${data[index].productDetails?.prodName}",
+                  child: Text(
+                      data[index].shopId == 0
+                          ? "${data[index].poojaDetails?.poojaName}"
+                          : "${data[index].productDetails?.prodName}",
                       textAlign: TextAlign.end,
                       style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
@@ -239,13 +244,13 @@ class SuggestedRemediesScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            Text("(Click to connect with user and try to increase your Ecom on chat assistance)",
+            Text(
+                "(Click to connect with user and try to increase your Ecom on chat assistance)",
                 textAlign: TextAlign.center,
                 style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w400,
-
                     fontColor: appColors.guideColor))
-           /* Row(
+            /* Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text("${"clientPaid".tr} :",
