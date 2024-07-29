@@ -211,23 +211,30 @@ class ProfileUI extends GetView<ProfilePageController> {
                 ),
               ),
               profileOptions(controller: controller),
-              Obx(() => controller.reviewDataSync.value == true ? controller.ratingsData.value.data?.totalRating != 0 ? ratingsView(controller: controller)
-                      : const SizedBox()
-                  : const SizedBox()),
+              controller.isGettingReviews.value == true
+                  ? const Center(
+                      child: CircularProgressIndicator(),
+                    )
+                  : Obx(() => controller.reviewDataSync.value == true
+                      ? controller.ratingsData.value.data?.totalRating != 0
+                          ? ratingsView(controller: controller)
+                          : const SizedBox()
+                      : const SizedBox()),
               Obx(() => controller.reviewDataSync.value == true
                   ? (controller
                               .ratingsData.value.data?.allReviews?.isNotEmpty ??
                           false)
                       ? Column(
-                        children: [
-                          SizedBox(height: 20.h),
-                          Container(
+                          children: [
+                            SizedBox(height: 20.h),
+                            Container(
                               width: MediaQuery.of(context).size.width,
                               padding: EdgeInsets.all(16.w),
                               decoration: BoxDecoration(
                                 boxShadow: [
                                   BoxShadow(
-                                      color: appColors.blackColor.withOpacity(0.2),
+                                      color:
+                                          appColors.blackColor.withOpacity(0.2),
                                       blurRadius: 1.0,
                                       offset: const Offset(0.0, 3.0)),
                                 ],
@@ -247,8 +254,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                                 ],
                               ),
                             ),
-                        ],
-                      )
+                          ],
+                        )
                       : const SizedBox()
                   : const SizedBox()),
               SizedBox(height: 20.h),
@@ -531,7 +538,9 @@ class ProfileUI extends GetView<ProfilePageController> {
   ratingsView({ProfilePageController? controller}) {
     return Column(
       children: [
-        SizedBox(height: 10.h,),
+        SizedBox(
+          height: 10.h,
+        ),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 16.h),
           decoration: BoxDecoration(
@@ -562,7 +571,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                               child: Text(
                                 "${controller!.ratingsData.value.data?.totalRating ?? "0.0"}",
                                 style: TextStyle(
-                                    fontSize: 17.sp, fontWeight: FontWeight.w400),
+                                    fontSize: 17.sp,
+                                    fontWeight: FontWeight.w400),
                               ),
                             ),
                             Icon(Icons.star, size: 22.h)
@@ -605,14 +615,15 @@ class ProfileUI extends GetView<ProfilePageController> {
                             lineHeight: 6.h,
                             animationDuration: 2000,
                             percent: controller.getReviewPercentage(
-                                ratingNumbers:
-                                    controller.ratingsData.value.data?.i5Rating ??
-                                        0,
-                                totalReviews: ((controller
-                                            .ratingsData.value.data?.totalReviews ??
+                                ratingNumbers: controller
+                                        .ratingsData.value.data?.i5Rating ??
+                                    0,
+                                totalReviews: ((controller.ratingsData.value
+                                            .data?.totalReviews ??
                                         0)
                                     .toDouble())),
-                            backgroundColor: appColors.guideColor.withOpacity(0.4),
+                            backgroundColor:
+                                appColors.guideColor.withOpacity(0.4),
                             progressColor: appColors.guideColor,
                           ),
                         ],
@@ -630,14 +641,15 @@ class ProfileUI extends GetView<ProfilePageController> {
                             lineHeight: 6.h,
                             animationDuration: 2000,
                             percent: controller.getReviewPercentage(
-                                ratingNumbers:
-                                    controller.ratingsData.value.data?.i4Rating ??
-                                        0,
-                                totalReviews: (controller
-                                            .ratingsData.value.data?.totalReviews ??
+                                ratingNumbers: controller
+                                        .ratingsData.value.data?.i4Rating ??
+                                    0,
+                                totalReviews: (controller.ratingsData.value.data
+                                            ?.totalReviews ??
                                         0)
                                     .toDouble()),
-                            backgroundColor: appColors.guideColor.withOpacity(0.4),
+                            backgroundColor:
+                                appColors.guideColor.withOpacity(0.4),
                             progressColor: appColors.guideColor,
                           ),
                         ],
@@ -655,14 +667,15 @@ class ProfileUI extends GetView<ProfilePageController> {
                             lineHeight: 6.h,
                             animationDuration: 2000,
                             percent: controller.getReviewPercentage(
-                                ratingNumbers:
-                                    controller.ratingsData.value.data?.i3Rating ??
-                                        0,
-                                totalReviews: (controller
-                                            .ratingsData.value.data?.totalReviews ??
+                                ratingNumbers: controller
+                                        .ratingsData.value.data?.i3Rating ??
+                                    0,
+                                totalReviews: (controller.ratingsData.value.data
+                                            ?.totalReviews ??
                                         0)
                                     .toDouble()),
-                            backgroundColor: appColors.guideColor.withOpacity(0.4),
+                            backgroundColor:
+                                appColors.guideColor.withOpacity(0.4),
                             progressColor: appColors.guideColor,
                           ),
                         ],
@@ -680,14 +693,15 @@ class ProfileUI extends GetView<ProfilePageController> {
                             lineHeight: 6.h,
                             animationDuration: 2000,
                             percent: controller.getReviewPercentage(
-                                ratingNumbers:
-                                    controller.ratingsData.value.data?.i2Rating ??
-                                        0,
-                                totalReviews: (controller
-                                            .ratingsData.value.data?.totalReviews ??
+                                ratingNumbers: controller
+                                        .ratingsData.value.data?.i2Rating ??
+                                    0,
+                                totalReviews: (controller.ratingsData.value.data
+                                            ?.totalReviews ??
                                         0)
                                     .toDouble()),
-                            backgroundColor: appColors.guideColor.withOpacity(0.4),
+                            backgroundColor:
+                                appColors.guideColor.withOpacity(0.4),
                             progressColor: appColors.guideColor,
                           ),
                         ],
@@ -705,14 +719,15 @@ class ProfileUI extends GetView<ProfilePageController> {
                             lineHeight: 6.h,
                             animationDuration: 2000,
                             percent: controller.getReviewPercentage(
-                                ratingNumbers:
-                                    controller.ratingsData.value.data?.i1Rating ??
-                                        0,
-                                totalReviews: (controller
-                                            .ratingsData.value.data?.totalReviews ??
+                                ratingNumbers: controller
+                                        .ratingsData.value.data?.i1Rating ??
+                                    0,
+                                totalReviews: (controller.ratingsData.value.data
+                                            ?.totalReviews ??
                                         0)
                                     .toDouble()),
-                            backgroundColor: appColors.guideColor.withOpacity(0.4),
+                            backgroundColor:
+                                appColors.guideColor.withOpacity(0.4),
                             progressColor: appColors.guideColor,
                           ),
                         ],
@@ -1016,11 +1031,11 @@ class ProfileUI extends GetView<ProfilePageController> {
             SizedBox(height: 10.h),
             Container(
               decoration:
-              BoxDecoration(borderRadius: BorderRadius.circular(10)),
+                  BoxDecoration(borderRadius: BorderRadius.circular(10)),
               child: TextFormField(
                 scrollPadding: EdgeInsets.only(
                     bottom:
-                    MediaQuery.of(Get.context!).viewInsets.bottom + 160),
+                        MediaQuery.of(Get.context!).viewInsets.bottom + 160),
                 maxLines: 6,
                 maxLength: 96,
                 keyboardType: TextInputType.text,
@@ -1072,11 +1087,11 @@ class ProfileUI extends GetView<ProfilePageController> {
                         borderRadius: BorderRadius.circular(30)),
                     child: Center(
                         child: Text(
-                          "submitFeedback".tr,
-                          style: AppTextStyle.textStyle16(
-                              fontWeight: FontWeight.w600,
-                              fontColor: appColors.white),
-                        ))),
+                      "submitFeedback".tr,
+                      style: AppTextStyle.textStyle16(
+                          fontWeight: FontWeight.w600,
+                          fontColor: appColors.white),
+                    ))),
               ),
             ),
             SizedBox(height: 20.h),

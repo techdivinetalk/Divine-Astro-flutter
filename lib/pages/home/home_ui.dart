@@ -315,29 +315,31 @@ class HomeUI extends GetView<HomeController> {
                                 // SizedBox(width: 10.w),
                                 InkWell(
                                   onTap: () {
-                                    showModalBottomSheet(
-                                      context: context,
-                                      builder: (BuildContext context) {
-                                        return Container(
-                                          height: 250,
-                                          width: double.infinity,
-                                          color: appColors.white,
-                                          child: Image.asset(
-                                              "assets/images/coming-soon-red-blue-3d-text-white-surface-clear-lighting.jpg"),
-                                        );
-                                      },
-                                    );
-
-                                    // Get.toNamed(
-                                    //   RouteName.passbookUI,
+                                    // showModalBottomSheet(
+                                    //   context: context,
+                                    //   builder: (BuildContext context) {
+                                    //     return Container(
+                                    //       height: 250,
+                                    //       width: double.infinity,
+                                    //       color: appColors.white,
+                                    //       child: Image.asset(
+                                    //           "assets/images/coming-soon-red-blue-3d-text-white-surface-clear-lighting.jpg"),
+                                    //     );
+                                    //   },
                                     // );
+
+                                    Get.toNamed(
+                                      RouteName.passbookUI,
+                                    );
                                   },
                                   child: Ink(
                                     height: 50.h,
                                     decoration: BoxDecoration(
                                       color: appColors.guideColor,
                                       borderRadius: const BorderRadius.all(
-                                          Radius.circular(10)),
+                                        Radius.circular(10),
+                                      ),
+                                      boxShadow: [],
                                     ),
                                     padding:
                                         EdgeInsets.symmetric(horizontal: 10.w),
@@ -1913,6 +1915,8 @@ class HomeUI extends GetView<HomeController> {
                               flex: 2,
                               child: SwitchWidget(
                                 onTap: () async {
+                                  log("here is it is comming - ${chatSwitch.value}");
+
                                   if (chatSwitch.value) {
                                     controller.selectDateTimePopupForChat(true);
                                   } else {
@@ -2008,6 +2012,7 @@ class HomeUI extends GetView<HomeController> {
                               flex: 2,
                               child: SwitchWidget(
                                 onTap: () async {
+                                  log("here is it is comming - ${callSwitch.value}");
                                   if (callSwitch.value) {
                                     controller.selectDateTimePopupForCall(true);
                                   } else {
@@ -2255,13 +2260,13 @@ class HomeUI extends GetView<HomeController> {
               ),*/
             ],
           ),
-          Text(
-            "(You can apply each offer only once per day)",
-            style: AppTextStyle.textStyle10(
-              fontWeight: FontWeight.w500,
-              fontColor: appColors.guideColor,
-            ),
-          ),
+          // Text(
+          //   "(You can apply each offer only once per day)",
+          //   style: AppTextStyle.textStyle10(
+          //     fontWeight: FontWeight.w500,
+          //     fontColor: appColors.guideColor,
+          //   ),
+          // ),
           SizedBox(height: 10.h),
           ListView.separated(
             shrinkWrap: true,
@@ -3462,3 +3467,143 @@ class SelectedTimeForVideoCall extends StatelessWidget {
     );
   }
 }
+
+// Future<void> showDiscountPopup(controller) async {
+//   return Get.dialog(
+//     barrierDismissible: false,
+//     AlertDialog(
+//       // insetPadding: EdgeInsets.all(16),
+//       // contentPadding: EdgeInsets.zero,
+//       shape: RoundedRectangleBorder(
+//         borderRadius: BorderRadius.circular(8.0),
+//       ),
+//       elevation: 0,
+//       content: customerOfferWidget2(Get.context!, controller),
+//     ),
+//   );
+// }
+//
+// Widget customerOfferWidget2(BuildContext context, controller) {
+//   return Container(
+//     key: Get.find<DashboardController>().keyManageDiscountOffers,
+//     margin: EdgeInsets.only(top: 10.h),
+//     padding: EdgeInsets.all(16.h),
+//     decoration: BoxDecoration(
+//       boxShadow: [
+//         BoxShadow(
+//             color: Colors.black.withOpacity(0.2),
+//             blurRadius: 1.0,
+//             offset: const Offset(0.0, 3.0)),
+//       ],
+//       color: appColors.white,
+//       borderRadius: const BorderRadius.all(Radius.circular(20)),
+//     ),
+//     child: Obx(() {
+//       return Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Row(
+//             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//             children: [
+//               Text(
+//                 "Discount Offers",
+//                 style: AppTextStyle.textStyle12(
+//                   fontWeight: FontWeight.w500,
+//                   fontColor: appColors.darkBlue,
+//                 ),
+//               ),
+//
+//               /*InkWell(
+//                         onTap: () {
+//                           Get.toNamed(RouteName.discountOffers)!.then((value) {
+//                             controller!.homeData?.offers?.customOffer = value;
+//                             controller.update();
+//                           });
+//                         },
+//                         child: Text(
+//                           "viewAll".tr,
+//                           style: AppTextStyle.textStyle12(
+//                             fontWeight: FontWeight.w500,
+//                             fontColor: appColors.darkBlue,
+//                           ),
+//                         ),
+//                       ),*/
+//             ],
+//           ),
+//           // Text(
+//           //   "(You can apply each offer only once per day)",
+//           //   style: AppTextStyle.textStyle10(
+//           //     fontWeight: FontWeight.w500,
+//           //     fontColor: appColors.guideColor,
+//           //   ),
+//           // ),
+//           SizedBox(height: 10.h),
+//           ListView.separated(
+//             shrinkWrap: true,
+//             physics: const NeverScrollableScrollPhysics(),
+//             itemCount: controller.homeData!.offers!.customOffer!.length,
+//             separatorBuilder: (context, _) => SizedBox(height: 10.h),
+//             itemBuilder: (context, index) {
+//               DiscountOffer data =
+//                   controller.homeData!.offers!.customOffer![index];
+//
+//               return Row(
+//                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                 crossAxisAlignment: CrossAxisAlignment.start,
+//                 children: [
+//                   Wrap(
+//                     crossAxisAlignment: WrapCrossAlignment.center,
+//                     children: [
+//                       Text(
+//                         "${data.offerName}".toUpperCase(),
+//                         style: AppTextStyle.textStyle12(
+//                           fontWeight: FontWeight.w700,
+//                         ),
+//                       ),
+//                       // if ((controller
+//                       //     .homeData?.offers?.customOffer?[index].callRate ??
+//                       //     0) >
+//                       //     0)
+//                       //   CustomText(
+//                       //     " (₹${controller.homeData?.offers?.orderOffer?[index].callRate}/min)"
+//                       //         .toUpperCase(),
+//                       //     fontSize: 10.sp,
+//                       //   ),
+//                     ],
+//                   ),
+//                   SwitchWidget(
+//                     onTap: () {
+//                       if (data.isOn!) {
+//                         data.isOn = !data.isOn!;
+//                         controller.updateOfferType(
+//                             value: data.isOn!,
+//                             index: index,
+//                             offerId: data.id!,
+//                             offerType: 2);
+//                       } else if (controller.homeData!.offers!.customOffer!
+//                           .any((element) => element.isOn!)) {
+//                         divineSnackBar(
+//                             data: "Only 1 custom offer is allowed at once",
+//                             color: appColors.redColor);
+//                       } else {
+//                         data.isOn = !data.isOn!;
+//                         controller.updateOfferType(
+//                             value: data.isOn!,
+//                             index: index,
+//                             offerId: data.id!,
+//                             offerType: 2);
+//                       }
+//
+//                       controller.update();
+//                     },
+//                     switchValue: data.isOn,
+//                   )
+//                 ],
+//               );
+//             },
+//           ),
+//         ],
+//       );
+//     }),
+//   );
+// }

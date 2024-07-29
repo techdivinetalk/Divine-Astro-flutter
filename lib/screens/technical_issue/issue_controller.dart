@@ -202,6 +202,8 @@ class TechnicalIssueController extends GetxController {
   var currentUploadedFile;
   Future<void> uploadImage(imageFile) async {
     var token = await preferenceService.getToken();
+    isLoading(true);
+
     log("image length - ${imageFile.path}");
 
     var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
@@ -242,6 +244,8 @@ class TechnicalIssueController extends GetxController {
       //   poojaImageUrl = image;
       // }
     } else {
+      isLoading(false);
+
       print("Failed to upload image.");
     }
   }

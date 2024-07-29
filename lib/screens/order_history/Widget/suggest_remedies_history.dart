@@ -208,7 +208,10 @@ class SuggestRemedies extends StatelessWidget {
                           fontColor: appColors.darkBlue)),
                 ),
                 Expanded(
-                  child: Text("${data[index].productDetails?.prodName}",
+                  child: Text(
+                      data[index].shopId == 0
+                          ? "${data[index].poojaDetails?.poojaName}"
+                          : "${data[index].productDetails?.prodName}",
                       textAlign: TextAlign.end,
                       style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
@@ -217,24 +220,24 @@ class SuggestRemedies extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 8),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text("${"clientPaid".tr} :",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400,
-                        fontColor: appColors.darkBlue)),
-                Text(
-                    data[index].getOrder?.amount != null &&
-                            data[index].getOrder?.amount != 0
-                        ? "₹${data[index].getOrder?.amount}"
-                        : "₹0",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w400,
-                        fontColor: appColors.darkBlue)),
-              ],
-            ),
+            // const SizedBox(height: 8),
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //   children: [
+            //     Text("${"clientPaid".tr} :",
+            //         style: AppTextStyle.textStyle12(
+            //             fontWeight: FontWeight.w400,
+            //             fontColor: appColors.darkBlue)),
+            //     Text(
+            //         data[index].getOrder?.amount != null &&
+            //                 data[index].getOrder?.amount != 0
+            //             ? "₹${data[index].getOrder?.amount}"
+            //             : "₹0",
+            //         style: AppTextStyle.textStyle12(
+            //             fontWeight: FontWeight.w400,
+            //             fontColor: appColors.darkBlue)),
+            //   ],
+            // ),
             const SizedBox(height: 8),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -243,7 +246,10 @@ class SuggestRemedies extends StatelessWidget {
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
-                Text("${data[index].productDetails?.payoutType}%",
+                Text(
+                    data[index].shopId == 0
+                        ? "${data[index].poojaDetails?.payoutType}%"
+                        : "${data[index].productDetails?.payoutType}%",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
@@ -260,14 +266,35 @@ class SuggestRemedies extends StatelessWidget {
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600),
                 ),
                 Text(
-                  data[index].getOrder?.amount != null &&
-                          data[index].getOrder?.amount != 0
-                      ? "₹${data[index].getOrder?.amount}"
-                      : "₹0",
+                  data[index].status == "approved" ||
+                          data[index].status == "completed"
+                      ? controller
+                          .calculatePercentage(
+                            data[index].shopId == 0
+                                ? double.parse(data[index]
+                                    .poojaDetails!
+                                    .payoutValue
+                                    .toString())
+                                : double.parse(data[index]
+                                    .productDetails!
+                                    .payoutValue
+                                    .toString()),
+                            data[index].shopId == 0
+                                ? double.parse(data[index]
+                                    .poojaDetails!
+                                    .pooja_starting_price_inr
+                                    .toString())
+                                : double.parse((data[index]
+                                    .productDetails!
+                                    .payoutValue
+                                    .toString())),
+                          )
+                          .toString()
+                      : "Nil",
                   style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w600,
-                    fontColor: data[index].getOrder?.amount != null &&
-                            data[index].getOrder?.amount != 0
+                    fontColor: data[index].status == "approved" ||
+                            data[index].status == "completed"
                         ? appColors.lightGreen
                         : Colors.red,
                   ),

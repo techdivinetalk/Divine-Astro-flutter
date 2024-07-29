@@ -245,13 +245,16 @@ class ProfilePageController extends GetxController {
     // scrollController.l
 
     userData = preference.getUserDetail();
+    getReviewRating();
+
     baseAmazonUrl = preference.getBaseImageURL();
     userProfileImage.value = "$baseAmazonUrl/${userData?.image}";
     print(userProfileImage.value);
     print("userProfileImage.value");
+
     getConstantDetailsData();
     getUserProfileDetails();
-    getReviewRating();
+    // getReviewRating();
   }
 
   void setUserData(UserData? value) {
@@ -283,19 +286,25 @@ class ProfilePageController extends GetxController {
     }
   }
 
+  var isGettingReviews = false.obs;
   getReviewRating() async {
+    isGettingReviews(true);
     try {
       Map<String, dynamic> params = {"role_id": userData?.roleId, "page": 1};
       var response = await userRepository.getReviewRatings(params);
       ratingsData.value = response;
       astrologerProfileReview.addAll(response.data!.allReviews ?? []);
       allReviews.value = response.data!.allReviews ?? [];
-
+      isGettingReviews(false);
       update();
       log("Data==>${jsonEncode(ratingsData.value.data)}");
     } catch (error) {
+      isGettingReviews(false);
+
       debugPrint("error $error");
       if (error is AppException) {
+        isGettingReviews(false);
+
         error.onException();
       } else {
         divineSnackBar(data: error.toString(), color: appColors.redColor);

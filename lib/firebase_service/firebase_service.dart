@@ -41,6 +41,7 @@ RxInt isTime = 0.obs;
 RxInt isCustomToken = 0.obs;
 RxInt isNetworkPopup = 0.obs;
 RxInt isPrivacyPolicy = 0.obs;
+RxInt isServerMaintenance = 0.obs;
 // RxInt isTruecaller = 1.obs;
 RxInt isLiveCall = 1.obs;
 RxInt homePage = 1.obs;
@@ -498,6 +499,9 @@ class AppFirebaseService {
         break;
       case "fire_chat":
         fireChat(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isServerMaintenance":
+        isServerMaintenance(int.parse(dataSnapshot.value.toString()));
         break;
       case "isNetworkPopup":
         isNetworkPopup(int.parse(dataSnapshot.value.toString()));
