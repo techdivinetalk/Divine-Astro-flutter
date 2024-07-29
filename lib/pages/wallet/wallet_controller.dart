@@ -14,6 +14,8 @@ class WalletController extends GetxController {
   Loading loading = Loading.initial;
   var currentPage = 1.obs;
   int pageSize = 10;
+  RxBool isDropDownShow = false.obs;
+  RxString dropDownValue = 'Today'.obs;
 
   @override
   void onInit() {
@@ -32,7 +34,7 @@ class WalletController extends GetxController {
     };
     try {
       PayoutDetails response =
-      await walletRepository.walletPayOutDetails(params);
+          await walletRepository.walletPayOutDetails(params);
       if (currentPage.value == 1) {
         walletListRepo.value = response;
       } else {
@@ -49,12 +51,8 @@ class WalletController extends GetxController {
     update();
   }
 
-
   void loadNextPage() {
     currentPage.value++;
     getWalletDetailsApi();
   }
-
 }
-
-

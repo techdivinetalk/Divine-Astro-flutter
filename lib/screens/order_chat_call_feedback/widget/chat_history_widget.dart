@@ -52,7 +52,8 @@ class MessageHistoryView extends StatelessWidget {
     print("chat Message:: ${chatMessage.msgType}");
     switch (chatMessage.msgType) {
       case MsgType.gift:
-        messageWidget = giftMsgView(context, chatMessage, yourMessage, userName);
+        messageWidget =
+            giftMsgView(context, chatMessage, yourMessage, userName);
         break;
       case MsgType.sendgifts:
         messageWidget = giftSendUi(context, chatMessage, yourMessage, userName);
@@ -88,7 +89,6 @@ class MessageHistoryView extends StatelessWidget {
     return messageWidget;
   }
 
-
   @override
   Widget build(BuildContext context) {
     return buildMessageView(context, chatMessage, yourMessage);
@@ -97,7 +97,7 @@ class MessageHistoryView extends StatelessWidget {
   Widget productMsgView(ChatMessage chatMessage, bool yourMessage) {
     return GestureDetector(
       onTap: () {
-       /* print(
+        /* print(
             "data from page ${chatMessage.productId} ${chatMessage.isPoojaProduct} ${chatMessage.customerId}");
         if (chatMessage.isPoojaProduct ?? false) {
           Get.toNamed(RouteName.poojaDharamDetailsScreen, arguments: {
@@ -282,7 +282,8 @@ class MessageHistoryView extends StatelessWidget {
                                           .orderData["astroId"]
                                           .toString()
                                   ? appColors.red
-                                  :*/ appColors.black,
+                                  :*/
+                                  appColors.black,
                             )),
                       ],
                     ),
@@ -331,6 +332,7 @@ class MessageHistoryView extends StatelessWidget {
       ),
     );
   }
+
   Widget audioView(BuildContext context,
       {required ChatMessage chatDetail, required bool yourMessage}) {
     RxInt msgType = (chatDetail.type ?? 0).obs;
@@ -340,7 +342,7 @@ class MessageHistoryView extends StatelessWidget {
       width: double.maxFinite,
       child: Column(
         crossAxisAlignment:
-        yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Container(
             padding: const EdgeInsets.all(8.0),
@@ -372,19 +374,17 @@ class MessageHistoryView extends StatelessWidget {
                     );
                   },
                   child: AbsorbPointer(
-
                     absorbing: true,
                     child: VoiceMessageView(
                         counterTextStyle: TextStyle(color: Colors.transparent),
                         controller: VoiceController(
                             audioSrc:
-                            "${pref.getAmazonUrl()}${chatDetail.awsUrl}",
+                                "${pref.getAmazonUrl()}${chatDetail.awsUrl}",
                             maxDuration: const Duration(minutes: 30),
                             isFile: false,
                             onComplete: () => debugPrint("onComplete"),
                             onPause: () => debugPrint("onPause"),
                             onPlaying: () => debugPrint("onPlaying")),
-
                         innerPadding: 0,
                         cornerRadius: 20),
                   ),
@@ -404,13 +404,13 @@ class MessageHistoryView extends StatelessWidget {
                         msgType.value == 0
                             ? Assets.images.icSingleTick.svg()
                             : msgType.value == 1
-                            ? Assets.images.icDoubleTick.svg(
-                            colorFilter: ColorFilter.mode(
-                                appColors.disabledGrey,
-                                BlendMode.srcIn))
-                            : msgType.value == 3
-                            ? Assets.images.icDoubleTick.svg()
-                            : Assets.images.icSingleTick.svg()
+                                ? Assets.images.icDoubleTick.svg(
+                                    colorFilter: ColorFilter.mode(
+                                        appColors.disabledGrey,
+                                        BlendMode.srcIn))
+                                : msgType.value == 3
+                                    ? Assets.images.icDoubleTick.svg()
+                                    : Assets.images.icSingleTick.svg()
                     ],
                   ),
                 ),
@@ -448,7 +448,7 @@ class MessageHistoryView extends StatelessWidget {
             child: Stack(
               alignment: Alignment.center,
               children: [
-                *//* AbsorbPointer(
+                */ /* AbsorbPointer(
                     absorbing: controller.isAudioPlaying.value,
                     child: VoiceMessageView(
                         controller: VoiceController(
@@ -473,7 +473,7 @@ class MessageHistoryView extends StatelessWidget {
                             }),
                         innerPadding: 0,
                         cornerRadius: 20),
-                  ),*//*
+                  ),*/ /*
                 Positioned(
                   bottom: 0,
                   right: 0,
@@ -833,95 +833,99 @@ class MessageHistoryView extends StatelessWidget {
   }
 
   Widget kundliView({required ChatMessage chatDetail, required int index}) {
-    return chatDetail.kundliName == null ? SizedBox.shrink():InkWell(
-      onTap: () {
-        Get.toNamed(RouteName.kundliDetail, arguments: {
-          "kundli_id": chatDetail.kundliId ?? chatDetail.kundli!.kundliId,
-          "from_kundli": true,
-          "birth_place":
-              chatDetail.kundliPlace ?? chatDetail.kundli!.kundliPlace,
-          "gender": chatDetail.gender ?? chatDetail.kundli!.gender,
-          "name": chatDetail.kundliName ?? chatDetail.kundli!.kundliName,
-          "longitude": chatDetail.longitude ?? chatDetail.kundli!.longitude,
-          "latitude": chatDetail.latitude ?? chatDetail.kundli!.latitude,
-        });
-      },
-      child: Card(
-        color: appColors.white,
-        surfaceTintColor: appColors.white,
-        child: Container(
-          padding: EdgeInsets.all(12.h),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Container(
-                decoration: BoxDecoration(
-                    shape: BoxShape.circle, color: appColors.extraLightGrey),
-                child: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: Text(
-                    chatDetail.kundliName?[0] ??
-                        chatDetail.kundli?.kundliName[0] ??
-                        '',
-                    style: AppTextStyle.textStyle24(
-                        fontColor: appColors.white,
-                        fontWeight: FontWeight.w600),
-                  ),
-                ),
-              ),
-              SizedBox(width: 15.w),
-              Expanded(
-                child: Column(
+    return chatDetail.kundliName == null
+        ? SizedBox.shrink()
+        : InkWell(
+            onTap: () {
+              Get.toNamed(RouteName.kundliDetail, arguments: {
+                "kundli_id": chatDetail.kundliId ?? chatDetail.kundli!.kundliId,
+                "from_kundli": true,
+                "birth_place":
+                    chatDetail.kundliPlace ?? chatDetail.kundli!.kundliPlace,
+                "gender": chatDetail.gender ?? chatDetail.kundli!.gender,
+                "name": chatDetail.kundliName ?? chatDetail.kundli!.kundliName,
+                "longitude":
+                    chatDetail.longitude ?? chatDetail.kundli!.longitude,
+                "latitude": chatDetail.latitude ?? chatDetail.kundli!.latitude,
+              });
+            },
+            child: Card(
+              color: appColors.white,
+              surfaceTintColor: appColors.white,
+              child: Container(
+                padding: EdgeInsets.all(12.h),
+                child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text(
-                      chatDetail.kundliName ??
-                          chatDetail.kundli?.kundliName ??
-                          "",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.sp,
-                        color: appColors.darkBlue,
+                    Container(
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: appColors.extraLightGrey),
+                      child: Padding(
+                        padding: const EdgeInsets.all(15.0),
+                        child: Text(
+                          chatDetail.kundliName?[0] ??
+                              chatDetail.kundli?.kundliName[0] ??
+                              '',
+                          style: AppTextStyle.textStyle24(
+                              fontColor: appColors.white,
+                              fontWeight: FontWeight.w600),
+                        ),
                       ),
                     ),
-                    SizedBox(height: 5.h),
-                    Text(
-                      chatDetail.kundliDateTime ??
-                          chatDetail.kundli?.kundliDateTime  ??
-                      "",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 10.sp,
-                        //color: appColors.lightGrey,
+                    SizedBox(width: 15.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            chatDetail.kundliName ??
+                                chatDetail.kundli?.kundliName ??
+                                "",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 16.sp,
+                              color: appColors.darkBlue,
+                            ),
+                          ),
+                          SizedBox(height: 5.h),
+                          Text(
+                            chatDetail.kundliDateTime ??
+                                chatDetail.kundli?.kundliDateTime ??
+                                "",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 10.sp,
+                              //color: appColors.lightGrey,
+                            ),
+                          ),
+                          SizedBox(height: 5.h),
+                          Text(
+                            chatDetail.kundliPlace ??
+                                chatDetail.kundli?.kundliPlace ??
+                                "",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 10.sp,
+                              color: appColors.lightGrey,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    SizedBox(height: 5.h),
-                    Text(
-                      chatDetail.kundliPlace ??
-                          chatDetail.kundli?.kundliPlace ??
-                          "",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 10.sp,
-                        color: appColors.lightGrey,
+                    const Padding(
+                      padding: EdgeInsets.only(top: 15),
+                      child: Icon(
+                        Icons.keyboard_arrow_right,
+                        size: 35,
                       ),
                     ),
                   ],
                 ),
               ),
-              const Padding(
-                padding: EdgeInsets.only(top: 15),
-                child: Icon(
-                  Icons.keyboard_arrow_right,
-                  size: 35,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
+            ),
+          );
   }
 
   Widget CustomProductView(
@@ -941,7 +945,8 @@ class MessageHistoryView extends StatelessWidget {
             CustomImageView(
               height: 165,
               width: 165,
-              imagePath: "${Get.find<SharedPreferenceService>().getAmazonUrl()}/${chatDetail.getCustomProduct!.image}",
+              imagePath:
+                  "${Get.find<SharedPreferenceService>().getAmazonUrl()}/${chatDetail.getCustomProduct!.image}",
               radius: const BorderRadius.vertical(top: Radius.circular(10)),
               placeHolder: "assets/images/default_profiles.svg",
               fit: BoxFit.cover,

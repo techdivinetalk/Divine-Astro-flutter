@@ -1635,6 +1635,21 @@ class ChatMessageWithSocketController extends GetxController
     update();
   }
 
+  /// ------------------ check if file exists  ----------------------- ///
+  Future<String?> getDownloadedImagePath(
+    int chatDetailId,
+  ) async {
+    var documentDirectory = await getApplicationDocumentsDirectory();
+    var filePathAndName = "${documentDirectory.path}/images/$chatDetailId.jpg";
+
+    // Check if the file already exists
+    if (await File(filePathAndName).exists()) {
+      return filePathAndName;
+    } else {
+      return null;
+    }
+  }
+
   // void leavePrivateChat() {
   //   socket.leavePrivateChat((data) {
   //     debugPrint("userLeavePrivateChatListenerSocket $data");
