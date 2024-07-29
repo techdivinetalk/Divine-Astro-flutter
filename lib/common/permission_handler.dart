@@ -148,6 +148,35 @@ class PermissionHelper {
       return 'notification';
     }
   }
+
+  Future<bool> getAllPermissionForCamera() async {
+    var cameraPermissionStatus = await Permission.camera.status;
+    var storagePermissionStatus = await Permission.storage.status;
+    var microphonePermissionStatus = await Permission.microphone.status;
+
+    if (!cameraPermissionStatus.isGranted) {
+      var cameraPermission = await Permission.camera.request();
+      if (!cameraPermission.isGranted) {
+        return false;
+      }
+    }
+
+    if (!storagePermissionStatus.isGranted) {
+      var storagePermission = await Permission.storage.request();
+      if (!storagePermission.isGranted) {
+        return false;
+      }
+    }
+
+    if (!microphonePermissionStatus.isGranted) {
+      var microphonePermission = await Permission.microphone.request();
+      if (!microphonePermission.isGranted) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 }
 
 class AskPermissionDialog extends StatelessWidget {
