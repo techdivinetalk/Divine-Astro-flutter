@@ -72,6 +72,7 @@ class AppSocket {
 
   saveMasterData(MasterData masterData) {
     isCall(int.parse(masterData.call.toString()));
+    isServerMaintenance(int.parse(masterData.call.toString()));
     isCamera(int.parse(masterData.camera.toString()));
     isChat(int.parse(masterData.chat.toString()));
     isChatAssistance(int.parse(masterData.chatAssistance.toString()));
