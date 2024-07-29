@@ -52,7 +52,7 @@ class ReferAstrologerResponse {
 
 class Data {
   String? uuid;
-  bool? experience;
+  dynamic experience;
   bool? alternativeNumber;
   bool? gender;
   bool? leadSource;
@@ -67,7 +67,7 @@ class Data {
   String? segment;
   String? notes;
   int? rm;
-  String? owner;
+  dynamic owner;
   int? leadProcessStatus;
   String? updatedAt;
   String? createdAt;
@@ -97,7 +97,7 @@ class Data {
 
   Data copyWith({
     String? uuid,
-    bool? experience,
+    dynamic experience,
     bool? alternativeNumber,
     bool? gender,
     bool? leadSource,
@@ -112,7 +112,7 @@ class Data {
     String? segment,
     String? notes,
     int? rm,
-    String? owner,
+    dynamic owner,
     int? leadProcessStatus,
     String? updatedAt,
     String? createdAt,

@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
 import '../../../common/custom_light_yellow_btn.dart';
 
 class ReferAnAstrologer extends GetView<ReferAstrologerController> {
@@ -19,12 +20,16 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
       bottomNavigationBar: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          CustomLightYellowButton(
-            name: "submitForm".tr,
-            onTaped: () {
-              controller.submitForm();
-            },
-          ),
+          controller.submitting.value == false
+              ? CustomLightYellowButton(
+                  name: "submitForm".tr,
+                  onTaped: () {
+                    controller.submitForm();
+                  },
+                )
+              : const Center(
+                  child: CircularProgressIndicator(),
+                ),
         ],
       ),
       body: SingleChildScrollView(
@@ -194,9 +199,11 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                               blurRadius: 3.0,
                               offset: const Offset(0.0, 3.0)),
                         ],
-                        color:
-                            controller.isNo ? appColors.darkBlue : appColors.white,
-                        borderRadius: const BorderRadius.all(Radius.circular(15)),
+                        color: controller.isNo
+                            ? appColors.darkBlue
+                            : appColors.white,
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15)),
                       ),
                       child: Text(
                         "no".tr,
@@ -326,14 +333,14 @@ class ReferAstrologerField extends StatelessWidget {
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide:  BorderSide(
+            borderSide: BorderSide(
               color: appColors.redColor,
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide:  BorderSide(
+            borderSide: BorderSide(
               color: appColors.guideColor,
               width: 1.0,
             ),
@@ -425,14 +432,14 @@ class WhiteTextField extends StatelessWidget {
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide:  BorderSide(
+            borderSide: BorderSide(
               color: appColors.redColor,
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide:  BorderSide(
+            borderSide: BorderSide(
               color: appColors.guideColor,
               width: 1.0,
             ),

@@ -55,8 +55,8 @@ class PassbooksController extends GetxController with WidgetsBindingObserver {
                 : 1;
 
     Map<String, dynamic> param = {
-      "wallet_type": null,
-      "type": walletType.toString(),
+      "wallet_type": walletType,
+      "type": null,
       "start_date": startDate == null ? "" : startDate,
       "end_date": endDate == null ? "" : endDate
     };

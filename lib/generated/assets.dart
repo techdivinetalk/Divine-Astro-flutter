@@ -44,6 +44,7 @@ class Assets {
   static const String imagesChatVideoCallCameraOn = 'assets/images/chat_video_call_camera_on.png';
   static const String imagesChatVideoCallIcon = 'assets/images/chat_video_call_icon.png';
   static const String imagesChatVideoCallLock = 'assets/images/chat_video_call_lock.png';
+  static const String passbook = 'assets/images/passport.png';
 
   // static const String imagesChatVideoCallMicOff = 'assets/images/chat_video_call_mic_off.png';
   static const String imagesChatVideoCallMicOff =

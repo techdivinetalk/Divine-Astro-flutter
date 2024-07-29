@@ -28,21 +28,27 @@ class ReferAstrologerController extends GetxController {
     update();
   }
 
+  var submitting = false.obs;
   void submitForm() async {
     if (formState.currentState!.validate()) {
+      submitting(true);
       formValidateVal.value = true;
       formState.currentState!.save();
       ReferAstrologerResponse response = await repository
           .referAstrologer(state.referAstrologerRequestString());
       if (response.status!.code == 200) {
+        submitting(false);
+        Fluttertoast.showToast(msg: "Success");
         Get.back();
-      }
-      if (response.status!.code == 400) {
+      } else if (response.status!.code == 400) {
+        submitting(false);
+
         Fluttertoast.showToast(msg: response.status!.message.toString());
-      }
+      } else {}
     } else {
       formValidateVal.value = false;
     }
+    update();
   }
 
   checkFormValidation() {

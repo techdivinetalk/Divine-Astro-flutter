@@ -24,16 +24,15 @@ import 'package:divine_astrologer/screens/order_feedback/widget/feedback_card_wi
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/load_image.dart';
-import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
-import 'package:marquee/marquee.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -332,24 +331,65 @@ class HomeUI extends GetView<HomeController> {
                                       RouteName.passbookUI,
                                     );
                                   },
-                                  child: Ink(
-                                    height: 50.h,
-                                    decoration: BoxDecoration(
-                                      color: appColors.guideColor,
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(10),
-                                      ),
-                                      boxShadow: [],
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                      top: 5,
+                                      bottom: 5,
                                     ),
-                                    padding:
-                                        EdgeInsets.symmetric(horizontal: 10.w),
-                                    // alignment: Alignment.center,
-                                    child: Center(
-                                      child: Text(
-                                        "PassBook".tr,
-                                        style: AppTextStyle.textStyle12(
-                                            fontColor: appColors.white,
-                                            fontWeight: FontWeight.w500),
+                                    child: Ink(
+                                      height: 50,
+                                      width: 100,
+                                      decoration: BoxDecoration(
+                                        color: appColors.white,
+                                        borderRadius: const BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            blurRadius: 6,
+                                            spreadRadius: 2,
+                                            color:
+                                                appColors.grey.withOpacity(0.2),
+                                          ),
+                                        ],
+                                      ),
+                                      padding:
+                                          EdgeInsets.symmetric(horizontal: 5),
+                                      // alignment: Alignment.center,
+                                      child: Center(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceEvenly,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Image.asset(
+                                              "assets/images/passport.png",
+                                              height: 30,
+                                              width: 30,
+                                            ),
+                                            // CommonImageView(
+                                            //   imagePath:
+                                            //       "assets/images/passport.png",
+                                            //   height: 30,
+                                            //   width: 30,
+                                            //   placeHolder: Assets
+                                            //       .images.defaultProfile.path,
+                                            //   radius:
+                                            //       BorderRadius.circular(100.r),
+                                            //   onTap: () async {
+                                            //     Get.toNamed(
+                                            //         RouteName.profileUi);
+                                            //   },
+                                            // ),
+                                            Text(
+                                              "PassBook".tr,
+                                              style: AppTextStyle.textStyle10(
+                                                  fontColor: appColors.black,
+                                                  fontWeight: FontWeight.w500),
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -362,21 +402,60 @@ class HomeUI extends GetView<HomeController> {
                                     Get.toNamed(RouteName.checkKundli);
                                   },
                                   child: Ink(
-                                    height: 50.h,
+                                    height: 50,
+                                    width: 100,
                                     decoration: BoxDecoration(
-                                      color: appColors.guideColor,
+                                      color: appColors.white,
                                       borderRadius: const BorderRadius.all(
-                                          Radius.circular(10)),
+                                        Radius.circular(10),
+                                      ),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 6,
+                                          spreadRadius: 2,
+                                          color:
+                                              appColors.grey.withOpacity(0.2),
+                                        ),
+                                      ],
                                     ),
                                     padding:
-                                        EdgeInsets.symmetric(horizontal: 10.w),
+                                        EdgeInsets.symmetric(horizontal: 5),
                                     // alignment: Alignment.center,
                                     child: Center(
-                                      child: Text(
-                                        "checkKundli".tr,
-                                        style: AppTextStyle.textStyle12(
-                                            fontColor: appColors.white,
-                                            fontWeight: FontWeight.w500),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          SizedBox(
+                                            height: 30,
+                                            width: 30,
+                                            child: SvgPicture.asset(
+                                              'assets/images/kundli_img.svg',
+                                              // height: 40,
+                                              // width: 40,
+                                            ),
+                                          ),
+                                          // CommonImageView(
+                                          //   imagePath:
+                                          //       "assets/images/kundli_img.svg",
+                                          //   height: 40,
+                                          //    placeHolder: Assets
+                                          //       .images.defaultProfile.path,
+                                          //   radius:
+                                          //       BorderRadius.circular(100.r),
+                                          //   onTap: () async {
+                                          //     Get.toNamed(RouteName.profileUi);
+                                          //   },
+                                          // ),
+                                          Text(
+                                            "View Kundli".tr,
+                                            style: AppTextStyle.textStyle10(
+                                                fontColor: appColors.black,
+                                                fontWeight: FontWeight.w500),
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ),
@@ -385,11 +464,11 @@ class HomeUI extends GetView<HomeController> {
                             ),
                           ),
                         ),
-                        SizedBox(height: 12.h),
 
                         /// new widget
                         Container(
-                          padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                           child: Row(
                             children: [
                               Expanded(
@@ -497,34 +576,14 @@ class HomeUI extends GetView<HomeController> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 10.h),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 20.w),
-                            child: CustomText(
-                              (controller.homeData!.retention! <
-                                      controller.homeData!.minimumRetention!)
-                                  ? "notEligibleBonus".tr
-                                  : "eligibleBonus".tr,
-                              fontWeight: FontWeight.w400,
-                              textAlign: TextAlign.start,
-                              fontSize: 14,
-                              fontColor: !(controller.homeData!.retention! <
-                                      controller.homeData!.minimumRetention!)!
-                                  ? appColors.green
-                                  : appColors.red,
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10.h),
+
                         Obx(
                           () => controller.isFeedbackAvailable.value
                               ? controller.homeData?.feedback == null
                                   ? const SizedBox.shrink()
                                   : Container(
-                                      padding: EdgeInsets.symmetric(
-                                          horizontal: 20.w),
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 16, vertical: 6),
                                       child: Column(
                                         children: [
                                           GestureDetector(
@@ -542,21 +601,23 @@ class HomeUI extends GetView<HomeController> {
                                               children: [
                                                 Text(
                                                   'Order Feedback',
-                                                  style:
-                                                      AppTextStyle.textStyle16(
-                                                          fontColor: appColors
-                                                              .darkBlue,
-                                                          fontWeight:
-                                                              FontWeight.w400),
+                                                  style: TextStyle(
+                                                    fontFamily:
+                                                        FontFamily.poppins,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: appColors.darkBlue,
+                                                    fontSize: 16,
+                                                  ),
                                                 ),
                                                 Text(
                                                   "viewAll".tr,
-                                                  style:
-                                                      AppTextStyle.textStyle12(
-                                                          fontColor: appColors
-                                                              .darkBlue,
-                                                          fontWeight:
-                                                              FontWeight.w400),
+                                                  style: TextStyle(
+                                                    fontFamily:
+                                                        FontFamily.poppins,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: appColors.darkBlue,
+                                                    fontSize: 12,
+                                                  ),
                                                 )
                                               ],
                                             ),
@@ -597,20 +658,18 @@ class HomeUI extends GetView<HomeController> {
                                                           ?.createdAt,
                                                     ),
                                                   )),
-                                          SizedBox(height: 10.h),
                                         ],
                                       ),
                                     )
                               : const SizedBox(),
                         ),
-                        // SizedBox(height: 10.h),
-                        // availableFeedbackWidget(controller.feedbackResponse ?? FeedbackData()),
-                        // SizedBox(height: 10.h),
+
                         controller.astroNoticeBoardResponse.value.success !=
                                 true
                             ? const SizedBox()
                             : Container(
-                                padding: EdgeInsets.symmetric(horizontal: 20.w),
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 6),
                                 child: Column(
                                   children: [
                                     GestureDetector(
@@ -623,16 +682,22 @@ class HomeUI extends GetView<HomeController> {
                                         children: [
                                           Text(
                                             "noticeBoard".tr,
-                                            style: AppTextStyle.textStyle16(
-                                                fontColor: appColors.darkBlue,
-                                                fontWeight: FontWeight.w400),
+                                            style: TextStyle(
+                                              fontFamily: FontFamily.poppins,
+                                              fontWeight: FontWeight.w400,
+                                              color: appColors.darkBlue,
+                                              fontSize: 16,
+                                            ),
                                           ),
                                           Text(
                                             "viewAll".tr,
-                                            style: AppTextStyle.textStyle12(
-                                                fontColor: appColors.darkBlue,
-                                                fontWeight: FontWeight.w400),
-                                          )
+                                            style: TextStyle(
+                                              fontFamily: FontFamily.poppins,
+                                              fontWeight: FontWeight.w400,
+                                              color: appColors.darkBlue,
+                                              fontSize: 12,
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -641,90 +706,33 @@ class HomeUI extends GetView<HomeController> {
                                   ],
                                 ),
                               ),
-                        // SizedBox(height: 10.h),
-                        // noticeBoardWidget(),
-                        SizedBox(height: 15.h),
+                        Obx(
+                          () {
+                            final bool cond1 = controller.isCallEnable.value;
+                            final bool cond2 = controller.isChatEnable.value;
+                            final bool cond3 =
+                                controller.isVideoCallEnable.value;
 
-                        /// marquree
-                        // Obx(() {
-                        //   return Visibility(
-                        //     visible: controller.marqueeText.isNotEmpty,
-                        //     child: Container(
-                        //       margin: EdgeInsets.only(bottom: 15.h),
-                        //       height: 45.h,
-                        //       color: appColors.marqueeBgColor,
-                        //       child: CustomWidgetMarquee(
-                        //         child: ListView(
-                        //           padding: EdgeInsets.zero,
-                        //           scrollDirection: Axis.horizontal,
-                        //           shrinkWrap: true,
-                        //           children: List.generate(
-                        //             controller.marqueeText.length,
-                        //             (index) {
-                        //               return Container(
-                        //                   alignment:
-                        //                       AlignmentDirectional.center,
-                        //                   child: HtmlWidget(
-                        //                     controller.marqueeText[index],
-                        //                   ));
-                        //             },
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   );
-                        // }),
-
-                        Obx(() {
-                          return Visibility(
-                            visible: controller.marqueeText.value.isNotEmpty,
-                            child: Container(
-                              margin: EdgeInsets.only(bottom: 5.h),
-                              height: 50.h,
-                              color: appColors.marqueeBgColor,
-                              child: Marquee(
-                                text: Utils().parseHtmlString(
-                                    controller.marqueeText.value),
-                                style: TextStyle(
-                                  color: appColors.black,
-                                  fontSize: 15.sp,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: FontFamily.metropolis,
-                                ),
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                blankSpace: 20.0,
-                                velocity: 60.0,
-                                startPadding: 10.0,
-                                accelerationCurve: Curves.linear,
-                                decelerationCurve: Curves.easeOut,
-                              ),
-                            ),
-                          );
-                        }),
-                        scheduledTrainingWidgetUpdated(controller: controller),
-                        // viewKundliWidget(),
+                            return cond1 || cond2 || cond3
+                                ? Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 6),
+                                    child: sessionTypeWidget(
+                                        controller: controller))
+                                : const SizedBox();
+                          },
+                        ),
                         viewKundliWidgetUpdated(),
-                        Obx(() {
-                          return Visibility(
-                            visible: controller.isLiveMonitor.value == 1,
-                            child: Column(
-                              children: [
-                                liveWidgetUpdated(),
-                                SizedBox(height: 10.h),
-                              ],
-                            ),
-                          );
-                        }),
                         Obx(
                           () {
                             return isLive.value == 1
-                                ? controller.isLiveEnable.value
+                                ? controller.isLiveEnable.value // == false
                                     ? Container(
                                         margin: EdgeInsets.symmetric(
-                                            horizontal: 20.w),
+                                            horizontal: 16, vertical: 6),
                                         child: Column(
                                           children: [
-                                            SizedBox(height: 10.h),
+                                            // SizedBox(height: 10.h),
                                             GestureDetector(
                                               onTap: () async {
                                                 bool hasOpenOrder = false;
@@ -763,14 +771,13 @@ class HomeUI extends GetView<HomeController> {
                                               child: Container(
                                                 height: 60,
                                                 decoration: BoxDecoration(
-                                                  color: appColors.guideColor,
+                                                  color: appColors.white,
                                                   boxShadow: [
                                                     BoxShadow(
-                                                      color: Colors.black
+                                                      blurRadius: 6,
+                                                      spreadRadius: 2,
+                                                      color: appColors.grey
                                                           .withOpacity(0.2),
-                                                      blurRadius: 1.0,
-                                                      offset: const Offset(
-                                                          0.0, 3.0),
                                                     ),
                                                   ],
                                                   borderRadius:
@@ -781,24 +788,35 @@ class HomeUI extends GetView<HomeController> {
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
                                                   children: [
-                                                    Assets.images.icGoLive.svg(
-                                                        color: Colors.white),
+                                                    CommonImageView(
+                                                      imagePath:
+                                                          "assets/images/live_image.png",
+                                                      height: 35,
+                                                      width: 35,
+                                                      placeHolder: Assets.images
+                                                          .defaultProfile.path,
+                                                      onTap: () async {
+                                                        Get.toNamed(RouteName
+                                                            .profileUi);
+                                                      },
+                                                    ),
                                                     const SizedBox(width: 15),
                                                     Text(
                                                       "goLive".tr,
-                                                      style: AppTextStyle
-                                                          .textStyle20(
+                                                      style: TextStyle(
+                                                        fontFamily:
+                                                            FontFamily.poppins,
                                                         fontWeight:
-                                                            FontWeight.w700,
-                                                        fontColor:
-                                                            appColors.white,
+                                                            FontWeight.w600,
+                                                        color: appColors.black,
+                                                        fontSize: 20,
                                                       ),
                                                     ),
                                                   ],
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(height: 10.h),
+                                            // SizedBox(height: 10.h),
                                           ],
                                         ),
                                       )
@@ -806,91 +824,170 @@ class HomeUI extends GetView<HomeController> {
                                 : const SizedBox();
                           },
                         ),
-                        SizedBox(height: 10.h),
-                        Container(
-                            margin: EdgeInsets.symmetric(horizontal: 20.w),
-                            height: 1.h,
-                            color: appColors.darkBlue.withOpacity(0.5)),
-                        SizedBox(height: 10.h),
-                        Obx(
-                          () {
-                            final bool cond1 = controller.isCallEnable.value;
-                            final bool cond2 = controller.isChatEnable.value;
-                            final bool cond3 =
-                                controller.isVideoCallEnable.value;
-
-                            return cond1 || cond2 || cond3
-                                ? Container(
-                                    margin:
-                                        EdgeInsets.symmetric(horizontal: 20.w),
-                                    child: sessionTypeWidget(
-                                        controller: controller))
-                                : const SizedBox();
-                          },
-                        ),
-                        // if (controller.homeData?.offerType != null &&
-                        //     controller.homeData?.offerType != [])
-                        //   offerTypeWidget(),
-                        SizedBox(height: 20.h),
                         Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 20.0),
+                          padding:
+                              EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                           child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () =>
-                                      Get.toNamed(RouteName.messageTemplate),
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    height: 55,
-                                    decoration: BoxDecoration(
-                                      color: appColors.guideColor,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.2),
-                                          blurRadius: 1.0,
-                                          offset: const Offset(0.0, 3.0),
+                              GestureDetector(
+                                onTap: () =>
+                                    Get.toNamed(RouteName.messageTemplate),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 55,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.28,
+                                  decoration: BoxDecoration(
+                                    color: appColors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 6,
+                                        spreadRadius: 2,
+                                        color: appColors.grey.withOpacity(0.2),
+                                      ),
+                                    ],
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        CommonImageView(
+                                          imagePath:
+                                              "assets/images/message.png",
+                                          height: 30,
+                                          width: 30,
+                                          placeHolder:
+                                              Assets.images.defaultProfile.path,
+                                          onTap: () async {
+                                            Get.toNamed(RouteName.profileUi);
+                                          },
+                                        ),
+                                        const SizedBox(width: 5),
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.15,
+                                          child: Text(
+                                            "Message Template",
+                                            style: AppTextStyle.textStyle10(
+                                              fontWeight: FontWeight.w500,
+                                              fontColor: appColors.black,
+                                            ),
+                                          ),
                                         ),
                                       ],
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: Text(
-                                      "Message Template",
-                                      style: AppTextStyle.textStyle14(
-                                        fontWeight: FontWeight.w500,
-                                        fontColor: appColors.white,
-                                      ),
                                     ),
                                   ),
                                 ),
                               ),
-                              SizedBox(
-                                width: 5.w,
-                              ),
-                              Expanded(
-                                child: GestureDetector(
-                                  onTap: () => Get.toNamed(
-                                      RouteName.suggestRemediesView),
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    height: 55,
-                                    decoration: BoxDecoration(
-                                      color: appColors.guideColor,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: Colors.black.withOpacity(0.2),
-                                          blurRadius: 1.0,
-                                          offset: const Offset(0.0, 3.0),
+                              GestureDetector(
+                                onTap: () =>
+                                    Get.toNamed(RouteName.suggestRemediesView),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 55,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.28,
+                                  decoration: BoxDecoration(
+                                    color: appColors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 6,
+                                        spreadRadius: 2,
+                                        color: appColors.grey.withOpacity(0.2),
+                                      ),
+                                    ],
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        CommonImageView(
+                                          imagePath:
+                                              "assets/images/service.png",
+                                          height: 30,
+                                          width: 30,
+                                          placeHolder:
+                                              Assets.images.defaultProfile.path,
+                                          onTap: () async {
+                                            Get.toNamed(RouteName.profileUi);
+                                          },
+                                        ),
+                                        const SizedBox(width: 5),
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.15,
+                                          child: Text(
+                                            "Suggested Remedies",
+                                            style: AppTextStyle.textStyle10(
+                                              fontWeight: FontWeight.w500,
+                                              fontColor: appColors.black,
+                                            ),
+                                          ),
                                         ),
                                       ],
-                                      borderRadius: BorderRadius.circular(10.0),
                                     ),
-                                    child: Text(
-                                      "Suggested Remedies",
-                                      style: AppTextStyle.textStyle14(
-                                        fontWeight: FontWeight.w500,
-                                        fontColor: appColors.white,
+                                  ),
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () =>
+                                    Get.toNamed(RouteName.customProduct),
+                                child: Container(
+                                  alignment: Alignment.center,
+                                  height: 55,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.28,
+                                  decoration: BoxDecoration(
+                                    color: appColors.white,
+                                    boxShadow: [
+                                      BoxShadow(
+                                        blurRadius: 6,
+                                        spreadRadius: 2,
+                                        color: appColors.grey.withOpacity(0.2),
                                       ),
+                                    ],
+                                    borderRadius: BorderRadius.circular(10.0),
+                                  ),
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        CommonImageView(
+                                          imagePath:
+                                              "assets/images/product.png",
+                                          height: 30,
+                                          width: 30,
+                                          placeHolder:
+                                              Assets.images.defaultProfile.path,
+                                          onTap: () async {
+                                            Get.toNamed(RouteName.profileUi);
+                                          },
+                                        ),
+                                        const SizedBox(width: 5),
+                                        SizedBox(
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.15,
+                                          child: Text(
+                                            "Custom Product",
+                                            style: AppTextStyle.textStyle10(
+                                              fontWeight: FontWeight.w500,
+                                              fontColor: appColors.black,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                                 ),
@@ -898,49 +995,289 @@ class HomeUI extends GetView<HomeController> {
                             ],
                           ),
                         ),
-                        SizedBox(height: 10.h),
-                        GestureDetector(
-                          onTap: () {
-                            Get.toNamed(RouteName.customProduct);
-                          },
-                          child: Container(
-                            margin:
-                                const EdgeInsets.symmetric(horizontal: 20.0),
-                            alignment: Alignment.center,
-                            height: 55,
-                            decoration: BoxDecoration(
-                              color: appColors.guideColor,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
-                                  blurRadius: 1.0,
-                                  offset: const Offset(0.0, 3.0),
-                                ),
-                              ],
-                              borderRadius: BorderRadius.circular(10.0),
-                            ),
-                            child: Text(
-                              "Custom Product",
-                              style: AppTextStyle.textStyle14(
-                                fontWeight: FontWeight.w500,
-                                fontColor: appColors.white,
-                              ),
-                            ),
-                          ),
-                        ),
                         controller.homeData?.offers?.orderOffer!.length != 0
                             ? Container(
-                                margin: EdgeInsets.symmetric(horizontal: 20.w),
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 6),
                                 child: orderOfferWidget(
                                     homeController: controller))
-                            : const SizedBox(),
+                            : SizedBox(),
+
                         controller.homeData?.offers?.customOffer!.length != 0
                             ? Container(
-                                margin: EdgeInsets.symmetric(horizontal: 20.w),
+                                margin: EdgeInsets.symmetric(
+                                    horizontal: 16, vertical: 6),
                                 child: customerOfferWidget(context,
                                     controller: controller),
                               )
                             : const SizedBox(),
+                        fullScreenBtnWidget(
+                            btnTitle: "referAnAstrologer".tr,
+                            onbtnTap: () {
+                              Get.toNamed(RouteName.referAstrologer);
+                            }),
+                        trainingVideoWidget(controller: controller),
+                        // feedbackWidget(controller: controller),
+
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     Get.toNamed(RouteName.customProduct);
+                        //   },
+                        //   child: Container(
+                        //     margin:
+                        //         const EdgeInsets.symmetric(horizontal: 20.0),
+                        //     alignment: Alignment.center,
+                        //     height: 55,
+                        //     decoration: BoxDecoration(
+                        //       color: appColors.guideColor,
+                        //       boxShadow: [
+                        //         BoxShadow(
+                        //           color: Colors.black.withOpacity(0.2),
+                        //           blurRadius: 1.0,
+                        //           offset: const Offset(0.0, 3.0),
+                        //         ),
+                        //       ],
+                        //       borderRadius: BorderRadius.circular(10.0),
+                        //     ),
+                        //     child: Text(
+                        //       "Custom Product",
+                        //       style: AppTextStyle.textStyle14(
+                        //         fontWeight: FontWeight.w500,
+                        //         fontColor: appColors.white,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        ///
+                        // Align(
+                        //   alignment: Alignment.centerLeft,
+                        //   child: Container(
+                        //     padding: EdgeInsets.symmetric(horizontal: 20.w),
+                        //     child: CustomText(
+                        //       (controller.homeData!.retention! <
+                        //               controller.homeData!.minimumRetention!)
+                        //           ? "notEligibleBonus".tr
+                        //           : "eligibleBonus".tr,
+                        //       fontWeight: FontWeight.w400,
+                        //       textAlign: TextAlign.start,
+                        //       fontSize: 14,
+                        //       fontColor: !(controller.homeData!.retention! <
+                        //               controller.homeData!.minimumRetention!)!
+                        //           ? appColors.green
+                        //           : appColors.red,
+                        //     ),
+                        //   ),
+                        // ),
+                        // SizedBox(height: 10.h),
+
+                        // SizedBox(height: 10.h),
+                        // availableFeedbackWidget(controller.feedbackResponse ?? FeedbackData()),
+                        // SizedBox(height: 10.h),
+
+                        // SizedBox(height: 10.h),
+                        // noticeBoardWidget(),
+                        // SizedBox(height: 15.h),
+
+                        /// marquree
+                        // Obx(() {
+                        //   return Visibility(
+                        //     visible: controller.marqueeText.isNotEmpty,
+                        //     child: Container(
+                        //       margin: EdgeInsets.only(bottom: 15.h),
+                        //       height: 45.h,
+                        //       color: appColors.marqueeBgColor,
+                        //       child: CustomWidgetMarquee(
+                        //         child: ListView(
+                        //           padding: EdgeInsets.zero,
+                        //           scrollDirection: Axis.horizontal,
+                        //           shrinkWrap: true,
+                        //           children: List.generate(
+                        //             controller.marqueeText.length,
+                        //             (index) {
+                        //               return Container(
+                        //                   alignment:
+                        //                       AlignmentDirectional.center,
+                        //                   child: HtmlWidget(
+                        //                     controller.marqueeText[index],
+                        //                   ));
+                        //             },
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   );
+                        // }),
+
+                        // Obx(() {
+                        //   return Visibility(
+                        //     visible: controller.marqueeText.value.isNotEmpty,
+                        //     child: Container(
+                        //       margin: EdgeInsets.only(bottom: 5.h),
+                        //       height: 50.h,
+                        //       color: appColors.marqueeBgColor,
+                        //       child: Marquee(
+                        //         text: Utils().parseHtmlString(
+                        //             controller.marqueeText.value),
+                        //         style: TextStyle(
+                        //           color: appColors.black,
+                        //           fontSize: 15.sp,
+                        //           fontWeight: FontWeight.w500,
+                        //           fontFamily: FontFamily.metropolis,
+                        //         ),
+                        //         crossAxisAlignment: CrossAxisAlignment.center,
+                        //         blankSpace: 20.0,
+                        //         velocity: 60.0,
+                        //         startPadding: 10.0,
+                        //         accelerationCurve: Curves.linear,
+                        //         decelerationCurve: Curves.easeOut,
+                        //       ),
+                        //     ),
+                        //   );
+                        // }),
+                        // scheduledTrainingWidgetUpdated(controller: controller),
+                        // viewKundliWidget(),
+                        // viewKundliWidgetUpdated(),
+                        // Obx(() {
+                        //   return Visibility(
+                        //     visible: controller.isLiveMonitor.value != 1,
+                        //     child: Column(
+                        //       children: [
+                        //         liveWidgetUpdated(),
+                        //         SizedBox(height: 10.h),
+                        //       ],
+                        //     ),
+                        //   );
+                        // }),
+
+                        // SizedBox(height: 10.h),
+                        // Container(
+                        //     margin: EdgeInsets.symmetric(horizontal: 20.w),
+                        //     height: 1.h,
+                        //     color: appColors.darkBlue.withOpacity(0.5)),
+                        // SizedBox(height: 10.h),
+                        // Obx(
+                        //   () {
+                        //     final bool cond1 = controller.isCallEnable.value;
+                        //     final bool cond2 = controller.isChatEnable.value;
+                        //     final bool cond3 =
+                        //         controller.isVideoCallEnable.value;
+                        //
+                        //     return cond1 || cond2 || cond3
+                        //         ? Container(
+                        //             margin:
+                        //                 EdgeInsets.symmetric(horizontal: 20.w),
+                        //             child: sessionTypeWidget(
+                        //                 controller: controller))
+                        //         : const SizedBox();
+                        //   },
+                        // ),
+                        // if (controller.homeData?.offerType != null &&
+                        //     controller.homeData?.offerType != [])
+                        //   offerTypeWidget(),
+                        // SizedBox(height: 20.h),
+                        // Padding(
+                        //   padding: EdgeInsets.symmetric(horizontal: 20.0),
+                        //   child: Row(
+                        //     children: [
+                        //       Expanded(
+                        //         child: GestureDetector(
+                        //           onTap: () =>
+                        //               Get.toNamed(RouteName.messageTemplate),
+                        //           child: Container(
+                        //             alignment: Alignment.center,
+                        //             height: 55,
+                        //             decoration: BoxDecoration(
+                        //               color: appColors.guideColor,
+                        //               boxShadow: [
+                        //                 BoxShadow(
+                        //                   color: Colors.black.withOpacity(0.2),
+                        //                   blurRadius: 1.0,
+                        //                   offset: const Offset(0.0, 3.0),
+                        //                 ),
+                        //               ],
+                        //               borderRadius: BorderRadius.circular(10.0),
+                        //             ),
+                        //             child: Text(
+                        //               "Message Template",
+                        //               style: AppTextStyle.textStyle14(
+                        //                 fontWeight: FontWeight.w500,
+                        //                 fontColor: appColors.white,
+                        //               ),
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //       SizedBox(
+                        //         width: 5.w,
+                        //       ),
+                        //       Expanded(
+                        //         child: GestureDetector(
+                        //           onTap: () => Get.toNamed(
+                        //               RouteName.suggestRemediesView),
+                        //           child: Container(
+                        //             alignment: Alignment.center,
+                        //             height: 55,
+                        //             decoration: BoxDecoration(
+                        //               color: appColors.guideColor,
+                        //               boxShadow: [
+                        //                 BoxShadow(
+                        //                   color: Colors.black.withOpacity(0.2),
+                        //                   blurRadius: 1.0,
+                        //                   offset: const Offset(0.0, 3.0),
+                        //                 ),
+                        //               ],
+                        //               borderRadius: BorderRadius.circular(10.0),
+                        //             ),
+                        //             child: Text(
+                        //               "Suggested Remedies",
+                        //               style: AppTextStyle.textStyle14(
+                        //                 fontWeight: FontWeight.w500,
+                        //                 fontColor: appColors.white,
+                        //               ),
+                        //             ),
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ],
+                        //   ),
+                        // ),
+                        // SizedBox(height: 10.h),
+                        // GestureDetector(
+                        //   onTap: () {
+                        //     Get.toNamed(RouteName.customProduct);
+                        //   },
+                        //   child: Container(
+                        //     margin:
+                        //         const EdgeInsets.symmetric(horizontal: 20.0),
+                        //     alignment: Alignment.center,
+                        //     height: 55,
+                        //     decoration: BoxDecoration(
+                        //       color: appColors.guideColor,
+                        //       boxShadow: [
+                        //         BoxShadow(
+                        //           color: Colors.black.withOpacity(0.2),
+                        //           blurRadius: 1.0,
+                        //           offset: const Offset(0.0, 3.0),
+                        //         ),
+                        //       ],
+                        //       borderRadius: BorderRadius.circular(10.0),
+                        //     ),
+                        //     child: Text(
+                        //       "Custom Product",
+                        //       style: AppTextStyle.textStyle14(
+                        //         fontWeight: FontWeight.w500,
+                        //         fontColor: appColors.white,
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+                        // controller.homeData?.offers?.orderOffer!.length != 0
+                        //     ? Container(
+                        //         margin: EdgeInsets.symmetric(horizontal: 20.w),
+                        //         child: orderOfferWidget(
+                        //             homeController: controller))
+                        //     : const SizedBox(),
+
                         // SizedBox(height: 10.h),
                         // fullScreenBtnWidget(
                         //     imageName: Assets.images.icReferAFriend.svg(),
@@ -948,8 +1285,8 @@ class HomeUI extends GetView<HomeController> {
                         //     onbtnTap: () {
                         //       Get.toNamed(RouteName.referAstrologer);
                         //     }),
-                        SizedBox(height: 10.h),
-                        trainingVideoWidget(controller: controller),
+                        // SizedBox(height: 10.h),
+                        // trainingVideoWidget(controller: controller),
                         /*  SizedBox(height: 10.h),
                           fullScreenBtnWidget(
                               imageName: Assets.images.icEcommerce.svg(),
@@ -959,8 +1296,28 @@ class HomeUI extends GetView<HomeController> {
                                   Get.toNamed(RouteName.videoCallPage);
                                 }
                               }),*/
-                        SizedBox(height: 20.h),
+                        // SizedBox(height: 20.h),
                         // feedbackWidget(controller: controller),
+                        (controller.customerDetailsResponse == null ||
+                                controller
+                                    .customerDetailsResponse!.data.isEmpty)
+                            ? SizedBox()
+                            : Align(
+                                alignment: Alignment.centerLeft,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 5),
+                                  child: Text(
+                                    "User Data".tr,
+                                    style: TextStyle(
+                                      fontFamily: FontFamily.poppins,
+                                      fontWeight: FontWeight.w400,
+                                      color: appColors.darkBlue,
+                                      fontSize: 16,
+                                    ),
+                                  ),
+                                ),
+                              ),
                         (controller.customerDetailsResponse == null ||
                                 controller
                                     .customerDetailsResponse!.data.isEmpty)
@@ -1087,9 +1444,10 @@ class HomeUI extends GetView<HomeController> {
       return !mapEquals(data, {})
           ? Container(
               margin: EdgeInsets.only(
-                bottom: 10.h,
-                left: 20.w,
-                right: 20.w,
+                bottom: 6,
+                top: 6,
+                left: 16,
+                right: 16,
               ),
               width: ScreenUtil().screenWidth,
               decoration: BoxDecoration(
@@ -1097,9 +1455,9 @@ class HomeUI extends GetView<HomeController> {
                 color: appColors.white,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.3),
-                    blurRadius: 3.0,
-                    offset: const Offset(0, 3.0),
+                    blurRadius: 6,
+                    spreadRadius: 2,
+                    color: appColors.grey.withOpacity(0.2),
                   ),
                 ],
               ),
@@ -1232,7 +1590,7 @@ class HomeUI extends GetView<HomeController> {
                                   const BorderRadius.all(Radius.circular(30)),
                             ),
                             padding: const EdgeInsets.symmetric(
-                                horizontal: 20, vertical: 8),
+                                horizontal: 20, vertical: 6),
                             // alignment: Alignment.center,
                             child: Center(
                               child: Text(
@@ -1273,9 +1631,10 @@ class HomeUI extends GetView<HomeController> {
                   decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
-                            color: Colors.black.withOpacity(0.2),
-                            blurRadius: 3.0,
-                            offset: const Offset(0.0, 3.0)),
+                          blurRadius: 4,
+                          spreadRadius: 2,
+                          color: appColors.grey.withOpacity(0.2),
+                        ),
                       ],
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(20.r)),
@@ -1293,7 +1652,7 @@ class HomeUI extends GetView<HomeController> {
                                       ?.noticeBoard?.title ??
                                   '',
                               fontWeight: FontWeight.w500,
-                              fontColor: appColors.darkBlue,
+                              fontColor: appColors.appRedColour,
                               maxLines: 2,
                               fontSize: 16.sp,
                             ),
@@ -1817,13 +2176,14 @@ class HomeUI extends GetView<HomeController> {
       final bool cond3 = controller.isVideoCallEnable.value;
       return Container(
         key: Get.find<DashboardController>().keySessionType,
-        padding: EdgeInsets.all(16.h),
+        padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-                color: Colors.black.withOpacity(0.2),
-                blurRadius: 1.0,
-                offset: const Offset(0.0, 3.0)),
+              blurRadius: 4,
+              spreadRadius: 2,
+              color: appColors.grey.withOpacity(0.2),
+            ),
           ],
           color: appColors.white,
           borderRadius: const BorderRadius.all(Radius.circular(20)),
@@ -1831,6 +2191,7 @@ class HomeUI extends GetView<HomeController> {
         child: Column(
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
                   flex: 2,
@@ -1843,6 +2204,7 @@ class HomeUI extends GetView<HomeController> {
                   ),
                 ),
                 Expanded(
+                  flex: 1,
                   child: Text(
                     "status".tr,
                     style: AppTextStyle.textStyle10(
@@ -1850,10 +2212,10 @@ class HomeUI extends GetView<HomeController> {
                         fontColor: appColors.darkBlue),
                   ),
                 ),
-                const SizedBox(width: 10),
                 Expanded(
-                  flex: 2,
+                  flex: 3,
                   child: Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       CustomText(
                         "nextOnlineTiming".tr,
@@ -1864,7 +2226,7 @@ class HomeUI extends GetView<HomeController> {
                         overflow: TextOverflow.ellipsis,
                       ),
                       SizedBox(
-                        width: 5.w,
+                        width: 4,
                       ),
                       GestureDetector(
                           onTap: () {
@@ -1873,8 +2235,8 @@ class HomeUI extends GetView<HomeController> {
                               subTitle: "nextOnlineTimeDes".tr,
                             ));
                           },
-                          child: Assets.images.icInfo
-                              .svg(height: 16.h, width: 16.h)),
+                          child:
+                              Assets.images.icInfo.svg(height: 15, width: 15)),
                     ],
                   ),
                 ),
@@ -1886,10 +2248,10 @@ class HomeUI extends GetView<HomeController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            flex: 3,
+                            flex: 2,
                             child: Container(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -1966,17 +2328,17 @@ class HomeUI extends GetView<HomeController> {
                               )),
                         ],
                       ),
-                      controller.chatMessage.isNotEmpty
-                          ? Text(
-                              controller.chatMessage,
-                              style: AppTextStyle.textStyle10(
-                                fontWeight: FontWeight.w500,
-                                fontColor: Color(int.parse(controller
-                                    .chatMessageColor
-                                    .replaceAll("#", "0xff"))),
-                              ),
-                            )
-                          : SizedBox(),
+                      // controller.chatMessage.isNotEmpty
+                      //     ? Text(
+                      //         controller.chatMessage,
+                      //         style: AppTextStyle.textStyle10(
+                      //           fontWeight: FontWeight.w500,
+                      //           fontColor: Color(int.parse(controller
+                      //               .chatMessageColor
+                      //               .replaceAll("#", "0xff"))),
+                      //         ),
+                      //       )
+                      //     : SizedBox(),
                     ],
                   )
                 : const SizedBox(),
@@ -1986,9 +2348,10 @@ class HomeUI extends GetView<HomeController> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            flex: 3,
+                            flex: 2,
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -2063,17 +2426,17 @@ class HomeUI extends GetView<HomeController> {
                               )),
                         ],
                       ),
-                      controller.callMessage.isNotEmpty
-                          ? Text(
-                              controller.callMessage,
-                              style: AppTextStyle.textStyle10(
-                                fontWeight: FontWeight.w500,
-                                fontColor: Color(int.parse(controller
-                                    .callMessageColor
-                                    .replaceAll("#", "0xff"))),
-                              ),
-                            )
-                          : SizedBox(),
+                      // controller.callMessage.isNotEmpty
+                      //     ? Text(
+                      //         controller.callMessage,
+                      //         style: AppTextStyle.textStyle10(
+                      //           fontWeight: FontWeight.w500,
+                      //           fontColor: Color(int.parse(controller
+                      //               .callMessageColor
+                      //               .replaceAll("#", "0xff"))),
+                      //         ),
+                      //       )
+                      //     : SizedBox(),
                     ],
                   )
                 : SizedBox(),
@@ -2131,14 +2494,15 @@ class HomeUI extends GetView<HomeController> {
             margin: EdgeInsets.only(top: 10.h),
             padding: EdgeInsets.all(16.h),
             decoration: BoxDecoration(
-              boxShadow: [
-                BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 1.0,
-                    offset: const Offset(0.0, 3.0)),
-              ],
               color: appColors.white,
               borderRadius: const BorderRadius.all(Radius.circular(20)),
+              boxShadow: [
+                BoxShadow(
+                  blurRadius: 4,
+                  spreadRadius: 2,
+                  color: appColors.grey.withOpacity(0.2),
+                ),
+              ],
             ),
             child: Column(
               children: [
@@ -2217,17 +2581,17 @@ class HomeUI extends GetView<HomeController> {
       {HomeController? controller}) {
     return Container(
       key: Get.find<DashboardController>().keyManageDiscountOffers,
-      margin: EdgeInsets.only(top: 10.h),
       padding: EdgeInsets.all(16.h),
       decoration: BoxDecoration(
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 1.0,
-              offset: const Offset(0.0, 3.0)),
-        ],
         color: appColors.white,
         borderRadius: const BorderRadius.all(Radius.circular(20)),
+        boxShadow: [
+          BoxShadow(
+            blurRadius: 6,
+            spreadRadius: 2,
+            color: appColors.grey.withOpacity(0.2),
+          ),
+        ],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -2242,22 +2606,21 @@ class HomeUI extends GetView<HomeController> {
                   fontColor: appColors.darkBlue,
                 ),
               ),
-
-              /*InkWell(
-                onTap: () {
-                  Get.toNamed(RouteName.discountOffers)!.then((value) {
-                    controller!.homeData?.offers?.customOffer = value;
-                    controller.update();
-                  });
-                },
-                child: Text(
-                  "viewAll".tr,
-                  style: AppTextStyle.textStyle12(
-                    fontWeight: FontWeight.w500,
-                    fontColor: appColors.darkBlue,
-                  ),
-                ),
-              ),*/
+              // InkWell(
+              //   onTap: () {
+              //     Get.toNamed(RouteName.discountOffers)!.then((value) {
+              //       controller!.homeData?.offers?.customOffer = value;
+              //       controller.update();
+              //     });
+              //   },
+              //   child: Text(
+              //     "viewAll".tr,
+              //     style: AppTextStyle.textStyle12(
+              //       fontWeight: FontWeight.w500,
+              //       fontColor: appColors.darkBlue,
+              //     ),
+              //   ),
+              // ),
             ],
           ),
           // Text(
@@ -2473,38 +2836,50 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget fullScreenBtnWidget({
-    required Widget imageName,
     required String? btnTitle,
     required VoidCallback? onbtnTap,
   }) {
-    return Container(
-        padding: EdgeInsets.all(16.h),
-        decoration: BoxDecoration(
-          boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.2),
-              blurRadius: 1.0,
-              offset: const Offset(0.0, 3.0),
-            ),
-          ],
-          color: appColors.white,
-          borderRadius: const BorderRadius.all(Radius.circular(20)),
-        ),
-        child: InkWell(
-          onTap: onbtnTap,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              imageName,
-              SizedBox(width: 5.w),
-              Text(
-                btnTitle ?? "",
-                style: AppTextStyle.textStyle20(
-                    fontWeight: FontWeight.w600, fontColor: appColors.darkBlue),
-              )
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+      child: Container(
+          height: 50,
+          padding: EdgeInsets.symmetric(vertical: 5, horizontal: 16),
+          decoration: BoxDecoration(
+            boxShadow: [
+              BoxShadow(
+                blurRadius: 4,
+                spreadRadius: 2,
+                color: appColors.grey.withOpacity(0.2),
+              ),
             ],
+            color: appColors.white,
+            borderRadius: const BorderRadius.all(Radius.circular(20)),
           ),
-        ));
+          child: InkWell(
+            onTap: onbtnTap,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CommonImageView(
+                  imagePath: "assets/images/referral.png",
+                  height: 30,
+                  width: 30,
+                  placeHolder: Assets.images.defaultProfile.path,
+                  onTap: () async {
+                    Get.toNamed(RouteName.profileUi);
+                  },
+                ),
+                SizedBox(width: 5.w),
+                Text(
+                  btnTitle ?? "",
+                  style: AppTextStyle.textStyle20(
+                      fontWeight: FontWeight.w600,
+                      fontColor: appColors.darkBlue),
+                )
+              ],
+            ),
+          )),
+    );
   }
 
   Widget trainingVideoWidget({HomeController? controller}) {
@@ -2516,7 +2891,8 @@ class HomeUI extends GetView<HomeController> {
         ? Container(
             width: double.infinity,
             margin: EdgeInsets.only(
-              top: 10.h,
+              top: 5,
+              bottom: 5,
               left: 20.w,
               right: 20.w,
             ),
@@ -2527,9 +2903,9 @@ class HomeUI extends GetView<HomeController> {
               border: Border.all(color: appColors.guideColor, width: 1),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.2),
-                  blurRadius: 1.0,
-                  offset: const Offset(0.0, 3.0),
+                  blurRadius: 4,
+                  spreadRadius: 2,
+                  color: appColors.grey.withOpacity(0.2),
                 ),
               ],
             ),
@@ -2634,17 +3010,18 @@ class HomeUI extends GetView<HomeController> {
 
   Widget feedbackWidget({HomeController? controller}) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 20.w),
+      margin: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
       width: ScreenUtil().screenWidth,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
         color: const Color(0xffEDEDED),
-        boxShadow: [
-          BoxShadow(
-              color: Colors.black.withOpacity(0.3),
-              blurRadius: 3.0,
-              offset: const Offset(0.3, 3.0)),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //     blurRadius: 4,
+        //     spreadRadius: 2,
+        //     color: appColors.grey.withOpacity(0.2),
+        //   ),
+        // ],
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 15.h),
@@ -2667,9 +3044,9 @@ class HomeUI extends GetView<HomeController> {
               decoration:
                   BoxDecoration(borderRadius: BorderRadius.circular(10)),
               child: TextFormField(
-                scrollPadding: EdgeInsets.only(
-                    bottom:
-                        MediaQuery.of(Get.context!).viewInsets.bottom + 160),
+                // scrollPadding: EdgeInsets.only(
+                //     bottom:
+                //         MediaQuery.of(Get.context!).viewInsets.bottom + 160),
                 maxLines: 6,
                 maxLength: 96,
                 keyboardType: TextInputType.text,
