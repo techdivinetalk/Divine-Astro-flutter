@@ -162,14 +162,14 @@ class OtpVerificationController extends GetxController {
         }
         if (isCustomToken.value.toString() == "1") {
           print("firebaseAuthEmail");
-          customTokenWithFirebase(
+          await customTokenWithFirebase(
             token: commonConstants.data!.token,
           );
         } else {
           print("firebaseAuthPassword");
           if (commonConstants.data!.firebaseAuthEmail != null &&
               commonConstants.data!.firebaseAuthPassword != null) {
-            Auth().handleSignInEmail(commonConstants.data!.firebaseAuthEmail!,
+            await Auth().handleSignInEmail(commonConstants.data!.firebaseAuthEmail!,
                 commonConstants.data!.firebaseAuthPassword!);
           }
         }
