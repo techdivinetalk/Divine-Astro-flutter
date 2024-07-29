@@ -861,8 +861,6 @@ class HomeUI extends GetView<HomeController> {
                                           width: 30,
                                           placeHolder:
                                               Assets.images.defaultProfile.path,
-                                          onTap: () async {
-                                           },
                                         ),
                                         const SizedBox(width: 5),
                                         SizedBox(
@@ -914,7 +912,6 @@ class HomeUI extends GetView<HomeController> {
                                           width: 30,
                                           placeHolder:
                                               Assets.images.defaultProfile.path,
-                                          onTap: () async {},
                                         ),
                                         const SizedBox(width: 5),
                                         SizedBox(
@@ -966,8 +963,6 @@ class HomeUI extends GetView<HomeController> {
                                           width: 30,
                                           placeHolder:
                                               Assets.images.defaultProfile.path,
-                                          onTap: () async {
-                                           },
                                         ),
                                         const SizedBox(width: 5),
                                         SizedBox(
