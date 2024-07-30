@@ -377,10 +377,7 @@ class HomeUI extends GetView<HomeController> {
                                             //       .images.defaultProfile.path,
                                             //   radius:
                                             //       BorderRadius.circular(100.r),
-                                            //   onTap: () async {
-                                            //     Get.toNamed(
-                                            //         RouteName.profileUi);
-                                            //   },
+
                                             // ),
                                             Text(
                                               "PassBook".tr,
@@ -445,9 +442,7 @@ class HomeUI extends GetView<HomeController> {
                                           //       .images.defaultProfile.path,
                                           //   radius:
                                           //       BorderRadius.circular(100.r),
-                                          //   onTap: () async {
-                                          //     Get.toNamed(RouteName.profileUi);
-                                          //   },
+
                                           // ),
                                           Text(
                                             "View Kundli".tr,
@@ -795,10 +790,6 @@ class HomeUI extends GetView<HomeController> {
                                                       width: 35,
                                                       placeHolder: Assets.images
                                                           .defaultProfile.path,
-                                                      onTap: () async {
-                                                        Get.toNamed(RouteName
-                                                            .profileUi);
-                                                      },
                                                     ),
                                                     const SizedBox(width: 15),
                                                     Text(
@@ -2856,9 +2847,6 @@ class HomeUI extends GetView<HomeController> {
                   height: 30,
                   width: 30,
                   placeHolder: Assets.images.defaultProfile.path,
-                  onTap: () async {
-                    Get.toNamed(RouteName.profileUi);
-                  },
                 ),
                 SizedBox(width: 5.w),
                 Text(
