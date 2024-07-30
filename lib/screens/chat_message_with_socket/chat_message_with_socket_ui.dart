@@ -1487,10 +1487,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 GestureDetector(
                                     onTap: () async {
                                       if (await PermissionHelper()
-                                              .askStoragePermission(
-                                                  Permission.photos) &&
-                                          await PermissionHelper()
-                                              .getAllPermissionForCamera()) {
+                                          .getAllPermissionForCamera()) {
                                         openBottomSheet(Get.context!,
                                             functionalityWidget: Column(
                                               children: [
