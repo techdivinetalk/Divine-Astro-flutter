@@ -154,23 +154,20 @@ class PermissionHelper {
     var storagePermissionStatus = await Permission.storage.status;
     var microphonePermissionStatus = await Permission.microphone.status;
 
-    if (!cameraPermissionStatus.isGranted) {
-      var cameraPermission = await Permission.camera.request();
-      if (!cameraPermission.isGranted) {
-        return false;
-      }
-    }
+    if (!cameraPermissionStatus.isGranted ||
+        !storagePermissionStatus.isGranted ||
+        !microphonePermissionStatus.isGranted) {
+      Map<Permission, PermissionStatus> statuses = await [
+        Permission.camera,
+        Permission.microphone,
+        Permission.storage,
+      ].request();
 
-    if (!storagePermissionStatus.isGranted) {
-      var storagePermission = await Permission.storage.request();
-      if (!storagePermission.isGranted) {
-        return false;
-      }
-    }
-
-    if (!microphonePermissionStatus.isGranted) {
-      var microphonePermission = await Permission.microphone.request();
-      if (!microphonePermission.isGranted) {
+      if (statuses[Permission.camera] == PermissionStatus.granted &&
+          statuses[Permission.microphone] == PermissionStatus.granted &&
+          statuses[Permission.storage] == PermissionStatus.granted) {
+        return true;
+      } else {
         return false;
       }
     }
