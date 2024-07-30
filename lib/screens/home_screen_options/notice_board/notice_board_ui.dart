@@ -130,7 +130,8 @@ class ExpandableHtml extends StatefulWidget {
   const ExpandableHtml({
     Key? key,
     required this.htmlData,
-    this.trimLength = 100, this.isExpanded,
+    this.trimLength = 100,
+    this.isExpanded,
   }) : super(key: key);
 
   @override
@@ -148,8 +149,8 @@ class _ExpandableHtmlState extends State<ExpandableHtml>
 
   @override
   void initState() {
-    if(widget.isExpanded != null){
-      _isExpanded = widget.isExpanded?? false;
+    if (widget.isExpanded != null) {
+      _isExpanded = widget.isExpanded ?? false;
     }
     super.initState();
   }
@@ -177,7 +178,7 @@ class _ExpandableHtmlState extends State<ExpandableHtml>
                 });
               },
               child: Text(
-                _isExpanded ? "Show Less" : "Show More",
+                _isExpanded ? "Read Less" : "Read More",
                 style: TextStyle(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w700,
@@ -189,6 +190,7 @@ class _ExpandableHtmlState extends State<ExpandableHtml>
       ],
     );
   }
+
   @override
   bool get wantKeepAlive => true;
 }

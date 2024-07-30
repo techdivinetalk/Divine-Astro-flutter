@@ -29,9 +29,10 @@ class FeedbackCardWidget extends StatelessWidget {
           decoration: BoxDecoration(
               boxShadow: [
                 BoxShadow(
-                    color: Colors.black.withOpacity(0.2),
-                    blurRadius: 6.0,
-                    offset: const Offset(0.0, 3.0)),
+                  blurRadius: 4,
+                  spreadRadius: 2,
+                  color: appColors.grey.withOpacity(0.2),
+                ),
               ],
               color: Colors.white,
               borderRadius: BorderRadius.all(Radius.circular(14.r)),
@@ -62,7 +63,9 @@ class FeedbackCardWidget extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      feedback.order?.productType == 12 ? Assets.svg.message.svg(height: 12.h, width: 12.h) :Assets.svg.icCall1.svg(height: 12.h, width: 12.h),
+                      feedback.order?.productType == 12
+                          ? Assets.svg.message.svg(height: 12.h, width: 12.h)
+                          : Assets.svg.icCall1.svg(height: 12.h, width: 12.h),
                       SizedBox(width: 8.w),
                       Text(
                         'ID : ${feedback.orderId ?? 'NA'}',
@@ -76,7 +79,9 @@ class FeedbackCardWidget extends StatelessWidget {
                   Row(
                     children: [
                       Text(
-                        feedback.createdAt != null ? '${dateToString(feedback.createdAt!, format: "h:mm a")} ${formatDateTime(feedback.createdAt!)}' : "NA",
+                        feedback.createdAt != null
+                            ? '${dateToString(feedback.createdAt!, format: "h:mm a")} ${formatDateTime(feedback.createdAt!)}'
+                            : "NA",
                         style: AppTextStyle.textStyle10(
                           fontWeight: FontWeight.w400,
                           fontColor: appColors.darkBlue.withOpacity(.5),
@@ -101,12 +106,12 @@ class FeedbackCardWidget extends StatelessWidget {
                     'product_type': feedback.order?.productType,
                   });
                 },
-                child: Text('Read More',
+                child: Text(
+                  'Read More',
                   style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w600,
                     fontColor: appColors.red,
                   ).copyWith(decoration: TextDecoration.underline),
-
                 ),
               ),
             ],

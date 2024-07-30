@@ -1,9 +1,7 @@
-import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 class RetentionWidget extends StatelessWidget {
   final Color? borderColor;
@@ -55,7 +53,7 @@ class RetentionWidget extends StatelessWidget {
                       title ?? "",
                       fontWeight: FontWeight.w400,
                       textAlign: TextAlign.center,
-                      fontSize: 9.sp,
+                      fontSize: 8,
                       maxLines: 2,
                       fontColor: appColors.textColor,
                     ),

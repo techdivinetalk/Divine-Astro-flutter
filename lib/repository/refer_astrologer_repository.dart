@@ -1,9 +1,10 @@
-import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/refer_astrologer/refer_astrologer_response.dart';
 import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
+
+import '../common/app_exception.dart';
 
 class ReferAstrologerRepository extends ApiProvider {
   Future<ReferAstrologerResponse> referAstrologer(String json) async {
@@ -20,8 +21,10 @@ class ReferAstrologerRepository extends ApiProvider {
       if (response.statusCode == 200) {
         final apiResponse = referAstrologerResponseFromJson(response.body);
         if (apiResponse.status?.code == successResponse &&
-            apiResponse.status?.message == "success") {
-          return apiResponse;
+            apiResponse.status?.message == "Success") {
+          final d = referAstrologerResponseFromJson(response.body);
+
+          return d;
         } else {
           throw CustomException("Unknown Error");
         }

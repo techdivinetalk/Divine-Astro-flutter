@@ -20,7 +20,13 @@ class AppTextStyle {
       color: fontColor ?? appColors.textColor,
     );
   }
-
+  static TextStyle textStyle11({Color? fontColor, FontWeight? fontWeight}) {
+    return TextStyle(
+      fontSize: 11.sp,
+      fontWeight: fontWeight ?? FontWeight.w400,
+      color: fontColor ?? appColors.textColor,
+    );
+  }
   static TextStyle textStyle12({Color? fontColor, FontWeight? fontWeight}) {
     return TextStyle(
       fontSize: 12.sp,

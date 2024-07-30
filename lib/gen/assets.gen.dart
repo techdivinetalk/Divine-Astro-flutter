@@ -3,15 +3,15 @@
 ///  FlutterGen
 /// *****************************************************
 
+import 'package:flutter/services.dart';
 // coverage:ignore-file
 // ignore_for_file: type=lint
 // ignore_for_file: directives_ordering,unnecessary_import,implicit_dynamic_list_literal,deprecated_member_use
 
 import 'package:flutter/widgets.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:vector_graphics/vector_graphics.dart';
 import 'package:lottie/lottie.dart';
+import 'package:vector_graphics/vector_graphics.dart';
 
 class $AssetsImagesGen {
   const $AssetsImagesGen();
@@ -223,6 +223,10 @@ class $AssetsImagesGen {
   AssetGenImage get divineLogo =>
       const AssetGenImage('assets/images/divine_logo.png');
 
+  /// File path: assets/images/divine_logo.png
+  AssetGenImage get passBook =>
+      const AssetGenImage('assets/images/passport.png');
+
   /// File path: assets/images/done.png
   AssetGenImage get done => const AssetGenImage('assets/images/done.png');
 
@@ -386,6 +390,8 @@ class $AssetsImagesGen {
 
   /// File path: assets/images/ic_go_live.svg
   SvgGenImage get icGoLive => const SvgGenImage('assets/images/ic_go_live.svg');
+  /// File path: assets/images/ic_go_live.svg
+  AssetGenImage get liveImage => AssetGenImage('assets/images/live_image.png');
 
   /// File path: assets/images/ic_gold.png
   AssetGenImage get icGold => const AssetGenImage('assets/images/ic_gold.png');
