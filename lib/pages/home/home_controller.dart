@@ -674,12 +674,17 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     update();
   }
 
+  var loadWalletData = false.obs;
   getWalletPointDetail(wallet) async {
     update();
+    loadWalletData(true);
     try {
       var response = await HomePageRepository().getWalletDetailsData(wallet);
       walletData.value = response.data;
+      loadWalletData(false);
     } catch (error) {
+      loadWalletData(false);
+
       if (error is AppException) {
         error.onException();
       } else {

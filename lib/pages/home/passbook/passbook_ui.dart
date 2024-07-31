@@ -180,17 +180,37 @@ class PassbookUi extends GetView<PassbooksController> {
                 //   ),
                 // ),
                 controller.isLoading.value == true
-                    ? const Center(
-                        child: CircularProgressIndicator(),
+                    ? const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(height: 200),
+                          Center(
+                            child: CircularProgressIndicator(),
+                          ),
+                        ],
                       )
                     : controller.passBookDataModel == null
-                        ? Container()
-                        : SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.8,
-                            width: MediaQuery.of(context).size.width,
-                            child: WebViewPage(
-                              url:
-                                  controller.passBookDataModel!.data.toString(),
+                        ? const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(height: 200),
+                              Center(
+                                child:
+                                    Text("Please Select Date and wallet type"),
+                              ),
+                            ],
+                          )
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.8,
+                              width: MediaQuery.of(context).size.width,
+                              child: WebViewPage(
+                                url: controller.passBookDataModel!.data
+                                    .toString(),
+                              ),
                             ),
                           ),
               ],
@@ -270,7 +290,7 @@ class PassbookUi extends GetView<PassbooksController> {
       },
       borderRadius: BorderRadius.circular(10),
       child: Container(
-        height: 40,
+        height: 50,
         width: MediaQuery.of(context).size.width * 0.3,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -301,7 +321,7 @@ class PassbookUi extends GetView<PassbooksController> {
       onTap: onTap,
       borderRadius: BorderRadius.circular(10),
       child: Container(
-        height: 40,
+        height: 50,
         width: MediaQuery.of(context).size.width * 0.4,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -437,7 +457,7 @@ class selectDateWid extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: DatePickerWidget(
                   initialDate: initialDate,
-                  lastDate: DateTime(DateTime.now().year + 100),
+                  lastDate: DateTime.now(),
                   firstDate: DateTime(1900, 1, 1),
                   dateFormat: "MMM/dd/yyyy",
                   pickerType: "DateCalendar",
