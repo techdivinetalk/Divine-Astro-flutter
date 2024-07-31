@@ -150,27 +150,26 @@ class PermissionHelper {
   }
 
   Future<bool> getAllPermissionForCamera() async {
+    Permission askPermission =
+        await getPermissionFromAPILevel(Permission.photos);
     var cameraPermissionStatus = await Permission.camera.status;
-    var storagePermissionStatus = await Permission.storage.status;
+    var storagePermissionStatus = await askPermission.status;
     var microphonePermissionStatus = await Permission.microphone.status;
 
-    if (!cameraPermissionStatus.isGranted) {
-      var cameraPermission = await Permission.camera.request();
-      if (!cameraPermission.isGranted) {
-        return false;
-      }
-    }
+    if (!cameraPermissionStatus.isGranted ||
+        !storagePermissionStatus.isGranted ||
+        !microphonePermissionStatus.isGranted) {
+      Map<Permission, PermissionStatus> statuses = await [
+        Permission.camera,
+        Permission.microphone,
+        askPermission,
+      ].request();
 
-    if (!storagePermissionStatus.isGranted) {
-      var storagePermission = await Permission.storage.request();
-      if (!storagePermission.isGranted) {
-        return false;
-      }
-    }
-
-    if (!microphonePermissionStatus.isGranted) {
-      var microphonePermission = await Permission.microphone.request();
-      if (!microphonePermission.isGranted) {
+      if (statuses[Permission.camera] == PermissionStatus.granted &&
+          statuses[Permission.microphone] == PermissionStatus.granted &&
+          statuses[askPermission] == PermissionStatus.granted) {
+        return true;
+      } else {
         return false;
       }
     }

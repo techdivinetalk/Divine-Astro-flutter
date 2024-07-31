@@ -1644,8 +1644,8 @@ class HomeUI extends GetView<HomeController> {
                               SizedBox(
                                 width: 100,
                                 child: Text(
-                                  '${dateToString(DateTime.parse(controller.astroNoticeBoardResponse.value.data?.noticeBoard?.createdAt ?? ''), format: "h:mm a")}  '
-                                  '${formatDateTime(DateTime.parse(controller.astroNoticeBoardResponse.value.data?.noticeBoard?.createdAt ?? ''))}',
+                                  '${dateToString(DateTime.parse(controller.astroNoticeBoardResponse.value.data?.noticeBoard?.createdAt != null ? controller.astroNoticeBoardResponse.value.data?.noticeBoard?.createdAt ?? "" : DateTime.now().toString()), format: "h:mm a")}  '
+                                  '${formatDateTime(DateTime.parse(controller.astroNoticeBoardResponse.value.data?.noticeBoard?.createdAt != null ? controller.astroNoticeBoardResponse.value.data?.noticeBoard?.createdAt ?? "" : DateTime.now().toString()))}',
                                   textAlign: TextAlign.right,
                                   style: AppTextStyle.textStyle10(
                                       fontWeight: FontWeight.w400,
