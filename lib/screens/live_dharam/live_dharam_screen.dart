@@ -9,6 +9,7 @@ import "package:after_layout/after_layout.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
 import "package:divine_astrologer/common/app_textstyle.dart";
 import "package:divine_astrologer/common/colors.dart";
+import "package:divine_astrologer/common/common_bottomsheet.dart";
 import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/generic_loading_widget.dart";
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
@@ -55,12 +56,14 @@ import "package:get/get.dart";
 import "package:simple_html_css/simple_html_css.dart";
 import "package:svgaplayer_flutter/parser.dart";
 import "package:svgaplayer_flutter/player.dart";
+import "package:velocity_x/velocity_x.dart";
 import "package:zego_express_engine/zego_express_engine.dart";
 import "package:zego_uikit_beauty_plugin/zego_uikit_beauty_plugin.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
 import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
 
 import '../../cache/custom_cache_manager.dart';
+import "../../model/live/blocked_customer_list_res.dart";
 
 const int appID = 696414715;
 const String appSign =
@@ -185,7 +188,7 @@ class _LivePage extends State<LiveDharamScreen>
     );
 
     _startTimer();
-    if(kDebugMode) {
+    if (kDebugMode) {
       _controller.isCamOn = false;
       zegoController.audioVideo.camera
           .turnOn(_controller.isCamOn, userID: _controller.userId);
@@ -1019,8 +1022,11 @@ class _LivePage extends State<LiveDharamScreen>
                                           await moreOptionsPopup(
                                             userId: msg.userId ?? "",
                                             userName: msg.userName ?? "",
+                                            avatar: msg.avatar ?? "",
                                             isBlocked: _controller.isBlocked(
-                                              id: int.parse(msg.userId ?? ""),
+                                              id: int.parse(
+                                                msg.userId ?? "",
+                                              ),
                                             ),
                                           );
                                         },
@@ -1377,6 +1383,7 @@ class _LivePage extends State<LiveDharamScreen>
   Future<void> moreOptionsPopup({
     required String userId,
     required String userName,
+    required String avatar,
     required bool isBlocked,
   }) async {
     LiveGlobalSingleton().isMoreOptionsPopupOpen = true;
@@ -2595,6 +2602,101 @@ class _LivePage extends State<LiveDharamScreen>
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
+        Column(
+          children: [
+            InkWell(
+              onTap: () async {
+                openBottomSheet(
+                  context,
+                  functionalityWidget: Container(
+                    constraints: BoxConstraints(
+                      maxHeight: Get.height - 200,
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        SizedBox(height: 10),
+                        Text(
+                          "Blocked Customers",
+                          style: TextStyle(
+                            color: appColors.black,
+                            fontSize: 20,
+                          ),
+                        ),
+                        ListView.builder(
+                          shrinkWrap: true,
+                          itemCount: _controller.blockedCustomerList.length,
+                          itemBuilder: (context, index) {
+                            BlockedCustomerListResData item =
+                                _controller.blockedCustomerList[index];
+                            GetCustomers? customer = item.getCustomers;
+                            return ListTile(
+                              leading: Container(
+                                height: 30,
+                                width: 30,
+                                margin: const EdgeInsets.only(top: 3),
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: appColors.guideColor,
+                                ),
+                                child: Text(
+                                    customer?.name
+                                            ?.split("")
+                                            .first
+                                            .toUpperCase() ??
+                                        'N',
+                                    style: TextStyle(
+                                      color: appColors.whiteGuidedColor,
+                                      fontSize: 12,
+                                      fontFamily: "Metropolis",
+                                      fontWeight: FontWeight.w500,
+                                    )),
+                              ),
+                              title: Text(customer?.name ?? 'N/A'),
+                              // subtitle: Text(customer.email!),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+              child: SizedBox(
+                height: 50,
+                width: 50,
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(50.0),
+                    ),
+                    border: Border.all(
+                      color: appColors.guideColor,
+                    ),
+                    color: appColors.black.withOpacity(0.2),
+                  ),
+                  // child: Padding(
+                  //   padding: const EdgeInsets.all(0.0),
+                  //   child: Icon(
+                  //     Icons.category,
+                  //     color: appColors.guideColor,
+                  //   ),
+                  // ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Icon(
+                      Icons.block,
+                      color: appColors.guideColor,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 8),
+          ],
+        ),
+
         AnimatedOpacity(
           opacity: !_controller.currentCaller.isEngaded! ? 0.0 : 1.0,
           duration: const Duration(seconds: 1),

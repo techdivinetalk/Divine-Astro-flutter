@@ -115,7 +115,7 @@ class CustomImageView extends StatelessWidget {
             fit: fit,
             imageUrl: imagePath!,
             color: color,
-            fadeInDuration: const Duration(milliseconds: 400),
+            // fadeInDuration: const Duration(milliseconds: 400),
             placeholder: (context, url) => SizedBox(
               height: 30,
               width: 30,

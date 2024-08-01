@@ -179,91 +179,40 @@ class PassbookUi extends GetView<PassbooksController> {
                 //     },
                 //   ),
                 // ),
-                controller.passBookDataModel == null
-                    ? Container()
-                    : controller.isLoading.value == true
-                        ? const Center(
+                controller.isLoading.value == true
+                    ? const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(height: 200),
+                          Center(
                             child: CircularProgressIndicator(),
+                          ),
+                        ],
+                      )
+                    : controller.passBookDataModel == null
+                        ? const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(height: 200),
+                              Center(
+                                child:
+                                    Text("Please Select Date and wallet type"),
+                              ),
+                            ],
                           )
-                        : SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.8,
-                            width: MediaQuery.of(context).size.width,
-                            child: WebViewPage(
-                              url:
-                                  controller.passBookDataModel!.data.toString(),
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 10),
+                            child: SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.8,
+                              width: MediaQuery.of(context).size.width,
+                              child: WebViewPage(
+                                url: controller.passBookDataModel!.data
+                                    .toString(),
+                              ),
                             ),
                           ),
-                // : Padding(
-                //     padding: const EdgeInsets.only(
-                //         left: 10, bottom: 5, right: 10),
-                //     child: Align(
-                //       alignment: Alignment.topLeft,
-                //       child: Container(
-                //         // height: 300,
-                //         // width: MediaQuery.of(context).size.width * 0.9,
-                //         // color: Colors.black,
-                //         child: SingleChildScrollView(
-                //           child: Html(
-                //             data:  "",
-                //             onLinkTap: (url, attributes, element) {
-                //               launchUrl(Uri.parse(url ?? ''));
-                //             },
-                //             shrinkWrap: true,
-                //             style: {
-                //               "table": Style(
-                //                 height: Height.auto(),
-                //                 width: Width.auto(),
-                //               ),
-                //               "tr": Style(
-                //                 height: Height.auto(),
-                //                 width: Width.auto(),
-                //               ),
-                //               "th": Style(
-                //                 padding: HtmlPaddings.all(6),
-                //                 height: Height.auto(),
-                //                 border: const Border(
-                //                   left: BorderSide(
-                //                       color: Colors.black, width: 0.5),
-                //                   bottom: BorderSide(
-                //                       color: Colors.black, width: 0.5),
-                //                   top: BorderSide(
-                //                       color: Colors.black, width: 0.5),
-                //                 ),
-                //               ),
-                //               "td": Style(
-                //                 padding: HtmlPaddings.all(6),
-                //                 height: Height.auto(),
-                //                 border: const Border(
-                //                   left: BorderSide(
-                //                       color: Colors.black, width: 0.5),
-                //                   bottom: BorderSide(
-                //                       color: Colors.black, width: 0.5),
-                //                   top: BorderSide(
-                //                       color: Colors.black, width: 0.5),
-                //                   right: BorderSide(
-                //                       color: Colors.black, width: 0.5),
-                //                 ),
-                //               ),
-                //               "col": Style(
-                //                 height: Height.auto(),
-                //                 width: Width.auto(),
-                //               ),
-                //             },
-                //             extensions: [
-                //               TagWrapExtension(
-                //                   tagsToWrap: {'table'},
-                //                   builder: (child) {
-                //                     return SingleChildScrollView(
-                //                       scrollDirection: Axis.horizontal,
-                //                       child: child,
-                //                     );
-                //                   }),
-                //             ],
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //   ),
               ],
             ),
           ),
@@ -341,7 +290,7 @@ class PassbookUi extends GetView<PassbooksController> {
       },
       borderRadius: BorderRadius.circular(10),
       child: Container(
-        height: 40,
+        height: 50,
         width: MediaQuery.of(context).size.width * 0.3,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -372,7 +321,7 @@ class PassbookUi extends GetView<PassbooksController> {
       onTap: onTap,
       borderRadius: BorderRadius.circular(10),
       child: Container(
-        height: 40,
+        height: 50,
         width: MediaQuery.of(context).size.width * 0.4,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -508,8 +457,8 @@ class selectDateWid extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: DatePickerWidget(
                   initialDate: initialDate,
-                  lastDate: DateTime(DateTime.now().year + 100),
-                  firstDate: DateTime.now(),
+                  lastDate: DateTime.now(),
+                  firstDate: DateTime(1900, 1, 1),
                   dateFormat: "MMM/dd/yyyy",
                   pickerType: "DateCalendar",
                   looping: looping,
