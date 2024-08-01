@@ -413,6 +413,7 @@ class ChatAssistanceTile extends StatelessWidget {
   }
 
   Widget lastMessage(MsgType msgtype) {
+    print("msgtype ----> $msgtype");
     late Widget lastMessageWidget;
     switch (msgtype) {
       case MsgType.text:
@@ -484,7 +485,7 @@ class ChatAssistanceTile extends StatelessWidget {
           ],
         );
         break;
-      case MsgType.gift:
+      case MsgType.gift || MsgType.sendgifts:
         lastMessageWidget = const Row(
           children: [
             Icon(
