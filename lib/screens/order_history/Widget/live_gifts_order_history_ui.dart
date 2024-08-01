@@ -44,7 +44,6 @@ class LiveGiftsHistory extends StatelessWidget {
                         type: 3, page: controller.liveGiftPageCount);
                   }
                 }
-
               });
               return Column(
                 children: [
@@ -266,10 +265,18 @@ class LiveGiftsHistory extends StatelessWidget {
                   "totalEarning".tr,
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600),
                 ),
-                Text("₹${data[index].amount ?? "0"}",
-                    style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.w600,
-                        fontColor: appColors.lightGreen)),
+                data[index].is_po_served.toString() == "1"
+                    ? Text(
+                        "PO Not Served",
+                        style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w400,
+                          fontColor: appColors.black,
+                        ),
+                      )
+                    : Text("₹${data[index].amount ?? "0"}",
+                        style: AppTextStyle.textStyle12(
+                            fontWeight: FontWeight.w600,
+                            fontColor: appColors.lightGreen)),
               ],
             ),
             const SizedBox(height: 8),

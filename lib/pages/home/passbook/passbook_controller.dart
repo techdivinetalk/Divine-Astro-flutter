@@ -18,7 +18,7 @@ class PassbooksController extends GetxController with WidgetsBindingObserver {
   PassBookDataModel? passBookDataModel;
   var startDate;
   var endDate;
-
+  ScrollController scrollController = ScrollController();
   selectDaysType(value) {
     selectedDaysData = value;
     update();

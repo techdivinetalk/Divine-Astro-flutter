@@ -11,9 +11,11 @@ class PoojaRemedyTextFiled extends StatelessWidget {
   final bool? isSuffix;
   final String? title;
   final Function(String)? onChanged;
+  final focusNode;
   final List<TextInputFormatter>? textInputFormatter;
 
   final String? Function(String?)? validator;
+  final Function(String?)? onFieldSubmitted;
 
   const PoojaRemedyTextFiled(
       {super.key,
@@ -21,7 +23,9 @@ class PoojaRemedyTextFiled extends StatelessWidget {
       this.maxLines = 1,
       this.maxLength,
       this.validator,
+      this.onFieldSubmitted,
       this.title,
+      this.focusNode,
       this.onChanged,
       this.textInputFormatter,
       this.isSuffix = true});
@@ -45,6 +49,8 @@ class PoojaRemedyTextFiled extends StatelessWidget {
           validator: validator,
           onChanged: onChanged,
           inputFormatters: textInputFormatter,
+          focusNode: focusNode,
+          onFieldSubmitted: onFieldSubmitted,
           decoration: InputDecoration(
               suffixIcon: isSuffix!
                   ? Center(

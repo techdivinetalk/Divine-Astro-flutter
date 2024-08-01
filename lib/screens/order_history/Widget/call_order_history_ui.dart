@@ -208,15 +208,24 @@ class CallOrderHistory extends StatelessWidget {
                           : appColors.darkBlue*/
                 ),
               ),
-              Text(
-                // "- ₹100000",
-                "+ ₹${data[index].amount ?? "0"}",
-                style: AppTextStyle.textStyle12(
-                    fontWeight: FontWeight.w400,
-                    fontColor: /*data[index].amount.toString().contains("+")
+              data[index].is_po_served.toString() == "1"
+                  ? Text(
+                      "PO Not Served",
+                      style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.black,
+                      ),
+                    )
+                  : Text(
+                      // "- ₹100000",
+                      "+ ₹${data[index].amount ?? "0"}",
+                      style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.w400,
+                          fontColor: /*data[index].amount.toString().contains("+")
                           ?*/
-                        appColors.lightGreen /*: appColors.appRedColour*/),
-              )
+                              appColors
+                                  .lightGreen /*: appColors.appRedColour*/),
+                    )
             ],
           ),
           Text(

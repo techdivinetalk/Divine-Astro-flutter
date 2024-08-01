@@ -191,13 +191,21 @@ class AllOrderHistoryUi extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              Text(
-                "+ ₹${data[index].amount ?? "0"}",
-                style: AppTextStyle.textStyle12(
-                  fontWeight: FontWeight.w400,
-                  fontColor: appColors.lightGreen,
-                ),
-              ),
+              data[index].is_po_served.toString() == "1"
+                  ? Text(
+                      "PO Not Served",
+                      style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.black,
+                      ),
+                    )
+                  : Text(
+                      "+ ₹${data[index].amount ?? "0"}",
+                      style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.lightGreen,
+                      ),
+                    ),
             ],
           ),
           Text(

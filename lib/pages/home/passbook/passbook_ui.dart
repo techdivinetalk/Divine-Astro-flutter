@@ -1,4 +1,3 @@
-import 'package:divine_astrologer/pages/home/passbook/htmlWidget.dart';
 import 'package:divine_astrologer/pages/home/passbook/passbook_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import 'package:get/get.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
 import '../../../common/date_picker/date_picker_widget.dart';
+import 'htmlWidget.dart';
 
 class PassbookUi extends GetView<PassbooksController> {
   const PassbookUi({Key? key}) : super(key: key);
@@ -23,19 +23,9 @@ class PassbookUi extends GetView<PassbooksController> {
         return Scaffold(
           appBar: appbarSmall1(context, "Passbook"),
           body: SingleChildScrollView(
+            controller: controller.scrollController,
             child: Column(
               children: [
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   crossAxisAlignment: CrossAxisAlignment.start,
-                //   children: [
-                //     selectWidget("Monthly", context, controller),
-                //     const SizedBox(
-                //       width: 10,
-                //     ),
-                //     selectWidget("Weekly", context, controller),
-                //   ],
-                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,76 +99,6 @@ class PassbookUi extends GetView<PassbooksController> {
                     selectTypeWidget("Ecomm", context, controller),
                   ],
                 ),
-                // const SizedBox(
-                //   height: 10,
-                // ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   crossAxisAlignment: CrossAxisAlignment.start,
-                //   children: [
-                //     selectDate(
-                //         controller.startDate == null
-                //             ? "Start Date"
-                //             : "${DateTime.parse(controller.startDate).day}-${DateTime.parse(controller.startDate).month}-${DateTime.parse(controller.startDate).year}",
-                //         context,
-                //         controller, () {
-                //       showCupertinoModalPopup(
-                //           context: Get.context!,
-                //           builder: (context) {
-                //             return selectDateWid(
-                //               looping: true,
-                //               buttonTitle: "Confirm",
-                //               initialDate: DateTime.now(),
-                //               onConfirm: (String value) {
-                //                 controller.setStartDate(value);
-                //               },
-                //               onChange: (String value) {
-                //                 controller.setStartDate(value);
-                //               },
-                //             );
-                //           });
-                //     }),
-                //     const SizedBox(
-                //       width: 10,
-                //     ),
-                //     selectDate(
-                //         controller.endDate == null
-                //             ? "End Date"
-                //             : "${DateTime.parse(controller.endDate).day}-${DateTime.parse(controller.endDate).month}-${DateTime.parse(controller.endDate).year}",
-                //         context,
-                //         controller, () {
-                //       showCupertinoModalPopup(
-                //           context: Get.context!,
-                //           builder: (context) {
-                //             return selectDateWid(
-                //               looping: true,
-                //               buttonTitle: "Confirm",
-                //               initialDate: DateTime.now(),
-                //               onConfirm: (String value) {
-                //                 controller.setEndDate(value);
-                //               },
-                //               onChange: (String value) {
-                //                 controller.setEndDate(value);
-                //               },
-                //             );
-                //           });
-                //     }),
-                //   ],
-                // ),
-                // Container(
-                //   child: Html(
-                //     data:
-                //         '<figure class="table"><table style="background-color:rgb(255, 255, 255);border:2px solid rgb(0, 0, 0);"><tbody><tr><th><strong>NAME</strong></th><th>DATE</th><th>DD</th></tr><tr><th>PETER</th><th>2020</th><th>SDSD</th></tr><tr><th>SAM</th><th>2021</th><th>SSS</th></tr></tbody></table></figure>',
-                //     style: {
-                //       "table": Style(
-                //         backgroundColor: Colors.white,
-                //       ),
-                //       "tr": Style(border: Border.all(color: Colors.black)),
-                //       "th": Style(border: Border.all(color: Colors.black)),
-                //       "td": Style(border: Border.all(color: Colors.black)),
-                //     },
-                //   ),
-                // ),
                 controller.isLoading.value == true
                     ? const Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -204,13 +124,9 @@ class PassbookUi extends GetView<PassbooksController> {
                           )
                         : Padding(
                             padding: const EdgeInsets.only(top: 10),
-                            child: SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.8,
-                              width: MediaQuery.of(context).size.width,
-                              child: WebViewPage(
-                                url: controller.passBookDataModel!.data
-                                    .toString(),
-                              ),
+                            child: WebViewPage(
+                              url:
+                                  controller.passBookDataModel!.data.toString(),
                             ),
                           ),
               ],
