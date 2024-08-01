@@ -957,6 +957,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 controller: controller.messageController,
                                 keyboardType: TextInputType.text,
                                 // expands: true,
+                                autofocus: false,
                                 minLines: 1,
                                 maxLines: 3,
                                 style: const TextStyle(
