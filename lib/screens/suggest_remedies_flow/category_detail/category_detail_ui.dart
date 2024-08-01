@@ -72,7 +72,8 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   if (controller.isSentMessage.value == false)
-                                    Padding(
+                                  /// select quantity
+                                    /*Padding(
                                       padding: EdgeInsets.only(right: 11.w),
                                       child: Text(
                                         "Select Quantity",
@@ -80,7 +81,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                             fontWeight: FontWeight.w400,
                                             fontColor: appColors.darkBlue),
                                       ),
-                                    ),
+                                    ),*/
                                   SizedBox(height: 4.h),
                                   Row(
                                     children: [
@@ -90,7 +91,8 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
-                                      Spacer(),
+                                      /// select quantity
+                                      /*Spacer(),
                                       if (controller.isSentMessage.value ==
                                           false)
                                         Container(
@@ -129,7 +131,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                                           appColors.darkBlue)),
                                             ],
                                           ),
-                                        ),
+                                        ),*/
                                     ],
                                   )
                                 ],

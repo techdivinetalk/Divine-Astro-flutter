@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:developer';
 
+import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/astrologer_training_session_response.dart';
 import 'package:divine_astrologer/model/home_model/astrologer_live_data_response.dart';
 import 'package:divine_astrologer/model/home_model/training_video_model.dart';
@@ -246,6 +248,8 @@ class HomePageRepository extends ApiProvider {
         Utils().handleStatusCodeUnauthorizedServer();
       } else if (response.statusCode == HttpStatus.badRequest) {
         Utils().handleStatusCode400(response.body);
+      } else if (response.statusCode == 110 || response.statusCode == HttpStatus.networkConnectTimeoutError || response.statusCode == HttpStatus.networkAuthenticationRequired) {
+        divineSnackBar(data: "No Internet connection", color: appColors.redColor);
       }
       debugPrint("test_response_body: ${response.body}");
 
@@ -277,6 +281,8 @@ class HomePageRepository extends ApiProvider {
         Utils().handleStatusCodeUnauthorizedServer();
       } else if (response.statusCode == HttpStatus.badRequest) {
         Utils().handleStatusCode400(response.body);
+      } else if (response.statusCode == 110 || response.statusCode == HttpStatus.networkConnectTimeoutError || response.statusCode == HttpStatus.networkAuthenticationRequired) {
+        divineSnackBar(data: "No Internet connection", color: appColors.redColor);
       }
       if (response.statusCode == 200 && json.decode(response.body) != null) {
         print("test_body: ${response.body}");
@@ -310,6 +316,8 @@ class HomePageRepository extends ApiProvider {
         Utils().handleStatusCodeUnauthorizedServer();
       } else if (response.statusCode == HttpStatus.badRequest) {
         Utils().handleStatusCode400(response.body);
+      } else if (response.statusCode == 110 || response.statusCode == HttpStatus.networkConnectTimeoutError || response.statusCode == HttpStatus.networkAuthenticationRequired) {
+        divineSnackBar(data: "No Internet connection", color: appColors.redColor);
       }
       if (response.statusCode == 200 && json.decode(response.body) != null) {
         print("test_body: ${response.body}");

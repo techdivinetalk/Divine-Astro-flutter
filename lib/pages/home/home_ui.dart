@@ -2261,8 +2261,10 @@ class HomeUI extends GetView<HomeController> {
                                   log("here is it is comming - ${chatSwitch.value}");
 
                                   if (chatSwitch.value) {
+                                    print("true ------->");
                                     controller.selectDateTimePopupForChat(true);
                                   } else {
+                                    print("false ------->");
                                     await controller.chatSwitchFN(
                                       onComplete: () {
                                         // if (controller.chatSwitch.value) {

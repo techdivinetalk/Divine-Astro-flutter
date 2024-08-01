@@ -6,6 +6,7 @@ import 'package:divine_astrologer/model/order_history_model/remedy_suggested_ord
 import 'package:divine_astrologer/repository/order_history_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class SuggestedRemediesController extends GetxController {
   var suggestApiCalling = false.obs;
@@ -60,6 +61,14 @@ class SuggestedRemediesController extends GetxController {
         divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
+  }
+
+  String newFormatDateTime(String value) {
+    /*DateTime now = DateTime.now();
+    DateTime currentUtcTime = now.toUtc();*/
+    DateTime dateTime = DateTime.parse(value);
+    String formattedDate = DateFormat("dd MMM, hh:mm a").format(dateTime.toLocal());
+    return formattedDate;
   }
 
   Widget paginationLoadingWidget() => Padding(
