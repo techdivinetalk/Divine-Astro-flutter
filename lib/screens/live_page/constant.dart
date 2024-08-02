@@ -8,6 +8,7 @@ import '../../model/chat/chat_socket/chat_socket_init.dart';
 import '../../model/chat/res_astro_chat_listener.dart';
 import '../../model/chat_assistant/chat_assistant_chats_response.dart';
 import '../../model/constant_details_model_class.dart';
+import '../../model/message_template_response.dart';
 
 /// Note that the userID needs to be globally unique,
 final String localUserID = math.Random().nextInt(10000).toString();
@@ -32,7 +33,7 @@ RxString imageUploadBaseUrl = ''.obs;
 RxInt fireChat = 1.obs;
 RxInt isEngagedStatus = 0.obs;
 RxInt dasboardCurrentIndex = 0.obs;
-
+RxList<MessageTemplates> messageTemplateList = <MessageTemplates>[].obs;
 const userChatData = "userChatData";
 RxInt currentChatUserId = 8693.obs;
 int roleId = 7;
