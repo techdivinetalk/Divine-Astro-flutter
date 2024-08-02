@@ -505,7 +505,7 @@ class PaymentLogTile extends StatelessWidget {
               ],
             ),
             Text(
-              "₹${log.partnerPrice ?? "N/a"}/min",
+              "₹${log.partnerPrice ?? "N/a"} ${log.payoutFor == "gift" ? "" : "/min"}",
               style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
             ),
           ],
