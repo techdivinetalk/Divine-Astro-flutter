@@ -582,7 +582,9 @@ class ChatMessageWithSocketController extends GetxController
     getChatList();
     socketReconnect();
     initTask(AppFirebaseService().orderData.value);
-    getMessageTemplates();
+    Future.delayed(const Duration(milliseconds: 3000)).then((value) {
+      getMessageTemplates();
+    });
   }
 
   navigateToOtherScreen() async {
