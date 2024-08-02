@@ -178,6 +178,7 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
                     textInputFormatter: [CustomSpaceInputFormatter()],
                     controller: controller.descriptionController,
                     maxLength: 500,
+                    keyboardType: TextInputType.text,
                     onChanged: (value) {
                       controller.update();
                     },

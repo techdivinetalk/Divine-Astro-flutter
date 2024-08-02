@@ -197,13 +197,15 @@ class PassbookUi extends GetView<PassbooksController> {
 
   Widget selectTypeWidget(title, context, controller) {
     return InkWell(
-      onTap: () {
-        if (controller.startDate == null || controller.endDate == null) {
-          Fluttertoast.showToast(msg: "Please select Date");
-        } else {
-          controller.selectEarningType(title);
-        }
-      },
+      onTap: controller.isLoading.value == true
+          ? null
+          : () {
+              if (controller.startDate == null || controller.endDate == null) {
+                Fluttertoast.showToast(msg: "Please select Date");
+              } else {
+                controller.selectEarningType(title);
+              }
+            },
       borderRadius: BorderRadius.circular(10),
       child: Container(
         height: 50,

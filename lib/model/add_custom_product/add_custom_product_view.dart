@@ -76,6 +76,7 @@ class AddCustomProductView extends GetView<AddCustomProductController> {
                 onChanged: (value) {
                   controller.update();
                 },
+                keyboardType: TextInputType.text,
                 onFieldSubmitted: (value) {
                   controller.nameNode.unfocus();
                   FocusScope.of(context).requestFocus(controller.priceNode);
@@ -98,6 +99,7 @@ class AddCustomProductView extends GetView<AddCustomProductController> {
                 isSuffix: false,
                 title: 'Product Price ( In INR )',
                 focusNode: controller.priceNode,
+                keyboardType: TextInputType.number,
                 onFieldSubmitted: (value) {
                   FocusNode().unfocus();
                 },

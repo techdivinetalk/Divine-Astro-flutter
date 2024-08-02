@@ -129,7 +129,7 @@ class ChatOrderHistory extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: detailView(index, data),
+                          child: detailView(index, data, Get.context),
                         ),
                       ],
                     ),
@@ -229,7 +229,7 @@ class ChatOrderHistory extends StatelessWidget {
     );
   }
 
-  Widget detailView(int index, List<ChatDataList> data) {
+  Widget detailView(int index, List<ChatDataList> data, context) {
     String getGenderText(int? gender) {
       switch (gender) {
         case 0:
@@ -336,9 +336,15 @@ class ChatOrderHistory extends StatelessWidget {
                 ),
               ],
             ),
-            Text(
-              "${data[index].getCustomers?.placeOfBirth ?? 'N/A'}",
-              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.5,
+              child: Text(
+                "${data[index].getCustomers?.placeOfBirth ?? 'N/A'}",
+                overflow: TextOverflow.visible,
+                maxLines: 1,
+                textAlign: TextAlign.end,
+                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+              ),
             ),
           ],
         ),

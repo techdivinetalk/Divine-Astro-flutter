@@ -65,14 +65,16 @@ class Data {
 
   factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
-      totalAmountEarned: TotalAmountEarned.fromJson(json['total_amount_earned']),
+      totalAmountEarned:
+          TotalAmountEarned.fromJson(json['total_amount_earned']),
       payoutPending: json['payout_pending'],
       productRevenue: ProductRevenue.fromJson(json['product_revenue']),
       weeklyOrder: WeeklyOrder.fromJson(json['weekly_order']),
       productSold: ProductSold.fromJson(json['product_sold']),
       callPickup: CallPickup.fromJson(json['call_pickup']),
       ratings: Ratings.fromJson(json['ratings']),
-      paymentLog: List<PaymentLog>.from(json['payment_log'].map((log) => PaymentLog.fromJson(log))),
+      paymentLog: List<PaymentLog>.from(
+          json['payment_log'].map((log) => PaymentLog.fromJson(log))),
       tds: json['tds'],
       totalPaymentGatewayCharges: json['total_payment_gateway_charges'],
     );
@@ -296,23 +298,23 @@ class PaymentLog {
   });
 
   factory PaymentLog.fromJson(Map<String, dynamic> json) => PaymentLog(
-    id: json['id'],
-    payoutFor: json['payout_for'],
-    tax: json['tax'],
-    paymentGateway: json['paymet_gateway'],
-    totalAmount: json['total_amount'],
-    status: json['status'],
-    date: json['date'],
-    actualPayments: json['actual_payments'],
-    discount: json['discount'],
-    orderId: json['order_id'],
-    callDuration: json['call_duration'],
-    callStatus: json['call_status'],
-    customerDetails: json['customer_details'] != null
-        ? CustomerDetails.fromJson(json['customer_details'])
-        : null,
-    partnerPrice: json['partner_price'],
-  );
+        id: json['id'],
+        payoutFor: json['payout_for'],
+        tax: json['tax'],
+        paymentGateway: json['paymet_gateway'],
+        totalAmount: json['total_amount'],
+        status: json['status'],
+        date: json['date'],
+        actualPayments: json['actual_payments'],
+        discount: json['discount'],
+        orderId: json['order_id'],
+        callDuration: json['call_duration'],
+        callStatus: json['call_status'],
+        customerDetails: json['customer_details'] != null
+            ? CustomerDetails.fromJson(json['customer_details'])
+            : null,
+        partnerPrice: json['partner_price'],
+      );
 
   Map<String, dynamic> toJson() {
     return {
@@ -339,7 +341,7 @@ class CustomerDetails {
   final String name;
   final String avatar;
   final int? customerNo;
-  final DateTime? dateOfBirth;
+  var dateOfBirth;
   final String? placeOfBirth;
   final int? gender;
 
@@ -358,11 +360,11 @@ class CustomerDetails {
       id: json['id'] ?? 0,
       name: json['name'] ?? '',
       avatar: json['avatar'] ?? '',
-      customerNo: json['customerNo'],
-      dateOfBirth: json['dateOfBirth'] != null
-          ? DateTime.tryParse(json['dateOfBirth'])
+      customerNo: json['customer_no'],
+      dateOfBirth: json['date_of_birth'] != null
+          ? DateTime.tryParse(json['date_of_birth'])
           : null,
-      placeOfBirth: json['placeOfBirth'],
+      placeOfBirth: json['place_of_birth'],
       gender: json['gender'],
     );
   }
@@ -372,11 +374,10 @@ class CustomerDetails {
       'id': id,
       'name': name,
       'avatar': avatar,
-      'customerNo': customerNo,
-      'dateOfBirth': dateOfBirth?.toIso8601String(),
-      'placeOfBirth': placeOfBirth,
+      'customer_no': customerNo,
+      'date_of_birth': dateOfBirth?.toIso8601String(),
+      'place_of_birth': placeOfBirth,
       'gender': gender,
     };
   }
 }
-

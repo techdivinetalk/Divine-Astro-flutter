@@ -103,6 +103,7 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
                 title: "Product Name",
                 maxLength: 20,
                 controller: productName,
+                keyboardType: TextInputType.text,
                 textInputFormatter: [CustomSpaceInputFormatter()],
                 onChanged: (value) {
                   setState(() {});
@@ -124,6 +125,7 @@ class _CreateCustomProductSheetState extends State<CreateCustomProductSheet> {
                 isSuffix: false,
                 title: 'Product Price ( In INR )',
                 controller: productPrice,
+                keyboardType: TextInputType.number,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Product Price is required';

@@ -1,8 +1,6 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:divine_astrologer/common/SvgIconButton.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/common/routes.dart';
@@ -33,7 +31,7 @@ class PujaScreen extends GetView<PujaController> {
               leading: IconButton(
                   onPressed: () => Get.back(),
                   icon: const Icon(Icons.arrow_back_ios_new_rounded)),
-              title:  CustomText('eCommerce'.tr)),
+              title: CustomText('eCommerce'.tr)),
           bottomNavigationBar: Container(
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
             child: Row(
