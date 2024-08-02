@@ -1,6 +1,3 @@
-import 'package:divine_astrologer/common/app_exception.dart';
-import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/wallet/wallet_model.dart';
 import 'package:divine_astrologer/repository/wallet_page_repository.dart';
 import 'package:divine_astrologer/utils/enum.dart';
@@ -37,6 +34,13 @@ class WalletController extends GetxController {
           await walletRepository.walletPayOutDetails(params);
       if (currentPage.value == 1) {
         walletListRepo.value = response;
+        print("object");
+        print("object");
+        print("${walletListRepo.value.toJson()}");
+        print("object");
+        print("object");
+        print("object");
+        print("object");
       } else {
         walletListRepo.update((val) {
           val?.data?.paymentLog?.addAll(response.data?.paymentLog ?? []);

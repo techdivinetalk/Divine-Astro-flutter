@@ -28,14 +28,13 @@ class GiftOrderHistoryModelClass {
         data: json["data"] == null
             ? []
             : List<GiftDataList>.from(
-            json["data"]!.map((x) => GiftDataList.fromJson(x))),
+                json["data"]!.map((x) => GiftDataList.fromJson(x))),
         success: json["success"],
         statusCode: json["status_code"],
         message: json["message"],
       );
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         "data": data == null
             ? []
             : List<dynamic>.from(data!.map((x) => x.toJson())),
@@ -48,6 +47,7 @@ class GiftOrderHistoryModelClass {
 class GiftDataList {
   int? id;
   dynamic amount;
+  dynamic is_po_served;
   String? orderId;
   String? status;
   int? transactionId;
@@ -66,6 +66,7 @@ class GiftDataList {
     this.id,
     this.amount,
     this.orderId,
+    this.is_po_served,
     this.status,
     this.transactionId,
     this.createdAt,
@@ -80,8 +81,7 @@ class GiftDataList {
     this.getGift,
   });
 
-  factory GiftDataList.fromJson(Map<String, dynamic> json) =>
-      GiftDataList(
+  factory GiftDataList.fromJson(Map<String, dynamic> json) => GiftDataList(
         id: json["id"],
         amount: json["amount"] as dynamic,
         orderId: json["order_id"],
@@ -91,6 +91,7 @@ class GiftDataList {
             ? null
             : DateTime.parse(json["created_at"]),
         productType: json["product_type"],
+        is_po_served: json["is_po_served"],
         userId: json["user_id"],
         roleId: json["role_id"],
         astrologerId: json["astrologer_id"],
@@ -105,12 +106,12 @@ class GiftDataList {
             : GetGift.fromJson(json["get_gift"]),
       );
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "amount": amount,
         "order_id": orderId,
         "status": status,
+        "is_po_served": is_po_served,
         "transaction_id": transactionId,
         "created_at": createdAt?.toIso8601String(),
         "product_type": productType,
@@ -138,16 +139,14 @@ class GetCustomers {
     this.customerNo,
   });
 
-  factory GetCustomers.fromJson(Map<String, dynamic> json) =>
-      GetCustomers(
+  factory GetCustomers.fromJson(Map<String, dynamic> json) => GetCustomers(
         id: json["id"],
         name: json["name"],
         avatar: json["avatar"],
         customerNo: json["customer_no"],
       );
 
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         "id": id,
         "name": name,
         "avatar": avatar,
@@ -161,24 +160,19 @@ class GetGift {
   int? id;
   int? giftPrice;
 
-  GetGift({
-    this.giftName,
-    this.giftImage,
-    this.id,
-    this.giftPrice
-  });
+  GetGift({this.giftName, this.giftImage, this.id, this.giftPrice});
 
-  factory GetGift.fromJson(Map<String, dynamic> json) =>
-      GetGift(
-          giftName: json["gift_name"],
-          giftImage: json["gift_image"],
-          id: json["id"],
-          giftPrice: json['gift_price'],
+  factory GetGift.fromJson(Map<String, dynamic> json) => GetGift(
+        giftName: json["gift_name"],
+        giftImage: json["gift_image"],
+        id: json["id"],
+        giftPrice: json['gift_price'],
       );
 
   Map<String, dynamic> toJson() => {
-  "gift_name": giftName,
-  "gift_image": giftImage,
-  "id": id,
-  "gift_price" : giftPrice,
-};}
+        "gift_name": giftName,
+        "gift_image": giftImage,
+        "id": id,
+        "gift_price": giftPrice,
+      };
+}

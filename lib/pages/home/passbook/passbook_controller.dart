@@ -18,15 +18,16 @@ class PassbooksController extends GetxController with WidgetsBindingObserver {
   PassBookDataModel? passBookDataModel;
   var startDate;
   var endDate;
-
+  ScrollController scrollController = ScrollController();
   selectDaysType(value) {
     selectedDaysData = value;
     update();
   }
 
   selectEarningType(value) {
+    getPassbookData(value);
+    update();
     selectedEarningData = value;
-    getPassbookData();
     update();
   }
 
@@ -43,22 +44,22 @@ class PassbooksController extends GetxController with WidgetsBindingObserver {
   var data;
   // dom.Document document = htmlparser.parse(data);
 
-  getPassbookData() async {
+  getPassbookData(value) async {
     isLoading(true);
-    isLoading(true);
-    int walletType = selectedEarningData == "Bonus"
+
+    int walletType = value == "Bonus"
         ? 2
-        : selectedEarningData == "Paid"
+        : value == "Paid"
             ? 1
-            : selectedEarningData == "Ecomm"
+            : value == "Ecomm"
                 ? 3
                 : 1;
 
     Map<String, dynamic> param = {
       "wallet_type": walletType,
       "type": null,
-      "start_date": startDate == null ? "" : startDate,
-      "end_date": endDate == null ? "" : endDate
+      "start_date": startDate ?? "",
+      "end_date": endDate ?? ""
     };
 
     log("paramssss${param.toString()}");

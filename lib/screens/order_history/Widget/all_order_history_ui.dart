@@ -191,13 +191,21 @@ class AllOrderHistoryUi extends StatelessWidget {
                   fontWeight: FontWeight.w400,
                 ),
               ),
-              Text(
-                "+ ₹${data[index].amount ?? "0"}",
-                style: AppTextStyle.textStyle12(
-                  fontWeight: FontWeight.w400,
-                  fontColor: appColors.lightGreen,
-                ),
-              ),
+              data[index].is_po_served.toString() == "1"
+                  ? Text(
+                      "PO Not Served",
+                      style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.black,
+                      ),
+                    )
+                  : Text(
+                      "+ ₹${data[index].amount ?? "0"}",
+                      style: AppTextStyle.textStyle12(
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.lightGreen,
+                      ),
+                    ),
             ],
           ),
           Text(
@@ -342,7 +350,10 @@ class AllOrderHistoryUi extends StatelessWidget {
               ],
             ),
             Text(
-              "${DateFormat('dd MMM yyyy, hh:mm a').format(data[index].getCustomers?.dateOfBirth ?? DateTime.now())}",
+              DateFormat('dd MMM yyyy, hh:mm a')
+                  .format(
+                      data[index].getCustomers?.dateOfBirth ?? DateTime.now())
+                  .toString(),
               style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
             ),
           ],
@@ -352,6 +363,7 @@ class AllOrderHistoryUi extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Assets.images.icLocation.svg(),
                 const SizedBox(width: 15),
@@ -361,9 +373,15 @@ class AllOrderHistoryUi extends StatelessWidget {
                 ),
               ],
             ),
-            Text(
-              "${data[index].getCustomers?.placeOfBirth ?? 'N/A'}",
-              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.5,
+              child: Text(
+                "${data[index].getCustomers?.placeOfBirth ?? 'N/A'}",
+                overflow: TextOverflow.visible,
+                maxLines: 1,
+                textAlign: TextAlign.end,
+                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+              ),
             ),
           ],
         ),

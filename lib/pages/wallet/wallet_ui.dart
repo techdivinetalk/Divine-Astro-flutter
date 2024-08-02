@@ -10,6 +10,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:velocity_x/velocity_x.dart';
+
 import '../../../common/app_textstyle.dart';
 import '../../../common/appbar.dart';
 import '../../../common/colors.dart';
@@ -34,121 +35,123 @@ class WalletPage extends GetView<WalletController> {
       body: Column(
         children: [
           /*  balanceView(),*/
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              SizedBox(
-                width: 60.w,
-                child: Column(
-                  children: [
-                    Text(
-                      'Available Balance:',
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      style: AppTextStyle.textStyle12(
-                          fontColor: appColors.darkBlue,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      '₹${controller.walletListRepo.value.data?.totalAmountEarned.amountEarned ?? 0}',
-                      style: AppTextStyle.textStyle12(
-                          fontColor: appColors.darkBlue,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: 60.w,
-                child: Column(
-                  children: [
-                    Text(
-                      'PG \n Charges:',
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      style: AppTextStyle.textStyle12(
-                          fontColor: appColors.darkBlue,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      '₹${controller.walletListRepo.value.data?.productRevenue.amount ?? 0}',
-                      style: AppTextStyle.textStyle12(
-                          fontColor: appColors.darkBlue,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: 60.w,
-                child: Column(
-                  children: [
-                    Text(
-                      'Sub \n Total:',
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      style: AppTextStyle.textStyle12(
-                          fontColor: appColors.darkBlue,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      '₹${controller.walletListRepo.value.data?.weeklyOrder.count ?? 0}',
-                      style: AppTextStyle.textStyle12(
-                          fontColor: appColors.darkBlue,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: 60.w,
-                child: Column(
-                  children: [
-                    Text(
-                      'Product  \n Sold:',
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      style: AppTextStyle.textStyle12(
-                          fontColor: appColors.darkBlue,
-                          fontWeight: FontWeight.w400),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      '₹${controller.walletListRepo.value.data?.productSold.count ?? 0}',
-                      style: AppTextStyle.textStyle12(
-                          fontColor: appColors.darkBlue,
-                          fontWeight: FontWeight.w400),
-                    ),
-                  ],
-                ),
-              ),
-              SizedBox(
-                width: 60.w,
-                child: Column(
-                  children: [
-                    Text(
-                      'Total \n Amount',
-                      textAlign: TextAlign.center,
-                      maxLines: 2,
-                      style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.bold,
+          Obx(() {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                SizedBox(
+                  width: 60.w,
+                  child: Column(
+                    children: [
+                      Text(
+                        'Available Balance:',
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        style: AppTextStyle.textStyle12(
+                            fontColor: appColors.darkBlue,
+                            fontWeight: FontWeight.w400),
                       ),
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      '₹${controller.walletListRepo.value.data?.totalAmountEarned.amountEarned ?? 0}',
-                      style: AppTextStyle.textStyle12(
-                        fontWeight: FontWeight.bold,
+                      const SizedBox(height: 10),
+                      Text(
+                        '₹${controller.walletListRepo.value.data?.totalAmountEarned.amountEarned ?? 0}',
+                        style: AppTextStyle.textStyle12(
+                            fontColor: appColors.darkBlue,
+                            fontWeight: FontWeight.w400),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
-              ),
-            ],
-          ).scrollHorizontal(),
+                SizedBox(
+                  width: 60.w,
+                  child: Column(
+                    children: [
+                      Text(
+                        'PG \n Charges:',
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        style: AppTextStyle.textStyle12(
+                            fontColor: appColors.darkBlue,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        '₹${controller.walletListRepo.value.data?.productRevenue.amount ?? 0}',
+                        style: AppTextStyle.textStyle12(
+                            fontColor: appColors.darkBlue,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: 60.w,
+                  child: Column(
+                    children: [
+                      Text(
+                        'Sub \n Total:',
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        style: AppTextStyle.textStyle12(
+                            fontColor: appColors.darkBlue,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        '₹${controller.walletListRepo.value.data?.weeklyOrder.count ?? 0}',
+                        style: AppTextStyle.textStyle12(
+                            fontColor: appColors.darkBlue,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: 60.w,
+                  child: Column(
+                    children: [
+                      Text(
+                        'Product  \n Sold:',
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        style: AppTextStyle.textStyle12(
+                            fontColor: appColors.darkBlue,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        '₹${controller.walletListRepo.value.data?.productSold.count ?? 0}',
+                        style: AppTextStyle.textStyle12(
+                            fontColor: appColors.darkBlue,
+                            fontWeight: FontWeight.w400),
+                      ),
+                    ],
+                  ),
+                ),
+                SizedBox(
+                  width: 60.w,
+                  child: Column(
+                    children: [
+                      Text(
+                        'Total \n Amount',
+                        textAlign: TextAlign.center,
+                        maxLines: 2,
+                        style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      Text(
+                        '₹${controller.walletListRepo.value.data?.totalAmountEarned.amountEarned ?? 0}',
+                        style: AppTextStyle.textStyle12(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ).scrollHorizontal();
+          }),
           const SizedBox(height: 20),
           Container(height: 1.h, color: appColors.darkBlue.withOpacity(0.5)),
           const SizedBox(height: 20),
@@ -178,8 +181,11 @@ class WalletPage extends GetView<WalletController> {
                     separatorBuilder: (context, index) =>
                         const SizedBox(height: 10),
                     itemBuilder: (context, index) {
-                      if (index < paymentLogList.length) {
-                        final log = paymentLogList[index];
+                      if (index <
+                          controller
+                              .walletListRepo.value.data!.paymentLog.length) {
+                        final log = controller
+                            .walletListRepo.value.data?.paymentLog[index];
 
                         return PaymentLogTile(log: log!);
                       } else {
@@ -231,6 +237,7 @@ class PaymentLogTile extends StatelessWidget {
       default:
         productTypeText = 'Unknown';
     }*/
+
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
@@ -255,7 +262,7 @@ class PaymentLogTile extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: detailView(log),
+                          child: detailView(log, context),
                         ),
                       ],
                     ),
@@ -342,7 +349,7 @@ class PaymentLogTile extends StatelessWidget {
     );
   }
 
-  Widget detailView(PaymentLog log) {
+  Widget detailView(PaymentLog log, context) {
     String getGenderText(int? gender) {
       switch (gender) {
         case 0:
@@ -430,7 +437,9 @@ class PaymentLogTile extends StatelessWidget {
               ],
             ),
             Text(
-              "${DateFormat('dd MMM yyyy, hh:mm a').format(log.customerDetails?.dateOfBirth ?? DateTime.now())}",
+              DateFormat('dd MMM yyyy, hh:mm a')
+                  .format(log.customerDetails!.dateOfBirth ?? DateTime.now())
+                  .toString(),
               style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
             ),
           ],
@@ -449,9 +458,15 @@ class PaymentLogTile extends StatelessWidget {
                 ),
               ],
             ),
-            Text(
-              "${log.customerDetails?.placeOfBirth ?? 'N/A'}",
-              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.5,
+              child: Text(
+                "${log.customerDetails?.placeOfBirth ?? 'N/A'}",
+                overflow: TextOverflow.fade,
+                maxLines: 1,
+                textAlign: TextAlign.end,
+                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+              ),
             ),
           ],
         ),

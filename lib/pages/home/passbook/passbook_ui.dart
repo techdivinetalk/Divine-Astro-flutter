@@ -1,4 +1,3 @@
-import 'package:divine_astrologer/pages/home/passbook/htmlWidget.dart';
 import 'package:divine_astrologer/pages/home/passbook/passbook_controller.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,6 +9,7 @@ import 'package:get/get.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
 import '../../../common/date_picker/date_picker_widget.dart';
+import 'htmlWidget.dart';
 
 class PassbookUi extends GetView<PassbooksController> {
   const PassbookUi({Key? key}) : super(key: key);
@@ -23,19 +23,9 @@ class PassbookUi extends GetView<PassbooksController> {
         return Scaffold(
           appBar: appbarSmall1(context, "Passbook"),
           body: SingleChildScrollView(
+            controller: controller.scrollController,
             child: Column(
               children: [
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   crossAxisAlignment: CrossAxisAlignment.start,
-                //   children: [
-                //     selectWidget("Monthly", context, controller),
-                //     const SizedBox(
-                //       width: 10,
-                //     ),
-                //     selectWidget("Weekly", context, controller),
-                //   ],
-                // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -109,161 +99,36 @@ class PassbookUi extends GetView<PassbooksController> {
                     selectTypeWidget("Ecomm", context, controller),
                   ],
                 ),
-                // const SizedBox(
-                //   height: 10,
-                // ),
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.center,
-                //   crossAxisAlignment: CrossAxisAlignment.start,
-                //   children: [
-                //     selectDate(
-                //         controller.startDate == null
-                //             ? "Start Date"
-                //             : "${DateTime.parse(controller.startDate).day}-${DateTime.parse(controller.startDate).month}-${DateTime.parse(controller.startDate).year}",
-                //         context,
-                //         controller, () {
-                //       showCupertinoModalPopup(
-                //           context: Get.context!,
-                //           builder: (context) {
-                //             return selectDateWid(
-                //               looping: true,
-                //               buttonTitle: "Confirm",
-                //               initialDate: DateTime.now(),
-                //               onConfirm: (String value) {
-                //                 controller.setStartDate(value);
-                //               },
-                //               onChange: (String value) {
-                //                 controller.setStartDate(value);
-                //               },
-                //             );
-                //           });
-                //     }),
-                //     const SizedBox(
-                //       width: 10,
-                //     ),
-                //     selectDate(
-                //         controller.endDate == null
-                //             ? "End Date"
-                //             : "${DateTime.parse(controller.endDate).day}-${DateTime.parse(controller.endDate).month}-${DateTime.parse(controller.endDate).year}",
-                //         context,
-                //         controller, () {
-                //       showCupertinoModalPopup(
-                //           context: Get.context!,
-                //           builder: (context) {
-                //             return selectDateWid(
-                //               looping: true,
-                //               buttonTitle: "Confirm",
-                //               initialDate: DateTime.now(),
-                //               onConfirm: (String value) {
-                //                 controller.setEndDate(value);
-                //               },
-                //               onChange: (String value) {
-                //                 controller.setEndDate(value);
-                //               },
-                //             );
-                //           });
-                //     }),
-                //   ],
-                // ),
-                // Container(
-                //   child: Html(
-                //     data:
-                //         '<figure class="table"><table style="background-color:rgb(255, 255, 255);border:2px solid rgb(0, 0, 0);"><tbody><tr><th><strong>NAME</strong></th><th>DATE</th><th>DD</th></tr><tr><th>PETER</th><th>2020</th><th>SDSD</th></tr><tr><th>SAM</th><th>2021</th><th>SSS</th></tr></tbody></table></figure>',
-                //     style: {
-                //       "table": Style(
-                //         backgroundColor: Colors.white,
-                //       ),
-                //       "tr": Style(border: Border.all(color: Colors.black)),
-                //       "th": Style(border: Border.all(color: Colors.black)),
-                //       "td": Style(border: Border.all(color: Colors.black)),
-                //     },
-                //   ),
-                // ),
-                controller.passBookDataModel == null
-                    ? Container()
-                    : controller.isLoading.value == true
-                        ? const Center(
+                controller.isLoading.value == true
+                    ? const Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          SizedBox(height: 200),
+                          Center(
                             child: CircularProgressIndicator(),
+                          ),
+                        ],
+                      )
+                    : controller.passBookDataModel == null
+                        ? const Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              SizedBox(height: 200),
+                              Center(
+                                child:
+                                    Text("Please Select Date and wallet type"),
+                              ),
+                            ],
                           )
-                        : SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.8,
-                            width: MediaQuery.of(context).size.width,
+                        : Padding(
+                            padding: const EdgeInsets.only(top: 10),
                             child: WebViewPage(
                               url:
                                   controller.passBookDataModel!.data.toString(),
                             ),
                           ),
-                // : Padding(
-                //     padding: const EdgeInsets.only(
-                //         left: 10, bottom: 5, right: 10),
-                //     child: Align(
-                //       alignment: Alignment.topLeft,
-                //       child: Container(
-                //         // height: 300,
-                //         // width: MediaQuery.of(context).size.width * 0.9,
-                //         // color: Colors.black,
-                //         child: SingleChildScrollView(
-                //           child: Html(
-                //             data:  "",
-                //             onLinkTap: (url, attributes, element) {
-                //               launchUrl(Uri.parse(url ?? ''));
-                //             },
-                //             shrinkWrap: true,
-                //             style: {
-                //               "table": Style(
-                //                 height: Height.auto(),
-                //                 width: Width.auto(),
-                //               ),
-                //               "tr": Style(
-                //                 height: Height.auto(),
-                //                 width: Width.auto(),
-                //               ),
-                //               "th": Style(
-                //                 padding: HtmlPaddings.all(6),
-                //                 height: Height.auto(),
-                //                 border: const Border(
-                //                   left: BorderSide(
-                //                       color: Colors.black, width: 0.5),
-                //                   bottom: BorderSide(
-                //                       color: Colors.black, width: 0.5),
-                //                   top: BorderSide(
-                //                       color: Colors.black, width: 0.5),
-                //                 ),
-                //               ),
-                //               "td": Style(
-                //                 padding: HtmlPaddings.all(6),
-                //                 height: Height.auto(),
-                //                 border: const Border(
-                //                   left: BorderSide(
-                //                       color: Colors.black, width: 0.5),
-                //                   bottom: BorderSide(
-                //                       color: Colors.black, width: 0.5),
-                //                   top: BorderSide(
-                //                       color: Colors.black, width: 0.5),
-                //                   right: BorderSide(
-                //                       color: Colors.black, width: 0.5),
-                //                 ),
-                //               ),
-                //               "col": Style(
-                //                 height: Height.auto(),
-                //                 width: Width.auto(),
-                //               ),
-                //             },
-                //             extensions: [
-                //               TagWrapExtension(
-                //                   tagsToWrap: {'table'},
-                //                   builder: (child) {
-                //                     return SingleChildScrollView(
-                //                       scrollDirection: Axis.horizontal,
-                //                       child: child,
-                //                     );
-                //                   }),
-                //             ],
-                //           ),
-                //         ),
-                //       ),
-                //     ),
-                //   ),
               ],
             ),
           ),
@@ -332,16 +197,18 @@ class PassbookUi extends GetView<PassbooksController> {
 
   Widget selectTypeWidget(title, context, controller) {
     return InkWell(
-      onTap: () {
-        if (controller.startDate == null || controller.endDate == null) {
-          Fluttertoast.showToast(msg: "Please select Date");
-        } else {
-          controller.selectEarningType(title);
-        }
-      },
+      onTap: controller.isLoading.value == true
+          ? null
+          : () {
+              if (controller.startDate == null || controller.endDate == null) {
+                Fluttertoast.showToast(msg: "Please select Date");
+              } else {
+                controller.selectEarningType(title);
+              }
+            },
       borderRadius: BorderRadius.circular(10),
       child: Container(
-        height: 40,
+        height: 50,
         width: MediaQuery.of(context).size.width * 0.3,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -372,7 +239,7 @@ class PassbookUi extends GetView<PassbooksController> {
       onTap: onTap,
       borderRadius: BorderRadius.circular(10),
       child: Container(
-        height: 40,
+        height: 50,
         width: MediaQuery.of(context).size.width * 0.4,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10),
@@ -508,8 +375,8 @@ class selectDateWid extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: DatePickerWidget(
                   initialDate: initialDate,
-                  lastDate: DateTime(DateTime.now().year + 100),
-                  firstDate: DateTime.now(),
+                  lastDate: DateTime.now(),
+                  firstDate: DateTime(1900, 1, 1),
                   dateFormat: "MMM/dd/yyyy",
                   pickerType: "DateCalendar",
                   looping: looping,

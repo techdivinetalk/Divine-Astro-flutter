@@ -2,6 +2,7 @@ import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/select_your_birth_place_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -24,7 +25,7 @@ class KundliUi extends GetView<KundliController> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: Colors.white,
         centerTitle: false,
         leading: IconButton(
           onPressed: () => Get.back(),
@@ -69,18 +70,23 @@ class KundliUi extends GetView<KundliController> {
         children: [
           Container(
             width: double.infinity,
-            decoration: BoxDecoration(
-              borderRadius:
-                  BorderRadius.vertical(bottom: Radius.circular(48.r)),
-              color: appColors.guideColor,
-            ),
+            // decoration: BoxDecoration(
+            //   borderRadius:
+            //       BorderRadius.vertical(bottom: Radius.circular(48.r)),
+            //   color: appColors.guideColor,
+            // ),
             child: Column(
               children: [
-                SizedBox(height: 50.h),
-                Assets.svg.kundaliHeader.svg(
-                  height: 250.h,
-                  width: 250.w,
-                )
+                SizedBox(height: 100.h),
+                // Assets.svg.kundaliHeader.svg(
+                //   height: 250.h,
+                //   width: 250.w,
+                // ),
+                SvgPicture.asset(
+                  'assets/images/kundli_img.svg',
+                  height: 200.h,
+                  width: 200.w,
+                ),
               ],
             ),
           ),

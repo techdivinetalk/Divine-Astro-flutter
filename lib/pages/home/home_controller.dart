@@ -34,6 +34,7 @@ import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/show_loader.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
@@ -216,6 +217,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     debugPrint("test_onInit: call");
 
     initData();
+
   }
 
   initData() {
@@ -674,12 +676,17 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     update();
   }
 
+  var loadWalletData = false.obs;
   getWalletPointDetail(wallet) async {
     update();
+    loadWalletData(true);
     try {
       var response = await HomePageRepository().getWalletDetailsData(wallet);
       walletData.value = response.data;
+      loadWalletData(false);
     } catch (error) {
+      loadWalletData(false);
+
       if (error is AppException) {
         error.onException();
       } else {
@@ -816,6 +823,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           print(
               "chatMessage----${chatMessage}--chatMessageColor---${chatMessageColor}--callMessage-----${callMessage}--callMessageColor--${callMessageColor}");
           update();
+        } else if (response.statusCode == 110 || response.statusCode == HttpStatus.networkConnectTimeoutError || response.statusCode == HttpStatus.networkAuthenticationRequired) {
+          divineSnackBar(data: "No Internet connection", color: appColors.redColor);
         }
       }
     } catch (e) {
@@ -1056,6 +1065,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           //   default:
           //     break;
           // }
+          print("message 1------>$message");
           divineSnackBar(data: message);
         },
         failureCallBack: (message) {
@@ -1083,11 +1093,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         print("here is it is comming - ${type}");
         print("here is it is comming - ${response.message}");
         print("here is it is comming - ${response.toJson()}");
-
+        print("type - $type");
         if (type == 1 &&
             response.message == "Successfully Checkin" &&
             params.containsKey("check_in")) {
-          print("here is it is comming - ${params.containsKey("check_in")}");
+          print("here is it is comming --- ${params.containsKey("check_in")}");
 
           showDiscountPopup();
         } else {}
@@ -1497,7 +1507,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
                       fontColor: appColors.darkBlue,
                     ),
                   ),
-
                   /*InkWell(
                               onTap: () {
                                 Get.toNamed(RouteName.discountOffers)!.then((value) {
@@ -1523,14 +1532,62 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               //   ),
               // ),
               SizedBox(height: 10.h),
-              ListView.separated(
+              for(int index = 0 ; index < homeData!.offers!.customOffer!.length; index++)
+                Padding(
+                  padding: const EdgeInsets.only(bottom: 10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Wrap(
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        children: [
+                          Text(
+                            "${homeData!.offers!.customOffer?[index].offerName}".toUpperCase(),
+                            style: AppTextStyle.textStyle12(
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SwitchWidget(
+                        onTap: () {
+                          if (homeData!.offers!.customOffer![index].isOn!) {
+                            homeData!.offers!.customOffer?[index].isOn = !homeData!.offers!.customOffer![index].isOn!;
+                            updateOfferType(
+                                value: homeData!.offers!.customOffer![index].isOn!,
+                                index: index,
+                                offerId: homeData!.offers!.customOffer![index].id!,
+                                offerType: 2);
+                          } else if (homeData!.offers!.customOffer!
+                              .any((element) => element.isOn!)) {
+                            divineSnackBar(
+                                data: "Only 1 custom offer is allowed at once",
+                                color: appColors.redColor);
+                          } else {
+                            homeData!.offers!.customOffer?[index].isOn = !homeData!.offers!.customOffer![index].isOn!;
+                            updateOfferType(
+                                value: homeData!.offers!.customOffer![index].isOn!,
+                                index: index,
+                                offerId: homeData!.offers!.customOffer![index].id!,
+                                offerType: 2);
+                          }
+
+                          update();
+                        },
+                        switchValue: homeData!.offers!.customOffer?[index].isOn,
+                      )
+                    ],
+                  ),
+                ),
+
+              /*ListView.separated(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
                 itemCount: homeData!.offers!.customOffer!.length,
                 separatorBuilder: (context, _) => SizedBox(height: 10.h),
                 itemBuilder: (context, index) {
                   DiscountOffer data = homeData!.offers!.customOffer![index];
-
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -1585,7 +1642,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
                     ],
                   );
                 },
-              ),
+              ),*/
             ],
           ),
         ),
@@ -1713,12 +1770,14 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
   }
 
+  bool isCallResume = false;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    debugPrint("test_state: $state");
-
-    if (state == AppLifecycleState.resumed) {
+    if (state == AppLifecycleState.paused) {
+      isCallResume = true;
+    } else if (state == AppLifecycleState.resumed && isCallResume) {
+      isCallResume = false;
       getAstrologerLiveData();
     }
   }

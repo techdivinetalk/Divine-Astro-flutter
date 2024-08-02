@@ -485,8 +485,8 @@ class HomeUI extends GetView<HomeController> {
                                       if (!controller.isOpenBonusSheet) {
                                         controller.isOpenBonusSheet = true;
                                         controller.update();
-                                        await controller
-                                            .getWalletPointDetail(2);
+                                        controller.getWalletPointDetail(2);
+
                                         ecommerceWalletDetailPopup(
                                             Get.context!, controller.walletData,
                                             title: "What is Bonus Wallet ?",
@@ -514,7 +514,7 @@ class HomeUI extends GetView<HomeController> {
                                     if (!controller.isOpenPaidSheet) {
                                       controller.isOpenPaidSheet = true;
                                       controller.update();
-                                      await controller.getWalletPointDetail(1);
+                                      controller.getWalletPointDetail(1);
                                       ecommerceWalletDetailPopup(
                                           Get.context!, controller.walletData,
                                           title: "What is Paid Wallet ?",
@@ -536,8 +536,7 @@ class HomeUI extends GetView<HomeController> {
                                       if (!controller.isOpenECommerceSheet) {
                                         controller.isOpenECommerceSheet = true;
                                         controller.update();
-                                        await controller
-                                            .getWalletPointDetail(3);
+                                        controller.getWalletPointDetail(3);
                                         ecommerceWalletDetailPopup(
                                             Get.context!, controller.walletData,
                                             title: "What is Ecommerce Wallet ?",
@@ -2262,8 +2261,10 @@ class HomeUI extends GetView<HomeController> {
                                   log("here is it is comming - ${chatSwitch.value}");
 
                                   if (chatSwitch.value) {
+                                    print("true ------->");
                                     controller.selectDateTimePopupForChat(true);
                                   } else {
+                                    print("false ------->");
                                     await controller.chatSwitchFN(
                                       onComplete: () {
                                         // if (controller.chatSwitch.value) {
@@ -3340,37 +3341,44 @@ class HomeUI extends GetView<HomeController> {
       {String? title, int? type, HomeController? controller}) async {
     await openBottomSheet(
       context,
-      functionalityWidget: Padding(
-        padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
-        child: SizedBox(
-          height: Get.height / 2,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                title ?? "",
-                style: AppTextStyle.textStyle20(
-                  fontWeight: FontWeight.w500,
-                  fontColor: appColors.textColor,
+      functionalityWidget: Obx(() {
+        return Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10, top: 20),
+          child: controller!.loadWalletData.value == true
+              ? const Center(
+                  child: CircularProgressIndicator(),
+                )
+              : SizedBox(
+                  height: Get.height / 2,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        title ?? "",
+                        style: AppTextStyle.textStyle20(
+                          fontWeight: FontWeight.w500,
+                          fontColor: appColors.textColor,
+                        ),
+                      ).centered(),
+                      SizedBox(height: 10.h),
+                      Expanded(
+                        child: ListView.builder(
+                          padding: EdgeInsets.zero,
+                          itemCount: controller.walletData.length,
+                          itemBuilder: (context, index) {
+                            return CustomInfoWidget(
+                              text: controller.walletData[index].title,
+                              badgeText: controller.walletData[index].sequence
+                                  .toString(),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-              ).centered(),
-              SizedBox(height: 10.h),
-              Expanded(
-                child: ListView.builder(
-                  padding: EdgeInsets.zero,
-                  itemCount: walletData.length,
-                  itemBuilder: (context, index) {
-                    return CustomInfoWidget(
-                      text: walletData[index].title,
-                      badgeText: walletData[index].sequence.toString(),
-                    );
-                  },
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
+        );
+      }),
     ).then(
       (value) {
         if (type == 1) {

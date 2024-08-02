@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_model.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
@@ -9,6 +10,8 @@ import 'package:image_picker/image_picker.dart';
 class AddCustomProductController extends GetxController {
   TextEditingController productName = TextEditingController();
   TextEditingController productPrice = TextEditingController();
+  FocusNode nameNode = FocusNode();
+  FocusNode priceNode = FocusNode();
 
   CustomProductData? customProductData;
   final userRepository = UserRepository();

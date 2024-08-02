@@ -1,22 +1,17 @@
-import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/services.dart';
-import 'package:fluttertoast/fluttertoast.dart';
-import 'package:http/http.dart' as http;
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/add_custom_product/add_custom_product_controller.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart' hide FormData, MultipartFile;
-import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../common/common_image_view.dart';
@@ -81,6 +76,12 @@ class AddCustomProductView extends GetView<AddCustomProductController> {
                 onChanged: (value) {
                   controller.update();
                 },
+                keyboardType: TextInputType.text,
+                onFieldSubmitted: (value) {
+                  controller.nameNode.unfocus();
+                  FocusScope.of(context).requestFocus(controller.priceNode);
+                },
+                focusNode: controller.nameNode,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Product Name is required';
@@ -97,6 +98,11 @@ class AddCustomProductView extends GetView<AddCustomProductController> {
                 ],
                 isSuffix: false,
                 title: 'Product Price ( In INR )',
+                focusNode: controller.priceNode,
+                keyboardType: TextInputType.number,
+                onFieldSubmitted: (value) {
+                  FocusNode().unfocus();
+                },
                 controller: controller.productPrice,
                 validator: (value) {
                   if (value == null || value.isEmpty) {

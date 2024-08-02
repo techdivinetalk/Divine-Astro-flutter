@@ -58,7 +58,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   hintText: "enterNameMsg".tr,
                   errorBorder: appColors.white,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Text(
                   "${"mobileNumber".tr}*",
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
@@ -80,7 +80,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   inputAction: TextInputAction.next,
                   hintText: "enterNumberMsg".tr,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Text(
                   "${"astrologySkill".tr}*",
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
@@ -98,7 +98,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   inputAction: TextInputAction.next,
                   hintText: "enterSkillsMsg".tr,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Text(
                   "${"experience".tr}*",
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
@@ -114,18 +114,18 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                     return null;
                   },
                   controller: controller.state.astrologerExperience,
-                  inputType: TextInputType.text,
+                  inputType: TextInputType.number,
                   inputAction: TextInputAction.done,
                   hintText: "enterExperienceMsg".tr,
                 ),
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
                 Text(
                   "anotherPlatform".tr,
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 SizedBox(height: 10.h),
                 yesNoOptionWiddet(),
-                SizedBox(height: 20.h),
+                const SizedBox(height: 10),
                 Text(
                   "*${"mandatoryFields".tr}",
                   style: AppTextStyle.textStyle14(
@@ -385,13 +385,12 @@ class WhiteTextField extends StatelessWidget {
       height: 55.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 1.0,
-            offset: const Offset(0.1, 1.0),
-          ),
-        ],
+        // boxShadow: [
+        //   BoxShadow(
+        //       color: Colors.grey.withOpacity(0.1),
+        //       blurRadius: 2,
+        //       spreadRadius: 3),
+        // ],
       ),
       child: TextFormField(
         maxLength: maxCount,
@@ -419,28 +418,28 @@ class WhiteTextField extends StatelessWidget {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: errorBorder ?? appColors.white,
+              color: appColors.grey.withOpacity(0.4),
               width: 1.0,
             ),
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: errorBorder ?? appColors.white,
+              color: appColors.grey.withOpacity(0.4),
               width: 1.0,
             ),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: appColors.redColor,
+              color: appColors.grey.withOpacity(0.4),
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: appColors.guideColor,
+              color: appColors.grey.withOpacity(0.4),
               width: 1.0,
             ),
           ),

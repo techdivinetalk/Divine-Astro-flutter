@@ -42,6 +42,9 @@ class _WebViewPageState extends State<WebViewPage> {
             ? Center(
                 child: CircularProgressIndicator(),
               )
-            : WebViewWidget(controller: controller!));
+            : Container(
+                height: 800,
+                // color: Colors.red,
+                child: WebViewWidget(controller: controller!)));
   }
 }

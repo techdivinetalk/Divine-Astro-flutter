@@ -109,14 +109,9 @@ class TechnicalIssueController extends GetxController {
                   children: [
                     SizedBox(height: 16.h),
                     CustomText(
-                      'chooseOptions'.tr,
+                      'Choose Options'.tr,
                       fontSize: 20.sp,
                       fontWeight: FontWeight.w600,
-                    ),
-                    CustomText(
-                      'shareOptions'.tr,
-                      fontSize: 16.sp,
-                      fontColor: appColors.grey,
                     ),
                     const SizedBox(height: 32),
                     Row(
