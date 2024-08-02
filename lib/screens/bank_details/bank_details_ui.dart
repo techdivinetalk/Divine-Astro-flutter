@@ -1,14 +1,13 @@
-import 'dart:io';
-
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/screens/bank_details/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+
 import '../../gen/assets.gen.dart';
 import 'bank_detail_controller.dart';
-import 'package:flutter/material.dart';
 
 class BankDetailsUI extends GetView<BankDetailController> {
   const BankDetailsUI({super.key});
@@ -21,7 +20,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
         data,
         style: AppTextStyle.textStyle16(
           fontWeight: FontWeight.w400,
-          fontColor: color ??appColors.darkBlue,
+          fontColor: color ?? appColors.darkBlue,
         ),
       );
 
@@ -35,17 +34,17 @@ class BankDetailsUI extends GetView<BankDetailController> {
           data: ThemeData(useMaterial3: false),
           child: Scaffold(
             backgroundColor: appColors.white,
-            bottomNavigationBar: controller.status == "" || controller.status == "Approved"
-                ? Container(
-                    margin: EdgeInsets.symmetric(horizontal: 12.w),
-                    child: CustomMaterialButton(
-                      height: 50.h,
-                      buttonName: "submit".tr,
-
-                      onPressed: () => controller.submit(),
-                    ),
-                  )
-                : const SizedBox(),
+            bottomNavigationBar:
+                controller.status == "" || controller.status == "Approved"
+                    ? Container(
+                        margin: EdgeInsets.symmetric(horizontal: 12.w),
+                        child: CustomMaterialButton(
+                          height: 50.h,
+                          buttonName: "submit".tr,
+                          onPressed: () => controller.submit(),
+                        ),
+                      )
+                    : const SizedBox(),
             body: SafeArea(
               child: Column(
                 children: [
@@ -100,7 +99,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                         controller: controller.accountNumber,
                                         hintText: "accountNumHintText".tr,
                                         inputAction: TextInputAction.next,
-                                        inputType: TextInputType.text,
+                                        inputType: TextInputType.number,
                                       ),
                                     ),
                                     sizedBox25,
@@ -125,8 +124,10 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                                 "status".tr +
                                                     " : " +
                                                     controller.status,
-                                          color: controller.status == "Approved" ?appColors.lightGreen:appColors.textColor
-                                              )
+                                                color: controller.status ==
+                                                        "Approved"
+                                                    ? appColors.lightGreen
+                                                    : appColors.textColor)
                                             : SizedBox()
                                       ],
                                     ),
@@ -137,13 +138,13 @@ class BankDetailsUI extends GetView<BankDetailController> {
                               builder: (controller) => Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-
                                   Expanded(
                                     child: Column(
                                       crossAxisAlignment:
                                           CrossAxisAlignment.start,
                                       children: [
-                                        controller.passBook == null && controller.passBookUrl.isEmpty
+                                        controller.passBook == null &&
+                                                controller.passBookUrl.isEmpty
                                             ? GestureDetector(
                                                 onTap: () {
                                                   controller
@@ -182,27 +183,28 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                                   child: Assets.svg.icAdd.svg(),
                                                 ),
                                               )
-                                            :   CommonImageView(
-                                                    imagePath:
-                                                    controller.passBookUrl.isEmpty
-                                                        ? ("file://"+controller.passBook!.path):   controller.passBookUrl,
-                                                    height: 120,
-                                                    onTap: () {},
-                                                    radius:
-                                                        BorderRadius.circular(
-                                                            10.h),
-                                                  ),
-                                        SizedBox(
-                                          height: 5.h
-                                        ),
+                                            : CommonImageView(
+                                                imagePath: controller
+                                                        .passBookUrl.isEmpty
+                                                    ? ("file://" +
+                                                        controller
+                                                            .passBook!.path)
+                                                    : controller.passBookUrl,
+                                                height: 120,
+                                                onTap: () {},
+                                                radius:
+                                                    BorderRadius.circular(10.h),
+                                              ),
+                                        SizedBox(height: 5.h),
                                         Text("passBook".tr),
                                       ],
                                     ),
                                   ),
                                   SizedBox(width: 12.w),
-
                                   Expanded(
-                                    child:controller.cancelledCheque == null && controller.cancelledChequeUrl.isEmpty
+                                    child: controller.cancelledCheque == null &&
+                                            controller
+                                                .cancelledChequeUrl.isEmpty
                                         ? GestureDetector(
                                             onTap: () {
                                               controller
@@ -222,7 +224,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                                 borderRadius:
                                                     BorderRadius.circular(10.h),
                                               ),
-                                              height: 120, 
+                                              height: 120,
                                               child: Assets.svg.icAdd.svg(),
                                             ),
                                           )
@@ -231,8 +233,15 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                                 CrossAxisAlignment.start,
                                             children: [
                                               CommonImageView(
-                                                  imagePath: controller.cancelledChequeUrl.isEmpty
-                                                      ? ("file://"+controller.cancelledCheque!.path):   controller.cancelledChequeUrl,
+                                                  imagePath: controller
+                                                          .cancelledChequeUrl
+                                                          .isEmpty
+                                                      ? ("file://" +
+                                                          controller
+                                                              .cancelledCheque!
+                                                              .path)
+                                                      : controller
+                                                          .cancelledChequeUrl,
                                                   radius: BorderRadius.circular(
                                                       10.h),
                                                   height: 120,
@@ -247,11 +256,8 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                                       }
                                                     });
                                                   }),
-                                              SizedBox(
-                                                  height: 5.h
-                                              ),
+                                              SizedBox(height: 5.h),
                                               Text("cancelledCheque".tr),
-
                                             ],
                                           ),
                                   ),

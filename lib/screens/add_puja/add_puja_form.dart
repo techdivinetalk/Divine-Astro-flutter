@@ -1,16 +1,12 @@
 import 'package:divine_astrologer/common/SvgIconButton.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
-import 'package:divine_astrologer/common/custom_text_field.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/screens/add_puja/add_puja_controller.dart';
 import 'package:divine_astrologer/screens/add_puja/model/puja_product_categories_model.dart';
-import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_ui.dart';
-import 'package:divine_astrologer/screens/puja/widget/pooja_submited_sheet.dart';
 import 'package:divine_astrologer/screens/puja/widget/remedy_text_filed.dart';
 import 'package:dropdown_button2/dropdown_button2.dart';
 import 'package:flutter/material.dart';
@@ -158,6 +154,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
                         title: "${controller.selectedValue} Name",
                         maxLength: 20,
                         controller: controller.poojaName,
+                        keyboardType: TextInputType.text,
                         textInputFormatter: [CustomSpaceInputFormatter()],
                         onChanged: (value) {
                           controller.update();
@@ -176,7 +173,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
                   maxLines: 5,
                   textInputFormatter: [CustomSpaceInputFormatter()],
                   controller: controller.poojaDes,
-                  maxLength: 500,
+                  maxLength: 500, keyboardType: TextInputType.text,
                   onChanged: (value) {
                     controller.update();
                   },
@@ -195,6 +192,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
                     FilteringTextInputFormatter.digitsOnly
                   ],
                   isSuffix: false,
+                  keyboardType: TextInputType.number,
                   title: '${controller.selectedValue} Price ( In INR )',
                   controller: controller.poojaPrice,
                   validator: (value) {

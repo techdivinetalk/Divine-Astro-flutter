@@ -15,15 +15,17 @@ class PoojaRemedyTextFiled extends StatelessWidget {
   final List<TextInputFormatter>? textInputFormatter;
 
   final String? Function(String?)? validator;
+  final keyboardType;
   final Function(String?)? onFieldSubmitted;
 
-  const PoojaRemedyTextFiled(
+  PoojaRemedyTextFiled(
       {super.key,
       this.controller,
       this.maxLines = 1,
       this.maxLength,
       this.validator,
       this.onFieldSubmitted,
+      this.keyboardType,
       this.title,
       this.focusNode,
       this.onChanged,
@@ -51,6 +53,7 @@ class PoojaRemedyTextFiled extends StatelessWidget {
           inputFormatters: textInputFormatter,
           focusNode: focusNode,
           onFieldSubmitted: onFieldSubmitted,
+          keyboardType: keyboardType ?? TextInputType.text,
           decoration: InputDecoration(
               suffixIcon: isSuffix!
                   ? Center(

@@ -181,8 +181,11 @@ class WalletPage extends GetView<WalletController> {
                     separatorBuilder: (context, index) =>
                         const SizedBox(height: 10),
                     itemBuilder: (context, index) {
-                      if (index < paymentLogList.length) {
-                        final log = paymentLogList[index];
+                      if (index <
+                          controller
+                              .walletListRepo.value.data!.paymentLog.length) {
+                        final log = controller
+                            .walletListRepo.value.data?.paymentLog[index];
 
                         return PaymentLogTile(log: log!);
                       } else {
@@ -234,6 +237,7 @@ class PaymentLogTile extends StatelessWidget {
       default:
         productTypeText = 'Unknown';
     }*/
+
     return Container(
       padding: const EdgeInsets.all(12.0),
       decoration: BoxDecoration(
@@ -258,7 +262,7 @@ class PaymentLogTile extends StatelessWidget {
                       children: [
                         Padding(
                           padding: const EdgeInsets.only(left: 10, right: 10),
-                          child: detailView(log),
+                          child: detailView(log, context),
                         ),
                       ],
                     ),
@@ -345,7 +349,7 @@ class PaymentLogTile extends StatelessWidget {
     );
   }
 
-  Widget detailView(PaymentLog log) {
+  Widget detailView(PaymentLog log, context) {
     String getGenderText(int? gender) {
       switch (gender) {
         case 0:
@@ -433,7 +437,9 @@ class PaymentLogTile extends StatelessWidget {
               ],
             ),
             Text(
-              "${DateFormat('dd MMM yyyy, hh:mm a').format(log.customerDetails?.dateOfBirth ?? DateTime.now())}",
+              DateFormat('dd MMM yyyy, hh:mm a')
+                  .format(log.customerDetails!.dateOfBirth ?? DateTime.now())
+                  .toString(),
               style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
             ),
           ],
@@ -452,9 +458,15 @@ class PaymentLogTile extends StatelessWidget {
                 ),
               ],
             ),
-            Text(
-              "${log.customerDetails?.placeOfBirth ?? 'N/A'}",
-              style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+            SizedBox(
+              width: MediaQuery.of(context).size.width * 0.5,
+              child: Text(
+                "${log.customerDetails?.placeOfBirth ?? 'N/A'}",
+                overflow: TextOverflow.fade,
+                maxLines: 1,
+                textAlign: TextAlign.end,
+                style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+              ),
             ),
           ],
         ),

@@ -197,7 +197,8 @@ class LiveDharamController extends GetxController {
       callStatus: 0,
     );
     showTopBanner = false;
-    blockedCustomerList = [];
+    blockedCustomerList.value = [];
+    blockedCustomerList.refresh();
     noticeBoardRes = NoticeBoardRes();
     timerCurrentIndex = 1;
 
@@ -300,7 +301,8 @@ class LiveDharamController extends GetxController {
 
   set showTopBanner(bool value) => _showTopBanner(value);
 
-  List<BlockedCustomerListResData> blockedCustomerList = [];
+  RxList<BlockedCustomerListResData> blockedCustomerList =
+      <BlockedCustomerListResData>[].obs;
 
   NoticeBoardRes get noticeBoardRes => _noticeBoardRes.value;
 
@@ -791,10 +793,11 @@ class LiveDharamController extends GetxController {
       successCallBack: successCallBack,
       failureCallBack: failureCallBack,
     );
-    blockedCustomerList = (blockedCustListRes.statusCode == HttpStatus.ok
+    blockedCustomerList.value = (blockedCustListRes.statusCode == HttpStatus.ok
         ? BlockedCustomerListRes.fromJson(blockedCustListRes.toJson()).data
         : BlockedCustomerListRes.fromJson(BlockedCustomerListRes().toJson())
             .data)!;
+    blockedCustomerList.refresh();
     print(blockedCustomerList);
     print(
         "blockedCustomerListblockedCustomerListblockedCustomerListblockedCustomerList");
