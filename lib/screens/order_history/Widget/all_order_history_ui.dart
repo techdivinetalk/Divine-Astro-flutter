@@ -420,7 +420,7 @@ class AllOrderHistoryUi extends StatelessWidget {
               ],
             ),
             Text(
-              "₹${data[index].partnerPrice ?? "${data[index].getGift?.giftPrice ?? "0"}"}/min",
+              "₹${data[index].partnerPrice ?? "${data[index].getGift?.giftPrice ?? "0"}"} ${data[index].getGift == null ? "/min" : ""}",
               style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
             ),
           ],
