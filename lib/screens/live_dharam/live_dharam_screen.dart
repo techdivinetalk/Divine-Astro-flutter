@@ -2672,9 +2672,9 @@ class _LivePage extends State<LiveDharamScreen>
                       Radius.circular(50.0),
                     ),
                     border: Border.all(
-                      color: appColors.guideColor,
+                      color: Colors.red,
                     ),
-                    color: appColors.black.withOpacity(0.2),
+                    color: Colors.red,
                   ),
                   // child: Padding(
                   //   padding: const EdgeInsets.all(0.0),
@@ -2683,11 +2683,13 @@ class _LivePage extends State<LiveDharamScreen>
                   //     color: appColors.guideColor,
                   //   ),
                   // ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.block,
-                      color: appColors.guideColor,
+                  child: Center(
+                    child: Container(
+                      height: 5,
+                      width: 30,
+                      decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(10)),
                     ),
                   ),
                 ),
