@@ -188,10 +188,12 @@ class SuggestRemedies extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
                 Text(
-                    data[index].createdAt != null
+                    /*data[index].createdAt != null
                         ? DateFormat("dd MMM, hh:mm aa")
                             .format(data[index].createdAt!)
-                        : "N/A",
+                        : "N/A",*/data[index].createdAt != null
+                    ? controller.newFormatDateTime(data[index].createdAt.toString())
+                    : "N/A",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),

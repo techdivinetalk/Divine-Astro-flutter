@@ -181,7 +181,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                data.title ?? "",
+                                                  data.title ?? "",
                                                 style: AppTextStyle.textStyle12(
                                                   fontWeight: FontWeight.w400,
                                                   fontColor: appColors.darkBlue,

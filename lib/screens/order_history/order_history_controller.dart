@@ -6,6 +6,7 @@ import 'package:divine_astrologer/model/order_history_model/feed_order_history.d
 import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../common/app_exception.dart';
 import '../../di/shared_preference_service.dart';
@@ -86,6 +87,14 @@ class OrderHistoryController extends GetxController {
   // }
 
   var preferences = Get.find<SharedPreferenceService>();
+
+  String newFormatDateTime(String value) {
+    /*DateTime now = DateTime.now();
+    DateTime currentUtcTime = now.toUtc();*/
+    DateTime dateTime = DateTime.parse(value);
+    String formattedDate = DateFormat("dd MMM, hh:mm a").format(dateTime.toLocal());
+    return formattedDate;
+  }
 
   Future<dynamic> getOrderHistory(
       {int? type, int? page, String? startDate, endDate}) async {
