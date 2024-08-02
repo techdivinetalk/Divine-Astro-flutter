@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../common/colors.dart';
 import '../../common/common_functions.dart';
@@ -44,7 +45,14 @@ class MessageTemplateController extends GetxController {
         .saveMessageTemplates(json.encode(messageLocalTemplates));
     await getMessageTemplatesLocally();
   }
-
+  Future<void> saveBoolToPrefs(String key, bool value) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool("${key}template", value);
+  }
+  Future<bool> getBoolFromPrefs(String key) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool("${key}template") ?? false;
+  }
   addedMessageTemplates() async {
     try {
       await getMessageTemplates();
