@@ -12,6 +12,7 @@ import "package:divine_astrologer/screens/dashboard/dashboard_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/live_global_singleton.dart";
 import "package:divine_astrologer/screens/side_menu/settings/settings_controller.dart";
 import "package:divine_astrologer/watcher/real_time_watcher.dart";
+import "package:firebase_auth/firebase_auth.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
@@ -79,26 +80,6 @@ class AppFirebaseService {
 
   String tableName = "";
 
-  // int x = 0;
-  // checkFirebaseConnection() {
-  //   final connectedRef = FirebaseDatabase.instance.ref(".info/connected");
-  //   connectedRef.onValue.listen((event) async {
-  //     final connected = event.snapshot.value as bool? ?? false;
-  //     if (!connected) {
-  //       print("trying to reconnect in 4 seconds");
-  //       // await Future.delayed(const Duration(seconds: 4));
-  //       // String path = "";
-  //       // if (preferenceService.getUserDetail() != null) {
-  //       //   path = 'astrologer/${preferenceService.getUserDetail()!.id}/realTime';
-  //       // }
-  //       // const masterPath = 'masters';
-  //       // readData(path);
-  //       // masterData(masterPath);
-  //     } else {
-  //       print("disconnected");
-  //     }
-  //   });
-  // }
   Future<void> userRealTime(String key, dynamic value, String path,
       [bool isRemoved = false]) async {
     debugPrint("test_userRealTime: value removed: $value");
@@ -451,8 +432,16 @@ class AppFirebaseService {
       debugPrint("Error reading data from the database: $e");
     }
   }
+  void checkIfLoggedIn() {
+    if (preferenceService.getUserDetail() != null) {
+      print("dataSnapshot-Value-7 astrologer/${preferenceService.getUserDetail()!.id}/realTime");
 
+    } else {
+      print("dataSnapshot-Value-3");
+    }
+  }
   saveMasterData(DataSnapshot dataSnapshot) {
+    checkIfLoggedIn();
     print("dataSnapshot-Value ${dataSnapshot.value}");
     switch (dataSnapshot.key) {
       case "call":

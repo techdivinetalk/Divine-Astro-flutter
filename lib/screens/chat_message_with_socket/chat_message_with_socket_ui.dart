@@ -19,6 +19,7 @@ import "package:firebase_database/firebase_database.dart";
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:flutter_svg/svg.dart";
+import "package:fluttertoast/fluttertoast.dart";
 import "package:get/get.dart";
 import "package:intl/intl.dart";
 import "package:lottie/lottie.dart";
@@ -783,54 +784,58 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
   Widget messageTemplateRow() {
     return SizedBox(
       height: 35,
-      child: ListView.separated(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        scrollDirection: Axis.horizontal,
-        itemCount: controller.messageTemplates.length + 1,
-        separatorBuilder: (_, index) => SizedBox(width: 10.w),
-        itemBuilder: (context, index) {
-          late final MessageTemplates msg;
-          return index == 0
-              ? GestureDetector(
-                  onTap: () async {
-                    await Get.toNamed(RouteName.messageTemplate);
-                    // controller.getMessageTemplatesLocally();
-                    // controller.update();
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Color(0xffFFEEF0),
-                      borderRadius: const BorderRadius.all(Radius.circular(18)),
-                    ),
-                    child: Text(
-                      '+ Add',
-                      style: AppTextStyle.textStyle12(
-                          fontColor: Color(0xff0E2339)),
-                    ),
-                  ),
-                )
-              : GestureDetector(
-                  onTap: () {
-                    controller.sendMsgTemplate(
-                        controller.messageTemplates[index - 1]);
-                  },
-                  child: Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: Color(0xffFFEEF0),
-                      borderRadius: const BorderRadius.all(Radius.circular(18)),
-                    ),
-                    child: Text(
-                      '${controller.messageTemplates[index - 1].message}',
-                      style: AppTextStyle.textStyle12(
-                          fontColor: Color(0xff0E2339)),
-                    ),
-                  ),
-                );
-        },
+      child: Obx(() {
+        print("controller.messageTemplates.length");
+          return ListView.separated(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            scrollDirection: Axis.horizontal,
+            itemCount: controller.messageTemplates.length + 1,
+            separatorBuilder: (_, index) => SizedBox(width: 10.w),
+            itemBuilder: (context, index) {
+              late final MessageTemplates msg;
+              return index == 0
+                  ? GestureDetector(
+                      onTap: () async {
+                        await Get.toNamed(RouteName.messageTemplate);
+                        // controller.getMessageTemplatesLocally();
+                        // controller.update();
+                      },
+                      child: Container(
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Color(0xffFFEEF0),
+                          borderRadius: const BorderRadius.all(Radius.circular(18)),
+                        ),
+                        child: Text(
+                          '+ Add',
+                          style: AppTextStyle.textStyle12(
+                              fontColor: Color(0xff0E2339)),
+                        ),
+                      ),
+                    )
+                  : GestureDetector(
+                      onTap: () {
+                        controller.sendMsgTemplate(
+                            controller.messageTemplates[index - 1]);
+                      },
+                      child: Container(
+                        padding:
+                            const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        decoration: const BoxDecoration(
+                          color: Color(0xffFFEEF0),
+                          borderRadius: BorderRadius.all(Radius.circular(18)),
+                        ),
+                        child: Text(
+                          '${controller.messageTemplates[index - 1].message}',
+                          style: AppTextStyle.textStyle12(
+                              fontColor: Color(0xff0E2339)),
+                        ),
+                      ),
+                    );
+            },
+          );
+        }
       ),
     );
   }
@@ -1172,7 +1177,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                               borderRadius:
                                                   BorderRadius.circular(16)),
                                           child: Text(
-                                            "Kundali",
+                                            "Kundli",
                                             style: AppTextStyle.textStyle9(
                                                 fontColor: AppColors().white),
                                           ),
@@ -1322,7 +1327,11 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                            controller.openShowDeck(context, controller);
+                           if(!AppFirebaseService().orderData.value.containsKey("card")) {
+                             controller.openShowDeck(context, controller);
+                           }else{
+                             Fluttertoast.showToast(msg: 'Tarot Card is still in progress...');
+                           }
                           },
                           child: Center(
                             child: SvgPicture.asset(

@@ -584,7 +584,7 @@ class ChatMessageWithSocketController extends GetxController
     try {
       final data = await sharedPreferencesInstance.getMessageTemplates();
       if (data.isNotEmpty) {
-        log("Adding");
+        log("Adding ");
         messageTemplates(data);
       }
     } catch (e) {
@@ -1732,11 +1732,9 @@ class ChatMessageWithSocketController extends GetxController
 
   final noticeRepository = Get.put(NoticeRepository());
   List<NoticeDatum> noticeDataChat = [];
-
   noticeAPi() async {
     try {
-      final response = await noticeRepository.get(
-          ApiProvider.getAstroAllNoticeType3,
+      final response = await noticeRepository.get("${ApiProvider.getAstroAllNoticeType3}&orderId=${AppFirebaseService().orderData.value["orderId"].toString()}&userId=${AppFirebaseService().orderData.value["userId"].toString()}",
           headers: await noticeRepository.getJsonHeaderURL());
 
       if (response.statusCode == 200) {

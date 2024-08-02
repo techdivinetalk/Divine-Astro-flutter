@@ -175,11 +175,13 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                                   .removeWhere((element) =>
                                                       element.id ==
                                                       messageTemplate.id);
+                                              controller.saveBoolToPrefs(messageTemplate.id.toString(), false);
                                             } else {
                                               controller.messageLocalTemplates
                                                   .add(messageTemplate);
-                                              print(
-                                                  "3 ${controller.messageLocalTemplates}");
+                                              controller.saveBoolToPrefs(messageTemplate.id.toString(), true);
+                                              print("getBoolFromPrefs");
+                                              print(await controller.getBoolFromPrefs(messageTemplate.id.toString()));
                                             }
                                             await controller
                                                 .updateMessageTemplateLocally();

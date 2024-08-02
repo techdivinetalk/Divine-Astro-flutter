@@ -27,7 +27,7 @@ class ApiProvider {
   static String baseUrl =
       "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
   static const String getOnlineOfflineStatus =
-      "https://list.divinetalk.live/api/v3/getAstroStatus?uniqueNo=";
+      "https://list.divinetalk.livebui/api/v3/getAstroStatus?uniqueNo=";
   static String imageBaseUrl =
       "${imageUploadBaseUrl.value}/api/astro/$version/";
   static const String astOnlineOffline =
