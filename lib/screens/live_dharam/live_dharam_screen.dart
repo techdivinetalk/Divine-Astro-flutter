@@ -2602,101 +2602,106 @@ class _LivePage extends State<LiveDharamScreen>
       mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.end,
       children: [
-        Column(
-          children: [
-            InkWell(
-              onTap: () async {
-                openBottomSheet(
-                  context,
-                  functionalityWidget: Container(
-                    constraints: BoxConstraints(
-                      maxHeight: Get.height - 200,
-                    ),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        SizedBox(height: 10),
-                        Text(
-                          "Blocked Customers",
-                          style: TextStyle(
-                            color: appColors.black,
-                            fontSize: 20,
+        Obx(
+          () => _controller.blockedCustomerList.isEmpty
+              ? SizedBox.shrink()
+              : Column(
+                  children: [
+                    InkWell(
+                      onTap: () async {
+                        openBottomSheet(
+                          context,
+                          functionalityWidget: Container(
+                            constraints: BoxConstraints(
+                              maxHeight: Get.height - 200,
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(height: 10),
+                                Text(
+                                  "Blocked Customers",
+                                  style: TextStyle(
+                                    color: appColors.black,
+                                    fontSize: 20,
+                                  ),
+                                ),
+                                ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount:
+                                      _controller.blockedCustomerList.length,
+                                  itemBuilder: (context, index) {
+                                    BlockedCustomerListResData item =
+                                        _controller.blockedCustomerList[index];
+                                    GetCustomers? customer = item.getCustomers;
+                                    return ListTile(
+                                      leading: Container(
+                                        height: 30,
+                                        width: 30,
+                                        margin: const EdgeInsets.only(top: 3),
+                                        alignment: Alignment.center,
+                                        decoration: BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color: appColors.guideColor,
+                                        ),
+                                        child: Text(
+                                            customer?.name
+                                                    ?.split("")
+                                                    .first
+                                                    .toUpperCase() ??
+                                                'N',
+                                            style: TextStyle(
+                                              color: appColors.whiteGuidedColor,
+                                              fontSize: 12,
+                                              fontFamily: "Metropolis",
+                                              fontWeight: FontWeight.w500,
+                                            )),
+                                      ),
+                                      title: Text(customer?.name ?? 'N/A'),
+                                      // subtitle: Text(customer.email!),
+                                    );
+                                  },
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                      child: SizedBox(
+                        height: 50,
+                        width: 50,
+                        child: DecoratedBox(
+                          decoration: BoxDecoration(
+                            borderRadius: const BorderRadius.all(
+                              Radius.circular(50.0),
+                            ),
+                            border: Border.all(
+                              color: Colors.red,
+                            ),
+                            color: Colors.red,
+                          ),
+                          // child: Padding(
+                          //   padding: const EdgeInsets.all(0.0),
+                          //   child: Icon(
+                          //     Icons.category,
+                          //     color: appColors.guideColor,
+                          //   ),
+                          // ),
+                          child: Center(
+                            child: Container(
+                              height: 5,
+                              width: 30,
+                              decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(10)),
+                            ),
                           ),
                         ),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: _controller.blockedCustomerList.length,
-                          itemBuilder: (context, index) {
-                            BlockedCustomerListResData item =
-                                _controller.blockedCustomerList[index];
-                            GetCustomers? customer = item.getCustomers;
-                            return ListTile(
-                              leading: Container(
-                                height: 30,
-                                width: 30,
-                                margin: const EdgeInsets.only(top: 3),
-                                alignment: Alignment.center,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: appColors.guideColor,
-                                ),
-                                child: Text(
-                                    customer?.name
-                                            ?.split("")
-                                            .first
-                                            .toUpperCase() ??
-                                        'N',
-                                    style: TextStyle(
-                                      color: appColors.whiteGuidedColor,
-                                      fontSize: 12,
-                                      fontFamily: "Metropolis",
-                                      fontWeight: FontWeight.w500,
-                                    )),
-                              ),
-                              title: Text(customer?.name ?? 'N/A'),
-                              // subtitle: Text(customer.email!),
-                            );
-                          },
-                        ),
-                      ],
+                      ),
                     ),
-                  ),
-                );
-              },
-              child: SizedBox(
-                height: 50,
-                width: 50,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(50.0),
-                    ),
-                    border: Border.all(
-                      color: Colors.red,
-                    ),
-                    color: Colors.red,
-                  ),
-                  // child: Padding(
-                  //   padding: const EdgeInsets.all(0.0),
-                  //   child: Icon(
-                  //     Icons.category,
-                  //     color: appColors.guideColor,
-                  //   ),
-                  // ),
-                  child: Center(
-                    child: Container(
-                      height: 5,
-                      width: 30,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10)),
-                    ),
-                  ),
+                    const SizedBox(height: 8),
+                  ],
                 ),
-              ),
-            ),
-            const SizedBox(height: 8),
-          ],
         ),
 
         AnimatedOpacity(
