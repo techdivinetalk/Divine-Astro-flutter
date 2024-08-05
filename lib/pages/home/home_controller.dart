@@ -1770,14 +1770,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(this);
   }
 
-  bool isCallResume = false;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if (state == AppLifecycleState.paused) {
-      isCallResume = true;
-    } else if (state == AppLifecycleState.resumed && isCallResume) {
-      isCallResume = false;
+    if(state == AppLifecycleState.resumed){
       getAstrologerLiveData();
     }
   }
