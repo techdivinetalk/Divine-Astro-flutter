@@ -16,44 +16,22 @@ import '../../common/custom_widgets.dart';
 import '../../common/routes.dart';
 import '../../di/api_provider.dart';
 import '../../gen/assets.gen.dart';
-import '../../model/TechnicalIssuesData.dart';
-import '../../model/TechnicalSupport.dart';
+import '../../model/FinancialCreateIssueModel.dart';
 import '../../repository/user_repository.dart';
 
-class TechnicalIssueController extends GetxController {
-  TechnicalIssueController(this.userRepository);
+class FinancialSupportController extends GetxController {
+  FinancialSupportController(this.userRepository);
 
   final UserRepository userRepository;
   TextEditingController descriptionController = TextEditingController();
   List<String> dropDownItems = ["Issue", "Suggestion"];
   var isLoading = false.obs;
   var isTechnicalLoading = false.obs;
-  TechnicalSupport? technicalSupport;
-  TechnicalIssuesData? technicalIssuesList;
+  FinancialCreateIssueModel? technicalSupport;
+  FinancialCreateIssueModelData? technicalIssuesList;
 
   var selected;
   String poojaImageUrl = "";
-  String htmlCode = '''<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Display Image</title>
-    <style>
-        /* Optional: CSS to style the image */
-        .center {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            width: 50%;
-        }
-    </style>
-</head>
-<body>
-    <h1 style="text-align: center;">My Image</h1>
-    <img src="https://img.freepik.com/free-photo/colorful-design-with-spiral-design_188544-9588.jpg" alt="My Image" class="center">
-</body>
-</html>''';
   selectedDropDown(value) {
     selected = value;
     update();
@@ -215,7 +193,7 @@ class TechnicalIssueController extends GetxController {
       'image',
       imageFile.path,
     ));
-    request.fields.addAll({"module_name": "technicalSupport"});
+    request.fields.addAll({"module_name": "financialSupport"});
 
     var response = await request.send();
 
@@ -291,7 +269,7 @@ class TechnicalIssueController extends GetxController {
     try {
       log(222.toString());
 
-      final response = await userRepository.submitTechnicalIssues(param);
+      final response = await userRepository.submitFinancialIssues(param);
       if (response.success == true) {
         technicalSupport = response;
         divineSnackBar(
@@ -301,7 +279,7 @@ class TechnicalIssueController extends GetxController {
         selectedImages.clear();
         selectedFiles.clear();
         selected = null;
-        Get.toNamed(RouteName.allTechnicalIssues);
+        Get.toNamed(RouteName.allFinancialSupportIssues);
 
         isLoading(false);
       } else {

@@ -91,6 +91,22 @@ class SideMenuDrawer extends GetView<HomeController> {
                 Get.toNamed(RouteName.technicalIssues);
               },
             ),
+            ListTile(
+              leading: const Icon(Icons.bug_report),
+              title: Text('Financial Support'.tr),
+              onTap: () async {
+                Navigator.of(context).pop();
+                Get.toNamed(RouteName.financialSupport);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.bug_report),
+              title: Text('Support'.tr),
+              onTap: () async {
+                Navigator.of(context).pop();
+                Get.toNamed(RouteName.newSupportScreen);
+              },
+            ),
             kDebugMode
                 ? ListTile(
                     leading: const Icon(Icons.check_box_outline_blank),

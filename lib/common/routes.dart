@@ -24,6 +24,7 @@ import 'package:divine_astrologer/screens/chat_remedies_details/chat_suggest_rem
 import 'package:divine_astrologer/screens/chat_remedies_details/chat_suggets_remedies_detail_binding.dart';
 import 'package:divine_astrologer/screens/faq/faqs_binding.dart';
 import 'package:divine_astrologer/screens/faq/faqs_ui.dart';
+import 'package:divine_astrologer/screens/financial_support/financial_support_screen.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_binding.dart';
 import 'package:divine_astrologer/screens/home_screen_options/check_kundli/kundli_ui.dart';
 import 'package:divine_astrologer/screens/home_screen_options/discount_offers/discount_offers.dart';
@@ -77,6 +78,8 @@ import 'package:divine_astrologer/screens/support/help_support/widgets/problem_a
 import 'package:divine_astrologer/screens/support/help_support/widgets/problem_questions_screen.dart';
 import 'package:divine_astrologer/screens/support/support_binding.dart';
 import 'package:divine_astrologer/screens/support/support_screen.dart';
+import 'package:divine_astrologer/screens/support_issue/support_all_issues/all_support_issues_screen.dart';
+import 'package:divine_astrologer/screens/support_issue/support_issue_screen.dart';
 import 'package:divine_astrologer/screens/terms_and_condition/terms_and_condition_binding.dart';
 import 'package:divine_astrologer/screens/terms_and_condition/terms_and_condition_screen.dart';
 import 'package:divine_astrologer/screens/video_call_page/video_call_page.dart';
@@ -114,6 +117,8 @@ import '../screens/dashboard/dashboard_bindings.dart';
 import '../screens/dashboard/dashboard_ui.dart';
 import '../screens/edit_profile/edit_profile_binding.dart';
 import '../screens/edit_profile/edit_profile_ui.dart';
+import '../screens/financial_support/financial_all_issues/all_financial_issues_screen.dart';
+import '../screens/financial_support/financial_support_binding.dart';
 import '../screens/home_screen_options/discount_offers/discount_offers_bindings.dart';
 import '../screens/home_screen_options/notice_board_detail/notice_detail_bindings.dart';
 import '../screens/leave_and_resignation/leave_and_resignation.dart';
@@ -141,6 +146,7 @@ import '../screens/side_menu/wait_list/wait_list_ui.dart';
 import '../screens/splash/splash_binding.dart';
 import '../screens/splash/splash_ui.dart';
 import '../screens/support/help_support/help_support_screen.dart';
+import '../screens/support_issue/support_issue_binding.dart';
 import '../screens/technical_issue/issue_binding.dart';
 import '../screens/technical_issue/issue_screen.dart';
 import '../screens/technical_issue/issues_screen/all_isssue_screen.dart';
@@ -224,8 +230,12 @@ class RouteName {
   static const String supportAnswerScreen = "/SupportAnswerScreen";
   static const String chatSupportScreen = "/ChatSupportScreen";
   static const String technicalIssues = "/technicalIssues";
+  static const String financialSupport = "/financialSupport";
+  static const String newSupportScreen = "/newSupportScreen";
   static const String testingScreen = "/testingScreen";
   static const String allTechnicalIssues = "/AllTechnicalIssues";
+  static const String allFinancialSupportIssues = "/allFinancialSupportIssues";
+  static const String allSupportIssuesScreen = "/allSupportIssuesScreen";
   static const String termsAndConditionScreen = "/TermsAndConditionScreen";
   static const String addCustomProduct = "/addCustomProduct";
   static const String customProduct = "/customProduct";
@@ -317,6 +327,16 @@ class Routes {
       binding: TechnicalBinding(),
     ),
     GetPage(
+      page: () => FinancialSupportScreen(),
+      name: RouteName.financialSupport,
+      binding: FinancialSupportBinding(),
+    ),
+    GetPage(
+      page: () => SupportIssueScreen(),
+      name: RouteName.newSupportScreen,
+      binding: SupportIssueBinding(),
+    ),
+    GetPage(
       page: () => TestingUI(),
       name: RouteName.testingScreen,
       binding: TestingBinding(),
@@ -330,6 +350,16 @@ class Routes {
       page: () => AllTechnicalIssueScreen(),
       name: RouteName.allTechnicalIssues,
       binding: TechnicalIssuesBinding(),
+    ),
+    GetPage(
+      page: () => AllFinancialIssuesScreen(),
+      name: RouteName.allFinancialSupportIssues,
+      binding: AllFinancialIssuesBinding(),
+    ),
+    GetPage(
+      page: () => AllSupportIssuesScreen(),
+      name: RouteName.allSupportIssuesScreen,
+      binding: AllSupportIssuesBinding(),
     ),
     GetPage(
         page: () => const BlockedUserUI(),
