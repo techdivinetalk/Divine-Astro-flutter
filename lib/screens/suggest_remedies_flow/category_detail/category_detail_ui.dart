@@ -259,7 +259,41 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                         fontColor: appColors.darkBlue
                                             .withOpacity(0.5)),
                                   ),
-                                  CustomLightYellowCurveButton(
+                                  Padding(
+                                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
+                                    child: InkWell(
+                                      onTap: () {
+                                        print(
+                                            "value of controller chat assist ${controller.isChatAssist.value}");
+                                        controller.isChatAssist.value
+                                            ? controller.saveRemedyForChatAssist()
+                                            : controller.suggestRemedy();
+                                        // Get.offNamedUntil(RouteName.orderHistory,
+                                        //     ModalRoute.withName(RouteName.dashboard));
+                                      },
+                                      child: Container(
+                                          width: MediaQuery.of(context).size.width,
+                                          decoration: BoxDecoration(
+                                              color: appColors.guideColor,
+                                              borderRadius: BorderRadius.circular(20)),
+                                          child: Center(
+                                              child: Obx(() => controller.isSendProduct.value ? Padding(
+                                                padding: EdgeInsets.symmetric(vertical: 7.0),
+                                                child: CircularProgressIndicator(
+                                                  strokeWidth: 1.5,
+                                                ),
+                                              ) : Padding(
+                                                padding: EdgeInsets.all(12.h),
+                                                child: Text(
+                                                  "suggestNow".tr,
+                                                  style: AppTextStyle.textStyle16(
+                                                      fontWeight: FontWeight.w600,
+                                                      fontColor: appColors.whiteGuidedColor),
+                                                ),
+                                              )))),
+                                    ),
+                                  ),
+                                  /*CustomLightYellowCurveButton(
                                     name: "suggestNow".tr,
                                     textColor: appColors.whiteGuidedColor,
                                     onTaped: () {
@@ -271,10 +305,19 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                       // Get.offNamedUntil(RouteName.orderHistory,
                                       //     ModalRoute.withName(RouteName.dashboard));
                                     },
-                                  )
+                                  )*/
                                 ],
                               ),
                             ),
+                            closeOnTap: () {
+                              if(!controller.isSendProduct.value){
+                                Get.back();
+                              }
+                            },
+                            isDismissible: !controller.isSendProduct.value,
+                            onWillPop: () {
+                              return Future.value(!controller.isSendProduct.value);
+                            },
                           );
                         },
                         color: appColors.guideColor,
