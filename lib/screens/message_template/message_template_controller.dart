@@ -9,6 +9,7 @@ import '../../common/common_functions.dart';
 import '../../model/message_template_response.dart';
 import '../../repository/message_template_repository.dart';
 import '../../utils/enum.dart';
+import '../live_page/constant.dart';
 
 class MessageTemplateController extends GetxController {
   final MessageTemplateRepo repository;
@@ -33,10 +34,9 @@ class MessageTemplateController extends GetxController {
   getMessageTemplatesLocally() async {
     final data = await sharedPreferencesInstance.getMessageTemplates();
     if (data.isNotEmpty) {
+      print("messageLocalTemplates");
       messageLocalTemplates = data;
     }
-    print(
-        "message Template locally called ${jsonEncode(messageLocalTemplates)}");
     update();
   }
 
@@ -69,6 +69,11 @@ class MessageTemplateController extends GetxController {
       final response = await repository.fetchTemplates();
       if (response.data != null) {
         messageTemplates = response.data!;
+        messageTemplateList.value.clear();
+        for(int i = 0; i < messageTemplateList.value.length;i++){
+          messageTemplateList.value.add(messageTemplateList.value[i]);
+        }
+        messageTemplateList.refresh();
         await sharedPreferencesInstance
             .saveMessageTemplates(json.encode(messageTemplates));
         //await preferenceService.saveMessageTemplates(response.toPrettyString());

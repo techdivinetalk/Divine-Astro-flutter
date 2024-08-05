@@ -31,6 +31,8 @@ import "../../common/common_bottomsheet.dart";
 import "../../model/message_template_response.dart";
 import "../home_screen_options/check_kundli/kundli_controller.dart";
 import "../live_dharam/widgets/custom_image_widget.dart";
+import "../live_page/constant.dart";
+import "../live_page/constant.dart";
 import "chat_message_with_socket_controller.dart";
 
 class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
@@ -785,11 +787,12 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
     return SizedBox(
       height: 35,
       child: Obx(() {
-        print("controller.messageTemplates.length");
+        print("controllerMessageTemplates");
+        print(controller.messageTemplatesList.length);
           return ListView.separated(
             padding: const EdgeInsets.symmetric(horizontal: 12),
             scrollDirection: Axis.horizontal,
-            itemCount: controller.messageTemplates.length + 1,
+            itemCount: controller.messageTemplatesList.length + 1,
             separatorBuilder: (_, index) => SizedBox(width: 10.w),
             itemBuilder: (context, index) {
               late final MessageTemplates msg;
@@ -797,6 +800,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   ? GestureDetector(
                       onTap: () async {
                         await Get.toNamed(RouteName.messageTemplate);
+                        controller.messageTemplatesList.value.clear();
+                        controller.messageTemplatesList.refresh();
+                        controller.getMessageTemplates();
                         // controller.getMessageTemplatesLocally();
                         // controller.update();
                       },
@@ -817,7 +823,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                   : GestureDetector(
                       onTap: () {
                         controller.sendMsgTemplate(
-                            controller.messageTemplates[index - 1]);
+                            controller.messageTemplatesList[index - 1]);
                       },
                       child: Container(
                         padding:
@@ -827,7 +833,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           borderRadius: BorderRadius.all(Radius.circular(18)),
                         ),
                         child: Text(
-                          '${controller.messageTemplates[index - 1].message}',
+                          '${controller.messageTemplatesList[index - 1].message}',
                           style: AppTextStyle.textStyle12(
                               fontColor: Color(0xff0E2339)),
                         ),
