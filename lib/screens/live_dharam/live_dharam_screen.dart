@@ -2342,6 +2342,11 @@ class _LivePage extends State<LiveDharamScreen>
             InkWell(
               onTap: () async {
                 _controller.isCamOn = !_controller.isCamOn;
+                await _controller.liveStore.doc(_controller.userId).update({
+                  'isCamOn': _controller.isCamOn,
+                }).then((value) {
+                  print("update isCamOn");
+                });
                 zegoController.audioVideo.camera
                     .turnOn(_controller.isCamOn, userID: _controller.userId);
                 _controller.update();
