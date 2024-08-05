@@ -658,9 +658,10 @@ class HomeUI extends GetView<HomeController> {
                               : const SizedBox(),
                         ),
 
-                        controller.astroNoticeBoardResponse.value.success !=
-                                true
-                            ? const SizedBox()
+                        controller.astroNoticeBoardResponse.value.data
+                                    ?.noticeBoard ==
+                                null
+                            ? SizedBox()
                             : Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 16, vertical: 6),
@@ -1594,6 +1595,8 @@ class HomeUI extends GetView<HomeController> {
   }
 
   Widget noticeBoardWidget({HomeController? controller}) {
+    print(
+        "-----------------${controller!.astroNoticeBoardResponse.value.data?.noticeBoard.toString()}");
     return controller!.astroNoticeBoardResponse.value.success == true
         ? ClipRRect(
             key: Get.find<DashboardController>().keyNoticeBoard,
