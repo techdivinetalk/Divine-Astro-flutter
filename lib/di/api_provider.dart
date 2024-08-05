@@ -229,6 +229,16 @@ class ApiProvider {
   final String technicalSupport = "addTechnicalSupport"; //Post Api
   final String getTechnicalSupportlist = "getTechnicalSupportlist"; //Get Api
 
+  //Financial Support
+  final String financialSupport = "addFinancialSupport"; //Post Api
+  final String getSingleFinancialSupport = "getFinancialSupportDetails"; //Api
+  final String getFinancialSupportlist = "getFinancialSupportlist"; //Get Api
+
+  //Financial Support
+  final String addSupport = "addSupport"; //Post Api
+  final String getSupportDetails = "getSupportDetails"; //Api
+  final String getSupportlist = "getSupportlist"; //Get Api
+
   //privacy policy & terms
   final String termsAndCondition = "termsAndCondition";
   final String privacyPolicy = "privacyPolicy";

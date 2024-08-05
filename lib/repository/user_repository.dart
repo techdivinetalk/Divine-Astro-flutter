@@ -33,6 +33,10 @@ import 'package:package_info_plus/package_info_plus.dart';
 import '../common/app_exception.dart';
 import '../common/common_functions.dart';
 import '../di/api_provider.dart';
+import '../model/AddSupportIssueDataModel.dart';
+import '../model/AllFinancialIssuesModel.dart';
+import '../model/AllSupportIssueModel.dart';
+import '../model/FinancialCreateIssueModel.dart';
 import '../model/PassBookDataModel.dart';
 import '../model/TechnicalIssuesData.dart';
 import '../model/TechnicalSupport.dart';
@@ -1128,6 +1132,108 @@ class UserRepository extends ApiProvider {
     }
   }
 
+  Future<FinancialCreateIssueModel> submitFinancialIssues(
+      Map<String, dynamic> param) async {
+    log(1.toString());
+
+    try {
+      log(11.toString());
+
+      final response = await post(financialSupport,
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
+      log(111.toString());
+
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+        throw CustomException('Unauthorized access');
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+        throw CustomException('Bad request');
+      }
+
+      if (response.statusCode == HttpStatus.ok ||
+          response.statusCode == HttpStatus.created) {
+        log(1111.toString());
+
+        final responseBody = json.decode(response.body);
+        if (responseBody["status_code"] == HttpStatus.unauthorized) {
+          log(2.toString());
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(responseBody["error"] ?? 'Unauthorized access');
+        } else {
+          log(11111.toString());
+
+          final submitResignation =
+              FinancialCreateIssueModel.fromJson(responseBody);
+          return submitResignation;
+        }
+      } else {
+        log(22.toString());
+
+        final errorBody = json.decode(response.body);
+        throw CustomException(
+            errorBody["message"]?.toString() ?? 'Unknown error');
+      }
+    } catch (e, s) {
+      log(222.toString());
+
+      debugPrint("Exception occurred: $e\nStack trace: $s");
+      rethrow;
+    }
+  }
+
+  Future<AddSupportIssueDataModel> submitSupportIssues(
+      Map<String, dynamic> param) async {
+    log(1.toString());
+
+    try {
+      log(11.toString());
+
+      final response = await post(addSupport,
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
+      log(111.toString());
+
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+        throw CustomException('Unauthorized access');
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+        throw CustomException('Bad request');
+      }
+
+      if (response.statusCode == HttpStatus.ok ||
+          response.statusCode == HttpStatus.created) {
+        log(1111.toString());
+
+        final responseBody = json.decode(response.body);
+        if (responseBody["status_code"] == HttpStatus.unauthorized) {
+          log(2.toString());
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(responseBody["error"] ?? 'Unauthorized access');
+        } else {
+          log(11111.toString());
+
+          final submitResignation =
+              AddSupportIssueDataModel.fromJson(responseBody);
+          return submitResignation;
+        }
+      } else {
+        log(22.toString());
+
+        final errorBody = json.decode(response.body);
+        throw CustomException(
+            errorBody["message"]?.toString() ?? 'Unknown error');
+      }
+    } catch (e, s) {
+      log(222.toString());
+
+      debugPrint("Exception occurred: $e\nStack trace: $s");
+      rethrow;
+    }
+  }
+
   Future<PassBookDataModel> getpassbookData(Map<String, dynamic> param) async {
     log(1.toString());
 
@@ -1209,6 +1315,105 @@ class UserRepository extends ApiProvider {
           log(responseBody.toString());
 
           final submitResignation = TechnicalIssuesData.fromJson(responseBody);
+          return submitResignation;
+        }
+      } else {
+        log(22.toString());
+
+        final errorBody = json.decode(response.body);
+        throw CustomException(
+            errorBody["message"]?.toString() ?? 'Unknown error');
+      }
+    } catch (e, s) {
+      log(222.toString());
+
+      debugPrint("Exception occurred: $e\nStack trace: $s");
+      rethrow;
+    }
+  }
+
+  Future<AllFinancialIssuesModel> getFinancialIssuess() async {
+    log(1.toString());
+
+    try {
+      log(11.toString());
+
+      final response =
+          await get(getFinancialSupportlist, headers: await getJsonHeaderURL());
+      log(111.toString());
+
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+        throw CustomException('Unauthorized access');
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+        throw CustomException('Bad request');
+      }
+
+      if (response.statusCode == HttpStatus.ok ||
+          response.statusCode == HttpStatus.created) {
+        log(1111.toString());
+
+        final responseBody = json.decode(response.body);
+        if (responseBody["status_code"] == HttpStatus.unauthorized) {
+          log(2.toString());
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(responseBody["error"] ?? 'Unauthorized access');
+        } else {
+          log(11111.toString());
+          log(responseBody.toString());
+
+          final submitResignation =
+              AllFinancialIssuesModel.fromJson(responseBody);
+          return submitResignation;
+        }
+      } else {
+        log(22.toString());
+
+        final errorBody = json.decode(response.body);
+        throw CustomException(
+            errorBody["message"]?.toString() ?? 'Unknown error');
+      }
+    } catch (e, s) {
+      log(222.toString());
+
+      debugPrint("Exception occurred: $e\nStack trace: $s");
+      rethrow;
+    }
+  }
+
+  Future<AllSupportIssueModel> getSupportIssuess() async {
+    log(1.toString());
+
+    try {
+      log(11.toString());
+
+      final response =
+          await get(getSupportlist, headers: await getJsonHeaderURL());
+      log(111.toString());
+
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+        throw CustomException('Unauthorized access');
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+        throw CustomException('Bad request');
+      }
+
+      if (response.statusCode == HttpStatus.ok ||
+          response.statusCode == HttpStatus.created) {
+        log(1111.toString());
+
+        final responseBody = json.decode(response.body);
+        if (responseBody["status_code"] == HttpStatus.unauthorized) {
+          log(2.toString());
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(responseBody["error"] ?? 'Unauthorized access');
+        } else {
+          log(11111.toString());
+          log(responseBody.toString());
+
+          final submitResignation = AllSupportIssueModel.fromJson(responseBody);
           return submitResignation;
         }
       } else {
