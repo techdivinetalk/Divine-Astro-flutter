@@ -24,6 +24,7 @@ const livePath = "live";
 const liveCountPath =  "liveCount";
 RxInt chatAssistantCurrentUserId = 0.obs;
 RxInt walletBalance = 0.obs;
+RxInt isTruecaller = 1.obs;
 RxList<AssistChatData> assistChatUnreadMessages = <AssistChatData>[].obs;
 RxBool chatSwitch = false.obs;
 RxBool callSwitch = false.obs;
