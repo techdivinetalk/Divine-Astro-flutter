@@ -2680,10 +2680,7 @@ class _LivePage extends State<LiveDharamScreen>
                             borderRadius: const BorderRadius.all(
                               Radius.circular(50.0),
                             ),
-                            border: Border.all(
-                              color: Colors.red,
-                            ),
-                            color: Colors.red,
+                            color: Colors.black.withOpacity(0.2),
                           ),
                           // child: Padding(
                           //   padding: const EdgeInsets.all(0.0),
@@ -2693,12 +2690,11 @@ class _LivePage extends State<LiveDharamScreen>
                           //   ),
                           // ),
                           child: Center(
-                            child: Container(
-                              height: 5,
-                              width: 30,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10)),
+                            child: SvgPicture.asset(
+                              "assets/svg/block-user-new.svg",
+                              height: 25,
+                              width: 25,
+                              color: Colors.white,
                             ),
                           ),
                         ),
