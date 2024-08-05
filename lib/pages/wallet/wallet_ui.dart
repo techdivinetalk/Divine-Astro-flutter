@@ -297,7 +297,7 @@ class PaymentLogTile extends StatelessWidget {
                 ),
               ),
               Text(
-                "+ ₹${log.totalAmount.toString()}",
+                "+ ₹${log.actualPayments.toString()}",
                 style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w400,
                     fontColor: /*data[index].amount.toString().contains("+")
