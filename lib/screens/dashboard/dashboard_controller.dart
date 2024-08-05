@@ -34,6 +34,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../cache/custom_cache_manager.dart';
+import '../../common/MiddleWare.dart';
 import '../../common/app_exception.dart';
 import '../../common/app_textstyle.dart';
 import '../../common/common_functions.dart';
@@ -101,6 +102,19 @@ class DashboardController extends GetxController
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
+      if (MiddleWare.instance.currentPage == RouteName.chatMessageWithSocketUI) {
+        getOrderFromApi();
+        if (preferenceService.getUserDetail() != null) {
+          // Check for null user details
+          appFirebaseService.readData(
+              'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
+        } else {
+          divineSnackBar(data: "User Not Found");
+        }
+      }
+    }
+
+    /*if (state == AppLifecycleState.resumed) {
       print("checkPermissions");
       // Check permissions when app is resumed
       //  checkPermissions();
@@ -112,7 +126,7 @@ class DashboardController extends GetxController
       } else {
         divineSnackBar(data: "User Not Found");
       }
-    }
+    }*/
   }
 
   void checkPermissions() async {

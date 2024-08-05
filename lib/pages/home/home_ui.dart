@@ -2279,6 +2279,8 @@ class HomeUI extends GetView<HomeController> {
                                   }
                                 },
                                 switchValue: chatSwitch.value,
+                                activeToggleColor: appColors.darkGreen,
+                                inactiveToggleColor: appColors.red,
                               ),
                             ),
                           ),
@@ -2376,6 +2378,8 @@ class HomeUI extends GetView<HomeController> {
                                   }
                                 },
                                 switchValue: callSwitch.value,
+                                activeToggleColor: appColors.darkGreen,
+                                inactiveToggleColor: appColors.red,
                               ),
                             ),
                           ),

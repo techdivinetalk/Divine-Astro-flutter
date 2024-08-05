@@ -11,72 +11,78 @@ import 'package:intl/intl.dart';
 import 'date_picker/date_picker_widget.dart';
 
 Future openBottomSheet(BuildContext context,
-    {String? title, String? btnTitle, required Widget functionalityWidget,Color? btnColor,Color? btnBorderColor}) {
+    {String? title, String? btnTitle, required Widget functionalityWidget,Color? btnColor,Color? btnBorderColor, void Function()? closeOnTap, bool? isDismissible, Future<bool> Function()? onWillPop}) {
   return showModalBottomSheet(
     isScrollControlled: true,
+    isDismissible: isDismissible ?? true,
     backgroundColor: Colors.transparent,
     elevation: 0,
     context: context,
-    builder: (context) => Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        GestureDetector(
-          onTap: () {
-            Get.back();
-          },
-          child: Container(
-            padding: const EdgeInsets.all(15.0),
-            decoration: BoxDecoration(
-                borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                border: Border.all(color: btnBorderColor?? appColors.darkBlue),
-                color: btnColor?? appColors.darkBlue),
-            child:  Icon(
-              Icons.close_rounded,
-              color: appColors.white,
+    builder: (context) => WillPopScope(
+      onWillPop: onWillPop ?? () {
+        return Future.value(true);
+      },
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          GestureDetector(
+            onTap: closeOnTap ?? () {
+              Get.back();
+            },
+            child: Container(
+              padding: const EdgeInsets.all(15.0),
+              decoration: BoxDecoration(
+                  borderRadius: const BorderRadius.all(Radius.circular(50.0)),
+                  border: Border.all(color: btnBorderColor?? appColors.darkBlue),
+                  color: btnColor?? appColors.darkBlue),
+              child:  Icon(
+                Icons.close_rounded,
+                color: appColors.white,
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 10),
-        Container(
-          decoration: BoxDecoration(
-            borderRadius:
-                const BorderRadius.vertical(top: Radius.circular(50.0)),
-            border: Border.all(color: Colors.white, width: 2),
-            color: Colors.white,
+          const SizedBox(height: 10),
+          Container(
+            decoration: BoxDecoration(
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(50.0)),
+              border: Border.all(color: Colors.white, width: 2),
+              color: Colors.white,
+            ),
+            child: Column(
+              children: [
+                if (title != null) const SizedBox(height: 10),
+                if (title != null)
+                  Text(
+                    title,
+                    style: AppTextStyle.textStyle16(fontWeight: FontWeight.w700),
+                  ),
+                const SizedBox(height: 10),
+                SizedBox(
+                    width: ScreenUtil().screenWidth, child: functionalityWidget),
+                const SizedBox(height: 20),
+                if (btnTitle != null)
+                  MaterialButton(
+                      height: 50,
+                      minWidth: MediaQuery.sizeOf(context).width * 0.75,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                        // Get.back();
+                      },
+                      color: appColors.guideColor,
+                      child: Text(
+                        btnTitle,
+                        style:  TextStyle(color: appColors.brownColour),
+                      )),
+                const SizedBox(height: 10),
+              ],
+            ),
           ),
-          child: Column(
-            children: [
-              if (title != null) const SizedBox(height: 10),
-              if (title != null)
-                Text(
-                  title,
-                  style: AppTextStyle.textStyle16(fontWeight: FontWeight.w700),
-                ),
-              const SizedBox(height: 10),
-              SizedBox(
-                  width: ScreenUtil().screenWidth, child: functionalityWidget),
-              const SizedBox(height: 20),
-              if (btnTitle != null)
-                MaterialButton(
-                    height: 50,
-                    minWidth: MediaQuery.sizeOf(context).width * 0.75,
-                    shape: const RoundedRectangleBorder(
-                      borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                    ),
-                    onPressed: () {
-                      Navigator.pop(context);
-                      // Get.back();
-                    },
-                    color: appColors.guideColor,
-                    child: Text(
-                      btnTitle,
-                      style:  TextStyle(color: appColors.brownColour),
-                    )),
-              const SizedBox(height: 10),
-            ],
-          ),
-        ),
-      ],
+        ],
+      ),
     ),
   );
 }
