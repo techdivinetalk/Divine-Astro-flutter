@@ -43,7 +43,7 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
             ),
             titleSpacing: 0,
             title: Text(
-              "Technical Issues",
+              "Technical Support",
               style: AppTextStyle.textStyle16(),
             ),
             // centerTitle: true,

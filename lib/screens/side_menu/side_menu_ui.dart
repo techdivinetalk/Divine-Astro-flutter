@@ -84,26 +84,26 @@ class SideMenuDrawer extends GetView<HomeController> {
               },
             ),
             ListTile(
-              leading: const Icon(Icons.bug_report),
-              title: Text('Technical Issues'.tr),
+              leading: const Icon(Icons.bug_report_outlined),
+              title: Text('Technical Support'.tr),
               onTap: () async {
-                Navigator.of(context).pop();
+                Get.back();
                 Get.toNamed(RouteName.technicalIssues);
               },
             ),
             ListTile(
-              leading: const Icon(Icons.bug_report),
+              leading: const Icon(Icons.request_quote_outlined),
               title: Text('Financial Support'.tr),
               onTap: () async {
-                Navigator.of(context).pop();
+                Get.back();
                 Get.toNamed(RouteName.financialSupport);
               },
             ),
             ListTile(
-              leading: const Icon(Icons.bug_report),
+              leading: const Icon(Icons.contact_support_outlined),
               title: Text('Support'.tr),
               onTap: () async {
-                Navigator.of(context).pop();
+                Get.back();
                 Get.toNamed(RouteName.newSupportScreen);
               },
             ),
