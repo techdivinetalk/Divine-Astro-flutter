@@ -90,6 +90,7 @@ class CategoryDetailController extends GetxController {
     }
   }
 
+  RxBool isSendProduct = false.obs;
   saveRemedyForChatAssist() async {
     Map<String, dynamic> params = {
       "product_id": productId,
@@ -98,24 +99,30 @@ class CategoryDetailController extends GetxController {
       "customer_id":AppFirebaseService().orderData.value["userId"] == null ? customerId: int.parse(AppFirebaseService().orderData.value["userId"]),
     };
     print('save remedy called $params}');
-    try {
-      var response = await shopRepository.saveRemediesForChatAssist(params);
-      saveRemediesResponse = response;
-      // Get.offNamedUntil(RouteName.orderHistory, ModalRoute.withName(RouteName.dashboard));
-      isLoading.value = true;
-      Get.back();
-      Get.back();
-      Get.back();
-      Get.back(result: {
-        'isPooja':false,
-        'saveRemedies': saveRemediesResponse,
-        'product_detail': productDetail,
-      });
-    } catch (error) {
-      if (error is AppException) {
-        error.onException();
-      } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+    if(!isSendProduct.value){
+      try {
+        isSendProduct.value = true;
+        var response = await shopRepository.saveRemediesForChatAssist(params);
+        saveRemediesResponse = response;
+        // Get.offNamedUntil(RouteName.orderHistory, ModalRoute.withName(RouteName.dashboard));
+        isLoading.value = true;
+        Get.back();
+        Get.back();
+        Get.back();
+        Get.back(result: {
+          'isPooja':false,
+          'saveRemedies': saveRemediesResponse,
+          'product_detail': productDetail,
+        });
+        isSendProduct.value = false;
+      } catch (error) {
+        isSendProduct.value = false;
+        if (error is AppException) {
+          error.onException();
+        } else {
+          isSendProduct.value = false;
+          divineSnackBar(data: error.toString(), color: appColors.redColor);
+        }
       }
     }
   }

@@ -33,6 +33,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:marquee/marquee.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -42,6 +43,7 @@ import '../../gen/fonts.gen.dart';
 import '../../model/feedback_response.dart';
 import '../../screens/chat_assistance/chat_assistance_ui.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
+import '../../utils/utils.dart';
 import 'home_controller.dart';
 import 'widgets/common_info_sheet.dart';
 import 'widgets/retention_widget.dart';
@@ -1000,7 +1002,34 @@ class HomeUI extends GetView<HomeController> {
                             }),
                         trainingVideoWidget(controller: controller),
                         // feedbackWidget(controller: controller),
-
+                        // Obx(() {
+                        //   return Visibility(
+                        //     visible: controller.marqueeText.isNotEmpty,
+                        //     child: Container(
+                        //       margin: EdgeInsets.only(bottom: 15.h),
+                        //       height: 45.h,
+                        //       color: appColors.marqueeBgColor,
+                        //       child: CustomWidgetMarquee(
+                        //         child: ListView(
+                        //           padding: EdgeInsets.zero,
+                        //           scrollDirection: Axis.horizontal,
+                        //           shrinkWrap: true,
+                        //           children: List.generate(
+                        //             controller.marqueeText.length,
+                        //                 (index) {
+                        //               return Container(
+                        //                   alignment:
+                        //                   AlignmentDirectional.center,
+                        //                   child: HtmlWidget(
+                        //                     controller.marqueeText[index],
+                        //                   ));
+                        //             },
+                        //           ),
+                        //         ),
+                        //       ),
+                        //     ),
+                        //   );
+                        // }),
                         // GestureDetector(
                         //   onTap: () {
                         //     Get.toNamed(RouteName.customProduct);
@@ -1061,61 +1090,33 @@ class HomeUI extends GetView<HomeController> {
                         // SizedBox(height: 15.h),
 
                         /// marquree
-                        // Obx(() {
-                        //   return Visibility(
-                        //     visible: controller.marqueeText.isNotEmpty,
-                        //     child: Container(
-                        //       margin: EdgeInsets.only(bottom: 15.h),
-                        //       height: 45.h,
-                        //       color: appColors.marqueeBgColor,
-                        //       child: CustomWidgetMarquee(
-                        //         child: ListView(
-                        //           padding: EdgeInsets.zero,
-                        //           scrollDirection: Axis.horizontal,
-                        //           shrinkWrap: true,
-                        //           children: List.generate(
-                        //             controller.marqueeText.length,
-                        //             (index) {
-                        //               return Container(
-                        //                   alignment:
-                        //                       AlignmentDirectional.center,
-                        //                   child: HtmlWidget(
-                        //                     controller.marqueeText[index],
-                        //                   ));
-                        //             },
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   );
-                        // }),
 
-                        // Obx(() {
-                        //   return Visibility(
-                        //     visible: controller.marqueeText.value.isNotEmpty,
-                        //     child: Container(
-                        //       margin: EdgeInsets.only(bottom: 5.h),
-                        //       height: 50.h,
-                        //       color: appColors.marqueeBgColor,
-                        //       child: Marquee(
-                        //         text: Utils().parseHtmlString(
-                        //             controller.marqueeText.value),
-                        //         style: TextStyle(
-                        //           color: appColors.black,
-                        //           fontSize: 15.sp,
-                        //           fontWeight: FontWeight.w500,
-                        //           fontFamily: FontFamily.metropolis,
-                        //         ),
-                        //         crossAxisAlignment: CrossAxisAlignment.center,
-                        //         blankSpace: 20.0,
-                        //         velocity: 60.0,
-                        //         startPadding: 10.0,
-                        //         accelerationCurve: Curves.linear,
-                        //         decelerationCurve: Curves.easeOut,
-                        //       ),
-                        //     ),
-                        //   );
-                        // }),
+                        Obx(() {
+                          return Visibility(
+                            visible: controller.marqueeText.value.isNotEmpty,
+                            child: Container(
+                              margin: EdgeInsets.only(bottom: 6, top: 6),
+                              height: 50.h,
+                              color: appColors.marqueeBgColor,
+                              child: Marquee(
+                                text: Utils().parseHtmlString(
+                                    controller.marqueeText.value),
+                                style: TextStyle(
+                                  color: appColors.black,
+                                  fontSize: 15.sp,
+                                  fontWeight: FontWeight.w500,
+                                  fontFamily: FontFamily.metropolis,
+                                ),
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                blankSpace: 20.0,
+                                velocity: 60.0,
+                                startPadding: 10.0,
+                                accelerationCurve: Curves.linear,
+                                decelerationCurve: Curves.easeOut,
+                              ),
+                            ),
+                          );
+                        }),
                         // scheduledTrainingWidgetUpdated(controller: controller),
                         // viewKundliWidget(),
                         // viewKundliWidgetUpdated(),
@@ -2279,6 +2280,8 @@ class HomeUI extends GetView<HomeController> {
                                   }
                                 },
                                 switchValue: chatSwitch.value,
+                                activeToggleColor: appColors.darkGreen,
+                                inactiveToggleColor: appColors.red,
                               ),
                             ),
                           ),
@@ -2376,6 +2379,8 @@ class HomeUI extends GetView<HomeController> {
                                   }
                                 },
                                 switchValue: callSwitch.value,
+                                activeToggleColor: appColors.darkGreen,
+                                inactiveToggleColor: appColors.red,
                               ),
                             ),
                           ),

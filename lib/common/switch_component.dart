@@ -11,6 +11,8 @@ class SwitchWidget extends StatelessWidget {
   double? width;
   double? height;
   Color? activeTextColor;
+  Color? activeToggleColor;
+  Color? inactiveToggleColor;
   SwitchWidget(
       {super.key,
       this.switchValue,
@@ -19,6 +21,8 @@ class SwitchWidget extends StatelessWidget {
       this.onText,
       this.offText,
       this.width,
+      this.activeToggleColor,
+      this.inactiveToggleColor,
       this.height});
 
   @override
@@ -38,8 +42,8 @@ class SwitchWidget extends StatelessWidget {
       valueFontSize: 12.0,
       activeTextFontWeight: FontWeight.w400,
       inactiveTextFontWeight: FontWeight.w400,
-      activeToggleColor: appColors.guideColor,
-      inactiveToggleColor: Colors.grey,
+      activeToggleColor: activeToggleColor ?? appColors.guideColor,
+      inactiveToggleColor: inactiveToggleColor ?? Colors.grey,
       toggleColor: appColors.greyColour,
       switchBorder: Border.all(
         color: appColors.darkBlue,

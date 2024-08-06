@@ -48,7 +48,6 @@ RxInt isLiveCall = 1.obs;
 RxInt homePage = 1.obs;
 RxMap<dynamic, dynamic> callKunadliUpdated = {}.obs;
 StreamSubscription<DatabaseEvent>? subscription;
-
 class AppFirebaseService {
   AppFirebaseService._privateConstructor();
 
@@ -65,6 +64,7 @@ class AppFirebaseService {
   final appSocket = AppSocket();
   var openChatUserId = "";
   var imagePath = "";
+  var serverTimeDiff = 0;
   RxBool isInterNetConnected = true.obs;
   RxMap<String, dynamic> orderData = <String, dynamic>{}.obs;
   final DatabaseReference database = FirebaseDatabase.instance.ref();
@@ -77,9 +77,10 @@ class AppFirebaseService {
       debugPrint("Error writing data to the database: $e");
     }
   }
-
+  DateTime currentTime(){
+    return DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch + serverTimeDiff);
+  }
   String tableName = "";
-
   Future<void> userRealTime(String key, dynamic value, String path,
       [bool isRemoved = false]) async {
     debugPrint("test_userRealTime: value removed: $value");
@@ -97,27 +98,13 @@ class AppFirebaseService {
                   orderData(Map<String, dynamic>.from(map));
                   if (orderData.value["status"] != null) {
                     if (orderData.value["orderType"] == "chat") {
-                      // if(kDebugMode) {
-                      //   divineSnackBar(data: "$value Order status ${orderData
-                      //       .value["status"]}");
-                      // }
                       switch ((orderData.value["status"])) {
                         case "0":
-                          // if(!kDebugMode){
-                          //
-                          // }
-                          // if (Get.currentRoute !=
-                          //     RouteName.acceptChatRequestScreen) {
                           await Get.toNamed(RouteName.acceptChatRequestScreen);
-                          //  }
                           break;
                         case "1":
-                          // if (Get.currentRoute !=
-                          //     RouteName.acceptChatRequestScreen) {
                           await Get.toNamed(RouteName.acceptChatRequestScreen);
-                          //  }
                           break;
-
                         case "2":
                           if (Get.currentRoute !=
                               RouteName.chatMessageWithSocketUI) {
@@ -127,7 +114,6 @@ class AppFirebaseService {
                             );
                           }
                           break;
-
                         case "3":
                           if (Get.currentRoute !=
                               RouteName.chatMessageWithSocketUI) {
@@ -156,9 +142,6 @@ class AppFirebaseService {
                   } else {}
                 } else {}
               } else {
-                // if(kDebugMode) {
-                //   divineSnackBar(data: "$value Order Ended");
-                // }
                 orderData({});
                 sendBroadcast(BroadcastMessage(name: "orderEnd"));
                 if (MiddleWare.instance.currentPage ==
@@ -175,9 +158,6 @@ class AppFirebaseService {
         } else {
           if (MiddleWare.instance.currentPage ==
               RouteName.acceptChatRequestScreen) {
-            // if(kDebugMode) {
-            //   divineSnackBar(data: "$value Order Ended");
-            // }
             Get.until(
               (route) {
                 return Get.currentRoute == RouteName.dashboard;
@@ -188,13 +168,16 @@ class AppFirebaseService {
           sendBroadcast(BroadcastMessage(name: "orderEnd"));
         }
         break;
-      case "isEngagedStatus":
+      case "TimeManage":
+        serverTimeDiff = int.parse(value.toString()) - DateTime.now().millisecondsSinceEpoch;
+        print("TimeDiff $serverTimeDiff");
+        break;
+     case "isEngagedStatus":
         isEngagedStatus(value);
         break;
 
       case "callKundli":
         callKunadliUpdated({});
-
         if (isRemoved) {
           callKunadliUpdated({});
           sendBroadcast(BroadcastMessage(name: "callKundli", data: {}));
@@ -285,6 +268,7 @@ class AppFirebaseService {
   readData(String path) async {
     print("readData $path");
     try {
+      database.child("${path}/TimeManage").set(ServerValue.timestamp);
       database.child(path).onChildChanged.listen((event) {
         final key = event.snapshot.key; // Get the key of the changed child
 

@@ -477,7 +477,6 @@ class ChatMessageWithSocketController extends GetxController
                 orderId: AppFirebaseService().orderData.value["orderId"],
                 id: int.parse(time),
                 message: event.data!["message"],
-                // createdAt: DateTime.now().toIso8601String(),
                 receiverId: int.parse(
                     AppFirebaseService().orderData.value["userId"].toString()),
                 senderId: preference.getUserDetail()!.id,
@@ -625,8 +624,7 @@ void startExtraTimer(int futureTimeInEpochMillis, String status) {
   DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis);
   Duration timeLeft = const Duration(minutes: 1);
   extraTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-    // final currentTime = DateTime.now();
-    final difference = dateTime.difference(DateTime.now());
+    final difference = dateTime.difference(AppFirebaseService().currentTime());
     if (difference.isNegative ||
         (difference.inSeconds == 0 &&
             difference.inMinutes == 0 &&
@@ -665,7 +663,7 @@ void talkTimeStartTimer(int futureTimeInEpochMillis) {
   chatTimer?.cancel();
   chatTimer = null;
   chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
-    timeDifference = dateTime.difference(DateTime.now());
+    timeDifference = dateTime.difference(AppFirebaseService().currentTime());
 
     if (timeDifference.isNegative ||
         (timeDifference.inSeconds == 0 &&
@@ -1165,7 +1163,6 @@ addNewMessage(String time,
       orderId: AppFirebaseService().orderData.value["orderId"],
       id: int.parse(time),
       message: messageText,
-      // createdAt: DateTime.now().toIso8601String(),
       receiverId: int.parse(
           AppFirebaseService().orderData.value["userId"].toString()),
       senderId: preference.getUserDetail()!.id,
@@ -1192,7 +1189,6 @@ addNewMessage(String time,
       newMessage = ChatMessage(
         message: productDetails.poojaName,
         astrologerId: userData?.id,
-        // createdAt: DateTime.now().toIso8601String(),
         id: int.parse(time),
         time: int.parse(time),
         isSuspicious: 0,
@@ -1229,7 +1225,6 @@ addNewMessage(String time,
           message: productDetails.prodName,
           title: productDetails.prodName,
           astrologerId: preferenceService.getUserDetail()!.id,
-          // createdAt: DateTime.now().toIso8601String(),
           time: int.parse(time),
           id: int.parse(time),
           isSuspicious: 0,
@@ -1263,7 +1258,6 @@ addNewMessage(String time,
       orderId: AppFirebaseService().orderData.value["orderId"],
       id: int.parse(time),
       message: messageText,
-      // createdAt: DateTime.now().toIso8601String(),
       receiverId: int.parse(
           AppFirebaseService().orderData.value["userId"].toString()),
       senderId: preference.getUserDetail()!.id,
@@ -1280,7 +1274,9 @@ addNewMessage(String time,
       userType: "astrologer",
     );
   }
-  if (!isBadWord(newMessage.message ?? "")) {
+  print("newMessage.msgType");
+  print(newMessage.msgType.toString());
+  if (newMessage.msgType.toString() != "MsgType.text"  || !isBadWord(newMessage.message ?? "")) {
     HashMap<dynamic, dynamic> hashMap =
     HashMap<dynamic, dynamic>.from(newMessage.toOfflineJson());
     if (fireChat.value == 1) {
@@ -1706,7 +1702,7 @@ File getFile(String base64String) {
     appDocumentsDirectory = value;
   });
   if (appDocumentsDirectory != null) {
-    String filePath = '${appDocumentsDirectory!.path}/${DateTime.now()}';
+    String filePath = '${appDocumentsDirectory!.path}/${AppFirebaseService().currentTime()}';
     String data = base64String.replaceAll('data:image/*;base64,', '');
 
     Uint8List bytes = base64.decode(data);
