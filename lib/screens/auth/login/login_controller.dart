@@ -5,6 +5,7 @@ import 'package:device_apps/device_apps.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/constants.dart';
+import 'package:divine_astrologer/di/progress_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 
 import 'package:divine_astrologer/gen/assets.gen.dart';
@@ -25,6 +26,8 @@ import 'package:truecaller_sdk/truecaller_sdk.dart';
 
 import '../../../common/app_exception.dart';
 import '../../../common/routes.dart';
+import '../../../di/firebase_network_service.dart';
+import '../../../di/network_service.dart';
 import '../../../di/shared_preference_service.dart';
 import '../../../model/send_otp.dart';
 import '../../../repository/user_repository.dart';
@@ -448,8 +451,13 @@ class LoginController extends GetxController {
     final String uniqueId = await getDeviceId() ?? '';
     final String firebaseNodeUrl = 'astrologer/${data.data?.id}';
     final FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
-    final DatabaseReference ref = firebaseDatabase.ref();
-    final DataSnapshot dataSnapshot = await ref.child(firebaseNodeUrl).get();
+    await firebaseDatabase
+        .ref()
+        .child("$firebaseNodeUrl/realTime/uniqueId")
+        .remove();
+    //final DatabaseReference ref = firebaseDatabase.ref();
+    // final DataSnapshot dataSnapshot = await ref.child(firebaseNodeUrl).get();
+    // if (dataSnapshot.exists) {
     final HashMap<String, dynamic> realTime = HashMap();
     realTime["uniqueId"] = uniqueId;
     realTime["voiceCallStatus"] = (data.data?.callPreviousStatus ?? 0);
@@ -464,8 +472,7 @@ class LoginController extends GetxController {
         deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
     firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
     firebaseDatabase.ref().child("$firebaseNodeUrl/realTime").update(realTime);
-    // if (dataSnapshot.exists) {
-    //
+    navigateToDashboard(data);
     // } else {
     //   final FirebaseUserData userData = FirebaseUserData(
     //     data.data?.name ?? "",
@@ -474,22 +481,34 @@ class LoginController extends GetxController {
     //     RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
     //   );
     //   firebaseDatabase.ref().child(firebaseNodeUrl).set(userData.toJson());
+    //   navigateToDashboard(data);
     // }
-    navigateToDashboard(data);
     return Future<void>.value();
   }
 
 
-  void navigateToDashboard(ResLogin data) {
-    if (data.token == null) {
-      Fluttertoast.showToast(msg: "No authorized token found from Api");
-    } else{
-    preferenceService.erase();
-    preferenceService.setUserDetail(data.data ?? UserData());
-    preferenceService.setToken(data.token!);
-    preferenceService.setDeviceToken(deviceToken ?? "");
-    Get.offAllNamed(RouteName.dashboard);
+  navigateToDashboard(ResLogin data) async {
+    print("beforeGoing ${preferenceService.getUserDetail()?.id}");
+    //_counterSubscription.cancel();
+    if (Constants.isUploadMode) {
+      await initServices();
+    }
+    Future.delayed(
+      const Duration(milliseconds: 500),
+          () => Get.offAllNamed(RouteName.dashboard),
+    );
   }
+
+  Future<void> initServices() async {
+    if (Constants.isUploadMode) {
+      debugPrint("test_initServices: call");
+      await Get.putAsync(() => ProgressService().init());
+      await Get.putAsync(() => SharedPreferenceService().init());
+      await Get.putAsync(() => NetworkService().init());
+      await Get.putAsync(() => FirebaseNetworkService().init());
+
+      debugPrint("test_initServices: called");
+    }
   }
 
   @override
