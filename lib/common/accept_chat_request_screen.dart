@@ -298,6 +298,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                         .orderData
                                                         .value["dob"] ??
                                                     "",
+                                                textAlign: TextAlign.end,
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.w400,
                                                     fontFamily:
@@ -337,6 +338,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                             .value[
                                                         "placeOfBirth"] ??
                                                     "",
+                                                textAlign: TextAlign.end,
                                                 style: TextStyle(
                                                     fontWeight: FontWeight.w400,
                                                     fontFamily:
