@@ -28,7 +28,9 @@ import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter/scheduler.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
+import "package:flutter_html/flutter_html.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
+import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:fluttertoast/fluttertoast.dart";
 import "package:get/get.dart";
 import "package:http/http.dart" as http;
@@ -39,17 +41,19 @@ import "package:permission_handler/permission_handler.dart";
 import "package:shared_preferences/shared_preferences.dart";
 import "package:socket_io_client/socket_io_client.dart";
 import "package:svgaplayer_flutter/svgaplayer_flutter.dart";
-import "package:velocity_x/velocity_x.dart";
+import "package:url_launcher/url_launcher.dart";
 
 import "../../cache/custom_cache_manager.dart";
 import "../../common/MiddleWare.dart";
 import "../../common/app_exception.dart";
+import "../../common/app_textstyle.dart";
 import "../../common/ask_for_gift_bottom_sheet.dart";
 import "../../common/camera.dart";
 import "../../common/common_functions.dart";
 import "../../common/show_permission_widget.dart";
 import "../../di/api_provider.dart";
 import "../../firebase_service/firebase_service.dart";
+import "../../model/RitentionPopupModel.dart";
 import "../../model/astrologer_gift_response.dart";
 import "../../model/message_template_response.dart";
 import "../../model/notice_response.dart";
@@ -416,6 +420,8 @@ class ChatMessageWithSocketController extends GetxController
         await receiveMessage(snapshot);
       }
     });
+    getRitentionPopUpDataApi();
+
     getDir();
     initialiseControllers();
     noticeAPi();
