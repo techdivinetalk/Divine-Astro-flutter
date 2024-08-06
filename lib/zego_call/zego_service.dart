@@ -18,6 +18,7 @@ import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
 import '../firebase_service/firebase_service.dart';
+import '../screens/live_page/constant.dart';
 
 //
 //
@@ -290,48 +291,49 @@ class ZegoService {
   }
 
   Widget commonTimerCountdown(Color color, bool isForBottomCard) {
-    return TimerCountdown(
-      format: CountDownTimerFormat.hoursMinutesSeconds,
-      enableDescriptions: false,
-      spacerWidth: 4,
-      colonsTextStyle: TextStyle(
-        fontSize: isForBottomCard ? 12 : 20,
-        fontWeight: FontWeight.w400,
-        color: color,
-        shadows: [
-          Shadow(
-            color: color,
-            offset: const Offset(1.0, 1.0),
-            blurRadius: 1.0,
-          ),
-        ],
-      ),
-      timeTextStyle: TextStyle(
-        fontSize: isForBottomCard ? 12 : 20,
-        fontWeight: FontWeight.w400,
-        color: color,
-        shadows: [
-          Shadow(
-            color: color,
-            offset: const Offset(1.0, 1.0),
-            blurRadius: 1.0,
-          ),
-        ],
-      ),
-      onTick: (Duration duration) {
-        onTickDuration(duration);
-        if (endTime.value != DateTime(1970, 01, 01)) {
-          endTime(DateTime.now().add(duration));
-        } else {}
-        isCardVisible(duration <= const Duration(seconds: 10));
-      },
-      endTime: endTime.value,
-      onEnd: () async {
-        if (isInCallScreen.value) {
-          await controller.hangUp(Get.context!);
-        } else {}
-      },
-    );
+    return Text(showTalkTime.value);
+    // return TimerCountdown(
+    //   format: CountDownTimerFormat.hoursMinutesSeconds,
+    //   enableDescriptions: false,
+    //   spacerWidth: 4,
+    //   colonsTextStyle: TextStyle(
+    //     fontSize: isForBottomCard ? 12 : 20,
+    //     fontWeight: FontWeight.w400,
+    //     color: color,
+    //     shadows: [
+    //       Shadow(
+    //         color: color,
+    //         offset: const Offset(1.0, 1.0),
+    //         blurRadius: 1.0,
+    //       ),
+    //     ],
+    //   ),
+    //   timeTextStyle: TextStyle(
+    //     fontSize: isForBottomCard ? 12 : 20,
+    //     fontWeight: FontWeight.w400,
+    //     color: color,
+    //     shadows: [
+    //       Shadow(
+    //         color: color,
+    //         offset: const Offset(1.0, 1.0),
+    //         blurRadius: 1.0,
+    //       ),
+    //     ],
+    //   ),
+    //   onTick: (Duration duration) {
+    //     onTickDuration(duration);
+    //     if (endTime.value != DateTime(1970, 01, 01)) {
+    //       endTime(DateTime.now().add(duration));
+    //     } else {}
+    //     isCardVisible(duration <= const Duration(seconds: 10));
+    //   },
+    //   endTime: endTime.value,
+    //   onEnd: () async {
+    //     if (isInCallScreen.value) {
+    //       await controller.hangUp(Get.context!);
+    //     } else {}
+    //   },
+    // );
   }
 
   Widget commonBottomCard() {

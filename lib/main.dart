@@ -34,6 +34,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
+import 'common/GlobalLifecycleObserver.dart';
 import 'common/MiddleWare.dart';
 import 'common/app_theme.dart';
 import 'common/colors.dart';
@@ -68,37 +69,12 @@ Future<void> main() async {
   AppFirebaseService().masterData("masters");
   cameras = await availableCameras();
   Get.put(AppColors());
-
-  // await RemoteConfigService.instance.initFirebaseRemoteConfig();
   final remoteConfig = FirebaseRemoteConfig.instance;
 
   final remoteConfigHelper = RemoteConfigHelper(remoteConfig: remoteConfig);
   await remoteConfigHelper.initialize();
   remoteConfigHelper.updateGlobalConstantWithFirebaseData();
   await GetStorage.init();
-  if (!kDebugMode) {
-    // InAppUpdate.checkForUpdate().then((updateInfo) {
-    //   if (updateInfo.updateAvailability == UpdateAvailability.updateAvailable) {
-    //     if (updateInfo.immediateUpdateAllowed) {
-    //       // Perform immediate update
-    //       InAppUpdate.startFlexibleUpdate().then((appUpdateResult) {
-    //         if (appUpdateResult == AppUpdateResult.success) {
-    //           Fluttertoast.showToast(msg: "AppUpdated lets Re-start");
-    //         }
-    //       });
-    //     } else if (updateInfo.flexibleUpdateAllowed) {
-    //       //Perform flexible update
-    //       InAppUpdate.startFlexibleUpdate().then((appUpdateResult) {
-    //         if (appUpdateResult == AppUpdateResult.success) {
-    //           //App Update successful
-    //           InAppUpdate.completeFlexibleUpdate();
-    //         }
-    //       });
-    //     }
-    //   }
-    // });
-  }
-
   Future<void> showFlutterNotification(RemoteMessage message) async {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
@@ -118,12 +94,6 @@ Future<void> main() async {
         ),
       );
     }
-
-    // Constants.isNotificationBadge.value = true;
-    // if(message.data["badge"] != null){
-    //   FlutterAppBadger.updateBadgeCount(int.parse(message.data["badge"]));
-    //   await SharedPreference().setNotificationBadge(true);
-    // }
   }
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
@@ -131,23 +101,9 @@ Future<void> main() async {
     print('Message data-: dasboardCurrentIndex---${message.data}');
     if (message.data["type"] == "2") {
       print('msg ---- from notification');
-      // if (message.data['type'] == "2") {
-      //   Map<String, String?>? payload = {};
-      //   message.data.forEach((key, value) {
-      //     payload[key] = value;
-      //   });
-      //   showSecondNotification(message.notification!.title ?? '',
-      //       message.notification!.body ?? '', payload);
-      //   return;
-      // }
       showFlutterNotification(message);
       return;
     }
-
-    // if (message.data["type"] == "1") {
-    //   print('msg ---- from notification');
-    //   return;
-    // }
     if (message.data["type"].toString() == "1") {
       if (MiddleWare.instance.currentPage !=
           RouteName.chatMessageWithSocketUI) {
@@ -365,16 +321,18 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  final GlobalLifecycleObserver _lifecycleObserver = GlobalLifecycleObserver();
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-
+    WidgetsBinding.instance.addObserver(_lifecycleObserver);
   }
 
   @override
   void dispose() {
     WidgetsBinding.instance.removeObserver(this);
+    WidgetsBinding.instance.removeObserver(_lifecycleObserver);
     super.dispose();
   }
 

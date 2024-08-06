@@ -359,7 +359,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             SizedBox(height: 10.h),
                             Obx(
                               () => Visibility(
-                                visible: controller.showTalkTime.value == "-1",
+                                visible: showTalkTime.value == "-1",
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
@@ -1402,7 +1402,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                           orderData["customerName"] ?? "",
                                       "cust_image": appendedCustImage,
                                       // "time": "00:20:00",
-                                      "time": controller.showTalkTime.value,
+                                      "time": showTalkTime.value,
                                     },
                                     isAstrologer: true,
                                     astrologerDisabledCalls: () {
@@ -1470,7 +1470,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                           orderData["customerName"] ?? "",
                                       "cust_image": appendedCustImage,
                                       // "time": "00:20:00",
-                                      "time": controller.showTalkTime.value,
+                                      "time":showTalkTime.value,
                                     },
                                     isAstrologer: true,
                                     astrologerDisabledCalls: () {
@@ -2042,9 +2042,9 @@ class AstrologerChatAppBar extends StatelessWidget {
                                       ),
                                       const SizedBox(width: 10),
                                       Text(
-                                        controller.showTalkTime.value == "-1"
+                                        showTalkTime.value == "-1"
                                             ? "Chat Ended"
-                                            : controller.showTalkTime.value,
+                                            : showTalkTime.value,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 10.sp,

@@ -78,7 +78,7 @@ class AppFirebaseService {
     }
   }
   DateTime currentTime(){
-    return DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch + serverTimeDiff);
+    return serverTime.value.toString() == "0" ? DateTime.now() :DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch + serverTimeDiff);
   }
   String tableName = "";
   Future<void> userRealTime(String key, dynamic value, String path,
@@ -268,7 +268,7 @@ class AppFirebaseService {
   readData(String path) async {
     print("readData $path");
     try {
-      database.child("${path}/TimeManage").set(ServerValue.timestamp);
+      database.child("$path/TimeManage").set(ServerValue.timestamp);
       database.child(path).onChildChanged.listen((event) {
         final key = event.snapshot.key; // Get the key of the changed child
 
@@ -493,7 +493,9 @@ class AppFirebaseService {
       case "astroMsg":
         astroMsg = dataSnapshot.value.toString();
         break;
-
+      case "serverTime":
+        serverTime(int.parse(dataSnapshot.value.toString()));
+        break;
       default:
         // preferenceService.setStringPref(
         //     dataSnapshot.key.toString(), dataSnapshot.value.toString());
