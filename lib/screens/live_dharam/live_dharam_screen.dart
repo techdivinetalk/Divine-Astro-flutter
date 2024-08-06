@@ -7,11 +7,13 @@ import "dart:io";
 
 import "package:after_layout/after_layout.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:connectivity_plus/connectivity_plus.dart";
 import "package:divine_astrologer/common/app_textstyle.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/common_bottomsheet.dart";
 import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/generic_loading_widget.dart";
+import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/model/live/deck_card_model.dart";
@@ -98,10 +100,29 @@ class _LivePage extends State<LiveDharamScreen>
   Timer? _timer;
   Timer? _msgTimerForFollowPopup;
   Timer? _msgTimerForTarotCardPopup;
+  StreamSubscription<ConnectivityResult>? _connectivitySubscription;
 
   @override
   void initState() {
     super.initState();
+    _connectivitySubscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) async {
+      if (result == ConnectivityResult.none) {
+        _controller.isInternetConnected.value = false;
+        divineSnackBar(
+            data: "No Internet Connection live ended", color: Colors.red);
+        if (mounted) {
+          _timer?.cancel();
+          _msgTimerForFollowPopup?.cancel();
+          _msgTimerForTarotCardPopup?.cancel();
+          // await _controller.liveStore.doc(_controller.userId).delete();
+          // await _controller.liveCount.doc(_controller.userId).delete();
+          await zegoController.leave(context);
+        }
+      }
+    });
+
     _svgController = SVGAAnimationController(vsync: this);
     _svgController.addStatusListener((status) async {
       if (status == AnimationStatus.completed) {
@@ -452,6 +473,7 @@ class _LivePage extends State<LiveDharamScreen>
     _timer?.cancel();
     _msgTimerForFollowPopup?.cancel();
     _msgTimerForTarotCardPopup?.cancel();
+    _connectivitySubscription?.cancel();
 
     WidgetsBinding.instance.removeObserver(this);
 
