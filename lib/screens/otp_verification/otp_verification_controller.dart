@@ -121,9 +121,14 @@ class OtpVerificationController extends GetxController {
       enableSubmit.value = false;
       VerifyOtpModel data = await userRepository.verifyOtp(params);
 
-      isPrivacyPolicy.value == 1 ? Get.offAllNamed(RouteName.termsAndConditionScreen, arguments: {"mobile" : number.value}) : await astroLogin();
-      // Get.offAllNamed(RouteName.termsAndConditionScreen, arguments: {"mobile" : number.value});
-      enableSubmit.value = true;
+      // isPrivacyPolicy.value == 1 ? Get.offAllNamed(RouteName.termsAndConditionScreen, arguments: {"mobile" : number.value}) : await astroLogin();
+      if(isPrivacyPolicy.value == 1){
+        Get.offAllNamed(RouteName.termsAndConditionScreen, arguments: {"mobile" : number.value});
+        enableSubmit.value = true;
+      } else{
+        await astroLogin();
+      }
+      // enableSubmit.value = true;
     } catch (error) {
       enableSubmit.value = true;
       debugPrint("error $error");
@@ -173,9 +178,10 @@ class OtpVerificationController extends GetxController {
                 commonConstants.data!.firebaseAuthPassword!);
           }
         }
-        updateLoginDataInFirebase(data);
+        await updateLoginDataInFirebase(data);
       }
     } catch (error) {
+      enableSubmit.value = true;
       debugPrint("error $error");
       if (error is AppException) {
         error.onException();
@@ -233,7 +239,7 @@ class OtpVerificationController extends GetxController {
         deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
     firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
     firebaseDatabase.ref().child("$firebaseNodeUrl/realTime").update(realTime);
-    navigateToDashboard(data);
+    await navigateToDashboard(data);
     // } else {
     //   final FirebaseUserData userData = FirebaseUserData(
     //     data.data?.name ?? "",
@@ -301,10 +307,11 @@ class OtpVerificationController extends GetxController {
     if (Constants.isUploadMode) {
       await initServices();
     }
-    Future.delayed(
+    await Future.delayed(
       const Duration(seconds: 1),
       () => Get.offAllNamed(RouteName.dashboard),
     );
+    enableSubmit.value = true;
   }
 
   removeAttempts() {
