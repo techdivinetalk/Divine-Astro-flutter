@@ -420,7 +420,7 @@ class ChatMessageWithSocketController extends GetxController
         await receiveMessage(snapshot);
       }
     });
-    getRitentionPopUpDataApi();
+   // getRitentionPopUpDataApi();
 
     getDir();
     initialiseControllers();
