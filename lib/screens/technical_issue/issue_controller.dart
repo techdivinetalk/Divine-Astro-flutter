@@ -1,10 +1,11 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:io';
+import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
@@ -19,6 +20,20 @@ import '../../gen/assets.gen.dart';
 import '../../model/TechnicalIssuesData.dart';
 import '../../model/TechnicalSupport.dart';
 import '../../repository/user_repository.dart';
+
+class FileUtils {
+  static String getfilesizestring({required int bytes, int decimals = 0}) {
+    if (bytes <= 0) return "0 bytes";
+    const suffixes = [" bytes", "kb", "mb", "gb", "tb"];
+    var i = (log(bytes) / log(1024)).floor();
+    return ((bytes / pow(1024, i)).toStringAsFixed(decimals)) + suffixes[i];
+  }
+
+  static bool isFileSizeValid({required int bytes, int maxSizeInMB = 2}) {
+    double sizeInMB = bytes / (1024 * 1024);
+    return sizeInMB <= maxSizeInMB;
+  }
+}
 
 class TechnicalIssueController extends GetxController {
   TechnicalIssueController(this.userRepository);
@@ -174,8 +189,20 @@ class TechnicalIssueController extends GetxController {
         // maxWidth: 250,
       );
       if (pickedFile != null) {
-        selectedImages.add(pickedFile.path);
-        selectedFiles.add(File(pickedFile.path));
+        // selectedImages.add(pickedFile.path);
+        // selectedFiles.add(File(pickedFile.path));
+        final imageTemp = File(pickedFile.path);
+
+        int imageSize = imageTemp.lengthSync(); // Get the image size in bytes
+
+        if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
+          Fluttertoast.showToast(
+              msg:
+                  "Image Size is more then 2 MB"); // Optionally, you can show an alert to the user or handle it accordingly
+        } else {
+          selectedImages.add(pickedFile.path);
+          selectedFiles.add(File(pickedFile.path));
+        }
       }
     } else {
       // Pick multiple images from the gallery
@@ -183,14 +210,38 @@ class TechnicalIssueController extends GetxController {
           // imageQuality: 90,
           // maxWidth: 250,
           );
-      if (pickedFiles != null && pickedFiles.isNotEmpty) {
-        selectedImages.addAll(pickedFiles.map((pickedFile) => pickedFile.path));
-        selectedFiles.addAll(
-            pickedFiles.map((pickedFile) => File(pickedFile.path)).toList());
+      // if (pickedFiles != null && pickedFiles.isNotEmpty) {
+      //   selectedImages.addAll(pickedFiles.map((pickedFile) => pickedFile.path));
+      //   selectedFiles.addAll(
+      //       pickedFiles.map((pickedFile) => File(pickedFile.path)).toList());
+      // }
+
+      int oversizedCount = 0;
+
+      final imageTemp = File(pickedFiles[0].path);
+      for (var pickedFile in pickedFiles) {
+        int imageSize =
+            await File(pickedFile.path).length(); // Get the image size in bytes
+
+        if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
+          oversizedCount++;
+        } else {
+          selectedImages.add(pickedFile.path);
+          selectedFiles.add(File(pickedFile.path));
+        }
       }
+      if (oversizedCount > 0) {
+        Fluttertoast.showToast(
+            msg: "$oversizedCount images exceed 2 MB and cannot be uploaded");
+      }
+      // if (selectedImages.isNotEmpty) {
+      //   Fluttertoast.showToast(
+      //       msg:
+      //           "Images selected successfully: ${selectedImages.length} images");
+      // }
     }
-    log("selectedImages - $selectedImages");
-    log("selectedImages - $selectedFiles");
+    print("selectedImages - $selectedImages");
+    print("selectedImages - $selectedFiles");
     update();
   }
 
@@ -199,7 +250,7 @@ class TechnicalIssueController extends GetxController {
     var token = await preferenceService.getToken();
     isLoading(true);
 
-    log("image length - ${imageFile.path}");
+    print("image length - ${imageFile.path}");
 
     var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
 
@@ -227,10 +278,10 @@ class TechnicalIssueController extends GetxController {
       uploadedImagesList.add(jsonDecode(value)["data"]["path"]);
       update();
       currentUploadedFile = jsonDecode(value)["data"]["path"];
-      log("img-- ${uploadedImagesList.toString()}");
+      print("img-- ${uploadedImagesList.toString()}");
       print("valuevaluevaluevaluevaluevaluevalue");
     });
-    log("uploadedImages -- ${uploadedImagesList.toString()}");
+    print("uploadedImages -- ${uploadedImagesList.toString()}");
 
     if (response.statusCode == 200) {
       print("Image uploaded successfully.");
@@ -252,32 +303,32 @@ class TechnicalIssueController extends GetxController {
     } else if (descriptionController.text.isEmpty) {
       divineSnackBar(data: "Description is empty", color: appColors.redColor);
     } else {
-      log("111");
+      print("111");
       for (var imageFile in selectedFiles) {
-        log("111");
+        print("111");
 
         await uploadImage(imageFile);
-        log("111");
+        print("111");
 
         update();
       }
       Future.delayed(Duration(seconds: 2)).then((c) {
         if (selectedFiles.length == uploadedImagesList.length &&
             uploadedImagesList.contains(currentUploadedFile)) {
-          log("222");
+          print("222");
           submitIssues();
         }
       });
-      log("111");
+      print("111");
     }
-    log("uploadedImages -- ${uploadedImagesList.toString()}");
+    print("uploadedImages -- ${uploadedImagesList.toString()}");
   }
 
   submitIssues() async {
     isLoading(true);
-    log("uploadedImages -- ${uploadedImagesList.toString()}");
+    print("uploadedImages -- ${uploadedImagesList.toString()}");
     isLoading(true);
-    log("uploadedImages -- ${uploadedImagesList.toString()}");
+    print("uploadedImages -- ${uploadedImagesList.toString()}");
 
     Map<String, dynamic> param = {
       "description": descriptionController.text,
@@ -285,11 +336,11 @@ class TechnicalIssueController extends GetxController {
       "images": uploadedImagesList
     };
 
-    log("paramssss${param.toString()}");
+    print("paramssss${param.toString()}");
     isLoading(true);
 
     try {
-      log(222.toString());
+      print(222.toString());
 
       final response = await userRepository.submitTechnicalIssues(param);
       if (response.success == true) {
@@ -305,13 +356,13 @@ class TechnicalIssueController extends GetxController {
 
         isLoading(false);
       } else {
-        log(3.toString());
+        print(3.toString());
 
         isLoading(false);
       }
-      log("Data Of submit ==> ${jsonEncode(response.data)}");
+      print("Data Of submit ==> ${jsonEncode(response.data)}");
     } catch (error) {
-      log(33.toString());
+      print(33.toString());
 
       isLoading(false);
       debugPrint("error $error");
