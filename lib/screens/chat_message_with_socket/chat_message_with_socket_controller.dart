@@ -420,7 +420,7 @@ class ChatMessageWithSocketController extends GetxController
         await receiveMessage(snapshot);
       }
     });
-   // getRitentionPopUpDataApi();
+    getRitentionPopUpDataApi();
 
     getDir();
     initialiseControllers();
@@ -1708,6 +1708,97 @@ class ChatMessageWithSocketController extends GetxController
       // "Picking tarot card...";
       update();
     }
+  }
+
+  RitentionPopupModel? ritentionPopupModel;
+
+  getRitentionPopUpDataApi() async {
+    try {
+      log(222.toString());
+
+      final response = await userRepository.getRitentionDataApi({});
+      if (response.success == true) {
+        ritentionPopupModel = response;
+        if (ritentionPopupModel!.data != null) {
+          print("showing popup -- ritention");
+          showRitentionPopup();
+        } else {
+          print("not showing popup -- ritention");
+        }
+      } else {
+        log(3.toString());
+      }
+    } catch (error) {
+      log(33.toString());
+
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+    update();
+  }
+
+  Future<void> showRitentionPopup() async {
+    return Get.dialog(
+      barrierDismissible: false,
+      AlertDialog(
+        // insetPadding: EdgeInsets.all(16),
+        // contentPadding: EdgeInsets.zero,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        elevation: 0,
+        content: ritentionPoupWidget(Get.context!),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Get.back();
+            },
+            child: Text(
+              "Ok",
+              style: AppTextStyle.textStyle18(
+                fontWeight: FontWeight.w500,
+                fontColor: appColors.darkBlue,
+              ),
+            ),
+          )
+        ],
+      ),
+    );
+  }
+
+  Widget ritentionPoupWidget(BuildContext context) {
+    return GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
+      return Container(
+        margin: EdgeInsets.only(top: 10.h),
+        child: SingleChildScrollView(
+          child: ritentionPopupModel!.data == null
+              ? SizedBox()
+              : Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Html(
+                      shrinkWrap: true,
+                      data: ritentionPopupModel!.data!.type ?? "",
+                      onLinkTap: (url, attributes, element) {
+                        launchUrl(Uri.parse(url ?? ''));
+                      },
+                    ),
+                    Html(
+                      shrinkWrap: true,
+                      data: ritentionPopupModel!.data!.message ?? "",
+                      onLinkTap: (url, attributes, element) {
+                        launchUrl(Uri.parse(url ?? ''));
+                      },
+                    ),
+                  ],
+                ),
+        ),
+      );
+    });
   }
 
   final noticeRepository = Get.put(NoticeRepository());
