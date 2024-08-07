@@ -13,6 +13,34 @@ class WalletController extends GetxController {
   int pageSize = 10;
   RxBool isDropDownShow = false.obs;
   RxString dropDownValue = 'Today'.obs;
+  var durationOptions =
+      ['Today', 'Last Week', 'Last Month', 'Select Custom'].obs;
+
+  RxString selectedOption = "Today".obs;
+  void updateDurationValue(String val) {
+    if (selectedOption.value != val) {
+      // if(selectedOption.value =="Yesterday"){
+      //   selectedOption.value = val;
+      //
+      // }else{}
+      selectedOption.value = val;
+      int index = durationOptions.indexOf(val);
+    }
+  }
+
+  var startDate;
+  var endDate;
+  var startSelectedDate;
+  var endSelectedDate;
+  setStartDate(var value) {
+    startDate = value;
+    update();
+  }
+
+  setEndDate(var value) {
+    endDate = value;
+    update();
+  }
 
   @override
   void onInit() {
