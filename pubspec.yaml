@@ -26,7 +26,7 @@ dependencies:
   device_info_plus: ^9.0.3
   dropdown_button2: ^2.3.7
   emoji_picker_flutter: ^1.6.1
-  file_picker: ^6.1.1
+  file_picker: ^8.0.6
   firebase_database: ^11.0.3
   firebase_core: ^3.2.0
   firebase_messaging: ^15.0.3
@@ -91,7 +91,7 @@ dependencies:
   flutter_timer_countdown: ^1.0.7
   flutter_keyboard_visibility: ^6.0.0
   app_settings: ^5.1.1
-#  truecaller_sdk: ^1.0.0
+  truecaller_sdk: ^1.0.0
   flutter_overlay_window: ^0.4.3
   velocity_x: ^4.2.1
   uuid: ^4.3.2
@@ -105,7 +105,7 @@ dependencies:
   #   git:
   #     url: https://github.com/delwar36/overlapped_carousel.git
   #     ref: b910005b978c35e0be5cadbb82c000faf6abebdf
-  audioplayers: ^5.2.1
+  audioplayers: ^6.0.0
   speed_test_dart: ^1.0.4+1
   shimmer: ^3.0.0
   cron: ^0.6.0
@@ -118,7 +118,7 @@ dependencies:
 #  zego_uikit_beauty_plugin: ^1.5.2
 
   zego_uikit_signaling_plugin: ^2.7.13
-  zego_uikit_prebuilt_call: ^4.12.3
+  zego_uikit_prebuilt_call: ^4.14.3
   zego_uikit_prebuilt_live_streaming: ^3.8.4
   zego_express_engine: ^3.15.1+2
   zego_uikit_beauty_plugin: ^1.5.3
@@ -134,7 +134,7 @@ dependencies:
 
 
 dependency_overrides:
-#  zego_uikit: ^2.23.0
+  zego_uikit: ^2.23.0
   fading_edge_scrollview: ^4.1.1
   intl: ^0.18.1
 
