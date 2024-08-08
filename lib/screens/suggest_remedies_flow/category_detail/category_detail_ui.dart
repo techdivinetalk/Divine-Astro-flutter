@@ -253,7 +253,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                   ),
                                   const SizedBox(height: 10),
                                   Text(
-                                    "On purchase 30% referral bonus will be added in your wallet",
+                                    "On purchase upto 30% referral bonus will be added in your wallet",
                                     style: AppTextStyle.textStyle12(
                                         fontWeight: FontWeight.w600,
                                         fontColor: appColors.darkBlue
