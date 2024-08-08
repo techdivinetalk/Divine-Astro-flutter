@@ -22,115 +22,113 @@ class PassbookUi extends GetView<PassbooksController> {
       builder: (controller) {
         return Scaffold(
           appBar: appbarSmall1(context, "Passbook"),
-          body: SingleChildScrollView(
-            controller: controller.scrollController,
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    selectDate(
-                        controller.startDate == null
-                            ? "Start Date"
-                            : "${DateTime.parse(controller.startDate).day}-${DateTime.parse(controller.startDate).month}-${DateTime.parse(controller.startDate).year}",
-                        context,
-                        controller, () {
-                      showCupertinoModalPopup(
-                          context: Get.context!,
-                          builder: (context) {
-                            return selectDateWid(
-                              name: "Start Date",
-                              looping: true,
-                              buttonTitle: "Confirm",
-                              initialDate: DateTime.now(),
-                              onConfirm: (String value) {
-                                controller.setStartDate(value);
-                              },
-                              onChange: (String value) {
-                                controller.setStartDate(value);
-                              },
-                            );
-                          });
-                    }),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    selectDate(
-                        controller.endDate == null
-                            ? "End Date"
-                            : "${DateTime.parse(controller.endDate).day}-${DateTime.parse(controller.endDate).month}-${DateTime.parse(controller.endDate).year}",
-                        context,
-                        controller, () {
-                      showCupertinoModalPopup(
-                          context: Get.context!,
-                          builder: (context) {
-                            return selectDateWid(
-                              name: "End Date",
-                              looping: true,
-                              buttonTitle: "Confirm",
-                              initialDate: DateTime.now(),
-                              onConfirm: (String value) {
-                                controller.setEndDate(value);
-                              },
-                              onChange: (String value) {
-                                controller.setEndDate(value);
-                              },
-                            );
-                          });
-                    }),
-                  ],
-                ),
-                const SizedBox(
-                  height: 10,
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    selectTypeWidget("Bonus", context, controller),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    selectTypeWidget("Paid", context, controller),
-                    const SizedBox(
-                      width: 10,
-                    ),
-                    selectTypeWidget("Ecomm", context, controller),
-                  ],
-                ),
-                controller.isLoading.value == true
-                    ? const Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          SizedBox(height: 200),
-                          Center(
-                            child: CircularProgressIndicator(),
-                          ),
-                        ],
-                      )
-                    : controller.passBookDataModel == null
-                        ? const Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              SizedBox(height: 200),
-                              Center(
-                                child:
-                                    Text("Please Select Date and wallet type"),
-                              ),
-                            ],
-                          )
-                        : Padding(
-                            padding: const EdgeInsets.only(top: 10),
+          body: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  selectDate(
+                      controller.startDate == null
+                          ? "Start Date"
+                          : "${DateTime.parse(controller.startDate).day}-${DateTime.parse(controller.startDate).month}-${DateTime.parse(controller.startDate).year}",
+                      context,
+                      controller, () {
+                    showCupertinoModalPopup(
+                        context: Get.context!,
+                        builder: (context) {
+                          return selectDateWid(
+                            name: "Start Date",
+                            looping: true,
+                            buttonTitle: "Confirm",
+                            initialDate: DateTime.now(),
+                            onConfirm: (String value) {
+                              controller.setStartDate(value);
+                            },
+                            onChange: (String value) {
+                              controller.setStartDate(value);
+                            },
+                          );
+                        });
+                  }),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  selectDate(
+                      controller.endDate == null
+                          ? "End Date"
+                          : "${DateTime.parse(controller.endDate).day}-${DateTime.parse(controller.endDate).month}-${DateTime.parse(controller.endDate).year}",
+                      context,
+                      controller, () {
+                    showCupertinoModalPopup(
+                        context: Get.context!,
+                        builder: (context) {
+                          return selectDateWid(
+                            name: "End Date",
+                            looping: true,
+                            buttonTitle: "Confirm",
+                            initialDate: DateTime.now(),
+                            onConfirm: (String value) {
+                              controller.setEndDate(value);
+                            },
+                            onChange: (String value) {
+                              controller.setEndDate(value);
+                            },
+                          );
+                        });
+                  }),
+                ],
+              ),
+              const SizedBox(
+                height: 10,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  selectTypeWidget("Bonus", context, controller),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  selectTypeWidget("Paid", context, controller),
+                  const SizedBox(
+                    width: 10,
+                  ),
+                  selectTypeWidget("Ecomm", context, controller),
+                ],
+              ),
+              controller.isLoading.value == true
+                  ? const Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        SizedBox(height: 200),
+                        Center(
+                          child: CircularProgressIndicator(),
+                        ),
+                      ],
+                    )
+                  : controller.passBookDataModel == null
+                      ? const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(height: 200),
+                            Center(
+                              child: Text("Please Select Date and wallet type"),
+                            ),
+                          ],
+                        )
+                      : Padding(
+                          padding: const EdgeInsets.only(top: 10),
+                          child: Expanded(
                             child: WebViewPage(
                               url:
                                   controller.passBookDataModel!.data.toString(),
                             ),
                           ),
-              ],
-            ),
+                        ),
+            ],
           ),
         );
       },

@@ -1,8 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
-import '../gen/assets.gen.dart';
-
 class CachedNetworkPhoto extends StatelessWidget {
   const CachedNetworkPhoto(
       {Key? key, this.url, this.width, this.height, this.fit})
@@ -35,8 +33,7 @@ class CachedNetworkPhoto extends StatelessWidget {
         decoration: const BoxDecoration(
           borderRadius: BorderRadius.all(Radius.circular(10)),
         ),
-        child:
-            Image.asset(Assets.images.defaultProfile.path, fit: BoxFit.cover),
+        child: Image.asset("assets/images/default.png", fit: BoxFit.cover),
       ),
     );
   }

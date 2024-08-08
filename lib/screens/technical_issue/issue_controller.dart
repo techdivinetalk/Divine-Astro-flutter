@@ -4,10 +4,12 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 
 import '../../common/app_exception.dart';
@@ -31,6 +33,7 @@ class FileUtils {
 
   static bool isFileSizeValid({required int bytes, int maxSizeInMB = 2}) {
     double sizeInMB = bytes / (1024 * 1024);
+    print("image size ------ ${sizeInMB.toString()}");
     return sizeInMB <= maxSizeInMB;
   }
 }
@@ -48,27 +51,6 @@ class TechnicalIssueController extends GetxController {
 
   var selected;
   String poojaImageUrl = "";
-  String htmlCode = '''<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Display Image</title>
-    <style>
-        /* Optional: CSS to style the image */
-        .center {
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-            width: 50%;
-        }
-    </style>
-</head>
-<body>
-    <h1 style="text-align: center;">My Image</h1>
-    <img src="https://img.freepik.com/free-photo/colorful-design-with-spiral-design_188544-9588.jpg" alt="My Image" class="center">
-</body>
-</html>''';
   selectedDropDown(value) {
     selected = value;
     update();
@@ -193,16 +175,18 @@ class TechnicalIssueController extends GetxController {
         // selectedFiles.add(File(pickedFile.path));
         final imageTemp = File(pickedFile.path);
 
-        int imageSize = imageTemp.lengthSync(); // Get the image size in bytes
+        int imageSize =
+            await File(pickedFile.path).length(); // Get the image size in bytes
+        await compressImages(XFile(pickedFile.path));
 
-        if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
-          Fluttertoast.showToast(
-              msg:
-                  "Image Size is more then 2 MB"); // Optionally, you can show an alert to the user or handle it accordingly
-        } else {
-          selectedImages.add(pickedFile.path);
-          selectedFiles.add(File(pickedFile.path));
-        }
+        // if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
+        //   Fluttertoast.showToast(
+        //       msg:
+        //           "Image Size is more then 2 MB"); // Optionally, you can show an alert to the user or handle it accordingly
+        // } else {
+        //   selectedImages.add(pickedFile.path);
+        //   selectedFiles.add(File(pickedFile.path));
+        // }
       }
     } else {
       // Pick multiple images from the gallery
@@ -222,13 +206,13 @@ class TechnicalIssueController extends GetxController {
       for (var pickedFile in pickedFiles) {
         int imageSize =
             await File(pickedFile.path).length(); // Get the image size in bytes
-
-        if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
-          oversizedCount++;
-        } else {
-          selectedImages.add(pickedFile.path);
-          selectedFiles.add(File(pickedFile.path));
-        }
+        await compressImages(XFile(pickedFile.path));
+        // if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
+        //   oversizedCount++;
+        // } else {
+        //   selectedImages.add(pickedFile.path);
+        //   selectedFiles.add(File(pickedFile.path));
+        // }
       }
       if (oversizedCount > 0) {
         Fluttertoast.showToast(
@@ -243,6 +227,103 @@ class TechnicalIssueController extends GetxController {
     print("selectedImages - $selectedImages");
     print("selectedImages - $selectedFiles");
     update();
+  }
+
+  compressImages(croppedFile) async {
+    int oversizedCount = 0;
+
+    uploadFile = File(croppedFile.path);
+    final filePath = uploadFile!.absolute.path;
+    final lastIndex = filePath
+        .lastIndexOf(RegExp(r'\.(png|jpg|jpeg|heic)', caseSensitive: false));
+
+    debugPrint("File path: $filePath");
+    debugPrint("Last index of extension: $lastIndex");
+    final splitted = filePath.substring(0, (lastIndex));
+    if (lastIndex != -1) {
+      final splitted = filePath.substring(0, lastIndex);
+      final extension = filePath.substring(lastIndex);
+      final outPath = extension.toLowerCase() == '.heic'
+          ? "${splitted}_out.jpg"
+          : "${splitted}_out$extension";
+      var result = await FlutterImageCompress.compressAndGetFile(
+        filePath,
+        outPath,
+        minWidth: 500,
+      );
+      if (result != null) {
+        int imageSize =
+            await File(result.path).length(); // Get the image size in bytes
+
+        if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
+          oversizedCount++;
+          Fluttertoast.showToast(
+              msg:
+                  "Image Size is more then 2 MB"); // Optionally, you can show an alert to the user or handle it accordingly
+        } else {
+          selectedImages.add(result.path);
+          selectedFiles.add(File(result.path));
+        }
+        if (oversizedCount > 0) {
+          Fluttertoast.showToast(
+              msg: "$oversizedCount images exceed 2 MB and cannot be uploaded");
+        }
+        // selectedImages.add(result.path);
+        // selectedFiles.add(File(result.path));
+      } else {
+        debugPrint("The file path does not contain .png, .jpg, or .jpeg.");
+      }
+      // uploadImage(File(result.path));
+    }
+  }
+
+  cropImage(i) async {
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: i.path,
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+        CropAspectRatioPreset.ratio3x2,
+        CropAspectRatioPreset.original,
+        CropAspectRatioPreset.ratio4x3,
+        CropAspectRatioPreset.ratio16x9,
+      ],
+      uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: 'Update image',
+          toolbarColor: appColors.white,
+          toolbarWidgetColor: appColors.blackColor,
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: false,
+        ),
+        IOSUiSettings(
+          title: 'Update image',
+        ),
+      ],
+    );
+    if (croppedFile != null) {
+      // final file = File(croppedFile.path);
+
+      uploadFile = File(croppedFile.path);
+      final filePath = uploadFile!.absolute.path;
+      final lastIndex = filePath.lastIndexOf(RegExp(r'.png|.jp'));
+      final splitted = filePath.substring(0, (lastIndex));
+      final outPath = "${splitted}_out${filePath.substring(lastIndex)}";
+      var result = await FlutterImageCompress.compressAndGetFile(
+        filePath,
+        outPath,
+        minWidth: 500,
+      );
+      if (result != null) {
+        // uploadImageToS3Bucket(File(result.path));
+
+        selectedImages.add(result.path);
+        selectedFiles.add(File(result.path));
+
+        // uploadImage(File(result.path));
+      }
+    } else {
+      debugPrint("Image is not cropped.");
+    }
   }
 
   var currentUploadedFile;

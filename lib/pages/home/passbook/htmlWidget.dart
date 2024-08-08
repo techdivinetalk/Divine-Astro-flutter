@@ -43,7 +43,7 @@ class _WebViewPageState extends State<WebViewPage> {
                 child: CircularProgressIndicator(),
               )
             : Container(
-                height: 800,
+                height: MediaQuery.of(context).size.height * 0.7,
                 // color: Colors.red,
                 child: WebViewWidget(controller: controller!)));
   }

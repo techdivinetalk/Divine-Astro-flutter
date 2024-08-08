@@ -42,39 +42,66 @@ class SideMenuDrawer extends GetView<HomeController> {
             ListTile(
               leading: Assets.images.icWaiting.svg(),
               title: Text("waitlist".tr),
-              onTap: () => {
-                Navigator.of(context).pop(),
-                Get.toNamed(RouteName.waitList)
+              onTap: () {
+                Get.put(HomeController()).homeScreenKey
+                  ..currentState?.closeDrawer();
+
+                Get.back();
+                Get.toNamed(RouteName.waitList);
               },
             ),
             ListTile(
               leading: Assets.images.icOrderHistory.svg(),
               title: Text("orderHistory".tr),
-              onTap: () => {Get.back(), Get.toNamed(RouteName.orderHistory)},
+              onTap: () {
+                Get.put(HomeController()).homeScreenKey
+                  ..currentState?.closeDrawer();
+
+                Get.back();
+                Get.toNamed(RouteName.orderHistory);
+              },
             ),
             ListTile(
               leading: Assets.images.icMessageTemplate.svg(),
               title: Text("messageTemplate".tr),
-              onTap: () => {Get.back(), Get.toNamed(RouteName.messageTemplate)},
+              onTap: () {
+                Get.put(HomeController()).homeScreenKey
+                  ..currentState?.closeDrawer();
+
+                Get.back();
+                Get.toNamed(RouteName.messageTemplate);
+              },
             ),
             ListTile(
               leading: Assets.images.icSetting.svg(),
               title: Text('settings'.tr),
-              onTap: () => {
-                Navigator.of(context).pop(),
-                Get.toNamed(RouteName.settingsUI)
+              onTap: () {
+                Get.put(HomeController()).homeScreenKey
+                  ..currentState?.closeDrawer();
+
+                Get.back();
+                Get.toNamed(RouteName.settingsUI);
               },
             ),
             ListTile(
               leading: Assets.images.icCustomerCare.svg(),
               title: Text('customerCare'.tr),
-              onTap: () => {Navigator.of(context).pop(), controller.whatsapp()},
+              onTap: () {
+                Get.put(HomeController()).homeScreenKey
+                  ..currentState?.closeDrawer();
+
+                Get.back();
+                controller.whatsapp();
+              },
             ),
             ListTile(
               leading: Assets.images.icImportContact.svg(),
               title: Text('importantNumbers'.tr),
               onTap: () async {
-                Navigator.of(context).pop();
+                Get.put(HomeController()).homeScreenKey
+                  ..currentState?.closeDrawer();
+
+                Get.back();
                 bool isPermission = await requestPermissions();
                 if (isPermission) {
                   Get.toNamed(RouteName.importantNumbers);
@@ -86,7 +113,10 @@ class SideMenuDrawer extends GetView<HomeController> {
             ListTile(
               leading: const Icon(Icons.bug_report_outlined),
               title: Text('Technical Support'.tr),
-              onTap: () async {
+              onTap: () {
+                Get.put(HomeController()).homeScreenKey
+                  ..currentState?.closeDrawer();
+
                 Get.back();
                 Get.toNamed(RouteName.technicalIssues);
               },
@@ -94,7 +124,10 @@ class SideMenuDrawer extends GetView<HomeController> {
             ListTile(
               leading: const Icon(Icons.request_quote_outlined),
               title: Text('Financial Support'.tr),
-              onTap: () async {
+              onTap: () {
+                Get.put(HomeController()).homeScreenKey
+                  ..currentState?.closeDrawer();
+
                 Get.back();
                 Get.toNamed(RouteName.financialSupport);
               },
@@ -102,7 +135,10 @@ class SideMenuDrawer extends GetView<HomeController> {
             ListTile(
               leading: const Icon(Icons.contact_support_outlined),
               title: Text('Support'.tr),
-              onTap: () async {
+              onTap: () {
+                Get.put(HomeController()).homeScreenKey
+                  ..currentState?.closeDrawer();
+
                 Get.back();
                 Get.toNamed(RouteName.newSupportScreen);
               },
@@ -111,8 +147,11 @@ class SideMenuDrawer extends GetView<HomeController> {
                 ? ListTile(
                     leading: const Icon(Icons.check_box_outline_blank),
                     title: Text('Testing'.tr),
-                    onTap: () async {
-                      Navigator.of(context).pop();
+                    onTap: () {
+                      Get.put(HomeController()).homeScreenKey
+                        ..currentState?.closeDrawer();
+
+                      Get.back();
                       Get.toNamed(RouteName.testingScreen);
                     },
                   )

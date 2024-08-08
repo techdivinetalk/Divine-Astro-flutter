@@ -1,17 +1,13 @@
+import 'dart:io';
+
 import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/ChatOrderResponse.dart';
-import 'package:divine_astrologer/pages/home/home_controller.dart';
-import 'package:divine_astrologer/pages/performance/performance_controller.dart';
-import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
-import 'package:divine_astrologer/screens/chat_assistance/chat_assistance_controller.dart';
 import 'package:divine_astrologer/screens/dashboard/widgets/rejoin_widget.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart';
-import 'package:divine_astrologer/screens/side_menu/wait_list/wait_list_controller.dart';
 import 'package:divine_astrologer/screens/side_menu/wait_list/wait_list_ui.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -21,10 +17,9 @@ import 'package:get/get.dart';
 import '../../../common/colors.dart';
 import '../../../gen/assets.gen.dart';
 import '../../common/common_functions.dart';
-import '../../di/notification_two.dart';
+import '../../pages/home/home_controller.dart';
 import '../../pages/home/home_ui.dart';
 import '../../pages/performance/performance_ui.dart';
-import '../../repository/waiting_list_queue_repository.dart';
 import '../chat_assistance/chat_assistance_ui.dart';
 import '../live_page/constant.dart';
 import 'dashboard_controller.dart';
@@ -32,9 +27,24 @@ import 'dashboard_controller.dart';
 class DashboardScreen extends GetView<DashboardController> {
   const DashboardScreen({super.key});
 
+  static int countExit = 0;
+  exitEvent() {
+    countExit++;
+    Future.delayed(
+      const Duration(seconds: 3),
+      () {
+        countExit = 0;
+      },
+    );
+    if (countExit == 1) {
+      Fluttertoast.showToast(msg: "Please press again to exit");
+    } else {
+      exit(0);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-
     print("beforeGoing 4 - ${preferenceService.getUserDetail()?.id}");
     // FirebaseMessaging.instance.getToken().then((value) {
     //   print("FirebaseMessagingToken: $value");
@@ -43,248 +53,278 @@ class DashboardScreen extends GetView<DashboardController> {
     return GetBuilder<DashboardController>(
       assignId: true,
       builder: (controller) {
-        return Material(
-          child: StreamBuilder<BroadcastMessage>(
-              initialData: BroadcastMessage(name: '', data: {}),
-              stream: controller.broadcastReceiver.messages,
-              builder: (context, broadcastSnapshot) {
-                final isDataNull = broadcastSnapshot.data != null &&
-                    broadcastSnapshot.data?.data != null &&
-                    broadcastSnapshot.data?.data?['orderData'] != null &&
-                    broadcastSnapshot.data?.data?['orderData']['status'] !=
-                        null;
-                return Stack(
-                  children: [
-                    Scaffold(
-                        backgroundColor: appColors.white,
-                        key: controller.scaffoldkey,
-                        body: Obx(
-                          () {
-                            debugPrint(
-                                "test_selectedIndex: ${controller.selectedIndex.value}");
-                            if (controller.selectedIndex.value == 0) {
-                              // debugPrint(
-                              //     "test_selectedIndex_isRegistered: ${Get.isRegistered<HomeController>()}");
-                              // if (Get.isRegistered<HomeController>() &&
-                              //     !Get.find<HomeController>().isInit) {
-                              //   Get.find<HomeController>().onInit();
-                              // }
-                            } else if (controller.selectedIndex.value == 1) {
-                              // debugPrint(
-                              //     "test_selectedIndex_isRegistered: ${Get.isRegistered<PerformanceController>()}");
-                              // if (Get.isRegistered<PerformanceController>() &&
-                              //     !Get.find<PerformanceController>().isInit) {
-                              //   Get.find<PerformanceController>().onInit();
-                              // }
-                            } else if (controller.selectedIndex.value == 2) {
-                              // debugPrint(
-                              //     "test_selectedIndex_isRegistered: ${Get.isRegistered<ChatAssistanceController>()}");
-                              // if (Get.isRegistered<
-                              //         ChatAssistanceController>() &&
-                              //     !Get.find<ChatAssistanceController>()
-                              //         .isInit) {
-                              //   Get.find<ChatAssistanceController>().onInit();
-                              // }
-                            } else if (controller.selectedIndex.value == 3) {
-                              // debugPrint(
-                              //     "test_selectedIndex_isRegistered: ${Get.isRegistered<WaitListUIController>()}");
-                              // if (Get.isRegistered<WaitListUIController>() &&
-                              //     !Get.find<WaitListUIController>().isInit) {
-                              //   Get.find<WaitListUIController>().onInit();
-                              //   WaitListUIController(WaitingListQueueRepo())
-                              //       .getWaitingList();
-                              // }
-                            } else if (controller.selectedIndex.value == 4) {
-                              // debugPrint(
-                              //     "test_selectedIndex_isRegistered: ${Get.isRegistered<ProfilePageController>()}");
-                              // if (Get.isRegistered<ProfilePageController>() &&
-                              //     !Get.find<ProfilePageController>().isInit) {
-                              //   Get.find<ProfilePageController>().onInit();
-                              // }
-                            }
+        return PopScope(
+          canPop: false,
+          onPopInvoked: (didPop) {
+            bool isHomeDrawerOpen = Get.put(HomeController())
+                    .homeScreenKey
+                    .currentState
+                    ?.isDrawerOpen ??
+                false;
+            if (isHomeDrawerOpen) {
+              Get.put(HomeController())
+                  .homeScreenKey
+                  .currentState
+                  ?.closeDrawer();
+            } else {}
+            if (controller.selectedIndex.value == 1 ||
+                controller.selectedIndex.value == 2 ||
+                controller.selectedIndex.value == 3 ||
+                controller.selectedIndex.value == 4) {
+              controller.selectedIndex.value = 0;
+              dasboardCurrentIndex(0);
+            } else {
+              exitEvent();
+            }
+          },
+          child: Material(
+            child: StreamBuilder<BroadcastMessage>(
+                initialData: BroadcastMessage(name: '', data: {}),
+                stream: controller.broadcastReceiver.messages,
+                builder: (context, broadcastSnapshot) {
+                  final isDataNull = broadcastSnapshot.data != null &&
+                      broadcastSnapshot.data?.data != null &&
+                      broadcastSnapshot.data?.data?['orderData'] != null &&
+                      broadcastSnapshot.data?.data?['orderData']['status'] !=
+                          null;
+                  return Stack(
+                    children: [
+                      Scaffold(
+                          backgroundColor: appColors.white,
+                          key: controller.scaffoldkey,
+                          body: Obx(
+                            () {
+                              debugPrint(
+                                  "test_selectedIndex: ${controller.selectedIndex.value}");
+                              if (controller.selectedIndex.value == 0) {
+                                // debugPrint(
+                                //     "test_selectedIndex_isRegistered: ${Get.isRegistered<HomeController>()}");
+                                // if (Get.isRegistered<HomeController>() &&
+                                //     !Get.find<HomeController>().isInit) {
+                                //   Get.find<HomeController>().onInit();
+                                // }
+                              } else if (controller.selectedIndex.value == 1) {
+                                // debugPrint(
+                                //     "test_selectedIndex_isRegistered: ${Get.isRegistered<PerformanceController>()}");
+                                // if (Get.isRegistered<PerformanceController>() &&
+                                //     !Get.find<PerformanceController>().isInit) {
+                                //   Get.find<PerformanceController>().onInit();
+                                // }
+                              } else if (controller.selectedIndex.value == 2) {
+                                // debugPrint(
+                                //     "test_selectedIndex_isRegistered: ${Get.isRegistered<ChatAssistanceController>()}");
+                                // if (Get.isRegistered<
+                                //         ChatAssistanceController>() &&
+                                //     !Get.find<ChatAssistanceController>()
+                                //         .isInit) {
+                                //   Get.find<ChatAssistanceController>().onInit();
+                                // }
+                              } else if (controller.selectedIndex.value == 3) {
+                                // debugPrint(
+                                //     "test_selectedIndex_isRegistered: ${Get.isRegistered<WaitListUIController>()}");
+                                // if (Get.isRegistered<WaitListUIController>() &&
+                                //     !Get.find<WaitListUIController>().isInit) {
+                                //   Get.find<WaitListUIController>().onInit();
+                                //   WaitListUIController(WaitingListQueueRepo())
+                                //       .getWaitingList();
+                                // }
+                              } else if (controller.selectedIndex.value == 4) {
+                                // debugPrint(
+                                //     "test_selectedIndex_isRegistered: ${Get.isRegistered<ProfilePageController>()}");
+                                // if (Get.isRegistered<ProfilePageController>() &&
+                                //     !Get.find<ProfilePageController>().isInit) {
+                                //   Get.find<ProfilePageController>().onInit();
+                                // }
+                              }
 
-                            return AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 250),
-                              child: widgetOptions
-                                  .elementAt(controller.selectedIndex.value),
-                              transitionBuilder: (child, anim) {
-                                return FadeTransition(
-                                    opacity: anim, child: child);
-                              },
-                            );
-                          },
-                        ),
-                        bottomNavigationBar: Obx(() => SafeArea(
-                              child: Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Container(
-                                    width: ScreenUtil().screenWidth * 0.9,
-                                    height: 1,
-                                    color:
-                                        appColors.lightGrey.withOpacity(0.50),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  BottomNavigationBar(
-                                    backgroundColor: appColors.white,
-                                    type: BottomNavigationBarType.fixed,
-                                    selectedFontSize: 10,
-                                    unselectedFontSize: 10,
-                                    selectedItemColor: appColors.darkBlue,
-                                    unselectedItemColor: appColors.lightGrey,
-                                    items: <BottomNavigationBarItem>[
-                                      BottomNavigationBarItem(
-                                        key: controller.keyHome,
-                                        icon: Column(
-                                          children: [
-                                            Assets.images.icSelectedHome.svg(
-                                                height: 22.h,
-                                                colorFilter: ColorFilter.mode(
-                                                    controller.selectedIndex
-                                                                .value ==
-                                                            0
-                                                        ? appColors.darkBlue
-                                                        : appColors.lightGrey,
-                                                    BlendMode.srcIn)),
-                                            const SizedBox(height: 5),
-                                          ],
+                              return AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 250),
+                                child: widgetOptions
+                                    .elementAt(controller.selectedIndex.value),
+                                transitionBuilder: (child, anim) {
+                                  return FadeTransition(
+                                      opacity: anim, child: child);
+                                },
+                              );
+                            },
+                          ),
+                          bottomNavigationBar: Obx(() => SafeArea(
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Container(
+                                      width: ScreenUtil().screenWidth * 0.9,
+                                      height: 1,
+                                      color:
+                                          appColors.lightGrey.withOpacity(0.50),
+                                    ),
+                                    const SizedBox(height: 10),
+                                    BottomNavigationBar(
+                                      backgroundColor: appColors.white,
+                                      type: BottomNavigationBarType.fixed,
+                                      selectedFontSize: 10,
+                                      unselectedFontSize: 10,
+                                      selectedItemColor: appColors.darkBlue,
+                                      unselectedItemColor: appColors.lightGrey,
+                                      items: <BottomNavigationBarItem>[
+                                        BottomNavigationBarItem(
+                                          key: controller.keyHome,
+                                          icon: Column(
+                                            children: [
+                                              Assets.images.icSelectedHome.svg(
+                                                  height: 22.h,
+                                                  colorFilter: ColorFilter.mode(
+                                                      controller.selectedIndex
+                                                                  .value ==
+                                                              0
+                                                          ? appColors.darkBlue
+                                                          : appColors.lightGrey,
+                                                      BlendMode.srcIn)),
+                                              const SizedBox(height: 5),
+                                            ],
+                                          ),
+                                          label: 'home'.tr,
                                         ),
-                                        label: 'home'.tr,
-                                      ),
-                                      BottomNavigationBarItem(
-                                        key: controller.keyPerformance,
-                                        icon: Column(
-                                          children: [
-                                            Assets.images.icSelectedPerfom.svg(
-                                                height: 22.h,
-                                                colorFilter: ColorFilter.mode(
-                                                    controller.selectedIndex
-                                                                .value ==
-                                                            1
-                                                        ? appColors.darkBlue
-                                                        : appColors.lightGrey,
-                                                    BlendMode.srcIn)),
-                                            const SizedBox(height: 5),
-                                          ],
+                                        BottomNavigationBarItem(
+                                          key: controller.keyPerformance,
+                                          icon: Column(
+                                            children: [
+                                              Assets.images.icSelectedPerfom.svg(
+                                                  height: 22.h,
+                                                  colorFilter: ColorFilter.mode(
+                                                      controller.selectedIndex
+                                                                  .value ==
+                                                              1
+                                                          ? appColors.darkBlue
+                                                          : appColors.lightGrey,
+                                                      BlendMode.srcIn)),
+                                              const SizedBox(height: 5),
+                                            ],
+                                          ),
+                                          label: 'performance'.tr,
                                         ),
-                                        label: 'performance'.tr,
-                                      ),
-                                      BottomNavigationBarItem(
-                                        key: controller.keyAssistance,
-                                        icon: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Assets.images.icChatBottom.svg(
-                                                height: 22.h,
-                                                colorFilter: ColorFilter.mode(
-                                                    controller.selectedIndex
-                                                                .value ==
-                                                            2
-                                                        ? appColors.darkBlue
-                                                        : appColors.lightGrey,
-                                                    BlendMode.srcIn)),
-                                            const SizedBox(height: 5),
-                                          ],
+                                        BottomNavigationBarItem(
+                                          key: controller.keyAssistance,
+                                          icon: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Assets.images.icChatBottom.svg(
+                                                  height: 22.h,
+                                                  colorFilter: ColorFilter.mode(
+                                                      controller.selectedIndex
+                                                                  .value ==
+                                                              2
+                                                          ? appColors.darkBlue
+                                                          : appColors.lightGrey,
+                                                      BlendMode.srcIn)),
+                                              const SizedBox(height: 5),
+                                            ],
+                                          ),
+                                          label: "assistance".tr,
                                         ),
-                                        label: "assistance".tr,
-                                      ),
-                                      BottomNavigationBarItem(
-                                        key: controller.keyQueue,
-                                        icon: Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Assets.svg.queue.svg(
-                                                height: 22.h,
-                                                colorFilter: ColorFilter.mode(
-                                                    controller.selectedIndex
-                                                                .value ==
-                                                            3
-                                                        ? appColors.darkBlue
-                                                        : appColors.lightGrey,
-                                                    BlendMode.srcIn)),
-                                            const SizedBox(height: 5),
-                                          ],
+                                        BottomNavigationBarItem(
+                                          key: controller.keyQueue,
+                                          icon: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Assets.svg.queue.svg(
+                                                  height: 22.h,
+                                                  colorFilter: ColorFilter.mode(
+                                                      controller.selectedIndex
+                                                                  .value ==
+                                                              3
+                                                          ? appColors.darkBlue
+                                                          : appColors.lightGrey,
+                                                      BlendMode.srcIn)),
+                                              const SizedBox(height: 5),
+                                            ],
+                                          ),
+                                          label: "queue".tr,
                                         ),
-                                        label: "queue".tr,
-                                      ),
 
-                                      // Profile Tab comment
-                                      BottomNavigationBarItem(
-                                        key: controller.keyProfile,
-                                        icon: Column(
-                                          children: [
-                                            userImage.value.contains("null") ||
-                                                    userImage.value.isEmpty ||
-                                                    userImage.value == ""
-                                                ? SizedBox(
-                                                    height: 30.h,
-                                                    width: 30.h,
-                                                    child: ClipRRect(
-                                                      borderRadius:
+                                        // Profile Tab comment
+                                        BottomNavigationBarItem(
+                                          key: controller.keyProfile,
+                                          icon: Column(
+                                            children: [
+                                              userImage.value
+                                                          .contains("null") ||
+                                                      userImage.value.isEmpty ||
+                                                      userImage.value == ""
+                                                  ? SizedBox(
+                                                      height: 30.h,
+                                                      width: 30.h,
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(
+                                                                    100.h),
+                                                        child: Image.asset(
+                                                            Assets
+                                                                .images
+                                                                .defaultProfile
+                                                                .path),
+                                                      ),
+                                                    )
+                                                  : CommonImageView(
+                                                      imagePath:
+                                                          userImage.value,
+                                                      fit: BoxFit.cover,
+                                                      height: 30.h,
+                                                      width: 30.h,
+                                                      placeHolder: Assets.images
+                                                          .defaultProfile.path,
+                                                      radius:
                                                           BorderRadius.circular(
                                                               100.h),
-                                                      child: Image.asset(Assets
-                                                          .images
-                                                          .defaultProfile
-                                                          .path),
                                                     ),
-                                                  )
-                                                : CommonImageView(
-                                                    imagePath: userImage.value,
-                                                    fit: BoxFit.cover,
-                                                    height: 30.h,
-                                                    width: 30.h,
-                                                    placeHolder: Assets.images
-                                                        .defaultProfile.path,
-                                                    radius:
-                                                        BorderRadius.circular(
-                                                            100.h),
-                                                  ),
-                                            const SizedBox(height: 5),
-                                          ],
+                                              const SizedBox(height: 5),
+                                            ],
+                                          ),
+                                          label: "profile".tr,
                                         ),
-                                        label: "profile".tr,
-                                      ),
-                                    ],
-                                    elevation: 0,
-                                    currentIndex:
-                                        controller.selectedIndex.value,
-                                    onTap: (value) {
-                                      if (value == 2 &&
-                                          isEngagedStatus.value == 2) {
-                                        Fluttertoast.showToast(
-                                            msg:
-                                                'Can\'t Perform this action while in a Chat');
-                                      } else {
-                                        controller.selectedIndex.value = value;
-                                        dasboardCurrentIndex(value);
-                                      }
-                                      /* if (controller.selectedIndex.value == 2) {
-                                       // Get.toNamed(RouteName.orderHistory);
-                                      } else {
+                                      ],
+                                      elevation: 0,
+                                      currentIndex:
+                                          controller.selectedIndex.value,
+                                      onTap: (value) {
+                                        if (value == 2 &&
+                                            isEngagedStatus.value == 2) {
+                                          Fluttertoast.showToast(
+                                              msg:
+                                                  'Can\'t Perform this action while in a Chat');
+                                        } else {
+                                          controller.selectedIndex.value =
+                                              value;
+                                          dasboardCurrentIndex(value);
+                                        }
+                                        /* if (controller.selectedIndex.value == 2) {
+                                         // Get.toNamed(RouteName.orderHistory);
+                                        } else {
 
-                                      }*/
-                                    },
-                                  ),
-                                ],
-                              ),
-                            ))),
-                    controller.chatOrderData != null &&
-                            controller.chatOrderData?.status.toString() == "0"
-                        ? acceptBottomBar(
-                            chatOrderData: controller.chatOrderData)
-                        : const SizedBox(),
-                    rejoinVisibility(),
-                  ],
-                );
-              }),
+                                        }*/
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ))),
+                      controller.chatOrderData != null &&
+                              controller.chatOrderData?.status.toString() == "0"
+                          ? acceptBottomBar(
+                              chatOrderData: controller.chatOrderData)
+                          : const SizedBox(),
+                      rejoinVisibility(),
+                    ],
+                  );
+                }),
+          ),
         );
       },
     );

@@ -4,6 +4,7 @@ import 'dart:math';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -30,6 +31,8 @@ class FileUtils {
 
   static bool isFileSizeValid({required int bytes, int maxSizeInMB = 2}) {
     double sizeInMB = bytes / (1024 * 1024);
+    print("image size ------ ${sizeInMB.toString()}");
+
     return sizeInMB <= maxSizeInMB;
   }
 }
@@ -171,16 +174,18 @@ class SupportIssueController extends GetxController {
         // selectedFiles.add(File(pickedFile.path));
         final imageTemp = File(pickedFile.path);
 
-        int imageSize = imageTemp.lengthSync(); // Get the image size in bytes
+        int imageSize =
+            await File(pickedFile.path).length(); // Get the image size in bytes
+        await compressImages(XFile(pickedFile.path));
 
-        if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
-          Fluttertoast.showToast(
-              msg:
-                  "Image Size is more then 2 MB"); // Optionally, you can show an alert to the user or handle it accordingly
-        } else {
-          selectedImages.add(pickedFile.path);
-          selectedFiles.add(File(pickedFile.path));
-        }
+        // if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
+        //   Fluttertoast.showToast(
+        //       msg:
+        //           "Image Size is more then 2 MB"); // Optionally, you can show an alert to the user or handle it accordingly
+        // } else {
+        //   selectedImages.add(pickedFile.path);
+        //   selectedFiles.add(File(pickedFile.path));
+        // }
       }
     } else {
       // Pick multiple images from the gallery
@@ -200,13 +205,13 @@ class SupportIssueController extends GetxController {
       for (var pickedFile in pickedFiles) {
         int imageSize =
             await File(pickedFile.path).length(); // Get the image size in bytes
-
-        if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
-          oversizedCount++;
-        } else {
-          selectedImages.add(pickedFile.path);
-          selectedFiles.add(File(pickedFile.path));
-        }
+        await compressImages(XFile(pickedFile.path));
+        // if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
+        //   oversizedCount++;
+        // } else {
+        //   selectedImages.add(pickedFile.path);
+        //   selectedFiles.add(File(pickedFile.path));
+        // }
       }
       if (oversizedCount > 0) {
         Fluttertoast.showToast(
@@ -221,6 +226,54 @@ class SupportIssueController extends GetxController {
     print("selectedImages - $selectedImages");
     print("selectedImages - $selectedFiles");
     update();
+  }
+
+  compressImages(croppedFile) async {
+    int oversizedCount = 0;
+
+    uploadFile = File(croppedFile.path);
+    final filePath = uploadFile!.absolute.path;
+    final lastIndex = filePath
+        .lastIndexOf(RegExp(r'\.(png|jpg|jpeg|heic)', caseSensitive: false));
+
+    debugPrint("File path: $filePath");
+    debugPrint("Last index of extension: $lastIndex");
+    final splitted = filePath.substring(0, (lastIndex));
+    if (lastIndex != -1) {
+      final splitted = filePath.substring(0, lastIndex);
+      final extension = filePath.substring(lastIndex);
+      final outPath = extension.toLowerCase() == '.heic'
+          ? "${splitted}_out.jpg"
+          : "${splitted}_out$extension";
+      var result = await FlutterImageCompress.compressAndGetFile(
+        filePath,
+        outPath,
+        minWidth: 500,
+      );
+      if (result != null) {
+        int imageSize =
+            await File(result.path).length(); // Get the image size in bytes
+
+        if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
+          oversizedCount++;
+          Fluttertoast.showToast(
+              msg:
+                  "Image Size is more then 2 MB"); // Optionally, you can show an alert to the user or handle it accordingly
+        } else {
+          selectedImages.add(result.path);
+          selectedFiles.add(File(result.path));
+        }
+        if (oversizedCount > 0) {
+          Fluttertoast.showToast(
+              msg: "$oversizedCount images exceed 2 MB and cannot be uploaded");
+        }
+        // selectedImages.add(result.path);
+        // selectedFiles.add(File(result.path));
+      } else {
+        debugPrint("The file path does not contain .png, .jpg, or .jpeg.");
+      }
+      // uploadImage(File(result.path));
+    }
   }
 
   var currentUploadedFile;
