@@ -29,6 +29,7 @@ import "../../common/routes.dart";
 import "../../repository/home_page_repository.dart";
 
 class LiveDharamController extends GetxController {
+  RxBool isInternetConnected = true.obs;
   RxBool isEndCallLoading = false.obs;
   final SharedPreferenceService pref = Get.put(SharedPreferenceService());
 

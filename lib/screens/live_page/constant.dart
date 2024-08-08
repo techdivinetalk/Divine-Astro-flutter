@@ -17,13 +17,13 @@ const yourAppID = 696414715;
 const yourAppSign =
     'bf7174a98b7d6fb6e2dc7ae60f6ed932d6a9794dad8a5cae22e29ad8abfac1aa';
 
-
 const yourServerSecret = '89ceddc6c59909af326ddb7209cb1c16';
 RxList assistChatNewMsg = [].obs;
 const livePath = "live";
-const liveCountPath =  "liveCount";
+const liveCountPath = "liveCount";
 RxInt chatAssistantCurrentUserId = 0.obs;
 RxInt walletBalance = 0.obs;
+RxInt isTruecaller = 1.obs;
 RxList<AssistChatData> assistChatUnreadMessages = <AssistChatData>[].obs;
 RxBool chatSwitch = false.obs;
 RxBool callSwitch = false.obs;
@@ -44,7 +44,3 @@ TimeDurationService timer = TimeDurationService();
 var chatSession = ResChatSocketInit().obs;
 Rx<Duration> TimerDuration = Duration.zero.obs;
 Rx<String> showTalkTime = "".obs;
-
-
-
-
