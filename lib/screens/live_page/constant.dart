@@ -33,6 +33,7 @@ RxString userImage = ''.obs;
 RxString imageUploadBaseUrl = ''.obs;
 RxInt fireChat = 1.obs;
 RxInt isEngagedStatus = 0.obs;
+RxInt serverTime = 0.obs;
 RxInt dasboardCurrentIndex = 0.obs;
 RxList<MessageTemplates> messageTemplateList = <MessageTemplates>[].obs;
 const userChatData = "userChatData";
@@ -42,6 +43,9 @@ ConstantDetailsModelClass globalConstantModel = ConstantDetailsModelClass();
 var astroChatWatcher = ResAstroChatListener().obs;
 TimeDurationService timer = TimeDurationService();
 var chatSession = ResChatSocketInit().obs;
+Rx<Duration> TimerDuration = Duration.zero.obs;
+Rx<String> showTalkTime = "".obs;
+
 
 
 

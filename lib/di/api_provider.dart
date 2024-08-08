@@ -277,6 +277,10 @@ class ApiProvider {
   final String sendOtpNumberChange = "sendOtpForNumberChange";
   final String verifyOtpNumberChange = "verifyOtpForNumberChange";
 
+
+
+  final String getRetentionDetails = "getRetentionDetails";
+
   // added by raj
   // final String addNoticeToAstrologer = "addNoticeToAstrologer";
 

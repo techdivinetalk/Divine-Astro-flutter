@@ -66,8 +66,10 @@ class AddMessageTemplateController extends GetxController {
     return value;
   }
 
+  RxBool isLoading = false.obs;
   submit() async {
     if (validate()) {
+      isLoading.value = true;
       Map<String, dynamic> params = {
         "message": nameController.text.trim(),
         "description": messageController.text.trim(),
@@ -78,8 +80,10 @@ class AddMessageTemplateController extends GetxController {
       if (response.statusCode == 200) {
         await messageTemplateController.addedMessageTemplates();
         Get.back(result: {'updated': true});
+        isLoading.value = false;
       }
       if (response.statusCode == 400 || response.success == false) {
+        isLoading.value = false;
         Fluttertoast.showToast(
             msg: response.message ?? 'Only 10 Templates are allowed');
       }
@@ -94,6 +98,7 @@ class AddMessageTemplateController extends GetxController {
 
   updateForm() async {
     if (validate()) {
+      isLoading.value = true;
       Map<String, dynamic> params = {
         "message": nameController.text.trim(),
         "description": messageController.text.trim(),
@@ -104,8 +109,10 @@ class AddMessageTemplateController extends GetxController {
       if (response.statusCode == 200) {
         Get.find<MessageTemplateController>().getMessageTemplates();
         Get.back(result: 1);
+        isLoading.value = false;
       }
       if (response.statusCode == 400) {
+        isLoading.value = false;
         Fluttertoast.showToast(msg: response.message.toString());
       }
     } else {

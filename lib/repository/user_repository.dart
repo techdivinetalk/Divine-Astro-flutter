@@ -38,6 +38,7 @@ import '../model/AllFinancialIssuesModel.dart';
 import '../model/AllSupportIssueModel.dart';
 import '../model/FinancialCreateIssueModel.dart';
 import '../model/PassBookDataModel.dart';
+import '../model/RitentionPopupModel.dart';
 import '../model/TechnicalIssuesData.dart';
 import '../model/TechnicalSupport.dart';
 import "../model/blocked_customers_response.dart";
@@ -331,6 +332,36 @@ class UserRepository extends ApiProvider {
         }
       } else {
         throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<RitentionPopupModel> getRitentionDataApi(
+      Map<String, dynamic> param) async {
+    try {
+      final response =
+          await post(getRetentionDetails, body: jsonEncode(param).toString());
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
+      if (response.statusCode == 200) {
+        final astrologerLoginModel =
+            RitentionPopupModel.fromJson(json.decode(response.body));
+        if (astrologerLoginModel.statusCode == successResponse &&
+            astrologerLoginModel.success!) {
+          return astrologerLoginModel;
+        } else {
+          throw CustomException("Unknown Error");
+        }
+      } else {
+        String exceptionmessage = json.decode(response.body)["message"];
+        throw CustomException(exceptionmessage);
       }
     } catch (e, s) {
       debugPrint("we got $e $s");

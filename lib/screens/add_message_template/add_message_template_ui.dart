@@ -89,8 +89,23 @@ class AddMessageTemplateUI extends GetView<AddMessageTemplateController> {
             CustomLightYellowButton(
               name: controller.isUpdate ? "updateForm".tr : "submitForm".tr,
               onTaped: () {
-                controller.isUpdate ? controller.updateForm() : controller.submit();
+                if(!controller.isLoading.value){
+                  controller.isUpdate ? controller.updateForm() : controller.submit();
+                }
               },
+              widget: Obx(() => controller.isLoading.value ? const Padding(
+                padding: EdgeInsets.all(15.0),
+                child: Center(child: CircularProgressIndicator()),
+              ) : Center(
+                  child: Padding(
+                    padding: EdgeInsets.all(18.h),
+                    child: Text(
+                      controller.isUpdate ? "updateForm".tr : "submitForm".tr,
+                      style: AppTextStyle.textStyle16(
+                          fontWeight: FontWeight.w600,
+                          fontColor: appColors.white),
+                    ),
+                  ))),
             ),
           ],
         ),
