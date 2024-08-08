@@ -922,8 +922,9 @@ class _LivePage extends State<LiveDharamScreen>
                   receiveMessageToZego(message.message);
               final bool isBlocked =
                   _controller.firebaseBlockUsersIds.contains(msg.userId);
-              // final isLiveMonitoringTeam =
-              //     msg.userName == "Live Monitoring Team";
+              final isLiveMonitoringTeam =
+                  msg.userName == "Live Monitoring Team" ||
+                      msg.userName == 'Quality Team';
               final isModerator = msg.isMod;
               return msg.type == 0
                   ? const SizedBox()
