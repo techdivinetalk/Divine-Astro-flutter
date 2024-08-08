@@ -165,12 +165,12 @@ class Data {
         isForceTraningVideo: json["is_force_traning_video"],
         chat: Chat.fromJson(json["chat"]),
         call: Call.fromJson(json["call"]),
-        badWordsData: List<String>.from(json["bad_words_data"].map((x) => x)),
+        badWordsData:json["bad_words_data"] == null ? []: List<String>.from(json["bad_words_data"].map((x) => x)),
         liveBackgroundImage: json["live_background_image"],
         token: json["token"] ?? "",
         chatSuspiciousRegex:
             List<String>.from(json["chat_suspicious_regex"].map((x) => x)),
-        cityList: List<String>.from(json["city_list"].map((x) => x)),
+        cityList:json["city_list"] != null ? List<String>.from(json["city_list"].map((x) => x)):[],
         notificationType: Map.from(json["notification_type"])
             .map((k, v) => MapEntry<String, String>(k, v)),
         awsCredentails: AwsCredential.fromJson(json["aws_credential"]),

@@ -18,22 +18,22 @@ import 'shared_preference_service.dart';
 class ApiProvider {
   static const String version = 'v7';
 
-  // static const String socketUrl = "http://13.127.116.89:4000"
-  // static const String socketUrl = "https://list.divinetalk.live";
-  static const String socketUrl = "https://list.divinetalk.live";
-  // static const String socketUrl = "https://list.divinetalk.live";
+  static const String socketUrl = "https://4.240.97.131:8081"; /// development url
+  // static const String socketUrl = "https://4.240.97.131:8081"; /// live url
 
-  static String debugingUrl = "http://13.235.46.27/api/astro/$version/";
+  // static String debugingUrl = "http://13.235.46.27/api/astro/$version/";
   static String baseUrl =
-      "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+      "http://4.188.246.208/api/astro/$version/"; // development
+  // static String baseUrl = /// live base url
+  //     "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
   static const String getOnlineOfflineStatus =
-      "https://list.divinetalk.livebui/api/v3/getAstroStatus?uniqueNo=";
+      "https://4.240.97.131:8081/api/v3/getAstroStatus?uniqueNo=";
   static String imageBaseUrl =
       "${imageUploadBaseUrl.value}/api/astro/$version/";
   static const String astOnlineOffline =
-      "https://list.divinetalk.live/api/v3/updateAstroStatusV2?unique_no=";
+      "https://4.240.97.131:8081/api/v3/updateAstroStatusV2?unique_no=";
   static const String onlineOfflineStatus =
-      "https://list.divinetalk.live/api/v3/getAstrologersData";
+      "https://4.240.97.131:8081/api/v3/getAstrologersData";
 
   //Socket Event
   final String deleteSession = "deleteSession";

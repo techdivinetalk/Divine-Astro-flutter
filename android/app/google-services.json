@@ -1,35 +1,50 @@
 {
   "project_info": {
-    "project_number": "507681862980",
-    "firebase_url": "https://divine-live-f7f79-default-rtdb.asia-southeast1.firebasedatabase.app",
-    "project_id": "divine-live-f7f79",
-    "storage_bucket": "divine-live-f7f79.appspot.com"
+    "project_number": "764246952124",
+    "firebase_url": "https://divine2-0-uat-default-rtdb.firebaseio.com",
+    "project_id": "divine2-0-uat",
+    "storage_bucket": "divine2-0-uat.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:507681862980:android:06fefd7a24257e13e51311",
+        "mobilesdk_app_id": "1:764246952124:android:521db0a4cbae2caf6fe8b9",
         "android_client_info": {
           "package_name": "app.divine"
         }
       },
       "oauth_client": [
         {
-          "client_id": "507681862980-2j8ifvafg22c97enn0lpir3pcfiffjju.apps.googleusercontent.com",
+          "client_id": "764246952124-ebi5t6dvglnm5picb03732ufvar0ekjm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "app.divine",
+            "certificate_hash": "a77d323925651d2516d49165e66167dd3466bfac"
+          }
+        },
+        {
+          "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC06RdHRB5jW2ri9DSbrd-fHh77yHaXJ1o"
+          "current_key": "AIzaSyD6TwQ1az8IU6mmhKZoeLa4kfdQa0BrbQY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "507681862980-2j8ifvafg22c97enn0lpir3pcfiffjju.apps.googleusercontent.com",
+              "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "764246952124-aobrfi6j154g9t30d9hgjii1th45tm55.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.divine"
+              }
             }
           ]
         }
@@ -37,28 +52,215 @@
     },
     {
       "client_info": {
-        "mobilesdk_app_id": "1:507681862980:android:abf46c3e015ebea1e51311",
+        "mobilesdk_app_id": "1:764246952124:android:c9f563c3a9416b276fe8b9",
         "android_client_info": {
           "package_name": "app.divine.astrologer"
         }
       },
       "oauth_client": [
         {
-          "client_id": "507681862980-2j8ifvafg22c97enn0lpir3pcfiffjju.apps.googleusercontent.com",
+          "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyC06RdHRB5jW2ri9DSbrd-fHh77yHaXJ1o"
+          "current_key": "AIzaSyD6TwQ1az8IU6mmhKZoeLa4kfdQa0BrbQY"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "507681862980-2j8ifvafg22c97enn0lpir3pcfiffjju.apps.googleusercontent.com",
+              "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "764246952124-aobrfi6j154g9t30d9hgjii1th45tm55.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.divine"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764246952124:android:3a7cfa8a605c85616fe8b9",
+        "android_client_info": {
+          "package_name": "app.divine.astrologer.dev"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6TwQ1az8IU6mmhKZoeLa4kfdQa0BrbQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "764246952124-aobrfi6j154g9t30d9hgjii1th45tm55.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.divine"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764246952124:android:3f4a894f37aa04856fe8b9",
+        "android_client_info": {
+          "package_name": "com.divine"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6TwQ1az8IU6mmhKZoeLa4kfdQa0BrbQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "764246952124-aobrfi6j154g9t30d9hgjii1th45tm55.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.divine"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764246952124:android:dba9eba1fb1f4d806fe8b9",
+        "android_client_info": {
+          "package_name": "com.divine.astrologer"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6TwQ1az8IU6mmhKZoeLa4kfdQa0BrbQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "764246952124-aobrfi6j154g9t30d9hgjii1th45tm55.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.divine"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764246952124:android:e7bd22d7e7235c646fe8b9",
+        "android_client_info": {
+          "package_name": "com.vsp.flutter_notification"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6TwQ1az8IU6mmhKZoeLa4kfdQa0BrbQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "764246952124-aobrfi6j154g9t30d9hgjii1th45tm55.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.divine"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:764246952124:android:0bb9fa29f72cc3616fe8b9",
+        "android_client_info": {
+          "package_name": "com.zegocloud.zegouikit.example.prebuiltcall"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6TwQ1az8IU6mmhKZoeLa4kfdQa0BrbQY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "764246952124-fcved29ij5nu8ckv8r2es2gnd1smv10d.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "764246952124-aobrfi6j154g9t30d9hgjii1th45tm55.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.divine"
+              }
             }
           ]
         }
