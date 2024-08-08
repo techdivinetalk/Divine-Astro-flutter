@@ -2,19 +2,16 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
-
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:divine_astrologer/model/login_images.dart';
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:overlay_support/overlay_support.dart';
 import 'package:permission_handler/permission_handler.dart';
+
 // import 'package:truecaller_sdk/truecaller_sdk.dart';
 
 import '../../../common/app_exception.dart';
@@ -22,7 +19,6 @@ import '../../../common/routes.dart';
 import '../../../di/shared_preference_service.dart';
 import '../../../model/send_otp.dart';
 import '../../../repository/user_repository.dart';
-import '../../server_maintenance_popup/server_maintenance_popup.dart';
 
 class LoginController extends GetxController {
   LoginController(this.userRepository);
@@ -215,6 +211,8 @@ class LoginController extends GetxController {
                     ),
                   ),
                   onTap: () {
+                    Get.put(LoginController(UserRepository()));
+
                     final splitResult = splitNumber(number);
                     String countryCode = splitResult['countryCode'] ?? '+91';
                     debugPrint("test_countryCode: $countryCode");
@@ -258,7 +256,6 @@ class LoginController extends GetxController {
       debugPrint("test_stopListening: call");
       AppFirebaseService().stopListening();
     }
-
 
     // isLogOut = false;
     super.onInit();
