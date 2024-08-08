@@ -4,7 +4,9 @@ import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
+import 'package:divine_astrologer/screens/auth/login/true_caller_fault_widget.dart';
 import 'package:divine_astrologer/screens/auth/login/widget/country_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,6 +14,8 @@ import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../../common/colors.dart';
+import '../../../true_caller_divine/true_caller_divine_service.dart';
+import '../../live_page/constant.dart';
 import 'login_controller.dart';
 
 class LoginUI extends GetView<LoginController> {
@@ -151,63 +155,63 @@ class LoginUI extends GetView<LoginController> {
                             ),
                           );
                         }),
-                        // SizedBox(height: 20.h),
-                        // Obx(() => Visibility(
-                        //     visible: controller.enable.value && isTruecaller.value.toString() == "1",
-                        //     child: TextWithDivider(
-                        //       text: 'Or',
-                        //       textColor: appColors.greyColor,
-                        //       dividerHeight: 1.0,
-                        //     ))),
-                        // SizedBox(height: 20.h),
-                        // Obx(() {
-                        //   print("showTrueCaller ${controller.showTrueCaller.value}");
-                        //   return Visibility(
-                        //     visible: (controller.showTrueCaller.value && controller.enable.value && isTruecaller.value.toString() == "1"),
-                        //     child: Padding(
-                        //       padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        //       child: SizedBox(
-                        //         height: 50,
-                        //         width: double.infinity,
-                        //         child: OutlinedButton(
-                        //           style: OutlinedButton.styleFrom(
-                        //             shape: RoundedRectangleBorder(
-                        //               borderRadius: BorderRadius.circular(10.0),
-                        //             ),
-                        //             side: const BorderSide(
-                        //               width: 1.0,
-                        //               color: Color(0xff0087FF),
-                        //             ),
-                        //           ),
-                        //           onPressed: () async {
-                        //             bool oAuthFlowUsable = false;
-                        //             oAuthFlowUsable =
-                        //                 await TrueCallerService().isOAuthFlowUsable();
-                        //
-                        //             oAuthFlowUsable
-                        //                 ? await TrueCallerService().startTrueCaller()
-                        //                 : trueCallerFaultPopup();
-                        //           },
-                        //           child: Row(
-                        //             mainAxisAlignment: MainAxisAlignment.center,
-                        //             children: [
-                        //               Image.asset(
-                        //                   "assets/images/true_caller_icon.png"),
-                        //               const SizedBox(width: 16),
-                        //               const Text(
-                        //                 "Login with TrueCaller",
-                        //                 style: TextStyle(
-                        //                   color: Color(0xff0087FF),
-                        //                 ),
-                        //               ),
-                        //               const SizedBox(width: 16),
-                        //             ],
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   );
-                        // })
+                        SizedBox(height: 20.h),
+                        Obx(() => Visibility(
+                            visible: controller.enable.value && isTruecaller.value.toString() == "1",
+                            child: TextWithDivider(
+                              text: 'Or',
+                              textColor: appColors.greyColor,
+                              dividerHeight: 1.0,
+                            ))),
+                        SizedBox(height: 20.h),
+                        Obx(() {
+                          print("showTrueCaller ${controller.showTrueCaller.value}");
+                          return Visibility(
+                            visible: (controller.showTrueCaller.value && controller.enable.value && isTruecaller.value.toString() == "1"),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(vertical: 10.0),
+                              child: SizedBox(
+                                height: 50,
+                                width: double.infinity,
+                                child: OutlinedButton(
+                                  style: OutlinedButton.styleFrom(
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    side: const BorderSide(
+                                      width: 1.0,
+                                      color: Color(0xff0087FF),
+                                    ),
+                                  ),
+                                  onPressed: () async {
+                                    bool oAuthFlowUsable = false;
+                                    oAuthFlowUsable =
+                                        await TrueCallerService().isOAuthFlowUsable();
+
+                                    oAuthFlowUsable
+                                        ? await TrueCallerService().startTrueCaller()
+                                        : trueCallerFaultPopup();
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Image.asset(
+                                          "assets/images/true_caller_icon.png"),
+                                      const SizedBox(width: 16),
+                                      const Text(
+                                        "Login with TrueCaller",
+                                        style: TextStyle(
+                                          color: Color(0xff0087FF),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 16),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+                        })
                       ],
                     ),
                   ),
@@ -218,15 +222,15 @@ class LoginUI extends GetView<LoginController> {
         });
   }
 
-  // Future<void> trueCallerFaultPopup() async {
-  //   await showCupertinoModalPopup(
-  //     context: Get.context!,
-  //     builder: (BuildContext context) {
-  //       return TrueCallerFaultWidget(onClose: Get.back);
-  //     },
-  //   );
-  //   return Future<void>.value();
-  // }
+  Future<void> trueCallerFaultPopup() async {
+    await showCupertinoModalPopup(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return TrueCallerFaultWidget(onClose: Get.back);
+      },
+    );
+    return Future<void>.value();
+  }
 
   Widget mobileField() {
     return Form(

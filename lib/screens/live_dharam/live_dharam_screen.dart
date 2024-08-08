@@ -7,11 +7,13 @@ import "dart:io";
 
 import "package:after_layout/after_layout.dart";
 import "package:cloud_firestore/cloud_firestore.dart";
+import "package:connectivity_plus/connectivity_plus.dart";
 import "package:divine_astrologer/common/app_textstyle.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/common_bottomsheet.dart";
 import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/generic_loading_widget.dart";
+import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/model/live/deck_card_model.dart";
@@ -98,10 +100,29 @@ class _LivePage extends State<LiveDharamScreen>
   Timer? _timer;
   Timer? _msgTimerForFollowPopup;
   Timer? _msgTimerForTarotCardPopup;
+  StreamSubscription<ConnectivityResult>? _connectivitySubscription;
 
   @override
   void initState() {
     super.initState();
+    _connectivitySubscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) async {
+      if (result == ConnectivityResult.none) {
+        _controller.isInternetConnected.value = false;
+        divineSnackBar(
+            data: "No Internet Connection live ended", color: Colors.red);
+        if (mounted) {
+          _timer?.cancel();
+          _msgTimerForFollowPopup?.cancel();
+          _msgTimerForTarotCardPopup?.cancel();
+          // await _controller.liveStore.doc(_controller.userId).delete();
+          // await _controller.liveCount.doc(_controller.userId).delete();
+          await zegoController.leave(context);
+        }
+      }
+    });
+
     _svgController = SVGAAnimationController(vsync: this);
     _svgController.addStatusListener((status) async {
       if (status == AnimationStatus.completed) {
@@ -452,6 +473,7 @@ class _LivePage extends State<LiveDharamScreen>
     _timer?.cancel();
     _msgTimerForFollowPopup?.cancel();
     _msgTimerForTarotCardPopup?.cancel();
+    _connectivitySubscription?.cancel();
 
     WidgetsBinding.instance.removeObserver(this);
 
@@ -2342,6 +2364,11 @@ class _LivePage extends State<LiveDharamScreen>
             InkWell(
               onTap: () async {
                 _controller.isCamOn = !_controller.isCamOn;
+                await _controller.liveStore.doc(_controller.userId).update({
+                  'isCamOn': _controller.isCamOn,
+                }).then((value) {
+                  print("update isCamOn");
+                });
                 zegoController.audioVideo.camera
                     .turnOn(_controller.isCamOn, userID: _controller.userId);
                 _controller.update();
@@ -2626,41 +2653,102 @@ class _LivePage extends State<LiveDharamScreen>
                                     fontSize: 20,
                                   ),
                                 ),
-                                ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount:
-                                      _controller.blockedCustomerList.length,
-                                  itemBuilder: (context, index) {
-                                    BlockedCustomerListResData item =
-                                        _controller.blockedCustomerList[index];
-                                    GetCustomers? customer = item.getCustomers;
-                                    return ListTile(
-                                      leading: Container(
-                                        height: 30,
-                                        width: 30,
-                                        margin: const EdgeInsets.only(top: 3),
-                                        alignment: Alignment.center,
-                                        decoration: BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color: appColors.guideColor,
+                                Obx(
+                                  () => ListView.builder(
+                                    shrinkWrap: true,
+                                    itemCount:
+                                        _controller.blockedCustomerList.length,
+                                    itemBuilder: (context, index) {
+                                      BlockedCustomerListResData item =
+                                          _controller
+                                              .blockedCustomerList[index];
+                                      GetCustomers? customer =
+                                          item.getCustomers;
+                                      return ListTile(
+                                        leading: Container(
+                                          height: 30,
+                                          width: 30,
+                                          margin: const EdgeInsets.only(top: 3),
+                                          alignment: Alignment.center,
+                                          decoration: BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: appColors.guideColor,
+                                          ),
+                                          child: Text(
+                                              customer?.name
+                                                      ?.split("")
+                                                      .first
+                                                      .toUpperCase() ??
+                                                  'N',
+                                              style: TextStyle(
+                                                color:
+                                                    appColors.whiteGuidedColor,
+                                                fontSize: 12,
+                                                fontFamily: "Metropolis",
+                                                fontWeight: FontWeight.w500,
+                                              )),
                                         ),
-                                        child: Text(
-                                            customer?.name
-                                                    ?.split("")
-                                                    .first
-                                                    .toUpperCase() ??
-                                                'N',
-                                            style: TextStyle(
-                                              color: appColors.whiteGuidedColor,
-                                              fontSize: 12,
-                                              fontFamily: "Metropolis",
-                                              fontWeight: FontWeight.w500,
-                                            )),
-                                      ),
-                                      title: Text(customer?.name ?? 'N/A'),
-                                      // subtitle: Text(customer.email!),
-                                    );
-                                  },
+                                        title: Text(customer?.name ?? 'N/A'),
+                                        // subtitle: Text(customer.email!),
+                                        trailing: SizedBox(
+                                          height: 30,
+                                          child: ElevatedButton(
+                                            style: ElevatedButton.styleFrom(
+                                              backgroundColor:
+                                                  appColors.guideColor,
+                                            ),
+                                            onPressed: () async {
+                                              await blockUnblockPopup(
+                                                  isAlreadyBeenBlocked: true,
+                                                  performAction: () async {
+                                                    await _controller
+                                                        .callblockCustomer(
+                                                      id: customer?.id ?? 0,
+                                                      successCallBack:
+                                                          (String message) {
+                                                        successAndFailureCallBack(
+                                                          message: message,
+                                                          isForSuccess: true,
+                                                          isForFailure: false,
+                                                        );
+                                                      },
+                                                      failureCallBack:
+                                                          (String message) {
+                                                        successAndFailureCallBack(
+                                                          message: message,
+                                                          isForSuccess: false,
+                                                          isForFailure: true,
+                                                        );
+                                                      },
+                                                    );
+                                                    var data = {
+                                                      "room_id":
+                                                          _controller.userId,
+                                                      "user_id": customer?.id,
+                                                      "user_name":
+                                                          customer?.name,
+                                                      "item": item.toJson(),
+                                                      "type": "Block/Unblock",
+                                                    };
+                                                    await _controller
+                                                        .sendGiftAPI(
+                                                      data: data,
+                                                      count: 1,
+                                                      svga: "",
+                                                      successCallback: log,
+                                                      failureCallback: log,
+                                                    );
+                                                  });
+                                            },
+                                            child: Text("Unblock",
+                                                style: TextStyle(
+                                                  color: appColors.white,
+                                                )),
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
                                 ),
                               ],
                             ),
@@ -2675,10 +2763,7 @@ class _LivePage extends State<LiveDharamScreen>
                             borderRadius: const BorderRadius.all(
                               Radius.circular(50.0),
                             ),
-                            border: Border.all(
-                              color: Colors.red,
-                            ),
-                            color: Colors.red,
+                            color: Colors.black.withOpacity(0.2),
                           ),
                           // child: Padding(
                           //   padding: const EdgeInsets.all(0.0),
@@ -2688,12 +2773,11 @@ class _LivePage extends State<LiveDharamScreen>
                           //   ),
                           // ),
                           child: Center(
-                            child: Container(
-                              height: 5,
-                              width: 30,
-                              decoration: BoxDecoration(
-                                  color: Colors.white,
-                                  borderRadius: BorderRadius.circular(10)),
+                            child: SvgPicture.asset(
+                              "assets/svg/block-user-new.svg",
+                              height: 25,
+                              width: 25,
+                              color: Colors.white,
                             ),
                           ),
                         ),

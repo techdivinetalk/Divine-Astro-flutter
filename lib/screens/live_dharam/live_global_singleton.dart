@@ -2,6 +2,8 @@ import 'package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 
+import '../live_page/constant.dart';
+
 class LiveGlobalSingleton {
   static final LiveGlobalSingleton _singleton = LiveGlobalSingleton._internal();
 
@@ -22,7 +24,6 @@ class LiveGlobalSingleton {
   set buildContext(BuildContext value) => _buildContext(value);
 
   Future<void> leaveLiveIfIsInLiveScreen() async {
-
     print(
         "LiveGlobalSingleton:: leaveLiveIfIsInLiveScreen():: isInLiveScreen:: $isInLiveScreen");
     bool canLeave = false;

@@ -3,13 +3,17 @@ class ResLogin {
   bool? success;
   int? statusCode;
   String? token;
+  String? error;
+  String? message;
 
-  ResLogin({this.data, this.success, this.statusCode, this.token});
+  ResLogin({this.data, this.success, this.statusCode, this.error, this.token, this.message});
 
   ResLogin.fromJson(Map<String, dynamic> json) {
     data = json['data'] != null ? UserData.fromJson(json['data']) : null;
     success = json['success'];
+    error = json['error'];
     statusCode = json['status_code'];
+    message = json['message'];
     token = json['token'];
   }
 
@@ -21,6 +25,8 @@ class ResLogin {
     data['success'] = success;
     data['status_code'] = statusCode;
     data['token'] = token;
+    data['message'] = message;
+    data['error'] = error;
     return data;
   }
 }
