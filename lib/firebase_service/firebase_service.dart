@@ -489,9 +489,7 @@ class AppFirebaseService {
         break;
       case "truecaller":
 
-        if(!kDebugMode){
-          // isTruecaller(int.parse(dataSnapshot.value.toString()));
-        }
+          isTruecaller(int.parse(dataSnapshot.value.toString()));
         break;
       case "astroMsg":
         astroMsg = dataSnapshot.value.toString();
