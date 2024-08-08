@@ -46,6 +46,7 @@ class PoojaDharamDetailsController extends GetxController {
 
   RxInt customerId = 0.obs;
   RxBool isSentMessage = false.obs;
+  RxBool isSendProduct = false.obs;
 
   @override
   void onInit() {
