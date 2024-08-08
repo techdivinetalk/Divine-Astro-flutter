@@ -41,6 +41,7 @@ import '../../../common/routes.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../gen/fonts.gen.dart';
 import '../../model/feedback_response.dart';
+import '../../repository/pre_defind_repository.dart';
 import '../../screens/chat_assistance/chat_assistance_ui.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import '../../utils/utils.dart';
@@ -103,7 +104,7 @@ class HomeUI extends GetView<HomeController> {
               ),
               actions: [
                 Column(
-                  key: Get.find<DashboardController>().keyHide,
+                  key: DashboardController(PreDefineRepository()).keyHide,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     GestureDetector(
@@ -126,7 +127,7 @@ class HomeUI extends GetView<HomeController> {
                 ),
                 SizedBox(width: 15.w),
                 Column(
-                  key: Get.find<DashboardController>().keyProfileHome,
+                  key: DashboardController(PreDefineRepository()).keyProfileHome,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     controller.userImage.contains("null") ||
@@ -174,7 +175,7 @@ class HomeUI extends GetView<HomeController> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
-                                  key: Get.find<DashboardController>()
+                                  key: DashboardController(PreDefineRepository())
                                       .keyTodayAmount,
                                   child: controller.isShowTitle.value
                                       ? InkWell(
@@ -231,7 +232,7 @@ class HomeUI extends GetView<HomeController> {
                                 ),
                                 // SizedBox(width: 15.w),
                                 /*Expanded(
-                                  key: Get.find<DashboardController>()
+                                  key: DashboardController(PreDefineRepository())
                                       .keyTotalAmount,
                                   child: controller.isShowTitle.value
                                       ? InkWell(
@@ -395,7 +396,7 @@ class HomeUI extends GetView<HomeController> {
                                 ),
                                 SizedBox(width: 10.w),
                                 InkWell(
-                                  key: Get.find<DashboardController>()
+                                  key: DashboardController(PreDefineRepository())
                                       .keyCheckKundli,
                                   onTap: () {
                                     Get.toNamed(RouteName.checkKundli);
@@ -469,7 +470,7 @@ class HomeUI extends GetView<HomeController> {
                           child: Row(
                             children: [
                               Expanded(
-                                  key: Get.find<DashboardController>()
+                                  key: DashboardController(PreDefineRepository())
                                       .keyRetentionRate,
                                   child: RetentionWidget(
                                     isEligible: true,
@@ -499,7 +500,7 @@ class HomeUI extends GetView<HomeController> {
                                   )),
                               SizedBox(width: 7.w),
                               Expanded(
-                                key: Get.find<DashboardController>()
+                                key: DashboardController(PreDefineRepository())
                                     .keyRepurchaseRate,
                                 child: RetentionWidget(
                                   title:
@@ -528,7 +529,7 @@ class HomeUI extends GetView<HomeController> {
                               ),
                               SizedBox(width: 7.w),
                               Expanded(
-                                  key: Get.find<DashboardController>()
+                                  key: DashboardController(PreDefineRepository())
                                       .keyEcommerceWallet,
                                   child: RetentionWidget(
                                     borderColor: appColors.textColor,
@@ -572,7 +573,7 @@ class HomeUI extends GetView<HomeController> {
                             ],
                           ),
                         ),
-
+                        // PerformanceTab(context, controller: controller),
                         Obx(
                           () => controller.isFeedbackAvailable.value
                               ? controller.homeData?.feedback == null
@@ -1387,7 +1388,7 @@ class HomeUI extends GetView<HomeController> {
                               controller.whatsapp();
                             },
                             child: Container(
-                                key: Get.find<DashboardController>().keyHelp,
+                                key: DashboardController(PreDefineRepository()).keyHelp,
                                 height: 50,
                                 width: 50,
                                 decoration: BoxDecoration(
@@ -1600,7 +1601,7 @@ class HomeUI extends GetView<HomeController> {
         "-----------------${controller!.astroNoticeBoardResponse.value.data?.noticeBoard.toString()}");
     return controller!.astroNoticeBoardResponse.value.success == true
         ? ClipRRect(
-            key: Get.find<DashboardController>().keyNoticeBoard,
+            key: DashboardController(PreDefineRepository()).keyNoticeBoard,
             borderRadius: BorderRadius.all(Radius.circular(20.r)),
             child: Material(
               color: appColors.transparent,
@@ -1713,6 +1714,97 @@ class HomeUI extends GetView<HomeController> {
             ),
           )
         : const SizedBox();
+  }
+
+  Widget PerformanceTab(context, {HomeController? controller}) {
+    return Padding(
+      padding: EdgeInsets.only(top: 6, bottom: 6, left: 16, right: 16),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.all(10.h),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 4,
+              spreadRadius: 2,
+              color: appColors.grey.withOpacity(0.2),
+            ),
+          ],
+          color: appColors.white,
+          borderRadius: const BorderRadius.all(Radius.circular(10)),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              child: CustomText(
+                'Performance Last Week (22nd-28th July)',
+                fontWeight: FontWeight.w600,
+                fontColor: appColors.black,
+                maxLines: 1,
+                fontSize: 12,
+              ),
+            ),
+            SizedBox(height: 5),
+            rowWidget(context, "Free Orders", "", "500"),
+            rowWidget(context, "Promotional Orders (₹5)", "", "500"),
+            rowWidget(context, "Retention Rate", "10%", "Good"),
+            rowWidget(context, "Repurchase Rate", "15%", "Average"),
+            rowWidget(context, "Online Hours", "14 hours", "Poor"),
+            rowWidget(context, "Ecommerce", "5000", "Poor"),
+            rowWidget(context, "Live", "-", "Yes"),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget rowWidget(context, title, mid, end) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 5, bottom: 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.46,
+            child: CustomText(
+              title,
+              overflow: TextOverflow.visible,
+              fontWeight: FontWeight.w400,
+              textAlign: TextAlign.start,
+              fontColor: appColors.black,
+              maxLines: 1,
+              fontSize: 12,
+            ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.16,
+            child: CustomText(
+              mid,
+              overflow: TextOverflow.visible,
+              textAlign: TextAlign.center,
+              fontWeight: FontWeight.w400,
+              fontColor: appColors.black,
+              maxLines: 1,
+              fontSize: 12,
+            ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width * 0.16,
+            child: CustomText(
+              end,
+              overflow: TextOverflow.visible,
+              textAlign: TextAlign.right,
+              fontWeight: FontWeight.w400,
+              fontColor: appColors.black,
+              maxLines: 1,
+              fontSize: 12,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   Widget scheduledTrainingWidgetUpdated({HomeController? controller}) {
@@ -2160,7 +2252,7 @@ class HomeUI extends GetView<HomeController> {
       final bool cond2 = controller.isChatEnable.value;
       final bool cond3 = controller.isVideoCallEnable.value;
       return Container(
-        key: Get.find<DashboardController>().keySessionType,
+        key: DashboardController(PreDefineRepository()).keySessionType,
         padding: EdgeInsets.all(16),
         decoration: BoxDecoration(
           boxShadow: [
@@ -2571,7 +2663,7 @@ class HomeUI extends GetView<HomeController> {
   Widget customerOfferWidget(BuildContext context,
       {HomeController? controller}) {
     return Container(
-      key: Get.find<DashboardController>().keyManageDiscountOffers,
+      key: DashboardController(PreDefineRepository()).keyManageDiscountOffers,
       padding: EdgeInsets.all(16.h),
       decoration: BoxDecoration(
         color: appColors.white,
@@ -3857,7 +3949,7 @@ class SelectedTimeForVideoCall extends StatelessWidget {
 //
 // Widget customerOfferWidget2(BuildContext context, controller) {
 //   return Container(
-//     key: Get.find<DashboardController>().keyManageDiscountOffers,
+//     key: DashboardController(PreDefineRepository()).keyManageDiscountOffers,
 //     margin: EdgeInsets.only(top: 10.h),
 //     padding: EdgeInsets.all(16.h),
 //     decoration: BoxDecoration(

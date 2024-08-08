@@ -1,38 +1,15 @@
-// package app.divine.astrologer
-
-// import io.flutter.embedding.android.FlutterActivity
-
-// class MainActivity: FlutterActivity() {
-// }
-
 package app.divine.astrologer
-
-//import io.flutter.embedding.android.FlutterActivityLaunchConfigs
-//import io.flutter.embedding.android.FlutterFragmentActivity
-//import io.flutter.embedding.engine.FlutterEngine
-//import io.flutter.plugins.GeneratedPluginRegistrant
-
-//class MainActivity : FlutterFragmentActivity() {
-////    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
-////        GeneratedPluginRegistrant.registerWith(flutterEngine)
-////    }
-////
-////    override fun getBackgroundMode(): FlutterActivityLaunchConfigs.BackgroundMode {
-////        return FlutterActivityLaunchConfigs.BackgroundMode.transparent
-////    }
-//}
-
-
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.telephony.SubscriptionInfo
 import android.telephony.SubscriptionManager
 import androidx.annotation.NonNull
+import io.flutter.embedding.android.FlutterFragmentActivity
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
 
-class MainActivity: FlutterActivity() {
+class MainActivity: FlutterFragmentActivity() {
     private val CHANNEL = "app.divine.astrologer/sim_info"
 
     override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
@@ -59,4 +36,7 @@ class MainActivity: FlutterActivity() {
 
         return subscriptionInfoList?.map { it.number }
     }
+//    override fun getBackgroundMode(): FlutterActivityLaunchConfigs.BackgroundMode {
+//        return FlutterActivityLaunchConfigs.BackgroundMode.transparent
+//    }
 }

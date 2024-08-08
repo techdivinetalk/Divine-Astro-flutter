@@ -1531,6 +1531,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               //     fontColor: appColors.guideColor,
               //   ),
               // ),
+
               SizedBox(height: 10.h),
               for(int index = 0 ; index < homeData!.offers!.customOffer!.length; index++)
                 Padding(

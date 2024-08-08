@@ -6,10 +6,11 @@ import 'colors.dart';
 
 class CustomLightYellowButton extends StatelessWidget {
   final String name;
+  final Widget? widget;
   final VoidCallback onTaped;
 
-  const CustomLightYellowButton(
-      {super.key, required this.name, required this.onTaped});
+  CustomLightYellowButton(
+      {super.key, required this.name, required this.onTaped, this.widget});
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +23,7 @@ class CustomLightYellowButton extends StatelessWidget {
             decoration: BoxDecoration(
                 color: appColors.guideColor,
                 borderRadius: BorderRadius.circular(12)),
-            child: Center(
+            child: widget ?? Center(
                 child: Padding(
               padding: EdgeInsets.all(18.h),
               child: Text(
