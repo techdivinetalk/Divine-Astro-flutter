@@ -395,6 +395,7 @@ class ChatMessageWithSocketController extends GetxController
       }
     }
   }
+  var timeLeft = 0;
 
   @override
   void onInit() {
@@ -1686,10 +1687,11 @@ class ChatMessageWithSocketController extends GetxController
       extraTimer?.cancel();
       print("extraTime closing");
       int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
+      timeLeft = (int.parse(AppFirebaseService().orderData.value["end_time"].toString()) * 1000) - (AppFirebaseService().currentTime().millisecondsSinceEpoch);
       talkTimeStartTimer(remainingTime);
     } else {
       if (p0["order_end_time"] != null) {
-        startExtraTimer(p0["order_end_time"], p0["status"]);
+        startExtraTimer(p0["order_end_time\ "], p0["status"]);
       }
     }
 
