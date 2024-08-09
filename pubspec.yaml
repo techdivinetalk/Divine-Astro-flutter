@@ -62,7 +62,7 @@ dependencies:
   readmore: ^2.2.0
   rxdart: ^0.27.7
   shared_preferences: ^2.2.0
-#  social_media_recorder: ^1.1.12
+  #  social_media_recorder: ^1.1.12
   socket_io_client: ^2.0.3+1
   audio_waveforms: ^1.0.4
   svgaplayer_flutter: ^2.2.0
@@ -103,7 +103,7 @@ dependencies:
   random_name_generator: ^1.2.0
   # overlapped_carousel:
   #   git:
-  #     url: https://github.com/delwar36/overlapped_carousel.git
+  #     url: GitHub - delwar36/overlapped_carousel: A horizontal overlapped carousel widget. The center widget wi
   #     ref: b910005b978c35e0be5cadbb82c000faf6abebdf
   audioplayers: ^6.0.0
   speed_test_dart: ^1.0.4+1
@@ -111,14 +111,14 @@ dependencies:
   cron: ^0.6.0
   cloud_firestore: any
   # new
-#  zego_uikit_signaling_plugin: ^2.7.6
-#  zego_uikit_prebuilt_call: ^4.8.5
-#  zego_uikit_prebuilt_live_streaming: ^3.5.4
-#  zego_express_engine: 3.15.0
-#  zego_uikit_beauty_plugin: ^1.5.2
+  #  zego_uikit_signaling_plugin: ^2.7.6
+  #  zego_uikit_prebuilt_call: ^4.8.5
+  #  zego_uikit_prebuilt_live_streaming: ^3.5.4
+  #  zego_express_engine: 3.15.0
+  #  zego_uikit_beauty_plugin: ^1.5.2
 
   zego_uikit_signaling_plugin: ^2.7.13
-  zego_uikit_prebuilt_call: ^4.14.3
+  zego_uikit_prebuilt_call: ^4.12.3
   zego_uikit_prebuilt_live_streaming: ^3.8.4
   zego_express_engine: ^3.15.1+2
   zego_uikit_beauty_plugin: ^1.5.3
@@ -134,7 +134,7 @@ dependencies:
 
 
 dependency_overrides:
-  zego_uikit: ^2.23.0
+  #  zego_uikit: ^2.23.0
   fading_edge_scrollview: ^4.1.1
   intl: ^0.18.1
 
