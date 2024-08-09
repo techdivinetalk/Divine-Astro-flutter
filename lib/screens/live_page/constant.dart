@@ -42,5 +42,4 @@ ConstantDetailsModelClass globalConstantModel = ConstantDetailsModelClass();
 var astroChatWatcher = ResAstroChatListener().obs;
 TimeDurationService timer = TimeDurationService();
 var chatSession = ResChatSocketInit().obs;
-Rx<Duration> TimerDuration = Duration.zero.obs;
 Rx<String> showTalkTime = "".obs;
