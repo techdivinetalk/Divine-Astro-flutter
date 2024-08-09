@@ -24,8 +24,22 @@ class WalletPage extends GetView<WalletController> {
       backgroundColor: appColors.white,
       appBar: commonAppbar(
         title: "wallet".tr,
+        leading: IconButton(
+          highlightColor: appColors.transparent,
+          splashColor: appColors.transparent,
+          onPressed: () {
+            if(controller.isOrderHistoryBack){
+              Get.offNamed(RouteName.orderHistory);
+            } else{
+              Get.back();
+            }
+          },
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+        ),
         trailingWidget: InkWell(
-          onTap: () => Get.offNamed(RouteName.orderHistory),
+          onTap: () {
+            Get.offNamed(RouteName.orderHistory);
+          },
           child: Padding(
             padding: const EdgeInsets.only(right: 20),
             child: Assets.images.icOrderHistory.svg(),
