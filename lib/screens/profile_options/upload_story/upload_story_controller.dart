@@ -101,7 +101,9 @@ class UploadStoryController extends GetxController {
     ));
     request.fields.addAll({"module_name": "astrologer_story"});
 
+    print("call this one ----> 1");
     var response = await request.send();
+    print("call this one ----> 2");
 
     // Listen for the response
     log(response.toString());

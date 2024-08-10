@@ -77,7 +77,7 @@ class SideMenuDrawer extends GetView<HomeController> {
                 Get.toNamed(RouteName.messageTemplate);
               },
             ),
-            ListTile(
+            /*ListTile(
               leading: Assets.images.icSetting.svg(),
               title: Text('settings'.tr),
               onTap: () {
@@ -87,7 +87,7 @@ class SideMenuDrawer extends GetView<HomeController> {
                 Get.back();
                 Get.toNamed(RouteName.settingsUI);
               },
-            ),
+            ),*/
             ListTile(
               leading: Assets.images.icCustomerCare.svg(),
               title: Text('customerCare'.tr),
@@ -161,6 +161,14 @@ class SideMenuDrawer extends GetView<HomeController> {
                     },
                   )
                 : const SizedBox(),
+            ListTile(
+              leading: Assets.images.icSetting.svg(),
+              title: Text('settings'.tr),
+              onTap: () => {
+                Navigator.of(context).pop(),
+                Get.toNamed(RouteName.settingsUI)
+              },
+            ),
             // ListTile(
             //   leading: Assets.images.icImportContact.svg(),
             //   title: Text("leaveresignation".tr),
