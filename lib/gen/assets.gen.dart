@@ -1628,7 +1628,7 @@ class SvgGenImage {
         _assetName,
         assetBundle: bundle,
         packageName: package,
-        theme: theme,
+        // theme: theme,
       );
     }
     return SvgPicture(

@@ -41,7 +41,7 @@ dependencies:
   flutter_image_compress: ^2.0.4
   flutter_local_notifications: ^15.1.0+1
   flutter_screenutil: ^5.8.4
-  flutter_svg: ^2.0.7
+  flutter_svg:
   flutter_switch: ^0.3.2
   fluttertoast: ^8.2.2
   simple_html_css: ^5.0.0
@@ -106,6 +106,7 @@ dependencies:
   #     url: https://github.com/delwar36/overlapped_carousel.git
   #     ref: b910005b978c35e0be5cadbb82c000faf6abebdf
   audioplayers: ^6.0.0
+  simple_waveform_progressbar:
   speed_test_dart: ^1.0.4+1
   shimmer: ^3.0.0
   cron: ^0.6.0
