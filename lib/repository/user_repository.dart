@@ -36,6 +36,7 @@ import '../di/api_provider.dart';
 import '../model/AddSupportIssueDataModel.dart';
 import '../model/AllFinancialIssuesModel.dart';
 import '../model/AllSupportIssueModel.dart';
+import '../model/AstroRitentionModel.dart';
 import '../model/FinancialCreateIssueModel.dart';
 import '../model/PassBookDataModel.dart';
 import '../model/RitentionPopupModel.dart';
@@ -793,6 +794,41 @@ class UserRepository extends ApiProvider {
         } else {
           final editResponse =
               AddEditPujaModel.fromJson(jsonDecode(response.body));
+          return editResponse;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<AstroRitentionModel> getRitentionData(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await post(getAstrologerRetention,
+          body: jsonEncode(param), headers: await getJsonHeaderURL());
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+      print(
+          "-----------------------getRitentionData -------- ${jsonDecode(response.body).toString()}");
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final editResponse =
+              AstroRitentionModel.fromJson(jsonDecode(response.body));
+          print(
+              "-----------------------getRitentionData -------- ${jsonDecode(response.body).toString()}");
+
           return editResponse;
         }
       } else {

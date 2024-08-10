@@ -395,6 +395,7 @@ class ChatMessageWithSocketController extends GetxController
       }
     }
   }
+
   var timeLeft = 0;
 
   @override
@@ -421,8 +422,12 @@ class ChatMessageWithSocketController extends GetxController
         await receiveMessage(snapshot);
       }
     });
-    getRitentionPopUpDataApi();
-
+    if (showRetentionPopup.toString() == "0") {
+      print("callling popup api from this side");
+      getRitentionPopUpDataApi();
+    } else {
+      print("not popup api from this side");
+    }
     getDir();
     initialiseControllers();
     noticeAPi();
@@ -1687,7 +1692,10 @@ class ChatMessageWithSocketController extends GetxController
       extraTimer?.cancel();
       print("extraTime closing");
       int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
-      timeLeft = (int.parse(AppFirebaseService().orderData.value["end_time"].toString()) * 1000) - (AppFirebaseService().currentTime().millisecondsSinceEpoch);
+      timeLeft = (int.parse(
+                  AppFirebaseService().orderData.value["end_time"].toString()) *
+              1000) -
+          (AppFirebaseService().currentTime().millisecondsSinceEpoch);
       talkTimeStartTimer(remainingTime);
     } else {
       if (p0["order_end_time"] != null) {
@@ -1744,43 +1752,49 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   Future<void> showRitentionPopup() async {
-    return Get.dialog(
-      barrierDismissible: false,
-      AlertDialog(
-        // insetPadding: EdgeInsets.all(16),
-        // contentPadding: EdgeInsets.zero,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(8.0),
-        ),
-        elevation: 0,
-        content: ritentionPoupWidget(Get.context!),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Get.back();
-            },
-            child: Text(
-              "Ok",
-              style: AppTextStyle.textStyle18(
-                fontWeight: FontWeight.w500,
-                fontColor: appColors.darkBlue,
+    try {
+      print("isssssssssssssssssssssssss");
+      return Get.dialog(
+        barrierDismissible: true,
+        AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0),
+          ),
+          elevation: 0,
+          content: ritentionPoupWidget(Get.context!),
+          contentPadding: EdgeInsets.all(5),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Get.back();
+              },
+              child: Text(
+                "Ok",
+                style: AppTextStyle.textStyle18(
+                  fontWeight: FontWeight.w500,
+                  fontColor: appColors.darkBlue,
+                ),
               ),
-            ),
-          )
-        ],
-      ),
-    );
+            )
+          ],
+        ),
+      );
+    } catch (e, stackTrace) {
+      print('Error showing popup: $e');
+      print('StackTrace: $stackTrace');
+    }
   }
 
   Widget ritentionPoupWidget(BuildContext context) {
     return GetBuilder<ChatMessageWithSocketController>(builder: (controller) {
-      return Container(
-        margin: EdgeInsets.only(top: 10.h),
-        child: SingleChildScrollView(
+      return SafeArea(
+        child: Container(
+          margin: EdgeInsets.only(top: 10.h),
           child: ritentionPopupModel!.data == null
               ? SizedBox()
               : Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Html(
                       shrinkWrap: true,

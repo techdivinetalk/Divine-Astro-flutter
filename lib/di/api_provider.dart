@@ -27,7 +27,7 @@ class ApiProvider {
   static String baseUrl =
       "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
   static const String getOnlineOfflineStatus =
-      "https://list.divinetalk.livebui/api/v3/getAstroStatus?uniqueNo=";
+      "https://list.divinetalk.live/api/v3/getAstroStatus?uniqueNo=";
   static String imageBaseUrl =
       "${imageUploadBaseUrl.value}/api/astro/$version/";
   static const String astOnlineOffline =
@@ -209,6 +209,7 @@ class ApiProvider {
   final String enterChatAssist = "enter-chat-assist";
   final String astrologerJoinedChatAssist = "astro-joined-chatAssist";
   final String userJoinedChatAssist = "user-joined-chatAssist";
+  final String getAstrologerRetention = "getAstrologerRetention";
 
   // Added By: divine-dharam
   final String joinLive = "join-live";
@@ -276,8 +277,6 @@ class ApiProvider {
   final String getCustomOffer = "getCustomOffer";
   final String sendOtpNumberChange = "sendOtpForNumberChange";
   final String verifyOtpNumberChange = "verifyOtpForNumberChange";
-
-
 
   final String getRetentionDetails = "getRetentionDetails";
 

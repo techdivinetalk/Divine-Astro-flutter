@@ -12,7 +12,6 @@ import "package:divine_astrologer/screens/dashboard/dashboard_controller.dart";
 import "package:divine_astrologer/screens/live_dharam/live_global_singleton.dart";
 import "package:divine_astrologer/screens/side_menu/settings/settings_controller.dart";
 import "package:divine_astrologer/watcher/real_time_watcher.dart";
-import "package:firebase_auth/firebase_auth.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
@@ -43,11 +42,13 @@ RxInt isCustomToken = 0.obs;
 RxInt isNetworkPopup = 0.obs;
 RxInt isPrivacyPolicy = 0.obs;
 RxInt isServerMaintenance = 0.obs;
+RxInt showRetentionPopup = 0.obs;
 // RxInt isTruecaller = 1.obs;
 RxInt isLiveCall = 1.obs;
 RxInt homePage = 1.obs;
 RxMap<dynamic, dynamic> callKunadliUpdated = {}.obs;
 StreamSubscription<DatabaseEvent>? subscription;
+
 class AppFirebaseService {
   AppFirebaseService._privateConstructor();
 
@@ -77,9 +78,14 @@ class AppFirebaseService {
       debugPrint("Error writing data to the database: $e");
     }
   }
-  DateTime currentTime(){
-    return serverTime.value.toString() == "0" ? DateTime.now() :DateTime.fromMillisecondsSinceEpoch(DateTime.now().millisecondsSinceEpoch + serverTimeDiff);
+
+  DateTime currentTime() {
+    return serverTime.value.toString() == "0"
+        ? DateTime.now()
+        : DateTime.fromMillisecondsSinceEpoch(
+            DateTime.now().millisecondsSinceEpoch + serverTimeDiff);
   }
+
   String tableName = "";
   Future<void> userRealTime(String key, dynamic value, String path,
       [bool isRemoved = false]) async {
@@ -169,10 +175,11 @@ class AppFirebaseService {
         }
         break;
       case "TimeManage":
-        serverTimeDiff = int.parse(value.toString()) - DateTime.now().millisecondsSinceEpoch;
+        serverTimeDiff =
+            int.parse(value.toString()) - DateTime.now().millisecondsSinceEpoch;
         print("TimeDiff $serverTimeDiff");
         break;
-     case "isEngagedStatus":
+      case "isEngagedStatus":
         isEngagedStatus(value);
         break;
 
@@ -416,14 +423,16 @@ class AppFirebaseService {
       debugPrint("Error reading data from the database: $e");
     }
   }
+
   void checkIfLoggedIn() {
     if (preferenceService.getUserDetail() != null) {
-      print("dataSnapshot-Value-7 astrologer/${preferenceService.getUserDetail()!.id}/realTime");
-
+      print(
+          "dataSnapshot-Value-7 astrologer/${preferenceService.getUserDetail()!.id}/realTime");
     } else {
       print("dataSnapshot-Value-3");
     }
   }
+
   saveMasterData(DataSnapshot dataSnapshot) {
     checkIfLoggedIn();
     print("dataSnapshot-Value ${dataSnapshot.value}");
@@ -488,14 +497,16 @@ class AppFirebaseService {
         isTemplates(int.parse(dataSnapshot.value.toString()));
         break;
       case "truecaller":
-
-          isTruecaller(int.parse(dataSnapshot.value.toString()));
+        isTruecaller(int.parse(dataSnapshot.value.toString()));
         break;
       case "astroMsg":
         astroMsg = dataSnapshot.value.toString();
         break;
       case "serverTime":
         serverTime(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "showRetentionPopup":
+        showRetentionPopup(int.parse(dataSnapshot.value.toString()));
         break;
       default:
         // preferenceService.setStringPref(

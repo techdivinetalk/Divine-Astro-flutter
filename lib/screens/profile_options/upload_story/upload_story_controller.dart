@@ -114,8 +114,8 @@ class UploadStoryController extends GetxController {
       uploadedStory = jsonDecode(value)["data"]["path"];
       update();
       print(
-          "Image uploaded successfully. --  - ${jsonDecode(value)["data"]["path"].toString()}");
-      uploadStory(jsonDecode(value)["data"]["path"].toString());
+          "Image uploaded successfully. --  - ${jsonDecode(value)["data"]["full_path"].toString()}");
+      uploadStory(jsonDecode(value)["data"]["full_path"].toString());
       print(
           "valuevaluevaluevaluevaluevaluevalue"); // Handle the response from the server
     });

@@ -32,7 +32,12 @@ class SideMenuDrawer extends GetView<HomeController> {
                   style: TextStyle(fontSize: 16, color: appColors.grey),
                 ),*/
                 InkWell(
-                  onTap: () => Navigator.pop(context),
+                  onTap: () {
+                    Get.put(HomeController()).homeScreenKey
+                      ..currentState?.closeDrawer();
+
+                    Get.back();
+                  },
                   child: const Icon(Icons.close),
                 ),
                 const SizedBox(width: 10),
