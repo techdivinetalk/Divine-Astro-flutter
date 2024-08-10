@@ -13,6 +13,8 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../generated/assets.dart';
 
+
+
 class TermsAndConditionScreen extends GetView<TermsAndConditionController> {
   const TermsAndConditionScreen({super.key});
 
