@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import "package:simple_waveform_progressbar/simple_waveform_progressbar.dart";
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
@@ -561,6 +562,7 @@ class MessageView extends StatelessWidget {
               yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
           children: [
             Container(
+              width: 230,
               padding: const EdgeInsets.all(8.0),
               clipBehavior: Clip.antiAlias,
               decoration: BoxDecoration(
@@ -575,37 +577,110 @@ class MessageView extends StatelessWidget {
               ),
               child: Stack(
                 alignment: Alignment.center,
+                clipBehavior: Clip.none,
                 children: [
-                  AbsorbPointer(
-                    absorbing: controller.isAudioPlaying.value,
-                    child: VoiceMessageView(
-                        controller: VoiceController(
-                            audioSrc: chatDetail.awsUrl ??
-                                "" /*?? chatDetail.message ?? ""*/,
-                            maxDuration: const Duration(minutes: 30),
-                            isFile: false,
-                            onComplete: () {
-                              controller.isAudioPlaying(false);
-                            },
-                            onPause: () {
-                              controller.isAudioPlaying(false);
-                            },
-                            onPlaying: () {
-                              print(
-                                  "value of audio playing ${controller.isAudioPlaying.value}");
-                              if (controller.isAudioPlaying.value) {
-                                Fluttertoast.showToast(
-                                    msg: "Audio is Already playing");
+                  // AbsorbPointer(
+                  //   absorbing: controller.isAudioPlaying.value,
+                  //   child: VoiceMessageView(
+                  //       controller: VoiceController(
+                  //           audioSrc: chatDetail.awsUrl ??
+                  //               "" /*?? chatDetail.message ?? ""*/,
+                  //           maxDuration: const Duration(minutes: 30),
+                  //           isFile: false,
+                  //           onComplete: () {
+                  //             controller.isAudioPlaying(false);
+                  //           },
+                  //           onPause: () {
+                  //             controller.isAudioPlaying(false);
+                  //           },
+                  //           onPlaying: () {
+                  //             print(
+                  //                 "value of audio playing ${controller.isAudioPlaying.value}");
+                  //             if (controller.isAudioPlaying.value) {
+                  //               Fluttertoast.showToast(
+                  //                   msg: "Audio is Already playing");
+                  //             } else {
+                  //               controller.isAudioPlaying(true);
+                  //             }
+                  //           }),
+                  //       innerPadding: 0,
+                  //       cornerRadius: 20),
+                  // ),
+                  Row(
+                    children: [
+                      Obx(() {
+                        return InkWell(
+                          onTap: () async {
+                            if (controller.selectedIndex.value == index) {
+                              if (controller.isPlaying.value[index!]) {
+                                controller.audioPlayer.pause();
+                                controller.isPlaying.value[index] = false;
                               } else {
-                                controller.isAudioPlaying(true);
+                                if (controller.durationTime.value.inSeconds == 0 ||
+                                    controller.durationTime.value.inSeconds == controller.currentDurationTime.value.inSeconds) {
+                                  controller.initAudioPlayer(
+                                      path: chatDetail.awsUrl ?? "", index: index);
+                                } else {
+                                  controller.audioPlayer.resume();
+                                }
+                                controller.isPlaying.value[index] = true;
                               }
-                            }),
-                        innerPadding: 0,
-                        cornerRadius: 20),
+                            } else {
+                              if (controller.isPlaying.value[controller.selectedIndex.value]) {
+                                controller.isPlaying.value[controller.selectedIndex.value] = false;
+                                controller.audioPlayer.pause();
+                              }
+                              controller.selectedIndex.value = index!;
+                              controller.initAudioPlayer(path: chatDetail.awsUrl
+                                  ?? "", index: index);
+                            }
+                            controller.update();
+                          },
+                          child: Container(
+                            height: 33,
+                            width: 33,
+
+                            decoration: BoxDecoration(
+                              color: appColors.guideColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              controller.isPlaying.value[index!] ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                              color: Colors.white,
+                            ),
+                          ),
+                        );
+                      }),
+                      SizedBox(
+                          width: 5
+                      ),
+                      Obx(() {
+                        return Center(
+                          child: Container(
+                            height: 22,
+                            width: 150,
+                            child: WaveformProgressbar(
+                              onTap: (double) {
+                                controller.progress.value[index!] = double;
+                                var cutSecond = controller.durationTime.value.inSeconds * double;
+                                print(cutSecond);
+                                print('cutSecond');
+                                Duration newPosition = Duration(seconds: cutSecond.toInt());
+                                controller.audioPlayer.seek(newPosition);
+                              },
+                              color: appColors.guideColor.withOpacity(0.4),
+                              progressColor: appColors.guideColor,
+                              progress: controller.progress.value[index!],
+                            ),
+                          ),
+                        );
+                      }),
+                    ],
                   ),
                   Positioned(
                     bottom: 0,
                     right: 0,
+                    top: 27,
                     child: Row(
                       children: [
                         Text(
