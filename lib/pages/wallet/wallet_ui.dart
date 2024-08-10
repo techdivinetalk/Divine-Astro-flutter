@@ -33,6 +33,18 @@ class WalletPage extends GetView<WalletController> {
         toolbarHeight: 50,
         iconTheme: IconThemeData(color: appColors.blackColor),
         titleSpacing: 0,
+        leading: IconButton(
+          highlightColor: appColors.transparent,
+          splashColor: appColors.transparent,
+          onPressed: () {
+            if(controller.isOrderHistoryBack){
+              Get.offNamed(RouteName.orderHistory);
+            } else{
+              Get.back();
+            }
+          },
+          icon: const Icon(Icons.arrow_back_ios_new_rounded),
+        ),
         title: Text(
           "wallet".tr,
           style: AppTextStyle.textStyle16(

@@ -13,6 +13,7 @@ class WalletController extends GetxController {
   int pageSize = 10;
   RxBool isDropDownShow = false.obs;
   RxString dropDownValue = 'Today'.obs;
+  bool isOrderHistoryBack = false;
   var durationOptions =
       ['Today', 'Last Week', 'Last Month', 'Select Custom'].obs;
 
@@ -45,6 +46,9 @@ class WalletController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    if(Get.arguments != null){
+      isOrderHistoryBack = Get.arguments["is_order_history"];
+    }
     getWalletDetailsApi();
   }
 
