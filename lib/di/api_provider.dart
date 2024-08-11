@@ -209,6 +209,7 @@ class ApiProvider {
   final String enterChatAssist = "enter-chat-assist";
   final String astrologerJoinedChatAssist = "astro-joined-chatAssist";
   final String userJoinedChatAssist = "user-joined-chatAssist";
+  final String getAstrologerRetention = "getAstrologerRetention";
 
   // Added By: divine-dharam
   final String joinLive = "join-live";
@@ -276,8 +277,6 @@ class ApiProvider {
   final String getCustomOffer = "getCustomOffer";
   final String sendOtpNumberChange = "sendOtpForNumberChange";
   final String verifyOtpNumberChange = "verifyOtpForNumberChange";
-
-
 
   final String getRetentionDetails = "getRetentionDetails";
 

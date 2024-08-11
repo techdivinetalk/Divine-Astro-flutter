@@ -191,7 +191,16 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                                             .passBook!.path)
                                                     : controller.passBookUrl,
                                                 height: 120,
-                                                onTap: () {},
+                                                onTap: () {
+                                                  controller
+                                                      .pickFile()
+                                                      .then((value) {
+                                                    if (value != null) {
+                                                      controller
+                                                          .addPassBook(value);
+                                                    }
+                                                  });
+                                                },
                                                 radius:
                                                     BorderRadius.circular(10.h),
                                               ),

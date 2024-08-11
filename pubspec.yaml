@@ -122,7 +122,7 @@ dependencies:
   zego_uikit_prebuilt_call: ^4.12.3
   zego_uikit_prebuilt_live_streaming: ^3.8.4
   zego_express_engine: ^3.15.1+2
-  zego_uikit_beauty_plugin: ^1.5.3
+  zego_uikit_beauty_plugin: ^1.7.2
   flutter_speed_dial: ^5.0.0+1
   tutorial_coach_mark: ^1.2.11
   animated_custom_dropdown: ^3.1.1

@@ -34,7 +34,6 @@ import 'package:divine_astrologer/utils/custom_extension.dart';
 import 'package:divine_astrologer/utils/enum.dart';
 import 'package:divine_astrologer/utils/show_loader.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
@@ -52,6 +51,7 @@ import '../../common/feedback_bottomsheet.dart';
 import "../../common/important_number_bottomsheet.dart";
 import '../../common/switch_component.dart';
 import '../../di/shared_preference_service.dart';
+import '../../model/AstroRitentionModel.dart';
 import '../../model/astro_notice_board_response.dart';
 import '../../model/chat_assistant/CustomerDetailsResponse.dart';
 import '../../model/constant_details_model_class.dart';
@@ -217,7 +217,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     debugPrint("test_onInit: call");
 
     initData();
-
   }
 
   initData() {
@@ -225,6 +224,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     if (preferenceService.getUserDetail() != null) {
       getAllDashboardData();
       userData = preferenceService.getUserDetail()!;
+      getRitentionDataApi();
+
       appbarTitle.value =
           "${userData.name.toString().capitalizeFirst} (${userData.uniqueNo})";
 
@@ -351,6 +352,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         print("else----getConstantDetails!.data!.isForceTraningVideo");
         await getDashboardDetail();
         getAstroNoticeBoardData();
+
         getFilteredPerformance();
         getFeedbackData();
         tarotCardData();
@@ -639,6 +641,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           },
         ));
       }
+
       if (homeData?.technical_support == null ||
           homeData?.technical_support == [] ||
           homeData?.technical_support!.isEmpty) {
@@ -663,6 +666,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         "role_id": userData.roleId ?? 0,
         "device_token": userData.deviceToken,
       };
+      log("noticeBoard paramss --------------- ${params.toString()}");
       var response = await HomePageRepository().getAstroNoticeBoardData(params);
       astroNoticeBoardResponse.value = response;
       log("AstroNoticeBoardData==>${jsonEncode(astroNoticeBoardResponse)}");
@@ -802,6 +806,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   getAstrologerStatus() async {
     UserData? userData = await pref.getUserDetail();
+    print("---------------${userData!.toJson().toString()}");
     try {
       dio.options.headers = {
         'Connection': 'keep-alive',
@@ -823,8 +828,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           print(
               "chatMessage----${chatMessage}--chatMessageColor---${chatMessageColor}--callMessage-----${callMessage}--callMessageColor--${callMessageColor}");
           update();
-        } else if (response.statusCode == 110 || response.statusCode == HttpStatus.networkConnectTimeoutError || response.statusCode == HttpStatus.networkAuthenticationRequired) {
-          divineSnackBar(data: "No Internet connection", color: appColors.redColor);
+        } else if (response.statusCode == 110 ||
+            response.statusCode == HttpStatus.networkConnectTimeoutError ||
+            response.statusCode == HttpStatus.networkAuthenticationRequired) {
+          divineSnackBar(
+              data: "No Internet connection", color: appColors.redColor);
         }
       }
     } catch (e) {
@@ -842,6 +850,29 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       profileDataSync.value = true;
       imageUploadBaseUrl.value =
           getConstantDetails?.data?.imageUploadBaseUrl ?? "";
+      update();
+      // getDashboardDetail();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        //  divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  AstroRitentionModel? getRitentionModel;
+
+  getRitentionDataApi() async {
+    try {
+      var data = await userRepository.getRitentionData({});
+      getRitentionModel = data;
+      print(
+          "-----------------------getRitentionData -------- ${data.toJson().toString()}");
+
+      print(
+          "-----------------------getRitentionData -------- ${getRitentionModel!.toJson().toString()}");
       update();
       // getDashboardDetail();
     } catch (error) {
@@ -1098,15 +1129,28 @@ class HomeController extends GetxController with WidgetsBindingObserver {
             response.message == "Successfully Checkin" &&
             params.containsKey("check_in")) {
           print("here is it is comming --- ${params.containsKey("check_in")}");
-
+          chatSwitch(true);
           showDiscountPopup();
         } else {}
 
         if (type == 2 &&
             response.message == "Successfully Checkin" &&
             params.containsKey("check_in")) {
+          callSwitch(true);
           print("here is it is comming");
           showDiscountPopup();
+        } else {}
+        if (type == 1 &&
+            response.message == "Successfully Checkout" &&
+            params.containsKey("check_out")) {
+          print("here is it is comming --- ${params.containsKey("check_in")}");
+          chatSwitch(false);
+        } else {}
+
+        if (type == 2 &&
+            response.message == "Successfully Checkout" &&
+            params.containsKey("check_out")) {
+          callSwitch(false);
         } else {}
         if (!videoSwitch.value && type == 3) {
           selectDateTimePopupForVideo();
@@ -1533,7 +1577,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               // ),
 
               SizedBox(height: 10.h),
-              for(int index = 0 ; index < homeData!.offers!.customOffer!.length; index++)
+              for (int index = 0;
+                  index < homeData!.offers!.customOffer!.length;
+                  index++)
                 Padding(
                   padding: const EdgeInsets.only(bottom: 10.0),
                   child: Row(
@@ -1544,7 +1590,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
                         crossAxisAlignment: WrapCrossAlignment.center,
                         children: [
                           Text(
-                            "${homeData!.offers!.customOffer?[index].offerName}".toUpperCase(),
+                            "${homeData!.offers!.customOffer?[index].offerName}"
+                                .toUpperCase(),
                             style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w700,
                             ),
@@ -1554,11 +1601,14 @@ class HomeController extends GetxController with WidgetsBindingObserver {
                       SwitchWidget(
                         onTap: () {
                           if (homeData!.offers!.customOffer![index].isOn!) {
-                            homeData!.offers!.customOffer?[index].isOn = !homeData!.offers!.customOffer![index].isOn!;
+                            homeData!.offers!.customOffer?[index].isOn =
+                                !homeData!.offers!.customOffer![index].isOn!;
                             updateOfferType(
-                                value: homeData!.offers!.customOffer![index].isOn!,
+                                value:
+                                    homeData!.offers!.customOffer![index].isOn!,
                                 index: index,
-                                offerId: homeData!.offers!.customOffer![index].id!,
+                                offerId:
+                                    homeData!.offers!.customOffer![index].id!,
                                 offerType: 2);
                           } else if (homeData!.offers!.customOffer!
                               .any((element) => element.isOn!)) {
@@ -1566,11 +1616,14 @@ class HomeController extends GetxController with WidgetsBindingObserver {
                                 data: "Only 1 custom offer is allowed at once",
                                 color: appColors.redColor);
                           } else {
-                            homeData!.offers!.customOffer?[index].isOn = !homeData!.offers!.customOffer![index].isOn!;
+                            homeData!.offers!.customOffer?[index].isOn =
+                                !homeData!.offers!.customOffer![index].isOn!;
                             updateOfferType(
-                                value: homeData!.offers!.customOffer![index].isOn!,
+                                value:
+                                    homeData!.offers!.customOffer![index].isOn!,
                                 index: index,
-                                offerId: homeData!.offers!.customOffer![index].id!,
+                                offerId:
+                                    homeData!.offers!.customOffer![index].id!,
                                 offerType: 2);
                           }
 
@@ -1774,7 +1827,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     super.didChangeAppLifecycleState(state);
-    if(state == AppLifecycleState.resumed){
+    if (state == AppLifecycleState.resumed) {
       getAstrologerLiveData();
     }
   }

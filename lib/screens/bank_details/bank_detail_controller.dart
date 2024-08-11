@@ -9,10 +9,11 @@ import 'package:divine_astrologer/model/update_bank_response.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
+
+import '../../di/api_provider.dart';
 
 class BankDetailController extends GetxController {
-
-
   String status = "";
 
   bool isImagesUploaded = false;
@@ -24,10 +25,10 @@ class BankDetailController extends GetxController {
   File? cancelledCheque;
   late int userId;
   late SharedPreferenceService service;
-   TextEditingController bankName = TextEditingController();
-   TextEditingController holderName = TextEditingController();
-   TextEditingController accountNumber = TextEditingController();
-   TextEditingController ifscCode = TextEditingController();
+  TextEditingController bankName = TextEditingController();
+  TextEditingController holderName = TextEditingController();
+  TextEditingController accountNumber = TextEditingController();
+  TextEditingController ifscCode = TextEditingController();
   @override
   void onInit() {
     service = Get.find<SharedPreferenceService>();
@@ -37,8 +38,6 @@ class BankDetailController extends GetxController {
     super.onInit();
   }
 
-
-
   Future<File?> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
       allowMultiple: false,
@@ -47,18 +46,19 @@ class BankDetailController extends GetxController {
       divineSnackBar(data: "Please Pick File");
       return null;
     }
+
     return File(result.files.first.path.toString());
   }
 
   void addPassBook(File file) {
     passBook = file;
-    uploadToBucket();
+    uploadToBucket("p", file);
     update();
   }
 
   void addCancelledCheque(File file) {
     cancelledCheque = file;
-    uploadToBucket();
+    uploadToBucket("c", file);
     update();
   }
 
@@ -70,21 +70,18 @@ class BankDetailController extends GetxController {
     }
   }
 
-  void uploadToBucket() {
-
-    if (passBook != null && cancelledCheque != null) {
+  void uploadToBucket(fileType, file) {
+    if (passBook != null) {
       uploadImagesToS3Bucket(
-        passBook: passBook!, 
-        cancelledCheque: cancelledCheque!,
+        file: file!,
         uploadDone: () => divineSnackBar(
             data: "Uploading Done", duration: const Duration(seconds: 1)),
+        fileType: fileType,
       );
       divineSnackBar(
           data: "Uploading Images", duration: const Duration(seconds: 1));
     }
   }
-
-
 
   void updateDetails() async {
     print(passBookUrl.toString());
@@ -103,11 +100,11 @@ class BankDetailController extends GetxController {
       return;
     }
     UpdateBankRequest request = getFormData().copyWith(
-          legalDocuments: LegalDocuments(
-            the0: passBookUrl.toString(),
-            the1: cancelledChequeUrl.toString(),
-          ),
-        );
+      legalDocuments: LegalDocuments(
+        the0: passBookUrl.toString(),
+        the1: cancelledChequeUrl.toString(),
+      ),
+    );
     final response =
         await userRepository.updateBankDetailsApi(request.toJson());
     status = response.data.status!;
@@ -130,25 +127,134 @@ class BankDetailController extends GetxController {
   }
 
   void uploadImagesToS3Bucket({
-    required File passBook,
-    required File cancelledCheque,
+    required File file,
     required void Function() uploadDone,
+    fileType,
   }) async {
     isImagesUploaded = false;
-    List<Future> futures = <Future>[];
-    futures.add(uploadImageToS3Bucket(passBook, "${userId}_PASSBOOK"));
-    futures.add(
-        uploadImageToS3Bucket(cancelledCheque, "${userId}_CANCELLED_CHEQUE"));
-    List<dynamic> data = await Future.wait(futures);
-    passBookUrl = data.first;
-    cancelledChequeUrl = data.last;
+    // List<Future> futures = <Future>[];
+    // futures.add(uploadImageToS3Bucket(passBook, "${userId}_PASSBOOK"));
+    // futures.add(
+    //     uploadImageToS3Bucket(cancelledCheque, "${userId}_CANCELLED_CHEQUE"));
+    // List<dynamic> data = await Future.wait(futures);
+    // passBookUrl = data.first;
+    // cancelledChequeUrl = data.last;
+    if (fileType == "p") {
+      uploadPassBook(passBook);
+    } else {
+      uploadCheque(cancelledCheque);
+    }
     isImagesUploaded = true;
+
     uploadDone();
+  }
+
+  var pasbok;
+  var cheque;
+  var isLoading = false.obs;
+  Future<void> uploadPassBook(imageFile) async {
+    var token = await preferenceService.getToken();
+    isLoading(true);
+
+    print("image length - ${imageFile.path}");
+
+    var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+
+    var request = http.MultipartRequest('POST', uri);
+    request.headers.addAll({
+      'Authorization': 'Bearer $token',
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    });
+
+    // Attach the image file to the request
+    request.files.add(await http.MultipartFile.fromPath(
+      'image',
+      imageFile.path,
+    ));
+    request.fields.addAll({"module_name": "user_bank_passbook"});
+
+    var response = await request.send();
+
+    // Listen for the response
+
+    print("responseresponseresponse");
+    response.stream.transform(utf8.decoder).listen((value) {
+      print(jsonDecode(value)["data"]);
+      update();
+      pasbok = jsonDecode(value)["data"]["full_path"];
+      passBookUrl = jsonDecode(value)["data"]["full_path"];
+      print("img-- ${passBookUrl.toString()}");
+      print("valuevaluevaluevaluevaluevaluevalue");
+    });
+    print("uploadedImages -- ${passBookUrl.toString()}");
+
+    if (response.statusCode == 200) {
+      print("Image uploaded successfully.");
+
+      // if (image.isNotEmpty) {
+      //   poojaImageUrl = image;
+      // }
+    } else {
+      isLoading(false);
+
+      print("Failed to upload image.");
+    }
+  }
+
+  Future<void> uploadCheque(imageFile) async {
+    var token = await preferenceService.getToken();
+    isLoading(true);
+
+    print("image length - ${imageFile.path}");
+
+    var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+
+    var request = http.MultipartRequest('POST', uri);
+    request.headers.addAll({
+      'Authorization': 'Bearer $token',
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    });
+
+    // Attach the image file to the request
+    request.files.add(await http.MultipartFile.fromPath(
+      'image',
+      imageFile.path,
+    ));
+    request.fields.addAll({"module_name": "user_bank_cheque"});
+
+    var response = await request.send();
+
+    // Listen for the response
+
+    print("responseresponseresponse");
+    response.stream.transform(utf8.decoder).listen((value) {
+      print(jsonDecode(value)["data"]);
+      update();
+      cheque = jsonDecode(value)["data"]["full_path"];
+      cancelledChequeUrl = jsonDecode(value)["data"]["full_path"];
+      print("img-- ${cancelledChequeUrl.toString()}");
+      print("valuevaluevaluevaluevaluevaluevalue");
+    });
+    print("uploadedImages -- ${cancelledChequeUrl.toString()}");
+
+    if (response.statusCode == 200) {
+      print("Image uploaded successfully.");
+
+      // if (image.isNotEmpty) {
+      //   poojaImageUrl = image;
+      // }
+    } else {
+      isLoading(false);
+
+      print("Failed to upload image.");
+    }
   }
 
   void setUserData() {
     final details =
-    service.prefs!.getString(SharedPreferenceService.updatedBankDetails);
+        service.prefs!.getString(SharedPreferenceService.updatedBankDetails);
     if (details != null) {
       UpdateBankResponse data = updateBankResponseFromJson(details);
       bankName.text = data.data.bankName ?? "";
@@ -172,5 +278,3 @@ class BankDetailController extends GetxController {
     }
   }
 }
-
-
