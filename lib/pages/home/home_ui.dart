@@ -1934,10 +1934,9 @@ class HomeUI extends GetView<HomeController> {
                               Get.toNamed(RouteName.referAstrologer);
                             }),
                         trainingVideoWidget(controller: controller),
-                        showDailyLive.value.toString() == "0"
-                            ? const SizedBox()
-                            : Obx(() {
-                                return Visibility(
+                        Obx(() {
+                          return showDailyLive.value.toString() == "1"
+                              ? Visibility(
                                   visible: controller.isLiveMonitor.value != 1,
                                   child: Padding(
                                     padding: const EdgeInsets.only(
@@ -1949,8 +1948,9 @@ class HomeUI extends GetView<HomeController> {
                                       ],
                                     ),
                                   ),
-                                );
-                              }),
+                                )
+                              : SizedBox();
+                        }),
                         (controller.customerDetailsResponse == null ||
                                 controller
                                     .customerDetailsResponse!.data.isEmpty)
