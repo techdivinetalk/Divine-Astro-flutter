@@ -1934,20 +1934,23 @@ class HomeUI extends GetView<HomeController> {
                               Get.toNamed(RouteName.referAstrologer);
                             }),
                         trainingVideoWidget(controller: controller),
-                        Obx(() {
-                          return Visibility(
-                            visible: controller.isLiveMonitor.value != 1,
-                            child: Padding(
-                              padding: const EdgeInsets.only(top: 6, bottom: 6),
-                              child: Column(
-                                children: [
-                                  liveWidgetUpdated(),
-                                  // SizedBox(height: 10.h),
-                                ],
-                              ),
-                            ),
-                          );
-                        }),
+                        showDailyLive.value.toString() == "0"
+                            ? const SizedBox()
+                            : Obx(() {
+                                return Visibility(
+                                  visible: controller.isLiveMonitor.value != 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 6, bottom: 6),
+                                    child: Column(
+                                      children: [
+                                        liveWidgetUpdated(),
+                                        // SizedBox(height: 10.h),
+                                      ],
+                                    ),
+                                  ),
+                                );
+                              }),
                         (controller.customerDetailsResponse == null ||
                                 controller
                                     .customerDetailsResponse!.data.isEmpty)
