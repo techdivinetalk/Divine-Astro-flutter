@@ -222,78 +222,79 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
               ),
             ),
           ),
-          bottomNavigationBar: controller.isSentMessage.value == false
-              ? Padding(
-                  padding: MediaQuery.of(context).viewInsets,
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                        left: 20.w, right: 20.w, bottom: 20.h, top: 10.h),
-                    child: MaterialButton(
-                        height: 50,
-                        minWidth: Get.width,
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                        ),
-                        onPressed: () {
-                          openBottomSheet(
-                            context,
-                            functionalityWidget: Padding(
-                              padding: const EdgeInsets.only(
-                                  top: 20, left: 20, right: 20),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
+          bottomNavigationBar: Obx(() => controller.isSentMessage.value == false
+              ? controller.isShowButton.value ? Padding(
+            padding: MediaQuery.of(context).viewInsets,
+            child: Padding(
+              padding: EdgeInsets.only(
+                  left: 20.w, right: 20.w, bottom: 20.h, top: 10.h),
+              child: MaterialButton(
+                  height: 50,
+                  minWidth: Get.width,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
+                  ),
+                  onPressed: () {
+                    if(controller.productDetail != null){
+                      openBottomSheet(
+                        context,
+                        functionalityWidget: Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20, left: 20, right: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
 
-                                  Text(
-                                    "Are You Sure You Want To Suggest ${controller.productDetail?.prodName} To User?",
-                                    textAlign: TextAlign.center,
-                                    style: AppTextStyle.textStyle20(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 10),
-                                  Text(
-                                    "On purchase upto 30% referral bonus will be added in your wallet",
-                                    style: AppTextStyle.textStyle12(
-                                        fontWeight: FontWeight.w600,
-                                        fontColor: appColors.darkBlue
-                                            .withOpacity(0.5)),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
-                                    child: InkWell(
-                                      onTap: () {
-                                        print(
-                                            "value of controller chat assist ${controller.isChatAssist.value}");
-                                        controller.isChatAssist.value
-                                            ? controller.saveRemedyForChatAssist()
-                                            : controller.suggestRemedy();
-                                        // Get.offNamedUntil(RouteName.orderHistory,
-                                        //     ModalRoute.withName(RouteName.dashboard));
-                                      },
-                                      child: Container(
-                                          width: MediaQuery.of(context).size.width,
-                                          decoration: BoxDecoration(
-                                              color: appColors.guideColor,
-                                              borderRadius: BorderRadius.circular(20)),
-                                          child: Center(
-                                              child: Obx(() => controller.isSendProduct.value ? Padding(
-                                                padding: EdgeInsets.symmetric(vertical: 7.0),
-                                                child: CircularProgressIndicator(
-                                                  strokeWidth: 1.5,
-                                                ),
-                                              ) : Padding(
-                                                padding: EdgeInsets.all(12.h),
-                                                child: Text(
-                                                  "suggestNow".tr,
-                                                  style: AppTextStyle.textStyle16(
-                                                      fontWeight: FontWeight.w600,
-                                                      fontColor: appColors.whiteGuidedColor),
-                                                ),
-                                              )))),
-                                    ),
-                                  ),
-                                  /*CustomLightYellowCurveButton(
+                              Text(
+                                "Are You Sure You Want To Suggest ${controller.productDetail?.prodName} To User?",
+                                textAlign: TextAlign.center,
+                                style: AppTextStyle.textStyle20(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                "On purchase upto 30% referral bonus will be added in your wallet",
+                                style: AppTextStyle.textStyle12(
+                                    fontWeight: FontWeight.w600,
+                                    fontColor: appColors.darkBlue
+                                        .withOpacity(0.5)),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
+                                child: InkWell(
+                                  onTap: () {
+                                    print(
+                                        "value of controller chat assist ${controller.isChatAssist.value}");
+                                    controller.isChatAssist.value
+                                        ? controller.saveRemedyForChatAssist()
+                                        : controller.suggestRemedy();
+                                    // Get.offNamedUntil(RouteName.orderHistory,
+                                    //     ModalRoute.withName(RouteName.dashboard));
+                                  },
+                                  child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      decoration: BoxDecoration(
+                                          color: appColors.guideColor,
+                                          borderRadius: BorderRadius.circular(20)),
+                                      child: Center(
+                                          child: Obx(() => controller.isSendProduct.value ? Padding(
+                                            padding: EdgeInsets.symmetric(vertical: 7.0),
+                                            child: CircularProgressIndicator(
+                                              strokeWidth: 1.5,
+                                            ),
+                                          ) : Padding(
+                                            padding: EdgeInsets.all(12.h),
+                                            child: Text(
+                                              "suggestNow".tr,
+                                              style: AppTextStyle.textStyle16(
+                                                  fontWeight: FontWeight.w600,
+                                                  fontColor: appColors.whiteGuidedColor),
+                                            ),
+                                          )))),
+                                ),
+                              ),
+                              /*CustomLightYellowCurveButton(
                                     name: "suggestNow".tr,
                                     textColor: appColors.whiteGuidedColor,
                                     onTaped: () {
@@ -306,32 +307,33 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                       //     ModalRoute.withName(RouteName.dashboard));
                                     },
                                   )*/
-                                ],
-                              ),
-                            ),
-                            closeOnTap: () {
-                              if(!controller.isSendProduct.value){
-                                Get.back();
-                              }
-                            },
-                            isDismissible: !controller.isSendProduct.value,
-                            onWillPop: () {
-                              return Future.value(!controller.isSendProduct.value);
-                            },
-                          );
-                        },
-                        color: appColors.guideColor,
-                        child: Text(
-                          "suggestNow".tr,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 20.sp,
-                            color: appColors.whiteGuidedColor,
+                            ],
                           ),
-                        )),
-                  ),
-                )
-              : SizedBox(),
+                        ),
+                        closeOnTap: () {
+                          if(!controller.isSendProduct.value){
+                            Get.back();
+                          }
+                        },
+                        isDismissible: !controller.isSendProduct.value,
+                        onWillPop: () {
+                          return Future.value(!controller.isSendProduct.value);
+                        },
+                      );
+                    }
+                  },
+                  color: appColors.guideColor,
+                  child: Text(
+                    "suggestNow".tr,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 20.sp,
+                      color: appColors.whiteGuidedColor,
+                    ),
+                  )),
+            ),
+          ) : SizedBox()
+              : SizedBox()),
         );
       },
     );
