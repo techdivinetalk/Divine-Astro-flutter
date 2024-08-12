@@ -36,7 +36,7 @@ class ChatMessage {
   String? multiImage;
   String? msgTime;
   bool isPlaying = false;
-  double progress = 0.0;
+  num progress = 0.0;
   //String? createdAt;
   String? updatedAt;
   String? msgSendBy;
