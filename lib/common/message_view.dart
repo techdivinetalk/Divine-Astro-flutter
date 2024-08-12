@@ -673,7 +673,7 @@ class MessageView extends StatelessWidget {
                             },
                             color: appColors.guideColor.withOpacity(0.4),
                             progressColor: appColors.guideColor,
-                            progress: chatDetail.progress,
+                            progress: double.parse(chatDetail.progress.toString()),
                           ),
                         ),
                       ),
