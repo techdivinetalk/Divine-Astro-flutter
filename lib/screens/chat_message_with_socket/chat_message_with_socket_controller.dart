@@ -636,13 +636,11 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   void talkTimeStartTimer(int futureTimeInEpochMillis) {
-    DateTime dateTime =
-        DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
     print("futureTime.minute $futureTimeInEpochMillis");
     chatTimer?.cancel();
     chatTimer = null;
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
-      print("timeLeft_c ${timeLeft} -- ${(AppFirebaseService().serverTimeDiff/1000)}");
+      print("showTalkTime1 ${timeLeft} -- ${(AppFirebaseService().serverTimeDiff/1000)}");
       if(timeLeft < 1){
         await callHangup();
         showTalkTime.value = "-1";
