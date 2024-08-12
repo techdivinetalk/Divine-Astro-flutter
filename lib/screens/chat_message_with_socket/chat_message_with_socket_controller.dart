@@ -258,6 +258,10 @@ class ChatMessageWithSocketController extends GetxController
     _listener = AppLifecycleListener(
       onShow: () {},
       onResume: () {
+        timeLeft = (int.parse(
+            AppFirebaseService().orderData.value["end_time"].toString()) *
+            1000) -
+            (AppFirebaseService().currentTime().millisecondsSinceEpoch);
         print("resume");
       },
       onHide: () {},
@@ -444,7 +448,7 @@ class ChatMessageWithSocketController extends GetxController
       }
     });
     messgeScrollController.addListener(_scrollListener);
-    //stateHandling();
+    stateHandling();
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) async {
       if (fireChat.value == 0) {
@@ -603,7 +607,7 @@ class ChatMessageWithSocketController extends GetxController
     }
     DateTime dateTime =
         DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis);
-    Duration timeLeft = const Duration(minutes: 1);
+    Duration extratimeLeft = const Duration(minutes: 1);
     extraTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       final difference =
           dateTime.difference(AppFirebaseService().currentTime());
@@ -614,14 +618,14 @@ class ChatMessageWithSocketController extends GetxController
           extraTalkTime.value = "0";
           timer.cancel();
           print("WentBack timeUp");
-          timeLeft = Duration.zero;
+          extratimeLeft = Duration.zero;
           backFunction();
         }
       } else {
-        timeLeft = difference;
+        extratimeLeft = difference;
         extraTalkTime.value =
-            "${timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
-            "${timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
+            "${extratimeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
+            "${extratimeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
         print("time Left ${extraTalkTime.value}");
         if (MiddleWare.instance.currentPage == RouteName.dashboard ||
             AppFirebaseService().orderData.value["status"] == "3") {

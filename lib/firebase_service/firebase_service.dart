@@ -278,6 +278,7 @@ class AppFirebaseService {
     print("readData $path");
     try {
       database.child("$path/TimeManage").set(ServerValue.timestamp);
+      database.child("$path/deliveredMsg").remove();
       database.child(path).onChildChanged.listen((event) {
         final key = event.snapshot.key; // Get the key of the changed child
 
