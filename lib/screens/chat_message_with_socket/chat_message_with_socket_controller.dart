@@ -350,8 +350,8 @@ class ChatMessageWithSocketController extends GetxController
       // });
       //   if (index == -1 || index == AppFirebaseService().orderData.value['userId'] || index == AppFirebaseService().orderData.value['astroId']) {
       chatMessages.add(chatMessage);
-      isPlaying.add(false);
-      progress.add(0.0);
+      // isPlaying.add(false);
+      // progress.add(0.0);
       chatMessages.refresh();
       scrollToBottomFunc();
       if (chatMessage.msgType == MsgType.sendgifts) {
@@ -473,8 +473,8 @@ class ChatMessageWithSocketController extends GetxController
                 userType: "customer",
               );
               chatMessages.add(chatMessage);
-              isPlaying.add(false);
-              progress.add(0.0);
+              // isPlaying.add(false);
+              // progress.add(0.0);
               scrollToBottomFunc();
             } else {
               getChatList();
@@ -1274,8 +1274,8 @@ class ChatMessageWithSocketController extends GetxController
       print("${newMessage.message}");
     }
     chatMessages.add(newMessage);
-    isPlaying.add(false);
-    progress.add(0.0);
+    // isPlaying.add(false);
+    // progress.add(0.0);
     chatMessages.refresh();
     update();
     scrollToBottomFunc();
@@ -1302,8 +1302,8 @@ class ChatMessageWithSocketController extends GetxController
           print("newMessage6");
           newMessage.type = 2;
           chatMessages.add(newMessage);
-          isPlaying.add(false);
-          progress.add(0.0);
+          // isPlaying.add(false);
+          // progress.add(0.0);
           scrollToBottomFunc();
           updateMsgDelieveredStatus(newMessage, 2);
           if (messgeScrollController.position.pixels ==
@@ -1314,8 +1314,8 @@ class ChatMessageWithSocketController extends GetxController
           print("newMessage5");
           newMessage.type = isSendMessage ? 0 : 1;
           chatMessages.add(newMessage);
-          isPlaying.add(false);
-          progress.add(0.0);
+          // isPlaying.add(false);
+          // progress.add(0.0);
           unreadMsgCount.value = chatMessages
               .where((ChatMessage e) =>
                   e.type != 2 && e.senderId != preference.getUserDetail()!.id)
@@ -1327,8 +1327,8 @@ class ChatMessageWithSocketController extends GetxController
       } else {
         newMessage.type = isSendMessage ? 0 : 1;
         chatMessages.add(newMessage);
-        isPlaying.add(false);
-        progress.add(0.0);
+        // isPlaying.add(false);
+        // progress.add(0.0);
         unreadMsgCount.value = chatMessages
             .where((ChatMessage e) =>
                 e.type != 2 && e.senderId != preference.getUserDetail()!.id)
@@ -1573,11 +1573,11 @@ class ChatMessageWithSocketController extends GetxController
 
           scrollToBottomFunc();
           chatMessages.refresh();
-          for (var i = 0; i < chatMessages.length; i++) {
-            isPlaying.add(false);
-            progress.add(0.0);
-            print('selectedIndexForTranslate');
-          }
+          // for (var i = 0; i < chatMessages.length; i++) {
+          //   isPlaying.add(false);
+          //   progress.add(0.0);
+          //   print('selectedIndexForTranslate');
+          // }
         }
       } else {
         throw CustomException(response.message ?? 'Failed to get chat history');
@@ -1895,8 +1895,8 @@ class ChatMessageWithSocketController extends GetxController
 
   /// new audio logic
   var selectedIndex = 0.obs;
-  var isPlaying = [].obs;
-  var progress = [].obs;
+  // var isPlaying = [].obs;
+  // var progress = [].obs;
   late AudioPlayer audioPlayer;
   Rx<Duration> durationTime = Duration().obs;
   Rx<Duration> currentDurationTime = Duration().obs;
@@ -1911,17 +1911,17 @@ class ChatMessageWithSocketController extends GetxController
       currentDurationTime.value = Duration(seconds: position.inSeconds);
       if (currentDurationTime.value.inSeconds == durationTime.value.inSeconds) {
         audioPlayer.pause();
-        isPlaying.value[index] = false;
+        chatMessages[index].isPlaying = false;
         update();
       }
       currentDurationTime.value = Duration(seconds: position.inSeconds);
       if (durationTime.value.inMilliseconds != 0) {
-        progress.value[index] = position.inMilliseconds / durationTime.value.inMilliseconds;
+        chatMessages[index].progress = position.inMilliseconds / durationTime.value.inMilliseconds;
         update();
       }
     });
     audioPlayer.play(UrlSource(path));
-    isPlaying.value[index] = true;
+    chatMessages[index].isPlaying = true;
     update();
   }
 }
