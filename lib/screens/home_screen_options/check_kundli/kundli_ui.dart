@@ -51,6 +51,7 @@ class KundliUi extends GetView<KundliController> {
             if (controller.yourFormKey.currentState!.validate()) {
               controller.yourParams.value.name =
                   controller.yourNameController.text.trim();
+              controller.yourParams.value.tzone = 5.5;
               controller.submitDetails(
                   controller.yourParams.value, controller.yourGender.value);
             }

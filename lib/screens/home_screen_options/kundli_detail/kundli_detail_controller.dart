@@ -231,7 +231,7 @@ class KundliDetailController extends GetxController {
       min: args['params'].min ?? 0,
       lat: args['params'].lat ?? 0.0,
       long: args['params'].long ?? 0.0,
-      tzone: 5.30,
+      tzone: 5.5,
       // tzone: args['params'].tzone,
       location: args['params'].location ?? "",
     );
@@ -243,7 +243,7 @@ class KundliDetailController extends GetxController {
       "min": args['params'].min,
       "lat": args['params'].lat,
       "lon": args['params'].long,
-      "tzone": 5.30,
+      "tzone": 5.5,
       // "tzone": args['params'].tzone,
     };
     getApiData(false);
