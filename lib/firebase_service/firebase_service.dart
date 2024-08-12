@@ -43,6 +43,7 @@ RxInt isNetworkPopup = 0.obs;
 RxInt isPrivacyPolicy = 0.obs;
 RxInt isServerMaintenance = 0.obs;
 RxInt showRetentionPopup = 1.obs;
+RxInt showDailyLive = 0.obs;
 // RxInt isTruecaller = 1.obs;
 RxInt isLiveCall = 1.obs;
 RxInt homePage = 1.obs;
@@ -507,6 +508,9 @@ class AppFirebaseService {
         break;
       case "showRetentionPopup":
         showRetentionPopup(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "showDailyLive":
+        showDailyLive(int.parse(dataSnapshot.value.toString()));
         break;
       default:
         // preferenceService.setStringPref(
