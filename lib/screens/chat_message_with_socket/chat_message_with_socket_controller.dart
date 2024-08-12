@@ -258,10 +258,6 @@ class ChatMessageWithSocketController extends GetxController
     _listener = AppLifecycleListener(
       onShow: () {},
       onResume: () {
-        timeLeft = (int.parse(
-            AppFirebaseService().orderData.value["end_time"].toString()) *
-            1000) -
-            (AppFirebaseService().currentTime().millisecondsSinceEpoch);
         print("resume");
       },
       onHide: () {},
@@ -448,7 +444,7 @@ class ChatMessageWithSocketController extends GetxController
       }
     });
     messgeScrollController.addListener(_scrollListener);
-    stateHandling();
+ //   stateHandling();
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) async {
       if (fireChat.value == 0) {
@@ -566,6 +562,10 @@ class ChatMessageWithSocketController extends GetxController
     userDataKey = "chat_${currentUserId.value}";
     getChatList();
     socketReconnect();
+    timeLeft = (int.parse(
+        AppFirebaseService().orderData.value["end_time"].toString()) *
+        1000) -
+        (AppFirebaseService().currentTime().millisecondsSinceEpoch);
     initTask(AppFirebaseService().orderData.value);
     Future.delayed(const Duration(milliseconds: 3000)).then((value) {
       getMessageTemplates();
@@ -1721,10 +1721,6 @@ class ChatMessageWithSocketController extends GetxController
       extraTimer?.cancel();
       print("extraTime closing");
       int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
-      timeLeft = (int.parse(
-                  AppFirebaseService().orderData.value["end_time"].toString()) *
-              1000) -
-          (AppFirebaseService().currentTime().millisecondsSinceEpoch);
       talkTimeStartTimer(remainingTime);
     } else {
       print("ShutDown");
