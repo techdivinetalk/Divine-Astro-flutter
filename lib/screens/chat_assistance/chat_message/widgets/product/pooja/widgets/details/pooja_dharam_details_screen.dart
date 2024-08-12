@@ -315,7 +315,7 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
         ),
         const SizedBox(height: 16),
         if (_controller.isSentMessage.value == false)
-          Padding(
+          Obx(() => _controller.isButtonShow.value ? Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: PoojaCustomButton(
               height: 64,
@@ -324,7 +324,6 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
               fontColor: appColors.whiteGuidedColor,
               needCircularBorder: false,
               onPressed: () async {
-
                 openBottomSheet(
                   context,
                   functionalityWidget: Padding(
@@ -458,7 +457,7 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
                 // }
               },
             ),
-          ),
+          ) : SizedBox()),
         const SizedBox(height: 16),
       ],
     );

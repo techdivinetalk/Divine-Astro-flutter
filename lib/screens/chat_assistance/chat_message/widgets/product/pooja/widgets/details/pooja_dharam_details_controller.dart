@@ -89,10 +89,12 @@ class PoojaDharamDetailsController extends GetxController {
     super.onClose();
   }
 
+  RxBool isButtonShow = false.obs;
   Future<void> getSinglePoojaCall({
     required Function(String message) successCallBack,
     required Function(String message) failureCallBack,
   }) async {
+    isButtonShow.value = false;
     isLoading = true;
     Map<String, dynamic> param = <String, dynamic>{};
     param = <String, dynamic>{"pooja_id": poojaId};
@@ -107,6 +109,7 @@ class PoojaDharamDetailsController extends GetxController {
         ? GetSinglePoojaResponse.fromJson(response.toJson())
         : GetSinglePoojaResponse.fromJson(GetSinglePoojaResponse().toJson());
     isLoading = false;
+    isButtonShow.value = true;
     return Future<void>.value();
   }
 
