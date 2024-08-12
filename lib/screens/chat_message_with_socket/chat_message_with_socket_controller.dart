@@ -116,8 +116,6 @@ class ChatMessageWithSocketController extends GetxController
   RxBool isTyping = false.obs;
   BroadcastReceiver broadcastReceiver = BroadcastReceiver(
       names: <String>["deliveredMsg", "messageReceive", "template"]);
-  late Duration timeDifference;
-
   final AppSocket socket = AppSocket();
   Timer? extraTimer;
   Timer? chatTimer;
@@ -425,7 +423,7 @@ class ChatMessageWithSocketController extends GetxController
         await receiveMessage(snapshot);
       }
     });
-    if (showRetentionPopup.toString() == "0") {
+    if (showRetentionPopup.toString() == "1") {
       print("callling popup api from this side");
       getRitentionPopUpDataApi();
     } else {
@@ -609,10 +607,7 @@ class ChatMessageWithSocketController extends GetxController
     extraTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       final difference =
           dateTime.difference(AppFirebaseService().currentTime());
-      if (difference.isNegative ||
-          (difference.inSeconds == 0 &&
-              difference.inMinutes == 0 &&
-              difference.inHours == 0)) {
+      if (difference.isNegative) {
         if (AppFirebaseService().orderData.value["orderId"] != null ||
             AppFirebaseService().orderData.value["status"] == "4") {
           extraTimer?.cancel();
@@ -647,44 +642,56 @@ class ChatMessageWithSocketController extends GetxController
     chatTimer?.cancel();
     chatTimer = null;
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
-      timeDifference = dateTime.difference(AppFirebaseService().currentTime());
-
-      if (timeDifference.isNegative ||
-          (timeDifference.inSeconds == 0 &&
-              timeDifference.inMinutes == 0 &&
-              timeDifference.inHours == 0)) {
+      print("timeLeft_c ${timeLeft} -- ${(AppFirebaseService().serverTimeDiff/1000)}");
+      if(timeLeft < 1){
         await callHangup();
         showTalkTime.value = "-1";
-        print("chatTimeLeft ${showTalkTime.value}");
+        print("chatTimeLeft ---- ${showTalkTime.value}");
         chatTimer?.cancel();
         Future.delayed(const Duration(seconds: 4)).then((value) {
           if (showTalkTime.value == "-1") {
+            print(
+                'showTalkTime Chat ending on cust app closed');
             DatabaseReference ref = FirebaseDatabase.instance.ref(
                 "order/${AppFirebaseService().orderData.value["orderId"]}");
             ref.update({
               "status": "4",
               "source": "astrorApp",
-              "order_end_time": DateTime.now().millisecondsSinceEpoch + 60000
+              "order_end_time": AppFirebaseService().currentTime().millisecondsSinceEpoch + 60000
             });
           }
         });
       } else {
+        timeLeft = timeLeft - 1000;
         extraTimer?.cancel();
-        //         print('Countdown working');
-        showTalkTime.value =
-            "${timeDifference.inHours.toString().padLeft(2, '0')}:"
-            "${timeDifference.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
-            "${timeDifference.inSeconds.remainder(60).toString().padLeft(2, '0')}";
+        print(
+            'showTalkTime ${timeLeft}');
+        showTalkTime.value = convertSeconds(timeLeft);
         if (MiddleWare.instance.currentPage == RouteName.dashboard) {
           timer.cancel();
         }
         print("${MiddleWare.instance.currentPage}");
-        print(
-            'chatTimeLeft ${timeDifference.inHours}:${timeDifference.inMinutes.remainder(60)}:${timeDifference.inSeconds.remainder(60)}');
+
       }
     });
   }
+  String convertSeconds(int totalMilliseconds) {
+    // Divide the given milliseconds by 1000 to get total seconds
+    double totalSeconds = totalMilliseconds / 1000.0;
 
+    // Calculate hours, minutes, and seconds
+    int hours = (totalSeconds ~/ 3600);
+    int remainingSeconds = (totalSeconds % 3600).toInt();
+    int minutes = remainingSeconds ~/ 60;
+    double seconds = totalSeconds % 60;
+
+    // Format the time as a string
+    String hoursStr = hours.toString().padLeft(2, '0');
+    String minutesStr = minutes.toString().padLeft(2, '0');
+    String secondsStr = seconds.toStringAsFixed(0).padLeft(2, '0');
+
+    return "$hoursStr:$minutesStr:$secondsStr";
+  }
   Loading loading = Loading.initial;
 
   endChatApi() async {
@@ -1716,8 +1723,9 @@ class ChatMessageWithSocketController extends GetxController
           (AppFirebaseService().currentTime().millisecondsSinceEpoch);
       talkTimeStartTimer(remainingTime);
     } else {
+      print("ShutDown");
       if (p0["order_end_time"] != null) {
-        startExtraTimer(p0["order_end_time\ "], p0["status"]);
+        startExtraTimer(p0["order_end_time"], p0["status"]);
       }
     }
 
