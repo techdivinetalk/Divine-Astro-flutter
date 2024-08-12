@@ -640,39 +640,40 @@ class ChatMessageWithSocketController extends GetxController
     chatTimer?.cancel();
     chatTimer = null;
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
-      print("showTalkTime1 ${timeLeft} -- ${(AppFirebaseService().serverTimeDiff/1000)}");
-      if(timeLeft < 1){
+      print(
+          "showTalkTime1 ${timeLeft} -- ${(AppFirebaseService().serverTimeDiff / 1000)}");
+      if (timeLeft < 1) {
         await callHangup();
         showTalkTime.value = "-1";
         print("chatTimeLeft ---- ${showTalkTime.value}");
         chatTimer?.cancel();
         Future.delayed(const Duration(seconds: 4)).then((value) {
           if (showTalkTime.value == "-1") {
-            print(
-                'showTalkTime Chat ending on cust app closed');
+            print('showTalkTime Chat ending on cust app closed');
             DatabaseReference ref = FirebaseDatabase.instance.ref(
                 "order/${AppFirebaseService().orderData.value["orderId"]}");
             ref.update({
               "status": "4",
               "source": "astrorApp",
-              "order_end_time": AppFirebaseService().currentTime().millisecondsSinceEpoch + 60000
+              "order_end_time":
+                  AppFirebaseService().currentTime().millisecondsSinceEpoch +
+                      60000
             });
           }
         });
       } else {
         timeLeft = timeLeft - 1000;
         extraTimer?.cancel();
-        print(
-            'showTalkTime ${timeLeft}');
+        print('showTalkTime ${timeLeft}');
         showTalkTime.value = convertSeconds(timeLeft);
         if (MiddleWare.instance.currentPage == RouteName.dashboard) {
           timer.cancel();
         }
         print("${MiddleWare.instance.currentPage}");
-
       }
     });
   }
+
   String convertSeconds(int totalMilliseconds) {
     // Divide the given milliseconds by 1000 to get total seconds
     double totalSeconds = totalMilliseconds / 1000.0;
@@ -690,6 +691,7 @@ class ChatMessageWithSocketController extends GetxController
 
     return "$hoursStr:$minutesStr:$secondsStr";
   }
+
   Loading loading = Loading.initial;
 
   endChatApi() async {
@@ -1785,7 +1787,13 @@ class ChatMessageWithSocketController extends GetxController
             borderRadius: BorderRadius.circular(8.0),
           ),
           elevation: 0,
-          content: ritentionPoupWidget(Get.context!),
+          content: ConstrainedBox(
+            constraints:
+                const BoxConstraints(maxHeight: 600.0), // Adjust as needed
+            child: ritentionPoupWidget(Get.context!),
+          ),
+
+          // content: ritentionPoupWidget(Get.context!),
           contentPadding: EdgeInsets.all(5),
           actions: [
             TextButton(
@@ -1822,14 +1830,14 @@ class ChatMessageWithSocketController extends GetxController
                   children: [
                     Html(
                       shrinkWrap: true,
-                      data: ritentionPopupModel!.data!.type ?? "",
+                      data: ritentionPopupModel!.data!.type ?? "" * 9,
                       onLinkTap: (url, attributes, element) {
                         launchUrl(Uri.parse(url ?? ''));
                       },
                     ),
                     Html(
                       shrinkWrap: true,
-                      data: ritentionPopupModel!.data!.message ?? "",
+                      data: ritentionPopupModel!.data!.message ?? "" * 99,
                       onLinkTap: (url, attributes, element) {
                         launchUrl(Uri.parse(url ?? ''));
                       },
@@ -1916,7 +1924,8 @@ class ChatMessageWithSocketController extends GetxController
       }
       currentDurationTime.value = Duration(seconds: position.inSeconds);
       if (durationTime.value.inMilliseconds != 0) {
-        chatMessages[index].progress = position.inMilliseconds / durationTime.value.inMilliseconds;
+        chatMessages[index].progress =
+            position.inMilliseconds / durationTime.value.inMilliseconds;
         update();
       }
     });
