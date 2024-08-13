@@ -32,6 +32,7 @@ class MasterData {
   final int? voip;
   final int? isPrivacyPolicy;
   final int? isServerMaintenance;
+  final int? maximumStorySize;
 
   MasterData({
     this.call,
@@ -52,6 +53,7 @@ class MasterData {
     this.truecaller,
     this.voip,
     this.isServerMaintenance,
+    this.maximumStorySize,
   });
 
   MasterData.fromJson(Map<String, dynamic> json)
@@ -71,6 +73,7 @@ class MasterData {
         tarrotCard = json['tarrotCard'] as int?,
         templates = json['templates'] as int?,
         truecaller = json['truecaller'] as int?,
+        maximumStorySize = json['maximumStorySize'] as int?,
         isServerMaintenance = json['isServerMaintenance'] as int?,
         voip = json['voip'] as int?;
 
@@ -91,6 +94,7 @@ class MasterData {
     'tarrotCard' : tarrotCard,
     'templates' : templates,
     'truecaller' : truecaller,
+    'maximumStorySize' : maximumStorySize,
     'isServerMaintenance' : isServerMaintenance,
     'voip' : voip
   };
