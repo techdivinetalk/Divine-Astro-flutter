@@ -51,16 +51,16 @@ class UploadStoryController extends GetxController {
       videoFileName: "vid_${DateTime.now().microsecond}_${DateTime.now().millisecond}",
       onSave: (outputPath) async {
         int fileSizeInBytes = await File(outputPath ?? "").length();
-        double fileSizeInMB = fileSizeInBytes / (1024 * 1024);
-        log("pick video size : $fileSizeInMB");
+        double sizeInKB = fileSizeInBytes / 1024;
+        log("pick video size : $sizeInKB");
         log("maximumStorySize : ${maximumStorySize.value}");
-        if(fileSizeInMB < maximumStorySize.value){
+        if(sizeInKB < double.parse(maximumStorySize.value.toString())){
           progressVisibility.value = false;
           Fluttertoast.showToast(msg: "${'uploadStory'.tr}..");
           await uploadImage(File(outputPath!));
         } else{
           Fluttertoast.showToast(
-              msg: "Story video size should be maximum ${maximumStorySize.value} mb",
+              msg: "Story video size should be maximum ${convertKBtoMB(double.parse(maximumStorySize.value.toString()))} MB",
             backgroundColor: appColors.red
           );
         }
@@ -68,6 +68,10 @@ class UploadStoryController extends GetxController {
         //     duration: ((endValue - startValue) / 1000).toString());
       },
     );
+  }
+
+  String convertKBtoMB(double sizeInKB) {
+    return (sizeInKB / 1024).toStringAsFixed(0);
   }
 
   /*reduceVideoSize(String path) async {
