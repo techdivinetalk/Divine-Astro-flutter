@@ -230,7 +230,7 @@ class FinancialSupportController extends GetxController {
     update();
   }
 
-  compressImages(croppedFile) async {
+  /*compressImages(croppedFile) async {
     int oversizedCount = 0;
     uploadFile = File(croppedFile.path);
     final filePath = uploadFile!.absolute.path;
@@ -275,6 +275,63 @@ class FinancialSupportController extends GetxController {
         debugPrint("The file path does not contain .png, .jpg, or .jpeg.");
       }
       // uploadImage(File(result.path));
+    }
+  }*/
+
+  compressImages(croppedFile) async {
+    int oversizedCount = 0;
+
+    uploadFile = File(croppedFile.path);
+    final filePath = uploadFile!.absolute.path;
+    final lastIndex = filePath
+        .lastIndexOf(RegExp(r'\.(png|jpg|jpeg|heic)', caseSensitive: false));
+
+    debugPrint("File path: $filePath");
+    debugPrint("Last index of extension: $lastIndex");
+
+    if (lastIndex != -1) {
+      final splitted = filePath.substring(0, lastIndex);
+      final extension = filePath.substring(lastIndex).toLowerCase();
+
+      // Ensure the output path ends with .jpg or .jpeg for compression
+      String outPath;
+      if (extension == '.heic' || extension == '.png') {
+        outPath = "${splitted}_out.jpg";
+      } else if (extension == '.jpg' || extension == '.jpeg') {
+        outPath = "${splitted}_out$extension";
+      } else {
+        Fluttertoast.showToast(msg: "Unsupported file format.");
+        return;
+      }
+
+      var result = await FlutterImageCompress.compressAndGetFile(
+        filePath,
+        outPath,
+        minWidth: 500,
+      );
+
+      if (result != null) {
+        int imageSize =
+        await File(result.path).length(); // Get the image size in bytes
+
+        if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
+          oversizedCount++;
+          Fluttertoast.showToast(msg: "Image Size is more than 2 MB");
+        } else {
+          selectedImages.add(result.path);
+          selectedFiles.add(File(result.path));
+        }
+
+        if (oversizedCount > 0) {
+          Fluttertoast.showToast(
+              msg: "$oversizedCount images exceed 2 MB and cannot be uploaded");
+        }
+      } else {
+        debugPrint("Failed to compress the image.");
+      }
+    } else {
+      Fluttertoast.showToast(
+          msg: "The file path does not contain a valid extension.");
     }
   }
 
