@@ -3,20 +3,16 @@ import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/common_bottomsheet.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/common/generic_loading_widget.dart';
-import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/res_product_detail.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/category_detail/category_detail_controller.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:velocity_x/velocity_x.dart';
 
 import '../../../../common/colors.dart';
-import '../../../common/custom_light_yellow_btn.dart';
 
 class CategoryDetailUi extends GetView<CategoryDetailController> {
   const CategoryDetailUi({Key? key}) : super(key: key);
@@ -52,7 +48,9 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
               child: Obx(
                 () => controller.isLoading.value == true
                     ? controller.productDetail == null
-                        ? Center(child: SvgPicture.asset('assets/svg/Group 129525.svg'))
+                        ? Center(
+                            child:
+                                SvgPicture.asset('assets/svg/Group 129525.svg'))
                         : Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -72,7 +70,8 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                 crossAxisAlignment: CrossAxisAlignment.end,
                                 children: [
                                   if (controller.isSentMessage.value == false)
-                                  /// select quantity
+
+                                    /// select quantity
                                     /*Padding(
                                       padding: EdgeInsets.only(right: 11.w),
                                       child: Text(
@@ -82,7 +81,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                             fontColor: appColors.darkBlue),
                                       ),
                                     ),*/
-                                  SizedBox(height: 4.h),
+                                    SizedBox(height: 4.h),
                                   Row(
                                     children: [
                                       Text(
@@ -91,6 +90,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                           fontWeight: FontWeight.w600,
                                         ),
                                       ),
+
                                       /// select quantity
                                       /*Spacer(),
                                       if (controller.isSentMessage.value ==
@@ -181,7 +181,7 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               Text(
-                                                  data.title ?? "",
+                                                data.title ?? "",
                                                 style: AppTextStyle.textStyle12(
                                                   fontWeight: FontWeight.w400,
                                                   fontColor: appColors.darkBlue,
@@ -223,78 +223,99 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
             ),
           ),
           bottomNavigationBar: Obx(() => controller.isSentMessage.value == false
-              ? controller.isShowButton.value ? Padding(
-            padding: MediaQuery.of(context).viewInsets,
-            child: Padding(
-              padding: EdgeInsets.only(
-                  left: 20.w, right: 20.w, bottom: 20.h, top: 10.h),
-              child: MaterialButton(
-                  height: 50,
-                  minWidth: Get.width,
-                  shape: const RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(25.0)),
-                  ),
-                  onPressed: () {
-                    if(controller.productDetail != null){
-                      openBottomSheet(
-                        context,
-                        functionalityWidget: Padding(
-                          padding: const EdgeInsets.only(
-                              top: 20, left: 20, right: 20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-
-                              Text(
-                                "Are You Sure You Want To Suggest ${controller.productDetail?.prodName} To User?",
-                                textAlign: TextAlign.center,
-                                style: AppTextStyle.textStyle20(
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                "On purchase upto 30% referral bonus will be added in your wallet",
-                                style: AppTextStyle.textStyle12(
-                                    fontWeight: FontWeight.w600,
-                                    fontColor: appColors.darkBlue
-                                        .withOpacity(0.5)),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
-                                child: InkWell(
-                                  onTap: () {
-                                    print(
-                                        "value of controller chat assist ${controller.isChatAssist.value}");
-                                    controller.isChatAssist.value
-                                        ? controller.saveRemedyForChatAssist()
-                                        : controller.suggestRemedy();
-                                    // Get.offNamedUntil(RouteName.orderHistory,
-                                    //     ModalRoute.withName(RouteName.dashboard));
-                                  },
-                                  child: Container(
-                                      width: MediaQuery.of(context).size.width,
-                                      decoration: BoxDecoration(
-                                          color: appColors.guideColor,
-                                          borderRadius: BorderRadius.circular(20)),
-                                      child: Center(
-                                          child: Obx(() => controller.isSendProduct.value ? Padding(
-                                            padding: EdgeInsets.symmetric(vertical: 7.0),
-                                            child: CircularProgressIndicator(
-                                              strokeWidth: 1.5,
-                                            ),
-                                          ) : Padding(
-                                            padding: EdgeInsets.all(12.h),
-                                            child: Text(
-                                              "suggestNow".tr,
-                                              style: AppTextStyle.textStyle16(
-                                                  fontWeight: FontWeight.w600,
-                                                  fontColor: appColors.whiteGuidedColor),
-                                            ),
-                                          )))),
-                                ),
-                              ),
-                              /*CustomLightYellowCurveButton(
+              ? controller.isShowButton.value
+                  ? Padding(
+                      padding: MediaQuery.of(context).viewInsets,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            left: 20.w, right: 20.w, bottom: 20.h, top: 10.h),
+                        child: MaterialButton(
+                            height: 50,
+                            minWidth: Get.width,
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(25.0)),
+                            ),
+                            onPressed: () {
+                              if (controller.productDetail != null) {
+                                openBottomSheet(
+                                  context,
+                                  functionalityWidget: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 20, left: 20, right: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "Are You Sure You Want To Suggest ${controller.productDetail?.prodName} To User?",
+                                          textAlign: TextAlign.center,
+                                          style: AppTextStyle.textStyle20(
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Text(
+                                          "On purchase upto 50% referral bonus will be added in your wallet",
+                                          style: AppTextStyle.textStyle12(
+                                              fontWeight: FontWeight.w600,
+                                              fontColor: appColors.darkBlue
+                                                  .withOpacity(0.5)),
+                                        ),
+                                        Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 10.w, vertical: 15.h),
+                                          child: InkWell(
+                                            onTap: () {
+                                              print(
+                                                  "value of controller chat assist ${controller.isChatAssist.value}");
+                                              controller.isChatAssist.value
+                                                  ? controller
+                                                      .saveRemedyForChatAssist()
+                                                  : controller.suggestRemedy();
+                                              // Get.offNamedUntil(RouteName.orderHistory,
+                                              //     ModalRoute.withName(RouteName.dashboard));
+                                            },
+                                            child: Container(
+                                                width: MediaQuery.of(context)
+                                                    .size
+                                                    .width,
+                                                decoration: BoxDecoration(
+                                                    color: appColors.guideColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20)),
+                                                child: Center(
+                                                    child: Obx(() => controller
+                                                            .isSendProduct.value
+                                                        ? Padding(
+                                                            padding: EdgeInsets
+                                                                .symmetric(
+                                                                    vertical:
+                                                                        7.0),
+                                                            child:
+                                                                CircularProgressIndicator(
+                                                              strokeWidth: 1.5,
+                                                            ),
+                                                          )
+                                                        : Padding(
+                                                            padding:
+                                                                EdgeInsets.all(
+                                                                    12.h),
+                                                            child: Text(
+                                                              "suggestNow".tr,
+                                                              style: AppTextStyle.textStyle16(
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w600,
+                                                                  fontColor:
+                                                                      appColors
+                                                                          .whiteGuidedColor),
+                                                            ),
+                                                          )))),
+                                          ),
+                                        ),
+                                        /*CustomLightYellowCurveButton(
                                     name: "suggestNow".tr,
                                     textColor: appColors.whiteGuidedColor,
                                     onTaped: () {
@@ -307,32 +328,35 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                       //     ModalRoute.withName(RouteName.dashboard));
                                     },
                                   )*/
-                            ],
-                          ),
-                        ),
-                        closeOnTap: () {
-                          if(!controller.isSendProduct.value){
-                            Get.back();
-                          }
-                        },
-                        isDismissible: !controller.isSendProduct.value,
-                        onWillPop: () {
-                          return Future.value(!controller.isSendProduct.value);
-                        },
-                      );
-                    }
-                  },
-                  color: appColors.guideColor,
-                  child: Text(
-                    "suggestNow".tr,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20.sp,
-                      color: appColors.whiteGuidedColor,
-                    ),
-                  )),
-            ),
-          ) : SizedBox()
+                                      ],
+                                    ),
+                                  ),
+                                  closeOnTap: () {
+                                    if (!controller.isSendProduct.value) {
+                                      Get.back();
+                                    }
+                                  },
+                                  isDismissible:
+                                      !controller.isSendProduct.value,
+                                  onWillPop: () {
+                                    return Future.value(
+                                        !controller.isSendProduct.value);
+                                  },
+                                );
+                              }
+                            },
+                            color: appColors.guideColor,
+                            child: Text(
+                              "suggestNow".tr,
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20.sp,
+                                color: appColors.whiteGuidedColor,
+                              ),
+                            )),
+                      ),
+                    )
+                  : SizedBox()
               : SizedBox()),
         );
       },

@@ -7,7 +7,6 @@ import 'package:camera/camera.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
-import 'package:divine_astrologer/firebase_options.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/remote_config/remote_config_helper.dart';
@@ -24,10 +23,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
-import 'package:in_app_update/in_app_update.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -335,8 +332,6 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.removeObserver(_lifecycleObserver);
     super.dispose();
   }
-
-
 
   @override
   Widget build(BuildContext context) {

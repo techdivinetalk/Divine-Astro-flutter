@@ -4,8 +4,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-
-
 class CommonImageView extends StatelessWidget {
   final String? imagePath;
 
@@ -38,7 +36,6 @@ class CommonImageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return alignment != null
         ? Align(
             alignment: alignment!,
@@ -86,9 +83,7 @@ class CommonImageView extends StatelessWidget {
 
   Widget _buildImageView() {
     if (imagePath != null) {
-
       switch (imagePath!.imageType) {
-
         case ImageType.svg:
           return SizedBox(
             height: height,
@@ -131,15 +126,22 @@ class CommonImageView extends StatelessWidget {
                 backgroundColor: Colors.grey.shade100,
               ),
             ),
-            errorWidget: (context, url, error) =>placeholderWidget ?? Center(
-              child:placeHolder.contains("images") ? Image.asset(placeHolder, height: height,
-                width: width,): SvgPicture.asset(
-                placeHolder ,
-                // height: height,
-                // width: width,
-                fit: BoxFit.cover,
-              ),
-            ),
+            errorWidget: (context, url, error) =>
+                placeholderWidget ??
+                Center(
+                  child: placeHolder.contains("images")
+                      ? Image.asset(
+                          placeHolder,
+                          height: height,
+                          width: width,
+                        )
+                      : SvgPicture.asset(
+                          placeHolder,
+                          // height: height,
+                          // width: width,
+                          fit: BoxFit.cover,
+                        ),
+                ),
           );
         case ImageType.png:
         default:

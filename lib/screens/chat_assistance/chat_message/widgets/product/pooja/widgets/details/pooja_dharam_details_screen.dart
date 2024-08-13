@@ -16,7 +16,6 @@ import '../../../../../../../../common/common_functions.dart';
 import '../../../../../../../../di/shared_preference_service.dart';
 import '../../../../../../../../repository/shop_repository.dart';
 import '../../../../../../../../utils/utils.dart';
-import '../../../../../../../home_screen_options/notice_board/notice_board_ui.dart';
 import '../../../../../../../live_dharam/widgets/custom_image_widget.dart';
 import '../../pooja_dharam/get_single_pooja_response.dart';
 import '../custom_widget/pooja_add_one_widget.dart';
@@ -315,91 +314,107 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
         ),
         const SizedBox(height: 16),
         if (_controller.isSentMessage.value == false)
-          Obx(() => _controller.isButtonShow.value ? Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0),
-            child: PoojaCustomButton(
-              height: 64,
-              text: "Recommended Pooja",
-              backgroundColor: appColors.guideColor,
-              fontColor: appColors.whiteGuidedColor,
-              needCircularBorder: false,
-              onPressed: () async {
-                openBottomSheet(
-                  context,
-                  functionalityWidget: Padding(
-                    padding: const EdgeInsets.only(
-                        top: 20, left: 20, right: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-
-                        Text(
-                          "Are You Sure You Want To Suggest ${pooja.poojaName} To User?",
-                          textAlign: TextAlign.center,
-                          style: AppTextStyle.textStyle20(
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        const SizedBox(height: 10),
-                        Text(
-                          "On purchase upto 30% referral bonus will be added in your wallet",
-                          style: AppTextStyle.textStyle12(
-                              fontWeight: FontWeight.w600,
-                              fontColor: appColors.darkBlue
-                                  .withOpacity(0.5)),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 15.h),
-                          child: InkWell(
-                            onTap: () async {
-                              if(!controller.isSendProduct.value){
-                                controller.isSendProduct.value = true;
-                                Map<String, dynamic> params = {
-                                  "product_id": pooja.id,
-                                  "shop_id": 0,
-                                  "customer_id":
-                                  AppFirebaseService().orderData.value["userId"] != null
-                                      ? int.parse(
-                                      AppFirebaseService().orderData.value["userId"])
-                                      : _controller.customerId.value,
-                                  "order_id": AppFirebaseService().orderData.value["orderId"]
-                                };
-                                var response =
-                                await ShopRepository().saveRemediesForChatAssist(params);
-                                Get.back();
-                                Get.back();
-                                Get.back();
-                                Get.back(result: {
-                                  'isPooja': true,
-                                  'poojaData': pooja,
-                                  'saveRemediesData': response
-                                });
-                                controller.isSendProduct.value = false;
-                              }
-                            },
-                            child: Container(
-                                width: MediaQuery.of(context).size.width,
-                                decoration: BoxDecoration(
-                                    color: appColors.guideColor,
-                                    borderRadius: BorderRadius.circular(20)),
-                                child: Center(
-                                    child: Obx(() => controller.isSendProduct.value ? Padding(
-                                      padding: EdgeInsets.symmetric(vertical: 7.0),
-                                      child: CircularProgressIndicator(
-                                        strokeWidth: 1.5,
-                                      ),
-                                    ) : Padding(
-                                      padding: EdgeInsets.all(12.h),
-                                      child: Text(
-                                        "Recommended Pooja".tr,
-                                        style: AppTextStyle.textStyle16(
-                                            fontWeight: FontWeight.w600,
-                                            fontColor: appColors.whiteGuidedColor),
-                                      ),
-                                    )))),
-                          ),
-                        ),
-                        /*CustomLightYellowCurveButton(
+          Obx(() => _controller.isButtonShow.value
+              ? Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                  child: PoojaCustomButton(
+                    height: 64,
+                    text: "Recommended Pooja",
+                    backgroundColor: appColors.guideColor,
+                    fontColor: appColors.whiteGuidedColor,
+                    needCircularBorder: false,
+                    onPressed: () async {
+                      openBottomSheet(
+                        context,
+                        functionalityWidget: Padding(
+                          padding: const EdgeInsets.only(
+                              top: 20, left: 20, right: 20),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                "Are You Sure You Want To Suggest ${pooja.poojaName} To User?",
+                                textAlign: TextAlign.center,
+                                style: AppTextStyle.textStyle20(
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                "On purchase upto 50% referral bonus will be added in your wallet",
+                                style: AppTextStyle.textStyle12(
+                                    fontWeight: FontWeight.w600,
+                                    fontColor:
+                                        appColors.darkBlue.withOpacity(0.5)),
+                              ),
+                              Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 10.w, vertical: 15.h),
+                                child: InkWell(
+                                  onTap: () async {
+                                    if (!controller.isSendProduct.value) {
+                                      controller.isSendProduct.value = true;
+                                      Map<String, dynamic> params = {
+                                        "product_id": pooja.id,
+                                        "shop_id": 0,
+                                        "customer_id": AppFirebaseService()
+                                                    .orderData
+                                                    .value["userId"] !=
+                                                null
+                                            ? int.parse(AppFirebaseService()
+                                                .orderData
+                                                .value["userId"])
+                                            : _controller.customerId.value,
+                                        "order_id": AppFirebaseService()
+                                            .orderData
+                                            .value["orderId"]
+                                      };
+                                      var response = await ShopRepository()
+                                          .saveRemediesForChatAssist(params);
+                                      Get.back();
+                                      Get.back();
+                                      Get.back();
+                                      Get.back(result: {
+                                        'isPooja': true,
+                                        'poojaData': pooja,
+                                        'saveRemediesData': response
+                                      });
+                                      controller.isSendProduct.value = false;
+                                    }
+                                  },
+                                  child: Container(
+                                      width: MediaQuery.of(context).size.width,
+                                      decoration: BoxDecoration(
+                                          color: appColors.guideColor,
+                                          borderRadius:
+                                              BorderRadius.circular(20)),
+                                      child: Center(
+                                          child: Obx(() =>
+                                              controller.isSendProduct.value
+                                                  ? Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              vertical: 7.0),
+                                                      child:
+                                                          CircularProgressIndicator(
+                                                        strokeWidth: 1.5,
+                                                      ),
+                                                    )
+                                                  : Padding(
+                                                      padding:
+                                                          EdgeInsets.all(12.h),
+                                                      child: Text(
+                                                        "Recommended Pooja".tr,
+                                                        style: AppTextStyle.textStyle16(
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontColor: appColors
+                                                                .whiteGuidedColor),
+                                                      ),
+                                                    )))),
+                                ),
+                              ),
+                              /*CustomLightYellowCurveButton(
                                     name: "suggestNow".tr,
                                     textColor: appColors.whiteGuidedColor,
                                     onTaped: () {
@@ -412,21 +427,21 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
                                       //     ModalRoute.withName(RouteName.dashboard));
                                     },
                                   )*/
-                      ],
-                    ),
-                  ),
-                  closeOnTap: () {
-                    if(!controller.isSendProduct.value){
-                      Get.back();
-                    }
-                  },
-                  isDismissible: !controller.isSendProduct.value,
-                  onWillPop: () {
-                    return Future.value(!controller.isSendProduct.value);
-                  },
-                );
+                            ],
+                          ),
+                        ),
+                        closeOnTap: () {
+                          if (!controller.isSendProduct.value) {
+                            Get.back();
+                          }
+                        },
+                        isDismissible: !controller.isSendProduct.value,
+                        onWillPop: () {
+                          return Future.value(!controller.isSendProduct.value);
+                        },
+                      );
 
-                /*Map<String, dynamic> params = {
+                      /*Map<String, dynamic> params = {
                   "product_id": pooja.id,
                   "shop_id": 0,
                   "customer_id":
@@ -445,19 +460,20 @@ class _PoojaDharamDetailsScreenState extends State<PoojaDharamDetailsScreen>
                   'poojaData': pooja,
                   'saveRemediesData': response
                 });*/
-                // if (_controller.selectedDate.isEmpty) {
-                //   divineSnackBar(data: "Please Select Pooja Date");
-                // } else if (_controller.selectedTime.isEmpty) {
-                //   divineSnackBar(data: "Please Select Pooja Time");
-                // } else {
-                //   _controller.assignGlobalSelectedPooja();
-                //   _controller.assignGlobalSelectedAddOnesList();
-                //   _controller.assignGlobalPoojaDateTimeModel();
-                //   await Get.toNamed(RouteName.addressViewScreen);
-                // }
-              },
-            ),
-          ) : SizedBox()),
+                      // if (_controller.selectedDate.isEmpty) {
+                      //   divineSnackBar(data: "Please Select Pooja Date");
+                      // } else if (_controller.selectedTime.isEmpty) {
+                      //   divineSnackBar(data: "Please Select Pooja Time");
+                      // } else {
+                      //   _controller.assignGlobalSelectedPooja();
+                      //   _controller.assignGlobalSelectedAddOnesList();
+                      //   _controller.assignGlobalPoojaDateTimeModel();
+                      //   await Get.toNamed(RouteName.addressViewScreen);
+                      // }
+                    },
+                  ),
+                )
+              : SizedBox()),
         const SizedBox(height: 16),
       ],
     );

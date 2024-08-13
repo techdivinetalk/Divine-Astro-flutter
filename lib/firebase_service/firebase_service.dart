@@ -45,6 +45,7 @@ RxInt isServerMaintenance = 0.obs;
 RxInt showRetentionPopup = 1.obs;
 RxInt showDailyLive = 0.obs;
 RxInt showHelp = 0.obs;
+RxInt astroHome = 0.obs;
 // RxInt isTruecaller = 1.obs;
 RxInt isLiveCall = 1.obs;
 RxInt homePage = 1.obs;
@@ -516,6 +517,9 @@ class AppFirebaseService {
         break;
       case "showHelp":
         showHelp(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "astroHome":
+        astroHome(int.parse(dataSnapshot.value.toString()));
         break;
       default:
         // preferenceService.setStringPref(

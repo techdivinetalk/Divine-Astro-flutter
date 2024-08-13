@@ -19,6 +19,7 @@ import '../../../gen/assets.gen.dart';
 import '../../common/common_functions.dart';
 import '../../pages/home/home_controller.dart';
 import '../../pages/home/home_ui.dart';
+import '../../pages/performance/performance_controller.dart';
 import '../../pages/performance/performance_ui.dart';
 import '../chat_assistance/chat_assistance_ui.dart';
 import '../live_page/constant.dart';
@@ -104,12 +105,12 @@ class DashboardScreen extends GetView<DashboardController> {
                                 //   Get.find<HomeController>().onInit();
                                 // }
                               } else if (controller.selectedIndex.value == 1) {
-                                // debugPrint(
-                                //     "test_selectedIndex_isRegistered: ${Get.isRegistered<PerformanceController>()}");
-                                // if (Get.isRegistered<PerformanceController>() &&
-                                //     !Get.find<PerformanceController>().isInit) {
-                                //   Get.find<PerformanceController>().onInit();
-                                // }
+                                debugPrint(
+                                    "test_selectedIndex_isRegistered: ${Get.isRegistered<PerformanceController>()}");
+                                if (Get.isRegistered<PerformanceController>() &&
+                                    !Get.find<PerformanceController>().isInit) {
+                                  Get.find<PerformanceController>().onInit();
+                                }
                               } else if (controller.selectedIndex.value == 2) {
                                 // debugPrint(
                                 //     "test_selectedIndex_isRegistered: ${Get.isRegistered<ChatAssistanceController>()}");

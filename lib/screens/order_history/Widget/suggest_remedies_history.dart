@@ -6,7 +6,6 @@ import 'package:divine_astrologer/screens/order_history/Widget/empty_widget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../../../common/app_textstyle.dart';
 import '../../../common/cached_network_image.dart';
@@ -191,9 +190,11 @@ class SuggestRemedies extends StatelessWidget {
                     /*data[index].createdAt != null
                         ? DateFormat("dd MMM, hh:mm aa")
                             .format(data[index].createdAt!)
-                        : "N/A",*/data[index].createdAt != null
-                    ? controller.newFormatDateTime(data[index].createdAt.toString())
-                    : "N/A",
+                        : "N/A",*/
+                    data[index].createdAt != null
+                        ? controller
+                            .newFormatDateTime(data[index].createdAt.toString())
+                        : "N/A",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
@@ -250,8 +251,12 @@ class SuggestRemedies extends StatelessWidget {
                         fontColor: appColors.darkBlue)),
                 Text(
                     data[index].shopId == 0
-                        ? "${data[index].poojaDetails?.payoutType}%"
-                        : "${data[index].productDetails?.payoutType}%",
+                        ? data[index].poojaDetails?.payoutType == 1
+                            ? "${data[index].poojaDetails?.payoutValue}%"
+                            : "Rs ${data[index].poojaDetails?.payoutValue}"
+                        : data[index].productDetails?.payoutType == 1
+                            ? "${data[index].productDetails?.payoutValue}%"
+                            : "Rs ${data[index].productDetails?.payoutValue}",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
@@ -268,31 +273,69 @@ class SuggestRemedies extends StatelessWidget {
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600),
                 ),
                 Text(
-                  data[index].status == "approved" ||
-                          data[index].status == "completed"
-                      ? controller
-                          .calculatePercentage(
-                            data[index].shopId == 0
-                                ? double.parse(data[index]
-                                    .poojaDetails!
-                                    .payoutValue
-                                    .toString())
-                                : double.parse(data[index]
-                                    .productDetails!
-                                    .payoutValue
-                                    .toString()),
-                            data[index].shopId == 0
-                                ? double.parse(data[index]
-                                    .poojaDetails!
-                                    .pooja_starting_price_inr
-                                    .toString())
-                                : double.parse((data[index]
-                                    .productDetails!
-                                    .payoutValue
-                                    .toString())),
-                          )
-                          .toString()
-                      : "Nil",
+                  data[index].shopId == 0
+                      ? data[index].status == "completed" &&
+                              data[index].poojaDetails!.payoutType == 1
+                          ? controller
+                              .calculatePercentage(
+                                  double.parse(data[index]
+                                      .poojaDetails!
+                                      .payoutValue
+                                      .toString()),
+                                  double.parse(data[index]
+                                      .poojaDetails!
+                                      .pooja_starting_price_inr
+                                      .toString()))
+                              .toString()
+                          : data[index].status == "completed" &&
+                                  data[index].poojaDetails!.payoutType == 2
+                              ? data[index].poojaDetails!.payoutValue.toString()
+                              : "Nil"
+                      : data[index].status == "completed" &&
+                              data[index].productDetails!.payoutType == 1
+                          ? controller
+                              .calculatePercentage(
+                                  double.parse(data[index]
+                                      .productDetails!
+                                      .payoutValue
+                                      .toString()),
+                                  double.parse(data[index]
+                                      .productDetails!
+                                      .prod_starting_price_inr
+                                      .toString()))
+                              .toString()
+                          : data[index].status == "completed" &&
+                                  data[index].productDetails!.payoutType == 2
+                              ? data[index]
+                                  .productDetails!
+                                  .payoutValue
+                                  .toString()
+                              : "Nil",
+                  // data[index].status == "approved" ||
+                  //        data[index].status == "completed"
+                  //    ? controller
+                  //        .calculatePercentage(
+                  //          data[index].shopId == 0
+                  //              ? double.parse(data[index]
+                  //                  .poojaDetails!
+                  //                  .payoutValue
+                  //                  .toString())
+                  //              : double.parse(data[index]
+                  //                  .productDetails!
+                  //                  .payoutValue
+                  //                  .toString()),
+                  //          data[index].shopId == 0
+                  //              ? double.parse(data[index]
+                  //                  .poojaDetails!
+                  //                  .pooja_starting_price_inr
+                  //                  .toString())
+                  //              : double.parse((data[index]
+                  //                  .productDetails!
+                  //                  .payoutValue
+                  //                  .toString())),
+                  //        )
+                  //        .toString()
+                  //    : "Nil",
                   style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w600,
                     fontColor: data[index].status == "approved" ||

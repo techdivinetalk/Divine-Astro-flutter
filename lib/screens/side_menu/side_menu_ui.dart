@@ -116,6 +116,19 @@ class SideMenuDrawer extends GetView<HomeController> {
               },
             ),
             ListTile(
+              leading: const Icon(Icons.notifications_active_outlined),
+              title: Text("Notice".tr),
+              onTap: () {
+                Get.put(HomeController())
+                    .homeScreenKey
+                    .currentState
+                    ?.closeDrawer();
+
+                Get.back();
+                Get.toNamed(RouteName.noticeBoard);
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.bug_report_outlined),
               title: Text('Technical Support'.tr),
               onTap: () {

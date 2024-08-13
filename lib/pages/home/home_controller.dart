@@ -870,6 +870,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       getRitentionModel = data;
       print(
           "-----------------------getRitentionData -------- ${data.toJson().toString()}");
+      print(
+          "-----------------------getRitentionData -------- ${getRitentionModel!.toJson().toString()}");
 
       print(
           "-----------------------getRitentionData -------- ${getRitentionModel!.toJson().toString()}");

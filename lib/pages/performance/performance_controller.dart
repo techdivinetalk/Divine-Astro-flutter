@@ -9,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 
 import '../../common/app_exception.dart';
+import '../../model/AstroRitentionModel.dart';
 import '../../repository/performance_repository.dart';
 
 class PerformanceController extends GetxController {
@@ -63,6 +64,7 @@ class PerformanceController extends GetxController {
       selectedValue.value = durationValue[index];
       log("=======${selectedValue.value}");
       getPerformance();
+      getRitentionDataApi();
     }
   }
 
@@ -86,6 +88,7 @@ class PerformanceController extends GetxController {
 
   Future<void> init() async {
     await getPerformance();
+    await getRitentionDataApi();
   }
 
   RxList<dynamic> overAllScoreList = <dynamic>[].obs;
@@ -122,6 +125,29 @@ class PerformanceController extends GetxController {
       }
     }
     loading.value = Loading.loaded;
+  }
+
+  AstroRitentionModel? getRitentionModel;
+
+  getRitentionDataApi() async {
+    try {
+      var data = await userRepository.getRitentionData({});
+      getRitentionModel = data;
+      print(
+          "-----------------------getRitentionData -------- ${data.toJson().toString()}");
+
+      print(
+          "-----------------------getRitentionData -------- ${getRitentionModel!.toJson().toString()}");
+      update();
+      // getDashboardDetail();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        //  divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
   }
 }
 

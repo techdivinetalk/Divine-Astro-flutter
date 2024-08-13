@@ -1,6 +1,6 @@
 /// success : true
 /// status_code : 200
-/// data : {"retention":{"retention":0,"bucket":5,"total_free_order":20,"free_user":0,"checkin_level":"0","recharge_user_sum":0},"notes":{"retention":"This is demo retention","bucket":"sample text for the bucket","total_free_order":"sample text for the total_free_order","free_user":"sample text for the free_user","checkin_level":"sample text for the checkin_level","recharge_user_sum":"Sample text for the recharge_user_sum"},"level":{"level_detail":[{"text":"%","min":"0","max":"35","value":"Unranked","image":null},{"text":"%","min":"36","max":"59","value":"Bronze","image":"https://divineprod.blob.core.windows.net/divineprod/badges/bronze.svg"},{"text":"%","min":"60","max":"69","value":"Silver","image":"https://divineprod.blob.core.windows.net/divineprod/badges/Silver.svg"},{"text":"%","min":"70","max":"79","value":"Gold","image":"https://divineprod.blob.core.windows.net/divineprod/badges/Gold.svg"},{"text":"%","min":"89","max":"80","value":"Platinum","image":"https://divineprod.blob.core.windows.net/divineprod/badges/Platinum.svg"},{"text":"%","min":"90","max":null,"value":"Diamond","image":"https://divineprod.blob.core.windows.net/divineprod/badges/Diamond.svg"}]},"performanceData":[{"metric":"Free Orders","value":500,"status":""},{"metric":"Promotional Orders (₹5)","value":500,"status":""},{"metric":"Retention Rate","value":"10%","status":"Good","color":"green"},{"metric":"Repurchase Rate","value":"15%","status":"Average","color":"yellow"},{"metric":"Online Hours","value":"14 hours","status":"Poor","color":"red"},{"metric":"Ecommerce","value":5000,"status":"Poor","color":"red"},{"metric":"Live","value":"","status":"Yes","color":"green"}]}
+/// data : {"retention":{"retention":100,"bucket":5,"total_free_order":20,"free_user":1,"level":"7","recharge_user_sum":1},"notes":{"retention":"This is demo retention","bucket":"sample text for the bucket","total_free_order":"sample text for the total_free_order","free_user":"sample text for the free_user","checkin_level":"sample text for the checkin_level","recharge_user_sum":"Sample text for the recharge_user_sum"},"level":{"hours":"7","text":"(Last 10 Days)"},"badge":{"value":"Unranked","image":"https://divineprod.blob.core.windows.net/divineprod/badges/bronze.svg"},"performanceData":[{"metric":"Free Orders","value":500,"status":"","color":"#000000"},{"metric":"Promotional Orders (₹5)","value":500,"status":"","color":"#000000"},{"metric":"Retention Rate","value":"10%","status":"Good","color":"#008000"},{"metric":"Repurchase Rate","value":"15%","status":"Average","color":"yellow"},{"metric":"Online Hours","value":"14 hours","status":"Poor","color":"#FF0000"},{"metric":"Ecommerce","value":5000,"status":"Poor","color":"#FF0000"},{"metric":"Live","value":"","status":"Yes","color":"#008000"}]}
 /// message : "Data retrieved successfully"
 
 class AstroRitentionModel {
@@ -55,21 +55,24 @@ class AstroRitentionModel {
   }
 }
 
-/// retention : {"retention":0,"bucket":5,"total_free_order":20,"free_user":0,"checkin_level":"0","recharge_user_sum":0}
+/// retention : {"retention":100,"bucket":5,"total_free_order":20,"free_user":1,"level":"7","recharge_user_sum":1}
 /// notes : {"retention":"This is demo retention","bucket":"sample text for the bucket","total_free_order":"sample text for the total_free_order","free_user":"sample text for the free_user","checkin_level":"sample text for the checkin_level","recharge_user_sum":"Sample text for the recharge_user_sum"}
-/// level : {"level_detail":[{"text":"%","min":"0","max":"35","value":"Unranked","image":null},{"text":"%","min":"36","max":"59","value":"Bronze","image":"https://divineprod.blob.core.windows.net/divineprod/badges/bronze.svg"},{"text":"%","min":"60","max":"69","value":"Silver","image":"https://divineprod.blob.core.windows.net/divineprod/badges/Silver.svg"},{"text":"%","min":"70","max":"79","value":"Gold","image":"https://divineprod.blob.core.windows.net/divineprod/badges/Gold.svg"},{"text":"%","min":"89","max":"80","value":"Platinum","image":"https://divineprod.blob.core.windows.net/divineprod/badges/Platinum.svg"},{"text":"%","min":"90","max":null,"value":"Diamond","image":"https://divineprod.blob.core.windows.net/divineprod/badges/Diamond.svg"}]}
-/// performanceData : [{"metric":"Free Orders","value":500,"status":""},{"metric":"Promotional Orders (₹5)","value":500,"status":""},{"metric":"Retention Rate","value":"10%","status":"Good","color":"green"},{"metric":"Repurchase Rate","value":"15%","status":"Average","color":"yellow"},{"metric":"Online Hours","value":"14 hours","status":"Poor","color":"red"},{"metric":"Ecommerce","value":5000,"status":"Poor","color":"red"},{"metric":"Live","value":"","status":"Yes","color":"green"}]
+/// level : {"hours":"7","text":"(Last 10 Days)"}
+/// badge : {"value":"Unranked","image":"https://divineprod.blob.core.windows.net/divineprod/badges/bronze.svg"}
+/// performanceData : [{"metric":"Free Orders","value":500,"status":"","color":"#000000"},{"metric":"Promotional Orders (₹5)","value":500,"status":"","color":"#000000"},{"metric":"Retention Rate","value":"10%","status":"Good","color":"#008000"},{"metric":"Repurchase Rate","value":"15%","status":"Average","color":"yellow"},{"metric":"Online Hours","value":"14 hours","status":"Poor","color":"#FF0000"},{"metric":"Ecommerce","value":5000,"status":"Poor","color":"#FF0000"},{"metric":"Live","value":"","status":"Yes","color":"#008000"}]
 
 class Data {
   Data({
     Retention? retention,
     Notes? notes,
     Level? level,
+    Badge? badge,
     List<PerformanceData>? performanceData,
   }) {
     _retention = retention;
     _notes = notes;
     _level = level;
+    _badge = badge;
     _performanceData = performanceData;
   }
 
@@ -79,6 +82,7 @@ class Data {
         : null;
     _notes = json['notes'] != null ? Notes.fromJson(json['notes']) : null;
     _level = json['level'] != null ? Level.fromJson(json['level']) : null;
+    _badge = json['badge'] != null ? Badge.fromJson(json['badge']) : null;
     if (json['performanceData'] != null) {
       _performanceData = [];
       json['performanceData'].forEach((v) {
@@ -89,22 +93,26 @@ class Data {
   Retention? _retention;
   Notes? _notes;
   Level? _level;
+  Badge? _badge;
   List<PerformanceData>? _performanceData;
   Data copyWith({
     Retention? retention,
     Notes? notes,
     Level? level,
+    Badge? badge,
     List<PerformanceData>? performanceData,
   }) =>
       Data(
         retention: retention ?? _retention,
         notes: notes ?? _notes,
         level: level ?? _level,
+        badge: badge ?? _badge,
         performanceData: performanceData ?? _performanceData,
       );
   Retention? get retention => _retention;
   Notes? get notes => _notes;
   Level? get level => _level;
+  Badge? get badge => _badge;
   List<PerformanceData>? get performanceData => _performanceData;
 
   Map<String, dynamic> toJson() {
@@ -118,6 +126,9 @@ class Data {
     if (_level != null) {
       map['level'] = _level?.toJson();
     }
+    if (_badge != null) {
+      map['badge'] = _badge?.toJson();
+    }
     if (_performanceData != null) {
       map['performanceData'] =
           _performanceData?.map((v) => v.toJson()).toList();
@@ -129,6 +140,7 @@ class Data {
 /// metric : "Free Orders"
 /// value : 500
 /// status : ""
+/// color : "#000000"
 
 class PerformanceData {
   PerformanceData({
@@ -180,101 +192,76 @@ class PerformanceData {
   }
 }
 
-/// level_detail : [{"text":"%","min":"0","max":"35","value":"Unranked","image":null},{"text":"%","min":"36","max":"59","value":"Bronze","image":"https://divineprod.blob.core.windows.net/divineprod/badges/bronze.svg"},{"text":"%","min":"60","max":"69","value":"Silver","image":"https://divineprod.blob.core.windows.net/divineprod/badges/Silver.svg"},{"text":"%","min":"70","max":"79","value":"Gold","image":"https://divineprod.blob.core.windows.net/divineprod/badges/Gold.svg"},{"text":"%","min":"89","max":"80","value":"Platinum","image":"https://divineprod.blob.core.windows.net/divineprod/badges/Platinum.svg"},{"text":"%","min":"90","max":null,"value":"Diamond","image":"https://divineprod.blob.core.windows.net/divineprod/badges/Diamond.svg"}]
-
-class Level {
-  Level({
-    List<LevelDetail>? levelDetail,
-  }) {
-    _levelDetail = levelDetail;
-  }
-
-  Level.fromJson(dynamic json) {
-    if (json['level_detail'] != null) {
-      _levelDetail = [];
-      json['level_detail'].forEach((v) {
-        _levelDetail?.add(LevelDetail.fromJson(v));
-      });
-    }
-  }
-  List<LevelDetail>? _levelDetail;
-  Level copyWith({
-    List<LevelDetail>? levelDetail,
-  }) =>
-      Level(
-        levelDetail: levelDetail ?? _levelDetail,
-      );
-  List<LevelDetail>? get levelDetail => _levelDetail;
-
-  Map<String, dynamic> toJson() {
-    final map = <String, dynamic>{};
-    if (_levelDetail != null) {
-      map['level_detail'] = _levelDetail?.map((v) => v.toJson()).toList();
-    }
-    return map;
-  }
-}
-
-/// text : "%"
-/// min : "0"
-/// max : "35"
 /// value : "Unranked"
-/// image : null
+/// image : "https://divineprod.blob.core.windows.net/divineprod/badges/bronze.svg"
 
-class LevelDetail {
-  LevelDetail({
-    String? text,
-    String? min,
-    String? max,
+class Badge {
+  Badge({
     String? value,
-    dynamic image,
+    String? image,
   }) {
-    _text = text;
-    _min = min;
-    _max = max;
     _value = value;
     _image = image;
   }
 
-  LevelDetail.fromJson(dynamic json) {
-    _text = json['text'];
-    _min = json['min'];
-    _max = json['max'];
+  Badge.fromJson(dynamic json) {
     _value = json['value'];
     _image = json['image'];
   }
-  String? _text;
-  String? _min;
-  String? _max;
   String? _value;
-  dynamic _image;
-  LevelDetail copyWith({
-    String? text,
-    String? min,
-    String? max,
+  String? _image;
+  Badge copyWith({
     String? value,
-    dynamic image,
+    String? image,
   }) =>
-      LevelDetail(
-        text: text ?? _text,
-        min: min ?? _min,
-        max: max ?? _max,
+      Badge(
         value: value ?? _value,
         image: image ?? _image,
       );
-  String? get text => _text;
-  String? get min => _min;
-  String? get max => _max;
   String? get value => _value;
-  dynamic get image => _image;
+  String? get image => _image;
 
   Map<String, dynamic> toJson() {
     final map = <String, dynamic>{};
-    map['text'] = _text;
-    map['min'] = _min;
-    map['max'] = _max;
     map['value'] = _value;
     map['image'] = _image;
+    return map;
+  }
+}
+
+/// hours : "7"
+/// text : "(Last 10 Days)"
+
+class Level {
+  Level({
+    String? hours,
+    String? text,
+  }) {
+    _hours = hours;
+    _text = text;
+  }
+
+  Level.fromJson(dynamic json) {
+    _hours = json['hours'];
+    _text = json['text'];
+  }
+  String? _hours;
+  String? _text;
+  Level copyWith({
+    String? hours,
+    String? text,
+  }) =>
+      Level(
+        hours: hours ?? _hours,
+        text: text ?? _text,
+      );
+  String? get hours => _hours;
+  String? get text => _text;
+
+  Map<String, dynamic> toJson() {
+    final map = <String, dynamic>{};
+    map['hours'] = _hours;
+    map['text'] = _text;
     return map;
   }
 }
@@ -352,12 +339,12 @@ class Notes {
   }
 }
 
-/// retention : 0
+/// retention : 100
 /// bucket : 5
 /// total_free_order : 20
-/// free_user : 0
-/// checkin_level : "0"
-/// recharge_user_sum : 0
+/// free_user : 1
+/// level : "7"
+/// recharge_user_sum : 1
 
 class Retention {
   Retention({
@@ -365,14 +352,14 @@ class Retention {
     num? bucket,
     num? totalFreeOrder,
     num? freeUser,
-    String? checkinLevel,
+    String? level,
     num? rechargeUserSum,
   }) {
     _retention = retention;
     _bucket = bucket;
     _totalFreeOrder = totalFreeOrder;
     _freeUser = freeUser;
-    _checkinLevel = checkinLevel;
+    _level = level;
     _rechargeUserSum = rechargeUserSum;
   }
 
@@ -381,21 +368,21 @@ class Retention {
     _bucket = json['bucket'];
     _totalFreeOrder = json['total_free_order'];
     _freeUser = json['free_user'];
-    _checkinLevel = json['checkin_level'];
+    _level = json['level'];
     _rechargeUserSum = json['recharge_user_sum'];
   }
   num? _retention;
   num? _bucket;
   num? _totalFreeOrder;
   num? _freeUser;
-  String? _checkinLevel;
+  String? _level;
   num? _rechargeUserSum;
   Retention copyWith({
     num? retention,
     num? bucket,
     num? totalFreeOrder,
     num? freeUser,
-    String? checkinLevel,
+    String? level,
     num? rechargeUserSum,
   }) =>
       Retention(
@@ -403,14 +390,14 @@ class Retention {
         bucket: bucket ?? _bucket,
         totalFreeOrder: totalFreeOrder ?? _totalFreeOrder,
         freeUser: freeUser ?? _freeUser,
-        checkinLevel: checkinLevel ?? _checkinLevel,
+        level: level ?? _level,
         rechargeUserSum: rechargeUserSum ?? _rechargeUserSum,
       );
   num? get retention => _retention;
   num? get bucket => _bucket;
   num? get totalFreeOrder => _totalFreeOrder;
   num? get freeUser => _freeUser;
-  String? get checkinLevel => _checkinLevel;
+  String? get level => _level;
   num? get rechargeUserSum => _rechargeUserSum;
 
   Map<String, dynamic> toJson() {
@@ -419,7 +406,7 @@ class Retention {
     map['bucket'] = _bucket;
     map['total_free_order'] = _totalFreeOrder;
     map['free_user'] = _freeUser;
-    map['checkin_level'] = _checkinLevel;
+    map['level'] = _level;
     map['recharge_user_sum'] = _rechargeUserSum;
     return map;
   }
