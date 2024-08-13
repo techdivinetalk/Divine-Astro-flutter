@@ -48,14 +48,14 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
     String? newtoken = await FirebaseMessaging.instance.getToken();
     final data = await AppFirebaseService()
         .database
-        .child("astrologer/${userData?.id}/deviceToken")
+        .child("astrologer/${preferenceService.getUserDetail()?.id}/deviceToken")
         .once();
     final currentToken = data.snapshot.value;
     if (newtoken.toString() != currentToken.toString()) {
       print("token updated from ${currentToken} to ${newtoken}");
       await AppFirebaseService()
           .database
-          .child("astrologer/${userData?.id}/")
+          .child("astrologer/${preferenceService.getUserDetail()?.id}/")
           .update({'deviceToken': newtoken});
     }
   }
@@ -88,7 +88,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
       FirebaseMessaging.instance.onTokenRefresh.listen((newtoken) {
         AppFirebaseService()
             .database
-            .child("astrologer/${userData?.id}/")
+            .child("astrologer/${preferenceService.getUserDetail()?.id}/")
             .update({'deviceToken': newtoken});
       });
 
@@ -366,7 +366,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                                           nextMessage: index == controller.chatMessageList.length - 1 ? controller.chatMessageList[index] : controller.chatMessageList[index + 1],
                                           yourMessage: currentMsg.sendBy == SendBy.astrologer,
                                           unreadMessage: controller.unreadMessageList.isNotEmpty ? controller.chatMessageList[index].id == controller.unreadMessageList.first.id : false,
-                                          baseImageUrl: controller.preference.getBaseImageURL() ?? '',
+                                          baseImageUrl: controller.preferenceService.getBaseImageURL() ?? '',
                                         );
                                       },
                                     ),

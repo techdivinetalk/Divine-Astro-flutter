@@ -423,6 +423,7 @@ class ChatMessageWithSocketController extends GetxController
         await receiveMessage(snapshot);
       }
     });
+
     if (showRetentionPopup.toString() == "1") {
       print("callling popup api from this side");
       getRitentionPopUpDataApi();
@@ -433,18 +434,8 @@ class ChatMessageWithSocketController extends GetxController
     initialiseControllers();
     noticeAPi();
     getSavedRemedies();
-    AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
-      if (p0["status"] == null || p0["astroId"] == null) {
-        backFunction();
-        // AppFirebaseService().database.child("order/${p0["orderId"]}").remove();
-      } else {
-        print("orderData Changed");
-
-        initTask(p0);
-      }
-    });
     messgeScrollController.addListener(_scrollListener);
- //   stateHandling();
+    //   stateHandling();
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) async {
       if (fireChat.value == 0) {
@@ -563,13 +554,82 @@ class ChatMessageWithSocketController extends GetxController
     getChatList();
     socketReconnect();
     timeLeft = (int.parse(
-        AppFirebaseService().orderData.value["end_time"].toString()) *
-        1000) -
+                AppFirebaseService().orderData.value["end_time"].toString()) *
+            1000) -
         (AppFirebaseService().currentTime().millisecondsSinceEpoch);
     initTask(AppFirebaseService().orderData.value);
     Future.delayed(const Duration(milliseconds: 3000)).then((value) {
       getMessageTemplates();
     });
+    AppFirebaseService()
+        .database
+        .child(
+            "order/${AppFirebaseService().orderData.value["orderId"].toString()}")
+        .onChildChanged
+        .listen((event) {
+      updateChanges(event.snapshot);
+    });
+    AppFirebaseService()
+        .database
+        .child(
+            "order/${AppFirebaseService().orderData.value["orderId"].toString()}")
+        .onChildAdded
+        .listen((event) {
+      addChanges(event.snapshot);
+    });
+  }
+
+  addChanges(DataSnapshot snapshot) {
+    final key = snapshot.key;
+    final value = snapshot.value;
+    print("addChanges $key");
+    switch (key) {
+      case "order_end_time":
+        startExtraTimer(int.parse(value.toString()));
+        break;
+    }
+  }
+
+  updateChanges(DataSnapshot snapshot) {
+    final key = snapshot.key;
+    final value = snapshot.value;
+    print("KeyChange $key -- $value");
+    switch (key) {
+      case "status":
+        if (value.toString() == "5") {
+          WidgetsBinding.instance.endOfFrame.then(
+            (_) async {
+              socket.socket?.disconnect();
+              chatTimer?.cancel();
+              print("WentBack Status-5");
+              extraTimer?.cancel();
+              if (MiddleWare.instance.currentPage ==
+                  RouteName.chatMessageWithSocketUI) {
+                Get.until(
+                  (route) {
+                    return Get.currentRoute == RouteName.dashboard;
+                  },
+                );
+              }
+            },
+          );
+          return;
+        }else if (value.toString() == "4") {
+          chatTimer?.cancel();
+          showTalkTime.value = "-1";
+        } else if (value.toString() == "3" || value.toString() == "2") {
+          extraTimer?.cancel();
+          print("extraTime closing");
+          int remainingTime =
+              AppFirebaseService().orderData.value["end_time"] ?? 0;
+          talkTimeStartTimer(remainingTime);
+        }
+        break;
+      case "end_time":
+        timeLeft = (int.parse(value.toString()) * 1000) -
+            (AppFirebaseService().currentTime().millisecondsSinceEpoch);
+        break;
+    }
   }
 
   navigateToOtherScreen() async {
@@ -600,11 +660,7 @@ class ChatMessageWithSocketController extends GetxController
     return prefs.getBool("${key}template") ?? false;
   }
 
-  void startExtraTimer(int futureTimeInEpochMillis, String status) {
-    if (status == "4") {
-      chatTimer?.cancel();
-      showTalkTime.value = "-1";
-    }
+  void startExtraTimer(int futureTimeInEpochMillis) {
     DateTime dateTime =
         DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis);
     Duration extratimeLeft = const Duration(minutes: 1);
@@ -668,8 +724,7 @@ class ChatMessageWithSocketController extends GetxController
       } else {
         timeLeft = timeLeft - 1000;
         extraTimer?.cancel();
-        print('showTalkTime ${timeLeft}');
-        showTalkTime.value = convertSeconds(timeLeft);
+         showTalkTime.value = convertSeconds(timeLeft);
         if (MiddleWare.instance.currentPage == RouteName.dashboard) {
           timer.cancel();
         }
@@ -747,11 +802,14 @@ class ChatMessageWithSocketController extends GetxController
         print("WentBack backFunc");
         extraTimer?.cancel();
         // Get.delete<ChatMessageWithSocketController>();
-        Get.until(
-          (route) {
-            return Get.currentRoute == RouteName.dashboard;
-          },
-        );
+        if (MiddleWare.instance.currentPage ==
+            RouteName.chatMessageWithSocketUI) {
+          Get.until(
+            (route) {
+              return Get.currentRoute == RouteName.dashboard;
+            },
+          );
+        }
         if (AppFirebaseService().orderData.value["status"] == "4") {
           AppFirebaseService().orderData.value["status"] = "5";
           // DatabaseReference ref = FirebaseDatabase.instance.ref("order/${AppFirebaseService().orderData.value["orderId"]}");
@@ -1725,15 +1783,9 @@ class ChatMessageWithSocketController extends GetxController
     } else {
       print("ShutDown");
       if (p0["order_end_time"] != null) {
-        startExtraTimer(p0["order_end_time"], p0["status"]);
+        startExtraTimer(p0["order_end_time"]);
       }
     }
-
-    if (p0["isCustEntered"] != null &&
-        p0["isCustEntered"] > DateTime.now().microsecondsSinceEpoch) {
-      updateReadMessage();
-    }
-    print("extraTime ${p0["status"]}");
 
     isCardVisible.value =
         p0["card"] != null ? (p0["card"]["isCardVisible"] ?? false) : false;
@@ -1903,6 +1955,7 @@ class ChatMessageWithSocketController extends GetxController
 
   /// new audio logic
   var selectedIndex = 0.obs;
+
   // var isPlaying = [].obs;
   // var progress = [].obs;
   late AudioPlayer audioPlayer;

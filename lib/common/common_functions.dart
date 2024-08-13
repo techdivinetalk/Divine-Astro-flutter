@@ -12,6 +12,7 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:path/path.dart' as p;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../di/shared_preference_service.dart';
 import '../model/chat/res_common_chat_success.dart';
@@ -21,8 +22,6 @@ import 'colors.dart';
 
 final UserRepository userRepository = Get.find<UserRepository>();
 SharedPreferenceService preferenceService = Get.find<SharedPreferenceService>();
-var userData = preferenceService.getUserDetail();
-
 Future<String> uploadImageToS3Bucket(
     File? selectedFile, String fileName) async {
   var commonConstants = await userRepository.constantDetailsData();
@@ -39,7 +38,7 @@ Future<String> uploadImageToS3Bucket(
     secretKey: 'K355AAmxo7XXIqF6UcO6SPC4I+Us0t3Y40+zbSTx',
     file: selectedFile,
     bucket: dataString![0].split("//")[1],
-    destDir: 'astrologer/${userData?.id}',
+    destDir: 'astrologer/${preferenceService.getUserDetail()?.id}',
     filename: '$fileName$extension',
     region: dataString[2],
   );
@@ -50,7 +49,10 @@ Future<String> uploadImageToS3Bucket(
     return "";
   }
 }
-
+Future<String> getUserData(String key) async {
+  final SharedPreferences prefs = await SharedPreferences.getInstance();
+ return prefs.getString(key) ?? "";
+}
 Future<String?> uploadImageFileToAws(
     {required File file, required String moduleName}) async {
   var token = preferenceService.getToken();

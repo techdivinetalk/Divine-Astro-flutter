@@ -28,7 +28,7 @@ class PujaController extends GetxController {
   getPujaList() async {
     isPujaLoading = true;
     try {
-      Map<String, dynamic> params = {"role_id": userData?.roleId};
+      Map<String, dynamic> params = {"role_id": preferenceService.getUserDetail()?.roleId};
       var response = await userRepository.getPujaList(params);
       if (response.data!.isNotEmpty) {
         pujaData = response.data!;
