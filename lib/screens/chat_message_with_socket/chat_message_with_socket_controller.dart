@@ -396,9 +396,6 @@ class ChatMessageWithSocketController extends GetxController
       }
     }
   }
-
-  var timeLeft = 0;
-
   @override
   void onInit() {
     super.onInit();
@@ -553,84 +550,80 @@ class ChatMessageWithSocketController extends GetxController
     userDataKey = "chat_${currentUserId.value}";
     getChatList();
     socketReconnect();
-    timeLeft = (int.parse(
-                AppFirebaseService().orderData.value["end_time"].toString()) *
-            1000) -
-        (AppFirebaseService().currentTime().millisecondsSinceEpoch);
     initTask(AppFirebaseService().orderData.value);
     Future.delayed(const Duration(milliseconds: 3000)).then((value) {
       getMessageTemplates();
     });
-    AppFirebaseService()
-        .database
-        .child(
-            "order/${AppFirebaseService().orderData.value["orderId"].toString()}")
-        .onChildChanged
-        .listen((event) {
-      updateChanges(event.snapshot);
-    });
-    AppFirebaseService()
-        .database
-        .child(
-            "order/${AppFirebaseService().orderData.value["orderId"].toString()}")
-        .onChildAdded
-        .listen((event) {
-      addChanges(event.snapshot);
-    });
+    // AppFirebaseService()
+    //     .database
+    //     .child(
+    //         "order/${AppFirebaseService().orderData.value["orderId"].toString()}")
+    //     .onChildChanged
+    //     .listen((event) {
+    //   updateChanges(event.snapshot);
+    // });
+    // AppFirebaseService()
+    //     .database
+    //     .child(
+    //         "order/${AppFirebaseService().orderData.value["orderId"].toString()}")
+    //     .onChildAdded
+    //     .listen((event) {
+    //   addChanges(event.snapshot);
+    // });
   }
 
-  addChanges(DataSnapshot snapshot) {
-    final key = snapshot.key;
-    final value = snapshot.value;
-    print("addChanges $key");
-    switch (key) {
-      case "order_end_time":
-        startExtraTimer(int.parse(value.toString()));
-        break;
-    }
-  }
-
-  updateChanges(DataSnapshot snapshot) {
-    final key = snapshot.key;
-    final value = snapshot.value;
-    print("KeyChange $key -- $value");
-    switch (key) {
-      case "status":
-        if (value.toString() == "5") {
-          WidgetsBinding.instance.endOfFrame.then(
-            (_) async {
-              socket.socket?.disconnect();
-              chatTimer?.cancel();
-              print("WentBack Status-5");
-              extraTimer?.cancel();
-              if (MiddleWare.instance.currentPage ==
-                  RouteName.chatMessageWithSocketUI) {
-                Get.until(
-                  (route) {
-                    return Get.currentRoute == RouteName.dashboard;
-                  },
-                );
-              }
-            },
-          );
-          return;
-        }else if (value.toString() == "4") {
-          chatTimer?.cancel();
-          showTalkTime.value = "-1";
-        } else if (value.toString() == "3" || value.toString() == "2") {
-          extraTimer?.cancel();
-          print("extraTime closing");
-          int remainingTime =
-              AppFirebaseService().orderData.value["end_time"] ?? 0;
-          talkTimeStartTimer(remainingTime);
-        }
-        break;
-      case "end_time":
-        timeLeft = (int.parse(value.toString()) * 1000) -
-            (AppFirebaseService().currentTime().millisecondsSinceEpoch);
-        break;
-    }
-  }
+  // addChanges(DataSnapshot snapshot) {
+  //   final key = snapshot.key;
+  //   final value = snapshot.value;
+  //   print("addChanges $key");
+  //   switch (key) {
+  //     case "order_end_time":
+  //       startExtraTimer(int.parse(value.toString()));
+  //       break;
+  //   }
+  // }
+  //
+  // updateChanges(DataSnapshot snapshot) {
+  //   final key = snapshot.key;
+  //   final value = snapshot.value;
+  //   print("KeyChange $key -- $value");
+  //   switch (key) {
+  //     case "status":
+  //       if (value.toString() == "5") {
+  //         WidgetsBinding.instance.endOfFrame.then(
+  //           (_) async {
+  //             socket.socket?.disconnect();
+  //             chatTimer?.cancel();
+  //             print("WentBack Status-5");
+  //             extraTimer?.cancel();
+  //             if (MiddleWare.instance.currentPage ==
+  //                 RouteName.chatMessageWithSocketUI) {
+  //               Get.until(
+  //                 (route) {
+  //                   return Get.currentRoute == RouteName.dashboard;
+  //                 },
+  //               );
+  //             }
+  //           },
+  //         );
+  //         return;
+  //       }else if (value.toString() == "4") {
+  //         chatTimer?.cancel();
+  //         showTalkTime.value = "-1";
+  //       } else if (value.toString() == "3" || value.toString() == "2") {
+  //         extraTimer?.cancel();
+  //         print("extraTime closing");
+  //         int remainingTime =
+  //             AppFirebaseService().orderData.value["end_time"] ?? 0;
+  //         talkTimeStartTimer(remainingTime);
+  //       }
+  //       break;
+  //     case "end_time":
+  //       timeLeft = (int.parse(value.toString()) * 1000) -
+  //           (AppFirebaseService().currentTime().millisecondsSinceEpoch);
+  //       break;
+  //   }
+  // }
 
   navigateToOtherScreen() async {
     await Future.delayed(const Duration(milliseconds: 300));
@@ -694,15 +687,20 @@ class ChatMessageWithSocketController extends GetxController
       }
     });
   }
-
+  Duration? timeDifference;
   void talkTimeStartTimer(int futureTimeInEpochMillis) {
     print("futureTime.minute $futureTimeInEpochMillis");
-    chatTimer?.cancel();
-    chatTimer = null;
+    DateTime dateTime =
+    DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
+    if (chatTimer != null) {
+      chatTimer?.cancel();
+    }
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
       print(
           "showTalkTime1 ${timeLeft} -- ${(AppFirebaseService().serverTimeDiff / 1000)}");
-      if (timeLeft < 1) {
+      timeDifference = dateTime.difference(AppFirebaseService().currentTime());
+      // print("current time difference:  ${timeDifference.toString()}");
+      if (timeDifference! == Duration.zero || timeDifference!.inMilliseconds.abs() < 1000) {
         await callHangup();
         showTalkTime.value = "-1";
         print("chatTimeLeft ---- ${showTalkTime.value}");
@@ -722,9 +720,11 @@ class ChatMessageWithSocketController extends GetxController
           }
         });
       } else {
-        timeLeft = timeLeft - 1000;
         extraTimer?.cancel();
-         showTalkTime.value = convertSeconds(timeLeft);
+        showTalkTime.value =
+        "${timeDifference!.inHours.toString().padLeft(2, '0')}:"
+            "${timeDifference!.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
+            "${timeDifference!.inSeconds.remainder(60).toString().padLeft(2, '0')}";
         if (MiddleWare.instance.currentPage == RouteName.dashboard) {
           timer.cancel();
         }
