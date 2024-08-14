@@ -28,7 +28,6 @@ import "package:flutter/cupertino.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter/scheduler.dart";
-import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:flutter_html/flutter_html.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -554,6 +553,7 @@ class ChatMessageWithSocketController extends GetxController
       getMessageTemplates();
     });
   }
+
   getMessageTemplates() async {
     try {
       final response = await messageTemplateRepository.fetchTemplates();
