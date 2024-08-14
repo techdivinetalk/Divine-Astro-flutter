@@ -10,6 +10,11 @@ environment:
 dependencies:
   aws_s3_upload: ^1.5.0
   badges: ^3.1.2
+  flutter_pdfview:
+  syncfusion_flutter_gauges:
+  path_provider: ^2.1.4
+  screenshot: ^3.0.0
+  syncfusion_flutter_signaturepad:
   cached_network_image: ^3.2.3
   carousel_slider: ^4.2.1
   camera: ^0.10.5+9
@@ -23,7 +28,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   custom_rating_bar: ^2.0.5
   custom_timer: ^0.2.3
-  device_info_plus: ^9.0.3
+  device_info_plus: ^10.1.0
   dropdown_button2: ^2.3.7
   emoji_picker_flutter: ^1.6.1
   file_picker: ^8.0.6
@@ -66,7 +71,7 @@ dependencies:
   socket_io_client: ^2.0.3+1
   audio_waveforms: ^1.0.4
   svgaplayer_flutter: ^2.2.0
-  syncfusion_flutter_gauges: ^23.2.7
+
   url_launcher: ^6.1.12
   video_trimmer: ^3.0.1
   voice_message_package: ^2.1.2
@@ -165,8 +170,12 @@ flutter:
     - assets/images/
     - assets/lottie/
     - assets/svg/
+    - assets/docx/
     - assets/
   fonts:
+    - family: MrsSaintDelafield
+      fonts:
+        - asset: assets/fonts/MrsSaintDelafield-Regular.ttf
     - family: Poppins
       fonts:
         - asset: assets/fonts/Poppins-Thin.ttf

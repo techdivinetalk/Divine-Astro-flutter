@@ -2,13 +2,15 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:flutter/material.dart';
 
 class CommonButton extends StatelessWidget {
-  const CommonButton({
+   CommonButton({
     required this.buttonText,
     required this.buttonCallback,
+     this.backgroundColor,
     super.key,
   });
 
   final String buttonText;
+  final Color? backgroundColor;
   final void Function() buttonCallback;
 
   @override
@@ -19,7 +21,7 @@ class CommonButton extends StatelessWidget {
       child: ElevatedButton(
         style: ButtonStyle(
           elevation: MaterialStateProperty.all(4),
-          backgroundColor: MaterialStateProperty.all(appColors.guideColor),
+          backgroundColor: MaterialStateProperty.all(backgroundColor ?? appColors.guideColor),
           shape: MaterialStateProperty.all<RoundedRectangleBorder>(
             const RoundedRectangleBorder(
               borderRadius: BorderRadius.all(Radius.circular(10.0)),

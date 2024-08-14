@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/screens/signature_module/view/agreement_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -44,6 +45,17 @@ class SideMenuDrawer extends GetView<HomeController> {
               ],
             ),
             const SizedBox(height: 10),
+            ListTile(
+              leading: Assets.images.agreement.svg(),
+              title: Text("Agreement".tr),
+              onTap: () {
+                Get.put(HomeController()).homeScreenKey
+                  ..currentState?.closeDrawer();
+
+                Get.back();
+                Get.to(() => AgreementScreen());
+              },
+            ),
             ListTile(
               leading: Assets.images.icWaiting.svg(),
               title: Text("waitlist".tr),

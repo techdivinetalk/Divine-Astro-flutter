@@ -448,6 +448,9 @@ class $AssetsImagesGen {
   /// File path: assets/images/ic_orderHistory.svg
   SvgGenImage get icOrderHistory =>
       const SvgGenImage('assets/images/ic_orderHistory.svg');
+  /// File path: assets/images/ic_orderHistory.svg
+  SvgGenImage get agreement =>
+      const SvgGenImage('assets/images/agreement.svg');
 
   /// File path: assets/images/ic_platinum.png
   AssetGenImage get icPlatinum =>
