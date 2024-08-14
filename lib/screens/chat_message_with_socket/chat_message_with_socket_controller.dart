@@ -396,6 +396,7 @@ class ChatMessageWithSocketController extends GetxController
       }
     }
   }
+
   @override
   void onInit() {
     super.onInit();
@@ -687,20 +688,22 @@ class ChatMessageWithSocketController extends GetxController
       }
     });
   }
+
   Duration? timeDifference;
   void talkTimeStartTimer(int futureTimeInEpochMillis) {
     print("futureTime.minute $futureTimeInEpochMillis");
     DateTime dateTime =
-    DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
+        DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
     if (chatTimer != null) {
       chatTimer?.cancel();
     }
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
-      print(
-          "showTalkTime1 ${timeLeft} -- ${(AppFirebaseService().serverTimeDiff / 1000)}");
+      // print(
+      //     "showTalkTime1 ${timeLeft} -- ${(AppFirebaseService().serverTimeDiff / 1000)}");
       timeDifference = dateTime.difference(AppFirebaseService().currentTime());
       // print("current time difference:  ${timeDifference.toString()}");
-      if (timeDifference! == Duration.zero || timeDifference!.inMilliseconds.abs() < 1000) {
+      if (timeDifference! == Duration.zero ||
+          timeDifference!.inMilliseconds.abs() < 1000) {
         await callHangup();
         showTalkTime.value = "-1";
         print("chatTimeLeft ---- ${showTalkTime.value}");
@@ -722,7 +725,7 @@ class ChatMessageWithSocketController extends GetxController
       } else {
         extraTimer?.cancel();
         showTalkTime.value =
-        "${timeDifference!.inHours.toString().padLeft(2, '0')}:"
+            "${timeDifference!.inHours.toString().padLeft(2, '0')}:"
             "${timeDifference!.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
             "${timeDifference!.inSeconds.remainder(60).toString().padLeft(2, '0')}";
         if (MiddleWare.instance.currentPage == RouteName.dashboard) {

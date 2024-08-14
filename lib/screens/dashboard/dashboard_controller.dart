@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
-
 // import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -24,7 +23,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -102,7 +100,8 @@ class DashboardController extends GetxController
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      if (MiddleWare.instance.currentPage == RouteName.chatMessageWithSocketUI) {
+      if (MiddleWare.instance.currentPage ==
+          RouteName.chatMessageWithSocketUI) {
         getOrderFromApi();
         if (preferenceService.getUserDetail() != null) {
           // Check for null user details
@@ -537,7 +536,9 @@ class DashboardController extends GetxController
     notificationPermission();
     final socket = AppSocket();
     socket.socketConnect();
-    isServerMaintenance.value == 1 ? CommonDialogue().serverMaintenancePopUp() : null;
+    isServerMaintenance.value == 1
+        ? CommonDialogue().serverMaintenancePopUp()
+        : null;
     super.onReady();
   }
 

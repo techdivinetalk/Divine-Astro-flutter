@@ -461,6 +461,8 @@ class MessageView extends StatelessWidget {
                           child: CustomButton(
                               color: appColors.guideColor,
                               onTap: () {
+                                log("fjdfkdjfkdjkdjkfjd");
+
                                 print(AppFirebaseService().orderData["lat"]);
                                 log("fjdfkdjfkdjkdjkfjd");
                                 // Parse the date string to DateTime
@@ -495,6 +497,7 @@ class MessageView extends StatelessWidget {
                                 log(params.day.toString());
                                 log(params.month.toString());
                                 log(params.year.toString());
+                                log("${params.toString()}");
                                 Get.toNamed(RouteName.kundliDetail, arguments: {
                                   "kundli_id": 0,
                                   "from_kundli": false,
@@ -615,10 +618,14 @@ class MessageView extends StatelessWidget {
                               controller.audioPlayer.pause();
                               chatDetail.isPlaying = false;
                             } else {
-                              if (controller.durationTime.value.inSeconds == 0 ||
-                                  controller.durationTime.value.inSeconds == controller.currentDurationTime.value.inSeconds) {
+                              if (controller.durationTime.value.inSeconds ==
+                                      0 ||
+                                  controller.durationTime.value.inSeconds ==
+                                      controller.currentDurationTime.value
+                                          .inSeconds) {
                                 controller.initAudioPlayer(
-                                    path: chatDetail.awsUrl ?? "", index: index);
+                                    path: chatDetail.awsUrl ?? "",
+                                    index: index);
                               } else {
                                 controller.audioPlayer.resume();
                               }
@@ -630,21 +637,22 @@ class MessageView extends StatelessWidget {
                               controller.audioPlayer.pause();
                             }
                             controller.selectedIndex.value = index!;
-                            controller.initAudioPlayer(path: chatDetail.awsUrl
-                                ?? "", index: index);
+                            controller.initAudioPlayer(
+                                path: chatDetail.awsUrl ?? "", index: index);
                           }
                           controller.update();
                         },
                         child: Container(
                           height: 33,
                           width: 33,
-
                           decoration: BoxDecoration(
                             color: appColors.guideColor,
                             shape: BoxShape.circle,
                           ),
                           child: Icon(
-                            chatDetail.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                            chatDetail.isPlaying
+                                ? Icons.pause_rounded
+                                : Icons.play_arrow_rounded,
                             color: Colors.white,
                           ),
                         ),
@@ -652,9 +660,7 @@ class MessageView extends StatelessWidget {
                       // Obx(() {
                       //   return ;
                       // }),
-                      SizedBox(
-                          width: 5
-                      ),
+                      SizedBox(width: 5),
                       // Obx(() {
                       //   return ;
                       // }),
@@ -665,15 +671,19 @@ class MessageView extends StatelessWidget {
                           child: WaveformProgressbar(
                             onTap: (double) {
                               chatDetail.progress = double;
-                              var cutSecond = controller.durationTime.value.inSeconds * double;
+                              var cutSecond =
+                                  controller.durationTime.value.inSeconds *
+                                      double;
                               print(cutSecond);
                               print('cutSecond');
-                              Duration newPosition = Duration(seconds: cutSecond.toInt());
+                              Duration newPosition =
+                                  Duration(seconds: cutSecond.toInt());
                               controller.audioPlayer.seek(newPosition);
                             },
                             color: appColors.guideColor.withOpacity(0.4),
                             progressColor: appColors.guideColor,
-                            progress: double.parse(chatDetail.progress.toString()),
+                            progress:
+                                double.parse(chatDetail.progress.toString()),
                           ),
                         ),
                       ),
