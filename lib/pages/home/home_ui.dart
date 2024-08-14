@@ -93,7 +93,7 @@ class HomeUI extends GetView<HomeController> {
                       builder: (context, snapshot) {
                         return Text(
                           DateFormat("dd/MM/yyyy hh:mm:ss")
-                              .format(DateTime.now()),
+                              .format(AppFirebaseService().currentTime()),
                           style: AppTextStyle.textStyle12(
                             fontWeight: FontWeight.w400,
                             fontColor: appColors.darkBlue,

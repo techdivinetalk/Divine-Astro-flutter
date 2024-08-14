@@ -696,8 +696,6 @@ class ChatMessageWithSocketController extends GetxController
       chatTimer?.cancel();
     }
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
-      print(
-          "showTalkTime1 ${timeLeft} -- ${(AppFirebaseService().serverTimeDiff / 1000)}");
       timeDifference = dateTime.difference(AppFirebaseService().currentTime());
       // print("current time difference:  ${timeDifference.toString()}");
       if (timeDifference! == Duration.zero || timeDifference!.inMilliseconds.abs() < 1000) {
