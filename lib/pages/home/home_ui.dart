@@ -2801,7 +2801,7 @@ class HomeUI extends GetView<HomeController> {
                 children: [
                   SizedBox(
                     child: CustomText(
-                      'Performance Last Week', //(22nd-28th July)
+                      'Performance ${controller.getRitentionModel!.data!.Date_text == null ? "" : "${controller.getRitentionModel!.data!.Date_text.toString()}"}', //(22nd-28th July)
                       fontWeight: FontWeight.w600,
                       fontColor: appColors.black,
                       maxLines: 1,

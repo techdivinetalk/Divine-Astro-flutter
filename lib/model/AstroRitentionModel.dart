@@ -67,12 +67,14 @@ class Data {
     Notes? notes,
     Level? level,
     Badge? badge,
+    dynamic Date_text,
     List<PerformanceData>? performanceData,
   }) {
     _retention = retention;
     _notes = notes;
     _level = level;
     _badge = badge;
+    _Date_text = Date_text;
     _performanceData = performanceData;
   }
 
@@ -83,6 +85,7 @@ class Data {
     _notes = json['notes'] != null ? Notes.fromJson(json['notes']) : null;
     _level = json['level'] != null ? Level.fromJson(json['level']) : null;
     _badge = json['badge'] != null ? Badge.fromJson(json['badge']) : null;
+    _Date_text = json['performance_date_text'];
     if (json['performanceData'] != null) {
       _performanceData = [];
       json['performanceData'].forEach((v) {
@@ -94,12 +97,14 @@ class Data {
   Notes? _notes;
   Level? _level;
   Badge? _badge;
+  dynamic _Date_text;
   List<PerformanceData>? _performanceData;
   Data copyWith({
     Retention? retention,
     Notes? notes,
     Level? level,
     Badge? badge,
+    dynamic Date_text,
     List<PerformanceData>? performanceData,
   }) =>
       Data(
@@ -107,12 +112,14 @@ class Data {
         notes: notes ?? _notes,
         level: level ?? _level,
         badge: badge ?? _badge,
+        Date_text: Date_text ?? _Date_text,
         performanceData: performanceData ?? _performanceData,
       );
   Retention? get retention => _retention;
   Notes? get notes => _notes;
   Level? get level => _level;
   Badge? get badge => _badge;
+  dynamic get Date_text => _Date_text;
   List<PerformanceData>? get performanceData => _performanceData;
 
   Map<String, dynamic> toJson() {
@@ -128,6 +135,9 @@ class Data {
     }
     if (_badge != null) {
       map['badge'] = _badge?.toJson();
+    }
+    if (_Date_text != null) {
+      map['performance_date_text'] = _Date_text?.toJson();
     }
     if (_performanceData != null) {
       map['performanceData'] =
