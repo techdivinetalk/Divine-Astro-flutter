@@ -97,7 +97,6 @@ Future<void> main() async {
     print("pushNotification1 ${message.notification?.title ?? ""}");
     print('Message data-: dasboardCurrentIndex---${message.data}');
     if (message.data["type"] == "2") {
-      print('msg ---- from notification');
       showFlutterNotification(message);
       return;
     }

@@ -177,9 +177,10 @@ class SideMenuDrawer extends GetView<HomeController> {
             ListTile(
               leading: Assets.images.icSetting.svg(),
               title: Text('settings'.tr),
-              onTap: () => {
-                Navigator.of(context).pop(),
-                Get.toNamed(RouteName.settingsUI)
+              onTap: () {
+                Get.find<HomeController>().homeScreenKey.currentState?.closeDrawer();
+                // Navigator.of(context).pop(),
+                Get.toNamed(RouteName.settingsUI);
               },
             ),
             // ListTile(
