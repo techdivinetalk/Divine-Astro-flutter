@@ -119,6 +119,7 @@ class ChatMessageWithSocketController extends GetxController
     if (isEmojiShowing.value) {
       isEmojiShowing.value = false;
     } else {
+      print("emoji backFunction");
       backFunction();
     }
     return false;
@@ -419,6 +420,7 @@ class ChatMessageWithSocketController extends GetxController
     getSavedRemedies();
     AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
       if (p0["status"] == null || p0["astroId"] == null) {
+        print("realTimeChange backFunction");
         backFunction();
         AppFirebaseService().database.child("order/${p0["orderId"]}").remove();
       } else {
@@ -591,7 +593,7 @@ class ChatMessageWithSocketController extends GetxController
           extraTimer?.cancel();
           extraTalkTime.value = "0";
           timer.cancel();
-          print("WentBack timeUp");
+          print("ExtraTimeUp backFunction");
           extratimeLeft = Duration.zero;
           backFunction();
         }
@@ -732,19 +734,6 @@ class ChatMessageWithSocketController extends GetxController
               return Get.currentRoute == RouteName.dashboard;
             },
           );
-        }
-        if (AppFirebaseService().orderData.value["status"] == "4") {
-          AppFirebaseService().orderData.value["status"] = "5";
-          // DatabaseReference ref = FirebaseDatabase.instance.ref("order/${AppFirebaseService().orderData.value["orderId"]}");
-          // ref.update({
-          //   "status": "5",
-          // }).then((_) {
-          //   // Success handling if needed.
-          // }).catchError((error) {
-          //   // Error handling.
-          //   print("Firebase error: $error");
-          // });
-          // await endChatApi();
         }
       },
     );
