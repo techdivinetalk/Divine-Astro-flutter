@@ -41,8 +41,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   final messageScrollController = ScrollController();
   ChatAssistChatResponse? chatAssistChatResponse;
   RxList chatMessageList = [].obs;
-  var preference = Get.find<SharedPreferenceService>();
-
+  var preferenceService;
   RxString userProfileImage = "".obs;
   RxList<AssistChatData> unreadMessageList = <AssistChatData>[].obs;
   RxList<MessageTemplates> messageTemplates = <MessageTemplates>[].obs;
@@ -96,6 +95,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
+    preferenceService = Get.find<SharedPreferenceService>();
     noticeAPi();
     getSavedRemedies();
     args = Get.arguments;
@@ -272,7 +272,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   getOurImage() async {
     final prefs = await SharedPreferences.getInstance();
     final baseAmazonUrl = prefs.getString(SharedPreferenceService.baseImageUrl);
-    userProfileImage("$baseAmazonUrl/${userData?.image}");
+    userProfileImage("$baseAmazonUrl/${preferenceService.getUserDetail()?.image}");
   }
 
   sendMsgTemplate(MessageTemplates msg, bool isTemplateMsg) {
@@ -283,7 +283,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
 
   userEnterChatSocket() {
     appSocket.emitForAstrologerEnterChatAssist(
-        args?.id.toString(), userData?.id.toString());
+        args?.id.toString(), preferenceService.getUserDetail()?.id.toString());
   }
 
   listenUserEnterChatSocket() {
@@ -296,13 +296,13 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
 
   userjoinedChatSocket() {
     appSocket.emitForStartAstroCustChatAssist(
-        userData?.id.toString(), args?.id.toString(), 0);
+        preferenceService.getUserDetail()?.id.toString(), args?.id.toString(), 0);
   }
 
   userleftChatSocket() {
     print("called user left chat socket");
     appSocket.userLeftCustChatAssist(
-        userData?.id.toString(), args?.id.toString());
+        preferenceService.getUserDetail()?.id.toString(), args?.id.toString());
   }
 
   userleftChatSocketListen() {
@@ -590,7 +590,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
       case MsgType.text:
         msgData = AssistChatData(
             message: data['text'],
-            profileImage: userData?.image,
+            profileImage: preferenceService.getUserDetail()?.image,
             astrologerId: preferenceService.getUserDetail()!.id,
             createdAt: DateTime.now().toIso8601String(),
             id: DateTime.now().millisecondsSinceEpoch,
@@ -610,7 +610,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
       case MsgType.voucher:
         msgData = AssistChatData(
             message: jsonEncode(data['data']),
-            profileImage: userData?.image,
+            profileImage: preferenceService.getUserDetail()?.image,
             astrologerId: preferenceService.getUserDetail()!.id,
             createdAt: DateTime.now().toIso8601String(),
             id: DateTime.now().millisecondsSinceEpoch,
@@ -630,7 +630,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
       case MsgType.audio:
         msgData = AssistChatData(
             message: data['audioUrl'],
-            profileImage: userData?.image,
+            profileImage: preferenceService.getUserDetail()?.image,
             astrologerId: preferenceService.getUserDetail()!.id,
             createdAt: DateTime.now().toIso8601String(),
             id: DateTime.now().millisecondsSinceEpoch,
@@ -654,7 +654,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
             createdAt: DateTime.now().toIso8601String(),
             id: DateTime.now().millisecondsSinceEpoch,
             isSuspicious: 0,
-            profileImage: userData?.image,
+            profileImage: preferenceService.getUserDetail()?.image,
             msgType: MsgType.remedies,
             sendBy: SendBy.astrologer,
             seenStatus: SeenStatus.notSent,
@@ -672,7 +672,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
             createdAt: DateTime.now().toIso8601String(),
             id: DateTime.now().millisecondsSinceEpoch,
             isSuspicious: 0,
-            profileImage: userData?.image,
+            profileImage: preferenceService.getUserDetail()?.image,
             msgType: MsgType.image,
             sendBy: SendBy.astrologer,
             seenStatus: SeenStatus.notSent,
@@ -697,7 +697,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
               id: DateTime.now().millisecondsSinceEpoch,
               isSuspicious: 0,
               isPoojaProduct: true,
-              profileImage: userData?.image,
+              profileImage: preferenceService.getUserDetail()?.image,
               msgType: MsgType.pooja,
               sendBy: SendBy.astrologer,
               product: Product(
@@ -727,7 +727,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
               id: DateTime.now().millisecondsSinceEpoch,
               isSuspicious: 0,
               isPoojaProduct: false,
-              profileImage: userData?.image,
+              profileImage: preferenceService.getUserDetail()?.image,
               msgType: MsgType.product,
               suggestedRemediesId: productData.data?.id ?? 0,
               sendBy: SendBy.astrologer,
@@ -754,7 +754,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
             createdAt: DateTime.now().toIso8601String(),
             id: DateTime.now().millisecondsSinceEpoch,
             isSuspicious: 0,
-            profileImage: userData?.image,
+            profileImage: preferenceService.getUserDetail()?.image,
             msgType: MsgType.customProduct,
             sendBy: SendBy.astrologer,
             seenStatus: SeenStatus.notSent,

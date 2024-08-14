@@ -608,77 +608,79 @@ class MessageView extends StatelessWidget {
                   // ),
                   Row(
                     children: [
-                      Obx(() {
-                        return InkWell(
-                          onTap: () async {
-                            if (controller.selectedIndex.value == index) {
-                              if (controller.isPlaying.value[index!]) {
-                                controller.audioPlayer.pause();
-                                controller.isPlaying.value[index] = false;
-                              } else {
-                                if (controller.durationTime.value.inSeconds == 0 ||
-                                    controller.durationTime.value.inSeconds == controller.currentDurationTime.value.inSeconds) {
-                                  controller.initAudioPlayer(
-                                      path: chatDetail.awsUrl ?? "", index: index);
-                                } else {
-                                  controller.audioPlayer.resume();
-                                }
-                                controller.isPlaying.value[index] = true;
-                              }
+                      InkWell(
+                        onTap: () async {
+                          if (controller.selectedIndex.value == index) {
+                            if (chatDetail.isPlaying!) {
+                              controller.audioPlayer.pause();
+                              chatDetail.isPlaying = false;
                             } else {
-                              if (controller.isPlaying.value[controller.selectedIndex.value]) {
-                                controller.isPlaying.value[controller.selectedIndex.value] = false;
-                                controller.audioPlayer.pause();
+                              if (controller.durationTime.value.inSeconds == 0 ||
+                                  controller.durationTime.value.inSeconds == controller.currentDurationTime.value.inSeconds) {
+                                controller.initAudioPlayer(
+                                    path: chatDetail.awsUrl ?? "", index: index);
+                              } else {
+                                controller.audioPlayer.resume();
                               }
-                              controller.selectedIndex.value = index!;
-                              controller.initAudioPlayer(path: chatDetail.awsUrl
-                                  ?? "", index: index);
+                              chatDetail.isPlaying = true;
                             }
-                            controller.update();
-                          },
-                          child: Container(
-                            height: 33,
-                            width: 33,
+                          } else {
+                            if (chatDetail.isPlaying!) {
+                              chatDetail.isPlaying = false;
+                              controller.audioPlayer.pause();
+                            }
+                            controller.selectedIndex.value = index!;
+                            controller.initAudioPlayer(path: chatDetail.awsUrl
+                                ?? "", index: index);
+                          }
+                          controller.update();
+                        },
+                        child: Container(
+                          height: 33,
+                          width: 33,
 
-                            decoration: BoxDecoration(
-                              color: appColors.guideColor,
-                              shape: BoxShape.circle,
-                            ),
-                            child: Icon(
-                              controller.isPlaying.value[index!] ? Icons.pause_rounded : Icons.play_arrow_rounded,
-                              color: Colors.white,
-                            ),
+                          decoration: BoxDecoration(
+                            color: appColors.guideColor,
+                            shape: BoxShape.circle,
                           ),
-                        );
-                      }),
+                          child: Icon(
+                            chatDetail.isPlaying ? Icons.pause_rounded : Icons.play_arrow_rounded,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                      // Obx(() {
+                      //   return ;
+                      // }),
                       SizedBox(
                           width: 5
                       ),
-                      Obx(() {
-                        return Center(
-                          child: Container(
-                            height: 22,
-                            width: 150,
-                            child: WaveformProgressbar(
-                              onTap: (double) {
-                                controller.progress.value[index!] = double;
-                                var cutSecond = controller.durationTime.value.inSeconds * double;
-                                print(cutSecond);
-                                print('cutSecond');
-                                Duration newPosition = Duration(seconds: cutSecond.toInt());
-                                controller.audioPlayer.seek(newPosition);
-                              },
-                              color: appColors.guideColor.withOpacity(0.4),
-                              progressColor: appColors.guideColor,
-                              progress: controller.progress.value[index!],
-                            ),
+                      // Obx(() {
+                      //   return ;
+                      // }),
+                      Center(
+                        child: Container(
+                          height: 22,
+                          width: 150,
+                          child: WaveformProgressbar(
+                            onTap: (double) {
+                              chatDetail.progress = double;
+                              var cutSecond = controller.durationTime.value.inSeconds * double;
+                              print(cutSecond);
+                              print('cutSecond');
+                              Duration newPosition = Duration(seconds: cutSecond.toInt());
+                              controller.audioPlayer.seek(newPosition);
+                            },
+                            color: appColors.guideColor.withOpacity(0.4),
+                            progressColor: appColors.guideColor,
+                            progress: double.parse(chatDetail.progress.toString()),
                           ),
-                        );
-                      }),
+                        ),
+                      ),
                     ],
                   ),
                   Positioned(
-                    bottom: 0,
+                    // bottom: 0,
                     right: 0,
                     top: 27,
                     child: Row(

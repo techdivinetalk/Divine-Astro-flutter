@@ -41,6 +41,8 @@ class KundliController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    yourParams.value.tzone = 5.5;
+
     getUserData();
   }
 

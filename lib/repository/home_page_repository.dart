@@ -248,8 +248,11 @@ class HomePageRepository extends ApiProvider {
         Utils().handleStatusCodeUnauthorizedServer();
       } else if (response.statusCode == HttpStatus.badRequest) {
         Utils().handleStatusCode400(response.body);
-      } else if (response.statusCode == 110 || response.statusCode == HttpStatus.networkConnectTimeoutError || response.statusCode == HttpStatus.networkAuthenticationRequired) {
-        divineSnackBar(data: "No Internet connection", color: appColors.redColor);
+      } else if (response.statusCode == 110 ||
+          response.statusCode == HttpStatus.networkConnectTimeoutError ||
+          response.statusCode == HttpStatus.networkAuthenticationRequired) {
+        divineSnackBar(
+            data: "No Internet connection", color: appColors.redColor);
       }
       debugPrint("test_response_body: ${response.body}");
 
@@ -281,8 +284,11 @@ class HomePageRepository extends ApiProvider {
         Utils().handleStatusCodeUnauthorizedServer();
       } else if (response.statusCode == HttpStatus.badRequest) {
         Utils().handleStatusCode400(response.body);
-      } else if (response.statusCode == 110 || response.statusCode == HttpStatus.networkConnectTimeoutError || response.statusCode == HttpStatus.networkAuthenticationRequired) {
-        divineSnackBar(data: "No Internet connection", color: appColors.redColor);
+      } else if (response.statusCode == 110 ||
+          response.statusCode == HttpStatus.networkConnectTimeoutError ||
+          response.statusCode == HttpStatus.networkAuthenticationRequired) {
+        divineSnackBar(
+            data: "No Internet connection", color: appColors.redColor);
       }
       if (response.statusCode == 200 && json.decode(response.body) != null) {
         print("test_body: ${response.body}");
@@ -316,8 +322,11 @@ class HomePageRepository extends ApiProvider {
         Utils().handleStatusCodeUnauthorizedServer();
       } else if (response.statusCode == HttpStatus.badRequest) {
         Utils().handleStatusCode400(response.body);
-      } else if (response.statusCode == 110 || response.statusCode == HttpStatus.networkConnectTimeoutError || response.statusCode == HttpStatus.networkAuthenticationRequired) {
-        divineSnackBar(data: "No Internet connection", color: appColors.redColor);
+      } else if (response.statusCode == 110 ||
+          response.statusCode == HttpStatus.networkConnectTimeoutError ||
+          response.statusCode == HttpStatus.networkAuthenticationRequired) {
+        divineSnackBar(
+            data: "No Internet connection", color: appColors.redColor);
       }
       if (response.statusCode == 200 && json.decode(response.body) != null) {
         print("test_body: ${response.body}");

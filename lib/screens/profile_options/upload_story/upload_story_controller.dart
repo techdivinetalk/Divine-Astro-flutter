@@ -1,7 +1,10 @@
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:math' as math;
 import 'dart:io';
 
+import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -33,7 +36,6 @@ class UploadStoryController extends GetxController {
 
     if (Get.arguments != null) {
       trimmer.loadVideo(videoFile: File(Get.arguments));
-
       selectedFile?.value = true;
       update();
     }
@@ -44,14 +46,57 @@ class UploadStoryController extends GetxController {
     trimmer.saveTrimmedVideo(
       startValue: startValue,
       endValue: endValue,
+      storageDir: StorageDir.applicationDocumentsDirectory,
+      videoFolderName: "trimmer video",
+      videoFileName: "vid_${DateTime.now().microsecond}_${DateTime.now().millisecond}",
       onSave: (outputPath) async {
-        progressVisibility.value = false;
-        await uploadImage(File(outputPath!));
+        int fileSizeInBytes = await File(outputPath ?? "").length();
+        double sizeInKB = fileSizeInBytes / 1024;
+        log("pick video size : $sizeInKB");
+        log("maximumStorySize : ${maximumStorySize.value}");
+        if(sizeInKB < double.parse(maximumStorySize.value.toString())){
+          progressVisibility.value = false;
+          Fluttertoast.showToast(msg: "${'uploadStory'.tr}..");
+          await uploadImage(File(outputPath!));
+        } else{
+          Fluttertoast.showToast(
+              msg: "Story video size should be maximum ${convertKBtoMB(double.parse(maximumStorySize.value.toString()))} MB",
+            backgroundColor: appColors.red
+          );
+        }
         // uploadImageToS3Bucket(File(outputPath!),
         //     duration: ((endValue - startValue) / 1000).toString());
       },
     );
   }
+
+  String convertKBtoMB(double sizeInKB) {
+    return (sizeInKB / 1024).toStringAsFixed(0);
+  }
+
+  /*reduceVideoSize(String path) async {
+    isLoading(true);
+    final mediaInfo = await VideoCompress.compressVideo(
+      path,
+      quality: VideoQuality.LowQuality,
+      deleteOrigin: false,
+      includeAudio: true,
+    );
+    if(mediaInfo?.file?.path != null){
+      int fileSizeInBytes = await File(mediaInfo!.file!.path).length();
+      double fileSizeInMB = fileSizeInBytes / (1024 * 1024);
+      log("compress video size : $fileSizeInMB");
+      if(fileSizeInMB < 2){
+        await uploadImage(File(mediaInfo.file!.path));
+      } else{
+        isLoading(false);
+        Fluttertoast.showToast(msg: "Story video should be maximum 2 mb");
+      }
+    } else{
+      isLoading(false);
+      Fluttertoast.showToast(msg: "Something went wrong");
+    }
+  }*/
 
   uploadImageToS3Bucket(File? selectedFile, {String? duration}) async {
     log("1");
@@ -81,7 +126,7 @@ class UploadStoryController extends GetxController {
 
   uploadImage(imageFile) async {
     var uploadedStory;
-    isLoading(true);
+    // isLoading(true);
     var token = await preferenceService.getToken();
     log("image length - ${imageFile.path}");
 

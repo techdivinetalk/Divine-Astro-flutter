@@ -33,8 +33,8 @@ class UploadStoryUi extends GetView<UploadStoryController> {
                         )
                       : InkWell(
                           onTap: () {
-                            Fluttertoast.showToast(
-                                msg: "${'uploadStory'.tr}..");
+                            // Fluttertoast.showToast(
+                            //     msg: "${'uploadStory'.tr}..");
                             controller.saveVideo();
                             controller.update();
                             controller.encodedURLFunction();

@@ -230,7 +230,34 @@ class _DashaUIState extends State<DashaUI> {
             ),
           ),
           SizedBox(height: 5.h),
-
+          Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Center(
+                    child: Text(
+                      "Planet".tr,
+                      style: AppTextStyle.textStyle14(
+                          fontWeight: FontWeight.w500,
+                          fontColor: appColors.brown),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                  child: Center(
+                    child: Text(
+                      "End Date".tr,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyle.textStyle14(
+                          fontWeight: FontWeight.w500,
+                          fontColor: appColors.brown),
+                    ),
+                  ),
+                ),
+              ]),
           ListView.builder(
               controller: controller.scrollController,
               shrinkWrap: true,
@@ -238,36 +265,9 @@ class _DashaUIState extends State<DashaUI> {
                   controller.dashaTableData.value.data?.vimshottari?.length ??
                       0 + 1,
               itemBuilder: (context, index) {
-                if (index == 0) {
-                  return Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                          child: Center(
-                            child: Text(
-                              "Planet".tr,
-                              style: AppTextStyle.textStyle14(
-                                  fontWeight: FontWeight.w500,
-                                  fontColor: appColors.brown),
-                            ),
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
-                          child: Center(
-                            child: Text(
-                              "End Date".tr,
-                              overflow: TextOverflow.ellipsis,
-                              style: AppTextStyle.textStyle14(
-                                  fontWeight: FontWeight.w500,
-                                  fontColor: appColors.brown),
-                            ),
-                          ),
-                        ),
-                      ]);
-                }
+                //       Vimshottari? vimshottariData =
+                //           controller.dashaTableData.value.data?.vimshottari?[index];
+
                 Vimshottari? vimshottariData =
                     controller.dashaTableData.value.data?.vimshottari?[index];
                 return InkWell(
@@ -580,44 +580,40 @@ class _DashaUIState extends State<DashaUI> {
               ),
             ),
             SizedBox(height: 5.h),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Center(
+                      child: Text(
+                        "Planet".tr,
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w500,
+                            fontColor: appColors.brown),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Center(
+                      child: Text(
+                        "End Date".tr,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w500,
+                            fontColor: appColors.brown),
+                      ),
+                    ),
+                  ),
+                ]),
             ListView.builder(
                 controller: controller.scrollController,
                 shrinkWrap: true,
                 itemCount:
                     controller.planetDataDetail.value.data?.length ?? 0 + 1,
                 itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Center(
-                              child: Text(
-                                "Planet".tr,
-                                style: AppTextStyle.textStyle14(
-                                    fontWeight: FontWeight.w500,
-                                    fontColor: appColors.brown),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Center(
-                              child: Text(
-                                "End Date".tr,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTextStyle.textStyle14(
-                                    fontWeight: FontWeight.w500,
-                                    fontColor: appColors.brown),
-                              ),
-                            ),
-                          ),
-                        ]);
-                  }
                   Vimshottari? vimshottariData =
                       controller.dashaTableData.value.data?.vimshottari?[index];
                   Datum? subModel =
@@ -631,9 +627,10 @@ class _DashaUIState extends State<DashaUI> {
                       } else {
                         controller.subDashaPlanetName2.value =
                             subModel?.planet ?? "";
+                        controller.pratyantarDataDetail.value.data = null;
 
                         controller.getPratyantarDashaApiList(
-                          vimshottariData?.planet.toString() ?? '',
+                          controller.subDashaPlanetName.value.toString() ?? '',
                           subModel?.planet.toString() ?? '',
                         );
                       }
@@ -946,6 +943,34 @@ class _DashaUIState extends State<DashaUI> {
                 ),
               ),
             ),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Center(
+                      child: Text(
+                        "Planet".tr,
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w500,
+                            fontColor: appColors.brown),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Center(
+                      child: Text(
+                        "End Date".tr,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w500,
+                            fontColor: appColors.brown),
+                      ),
+                    ),
+                  ),
+                ]),
             SizedBox(height: 5.h),
             ListView.builder(
                 controller: controller.scrollController,
@@ -953,38 +978,6 @@ class _DashaUIState extends State<DashaUI> {
                 itemCount:
                     controller.pratyantarDataDetail.value.data?.length ?? 0 + 1,
                 itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Center(
-                              child: Text(
-                                "Planet".tr,
-                                style: AppTextStyle.textStyle14(
-                                    fontWeight: FontWeight.w500,
-                                    fontColor: appColors.brown),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Center(
-                              child: Text(
-                                "End Date".tr,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTextStyle.textStyle14(
-                                    fontWeight: FontWeight.w500,
-                                    fontColor: appColors.brown),
-                              ),
-                            ),
-                          ),
-                        ]);
-                  }
                   Vimshottari? vimshottariData =
                       controller.dashaTableData.value.data?.vimshottari?[index];
                   Datum? subModel =
@@ -995,13 +988,21 @@ class _DashaUIState extends State<DashaUI> {
                   return InkWell(
                     onTap: () {
                       controller.subDashaLevel.value = 3;
-                      controller.subDashaLevelName3.value =
-                          pratyantarModel?.planet ?? "";
 
-                      controller.getSookshmaDashaApiList(
-                          vimshottariData?.planet.toString() ?? '',
-                          subModel?.planet.toString() ?? '',
-                          pratyantarModel?.planet.toString() ?? '');
+                      if (controller.subDashaLevelName3 ==
+                          pratyantarModel?.planet.toString()) {
+                      } else {
+                        controller.subDashaLevelName3.value =
+                            pratyantarModel?.planet ?? "";
+                        controller.sookshmaDataDetail.value.data = null;
+
+                        controller.getSookshmaDashaApiList(
+                            controller.subDashaPlanetName.value.toString() ??
+                                '',
+                            controller.subDashaPlanetName2.value.toString() ??
+                                '',
+                            pratyantarModel?.planet.toString() ?? '');
+                      }
                     },
                     child: Column(
                       children: [
@@ -1325,44 +1326,39 @@ class _DashaUIState extends State<DashaUI> {
               ),
             ),
             SizedBox(height: 5.h),
-
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Center(
+                      child: Text(
+                        "Planet".tr,
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w500,
+                            fontColor: appColors.brown),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Center(
+                      child: Text(
+                        "End Date".tr,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w500,
+                            fontColor: appColors.brown),
+                      ),
+                    ),
+                  ),
+                ]),
             ListView.builder(
                 shrinkWrap: true,
                 itemCount:
                     controller.sookshmaDataDetail.value.data?.length ?? 0 + 1,
                 itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Center(
-                              child: Text(
-                                "Planet".tr,
-                                style: AppTextStyle.textStyle14(
-                                    fontWeight: FontWeight.w500,
-                                    fontColor: appColors.brown),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Center(
-                              child: Text(
-                                "End Date".tr,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTextStyle.textStyle14(
-                                    fontWeight: FontWeight.w500,
-                                    fontColor: appColors.brown),
-                              ),
-                            ),
-                          ),
-                        ]);
-                  }
                   Vimshottari? vimshottariData =
                       controller.dashaTableData.value.data?.vimshottari?[index];
                   Datum? subModel =
@@ -1384,9 +1380,14 @@ class _DashaUIState extends State<DashaUI> {
                         controller.pranDataDetail.value.data = null;
 
                         controller.getPranDashaApiList(
-                            vimshottariData?.planet.toString() ?? '',
-                            subModel?.planet.toString() ?? '',
-                            pratyantarModel?.planet.toString() ?? '',
+                            controller.subDashaPlanetName.value.toString() ??
+                                '',
+                            controller.subDashaPlanetName2.value.toString() ??
+                                '',
+                            controller.subDashaLevelName3
+                                    .toString()
+                                    .toString() ??
+                                '',
                             sookshmaData?.planet.toString() ?? '');
                       }
                     },
@@ -1763,93 +1764,92 @@ class _DashaUIState extends State<DashaUI> {
             //       ),
             //     ),
             //   ),
-            // ),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Center(
+                      child: Text(
+                        "Planet".tr,
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w500,
+                            fontColor: appColors.brown),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Center(
+                      child: Text(
+                        "End Date".tr,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w500,
+                            fontColor: appColors.brown),
+                      ),
+                    ),
+                  ),
+                ]),
             ListView.builder(
                 controller: controller.scrollController,
                 shrinkWrap: true,
                 itemCount:
                     controller.pranDataDetail.value.data?.length ?? 0 + 1,
                 itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Center(
-                              child: Text(
-                                "Planet".tr,
-                                style: AppTextStyle.textStyle14(
-                                    fontWeight: FontWeight.w500,
-                                    fontColor: appColors.brown),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Center(
-                              child: Text(
-                                "End Date".tr,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTextStyle.textStyle14(
-                                    fontWeight: FontWeight.w500,
-                                    fontColor: appColors.brown),
-                              ),
-                            ),
-                          ),
-                        ]);
-                  }
                   PranDashaData? pranDashaData =
                       controller.pranDataDetail.value.data?[index];
 
-                  return Column(
-                    children: [
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
-                            child: Text(
-                              "${controller.subDashaPlanetName.value.substring(0, 2).toString()}/${controller.subDashaPlanetName2.value.toString().substring(0, 2).toString()}/${controller.subDashaLevelName3.toString().substring(0, 2).toString()}/${controller.subDashaLevelName4.toString().substring(0, 2).toString()}/${pranDashaData?.planet.toString().substring(0, 2).toString()}",
-                              //                                  "${controller.subDashaPlanetName.value.substring(0, 2).toString()}/${controller.subDashaPlanetName.value.toString().substring(0, 2).toString()}/${pranDashaData?.planet.toString().substring(0, 2).toString()}",
-                              textAlign: TextAlign.center,
-                              style: AppTextStyle.textStyle16(
-                                fontColor: appColors.black,
-                                fontWeight: FontWeight.w500,
+                  return InkWell(
+                    onTap: () {},
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+                              child: Text(
+                                "${controller.subDashaPlanetName.value.substring(0, 2).toString()}/${controller.subDashaPlanetName2.value.toString().substring(0, 2).toString()}/${controller.subDashaLevelName3.toString().substring(0, 2).toString()}/${controller.subDashaLevelName4.toString().substring(0, 2).toString()}/${pranDashaData?.planet.toString().substring(0, 2).toString()}",
+                                //                                  "${controller.subDashaPlanetName.value.substring(0, 2).toString()}/${controller.subDashaPlanetName.value.toString().substring(0, 2).toString()}/${pranDashaData?.planet.toString().substring(0, 2).toString()}",
+                                textAlign: TextAlign.center,
+                                style: AppTextStyle.textStyle16(
+                                  fontColor: appColors.black,
+                                  fontWeight: FontWeight.w500,
+                                ),
                               ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      getDashaFormattedDate(pranDashaData?.end),
-                                      style: AppTextStyle.textStyle16(
-                                        fontColor: appColors.black,
-                                        fontWeight: FontWeight.w500,
+                            Padding(
+                              padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        getDashaFormattedDate(
+                                            pranDashaData?.end),
+                                        style: AppTextStyle.textStyle16(
+                                          fontColor: appColors.black,
+                                          fontWeight: FontWeight.w500,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                          ),
-                        ],
-                      ),
-                      Divider(),
-                    ],
+                          ],
+                        ),
+                        Divider(),
+                      ],
+                    ),
                   );
                   // }
                 }),
@@ -2029,7 +2029,7 @@ class _DashaUIState extends State<DashaUI> {
           mainAxisAlignment: MainAxisAlignment.center,
           mainAxisSize: MainAxisSize.max,
           children: [
-            const KundliLoading(),
+            KundliLoading(),
           ],
         ),
         firstChild: Column(
@@ -2042,6 +2042,34 @@ class _DashaUIState extends State<DashaUI> {
             SizedBox(
               height: 15.h,
             ),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Center(
+                      child: Text(
+                        "Planet".tr,
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w500,
+                            fontColor: appColors.brown),
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                    child: Center(
+                      child: Text(
+                        "End Date".tr,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTextStyle.textStyle14(
+                            fontWeight: FontWeight.w500,
+                            fontColor: appColors.brown),
+                      ),
+                    ),
+                  ),
+                ]),
             ListView.builder(
                 controller: controller.scrollController,
                 shrinkWrap: true,
@@ -2049,38 +2077,6 @@ class _DashaUIState extends State<DashaUI> {
                     controller.dashaTableData.value.data?.yogini?.length ??
                         0 + 1,
                 itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Center(
-                              child: Text(
-                                "planet".tr,
-                                style: AppTextStyle.textStyle14(
-                                    fontWeight: FontWeight.w500,
-                                    fontColor: appColors.brown),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 4.0),
-                            child: Center(
-                              child: Text(
-                                "End Date".tr,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTextStyle.textStyle14(
-                                    fontWeight: FontWeight.w500,
-                                    fontColor: appColors.brown),
-                              ),
-                            ),
-                          ),
-                        ]);
-                  }
                   Yogini? yoginiData =
                       controller.dashaTableData.value.data?.yogini?[index];
 
@@ -2095,21 +2091,24 @@ class _DashaUIState extends State<DashaUI> {
                     },
                     child: Column(
                       children: [
-                        SizedBox(
+                        const SizedBox(
                           height: 10,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
-                              child: Text(
-                                yoginiData?.dashaName ?? "",
-                                textAlign: TextAlign.center,
-                                style: AppTextStyle.textStyle16(
-                                  fontColor: appColors.black,
-                                  fontWeight: FontWeight.w500,
+                            GestureDetector(
+                              onTap: () {},
+                              child: Padding(
+                                padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+                                child: Text(
+                                  yoginiData?.dashaName ?? "",
+                                  textAlign: TextAlign.center,
+                                  style: AppTextStyle.textStyle16(
+                                    fontColor: appColors.black,
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
                             ),
@@ -2307,6 +2306,2118 @@ class _DashaUIState extends State<DashaUI> {
       );
     });
   }
+
+///////////////////////////////////////////
+//   //maha Dasha Data
+//   Widget mahaDashaWidget() {
+//     // Rx<DashaChartDataModel> dashaTableData
+//     return GetBuilder<KundliDetailController>(builder: (controller) {
+//       return Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           // Row(
+//           //   children: [
+//           //     Text("mahadasha".tr,
+//           //         style: AppTextStyle.textStyle16(
+//           //             fontWeight: FontWeight.w500,
+//           //             fontColor: appColors.textColor)),
+//           //     const SizedBox(height: 24),
+//           //   ],
+//           // ),
+//           SizedBox(height: 5.h),
+//           Align(
+//             alignment: Alignment.center,
+//             child: Padding(
+//               padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//               child: Center(
+//                 child: Text(
+//                   "Vimshottari Maha Dasha".tr,
+//                   style: AppTextStyle.textStyle18(
+//                     fontWeight: FontWeight.w700,
+//                     fontColor: appColors.black,
+//                   ),
+//                 ),
+//               ),
+//             ),
+//           ),
+//           SizedBox(height: 5.h),
+//
+//           ListView.builder(
+//               controller: controller.scrollController,
+//               shrinkWrap: true,
+//               itemCount:
+//                   controller.dashaTableData.value.data?.vimshottari?.length ??
+//                       0 + 1,
+//               itemBuilder: (context, index) {
+//                 if (index == 0) {
+//                   return Row(
+//                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                       crossAxisAlignment: CrossAxisAlignment.start,
+//                       children: [
+//                         Padding(
+//                           padding: const EdgeInsets.symmetric(horizontal: 5.0),
+//                           child: Center(
+//                             child: Text(
+//                               "Planet".tr,
+//                               style: AppTextStyle.textStyle14(
+//                                   fontWeight: FontWeight.w500,
+//                                   fontColor: appColors.brown),
+//                             ),
+//                           ),
+//                         ),
+//                         Padding(
+//                           padding: const EdgeInsets.symmetric(horizontal: 5.0),
+//                           child: Center(
+//                             child: Text(
+//                               "End Date".tr,
+//                               overflow: TextOverflow.ellipsis,
+//                               style: AppTextStyle.textStyle14(
+//                                   fontWeight: FontWeight.w500,
+//                                   fontColor: appColors.brown),
+//                             ),
+//                           ),
+//                         ),
+//                       ]);
+//                 }
+//                 Vimshottari? vimshottariData =
+//                     controller.dashaTableData.value.data?.vimshottari?[index];
+//                 return InkWell(
+//                   onTap: () {
+//                     controller.subDashaLevel.value = 1;
+//                     if (controller.subDashaPlanetName.value ==
+//                         vimshottariData?.planet.toString()) {
+//                     } else {
+//                       controller.subDashaPlanetName.value =
+//                           vimshottariData?.planet.toString() ?? '';
+//                       controller.planetDataDetail.value.data = null;
+//                       controller.getAntraDataApiList(
+//                           vimshottariData?.planet.toString() ?? '');
+//                     }
+//                   },
+//                   child: Column(
+//                     children: [
+//                       SizedBox(
+//                         height: 10,
+//                       ),
+//                       Row(
+//                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Padding(
+//                             padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+//                             child: Text(
+//                               vimshottariData?.planet
+//                                       .toString()
+//                                       .substring(0, 2) ??
+//                                   "",
+//                               textAlign: TextAlign.center,
+//                               style: AppTextStyle.textStyle16(
+//                                 fontColor: appColors.black,
+//                                 fontWeight: FontWeight.w500,
+//                               ),
+//                             ),
+//                           ),
+//                           Padding(
+//                             padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+//                             child: Row(
+//                               mainAxisAlignment: MainAxisAlignment.center,
+//                               children: [
+//                                 Row(
+//                                   mainAxisAlignment: MainAxisAlignment.center,
+//                                   children: [
+//                                     Text(
+//                                       getDashaFormattedDate(
+//                                           vimshottariData?.end),
+//                                       style: AppTextStyle.textStyle16(
+//                                         fontColor: appColors.black,
+//                                         fontWeight: FontWeight.w500,
+//                                       ),
+//                                     ),
+//                                   ],
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                       Divider(),
+//                     ],
+//                   ),
+//                 );
+//                 // }
+//               }),
+//           // Table(
+//           //     border: TableBorder(
+//           //         //   verticalInside: BorderSide(
+//           //         //       width: 1, color: appColors.grey, style: BorderStyle.solid),
+//           //         ),
+//           //     children: List.generate(
+//           //         controller.dashaTableData.value.data?.vimshottari?.length ??
+//           //             0 + 1, (index) {
+//           //       if (index == 0) {
+//           //         return TableRow(children: [
+//           //           Padding(
+//           //             padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//           //             child: Container(
+//           //               height: 65.h,
+//           //               width: 76.w,
+//           //               decoration: BoxDecoration(
+//           //                 boxShadow: [
+//           //                   BoxShadow(
+//           //                       color: Colors.black.withOpacity(0.2),
+//           //                       blurRadius: 3.0,
+//           //                       offset: const Offset(0.0, 3.0)),
+//           //                 ],
+//           //                 color: Colors.white,
+//           //                 borderRadius: const BorderRadius.all(
+//           //                   Radius.circular(8),
+//           //                 ),
+//           //               ),
+//           //               child: Center(
+//           //                 child: Text(
+//           //                   "planet".tr,
+//           //                   style: AppTextStyle.textStyle14(
+//           //                       fontWeight: FontWeight.w500,
+//           //                       fontColor: appColors.brown),
+//           //                 ),
+//           //               ),
+//           //             ),
+//           //           ),
+//           //           // Padding(
+//           //           //   padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//           //           //   child: Container(
+//           //           //     height: 65.h,
+//           //           //     width: 76.w,
+//           //           //     decoration: BoxDecoration(
+//           //           //       boxShadow: [
+//           //           //         BoxShadow(
+//           //           //             color: Colors.black.withOpacity(0.2),
+//           //           //             blurRadius: 3.0,
+//           //           //             offset: const Offset(0.0, 3.0)),
+//           //           //       ],
+//           //           //       color: Colors.white,
+//           //           //       borderRadius: const BorderRadius.all(
+//           //           //         Radius.circular(8),
+//           //           //       ),
+//           //           //     ),
+//           //           //     child: Center(
+//           //           //       child: Text(
+//           //           //         "startDate".tr,
+//           //           //         style: AppTextStyle.textStyle14(
+//           //           //             fontWeight: FontWeight.w500,
+//           //           //             fontColor: appColors.brown),
+//           //           //       ),
+//           //           //     ),
+//           //           //   ),
+//           //           // ),
+//           //           Padding(
+//           //             padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//           //             child: Container(
+//           //               height: 65.h,
+//           //               width: 76.w,
+//           //               decoration: BoxDecoration(
+//           //                 boxShadow: [
+//           //                   BoxShadow(
+//           //                       color: Colors.black.withOpacity(0.2),
+//           //                       blurRadius: 3.0,
+//           //                       offset: const Offset(0.0, 3.0)),
+//           //                 ],
+//           //                 color: Colors.white,
+//           //                 borderRadius: const BorderRadius.all(
+//           //                   Radius.circular(8),
+//           //                 ),
+//           //               ),
+//           //               child: Center(
+//           //                 child: Text(
+//           //                   "endDate".tr,
+//           //                   style: AppTextStyle.textStyle14(
+//           //                       fontWeight: FontWeight.w500,
+//           //                       fontColor: appColors.brown),
+//           //                 ),
+//           //               ),
+//           //             ),
+//           //           ),
+//           //         ]);
+//           //       }
+//           //       Vimshottari? vimshottariData =
+//           //           controller.dashaTableData.value.data?.vimshottari?[index];
+//           //       return TableRow(children: [
+//           //         GestureDetector(
+//           //           onTap: () {
+//           //             controller.subDashaLevel.value = 1;
+//           //             if (controller.subDashaPlanetName.value ==
+//           //                 vimshottariData?.planet.toString()) {
+//           //             } else {
+//           //               controller.subDashaPlanetName.value =
+//           //                   vimshottariData?.planet.toString() ?? '';
+//           //               controller.planetDataDetail.value.data = null;
+//           //               controller.getAntraDataApiList(
+//           //                   vimshottariData?.planet.toString() ?? '');
+//           //             }
+//           //           },
+//           //           child: Padding(
+//           //             padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+//           //             child: Text(
+//           //               vimshottariData?.planet.toString().substring(0, 2) ??
+//           //                   "",
+//           //               textAlign: TextAlign.center,
+//           //               style: AppTextStyle.textStyle14(),
+//           //             ),
+//           //           ),
+//           //         ),
+//           //         // GestureDetector(
+//           //         //   onTap: () {
+//           //         //     controller.subDashaLevel.value = 1;
+//           //         //     if (controller.subDashaPlanetName.value ==
+//           //         //         vimshottariData?.planet.toString()) {
+//           //         //     } else {
+//           //         //       controller.subDashaPlanetName.value =
+//           //         //           vimshottariData?.planet.toString() ?? '';
+//           //         //       controller.planetDataDetail.value.data = null;
+//           //         //       controller.getAntraDataApiList(
+//           //         //           vimshottariData?.planet.toString() ?? '');
+//           //         //     }
+//           //         //   },
+//           //         //   child: Padding(
+//           //         //     padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+//           //         //     child: Text(
+//           //         //       getDashaFormattedDate(vimshottariData?.start),
+//           //         //       textAlign: TextAlign.center,
+//           //         //       style: AppTextStyle.textStyle12(),
+//           //         //     ),
+//           //         //   ),
+//           //         // ),
+//           //         Padding(
+//           //           padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+//           //           child: Row(
+//           //             mainAxisAlignment: MainAxisAlignment.center,
+//           //             children: [
+//           //               GestureDetector(
+//           //                 onTap: () {
+//           //                   controller.subDashaLevel.value = 1;
+//           //                   if (controller.subDashaPlanetName.value ==
+//           //                       vimshottariData?.planet.toString()) {
+//           //                   } else {
+//           //                     controller.subDashaPlanetName.value =
+//           //                         vimshottariData?.planet.toString() ?? '';
+//           //                     controller.planetDataDetail.value.data = null;
+//           //                     controller.getAntraDataApiList(
+//           //                         vimshottariData?.planet.toString() ?? '');
+//           //                   }
+//           //                 },
+//           //                 child: Row(
+//           //                   mainAxisAlignment: MainAxisAlignment.center,
+//           //                   children: [
+//           //                     Text(
+//           //                       getDashaFormattedDate(vimshottariData?.end),
+//           //                       style: AppTextStyle.textStyle12(),
+//           //                     ),
+//           //                     const Icon(
+//           //                       Icons.chevron_right,
+//           //                       size: 12,
+//           //                     )
+//           //                   ],
+//           //                 ),
+//           //               ),
+//           //             ],
+//           //           ),
+//           //         ),
+//           //       ]);
+//           //     }).toList()),
+//           SizedBox(
+//             height: 20.h,
+//           ),
+//         ],
+//       );
+//     });
+//   }
+//
+//   //antar Dasha  Data
+//   Widget antarDashaWidget() {
+//     return GetBuilder<KundliDetailController>(builder: (controller) {
+//       return AnimatedCrossFade(
+//         duration: const Duration(milliseconds: 200),
+//         crossFadeState: controller.planetDataDetail.value.data == null
+//             ? CrossFadeState.showSecond
+//             : CrossFadeState.showFirst,
+//         secondChild: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           mainAxisSize: MainAxisSize.max,
+//           children: [
+//             // SizedBox(height: kToolbarHeight.h * 2.5),
+//             // SizedBox(height: 40.h),
+//             KundliLoading(),
+//           ],
+//         ),
+//         firstChild: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             // Row(
+//             //   children: [
+//             //     GestureDetector(
+//             //       onTap: () {
+//             //         controller.subDashaLevel.value = 0;
+//             //       },
+//             //       child: Row(
+//             //         children: [
+//             //           Text("mahadasha".tr,
+//             //               style: AppTextStyle.textStyle16(
+//             //                   fontWeight: FontWeight.w500,
+//             //                   fontColor: appColors.textColor)),
+//             //         ],
+//             //       ),
+//             //     ),
+//             //     const Icon(Icons.chevron_right),
+//             //     Text("antarDasha".tr,
+//             //         style: AppTextStyle.textStyle16(
+//             //             fontWeight: FontWeight.w500,
+//             //             fontColor: appColors.textColor)),
+//             //   ],
+//             // ),
+//             SizedBox(height: 5.h),
+//             Align(
+//               alignment: Alignment.center,
+//               child: Padding(
+//                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//                 child: Center(
+//                   child: Text(
+//                     "Vimshottari Antara Dasha".tr,
+//                     style: AppTextStyle.textStyle18(
+//                       fontWeight: FontWeight.w700,
+//                       fontColor: appColors.black,
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             SizedBox(height: 5.h),
+//             ListView.builder(
+//                 controller: controller.scrollController,
+//                 shrinkWrap: true,
+//                 itemCount:
+//                     controller.planetDataDetail.value.data?.length ?? 0 + 1,
+//                 itemBuilder: (context, index) {
+//                   if (index == 0) {
+//                     return Row(
+//                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Padding(
+//                             padding:
+//                                 const EdgeInsets.symmetric(horizontal: 4.0),
+//                             child: Center(
+//                               child: Text(
+//                                 "Planet".tr,
+//                                 style: AppTextStyle.textStyle14(
+//                                     fontWeight: FontWeight.w500,
+//                                     fontColor: appColors.brown),
+//                               ),
+//                             ),
+//                           ),
+//                           Padding(
+//                             padding:
+//                                 const EdgeInsets.symmetric(horizontal: 4.0),
+//                             child: Center(
+//                               child: Text(
+//                                 "End Date".tr,
+//                                 overflow: TextOverflow.ellipsis,
+//                                 style: AppTextStyle.textStyle14(
+//                                     fontWeight: FontWeight.w500,
+//                                     fontColor: appColors.brown),
+//                               ),
+//                             ),
+//                           ),
+//                         ]);
+//                   }
+//                   Vimshottari? vimshottariData =
+//                       controller.dashaTableData.value.data?.vimshottari?[index];
+//                   Datum? subModel =
+//                       controller.planetDataDetail.value.data?[index];
+//
+//                   return InkWell(
+//                     onTap: () {
+//                       controller.subDashaLevel.value = 2;
+//                       if (controller.subDashaPlanetName2.value.toString() ==
+//                           subModel?.planet.toString()) {
+//                       } else {
+//                         controller.subDashaPlanetName2.value =
+//                             subModel?.planet ?? "";
+//
+//                         controller.getPratyantarDashaApiList(
+//                           vimshottariData?.planet.toString() ?? '',
+//                           subModel?.planet.toString() ?? '',
+//                         );
+//                       }
+//                     },
+//                     child: Column(
+//                       children: [
+//                         SizedBox(
+//                           height: 10,
+//                         ),
+//                         Row(
+//                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             Padding(
+//                               padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+//                               child: Text(
+//                                 "${controller.subDashaPlanetName.value.substring(0, 2).toString()}/${subModel?.planet.toString().substring(0, 2).toString()}",
+//                                 textAlign: TextAlign.center,
+//                                 style: AppTextStyle.textStyle16(
+//                                   fontColor: appColors.black,
+//                                   fontWeight: FontWeight.w500,
+//                                 ),
+//                               ),
+//                             ),
+//                             Padding(
+//                               padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+//                               child: Row(
+//                                 mainAxisAlignment: MainAxisAlignment.center,
+//                                 children: [
+//                                   Row(
+//                                     mainAxisAlignment: MainAxisAlignment.center,
+//                                     children: [
+//                                       Text(
+//                                         getDashaFormattedDate(subModel?.end),
+//                                         style: AppTextStyle.textStyle16(
+//                                           fontColor: appColors.black,
+//                                           fontWeight: FontWeight.w500,
+//                                         ),
+//                                       ),
+//                                     ],
+//                                   ),
+//                                 ],
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                         Divider(),
+//                       ],
+//                     ),
+//                   );
+//                   // }
+//                 }),
+//             // Table(
+//             //     border: TableBorder(
+//             //       verticalInside: BorderSide(
+//             //           width: 1,
+//             //           color: appColors.grey,
+//             //           style: BorderStyle.solid),
+//             //     ),
+//             //     children: List.generate(
+//             //         controller.planetDataDetail.value.data?.length ?? 0 + 1,
+//             //         (index) {
+//             //       if (index == 0) {
+//             //         return TableRow(children: [
+//             //           Padding(
+//             //             padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//             //             child: Container(
+//             //               height: 65.h,
+//             //               width: 76.w,
+//             //               decoration: BoxDecoration(
+//             //                 boxShadow: [
+//             //                   BoxShadow(
+//             //                       color: Colors.black.withOpacity(0.2),
+//             //                       blurRadius: 3.0,
+//             //                       offset: const Offset(0.0, 3.0)),
+//             //                 ],
+//             //                 color: Colors.white,
+//             //                 borderRadius: const BorderRadius.all(
+//             //                   Radius.circular(8),
+//             //                 ),
+//             //               ),
+//             //               child: Center(
+//             //                 child: Text(
+//             //                   "planet".tr,
+//             //                   style: AppTextStyle.textStyle14(
+//             //                       fontWeight: FontWeight.w500,
+//             //                       fontColor: appColors.brown),
+//             //                 ),
+//             //               ),
+//             //             ),
+//             //           ),
+//             //           // Padding(
+//             //           //   padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//             //           //   child: Container(
+//             //           //     height: 65.h,
+//             //           //     width: 76.w,
+//             //           //     decoration: BoxDecoration(
+//             //           //       boxShadow: [
+//             //           //         BoxShadow(
+//             //           //             color: Colors.black.withOpacity(0.2),
+//             //           //             blurRadius: 3.0,
+//             //           //             offset: const Offset(0.0, 3.0)),
+//             //           //       ],
+//             //           //       color: Colors.white,
+//             //           //       borderRadius: const BorderRadius.all(
+//             //           //         Radius.circular(8),
+//             //           //       ),
+//             //           //     ),
+//             //           //     child: Center(
+//             //           //       child: Text(
+//             //           //         "startDate".tr,
+//             //           //         style: AppTextStyle.textStyle14(
+//             //           //             fontWeight: FontWeight.w500,
+//             //           //             fontColor: appColors.brown),
+//             //           //       ),
+//             //           //     ),
+//             //           //   ),
+//             //           // ),
+//             //           Padding(
+//             //             padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//             //             child: Container(
+//             //               height: 65.h,
+//             //               width: 76.w,
+//             //               decoration: BoxDecoration(
+//             //                 boxShadow: [
+//             //                   BoxShadow(
+//             //                       color: Colors.black.withOpacity(0.2),
+//             //                       blurRadius: 3.0,
+//             //                       offset: const Offset(0.0, 3.0)),
+//             //                 ],
+//             //                 color: Colors.white,
+//             //                 borderRadius: const BorderRadius.all(
+//             //                   Radius.circular(8),
+//             //                 ),
+//             //               ),
+//             //               child: Center(
+//             //                 child: Text(
+//             //                   "endDate".tr,
+//             //                   style: AppTextStyle.textStyle14(
+//             //                       fontWeight: FontWeight.w500,
+//             //                       fontColor: appColors.brown),
+//             //                 ),
+//             //               ),
+//             //             ),
+//             //           ),
+//             //         ]);
+//             //       }
+//             //       Vimshottari? vimshottariData =
+//             //           controller.dashaTableData.value.data?.vimshottari?[index];
+//             //       Datum? subModel =
+//             //           controller.planetDataDetail.value.data?[index];
+//             //
+//             //       return TableRow(children: [
+//             //         Padding(
+//             //           padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+//             //           child: Text(
+//             //             subModel?.planet ?? "",
+//             //             textAlign: TextAlign.center,
+//             //             style: AppTextStyle.textStyle12(),
+//             //           ),
+//             //         ),
+//             //         Padding(
+//             //           padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+//             //           child: Text(
+//             //             getDashaFormattedDate(subModel?.start),
+//             //             textAlign: TextAlign.center,
+//             //             style: AppTextStyle.textStyle12(),
+//             //           ),
+//             //         ),
+//             //         Padding(
+//             //           padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+//             //           child: Row(
+//             //             mainAxisAlignment: MainAxisAlignment.center,
+//             //             children: [
+//             //               GestureDetector(
+//             //                 onTap: () {
+//             //                   controller.subDashaLevel.value = 2;
+//             //                   controller.getPratyantarDashaApiList(
+//             //                     vimshottariData?.planet.toString() ?? '',
+//             //                     subModel?.planet.toString() ?? '',
+//             //                   );
+//             //                 },
+//             //                 child: Container(
+//             //                   padding: const EdgeInsets.symmetric(),
+//             //                   child: Row(
+//             //                     mainAxisAlignment: MainAxisAlignment.center,
+//             //                     children: [
+//             //                       Text(
+//             //                         getDashaFormattedDate(subModel?.end),
+//             //                         style: AppTextStyle.textStyle12(),
+//             //                       ),
+//             //                       const Icon(
+//             //                         Icons.chevron_right,
+//             //                         size: 12,
+//             //                       )
+//             //                     ],
+//             //                   ),
+//             //                 ),
+//             //               ),
+//             //             ],
+//             //           ),
+//             //         ),
+//             //       ]);
+//             //     }).toList()),
+//             // SizedBox(
+//             //   height: 20.h,
+//             // ),
+//             // GestureDetector(
+//             //   onTap: () {
+//             //     controller.subDashaLevel.value = 0;
+//             //   },
+//             //   child: Container(
+//             //       width: MediaQuery.of(context).size.width,
+//             //       decoration: BoxDecoration(
+//             //           color: appColors.guideColor,
+//             //           borderRadius: BorderRadius.circular(30)),
+//             //       child: Padding(
+//             //         padding: const EdgeInsets.all(14.0),
+//             //         child: Center(
+//             //             child: Text(
+//             //           "levelUp".tr,
+//             //           style: AppTextStyle.textStyle20(
+//             //               fontWeight: FontWeight.w600,
+//             //               fontColor: appColors.brown),
+//             //         )),
+//             //       )),
+//             // ),
+//             SizedBox(
+//               height: 20.h,
+//             ),
+//           ],
+//         ),
+//       );
+//     });
+//   }
+//
+//   //Pratyantar Dasha  Data
+//   Widget pratyantarDashaWidget() {
+//     return GetBuilder<KundliDetailController>(builder: (controller) {
+//       return AnimatedCrossFade(
+//         duration: const Duration(milliseconds: 200),
+//         crossFadeState: controller.pratyantarDataDetail.value.data == null
+//             ? CrossFadeState.showSecond
+//             : CrossFadeState.showFirst,
+//         secondChild: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           mainAxisSize: MainAxisSize.max,
+//           children: [
+//             KundliLoading(),
+//           ],
+//         ),
+//         firstChild: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             // Wrap(
+//             //   children: [
+//             //     Row(
+//             //       mainAxisSize: MainAxisSize.min,
+//             //       children: [
+//             //         GestureDetector(
+//             //           onTap: () {
+//             //             controller.subDashaLevel.value = 0;
+//             //           },
+//             //           child: Row(
+//             //             children: [
+//             //               Text("mahadasha".tr,
+//             //                   style: AppTextStyle.textStyle16(
+//             //                       fontWeight: FontWeight.w500,
+//             //                       fontColor: appColors.textColor)),
+//             //             ],
+//             //           ),
+//             //         ),
+//             //         const Icon(Icons.chevron_right),
+//             //       ],
+//             //     ),
+//             //     Row(
+//             //       mainAxisSize: MainAxisSize.min,
+//             //       children: [
+//             //         GestureDetector(
+//             //           onTap: () {
+//             //             controller.subDashaLevel.value = 1;
+//             //           },
+//             //           child: Text("antarDasha".tr,
+//             //               style: AppTextStyle.textStyle16(
+//             //                   fontWeight: FontWeight.w500,
+//             //                   fontColor: appColors.textColor)),
+//             //         ),
+//             //         const Icon(Icons.chevron_right),
+//             //       ],
+//             //     ),
+//             //     Text("pratyantarDasha".tr,
+//             //         style: AppTextStyle.textStyle16(
+//             //             fontWeight: FontWeight.w500,
+//             //             fontColor: appColors.textColor)),
+//             //   ],
+//             // ),
+//             SizedBox(height: 5.h),
+//             Align(
+//               alignment: Alignment.center,
+//               child: Padding(
+//                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//                 child: Center(
+//                   child: Text(
+//                     "Vimtara Pratyantar Dasha".tr,
+//                     style: AppTextStyle.textStyle18(
+//                       fontWeight: FontWeight.w700,
+//                       fontColor: appColors.black,
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             SizedBox(height: 5.h),
+//             ListView.builder(
+//                 controller: controller.scrollController,
+//                 shrinkWrap: true,
+//                 itemCount:
+//                     controller.pratyantarDataDetail.value.data?.length ?? 0 + 1,
+//                 itemBuilder: (context, index) {
+//                   if (index == 0) {
+//                     return Row(
+//                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Padding(
+//                             padding:
+//                                 const EdgeInsets.symmetric(horizontal: 4.0),
+//                             child: Center(
+//                               child: Text(
+//                                 "Planet".tr,
+//                                 style: AppTextStyle.textStyle14(
+//                                     fontWeight: FontWeight.w500,
+//                                     fontColor: appColors.brown),
+//                               ),
+//                             ),
+//                           ),
+//                           Padding(
+//                             padding:
+//                                 const EdgeInsets.symmetric(horizontal: 4.0),
+//                             child: Center(
+//                               child: Text(
+//                                 "End Date".tr,
+//                                 overflow: TextOverflow.ellipsis,
+//                                 style: AppTextStyle.textStyle14(
+//                                     fontWeight: FontWeight.w500,
+//                                     fontColor: appColors.brown),
+//                               ),
+//                             ),
+//                           ),
+//                         ]);
+//                   }
+//                   Vimshottari? vimshottariData =
+//                       controller.dashaTableData.value.data?.vimshottari?[index];
+//                   Datum? subModel =
+//                       controller.planetDataDetail.value.data?[index];
+//                   PratyantarData? pratyantarModel =
+//                       controller.pratyantarDataDetail.value.data?[index];
+//
+//                   return InkWell(
+//                     onTap: () {
+//                       controller.subDashaLevel.value = 3;
+//                       controller.subDashaLevelName3.value =
+//                           pratyantarModel?.planet ?? "";
+//
+//                       controller.getSookshmaDashaApiList(
+//                           vimshottariData?.planet.toString() ?? '',
+//                           subModel?.planet.toString() ?? '',
+//                           pratyantarModel?.planet.toString() ?? '');
+//                     },
+//                     child: Column(
+//                       children: [
+//                         SizedBox(
+//                           height: 10,
+//                         ),
+//                         Row(
+//                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             Padding(
+//                               padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+//                               child: Text(
+//                                 "${controller.subDashaPlanetName.value.substring(0, 2).toString()}/${controller.subDashaPlanetName2.value.toString().substring(0, 2).toString()}/${pratyantarModel?.planet.toString().substring(0, 2).toString()}",
+//                                 textAlign: TextAlign.center,
+//                                 style: AppTextStyle.textStyle16(
+//                                   fontColor: appColors.black,
+//                                   fontWeight: FontWeight.w500,
+//                                 ),
+//                               ),
+//                             ),
+//                             Padding(
+//                               padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+//                               child: Row(
+//                                 mainAxisAlignment: MainAxisAlignment.center,
+//                                 children: [
+//                                   Row(
+//                                     mainAxisAlignment: MainAxisAlignment.center,
+//                                     children: [
+//                                       Text(
+//                                         getDashaFormattedDate(
+//                                             pratyantarModel?.end),
+//                                         style: AppTextStyle.textStyle16(
+//                                           fontColor: appColors.black,
+//                                           fontWeight: FontWeight.w500,
+//                                         ),
+//                                       ),
+//                                     ],
+//                                   ),
+//                                 ],
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                         Divider(),
+//                       ],
+//                     ),
+//                   );
+//                   // }
+//                 }),
+//
+//             // Table(
+//             //     border: TableBorder(
+//             //       verticalInside: BorderSide(
+//             //           width: 1,
+//             //           color: appColors.grey,
+//             //           style: BorderStyle.solid),
+//             //     ),
+//             //     children: List.generate(
+//             //         controller.pratyantarDataDetail.value.data?.length ?? 0 + 1,
+//             //         (index) {
+//             //       if (index == 0) {
+//             //         return TableRow(children: [
+//             //           Padding(
+//             //             padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//             //             child: Container(
+//             //               height: 65.h,
+//             //               width: 76.w,
+//             //               decoration: BoxDecoration(
+//             //                 boxShadow: [
+//             //                   BoxShadow(
+//             //                       color: Colors.black.withOpacity(0.2),
+//             //                       blurRadius: 3.0,
+//             //                       offset: const Offset(0.0, 3.0)),
+//             //                 ],
+//             //                 color: Colors.white,
+//             //                 borderRadius: const BorderRadius.all(
+//             //                   Radius.circular(8),
+//             //                 ),
+//             //               ),
+//             //               child: Center(
+//             //                 child: Text(
+//             //                   "planet".tr,
+//             //                   style: AppTextStyle.textStyle14(
+//             //                       fontWeight: FontWeight.w500,
+//             //                       fontColor: appColors.brown),
+//             //                 ),
+//             //               ),
+//             //             ),
+//             //           ),
+//             //           Padding(
+//             //             padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//             //             child: Container(
+//             //               height: 65.h,
+//             //               width: 76.w,
+//             //               decoration: BoxDecoration(
+//             //                 boxShadow: [
+//             //                   BoxShadow(
+//             //                       color: Colors.black.withOpacity(0.2),
+//             //                       blurRadius: 3.0,
+//             //                       offset: const Offset(0.0, 3.0)),
+//             //                 ],
+//             //                 color: Colors.white,
+//             //                 borderRadius: const BorderRadius.all(
+//             //                   Radius.circular(8),
+//             //                 ),
+//             //               ),
+//             //               child: Center(
+//             //                 child: Text(
+//             //                   "startDate".tr,
+//             //                   style: AppTextStyle.textStyle14(
+//             //                       fontWeight: FontWeight.w500,
+//             //                       fontColor: appColors.brown),
+//             //                 ),
+//             //               ),
+//             //             ),
+//             //           ),
+//             //           Padding(
+//             //             padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//             //             child: Container(
+//             //               height: 65.h,
+//             //               width: 76.w,
+//             //               decoration: BoxDecoration(
+//             //                 boxShadow: [
+//             //                   BoxShadow(
+//             //                       color: Colors.black.withOpacity(0.2),
+//             //                       blurRadius: 3.0,
+//             //                       offset: const Offset(0.0, 3.0)),
+//             //                 ],
+//             //                 color: Colors.white,
+//             //                 borderRadius: const BorderRadius.all(
+//             //                   Radius.circular(8),
+//             //                 ),
+//             //               ),
+//             //               child: Center(
+//             //                 child: Text(
+//             //                   "endDate".tr,
+//             //                   style: AppTextStyle.textStyle14(
+//             //                       fontWeight: FontWeight.w500,
+//             //                       fontColor: appColors.brown),
+//             //                 ),
+//             //               ),
+//             //             ),
+//             //           ),
+//             //         ]);
+//             //       }
+//             //       Vimshottari? vimshottariData =
+//             //           controller.dashaTableData.value.data?.vimshottari?[index];
+//             //       Datum? subModel =
+//             //           controller.planetDataDetail.value.data?[index];
+//             //       pratyantarData? pratyantarModel =
+//             //           controller.pratyantarDataDetail.value.data?[index];
+//             //       return TableRow(children: [
+//             //         Padding(
+//             //           padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+//             //           child: Text(
+//             //             pratyantarModel?.planet ?? "",
+//             //             textAlign: TextAlign.center,
+//             //             style: AppTextStyle.textStyle12(),
+//             //           ),
+//             //         ),
+//             //         Padding(
+//             //           padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+//             //           child: Text(
+//             //             getDashaFormattedDate(pratyantarModel?.start),
+//             //             textAlign: TextAlign.center,
+//             //             style: AppTextStyle.textStyle12(),
+//             //           ),
+//             //         ),
+//             //         Padding(
+//             //           padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+//             //           child: Row(
+//             //             mainAxisAlignment: MainAxisAlignment.center,
+//             //             children: [
+//             //               GestureDetector(
+//             //                 onTap: () {
+//             //                   controller.subDashaLevel.value = 3;
+//             //                   controller.getSookshmaDashaApiList(
+//             //                       vimshottariData?.planet.toString() ?? '',
+//             //                       subModel?.planet.toString() ?? '',
+//             //                       pratyantarModel?.planet.toString() ?? '');
+//             //                 },
+//             //                 child: Row(
+//             //                   mainAxisAlignment: MainAxisAlignment.center,
+//             //                   children: [
+//             //                     Text(
+//             //                       getDashaFormattedDate(pratyantarModel?.end),
+//             //                       style: AppTextStyle.textStyle12(),
+//             //                     ),
+//             //                     const Icon(
+//             //                       Icons.chevron_right,
+//             //                       size: 12,
+//             //                     )
+//             //                   ],
+//             //                 ),
+//             //               ),
+//             //             ],
+//             //           ),
+//             //         ),
+//             //       ]);
+//             //     }).toList()),
+//             // SizedBox(
+//             //   height: 20.h,
+//             // ),
+//             // GestureDetector(
+//             //   onTap: () {
+//             //     controller.subDashaLevel.value = 1;
+//             //   },
+//             //   child: Container(
+//             //       width: MediaQuery.of(context).size.width,
+//             //       decoration: BoxDecoration(
+//             //           color: appColors.guideColor,
+//             //           borderRadius: BorderRadius.circular(30)),
+//             //       child: Padding(
+//             //         padding: const EdgeInsets.all(14.0),
+//             //         child: Center(
+//             //             child: Text(
+//             //           "levelUp".tr,
+//             //           style: AppTextStyle.textStyle20(
+//             //               fontWeight: FontWeight.w600,
+//             //               fontColor: appColors.brown),
+//             //         )),
+//             //       )),
+//             // ),
+//             // SizedBox(height: 20.h),
+//           ],
+//         ),
+//       );
+//     });
+//   }
+//
+//   //Sookshma Dasha  Data
+//   Widget sookshmaDashaWidget() {
+//     return GetBuilder<KundliDetailController>(builder: (controller) {
+//       return AnimatedCrossFade(
+//         duration: const Duration(milliseconds: 200),
+//         crossFadeState: controller.sookshmaDataDetail.value.data == null
+//             ? CrossFadeState.showSecond
+//             : CrossFadeState.showFirst,
+//         secondChild: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           mainAxisSize: MainAxisSize.max,
+//           children: [
+//             KundliLoading(),
+//           ],
+//         ),
+//         firstChild: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             // Wrap(
+//             //   children: [
+//             //     Row(
+//             //       mainAxisSize: MainAxisSize.min,
+//             //       children: [
+//             //         GestureDetector(
+//             //           onTap: () {
+//             //             controller.subDashaLevel.value = 0;
+//             //           },
+//             //           child: Row(
+//             //             children: [
+//             //               Text("mahadasha".tr,
+//             //                   style: AppTextStyle.textStyle16(
+//             //                       fontWeight: FontWeight.w500,
+//             //                       fontColor: appColors.textColor)),
+//             //             ],
+//             //           ),
+//             //         ),
+//             //         const Icon(Icons.chevron_right),
+//             //       ],
+//             //     ),
+//             //     Row(
+//             //       mainAxisSize: MainAxisSize.min,
+//             //       children: [
+//             //         GestureDetector(
+//             //           onTap: () {
+//             //             controller.subDashaLevel.value = 1;
+//             //           },
+//             //           child: Text("antarDasha".tr,
+//             //               style: AppTextStyle.textStyle16(
+//             //                   fontWeight: FontWeight.w500,
+//             //                   fontColor: appColors.textColor)),
+//             //         ),
+//             //         const Icon(Icons.chevron_right),
+//             //       ],
+//             //     ),
+//             //     Row(
+//             //       mainAxisSize: MainAxisSize.min,
+//             //       children: [
+//             //         GestureDetector(
+//             //           onTap: () {
+//             //             controller.subDashaLevel.value = 2;
+//             //           },
+//             //           child: Text("pratyantarDasha".tr,
+//             //               style: AppTextStyle.textStyle16(
+//             //                   fontWeight: FontWeight.w500,
+//             //                   fontColor: appColors.textColor)),
+//             //         ),
+//             //         const Icon(Icons.chevron_right),
+//             //       ],
+//             //     ),
+//             //     Text("sookshmaDasha".tr,
+//             //         style: AppTextStyle.textStyle16(
+//             //             fontWeight: FontWeight.w500,
+//             //             fontColor: appColors.textColor)),
+//             //   ],
+//             // ),
+//             SizedBox(height: 5.h),
+//             Align(
+//               alignment: Alignment.center,
+//               child: Padding(
+//                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//                 child: Center(
+//                   child: Text(
+//                     "Vimshottari Sookshma Dasha".tr,
+//                     style: AppTextStyle.textStyle18(
+//                       fontWeight: FontWeight.w700,
+//                       fontColor: appColors.black,
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             SizedBox(height: 5.h),
+//
+//             ListView.builder(
+//                 shrinkWrap: true,
+//                 itemCount:
+//                     controller.sookshmaDataDetail.value.data?.length ?? 0 + 1,
+//                 itemBuilder: (context, index) {
+//                   if (index == 0) {
+//                     return Row(
+//                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Padding(
+//                             padding:
+//                                 const EdgeInsets.symmetric(horizontal: 4.0),
+//                             child: Center(
+//                               child: Text(
+//                                 "Planet".tr,
+//                                 style: AppTextStyle.textStyle14(
+//                                     fontWeight: FontWeight.w500,
+//                                     fontColor: appColors.brown),
+//                               ),
+//                             ),
+//                           ),
+//                           Padding(
+//                             padding:
+//                                 const EdgeInsets.symmetric(horizontal: 4.0),
+//                             child: Center(
+//                               child: Text(
+//                                 "End Date".tr,
+//                                 overflow: TextOverflow.ellipsis,
+//                                 style: AppTextStyle.textStyle14(
+//                                     fontWeight: FontWeight.w500,
+//                                     fontColor: appColors.brown),
+//                               ),
+//                             ),
+//                           ),
+//                         ]);
+//                   }
+//                   Vimshottari? vimshottariData =
+//                       controller.dashaTableData.value.data?.vimshottari?[index];
+//                   Datum? subModel =
+//                       controller.planetDataDetail.value.data?[index];
+//                   PratyantarData? pratyantarModel =
+//                       controller.pratyantarDataDetail.value.data?[index];
+//                   SookshmaData? sookshmaData =
+//                       controller.sookshmaDataDetail.value.data?[index];
+//
+//                   return InkWell(
+//                     onTap: () {
+//                       controller.subDashaLevel.value = 4;
+//                       if (controller.subDashaLevelName4.value.toString() ==
+//                           sookshmaData?.planet.toString()) {
+//                       } else {
+//                         controller.subDashaLevelName4.value =
+//                             sookshmaData?.planet ?? "";
+//
+//                         controller.pranDataDetail.value.data = null;
+//
+//                         controller.getPranDashaApiList(
+//                             vimshottariData?.planet.toString() ?? '',
+//                             subModel?.planet.toString() ?? '',
+//                             pratyantarModel?.planet.toString() ?? '',
+//                             sookshmaData?.planet.toString() ?? '');
+//                       }
+//                     },
+//                     child: Column(
+//                       children: [
+//                         SizedBox(
+//                           height: 10,
+//                         ),
+//                         Row(
+//                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             Padding(
+//                               padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+//                               child: Text(
+//                                 "${controller.subDashaPlanetName.value.substring(0, 2).toString()}/${controller.subDashaPlanetName2.value.toString().substring(0, 2).toString()}/${controller.subDashaLevelName3.toString().substring(0, 2).toString()}/${sookshmaData?.planet.toString().substring(0, 2).toString()}",
+//                                 textAlign: TextAlign.center,
+//                                 style: AppTextStyle.textStyle16(
+//                                   fontColor: appColors.black,
+//                                   fontWeight: FontWeight.w500,
+//                                 ),
+//                               ),
+//                             ),
+//                             Padding(
+//                               padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+//                               child: Row(
+//                                 mainAxisAlignment: MainAxisAlignment.center,
+//                                 children: [
+//                                   Row(
+//                                     mainAxisAlignment: MainAxisAlignment.center,
+//                                     children: [
+//                                       Text(
+//                                         getDashaFormattedDate(
+//                                             sookshmaData?.end),
+//                                         style: AppTextStyle.textStyle16(
+//                                           fontColor: appColors.black,
+//                                           fontWeight: FontWeight.w500,
+//                                         ),
+//                                       ),
+//                                     ],
+//                                   ),
+//                                 ],
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                         Divider(),
+//                       ],
+//                     ),
+//                   );
+//                   // }
+//                 }),
+//
+//             // Table(
+//             //     border: TableBorder(
+//             //       verticalInside: BorderSide(
+//             //           width: 1,
+//             //           color: appColors.grey,
+//             //           style: BorderStyle.solid),
+//             //     ),
+//             //     children: List.generate(
+//             //         controller.sookshmaDataDetail.value.data?.length ?? 0 + 1,
+//             //         (index) {
+//             //       if (index == 0) {
+//             //         return TableRow(children: [
+//             //           Padding(
+//             //             padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//             //             child: Container(
+//             //               height: 65.h,
+//             //               width: 76.w,
+//             //               decoration: BoxDecoration(
+//             //                 boxShadow: [
+//             //                   BoxShadow(
+//             //                       color: Colors.black.withOpacity(0.2),
+//             //                       blurRadius: 3.0,
+//             //                       offset: const Offset(0.0, 3.0)),
+//             //                 ],
+//             //                 color: Colors.white,
+//             //                 borderRadius: const BorderRadius.all(
+//             //                   Radius.circular(8),
+//             //                 ),
+//             //               ),
+//             //               child: Center(
+//             //                 child: Text(
+//             //                   "planet".tr,
+//             //                   style: AppTextStyle.textStyle14(
+//             //                       fontWeight: FontWeight.w500,
+//             //                       fontColor: appColors.brown),
+//             //                 ),
+//             //               ),
+//             //             ),
+//             //           ),
+//             //           Padding(
+//             //             padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//             //             child: Container(
+//             //               height: 65.h,
+//             //               width: 76.w,
+//             //               decoration: BoxDecoration(
+//             //                 boxShadow: [
+//             //                   BoxShadow(
+//             //                       color: Colors.black.withOpacity(0.2),
+//             //                       blurRadius: 3.0,
+//             //                       offset: const Offset(0.0, 3.0)),
+//             //                 ],
+//             //                 color: Colors.white,
+//             //                 borderRadius: const BorderRadius.all(
+//             //                   Radius.circular(8),
+//             //                 ),
+//             //               ),
+//             //               child: Center(
+//             //                 child: Text(
+//             //                   "startDate".tr,
+//             //                   style: AppTextStyle.textStyle14(
+//             //                       fontWeight: FontWeight.w500,
+//             //                       fontColor: appColors.brown),
+//             //                 ),
+//             //               ),
+//             //             ),
+//             //           ),
+//             //           Padding(
+//             //             padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//             //             child: Container(
+//             //               height: 65.h,
+//             //               width: 76.w,
+//             //               decoration: BoxDecoration(
+//             //                 boxShadow: [
+//             //                   BoxShadow(
+//             //                       color: Colors.black.withOpacity(0.2),
+//             //                       blurRadius: 3.0,
+//             //                       offset: const Offset(0.0, 3.0)),
+//             //                 ],
+//             //                 color: Colors.white,
+//             //                 borderRadius: const BorderRadius.all(
+//             //                   Radius.circular(8),
+//             //                 ),
+//             //               ),
+//             //               child: Center(
+//             //                 child: Text(
+//             //                   "endDate".tr,
+//             //                   style: AppTextStyle.textStyle14(
+//             //                       fontWeight: FontWeight.w500,
+//             //                       fontColor: appColors.brown),
+//             //                 ),
+//             //               ),
+//             //             ),
+//             //           ),
+//             //         ]);
+//             //       }
+//             //       Vimshottari? vimshottariData =
+//             //           controller.dashaTableData.value.data?.vimshottari?[index];
+//             //       Datum? subModel =
+//             //           controller.planetDataDetail.value.data?[index];
+//             //       pratyantarData? pratyantarModel =
+//             //           controller.pratyantarDataDetail.value.data?[index];
+//             //       SookshmaData? sookshmaData =
+//             //           controller.sookshmaDataDetail.value.data?[index];
+//             //       return TableRow(children: [
+//             //         Padding(
+//             //           padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+//             //           child: Text(
+//             //             sookshmaData?.planet ?? "",
+//             //             textAlign: TextAlign.center,
+//             //             style: AppTextStyle.textStyle12(),
+//             //           ),
+//             //         ),
+//             //         Padding(
+//             //           padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+//             //           child: Text(
+//             //             getDashaFormattedDate(sookshmaData?.start),
+//             //             textAlign: TextAlign.center,
+//             //             style: AppTextStyle.textStyle12(),
+//             //           ),
+//             //         ),
+//             //         Padding(
+//             //           padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+//             //           child: Row(
+//             //             mainAxisAlignment: MainAxisAlignment.center,
+//             //             children: [
+//             //               GestureDetector(
+//             //                 onTap: () {
+//             //                   controller.subDashaLevel.value = 4;
+//             //                   controller.getPranDashaApiList(
+//             //                       vimshottariData?.planet.toString() ?? '',
+//             //                       subModel?.planet.toString() ?? '',
+//             //                       pratyantarModel?.planet.toString() ?? '',
+//             //                       sookshmaData?.planet.toString() ?? '');
+//             //                 },
+//             //                 child: Row(
+//             //                   mainAxisAlignment: MainAxisAlignment.center,
+//             //                   children: [
+//             //                     Text(
+//             //                       getDashaFormattedDate(sookshmaData?.end),
+//             //                       style: AppTextStyle.textStyle12(),
+//             //                     ),
+//             //                     const Icon(
+//             //                       Icons.chevron_right,
+//             //                       size: 12,
+//             //                     )
+//             //                   ],
+//             //                 ),
+//             //               ),
+//             //             ],
+//             //           ),
+//             //         ),
+//             //       ]);
+//             //     }).toList()),
+//             // SizedBox(
+//             //   height: 20.h,
+//             // ),
+//             // GestureDetector(
+//             //   onTap: () {
+//             //     controller.subDashaLevel.value = 2;
+//             //   },
+//             //   child: Container(
+//             //       width: MediaQuery.of(context).size.width,
+//             //       decoration: BoxDecoration(
+//             //           color: appColors.guideColor,
+//             //           borderRadius: BorderRadius.circular(30)),
+//             //       child: Padding(
+//             //         padding: const EdgeInsets.all(14.0),
+//             //         child: Center(
+//             //             child: Text(
+//             //           "levelUp".tr,
+//             //           style: AppTextStyle.textStyle20(
+//             //               fontWeight: FontWeight.w600,
+//             //               fontColor: appColors.brown),
+//             //         )),
+//             //       )),
+//             // ),
+//             // SizedBox(
+//             //   height: 20.h,
+//             // ),
+//           ],
+//         ),
+//       );
+//     });
+//   }
+//
+//   //Pran Dasha  Data
+//   Widget pranDashaWidget() {
+//     return GetBuilder<KundliDetailController>(builder: (controller) {
+//       return AnimatedCrossFade(
+//         duration: const Duration(milliseconds: 200),
+//         crossFadeState: controller.pranDataDetail.value.data == null
+//             ? CrossFadeState.showSecond
+//             : CrossFadeState.showFirst,
+//         secondChild: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           mainAxisSize: MainAxisSize.max,
+//           children: [
+//             KundliLoading(),
+//           ],
+//         ),
+//         firstChild: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             // Wrap(
+//             // children: [
+//             //     Row(
+//             //       mainAxisSize: MainAxisSize.min,
+//             //       children: [
+//             //         GestureDetector(
+//             //           onTap: () {
+//             //             controller.subDashaLevel.value = 0;
+//             //           },
+//             //           child: Row(
+//             //             children: [
+//             //               Text("mahadasha".tr,
+//             //                   style: AppTextStyle.textStyle16(
+//             //                       fontWeight: FontWeight.w500,
+//             //                       fontColor: appColors.textColor)),
+//             //             ],
+//             //           ),
+//             //         ),
+//             //         const Icon(Icons.chevron_right),
+//             //       ],
+//             //     ),
+//             //     Row(
+//             //       mainAxisSize: MainAxisSize.min,
+//             //       children: [
+//             //         GestureDetector(
+//             //           onTap: () {
+//             //             controller.subDashaLevel.value = 1;
+//             //           },
+//             //           child: Text("antarDasha".tr,
+//             //               style: AppTextStyle.textStyle16(
+//             //                   fontWeight: FontWeight.w500,
+//             //                   fontColor: appColors.textColor)),
+//             //         ),
+//             //         const Icon(Icons.chevron_right),
+//             //       ],
+//             //     ),
+//             //     Row(
+//             //       mainAxisSize: MainAxisSize.min,
+//             //       children: [
+//             //         GestureDetector(
+//             //           onTap: () {
+//             //             controller.subDashaLevel.value = 2;
+//             //           },
+//             //           child: Text("pratyantarDasha".tr,
+//             //               style: AppTextStyle.textStyle16(
+//             //                   fontWeight: FontWeight.w500,
+//             //                   fontColor: appColors.textColor)),
+//             //         ),
+//             //         const Icon(Icons.chevron_right),
+//             //       ],
+//             //     ),
+//             //     Row(
+//             //       mainAxisSize: MainAxisSize.min,
+//             //       children: [
+//             //         GestureDetector(
+//             //           onTap: () {
+//             //             controller.subDashaLevel.value = 3;
+//             //           },
+//             //           child: Text("sookshmaDasha".tr,
+//             //               style: AppTextStyle.textStyle16(
+//             //                   fontWeight: FontWeight.w500,
+//             //                   fontColor: appColors.textColor)),
+//             //         ),
+//             //         const Icon(Icons.chevron_right),
+//             //       ],
+//             //     ),
+//             //     Text("pranDasha".tr,
+//             //         style: AppTextStyle.textStyle16(
+//             //             fontWeight: FontWeight.w500,
+//             //             fontColor: appColors.textColor)),
+//             //   ],
+//             // ),
+//             SizedBox(height: 5.h),
+//             Align(
+//               alignment: Alignment.center,
+//               child: Padding(
+//                 padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//                 child: Center(
+//                   child: Text(
+//                     "Vimshottari Pran Dasha".tr,
+//                     style: AppTextStyle.textStyle18(
+//                       fontWeight: FontWeight.w700,
+//                       fontColor: appColors.black,
+//                     ),
+//                   ),
+//                 ),
+//               ),
+//             ),
+//             SizedBox(height: 5.h),
+//             // SizedBox(
+//             //   height: 15.h,
+//             // ),
+//             // Align(
+//             //   alignment: Alignment.center,
+//             //   child: Padding(
+//             //     padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//             //     child: Container(
+//             //       width: 180.w,
+//             //       decoration: BoxDecoration(
+//             //         boxShadow: [
+//             //           BoxShadow(
+//             //               color: Colors.black.withOpacity(0.2),
+//             //               blurRadius: 3.0,
+//             //               offset: const Offset(0.0, 3.0)),
+//             //         ],
+//             //         color: Colors.white,
+//             //         borderRadius: const BorderRadius.all(
+//             //           Radius.circular(8),
+//             //         ),
+//             //       ),
+//             //       child: Center(
+//             //         child: Text(
+//             //           "Vimshottari Maha Dasha".tr,
+//             //           style: AppTextStyle.textStyle14(
+//             //               fontWeight: FontWeight.w500,
+//             //               fontColor: appColors.black),
+//             //         ),
+//             //       ),
+//             //     ),
+//             //   ),
+//             // ),
+//             ListView.builder(
+//                 controller: controller.scrollController,
+//                 shrinkWrap: true,
+//                 itemCount:
+//                     controller.pranDataDetail.value.data?.length ?? 0 + 1,
+//                 itemBuilder: (context, index) {
+//                   if (index == 0) {
+//                     return Row(
+//                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Padding(
+//                             padding:
+//                                 const EdgeInsets.symmetric(horizontal: 4.0),
+//                             child: Center(
+//                               child: Text(
+//                                 "Planet".tr,
+//                                 style: AppTextStyle.textStyle14(
+//                                     fontWeight: FontWeight.w500,
+//                                     fontColor: appColors.brown),
+//                               ),
+//                             ),
+//                           ),
+//                           Padding(
+//                             padding:
+//                                 const EdgeInsets.symmetric(horizontal: 4.0),
+//                             child: Center(
+//                               child: Text(
+//                                 "End Date".tr,
+//                                 overflow: TextOverflow.ellipsis,
+//                                 style: AppTextStyle.textStyle14(
+//                                     fontWeight: FontWeight.w500,
+//                                     fontColor: appColors.brown),
+//                               ),
+//                             ),
+//                           ),
+//                         ]);
+//                   }
+//                   PranDashaData? pranDashaData =
+//                       controller.pranDataDetail.value.data?[index];
+//
+//                   return Column(
+//                     children: [
+//                       SizedBox(
+//                         height: 10,
+//                       ),
+//                       Row(
+//                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Padding(
+//                             padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+//                             child: Text(
+//                               "${controller.subDashaPlanetName.value.substring(0, 2).toString()}/${controller.subDashaPlanetName2.value.toString().substring(0, 2).toString()}/${controller.subDashaLevelName3.toString().substring(0, 2).toString()}/${controller.subDashaLevelName4.toString().substring(0, 2).toString()}/${pranDashaData?.planet.toString().substring(0, 2).toString()}",
+//                               //                                  "${controller.subDashaPlanetName.value.substring(0, 2).toString()}/${controller.subDashaPlanetName.value.toString().substring(0, 2).toString()}/${pranDashaData?.planet.toString().substring(0, 2).toString()}",
+//                               textAlign: TextAlign.center,
+//                               style: AppTextStyle.textStyle16(
+//                                 fontColor: appColors.black,
+//                                 fontWeight: FontWeight.w500,
+//                               ),
+//                             ),
+//                           ),
+//                           Padding(
+//                             padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+//                             child: Row(
+//                               mainAxisAlignment: MainAxisAlignment.center,
+//                               children: [
+//                                 Row(
+//                                   mainAxisAlignment: MainAxisAlignment.center,
+//                                   children: [
+//                                     Text(
+//                                       getDashaFormattedDate(pranDashaData?.end),
+//                                       style: AppTextStyle.textStyle16(
+//                                         fontColor: appColors.black,
+//                                         fontWeight: FontWeight.w500,
+//                                       ),
+//                                     ),
+//                                   ],
+//                                 ),
+//                               ],
+//                             ),
+//                           ),
+//                         ],
+//                       ),
+//                       Divider(),
+//                     ],
+//                   );
+//                   // }
+//                 }),
+//
+//             // Table(
+//             //     border: TableBorder(
+//             //       verticalInside: BorderSide(
+//             //           width: 1,
+//             //           color: appColors.grey,
+//             //           style: BorderStyle.solid),
+//             //     ),
+//             //     children: List.generate(
+//             //         controller.pranDataDetail.value.data?.length ?? 0 + 1,
+//             //         (index) {
+//             //       if (index == 0) {
+//             //         return TableRow(children: [
+//             //           Padding(
+//             //             padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//             //             child: Container(
+//             //               height: 65.h,
+//             //               width: 76.w,
+//             //               decoration: BoxDecoration(
+//             //                 boxShadow: [
+//             //                   BoxShadow(
+//             //                       color: Colors.black.withOpacity(0.2),
+//             //                       blurRadius: 3.0,
+//             //                       offset: const Offset(0.0, 3.0)),
+//             //                 ],
+//             //                 color: Colors.white,
+//             //                 borderRadius: const BorderRadius.all(
+//             //                   Radius.circular(8),
+//             //                 ),
+//             //               ),
+//             //               child: Center(
+//             //                 child: Text(
+//             //                   "planet".tr,
+//             //                   style: AppTextStyle.textStyle14(
+//             //                       fontWeight: FontWeight.w500,
+//             //                       fontColor: appColors.brown),
+//             //                 ),
+//             //               ),
+//             //             ),
+//             //           ),
+//             //           // Padding(
+//             //           //   padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//             //           //   child: Container(
+//             //           //     height: 65.h,
+//             //           //     width: 76.w,
+//             //           //     decoration: BoxDecoration(
+//             //           //       boxShadow: [
+//             //           //         BoxShadow(
+//             //           //             color: Colors.black.withOpacity(0.2),
+//             //           //             blurRadius: 3.0,
+//             //           //             offset: const Offset(0.0, 3.0)),
+//             //           //       ],
+//             //           //       color: Colors.white,
+//             //           //       borderRadius: const BorderRadius.all(
+//             //           //         Radius.circular(8),
+//             //           //       ),
+//             //           //     ),
+//             //           //     child: Center(
+//             //           //       child: Text(
+//             //           //         "startDate".tr,
+//             //           //         style: AppTextStyle.textStyle14(
+//             //           //             fontWeight: FontWeight.w500,
+//             //           //             fontColor: appColors.brown),
+//             //           //       ),
+//             //           //     ),
+//             //           //   ),
+//             //           // ),
+//             //           Padding(
+//             //             padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//             //             child: Container(
+//             //               height: 65.h,
+//             //               width: 76.w,
+//             //               decoration: BoxDecoration(
+//             //                 boxShadow: [
+//             //                   BoxShadow(
+//             //                       color: Colors.black.withOpacity(0.2),
+//             //                       blurRadius: 3.0,
+//             //                       offset: const Offset(0.0, 3.0)),
+//             //                 ],
+//             //                 color: Colors.white,
+//             //                 borderRadius: const BorderRadius.all(
+//             //                   Radius.circular(8),
+//             //                 ),
+//             //               ),
+//             //               child: Center(
+//             //                 child: Text(
+//             //                   "endDate".tr,
+//             //                   style: AppTextStyle.textStyle14(
+//             //                       fontWeight: FontWeight.w500,
+//             //                       fontColor: appColors.brown),
+//             //                 ),
+//             //               ),
+//             //             ),
+//             //           ),
+//             //         ]);
+//             //       }
+//             //       PranDashaData? pranDashaData =
+//             //           controller.pranDataDetail.value.data?[index];
+//             //       return TableRow(children: [
+//             //         Padding(
+//             //           padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+//             //           child: Text(
+//             //             pranDashaData?.planet ?? "",
+//             //             textAlign: TextAlign.center,
+//             //             style: AppTextStyle.textStyle10(
+//             //                 fontColor: Colors.black,
+//             //                 fontWeight: FontWeight.w400),
+//             //           ),
+//             //         ),
+//             //         // Padding(
+//             //         //   padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+//             //         //   child: Text(
+//             //         //     getDashaFormattedDate(pranDashaData?.start),
+//             //         //     textAlign: TextAlign.center,
+//             //         //     style: AppTextStyle.textStyle12(),
+//             //         //   ),
+//             //         // ),
+//             //         Padding(
+//             //           padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+//             //           child: Row(
+//             //             mainAxisAlignment: MainAxisAlignment.center,
+//             //             children: [
+//             //               Text(
+//             //                 getDashaFormattedDate(pranDashaData?.end),
+//             //                 style: AppTextStyle.textStyle12(
+//             //                     fontColor: Colors.black),
+//             //               ),
+//             //             ],
+//             //           ),
+//             //         ),
+//             //       ]);
+//             //     }).toList()),
+//             // SizedBox(
+//             //   height: 20.h,
+//             // ),
+//             // GestureDetector(
+//             //   onTap: () {
+//             //     controller.subDashaLevel.value = 3;
+//             //   },
+//             //   child: Container(
+//             //       width: MediaQuery.of(context).size.width,
+//             //       decoration: BoxDecoration(
+//             //           color: appColors.guideColor,
+//             //           borderRadius: BorderRadius.circular(30)),
+//             //       child: Padding(
+//             //         padding: const EdgeInsets.all(14.0),
+//             //         child: Center(
+//             //             child: Text(
+//             //           "levelUp".tr,
+//             //           style: AppTextStyle.textStyle20(
+//             //               fontWeight: FontWeight.w600,
+//             //               fontColor: appColors.brown),
+//             //         )),
+//             //       )),
+//             // ),
+//             SizedBox(
+//               height: 20.h,
+//             ),
+//           ],
+//         ),
+//       );
+//     });
+//   }
+//
+//   //yogini Data
+//   Widget yoginiWidget() {
+//     return GetBuilder<KundliDetailController>(builder: (controller) {
+//       return AnimatedCrossFade(
+//         duration: const Duration(milliseconds: 200),
+//         crossFadeState: controller.dashaTableData.value.data?.yogini == null
+//             ? CrossFadeState.showSecond
+//             : CrossFadeState.showFirst,
+//         secondChild: Column(
+//           mainAxisAlignment: MainAxisAlignment.center,
+//           mainAxisSize: MainAxisSize.max,
+//           children: [
+//             const KundliLoading(),
+//           ],
+//         ),
+//         firstChild: Column(
+//           crossAxisAlignment: CrossAxisAlignment.start,
+//           children: [
+//             Text("bhadrika".tr,
+//                 style: AppTextStyle.textStyle16(
+//                     fontWeight: FontWeight.w500,
+//                     fontColor: appColors.textColor)),
+//             SizedBox(
+//               height: 15.h,
+//             ),
+//             ListView.builder(
+//                 controller: controller.scrollController,
+//                 shrinkWrap: true,
+//                 itemCount:
+//                     controller.dashaTableData.value.data?.yogini?.length ??
+//                         0 + 1,
+//                 itemBuilder: (context, index) {
+//                   if (index == 0) {
+//                     return Row(
+//                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                         crossAxisAlignment: CrossAxisAlignment.start,
+//                         children: [
+//                           Padding(
+//                             padding:
+//                                 const EdgeInsets.symmetric(horizontal: 4.0),
+//                             child: Center(
+//                               child: Text(
+//                                 "planet".tr,
+//                                 style: AppTextStyle.textStyle14(
+//                                     fontWeight: FontWeight.w500,
+//                                     fontColor: appColors.brown),
+//                               ),
+//                             ),
+//                           ),
+//                           Padding(
+//                             padding:
+//                                 const EdgeInsets.symmetric(horizontal: 4.0),
+//                             child: Center(
+//                               child: Text(
+//                                 "End Date".tr,
+//                                 overflow: TextOverflow.ellipsis,
+//                                 style: AppTextStyle.textStyle14(
+//                                     fontWeight: FontWeight.w500,
+//                                     fontColor: appColors.brown),
+//                               ),
+//                             ),
+//                           ),
+//                         ]);
+//                   }
+//                   Yogini? yoginiData =
+//                       controller.dashaTableData.value.data?.yogini?[index];
+//
+//                   return InkWell(
+//                     onTap: () {
+//                       // controller.subDashaLevel.value = 4;
+//                       // controller.getPranDashaApiList(
+//                       //     vimshottariData?.planet.toString() ?? '',
+//                       //     subModel?.planet.toString() ?? '',
+//                       //     pratyantarModel?.planet.toString() ?? '',
+//                       //     sookshmaData?.planet.toString() ?? '');
+//                     },
+//                     child: Column(
+//                       children: [
+//                         SizedBox(
+//                           height: 10,
+//                         ),
+//                         Row(
+//                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+//                           crossAxisAlignment: CrossAxisAlignment.start,
+//                           children: [
+//                             Padding(
+//                               padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+//                               child: Text(
+//                                 yoginiData?.dashaName ?? "",
+//                                 textAlign: TextAlign.center,
+//                                 style: AppTextStyle.textStyle16(
+//                                   fontColor: appColors.black,
+//                                   fontWeight: FontWeight.w500,
+//                                 ),
+//                               ),
+//                             ),
+//                             Padding(
+//                               padding: EdgeInsets.only(top: 4.h, bottom: 4.h),
+//                               child: Row(
+//                                 mainAxisAlignment: MainAxisAlignment.center,
+//                                 children: [
+//                                   Row(
+//                                     mainAxisAlignment: MainAxisAlignment.center,
+//                                     children: [
+//                                       Text(
+//                                         getDashaFormattedDate(
+//                                             yoginiData?.endDate),
+//                                         style: AppTextStyle.textStyle16(
+//                                           fontColor: appColors.black,
+//                                           fontWeight: FontWeight.w500,
+//                                         ),
+//                                       ),
+//                                     ],
+//                                   ),
+//                                 ],
+//                               ),
+//                             ),
+//                           ],
+//                         ),
+//                         Divider(),
+//                       ],
+//                     ),
+//                   );
+//                   // }
+//                 }),
+//
+//             // Table(
+//             //     border: TableBorder(
+//             //       verticalInside: BorderSide(
+//             //           width: 1,
+//             //           color: appColors.grey,
+//             //           style: BorderStyle.solid),
+//             //     ),
+//             //     children: List.generate(
+//             //         controller.dashaTableData.value.data?.yogini?.length ??
+//             //             0 + 1, (index) {
+//             //       if (index == 0) {
+//             //         return TableRow(children: [
+//             //           Padding(
+//             //             padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//             //             child: Container(
+//             //               height: 65.h,
+//             //               width: 76.w,
+//             //               decoration: BoxDecoration(
+//             //                 boxShadow: [
+//             //                   BoxShadow(
+//             //                       color: Colors.black.withOpacity(0.2),
+//             //                       blurRadius: 3.0,
+//             //                       offset: const Offset(0.0, 3.0)),
+//             //                 ],
+//             //                 color: Colors.white,
+//             //                 borderRadius: const BorderRadius.all(
+//             //                   Radius.circular(8),
+//             //                 ),
+//             //               ),
+//             //               child: Center(
+//             //                 child: Text(
+//             //                   "planet".tr,
+//             //                   style: AppTextStyle.textStyle14(
+//             //                       fontWeight: FontWeight.w500,
+//             //                       fontColor: appColors.brown),
+//             //                 ),
+//             //               ),
+//             //             ),
+//             //           ),
+//             //           Padding(
+//             //             padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//             //             child: Container(
+//             //               height: 65.h,
+//             //               width: 76.w,
+//             //               decoration: BoxDecoration(
+//             //                 boxShadow: [
+//             //                   BoxShadow(
+//             //                       color: Colors.black.withOpacity(0.2),
+//             //                       blurRadius: 3.0,
+//             //                       offset: const Offset(0.0, 3.0)),
+//             //                 ],
+//             //                 color: Colors.white,
+//             //                 borderRadius: const BorderRadius.all(
+//             //                   Radius.circular(8),
+//             //                 ),
+//             //               ),
+//             //               child: Center(
+//             //                 child: Text(
+//             //                   "startDate".tr,
+//             //                   style: AppTextStyle.textStyle14(
+//             //                       fontWeight: FontWeight.w500,
+//             //                       fontColor: appColors.brown),
+//             //                 ),
+//             //               ),
+//             //             ),
+//             //           ),
+//             //           Padding(
+//             //             padding: const EdgeInsets.symmetric(horizontal: 12.0),
+//             //             child: Container(
+//             //               height: 65.h,
+//             //               width: 76.w,
+//             //               decoration: BoxDecoration(
+//             //                 boxShadow: [
+//             //                   BoxShadow(
+//             //                       color: Colors.black.withOpacity(0.2),
+//             //                       blurRadius: 3.0,
+//             //                       offset: const Offset(0.0, 3.0)),
+//             //                 ],
+//             //                 color: Colors.white,
+//             //                 borderRadius: const BorderRadius.all(
+//             //                   Radius.circular(8),
+//             //                 ),
+//             //               ),
+//             //               child: Center(
+//             //                 child: Text(
+//             //                   "endDate".tr,
+//             //                   style: AppTextStyle.textStyle14(
+//             //                       fontWeight: FontWeight.w500,
+//             //                       fontColor: appColors.brown),
+//             //                 ),
+//             //               ),
+//             //             ),
+//             //           ),
+//             //         ]);
+//             //       }
+//             //       Yogini? yoginiData =
+//             //           controller.dashaTableData.value.data?.yogini?[index];
+//             //       return TableRow(children: [
+//             //         Padding(
+//             //           padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+//             //           child: Text(
+//             //             yoginiData?.dashaName ?? "",
+//             //             textAlign: TextAlign.center,
+//             //             style: AppTextStyle.textStyle12(),
+//             //           ),
+//             //         ),
+//             //         Padding(
+//             //           padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+//             //           child: Text(
+//             //             getDashaFormattedDate(yoginiData?.startDate),
+//             //             textAlign: TextAlign.center,
+//             //             style: AppTextStyle.textStyle12(),
+//             //           ),
+//             //         ),
+//             //         Padding(
+//             //           padding: EdgeInsets.only(top: 14.h, bottom: 10.h),
+//             //           child: Row(
+//             //             mainAxisAlignment: MainAxisAlignment.center,
+//             //             children: [
+//             //               GestureDetector(
+//             //                 onTap: () {
+//             //                   // controller.isSubDasha.value = true;
+//             //                 },
+//             //                 child: Row(
+//             //                   mainAxisAlignment: MainAxisAlignment.center,
+//             //                   children: [
+//             //                     Text(
+//             //                       getDashaFormattedDate(yoginiData?.endDate),
+//             //                       style: AppTextStyle.textStyle12(),
+//             //                     ),
+//             //                     /* const Icon(
+//             //                       Icons.chevron_right,
+//             //                       size: 12,
+//             //                     ) */
+//             //                   ],
+//             //                 ),
+//             //               ),
+//             //             ],
+//             //           ),
+//             //         ),
+//             //       ]);
+//             //     }).toList()),
+//             // SizedBox(
+//             //   height: 20.h,
+//             // ),
+//             // Text(
+//             //   "rashiChart".tr,
+//             //   style:
+//             //       AppTextStyle.textStyle16(fontColor: appColors.textColor),
+//             // ),
+//             // SizedBox(
+//             //   height: 15.h,
+//             // ),
+//             // SvgPicture.string(
+//             //   controller.lagnaChart.value.data?.svg ?? '',
+//             // ),
+//             SizedBox(
+//               height: 20.h,
+//             ),
+//           ],
+//         ),
+//       );
+//     });
+//   }
 
   getDashaFormattedDate(String? date) {
     return date != null

@@ -26,7 +26,7 @@ class RemediesController extends GetxController{
   getPujaList() async {
     isRemdiesLoading = true;
     try {
-      Map<String, dynamic> params = {"role_id": userData?.roleId};
+      Map<String, dynamic> params = {"role_id": preferenceService.getUserDetail()?.roleId};
       var response = await userRepository.getRemedyList(params);
       if (response.data != null) {
         remdiesData = response.data!;

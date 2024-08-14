@@ -20,14 +20,42 @@ class PermissionHelper {
     return result;
   }
 
-  askMediaPermission() async {
-    //Camera, Gallery (32 > photos : storage)
-    Permission permission = await getPermissionFromAPILevel(Permission.photos);
-    var result = await [
-      Permission.camera,
-      permission,
-    ].request().then((value) => getMediaPermissionStatus(permission));
-    return result;
+  Future<bool> askMediaPermission() async {
+    // Determine the API level
+     int sdkInt = await getSdkInt();
+
+    Permission permission;
+
+    // Handle backward compatibility
+    if (sdkInt >= 33) {
+      // For Android 13 and above, use `Permission.photos`
+      permission = Permission.photos;
+    } else {
+      // For Android 12 and below, use `Permission.storage`
+      permission = Permission.storage;
+    }
+
+    // Request the permission
+    var status = await permission.request();
+
+    // Check if permission is granted
+    if (status.isGranted) {
+      return true;
+    } else {
+      // Handle the case where the permission is denied
+      return false;
+    }
+  }
+  Future<int> getSdkInt() async {
+    // Retrieve the SDK version of the device
+    try {
+      // Use 'device_info_plus' package to get the Android SDK version
+      final info = await DeviceInfoPlugin().androidInfo;
+      return info.version.sdkInt;
+    } catch (e) {
+      // Handle error
+      return 0;
+    }
   }
 
   askStoragePermission(Permission permission) async {

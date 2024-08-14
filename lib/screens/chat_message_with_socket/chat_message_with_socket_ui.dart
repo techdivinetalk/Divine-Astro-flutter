@@ -1971,6 +1971,7 @@ class AstrologerChatAppBar extends StatelessWidget {
     return PopScope(
       canPop: false,
       onPopInvoked: (pop) {
+        print("manual backbutton press backFunction");
         controller.backFunction();
       },
       child: Container(

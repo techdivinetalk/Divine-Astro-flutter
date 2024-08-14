@@ -35,7 +35,8 @@ class ChatMessage {
   String? message;
   String? multiImage;
   String? msgTime;
-
+  bool isPlaying = false;
+  num progress = 0.0;
   //String? createdAt;
   String? updatedAt;
   String? msgSendBy;
@@ -93,6 +94,8 @@ class ChatMessage {
     this.roleId,
     this.productId,
     this.title,
+    this.isPlaying = false,
+    this.progress = 0.0,
     this.shopId,
     this.latitude,
     this.longitude,
@@ -150,6 +153,8 @@ class ChatMessage {
     id = json['chatMessageId'];
     orderId = json['order_id'];
     memberId = json['member_id'];
+    isPlaying = json['isPlaying'] ?? false;
+    progress = json['progress'] ?? 0.0;
     roleId = json['role_id'];
     customerId = json['customer_id'];
     title = json['title'];
@@ -227,6 +232,8 @@ class ChatMessage {
     data['chatMessageId'] = id;
     data['order_id'] = orderId;
     data['get_pooja'] = getPooja;
+    data['isPlaying'] = isPlaying ?? false;
+    data['progress'] = progress ?? 0.0;
     data['get_custom_product'] = getCustomProduct;
     data['member_id'] = memberId;
     data['productPrice'] = productPrice;
@@ -294,6 +301,8 @@ class ChatMessage {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['chatMessageId'] = id;
     data['order_id'] = orderId;
+    data['isPlaying'] = isPlaying;
+    data['progress'] = progress;
     data['get_pooja'] = getPooja?.toJson();
     data['get_custom_product'] = getCustomProduct?.toJson();
     data['member_id'] = memberId;

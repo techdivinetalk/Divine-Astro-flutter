@@ -42,7 +42,11 @@ RxInt isCustomToken = 0.obs;
 RxInt isNetworkPopup = 0.obs;
 RxInt isPrivacyPolicy = 0.obs;
 RxInt isServerMaintenance = 0.obs;
-RxInt showRetentionPopup = 0.obs;
+RxInt showRetentionPopup = 1.obs;
+RxInt showDailyLive = 0.obs;
+RxInt showHelp = 0.obs;
+RxInt maximumStorySize = 2048.obs;
+RxInt astroHome = 0.obs;
 // RxInt isTruecaller = 1.obs;
 RxInt isLiveCall = 1.obs;
 RxInt homePage = 1.obs;
@@ -276,6 +280,7 @@ class AppFirebaseService {
     print("readData $path");
     try {
       database.child("$path/TimeManage").set(ServerValue.timestamp);
+      database.child("$path/deliveredMsg").remove();
       database.child(path).onChildChanged.listen((event) {
         final key = event.snapshot.key; // Get the key of the changed child
 
@@ -485,6 +490,9 @@ class AppFirebaseService {
       case "isServerMaintenance":
         isServerMaintenance(int.parse(dataSnapshot.value.toString()));
         break;
+      case "maximumStorySize":
+        maximumStorySize(int.parse(dataSnapshot.value.toString()));
+        break;
       case "isNetworkPopup":
         isNetworkPopup(int.parse(dataSnapshot.value.toString()));
         print(
@@ -507,6 +515,15 @@ class AppFirebaseService {
         break;
       case "showRetentionPopup":
         showRetentionPopup(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "showDailyLive":
+        showDailyLive(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "showHelp":
+        showHelp(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "astroHome":
+        astroHome(int.parse(dataSnapshot.value.toString()));
         break;
       default:
         // preferenceService.setStringPref(

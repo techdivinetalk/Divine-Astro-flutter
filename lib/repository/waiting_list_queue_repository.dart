@@ -4,12 +4,10 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/model/waiting_list_queue.dart';
 import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
 
 import '../common/app_exception.dart';
 import '../common/common_functions.dart';
-import '../common/routes.dart';
 import '../di/api_provider.dart';
 
 class WaitingListQueueRepo extends ApiProvider {
@@ -62,8 +60,10 @@ class WaitingListQueueRepo extends ApiProvider {
 
       if (response.statusCode == 200 &&
           json.decode(response.body)["status_code"] == 200) {
-        if(!json.decode(response.body)["success"]){
-          divineSnackBar(data: json.decode(response.body)["message"], color: AppColors().redColor);
+        if (!json.decode(response.body)["success"]) {
+          divineSnackBar(
+              data: json.decode(response.body)["message"],
+              color: AppColors().redColor);
           return "fail";
         }
         return "success";

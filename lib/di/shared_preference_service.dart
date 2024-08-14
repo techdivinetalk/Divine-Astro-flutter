@@ -40,6 +40,7 @@ class SharedPreferenceService extends GetxService {
   }
 
   UserData? getUserDetail() {
+
     UserData? userDetail;
     String userData = prefs?.getString(userKey) ?? "";
     // log("userData:: $userData");

@@ -52,14 +52,18 @@ class CategoryDetailController extends GetxController {
     //getProductDetails();
   }
 
+  RxBool isShowButton = false.obs;
   getProductDetails() async {
     Map<String, dynamic> params = {"product_id": productId};
     try {
+      isShowButton.value = false;
       var response = await shopRepository.getProductDetail(params);
       productDetail = response.data!.products![0];
       shopId = productDetail?.prodShopId;
       isLoading.value = true;
+      isShowButton.value = true;
     } catch (error) {
+      isShowButton.value = true;
       if (error is AppException) {
         error.onException();
       } else {

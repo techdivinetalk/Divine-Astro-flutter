@@ -51,8 +51,8 @@ class OrderHistoryController extends GetxController {
   var liveGiftPageCount = 1;
   var remedyPageCount = 1;
   var feedBackPageCount = 1;
-  double calculatePercentage(double value, double percentage) {
-    return value * (percentage / 100);
+  double calculatePercentage(double value, double price) {
+    return value / 100 * price;
   }
 
   @override
@@ -92,7 +92,8 @@ class OrderHistoryController extends GetxController {
     /*DateTime now = DateTime.now();
     DateTime currentUtcTime = now.toUtc();*/
     DateTime dateTime = DateTime.parse(value);
-    String formattedDate = DateFormat("dd MMM, hh:mm a").format(dateTime.toLocal());
+    String formattedDate =
+        DateFormat("dd MMM, hh:mm a").format(dateTime.toLocal());
     return formattedDate;
   }
 

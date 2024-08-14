@@ -121,11 +121,8 @@ class PassbookUi extends GetView<PassbooksController> {
                         )
                       : Padding(
                           padding: const EdgeInsets.only(top: 10),
-                          child: Expanded(
-                            child: WebViewPage(
-                              url:
-                                  controller.passBookDataModel!.data.toString(),
-                            ),
+                          child: WebViewPage(
+                            url: controller.passBookDataModel!.data.toString(),
                           ),
                         ),
             ],
