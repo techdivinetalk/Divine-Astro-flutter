@@ -82,8 +82,9 @@ class PerformanceController extends GetxController {
     super.onInit();
     debugPrint("test_onInit: call");
     isInit = true;
-    init();
     getRitentionDataApi();
+
+    init();
   }
 
   Future<void> init() async {
