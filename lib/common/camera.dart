@@ -7,9 +7,10 @@ import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
 class CameraPage extends StatefulWidget {
-  const CameraPage({Key? key, required this.cameras}) : super(key: key);
+  const CameraPage({Key? key, required this.cameras,}) : super(key: key);
 
   final List<CameraDescription>? cameras;
+
 
   @override
   State<CameraPage> createState() => _CameraPageState();

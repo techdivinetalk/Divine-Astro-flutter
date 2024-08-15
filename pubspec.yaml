@@ -54,12 +54,15 @@ dependencies:
   get_storage: ^2.1.1
   #html: ^0.15.4
   image_cropper: null
-  image_picker: ^1.1.1
+  image_picker: ^1.1.2
+  pdf:
+  printing: any
+
 
   intl: ^0.18.0
   lottie: ^2.6.0
   percent_indicator: ^4.2.3
-  permission_handler: any
+  permission_handler: ^11.3.0
   photo_view: ^0.14.0
 
   pin_input_text_field: ^4.5.1
@@ -106,26 +109,17 @@ dependencies:
   # overlapped_carousel: ^1.0.1
   # coverflow: ^2.0.3
   random_name_generator: ^1.2.0
-  # overlapped_carousel:
-  #   git:
-  #     url: https://github.com/delwar36/overlapped_carousel.git
-  #     ref: b910005b978c35e0be5cadbb82c000faf6abebdf
+  dotted_border: ^2.1.0
   audioplayers: ^6.0.0
   simple_waveform_progressbar:
   speed_test_dart: ^1.0.4+1
   shimmer: ^3.0.0
   cron: ^0.6.0
   cloud_firestore: any
-  # new
-#  zego_uikit_signaling_plugin: ^2.7.6
-#  zego_uikit_prebuilt_call: ^4.8.5
-#  zego_uikit_prebuilt_live_streaming: ^3.5.4
-#  zego_express_engine: 3.15.0
-#  zego_uikit_beauty_plugin: ^1.5.2
 
   zego_uikit_signaling_plugin: ^2.7.13
   zego_uikit_prebuilt_call: ^4.12.3
-  zego_uikit_prebuilt_live_streaming: ^3.8.4
+  zego_uikit_prebuilt_live_streaming: ^3.12.3
   zego_express_engine: ^3.15.1+2
   zego_uikit_beauty_plugin: ^1.7.2
   flutter_speed_dial: ^5.0.0+1

@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/screens/signature_module/controller/agreement_controller.dart';
+import 'package:divine_astrologer/screens/signature_module/view/face_verification_screen.dart';
 import 'package:divine_astrologer/screens/signature_module/view/signature_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../../common/colors.dart';
+import '../../../pages/home/passbook/htmlWidget.dart';
 import '../../live_dharam/widgets/common_button.dart';
 
 class AgreementScreen extends GetView<AgreementController> {
@@ -31,41 +33,50 @@ class AgreementScreen extends GetView<AgreementController> {
           body: Column(
             children: [
               Expanded(
-                child: FutureBuilder<String>(
-                  future: controller.pdfPath,
-                  builder: (context, snapshot) {
-                    if (snapshot.connectionState == ConnectionState.waiting) {
-                      return const Center(child: CircularProgressIndicator());
-                    } else if (snapshot.hasError) {
-                      return const Center(child: Text('Error loading PDF'));
-                    } else {
-                      return SizedBox(
-                        width: double.infinity,
-                        height: double.infinity,
-                        child: PDFView(
-                          filePath: snapshot.data!,
-                          fitEachPage: false,
-                          fitPolicy: FitPolicy.BOTH,
-                          autoSpacing: false,
-                          onPageChanged: (page, total) {
-                            print("totalpage---$total");
-                            print("page---$page");
-                            if (total == (page! + 1)) {
-                              controller.isLastPage = true;
-                            } else {
-                              controller.isLastPage = false;
-                            }
-                            controller.update();
-                          },
+                      child:controller.pdfPath != null
+                          ?  FutureBuilder<String>(
+                        future: controller.pdfPath,
+                        builder: (context, snapshot) {
+                          if (snapshot.connectionState ==
+                              ConnectionState.waiting) {
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          } else if (snapshot.hasError) {
+                            return const Center(
+                                child: Text('Error loading PDF'));
+                          } else {
+                            return SizedBox(
+                              width: double.infinity,
+                              height: double.infinity,
+                              child: PDFView(
+                                filePath: snapshot.data!,
+                                fitEachPage: false,
+                                fitPolicy: FitPolicy.BOTH,
+                                autoSpacing: false,
+                                onError: (error) {
+                                  print(
+                                      "objectobjectobjectobjectobject--${error}");
+                                },
+                                onPageChanged: (page, total) {
+                                  print("totalpage---$total");
+                                  print("page---$page");
+                                  if (total == (page! + 1)) {
+                                    controller.isLastPage = true;
+                                  } else {
+                                    controller.isLastPage = false;
+                                  }
+                                  controller.update();
+                                },
 
-                          // pageFling: true,
-                          // pageSnap: true,
-                        ),
-                      );
-                    }
-                  },
-                ),
-              ),
+                                // pageFling: true,
+                                // pageSnap: true,
+                              ),
+                            );
+                          }
+                        },
+                      ): SizedBox(),
+                    )
+                  ,
               Padding(
                 padding: const EdgeInsets.all(20),
                 child: CommonButton(
@@ -75,7 +86,7 @@ class AgreementScreen extends GetView<AgreementController> {
                     buttonText: "Sign Your Agreement",
                     buttonCallback: () {
                       if (controller.isLastPage) {
-                        Get.to(() => SignatureView());
+                        Get.to(() => const FaceVerificationScreen());
                       } else {
                         divineSnackBar(data: "Please read full agreement");
                       }

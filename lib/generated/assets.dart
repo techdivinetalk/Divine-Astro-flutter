@@ -345,6 +345,7 @@ class Assets {
   static const String svgProduct = 'assets/svg/product.svg';
   static const String svgPuja = 'assets/svg/puja.svg';
   static const String svgQueue = 'assets/svg/queue.svg';
+  static const String addPhoto = 'assets/svg/add_photo.svg';
   static const String svgRejoin = 'assets/svg/rejoin.svg';
   static const String svgRejoinChatIcon = 'assets/svg/rejoin_chat_icon.svg';
   static const String svgRemediesIcon = 'assets/svg/remedies_icon.svg';

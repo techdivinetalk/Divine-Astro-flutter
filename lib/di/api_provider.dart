@@ -32,6 +32,15 @@ class ApiProvider {
       "${imageUploadBaseUrl.value}/api/astro/$version/";
   static const String astOnlineOffline =
       "https://list.divinetalk.live/api/v3/updateAstroStatusV2?unique_no=";
+  static const String astrologerAgreement =
+      "http://20.193.154.99:8080/api/v1/getAstroAgreement?astrologer_id=";
+  static const String astrologerFaceVerification =
+      "http://20.193.154.99:8080/api/v1/uploadAstroImage?astrologer_id=";
+  static const String astrologerAstroSign=
+      "http://20.193.154.99:8080/api/v1/uploadAstroSign?astrologer_id=";
+
+  static const String astrologerSignPdf=
+      "http://20.193.154.99:8080/api/v1/uploadAstroSignedPdf?astrologer_id=";
   static const String onlineOfflineStatus =
       "https://list.divinetalk.live/api/v3/getAstrologersData";
 
