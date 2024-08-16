@@ -71,8 +71,10 @@ class Data {
   String? imageUploadBaseUrl;
   String? appVersion;
   int? isForceTraningVideo;
+  int? showAgreement;
   num? currentTime;
   Map? notice;
+
   Data({
     required this.leaderboardRankImage,
     required this.lottiFile,
@@ -88,6 +90,7 @@ class Data {
     required this.whatsappNo,
     required this.awsCredentails,
     this.taroCard,
+    this.showAgreement,
     this.token,
     this.isForceTraningVideo,
     this.appVersion,
@@ -128,6 +131,7 @@ class Data {
         reviewFreeAnimation: reviewFreeAnimation ?? this.reviewFreeAnimation,
         giftTimeInterval: giftTimeInterval ?? this.giftTimeInterval,
         chat: chat ?? this.chat,
+        showAgreement: showAgreement ?? this.showAgreement,
         call: call ?? this.call,
         token: token ?? this.token,
         appVersion: appVersion ?? this.appVersion,
@@ -162,6 +166,7 @@ class Data {
         firebaseAuthPassword: json["firebase_auth_password"],
         appVersion: json["app_version"],
         imageUploadBaseUrl: json["image_upload_base_url"],
+        showAgreement: json["show_agreement"],
         isForceTraningVideo: json["is_force_traning_video"],
         chat: Chat.fromJson(json["chat"]),
         call: Call.fromJson(json["call"]),
@@ -192,6 +197,7 @@ class Data {
         "chat": chat.toJson(),
         "call": call.toJson(),
         "token": token,
+        "show_agreement": showAgreement,
         "bad_words_data": List<dynamic>.from(badWordsData.map((x) => x)),
         "live_background_image": liveBackgroundImage,
         "chat_suspicious_regex":

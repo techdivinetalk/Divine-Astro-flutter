@@ -1,4 +1,5 @@
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:divine_astrologer/screens/signature_module/controller/agreement_controller.dart';
 import 'package:divine_astrologer/screens/signature_module/view/face_verification_screen.dart';
 import 'package:divine_astrologer/screens/signature_module/view/signature_view.dart';
@@ -32,9 +33,19 @@ class AgreementScreen extends GetView<AgreementController> {
           ),
           body: Column(
             children: [
+              Align(
+                alignment: Alignment.center,
+                child: Text(
+                  controller.stageMessage,
+                  style: const TextStyle(
+                    fontFamily: FontFamily.metropolis,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+              ),
               Expanded(
-                      child:controller.pdfPath != null
-                          ?  FutureBuilder<String>(
+                child: controller.pdfPath != null
+                    ? FutureBuilder<String>(
                         future: controller.pdfPath,
                         builder: (context, snapshot) {
                           if (snapshot.connectionState ==
@@ -74,24 +85,30 @@ class AgreementScreen extends GetView<AgreementController> {
                             );
                           }
                         },
-                      ): SizedBox(),
-                    )
-                  ,
-              Padding(
-                padding: const EdgeInsets.all(20),
-                child: CommonButton(
-                    backgroundColor: !controller.isLastPage
-                        ? appColors.greyColor.withOpacity(0.4)
-                        : appColors.guideColor,
-                    buttonText: "Sign Your Agreement",
-                    buttonCallback: () {
-                      if (controller.isLastPage) {
-                        Get.to(() => const FaceVerificationScreen());
-                      } else {
-                        divineSnackBar(data: "Please read full agreement");
-                      }
-                    }),
+                      )
+                    : SizedBox(),
               ),
+              (controller.pdfPath != null &&
+                          controller.exclusiveAgreementStages == 0) ||
+                      controller.exclusiveAgreementStages == 1 ||
+                      controller.exclusiveAgreementStages == 4
+                  ? Padding(
+                      padding: const EdgeInsets.all(20),
+                      child: CommonButton(
+                          backgroundColor: !controller.isLastPage
+                              ? appColors.greyColor.withOpacity(0.4)
+                              : appColors.guideColor,
+                          buttonText: "Sign Your Agreement",
+                          buttonCallback: () {
+                            if (controller.isLastPage) {
+                              Get.to(() => const FaceVerificationScreen());
+                            } else {
+                              divineSnackBar(
+                                  data: "Please read full agreement");
+                            }
+                          }),
+                    )
+                  : const SizedBox(),
             ],
           ),
         );

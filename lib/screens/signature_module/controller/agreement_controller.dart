@@ -13,24 +13,18 @@ import 'package:permission_handler/permission_handler.dart';
 import '../model/agreement_model.dart';
 
 class AgreementController extends GetxController {
-   Future<String>? pdfPath;
+  Future<String>? pdfPath;
   bool isLastPage = false;
+
+  /// 0(NotSend),1(pending sign),2(underRevie),3(approved),4(not approved)
+  int exclusiveAgreementStages = 0;
+  String stageMessage = "";
 
   @override
   void onInit() {
     getAstrologerStatus();
     super.onInit();
   }
-
-  // Future<String> loadPdfFromAssets() async {
-  //   final ByteData data =
-  //       await rootBundle.load('assets/docx/sodapdf-converted.pdf');
-  //   final Uint8List bytes = data.buffer.asUint8List();
-  //   final Directory directory = await getTemporaryDirectory();
-  //   final File file = File('${directory.path}/example.pdf');
-  //   await file.writeAsBytes(bytes);
-  //   return file.path;
-  // }
 
   Future<String> loadPdfFromFile(String filePath) async {
     // Check if the file exists
@@ -53,12 +47,27 @@ class AgreementController extends GetxController {
         'Connection': 'keep-alive',
         'Keep-Alive': 'timeout=5, max=1000',
       };
-      final response = await Dio().get(
-        "${ApiProvider.astrologerAgreement}${userData!.id}",
-      );
+      final response =
+          await Dio().get("${ApiProvider.astrologerAgreement}${userData!.id}");
       print("astrologerAgreement.data${jsonEncode(response.data)}");
       AgreementModel agreementModel = AgreementModel.fromJson(response.data);
       if (agreementModel.data != null) {
+        exclusiveAgreementStages =
+            agreementModel.data!.exclusiveAgreementStages!;
+        print("exclusiveAgreementStages--->>$exclusiveAgreementStages");
+        if (agreementModel.data!.stageMessage != null) {
+          stageMessage = agreementModel.data!.stageMessage ?? "";
+        } else {
+          stageMessage = exclusiveAgreementStages == 2
+              ? "Your Agreement is under-review"
+              : exclusiveAgreementStages == 3
+                  ? "Your Agreement is approved"
+                  : exclusiveAgreementStages == 4
+                      ? "Your Agreement not approved please retry aga"
+                      : "";
+        }
+
+        update();
         downloadPDF(agreementModel.data!.pdfLink ?? "");
       }
     } catch (e) {

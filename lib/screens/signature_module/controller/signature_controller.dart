@@ -46,6 +46,7 @@ class SignatureController extends GetxController {
 
   saveDrawSignature() {
     if (signaturePadKey.currentState!.toPathList().isNotEmpty) {
+      print("signaturePadKey.currentState ----->");
       screenShotImage();
     } else {
       divineSnackBar(data: "Please draw signature");
@@ -57,7 +58,9 @@ class SignatureController extends GetxController {
       Directory downloadPath = await getDownloadPath();
       String fileName =
           "${downloadPath.path}/Draw_signature_${DateTime.now().microsecond}${DateTime.now().millisecond}.png";
-      bool isPermission = await askStoragePermission();
+      print("fileName ----->$fileName");
+       bool isPermission = await askStoragePermission();
+
       print("isPermission ----->$isPermission");
       if (isPermission) {
         await File(fileName).writeAsBytes(image!);
@@ -129,6 +132,7 @@ class SignatureController extends GetxController {
         openAppSettings();
       }
     }
+    print("isPermission-->>$isPermission");
     return isPermission;
   }
 
@@ -168,7 +172,7 @@ class SignatureController extends GetxController {
             astrologerSignaturePhoto: agreementModel.data!.signLink);
       }
     } on DioException catch (e) {
-      print("objectobjectobjectobject----${e}");
+      print("DioException--astrologerAstroSign--${e}");
     }
   }
 
@@ -194,9 +198,10 @@ class SignatureController extends GetxController {
             return Get.currentRoute == RouteName.dashboard;
           },
         );
+        divineSnackBar(data: "upload successfully");
       }
     } on DioException catch (e) {
-      print("objectobjectobjectobject----${e}");
+      print("uploadSignaturePdf----DioException----${e}");
     }
   }
 
@@ -233,7 +238,6 @@ class SignatureController extends GetxController {
                             ceoSignaturePhoto,
                             height: 100,
                             width: 100,
-
                           ),
                         ),
                         pw.Divider(color: const PdfColor.fromInt(0xf000000)),

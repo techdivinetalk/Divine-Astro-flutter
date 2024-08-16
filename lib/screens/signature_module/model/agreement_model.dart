@@ -32,28 +32,39 @@ class Status {
       : code = json['code'] as int?,
         message = json['message'] as String?;
 
-  Map<String, dynamic> toJson() => {'code': code, 'message': message};
+  Map<String, dynamic> toJson() => {
+        'code': code,
+        'message': message,
+      };
 }
 
 class AgreementData {
   final String? pdfLink;
   final String? imageLink;
   final String? signLink;
+  final String? stageMessage;
+  final int? exclusiveAgreementStages;
 
   AgreementData({
     this.pdfLink,
     this.imageLink,
     this.signLink,
+    this.stageMessage,
+    this.exclusiveAgreementStages,
   });
 
   AgreementData.fromJson(Map<String, dynamic> json)
       : pdfLink = json['pdfLink'] as String?,
         imageLink = json['ImageLink'] as String?,
+        stageMessage = json['stage_message'] as String?,
+        exclusiveAgreementStages = json['exclusiveAgreementStages'] as int?,
         signLink = json['SignLink'] as String?;
 
   Map<String, dynamic> toJson() => {
         'pdfLink': pdfLink,
         'ImageLink': imageLink,
         'SignLink': signLink,
+        'stage_message': stageMessage,
+        'exclusiveAgreementStages': exclusiveAgreementStages,
       };
 }

@@ -843,6 +843,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   getConstantDetailsData() async {
     try {
       var data = await userRepository.constantDetailsData();
+      print(data.data!.showAgreement);
+      print("constantDetailsModelClass.data!.showAgreement");
       getConstantDetails = data;
       log(getConstantDetails!.data!.toJson().toString());
       print("getting is force training video flag");

@@ -33,46 +33,6 @@ class SignatureView extends GetView<SignatureController> {
             children: [
               Column(
                 children: [
-                  // Padding(
-                  //   padding: const EdgeInsets.symmetric(horizontal: 15),
-                  //   child: Row(
-                  //     children: [
-                  //       Expanded(
-                  //         child: SignatureTextFiled(
-                  //           onChanged: (value) {
-                  //             if(value.isEmpty){
-                  //               // controller.isRegenerate = false;
-                  //               controller.update();
-                  //             }
-                  //           },
-                  //           controller: controller.signature,
-                  //           onTap: (){
-                  //             // controller.resetScreen();
-                  //           },
-                  //         ),
-                  //       ),
-                  //       SizedBox(width: 10),
-                  //       GestureDetector(
-                  //         onTap: () async {
-                  //
-                  //         },
-                  //         child: Container(
-                  //           height: 45,
-                  //           width: 45,
-                  //           decoration: BoxDecoration(
-                  //             borderRadius: BorderRadius.circular(10.0),
-                  //             color: appColors.guideColor,
-                  //           ),
-                  //           child: Icon(
-                  //             Icons.send_outlined,
-                  //             color: appColors.white,
-                  //             // size: controller.isAILoading ? 30.0 : 25.0,
-                  //           ),
-                  //         ),
-                  //       ),
-                  //     ],
-                  //   ),
-                  // ),
                   SignatureDrawContainer(
                     isRadius: controller.isRadius,
                     screenshotController: controller.screenshotController,
@@ -93,6 +53,7 @@ class SignatureView extends GetView<SignatureController> {
                     child: CommonButton(
                         buttonText: "Submit",
                         buttonCallback: () {
+                          print("signaturePadKey.currentState ----->");
                           controller.saveDrawSignature();
                         }),
                   ),

@@ -674,6 +674,7 @@ class UserRepository extends ApiProvider {
             ConstantDetailsModelClass.fromJson(json.decode(response.body));
         if (constantDetailsModelClass.statusCode == successResponse &&
             constantDetailsModelClass.success == true) {
+
           log("1111111 - ${constantDetailsModelClass.toString()}");
           return constantDetailsModelClass;
         } else {
