@@ -231,7 +231,7 @@ class HomeUI extends GetView<HomeController> {
                                     child: Row(
                                       children: [
                                         Text(
-                                          "Agreement".tr,
+                                          "Exclusive agreement".tr,
                                           style: TextStyle(
                                             fontFamily: FontFamily.poppins,
                                             fontWeight: FontWeight.w600,
