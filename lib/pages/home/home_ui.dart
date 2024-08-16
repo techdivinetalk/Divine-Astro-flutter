@@ -56,11 +56,40 @@ class HomeUI extends GetView<HomeController> {
   Widget build(BuildContext context) {
     // Get.put(HomeController());
     print("beforeGoing 5 - ${preferenceService.getUserDetail()?.id}");
+    print("width - ${MediaQuery.of(context).size.width.toString()}");
+    print("height - ${MediaQuery.of(context).size.height.toString()}");
+    print(
+        "width - ${MediaQuery.of(context).size.width * 0.19} ${MediaQuery.of(context).size.width * 0.19 * 3 + 0.29 + 18 + 16.w + 16.w} ${16.w}");
 
     return GetBuilder<HomeController>(
         assignId: true,
         init: HomeController(),
         builder: (controller) {
+          // controller.scrollController.addListener(() {
+          //   if (controller.scrollController.position.maxScrollExtent ==
+          //       controller.scrollController.position.pixels) {
+          //   }
+          // });
+          controller.scrollController.addListener(() {
+            // Check if the user is at the bottom
+            if (controller.scrollController.hasClients) {
+              final double maxScrollExtent =
+                  controller.scrollController.position.maxScrollExtent;
+              final double currentScrollPosition =
+                  controller.scrollController.position.pixels;
+
+              if (currentScrollPosition >=
+                      maxScrollExtent - controller.threshold &&
+                  controller.checkin.value == false) {
+                controller.checkin(true);
+                // User is at the bottom
+                controller.getConsulation();
+
+                print("User is at the bottom of the screen");
+              }
+            }
+          });
+
           return Scaffold(
             key: controller.homeScreenKey,
             backgroundColor: appColors.white,
@@ -166,6 +195,8 @@ class HomeUI extends GetView<HomeController> {
               if (controller.loading == Loading.loaded) {
                 return Stack(children: [
                   SingleChildScrollView(
+                    controller: controller.scrollController,
+
                     // padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: Column(
                       children: [
@@ -237,7 +268,7 @@ class HomeUI extends GetView<HomeController> {
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.fromLTRB(
-                                                      10, 15, 6, 15),
+                                                      10, 15, 8, 15),
                                               child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -837,8 +868,7 @@ class HomeUI extends GetView<HomeController> {
                                       // Container(width: MediaQuery.of(context).size),
 
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 6, top: 6),
+                                        padding: const EdgeInsets.only(top: 6),
                                         child: Column(
                                           children: [
                                             InkWell(
@@ -852,7 +882,7 @@ class HomeUI extends GetView<HomeController> {
                                                 width: MediaQuery.of(context)
                                                         .size
                                                         .width *
-                                                    0.28,
+                                                    0.29,
                                                 decoration: BoxDecoration(
                                                   color: appColors.white,
                                                   borderRadius:
@@ -885,25 +915,34 @@ class HomeUI extends GetView<HomeController> {
                                                         width: 30,
                                                       ),
                                                       const SizedBox(
-                                                        width: 4,
+                                                        width: 2,
                                                       ),
-                                                      Text(
-                                                        "PassBook".tr,
-                                                        style: AppTextStyle
-                                                            .textStyle12(
-                                                                fontColor:
-                                                                    appColors
-                                                                        .black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500),
+                                                      SizedBox(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.18,
+                                                        child: Text(
+                                                          "PassBook".tr,
+                                                          overflow:
+                                                              TextOverflow.clip,
+                                                          style: AppTextStyle
+                                                              .textStyle12(
+                                                                  fontColor:
+                                                                      appColors
+                                                                          .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500),
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 6,
                                             ),
                                             InkWell(
@@ -919,7 +958,7 @@ class HomeUI extends GetView<HomeController> {
                                                 width: MediaQuery.of(context)
                                                         .size
                                                         .width *
-                                                    0.28,
+                                                    0.29,
                                                 decoration: BoxDecoration(
                                                   color: appColors.white,
                                                   borderRadius:
@@ -956,20 +995,27 @@ class HomeUI extends GetView<HomeController> {
                                                         ),
                                                       ),
                                                       const SizedBox(
-                                                        width: 4,
+                                                        width: 2,
                                                       ),
-                                                      Text(
-                                                        "View \nKundli".tr,
-                                                        overflow:
-                                                            TextOverflow.clip,
-                                                        style: AppTextStyle
-                                                            .textStyle12(
-                                                                fontColor:
-                                                                    appColors
-                                                                        .black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500),
+                                                      SizedBox(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.18,
+                                                        child: Text(
+                                                          "View Kundli".tr,
+                                                          overflow:
+                                                              TextOverflow.clip,
+                                                          style: AppTextStyle
+                                                              .textStyle12(
+                                                                  fontColor:
+                                                                      appColors
+                                                                          .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500),
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
@@ -1158,24 +1204,35 @@ class HomeUI extends GetView<HomeController> {
                                                                       FontWeight
                                                                           .w500),
                                                         ),
-                                                        Text(
-                                                          controller
-                                                              .getRitentionModel!
-                                                              .data!
-                                                              .level!
-                                                              .text
-                                                              .toString(),
-                                                          maxLines: 1,
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          style: AppTextStyle
-                                                              .textStyle10(
-                                                                  fontColor:
-                                                                      appColors
-                                                                          .black,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400),
+                                                        SizedBox(width: 2),
+                                                        SizedBox(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.17,
+                                                          child: Text(
+                                                            controller
+                                                                .getRitentionModel!
+                                                                .data!
+                                                                .level!
+                                                                .text
+                                                                .toString(),
+                                                            maxLines: 1,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: AppTextStyle
+                                                                .textStyle10(
+                                                                    fontColor:
+                                                                        appColors
+                                                                            .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400),
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
@@ -1705,22 +1762,6 @@ class HomeUI extends GetView<HomeController> {
                             ? PerformanceTab(context, controller: controller)
                             : SizedBox(),
                         Obx(
-                          () {
-                            final bool cond1 = controller.isCallEnable.value;
-                            final bool cond2 = controller.isChatEnable.value;
-                            final bool cond3 =
-                                controller.isVideoCallEnable.value;
-
-                            return cond1 || cond2 || cond3
-                                ? Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 6),
-                                    child: sessionTypeWidget(
-                                        controller: controller))
-                                : const SizedBox();
-                          },
-                        ),
-                        Obx(
                           () => controller.isFeedbackAvailable.value
                               ? controller.homeData?.feedback == null
                                   ? const SizedBox.shrink()
@@ -1806,7 +1847,6 @@ class HomeUI extends GetView<HomeController> {
                                     )
                               : const SizedBox(),
                         ),
-
                         controller.astroNoticeBoardResponse.value.data
                                     ?.noticeBoard ==
                                 null
@@ -1850,12 +1890,26 @@ class HomeUI extends GetView<HomeController> {
                                   ],
                                 ),
                               ),
+                        Obx(
+                          () {
+                            final bool cond1 = controller.isCallEnable.value;
+                            final bool cond2 = controller.isChatEnable.value;
+                            final bool cond3 =
+                                controller.isVideoCallEnable.value;
 
-                        viewKundliWidgetUpdated(),
+                            return cond1 || cond2 || cond3
+                                ? Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 6),
+                                    child: sessionTypeWidget(
+                                        controller: controller))
+                                : const SizedBox();
+                          },
+                        ),
                         Obx(
                           () {
                             return isLive.value == 1
-                                ? controller.isLiveEnable.value // == false
+                                ? controller.isLiveEnable.value //== false
                                     ? Container(
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 16, vertical: 6),
@@ -1949,6 +2003,9 @@ class HomeUI extends GetView<HomeController> {
                                 : const SizedBox();
                           },
                         ),
+
+                        viewKundliWidgetUpdated(),
+
                         Padding(
                           padding:
                               EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -2174,44 +2231,44 @@ class HomeUI extends GetView<HomeController> {
                                 controller
                                     .customerDetailsResponse!.data.isEmpty)
                             ? SizedBox()
-                            : NotificationListener<ScrollNotification>(
-                                onNotification:
-                                    (ScrollNotification scrollInfo) {
-                                  if (scrollInfo.metrics.pixels ==
-                                      scrollInfo.metrics.maxScrollExtent) {
-                                    print(
-                                        "getConsulation getConsulation getConsulation");
-                                    controller.getConsulation();
-                                    return true;
-                                  }
-                                  return false;
+                            : ListView.builder(
+                                shrinkWrap: true,
+                                padding: EdgeInsets.symmetric(horizontal: 10.h),
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount:
+                                    (controller.filteredUserData).isNotEmpty ||
+                                            controller.searchController.text
+                                                .isNotEmpty
+                                        ? controller.filteredUserData.length
+                                        : controller.customerDetailsResponse
+                                                ?.data.length ??
+                                            0,
+                                itemBuilder: (context, index) {
+                                  return ChatAssistanceDataTile(
+                                    data: (controller.filteredUserData)
+                                                .isNotEmpty ||
+                                            controller.searchController.text
+                                                .isNotEmpty
+                                        ? controller.filteredUserData[index]
+                                        : controller.customerDetailsResponse!
+                                            .data[index],
+                                  );
                                 },
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 10.h),
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: (controller.filteredUserData)
-                                              .isNotEmpty ||
-                                          controller
-                                              .searchController.text.isNotEmpty
-                                      ? controller.filteredUserData.length
-                                      : controller.customerDetailsResponse?.data
-                                              .length ??
-                                          0,
-                                  itemBuilder: (context, index) {
-                                    return ChatAssistanceDataTile(
-                                      data: (controller.filteredUserData)
-                                                  .isNotEmpty ||
-                                              controller.searchController.text
-                                                  .isNotEmpty
-                                          ? controller.filteredUserData[index]
-                                          : controller.customerDetailsResponse!
-                                              .data[index],
-                                    );
-                                  },
-                                ),
                               ),
+                        // NotificationListener<ScrollNotification>(
+                        //         onNotification:
+                        //             (ScrollNotification scrollInfo) {
+                        //           if (scrollInfo.metrics.pixels ==
+                        //               scrollInfo.metrics.maxScrollExtent) {
+                        //             print(
+                        //                 "getConsulation getConsulation getConsulation");
+                        //             // controller.getConsulation();
+                        //             return true;
+                        //           }
+                        //           return false;
+                        //         },
+                        //         child:
+                        //       ),
                         SizedBox(height: 20.h),
                         // feedbackWidget(controller: controller),
                         // Obx(() {
@@ -2837,11 +2894,12 @@ class HomeUI extends GetView<HomeController> {
             controller.getRitentionModel!.data!.performanceData == null
         ? const SizedBox()
         : Padding(
-            padding: EdgeInsets.only(top: 6, bottom: 6, left: 16, right: 16),
+            padding:
+                const EdgeInsets.only(top: 6, bottom: 6, left: 16, right: 16),
             child: Container(
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.all(10.h),
               decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
                     blurRadius: 4,
@@ -2849,39 +2907,91 @@ class HomeUI extends GetView<HomeController> {
                     color: appColors.grey.withOpacity(0.2),
                   ),
                 ],
-                color: appColors.white,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
+              child: Theme(
+                data: Theme.of(context)
+                    .copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  maintainState: true,
+                  collapsedIconColor: Colors.black,
+                  iconColor: Colors.black,
+                  initiallyExpanded: false,
+                  title: Align(
+                    alignment: Alignment.centerLeft,
                     child: CustomText(
-                      'Performance ${controller.getRitentionModel!.data!.Date_text == null ? "" : "${controller.getRitentionModel!.data!.Date_text.toString()}"}', //(22nd-28th July)
+                      'Performance',
                       fontWeight: FontWeight.w600,
                       fontColor: appColors.black,
                       maxLines: 1,
                       fontSize: 12,
                     ),
                   ),
-                  SizedBox(height: 5),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: controller
-                        .getRitentionModel!.data!.performanceData!.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      var data = controller
-                          .getRitentionModel!.data!.performanceData![index];
-                      return rowWidget(
-                          context,
-                          data.metric.toString(),
-                          data.value.toString(),
-                          data.status.toString(),
-                          data.color ?? "#FF5733");
-                    },
-                  ),
-                ],
+                  subtitle: controller.change.value == false
+                      ? null
+                      : Align(
+                          alignment: Alignment.centerLeft,
+                          child: CustomText(
+                            controller.getRitentionModel!.data!.Date_text ==
+                                    null
+                                ? ""
+                                : controller.getRitentionModel!.data!.Date_text
+                                    .toString(),
+                            fontWeight: FontWeight.w600,
+                            fontColor: appColors.black,
+                            maxLines: 1,
+                            fontSize: 12,
+                          ),
+                        ),
+                  onExpansionChanged: (bool value) {
+                    if (value == true) {
+                      controller.change(true);
+                      controller.update();
+                    } else {
+                      controller.change(false);
+                      controller.update();
+                    }
+                  },
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(bottom: 6, left: 16, right: 16),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // SizedBox(
+                            //   child: CustomText(
+                            //     'Performance ${controller.getRitentionModel!.data!.Date_text == null ? "" : "${controller.getRitentionModel!.data!.Date_text.toString()}"}', //(22nd-28th July)
+                            //     fontWeight: FontWeight.w600,
+                            //     fontColor: appColors.black,
+                            //     maxLines: 1,
+                            //     fontSize: 12,
+                            //   ),
+                            // ),
+                            // SizedBox(height: 5),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: controller.getRitentionModel!.data!
+                                  .performanceData!.length,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                var data = controller.getRitentionModel!.data!
+                                    .performanceData![index];
+                                return rowWidget(
+                                    context,
+                                    data.metric.toString(),
+                                    data.value.toString(),
+                                    data.status.toString(),
+                                    data.color ?? "#FF5733");
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

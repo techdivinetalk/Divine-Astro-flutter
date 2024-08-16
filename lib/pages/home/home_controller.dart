@@ -39,6 +39,7 @@ import 'package:flutter/services.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import "package:permission_handler/permission_handler.dart";
@@ -125,18 +126,29 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   CustomerDetailsResponse? customerDetailsResponse;
   RxList filteredUserData = [].obs;
   final searchController = TextEditingController();
+  var checkin = false.obs;
+  var emptyRes = false.obs;
   Future<void> getConsulation() async {
     CustomerDetailsResponse response =
         await chatAssistantRepository.getConsulation(pageUsersData);
-    if (response.data.isNotEmpty) {
-      if (pageUsersData != 1 &&
-          customerDetailsResponse != null &&
-          customerDetailsResponse!.data.isNotEmpty) {
-        customerDetailsResponse!.data.addAll(response.data);
+    if (emptyRes.value == false) {
+      if (response.data.isNotEmpty) {
+        if (pageUsersData != 1 &&
+            customerDetailsResponse != null &&
+            customerDetailsResponse!.data.isNotEmpty) {
+          customerDetailsResponse!.data.addAll(response.data);
+          checkin(false);
+        } else {
+          customerDetailsResponse = response;
+        }
+        pageUsersData++;
       } else {
-        customerDetailsResponse = response;
+        Fluttertoast.showToast(msg: "No more data");
+        print("data ---- ${response.data.toString()}");
+        emptyRes(true);
       }
-      pageUsersData++;
+    } else {
+      print("There is no more data in user data");
     }
     update();
   }
@@ -211,12 +223,25 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  final ScrollController scrollController = ScrollController();
+  final threshold = 50.0; // Adjust as needed
+
   @override
   void onInit() async {
     super.onInit();
     debugPrint("test_onInit: call");
 
     initData();
+// // Log when the scroll controller is attached
+//     print('ScrollController attached: ${scrollController.positions.length}');
+//     scrollController.addListener(() {
+//       print('pixels ${scrollController.positions.length}');
+//
+//       if (scrollController.position.maxScrollExtent ==
+//           scrollController.position.pixels) {
+//         getConsulation();
+//       }
+//     });
   }
 
   initData() {
@@ -866,7 +891,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   AstroRitentionModel? getRitentionModel;
-
+  var change = false.obs;
   getRitentionDataApi() async {
     try {
       var data = await userRepository.getRitentionData({});
@@ -1102,7 +1127,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           //     break;
           // }
           print("message 1------>$message");
-          divineSnackBar(data: message);
+          divineSnackBar(
+              data: message, duration: const Duration(milliseconds: 5000));
         },
         failureCallBack: (message) {
           switch (type) {
@@ -1118,7 +1144,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
             default:
               break;
           }
-          divineSnackBar(data: message ?? "");
+          divineSnackBar(
+              data: message ?? "",
+              duration: const Duration(milliseconds: 5000));
         },
       );
 

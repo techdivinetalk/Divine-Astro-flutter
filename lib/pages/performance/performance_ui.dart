@@ -72,106 +72,129 @@ class PerformanceUI extends GetView<PerformanceController> {
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
                                   children: [
-                                    Ink(
-                                      height: 50,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.44,
-                                      decoration: BoxDecoration(
-                                        color: appColors.white,
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(10),
-                                        ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            blurRadius: 6,
-                                            spreadRadius: 2,
-                                            color:
-                                                appColors.grey.withOpacity(0.2),
+                                    controller.getRitentionModel!.data!.badge ==
+                                            null
+                                        ? SizedBox()
+                                        : Ink(
+                                            height: 50,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.44,
+                                            decoration: BoxDecoration(
+                                              color: appColors.white,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                Radius.circular(10),
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  blurRadius: 6,
+                                                  spreadRadius: 2,
+                                                  color: appColors.grey
+                                                      .withOpacity(0.2),
+                                                ),
+                                              ],
+                                            ),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 5),
+                                            // alignment: Alignment.center,
+                                            child: Center(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  CommonImageView(
+                                                    imagePath: controller
+                                                        .getRitentionModel!
+                                                        .data!
+                                                        .badge!
+                                                        .image
+                                                        .toString(),
+                                                    height: 30,
+                                                    width: 30,
+                                                    placeHolder: Assets.images
+                                                        .defaultProfile.path,
+                                                  ),
+                                                  SizedBox(width: 5),
+                                                  Text(
+                                                    controller
+                                                        .getRitentionModel!
+                                                        .data!
+                                                        .badge!
+                                                        .value
+                                                        .toString(),
+                                                    style: AppTextStyle
+                                                        .textStyle12(
+                                                            fontColor:
+                                                                appColors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
                                           ),
-                                        ],
-                                      ),
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 5),
-                                      // alignment: Alignment.center,
-                                      child: Center(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            CommonImageView(
-                                              imagePath: controller
-                                                  .getRitentionModel!
-                                                  .data!
-                                                  .badge!
-                                                  .image
-                                                  .toString(),
-                                              height: 30,
-                                              width: 30,
-                                              placeHolder: Assets
-                                                  .images.defaultProfile.path,
+                                    controller.getRitentionModel!.data!.level ==
+                                            null
+                                        ? SizedBox()
+                                        : Ink(
+                                            height: 50,
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.44,
+                                            decoration: BoxDecoration(
+                                              color: appColors.white,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                Radius.circular(10),
+                                              ),
+                                              boxShadow: [
+                                                BoxShadow(
+                                                  blurRadius: 6,
+                                                  spreadRadius: 2,
+                                                  color: appColors.grey
+                                                      .withOpacity(0.2),
+                                                ),
+                                              ],
                                             ),
-                                            SizedBox(width: 5),
-                                            Text(
-                                              controller.getRitentionModel!
-                                                  .data!.badge!.value
-                                                  .toString(),
-                                              style: AppTextStyle.textStyle12(
-                                                  fontColor: appColors.black,
-                                                  fontWeight: FontWeight.w500),
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 5),
+                                            child: Center(
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  CommonImageView(
+                                                    imagePath:
+                                                        "assets/images/rank.png",
+                                                    height: 30,
+                                                    width: 30,
+                                                    placeHolder: Assets.images
+                                                        .defaultProfile.path,
+                                                  ),
+                                                  SizedBox(width: 5),
+                                                  Text(
+                                                    "Level. ${controller.getRitentionModel!.data!.level!.hours.toString()}"
+                                                        .tr,
+                                                    style: AppTextStyle
+                                                        .textStyle12(
+                                                            fontColor:
+                                                                appColors.black,
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .w500),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
-                                    Ink(
-                                      height: 50,
-                                      width: MediaQuery.of(context).size.width *
-                                          0.44,
-                                      decoration: BoxDecoration(
-                                        color: appColors.white,
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(10),
-                                        ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            blurRadius: 6,
-                                            spreadRadius: 2,
-                                            color:
-                                                appColors.grey.withOpacity(0.2),
                                           ),
-                                        ],
-                                      ),
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 5),
-                                      child: Center(
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.center,
-                                          children: [
-                                            CommonImageView(
-                                              imagePath:
-                                                  "assets/images/rank.png",
-                                              height: 30,
-                                              width: 30,
-                                              placeHolder: Assets
-                                                  .images.defaultProfile.path,
-                                            ),
-                                            SizedBox(width: 5),
-                                            Text(
-                                              "Level. ${controller.getRitentionModel!.data!.level!.hours.toString()}"
-                                                  .tr,
-                                              style: AppTextStyle.textStyle12(
-                                                  fontColor: appColors.black,
-                                                  fontWeight: FontWeight.w500),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ),
                                   ],
                                 ),
                               )
