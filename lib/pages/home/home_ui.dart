@@ -56,11 +56,40 @@ class HomeUI extends GetView<HomeController> {
   Widget build(BuildContext context) {
     // Get.put(HomeController());
     print("beforeGoing 5 - ${preferenceService.getUserDetail()?.id}");
+    print("width - ${MediaQuery.of(context).size.width.toString()}");
+    print("height - ${MediaQuery.of(context).size.height.toString()}");
+    print(
+        "width - ${MediaQuery.of(context).size.width * 0.19} ${MediaQuery.of(context).size.width * 0.19 * 3 + 0.29 + 18 + 16.w + 16.w} ${16.w}");
 
     return GetBuilder<HomeController>(
         assignId: true,
         init: HomeController(),
         builder: (controller) {
+          // controller.scrollController.addListener(() {
+          //   if (controller.scrollController.position.maxScrollExtent ==
+          //       controller.scrollController.position.pixels) {
+          //   }
+          // });
+          controller.scrollController.addListener(() {
+            // Check if the user is at the bottom
+            if (controller.scrollController.hasClients) {
+              final double maxScrollExtent =
+                  controller.scrollController.position.maxScrollExtent;
+              final double currentScrollPosition =
+                  controller.scrollController.position.pixels;
+
+              if (currentScrollPosition >=
+                      maxScrollExtent - controller.threshold &&
+                  controller.checkin.value == false) {
+                controller.checkin(true);
+                // User is at the bottom
+                controller.getConsulation();
+
+                print("User is at the bottom of the screen");
+              }
+            }
+          });
+
           return Scaffold(
             key: controller.homeScreenKey,
             backgroundColor: appColors.white,
@@ -166,6 +195,8 @@ class HomeUI extends GetView<HomeController> {
               if (controller.loading == Loading.loaded) {
                 return Stack(children: [
                   SingleChildScrollView(
+                    controller: controller.scrollController,
+
                     // padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: Column(
                       children: [
@@ -203,7 +234,7 @@ class HomeUI extends GetView<HomeController> {
                                             child: Padding(
                                               padding:
                                                   const EdgeInsets.fromLTRB(
-                                                      10, 15, 6, 15),
+                                                      10, 15, 8, 15),
                                               child: Column(
                                                 mainAxisAlignment:
                                                     MainAxisAlignment
@@ -803,8 +834,7 @@ class HomeUI extends GetView<HomeController> {
                                       // Container(width: MediaQuery.of(context).size),
 
                                       Padding(
-                                        padding: const EdgeInsets.only(
-                                            left: 6, top: 6),
+                                        padding: const EdgeInsets.only(top: 6),
                                         child: Column(
                                           children: [
                                             InkWell(
@@ -818,7 +848,7 @@ class HomeUI extends GetView<HomeController> {
                                                 width: MediaQuery.of(context)
                                                         .size
                                                         .width *
-                                                    0.28,
+                                                    0.29,
                                                 decoration: BoxDecoration(
                                                   color: appColors.white,
                                                   borderRadius:
@@ -878,7 +908,7 @@ class HomeUI extends GetView<HomeController> {
                                                 ),
                                               ),
                                             ),
-                                            SizedBox(
+                                            const SizedBox(
                                               height: 6,
                                             ),
                                             InkWell(
@@ -894,7 +924,7 @@ class HomeUI extends GetView<HomeController> {
                                                 width: MediaQuery.of(context)
                                                         .size
                                                         .width *
-                                                    0.28,
+                                                    0.29,
                                                 decoration: BoxDecoration(
                                                   color: appColors.white,
                                                   borderRadius:
@@ -2167,44 +2197,44 @@ class HomeUI extends GetView<HomeController> {
                                 controller
                                     .customerDetailsResponse!.data.isEmpty)
                             ? SizedBox()
-                            : NotificationListener<ScrollNotification>(
-                                onNotification:
-                                    (ScrollNotification scrollInfo) {
-                                  if (scrollInfo.metrics.pixels ==
-                                      scrollInfo.metrics.maxScrollExtent) {
-                                    print(
-                                        "getConsulation getConsulation getConsulation");
-                                    controller.getConsulation();
-                                    return true;
-                                  }
-                                  return false;
+                            : ListView.builder(
+                                shrinkWrap: true,
+                                padding: EdgeInsets.symmetric(horizontal: 10.h),
+                                physics: NeverScrollableScrollPhysics(),
+                                itemCount:
+                                    (controller.filteredUserData).isNotEmpty ||
+                                            controller.searchController.text
+                                                .isNotEmpty
+                                        ? controller.filteredUserData.length
+                                        : controller.customerDetailsResponse
+                                                ?.data.length ??
+                                            0,
+                                itemBuilder: (context, index) {
+                                  return ChatAssistanceDataTile(
+                                    data: (controller.filteredUserData)
+                                                .isNotEmpty ||
+                                            controller.searchController.text
+                                                .isNotEmpty
+                                        ? controller.filteredUserData[index]
+                                        : controller.customerDetailsResponse!
+                                            .data[index],
+                                  );
                                 },
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 10.h),
-                                  physics: const NeverScrollableScrollPhysics(),
-                                  itemCount: (controller.filteredUserData)
-                                              .isNotEmpty ||
-                                          controller
-                                              .searchController.text.isNotEmpty
-                                      ? controller.filteredUserData.length
-                                      : controller.customerDetailsResponse?.data
-                                              .length ??
-                                          0,
-                                  itemBuilder: (context, index) {
-                                    return ChatAssistanceDataTile(
-                                      data: (controller.filteredUserData)
-                                                  .isNotEmpty ||
-                                              controller.searchController.text
-                                                  .isNotEmpty
-                                          ? controller.filteredUserData[index]
-                                          : controller.customerDetailsResponse!
-                                              .data[index],
-                                    );
-                                  },
-                                ),
                               ),
+                        // NotificationListener<ScrollNotification>(
+                        //         onNotification:
+                        //             (ScrollNotification scrollInfo) {
+                        //           if (scrollInfo.metrics.pixels ==
+                        //               scrollInfo.metrics.maxScrollExtent) {
+                        //             print(
+                        //                 "getConsulation getConsulation getConsulation");
+                        //             // controller.getConsulation();
+                        //             return true;
+                        //           }
+                        //           return false;
+                        //         },
+                        //         child:
+                        //       ),
                         SizedBox(height: 20.h),
                         // feedbackWidget(controller: controller),
                         // Obx(() {
