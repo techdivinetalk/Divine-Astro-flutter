@@ -325,6 +325,7 @@ class DashboardController extends GetxController
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print("noti type(onMessageOpenedApp) : ${message.data["type"]}");
       if (message.data["type"] == "8") {
         final senderId = message.data["sender_id"];
         DataList dataList = DataList();
