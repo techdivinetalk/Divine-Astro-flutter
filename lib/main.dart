@@ -95,8 +95,7 @@ Future<void> main() async {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     print("pushNotification1 ${message.notification?.title ?? ""}");
-    print('Message data-: dasboardCurrentIndex---${message.data}');
-    if (message.data["type"] == "2") {
+    if (message.data["type"] == "2" || message.data["type"] == "20") {
       showFlutterNotification(message);
       return;
     }
