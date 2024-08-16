@@ -128,6 +128,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   final searchController = TextEditingController();
   var checkin = false.obs;
   var emptyRes = false.obs;
+
   Future<void> getConsulation() async {
     CustomerDetailsResponse response =
         await chatAssistantRepository.getConsulation(pageUsersData);
@@ -706,6 +707,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   var loadWalletData = false.obs;
+
   getWalletPointDetail(wallet) async {
     update();
     loadWalletData(true);
@@ -865,13 +867,17 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       print("getting error --- getAstroCustOfferData ${e}");
     }
   }
-int showAgreement = 0;
+
+  int showAgreement = 0;
+
   getConstantDetailsData() async {
     try {
       var data = await userRepository.constantDetailsData();
       print(data.data!.showAgreement);
-      if(data.data!.showAgreement != null){
-        showAgreement =data.data!.showAgreement ?? 0;
+      if (data.data!.showAgreement != null) {
+        showAgreement = data.data!.showAgreement ?? 0;
+        update();
+        log("showAgreement----->>>>$showAgreement");
       }
       print("constantDetailsModelClass.data!.showAgreement");
       getConstantDetails = data;
@@ -895,6 +901,7 @@ int showAgreement = 0;
 
   AstroRitentionModel? getRitentionModel;
   var change = false.obs;
+
   getRitentionDataApi() async {
     try {
       var data = await userRepository.getRitentionData({});
