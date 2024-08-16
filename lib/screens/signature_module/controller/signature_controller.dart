@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
@@ -8,6 +9,7 @@ import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/res_login.dart';
 import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/product/pooja/widgets/custom_widget/pooja_common_list.dart';
 import 'package:divine_astrologer/screens/signature_module/model/agreement_model.dart';
+import 'package:divine_astrologer/utils/show_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide FormData, MultipartFile;
@@ -46,33 +48,41 @@ class SignatureController extends GetxController {
 
   saveDrawSignature() {
     if (signaturePadKey.currentState!.toPathList().isNotEmpty) {
-      print("signaturePadKey.currentState ----->");
+      log("signaturePadKey.currentState ----->");
       screenShotImage();
     } else {
       divineSnackBar(data: "Please draw signature");
     }
   }
 
+  bool isLoading = false;
+
   screenShotImage() async {
+    isLoading = true;
     screenshotController.capture().then((Uint8List? image) async {
       Directory downloadPath = await getDownloadPath();
       String fileName =
           "${downloadPath.path}/Draw_signature_${DateTime.now().microsecond}${DateTime.now().millisecond}.png";
-      print("fileName ----->$fileName");
-       bool isPermission = await askStoragePermission();
+      log("fileName ----->$fileName");
+      bool isPermission = await askStoragePermission();
 
-      print("isPermission ----->$isPermission");
+      log("isPermission ----->$isPermission");
       if (isPermission) {
         await File(fileName).writeAsBytes(image!);
         uploadSignatureImage(File(fileName));
       } else {
         divineSnackBar(data: "Permission denied");
+        isLoading = false;
+        update();
       }
       isRadius = true;
       update();
     }).catchError((onError) {
-      print(onError);
+      log("screenshotController----onError--${onError}");
+      isLoading = false;
+      update();
     });
+
     isRadius = false;
     update();
   }
@@ -149,8 +159,8 @@ class SignatureController extends GetxController {
   }
 
   Future<void> uploadSignatureImage(File imageFile) async {
-    print(imageFile);
-    print("imageFileimageFile");
+    log(imageFile.path);
+    log("imageFileimageFile");
     UserData? userData = await pref.getUserDetail();
     try {
       var uri = "${ApiProvider.astrologerAstroSign}${userData!.id}";
@@ -161,18 +171,19 @@ class SignatureController extends GetxController {
                     filename: imageFile.path.split('/').last)
                 : null,
           }));
-      print(data.data);
-      print("data.data-->>${data.data}");
+
+      log("data.data-->>${data.data}");
       AgreementModel agreementModel = AgreementModel.fromJson(data.data);
       if (agreementModel.status!.code == 200) {
-        print(
-            "agreementModel.data!.signLink-->>${agreementModel.data!.signLink}----${astrologerProfilePhoto}");
+        log("agreementModel.data!.signLink-->>${agreementModel.data!.signLink}----${astrologerProfilePhoto}");
         savePdf(
             astrologerProfilePhoto: astrologerProfilePhoto,
             astrologerSignaturePhoto: agreementModel.data!.signLink);
       }
     } on DioException catch (e) {
-      print("DioException--astrologerAstroSign--${e}");
+      isLoading = false;
+      update();
+      log("DioException--astrologerAstroSign--${e}");
     }
   }
 
@@ -187,21 +198,24 @@ class SignatureController extends GetxController {
                     filename: imageFile.path.split('/').last)
                 : null,
           }));
-      print(data.data);
-      print("data.uploadSignaturePdf-->>${data.data}");
+
+      log("data.uploadSignaturePdf-->>${data.data}");
       AgreementModel agreementModel = AgreementModel.fromJson(data.data);
       if (agreementModel.status!.code == 200) {
-        print(
-            "agreementModel.data!.signLink-->>${agreementModel.data!.signLink}");
+        log("agreementModel.data!.signLink-->>${agreementModel.data!.signLink}");
         Get.until(
           (route) {
             return Get.currentRoute == RouteName.dashboard;
           },
         );
         divineSnackBar(data: "upload successfully");
+        isLoading = false;
+        update();
       }
     } on DioException catch (e) {
-      print("uploadSignaturePdf----DioException----${e}");
+      isLoading = false;
+      update();
+      log("uploadSignaturePdf----DioException----${e}");
     }
   }
 
@@ -381,10 +395,18 @@ class SignatureController extends GetxController {
         Directory('/storage/emulated/0/Download/divinetalkAstrology');
     final filePath = '${appDocDirFolder.path}/astrologer_sign_and_photo.pdf';
     final file = File(filePath);
+    // bool isExists = await file.exists();
+    // log("isExists----${isExists}");
+    // if (isExists) {
+    //
+    //  await file.delete();
+    // }
     await file.writeAsBytes(await pdf.save());
+
     Future.delayed(
       const Duration(milliseconds: 200),
       () async {
+        log("uploadSignaturePdf----${filePath}");
         await uploadSignaturePdf(File(filePath));
       },
     );

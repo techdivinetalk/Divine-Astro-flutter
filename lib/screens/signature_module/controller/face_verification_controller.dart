@@ -46,6 +46,7 @@ class FaceVerificationController extends GetxController
   }
 
   Future<void> uploadFaceImage(File imageFile) async {
+    log("uploadFaceImage-----uploadFaceImage");
     UserData? userData = await pref.getUserDetail();
     try {
       var uri = "${ApiProvider.astrologerFaceVerification}${userData!.id}";
@@ -61,11 +62,11 @@ class FaceVerificationController extends GetxController
         Get.to(() => SignatureView(), arguments: {
           "astrologerProfilePhoto": agreementModel.data!.imageLink,
         });
-        print(
+        log(
             "agreementModel.data!.imageLink----->>>${agreementModel.data!.imageLink}");
       }
     } on DioException catch (e) {
-      print("objectobjectobjectobject----${e}");
+      log("objectobjectobjectobject----${e}");
     }
   }
 }

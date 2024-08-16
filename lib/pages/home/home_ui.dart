@@ -169,6 +169,40 @@ class HomeUI extends GetView<HomeController> {
                     // padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: Column(
                       children: [
+                        /*const SizedBox(height: 15),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 10),
+                          child: Container(
+                            height: 40,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: appColors.white,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 6,
+                                  spreadRadius: 2,
+                                  color: appColors.grey
+                                      .withOpacity(0.2),
+                                ),
+                              ],
+                              borderRadius:
+                              BorderRadius.circular(
+                                  10.0),
+                            ),
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Agreement".tr,
+                              style: TextStyle(
+                                fontFamily:
+                                FontFamily.poppins,
+                                fontWeight:
+                                FontWeight.w600,
+                                color: appColors.black,
+                                fontSize: 15,
+                              ),
+                            ),
+                          ),
+                        ),*/
                         astroHome.toString() == "0"
                             ? Obx(
                                 () => Container(

@@ -6,11 +6,13 @@ class CommonButton extends StatelessWidget {
     required this.buttonText,
     required this.buttonCallback,
      this.backgroundColor,
+     this.centerWidget,
     super.key,
   });
 
   final String buttonText;
   final Color? backgroundColor;
+  final Widget? centerWidget;
   final void Function() buttonCallback;
 
   @override
@@ -29,7 +31,7 @@ class CommonButton extends StatelessWidget {
           ),
         ),
         onPressed: buttonCallback,
-        child: Text(buttonText, style:  TextStyle(color: appColors.whiteGuidedColor)),
+        child:centerWidget ?? Text(buttonText, style:  TextStyle(color: appColors.whiteGuidedColor)),
       ),
     );
   }

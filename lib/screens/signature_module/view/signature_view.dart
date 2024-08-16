@@ -4,6 +4,7 @@ import 'package:divine_astrologer/screens/signature_module/controller/agreement_
 import 'package:divine_astrologer/screens/signature_module/controller/signature_controller.dart';
 import 'package:divine_astrologer/screens/signature_module/widget/siganture_textfiled.dart';
 import 'package:divine_astrologer/screens/signature_module/widget/signature_draw_container.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -28,6 +29,24 @@ class SignatureView extends GetView<SignatureController> {
                   fontSize: 16.sp,
                   color: appColors.darkBlue,
                 )),
+            actions: [
+              controller.signaturePadKey.currentState != null &&    controller.signaturePadKey.currentState!.toPathList().isNotEmpty
+                  ? GestureDetector(
+                      onTap: () {
+                        if (controller.signaturePadKey.currentState!
+                            .toPathList()
+                            .isNotEmpty) {
+                          controller.signaturePadKey.currentState!.clear();
+                          controller.update();
+                        }
+                      },
+                      child: Icon(
+                        Icons.refresh_rounded,
+                      ),
+                    )
+                  : SizedBox(),
+              SizedBox(width: 10)
+            ],
           ),
           body: Stack(
             children: [
@@ -52,6 +71,9 @@ class SignatureView extends GetView<SignatureController> {
                     padding: const EdgeInsets.all(20),
                     child: CommonButton(
                         buttonText: "Submit",
+                        centerWidget: controller.isLoading
+                            ? CircularProgressIndicator(color: appColors.white)
+                            : null,
                         buttonCallback: () {
                           print("signaturePadKey.currentState ----->");
                           controller.saveDrawSignature();
