@@ -231,9 +231,12 @@ class HomeUI extends GetView<HomeController> {
                                                                     // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
                                                                     maxLines: 1,
                                                                     style: AppTextStyle.textStyle14(
-                                                                        fontColor:
-                                                                            appColors
-                                                                                .darkBlue,
+                                                                        fontColor: (controller.homeData?.todaysEarning ?? 0) <=
+                                                                                0
+                                                                            ? appColors
+                                                                                .red
+                                                                            : appColors
+                                                                                .green,
                                                                         fontWeight:
                                                                             FontWeight.w700),
                                                                   ),
@@ -241,9 +244,12 @@ class HomeUI extends GetView<HomeController> {
                                                                     "today".tr,
                                                                     maxLines: 1,
                                                                     style: AppTextStyle.textStyle10(
-                                                                        fontColor:
-                                                                            appColors
-                                                                                .darkBlue,
+                                                                        fontColor: (controller.homeData?.todaysEarning ?? 0) <=
+                                                                                0
+                                                                            ? appColors
+                                                                                .red
+                                                                            : appColors
+                                                                                .green,
                                                                         fontWeight:
                                                                             FontWeight.w400),
                                                                   ),
@@ -265,9 +271,12 @@ class HomeUI extends GetView<HomeController> {
                                                                     "₹******",
                                                                     maxLines: 1,
                                                                     style: AppTextStyle.textStyle14(
-                                                                        fontColor:
-                                                                            appColors
-                                                                                .darkBlue,
+                                                                        fontColor: (controller.homeData?.todaysEarning ?? 0) <=
+                                                                                0
+                                                                            ? appColors
+                                                                                .red
+                                                                            : appColors
+                                                                                .green,
                                                                         fontWeight:
                                                                             FontWeight.w700),
                                                                   ),
@@ -275,9 +284,12 @@ class HomeUI extends GetView<HomeController> {
                                                                     "today".tr,
                                                                     maxLines: 1,
                                                                     style: AppTextStyle.textStyle10(
-                                                                        fontColor:
-                                                                            appColors
-                                                                                .darkBlue,
+                                                                        fontColor: (controller.homeData?.todaysEarning ?? 0) <=
+                                                                                0
+                                                                            ? appColors
+                                                                                .red
+                                                                            : appColors
+                                                                                .green,
                                                                         fontWeight:
                                                                             FontWeight.w400),
                                                                   ),
@@ -484,10 +496,10 @@ class HomeUI extends GetView<HomeController> {
                                                                       maxLines:
                                                                           1,
                                                                       style: AppTextStyle.textStyle14(
-                                                                          fontColor: appColors
-                                                                              .darkBlue,
-                                                                          fontWeight:
-                                                                              FontWeight.w700),
+                                                                          fontColor: (controller.homeData?.ecommerceWallet ?? 0) <= 0
+                                                                              ? appColors.red
+                                                                              : appColors.green,
+                                                                          fontWeight: FontWeight.w700),
                                                                     ),
                                                                     Text(
                                                                       "Ecom. Wallet"
@@ -495,10 +507,10 @@ class HomeUI extends GetView<HomeController> {
                                                                       maxLines:
                                                                           1,
                                                                       style: AppTextStyle.textStyle10(
-                                                                          fontColor: appColors
-                                                                              .darkBlue,
-                                                                          fontWeight:
-                                                                              FontWeight.w400),
+                                                                          fontColor: (controller.homeData?.ecommerceWallet ?? 0) <= 0
+                                                                              ? appColors.red
+                                                                              : appColors.green,
+                                                                          fontWeight: FontWeight.w400),
                                                                     ),
                                                                   ],
                                                                 ),
@@ -519,9 +531,12 @@ class HomeUI extends GetView<HomeController> {
                                                                     "₹******",
                                                                     maxLines: 1,
                                                                     style: AppTextStyle.textStyle14(
-                                                                        fontColor:
-                                                                            appColors
-                                                                                .darkBlue,
+                                                                        fontColor: (controller.homeData?.ecommerceWallet ?? 0) <=
+                                                                                0
+                                                                            ? appColors
+                                                                                .red
+                                                                            : appColors
+                                                                                .green,
                                                                         fontWeight:
                                                                             FontWeight.w700),
                                                                   ),
@@ -530,9 +545,12 @@ class HomeUI extends GetView<HomeController> {
                                                                         .tr,
                                                                     maxLines: 1,
                                                                     style: AppTextStyle.textStyle10(
-                                                                        fontColor:
-                                                                            appColors
-                                                                                .darkBlue,
+                                                                        fontColor: (controller.homeData?.ecommerceWallet ?? 0) <=
+                                                                                0
+                                                                            ? appColors
+                                                                                .red
+                                                                            : appColors
+                                                                                .green,
                                                                         fontWeight:
                                                                             FontWeight.w400),
                                                                   ),
@@ -819,12 +837,14 @@ class HomeUI extends GetView<HomeController> {
                                                 child: Center(
                                                   child: Row(
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
+                                                        MainAxisAlignment.start,
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .center,
                                                     children: [
+                                                      const SizedBox(
+                                                        width: 4,
+                                                      ),
                                                       Image.asset(
                                                         "assets/images/passport.png",
                                                         height: 30,
@@ -884,12 +904,14 @@ class HomeUI extends GetView<HomeController> {
                                                 child: Center(
                                                   child: Row(
                                                     mainAxisAlignment:
-                                                        MainAxisAlignment
-                                                            .center,
+                                                        MainAxisAlignment.start,
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
                                                             .center,
                                                     children: [
+                                                      const SizedBox(
+                                                        width: 4,
+                                                      ),
                                                       SizedBox(
                                                         height: 30,
                                                         width: 30,
@@ -903,7 +925,7 @@ class HomeUI extends GetView<HomeController> {
                                                         width: 4,
                                                       ),
                                                       Text(
-                                                        "View Kundli".tr,
+                                                        "View \nKundli".tr,
                                                         overflow:
                                                             TextOverflow.clip,
                                                         style: AppTextStyle
@@ -3457,7 +3479,7 @@ class HomeUI extends GetView<HomeController> {
                                         chatSwitch.value
                                     ? InkWell(
                                         onTap: () => controller
-                                            .selectDateTimePopupForChat(false),
+                                            .selectDateTimePopupForChat(true),
                                         child: Container(
                                           height: 31.h,
                                           decoration: BoxDecoration(
@@ -3556,7 +3578,7 @@ class HomeUI extends GetView<HomeController> {
                                         callSwitch.value
                                     ? InkWell(
                                         onTap: () => controller
-                                            .selectDateTimePopupForCall(false),
+                                            .selectDateTimePopupForCall(true),
                                         child: Container(
                                           // width: 128.w,
                                           height: 31.h,

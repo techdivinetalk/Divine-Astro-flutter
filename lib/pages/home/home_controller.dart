@@ -816,6 +816,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         "${ApiProvider.getOnlineOfflineStatus}${userData!.uniqueNo}",
       );
       print("response.dataresponse.data${response.data}");
+      print("response.dataresponse.data${userData!.uniqueNo}");
 
       AstrologerNordModel astrologerNordModel =
           AstrologerNordModel.fromJson(response.data);

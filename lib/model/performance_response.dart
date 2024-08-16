@@ -1,4 +1,3 @@
-
 import 'dart:convert';
 
 PerformanceResponse performanceResponseFromJson(String str) =>
@@ -73,15 +72,13 @@ class Data {
     onlineHours = json['online_hours'] != null
         ? OnlineHours.fromJson(json['online_hours'])
         : null;
-    liveHours = json['live_hrs'] != null
-        ? LiveHours.fromJson(json['live_hrs'])
-        : null;
+    liveHours =
+        json['live_hrs'] != null ? LiveHours.fromJson(json['live_hrs']) : null;
     ecom = json['ecom'] != null ? Ecom.fromJson(json['ecom']) : null;
-    busyHours = json['busy_hrs'] != null
-        ? BusyHours.fromJson(json['busy_hrs'])
-        : null;
+    busyHours =
+        json['busy_hrs'] != null ? BusyHours.fromJson(json['busy_hrs']) : null;
     overall =
-    json['overall'] != null ? Overall.fromJson(json['overall']) : null;
+        json['overall'] != null ? Overall.fromJson(json['overall']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -477,11 +474,11 @@ class TodaysAvailiblity {
 
   TodaysAvailiblity(
       {this.availableChat,
-        this.availableCall,
-        this.availableLive,
-        this.busyChat,
-        this.busyCall,
-        this.busyLive});
+      this.availableCall,
+      this.availableLive,
+      this.busyChat,
+      this.busyCall,
+      this.busyLive});
 
   TodaysAvailiblity.fromJson(Map<String, dynamic> json) {
     availableChat = json['available_chat'];
@@ -513,11 +510,12 @@ class Last30DaysAvailiblity {
   dynamic availableLive;
 
   Last30DaysAvailiblity(
-      { this.data,this.availableChat,
-        this.availableCall,
-        this.busyChat,
-        this.busyCall,
-        this.availableLive});
+      {this.data,
+      this.availableChat,
+      this.availableCall,
+      this.busyChat,
+      this.busyCall,
+      this.availableLive});
 
   Last30DaysAvailiblity.fromJson(Map<String, dynamic> json) {
     data = json['data'];

@@ -28,7 +28,6 @@ import "package:flutter/cupertino.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter/scheduler.dart";
-import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:flutter_html/flutter_html.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -383,6 +382,7 @@ class ChatMessageWithSocketController extends GetxController
       }
     }
   }
+
   @override
   void onInit() {
     super.onInit();
@@ -553,6 +553,7 @@ class ChatMessageWithSocketController extends GetxController
       getMessageTemplates();
     });
   }
+
   getMessageTemplates() async {
     try {
       final response = await messageTemplateRepository.fetchTemplates();
@@ -614,18 +615,20 @@ class ChatMessageWithSocketController extends GetxController
       }
     });
   }
+
   Duration? timeDifference;
   void talkTimeStartTimer(int futureTimeInEpochMillis) {
     print("futureTime.minute $futureTimeInEpochMillis");
     DateTime dateTime =
-    DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
+        DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
     if (chatTimer != null) {
       chatTimer?.cancel();
     }
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
       timeDifference = dateTime.difference(AppFirebaseService().currentTime());
       // print("current time difference:  ${timeDifference.toString()}");
-      if (timeDifference! == Duration.zero || timeDifference!.inMilliseconds.abs() < 1000) {
+      if (timeDifference! == Duration.zero ||
+          timeDifference!.inMilliseconds.abs() < 1000) {
         await callHangup();
         showTalkTime.value = "-1";
         print("chatTimeLeft ---- ${showTalkTime.value}");
@@ -647,7 +650,7 @@ class ChatMessageWithSocketController extends GetxController
       } else {
         extraTimer?.cancel();
         showTalkTime.value =
-        "${timeDifference!.inHours.toString().padLeft(2, '0')}:"
+            "${timeDifference!.inHours.toString().padLeft(2, '0')}:"
             "${timeDifference!.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
             "${timeDifference!.inSeconds.remainder(60).toString().padLeft(2, '0')}";
         if (MiddleWare.instance.currentPage == RouteName.dashboard) {

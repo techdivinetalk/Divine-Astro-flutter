@@ -137,7 +137,7 @@ class Data {
       map['badge'] = _badge?.toJson();
     }
     if (_Date_text != null) {
-      map['performance_date_text'] = _Date_text?.toJson();
+      map['performance_date_text'];
     }
     if (_performanceData != null) {
       map['performanceData'] =

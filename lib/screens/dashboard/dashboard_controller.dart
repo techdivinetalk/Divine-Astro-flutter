@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
-
 // import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -24,7 +23,6 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_overlay_window/flutter_overlay_window.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -102,7 +100,8 @@ class DashboardController extends GetxController
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
-      if (MiddleWare.instance.currentPage == RouteName.chatMessageWithSocketUI) {
+      if (MiddleWare.instance.currentPage ==
+          RouteName.chatMessageWithSocketUI) {
         getOrderFromApi();
         if (preferenceService.getUserDetail() != null) {
           // Check for null user details
@@ -311,16 +310,22 @@ class DashboardController extends GetxController
             dataList.name = remoteMessage.data["title"];
             Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
           } else if (remoteMessage.data["type"] == "2") {
-            print("remoteMessage.data ------>${remoteMessage.data}");
             acceptOrRejectChat(
                 orderId: int.parse(remoteMessage.data["order_id"]),
                 queueId: int.parse(remoteMessage.data["queue_id"]));
+          } else if(remoteMessage.data["type"] == "20"){
+            if(MiddleWare.instance.currentPage == RouteName.dashboard){
+              if(Get.isRegistered<DashboardController>()){
+                Get.find<DashboardController>().selectedIndex.value = 3;
+              }
+            }
           }
         });
       }
     });
 
     FirebaseMessaging.onMessageOpenedApp.listen((message) {
+      print("noti type(onMessageOpenedApp) : ${message.data["type"]}");
       if (message.data["type"] == "8") {
         final senderId = message.data["sender_id"];
         DataList dataList = DataList();
@@ -331,6 +336,12 @@ class DashboardController extends GetxController
         acceptOrRejectChat(
             orderId: int.parse(message.data["order_id"]),
             queueId: int.parse(message.data["queue_id"]));
+      } else if(message.data["type"] == "20"){
+        if(MiddleWare.instance.currentPage == RouteName.dashboard){
+          if(Get.isRegistered<DashboardController>()){
+            Get.find<DashboardController>().selectedIndex.value = 3;
+          }
+        }
       }
     });
 
@@ -537,7 +548,9 @@ class DashboardController extends GetxController
     notificationPermission();
     final socket = AppSocket();
     socket.socketConnect();
-    isServerMaintenance.value == 1 ? CommonDialogue().serverMaintenancePopUp() : null;
+    isServerMaintenance.value == 1
+        ? CommonDialogue().serverMaintenancePopUp()
+        : null;
     super.onReady();
   }
 

@@ -2,10 +2,12 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:math' as math;
 
+import 'package:divine_astrologer/common/MiddleWare.dart';
 import 'package:divine_astrologer/common/routes.dart';
 
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import "package:divine_astrologer/model/chat_offline_model.dart";
+import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import "package:divine_astrologer/screens/live_page/constant.dart";
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
@@ -135,6 +137,8 @@ void initMessaging() async {
       //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
       // if(payloadMap["type"] == "2") {
 
+
+      log("payloadMap type ------>${payloadMap["type"]}");
       if (payloadMap["type"] == "1") {
         print("22222" + payloadMap.toString());
         Get.toNamed(RouteName.chatMessageWithSocketUI);
@@ -174,8 +178,13 @@ void initMessaging() async {
         print("333333" + payloadMap.toString());
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
       } else if (payloadMap["type"] == "13") {
-      } else if (payloadMap["type"] == "13") {
         dasboardCurrentIndex(3);
+      } else if(payloadMap["type"] == "20"){
+        if(MiddleWare.instance.currentPage == RouteName.dashboard){
+          if(Get.isRegistered<DashboardController>()){
+            Get.find<DashboardController>().selectedIndex.value = 3;
+          }
+        }
       } else {
         if (!await launchUrl(Uri.parse(payloadMap["url"].toString()))) {
           throw Exception('Could not launch ${payloadMap["url"]}');
@@ -248,6 +257,8 @@ void onDidReceiveNotificationResponse(
     debugPrint('notification payload: -- ${payloadMap}');
     //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
     // // if(payloadMap["type"] == "2") {
+
+
     if (payloadMap["type"] == "1") {
       Get.toNamed(RouteName.chatMessageWithSocketUI);
     } else if (payloadMap["type"] == "8") {

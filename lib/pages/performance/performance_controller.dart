@@ -64,7 +64,6 @@ class PerformanceController extends GetxController {
       selectedValue.value = durationValue[index];
       log("=======${selectedValue.value}");
       getPerformance();
-      getRitentionDataApi();
     }
   }
 
@@ -83,12 +82,14 @@ class PerformanceController extends GetxController {
     super.onInit();
     debugPrint("test_onInit: call");
     isInit = true;
+    getRitentionDataApi();
+
     init();
   }
 
   Future<void> init() async {
     await getPerformance();
-    await getRitentionDataApi();
+    // await getRitentionDataApi();
   }
 
   RxList<dynamic> overAllScoreList = <dynamic>[].obs;
@@ -139,7 +140,6 @@ class PerformanceController extends GetxController {
       print(
           "-----------------------getRitentionData -------- ${getRitentionModel!.toJson().toString()}");
       update();
-      // getDashboardDetail();
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
