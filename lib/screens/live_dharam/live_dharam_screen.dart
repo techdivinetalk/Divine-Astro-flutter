@@ -2654,100 +2654,102 @@ class _LivePage extends State<LiveDharamScreen>
                                   ),
                                 ),
                                 Obx(
-                                  () => ListView.builder(
-                                    shrinkWrap: true,
-                                    itemCount:
-                                        _controller.blockedCustomerList.length,
-                                    itemBuilder: (context, index) {
-                                      BlockedCustomerListResData item =
-                                          _controller
-                                              .blockedCustomerList[index];
-                                      GetCustomers? customer =
-                                          item.getCustomers;
-                                      return ListTile(
-                                        leading: Container(
-                                          height: 30,
-                                          width: 30,
-                                          margin: const EdgeInsets.only(top: 3),
-                                          alignment: Alignment.center,
-                                          decoration: BoxDecoration(
-                                            shape: BoxShape.circle,
-                                            color: appColors.guideColor,
-                                          ),
-                                          child: Text(
-                                              customer?.name
-                                                      ?.split("")
-                                                      .first
-                                                      .toUpperCase() ??
-                                                  'N',
-                                              style: TextStyle(
-                                                color:
-                                                    appColors.whiteGuidedColor,
-                                                fontSize: 12,
-                                                fontFamily: "Metropolis",
-                                                fontWeight: FontWeight.w500,
-                                              )),
-                                        ),
-                                        title: Text(customer?.name ?? 'N/A'),
-                                        // subtitle: Text(customer.email!),
-                                        trailing: SizedBox(
-                                          height: 30,
-                                          child: ElevatedButton(
-                                            style: ElevatedButton.styleFrom(
-                                              backgroundColor:
-                                                  appColors.guideColor,
+                                  () => Expanded(
+                                    child: ListView.builder(
+                                      shrinkWrap: true,
+                                      itemCount:
+                                          _controller.blockedCustomerList.length,
+                                      itemBuilder: (context, index) {
+                                        BlockedCustomerListResData item =
+                                            _controller
+                                                .blockedCustomerList[index];
+                                        GetCustomers? customer =
+                                            item.getCustomers;
+                                        return ListTile(
+                                          leading: Container(
+                                            height: 30,
+                                            width: 30,
+                                            margin: const EdgeInsets.only(top: 3),
+                                            alignment: Alignment.center,
+                                            decoration: BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color: appColors.guideColor,
                                             ),
-                                            onPressed: () async {
-                                              await blockUnblockPopup(
-                                                  isAlreadyBeenBlocked: true,
-                                                  performAction: () async {
-                                                    await _controller
-                                                        .callblockCustomer(
-                                                      id: customer?.id ?? 0,
-                                                      successCallBack:
-                                                          (String message) {
-                                                        successAndFailureCallBack(
-                                                          message: message,
-                                                          isForSuccess: true,
-                                                          isForFailure: false,
-                                                        );
-                                                      },
-                                                      failureCallBack:
-                                                          (String message) {
-                                                        successAndFailureCallBack(
-                                                          message: message,
-                                                          isForSuccess: false,
-                                                          isForFailure: true,
-                                                        );
-                                                      },
-                                                    );
-                                                    var data = {
-                                                      "room_id":
-                                                          _controller.userId,
-                                                      "user_id": customer?.id,
-                                                      "user_name":
-                                                          customer?.name,
-                                                      "item": item.toJson(),
-                                                      "type": "Block/Unblock",
-                                                    };
-                                                    await _controller
-                                                        .sendGiftAPI(
-                                                      data: data,
-                                                      count: 1,
-                                                      svga: "",
-                                                      successCallback: log,
-                                                      failureCallback: log,
-                                                    );
-                                                  });
-                                            },
-                                            child: Text("Unblock",
+                                            child: Text(
+                                                customer?.name
+                                                        ?.split("")
+                                                        .first
+                                                        .toUpperCase() ??
+                                                    'N',
                                                 style: TextStyle(
-                                                  color: appColors.white,
+                                                  color:
+                                                      appColors.whiteGuidedColor,
+                                                  fontSize: 12,
+                                                  fontFamily: "Metropolis",
+                                                  fontWeight: FontWeight.w500,
                                                 )),
                                           ),
-                                        ),
-                                      );
-                                    },
+                                          title: Text(customer?.name ?? 'N/A'),
+                                          // subtitle: Text(customer.email!),
+                                          trailing: SizedBox(
+                                            height: 30,
+                                            child: ElevatedButton(
+                                              style: ElevatedButton.styleFrom(
+                                                backgroundColor:
+                                                    appColors.guideColor,
+                                              ),
+                                              onPressed: () async {
+                                                await blockUnblockPopup(
+                                                    isAlreadyBeenBlocked: true,
+                                                    performAction: () async {
+                                                      await _controller
+                                                          .callblockCustomer(
+                                                        id: customer?.id ?? 0,
+                                                        successCallBack:
+                                                            (String message) {
+                                                          successAndFailureCallBack(
+                                                            message: message,
+                                                            isForSuccess: true,
+                                                            isForFailure: false,
+                                                          );
+                                                        },
+                                                        failureCallBack:
+                                                            (String message) {
+                                                          successAndFailureCallBack(
+                                                            message: message,
+                                                            isForSuccess: false,
+                                                            isForFailure: true,
+                                                          );
+                                                        },
+                                                      );
+                                                      var data = {
+                                                        "room_id":
+                                                            _controller.userId,
+                                                        "user_id": customer?.id,
+                                                        "user_name":
+                                                            customer?.name,
+                                                        "item": item.toJson(),
+                                                        "type": "Block/Unblock",
+                                                      };
+                                                      await _controller
+                                                          .sendGiftAPI(
+                                                        data: data,
+                                                        count: 1,
+                                                        svga: "",
+                                                        successCallback: log,
+                                                        failureCallback: log,
+                                                      );
+                                                    });
+                                              },
+                                              child: Text("Unblock",
+                                                  style: TextStyle(
+                                                    color: appColors.white,
+                                                  )),
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
                                   ),
                                 ),
                               ],
