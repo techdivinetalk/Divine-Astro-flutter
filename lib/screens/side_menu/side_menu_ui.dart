@@ -48,17 +48,6 @@ class SideMenuDrawer extends GetView<HomeController> {
             ),
             const SizedBox(height: 10),
             ListTile(
-              leading: Assets.images.agreement.svg(),
-              title: Text("Agreement".tr),
-              onTap: () {
-                Get.put(HomeController()).homeScreenKey
-                  ..currentState?.closeDrawer();
-
-                Get.back();
-                Get.to(() => AgreementScreen());
-              },
-            ),
-            ListTile(
               leading: Assets.images.icWaiting.svg(),
               title: Text("waitlist".tr),
               onTap: () {
