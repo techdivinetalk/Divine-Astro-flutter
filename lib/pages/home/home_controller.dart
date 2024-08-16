@@ -865,11 +865,14 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       print("getting error --- getAstroCustOfferData ${e}");
     }
   }
-
+int showAgreement = 0;
   getConstantDetailsData() async {
     try {
       var data = await userRepository.constantDetailsData();
       print(data.data!.showAgreement);
+      if(data.data!.showAgreement != null){
+        showAgreement =data.data!.showAgreement ?? 0;
+      }
       print("constantDetailsModelClass.data!.showAgreement");
       getConstantDetails = data;
       log(getConstantDetails!.data!.toJson().toString());

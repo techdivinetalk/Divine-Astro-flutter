@@ -202,50 +202,54 @@ class HomeUI extends GetView<HomeController> {
                     child: Column(
                       children: [
                         const SizedBox(height: 15),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10),
-                          child: GestureDetector(
-                            onTap: () {
-                              Get.to(() => AgreementScreen());
-                            },
-                            child: Container(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              height: 45,
-                              width: double.infinity,
-                              decoration: BoxDecoration(
-                                color: appColors.white,
-                                boxShadow: [
-                                  BoxShadow(
-                                    blurRadius: 6,
-                                    spreadRadius: 2,
-                                    color: appColors.grey.withOpacity(0.2),
-                                  ),
-                                ],
-                                borderRadius: BorderRadius.circular(10.0),
-                              ),
-                              alignment: Alignment.centerLeft,
-                              child: Row(
-                                children: [
-                                  Text(
-                                    "Agreement".tr,
-                                    style: TextStyle(
-                                      fontFamily: FontFamily.poppins,
-                                      fontWeight: FontWeight.w600,
-                                      color: appColors.black,
-                                      fontSize: 12,
+                        controller.showAgreement == 1
+                            ? Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Get.to(() => AgreementScreen());
+                                  },
+                                  child: Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10),
+                                    height: 45,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: appColors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 6,
+                                          spreadRadius: 2,
+                                          color:
+                                              appColors.grey.withOpacity(0.2),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    alignment: Alignment.centerLeft,
+                                    child: Row(
+                                      children: [
+                                        Text(
+                                          "Agreement".tr,
+                                          style: TextStyle(
+                                            fontFamily: FontFamily.poppins,
+                                            fontWeight: FontWeight.w600,
+                                            color: appColors.black,
+                                            fontSize: 12,
+                                          ),
+                                        ),
+                                        Spacer(),
+                                        Icon(
+                                          Icons.arrow_forward_ios_outlined,
+                                          size: 13,
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                  Spacer(),
-                                  Icon(
-                                    Icons.arrow_forward_ios_outlined,
-                                    size: 13,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                                ),
+                              )
+                            : SizedBox(),
                         astroHome.toString() == "0"
                             ? Obx(
                                 () => Container(
