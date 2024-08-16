@@ -851,18 +851,27 @@ class HomeUI extends GetView<HomeController> {
                                                         width: 30,
                                                       ),
                                                       const SizedBox(
-                                                        width: 4,
+                                                        width: 2,
                                                       ),
-                                                      Text(
-                                                        "PassBook".tr,
-                                                        style: AppTextStyle
-                                                            .textStyle12(
-                                                                fontColor:
-                                                                    appColors
-                                                                        .black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500),
+                                                      SizedBox(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.18,
+                                                        child: Text(
+                                                          "PassBook".tr,
+                                                          overflow:
+                                                              TextOverflow.clip,
+                                                          style: AppTextStyle
+                                                              .textStyle12(
+                                                                  fontColor:
+                                                                      appColors
+                                                                          .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500),
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
@@ -922,20 +931,27 @@ class HomeUI extends GetView<HomeController> {
                                                         ),
                                                       ),
                                                       const SizedBox(
-                                                        width: 4,
+                                                        width: 2,
                                                       ),
-                                                      Text(
-                                                        "View \nKundli".tr,
-                                                        overflow:
-                                                            TextOverflow.clip,
-                                                        style: AppTextStyle
-                                                            .textStyle12(
-                                                                fontColor:
-                                                                    appColors
-                                                                        .black,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .w500),
+                                                      SizedBox(
+                                                        width: MediaQuery.of(
+                                                                    context)
+                                                                .size
+                                                                .width *
+                                                            0.18,
+                                                        child: Text(
+                                                          "View Kundli".tr,
+                                                          overflow:
+                                                              TextOverflow.clip,
+                                                          style: AppTextStyle
+                                                              .textStyle12(
+                                                                  fontColor:
+                                                                      appColors
+                                                                          .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w500),
+                                                        ),
                                                       ),
                                                     ],
                                                   ),
@@ -1124,24 +1140,35 @@ class HomeUI extends GetView<HomeController> {
                                                                       FontWeight
                                                                           .w500),
                                                         ),
-                                                        Text(
-                                                          controller
-                                                              .getRitentionModel!
-                                                              .data!
-                                                              .level!
-                                                              .text
-                                                              .toString(),
-                                                          maxLines: 1,
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          style: AppTextStyle
-                                                              .textStyle10(
-                                                                  fontColor:
-                                                                      appColors
-                                                                          .black,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400),
+                                                        SizedBox(width: 2),
+                                                        SizedBox(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.17,
+                                                          child: Text(
+                                                            controller
+                                                                .getRitentionModel!
+                                                                .data!
+                                                                .level!
+                                                                .text
+                                                                .toString(),
+                                                            maxLines: 1,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            style: AppTextStyle
+                                                                .textStyle10(
+                                                                    fontColor:
+                                                                        appColors
+                                                                            .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400),
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
@@ -1671,22 +1698,6 @@ class HomeUI extends GetView<HomeController> {
                             ? PerformanceTab(context, controller: controller)
                             : SizedBox(),
                         Obx(
-                          () {
-                            final bool cond1 = controller.isCallEnable.value;
-                            final bool cond2 = controller.isChatEnable.value;
-                            final bool cond3 =
-                                controller.isVideoCallEnable.value;
-
-                            return cond1 || cond2 || cond3
-                                ? Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 6),
-                                    child: sessionTypeWidget(
-                                        controller: controller))
-                                : const SizedBox();
-                          },
-                        ),
-                        Obx(
                           () => controller.isFeedbackAvailable.value
                               ? controller.homeData?.feedback == null
                                   ? const SizedBox.shrink()
@@ -1772,7 +1783,6 @@ class HomeUI extends GetView<HomeController> {
                                     )
                               : const SizedBox(),
                         ),
-
                         controller.astroNoticeBoardResponse.value.data
                                     ?.noticeBoard ==
                                 null
@@ -1816,12 +1826,26 @@ class HomeUI extends GetView<HomeController> {
                                   ],
                                 ),
                               ),
+                        Obx(
+                          () {
+                            final bool cond1 = controller.isCallEnable.value;
+                            final bool cond2 = controller.isChatEnable.value;
+                            final bool cond3 =
+                                controller.isVideoCallEnable.value;
 
-                        viewKundliWidgetUpdated(),
+                            return cond1 || cond2 || cond3
+                                ? Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 6),
+                                    child: sessionTypeWidget(
+                                        controller: controller))
+                                : const SizedBox();
+                          },
+                        ),
                         Obx(
                           () {
                             return isLive.value == 1
-                                ? controller.isLiveEnable.value // == false
+                                ? controller.isLiveEnable.value //== false
                                     ? Container(
                                         margin: EdgeInsets.symmetric(
                                             horizontal: 16, vertical: 6),
@@ -1915,6 +1939,9 @@ class HomeUI extends GetView<HomeController> {
                                 : const SizedBox();
                           },
                         ),
+
+                        viewKundliWidgetUpdated(),
+
                         Padding(
                           padding:
                               EdgeInsets.symmetric(horizontal: 16, vertical: 6),
@@ -2803,11 +2830,12 @@ class HomeUI extends GetView<HomeController> {
             controller.getRitentionModel!.data!.performanceData == null
         ? const SizedBox()
         : Padding(
-            padding: EdgeInsets.only(top: 6, bottom: 6, left: 16, right: 16),
+            padding:
+                const EdgeInsets.only(top: 6, bottom: 6, left: 16, right: 16),
             child: Container(
-              width: MediaQuery.of(context).size.width,
-              padding: EdgeInsets.all(10.h),
               decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
                 boxShadow: [
                   BoxShadow(
                     blurRadius: 4,
@@ -2815,39 +2843,91 @@ class HomeUI extends GetView<HomeController> {
                     color: appColors.grey.withOpacity(0.2),
                   ),
                 ],
-                color: appColors.white,
-                borderRadius: const BorderRadius.all(Radius.circular(10)),
               ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
+              child: Theme(
+                data: Theme.of(context)
+                    .copyWith(dividerColor: Colors.transparent),
+                child: ExpansionTile(
+                  maintainState: true,
+                  collapsedIconColor: Colors.black,
+                  iconColor: Colors.black,
+                  initiallyExpanded: false,
+                  title: Align(
+                    alignment: Alignment.centerLeft,
                     child: CustomText(
-                      'Performance ${controller.getRitentionModel!.data!.Date_text == null ? "" : "${controller.getRitentionModel!.data!.Date_text.toString()}"}', //(22nd-28th July)
+                      'Performance',
                       fontWeight: FontWeight.w600,
                       fontColor: appColors.black,
                       maxLines: 1,
                       fontSize: 12,
                     ),
                   ),
-                  SizedBox(height: 5),
-                  ListView.builder(
-                    shrinkWrap: true,
-                    itemCount: controller
-                        .getRitentionModel!.data!.performanceData!.length,
-                    physics: const NeverScrollableScrollPhysics(),
-                    itemBuilder: (context, index) {
-                      var data = controller
-                          .getRitentionModel!.data!.performanceData![index];
-                      return rowWidget(
-                          context,
-                          data.metric.toString(),
-                          data.value.toString(),
-                          data.status.toString(),
-                          data.color ?? "#FF5733");
-                    },
-                  ),
-                ],
+                  subtitle: controller.change.value == false
+                      ? null
+                      : Align(
+                          alignment: Alignment.centerLeft,
+                          child: CustomText(
+                            controller.getRitentionModel!.data!.Date_text ==
+                                    null
+                                ? ""
+                                : controller.getRitentionModel!.data!.Date_text
+                                    .toString(),
+                            fontWeight: FontWeight.w600,
+                            fontColor: appColors.black,
+                            maxLines: 1,
+                            fontSize: 12,
+                          ),
+                        ),
+                  onExpansionChanged: (bool value) {
+                    if (value == true) {
+                      controller.change(true);
+                      controller.update();
+                    } else {
+                      controller.change(false);
+                      controller.update();
+                    }
+                  },
+                  children: [
+                    Padding(
+                      padding:
+                          const EdgeInsets.only(bottom: 6, left: 16, right: 16),
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            // SizedBox(
+                            //   child: CustomText(
+                            //     'Performance ${controller.getRitentionModel!.data!.Date_text == null ? "" : "${controller.getRitentionModel!.data!.Date_text.toString()}"}', //(22nd-28th July)
+                            //     fontWeight: FontWeight.w600,
+                            //     fontColor: appColors.black,
+                            //     maxLines: 1,
+                            //     fontSize: 12,
+                            //   ),
+                            // ),
+                            // SizedBox(height: 5),
+                            ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: controller.getRitentionModel!.data!
+                                  .performanceData!.length,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemBuilder: (context, index) {
+                                var data = controller.getRitentionModel!.data!
+                                    .performanceData![index];
+                                return rowWidget(
+                                    context,
+                                    data.metric.toString(),
+                                    data.value.toString(),
+                                    data.status.toString(),
+                                    data.color ?? "#FF5733");
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           );

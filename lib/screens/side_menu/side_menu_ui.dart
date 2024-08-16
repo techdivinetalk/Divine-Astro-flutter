@@ -33,8 +33,10 @@ class SideMenuDrawer extends GetView<HomeController> {
                 ),*/
                 InkWell(
                   onTap: () {
-                    Get.put(HomeController()).homeScreenKey
-                      ..currentState?.closeDrawer();
+                    Get.put(HomeController())
+                        .homeScreenKey
+                        .currentState
+                        ?.closeDrawer();
 
                     Get.back();
                   },
@@ -178,7 +180,10 @@ class SideMenuDrawer extends GetView<HomeController> {
               leading: Assets.images.icSetting.svg(),
               title: Text('settings'.tr),
               onTap: () {
-                Get.find<HomeController>().homeScreenKey.currentState?.closeDrawer();
+                Get.find<HomeController>()
+                    .homeScreenKey
+                    .currentState
+                    ?.closeDrawer();
                 // Navigator.of(context).pop(),
                 Get.toNamed(RouteName.settingsUI);
               },

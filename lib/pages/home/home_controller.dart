@@ -864,7 +864,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   AstroRitentionModel? getRitentionModel;
-
+  var change = false.obs;
   getRitentionDataApi() async {
     try {
       var data = await userRepository.getRitentionData({});
