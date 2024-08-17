@@ -910,8 +910,6 @@ class _LivePage extends State<LiveDharamScreen>
             reverse: true,
             shrinkWrap: true,
             padding: EdgeInsets.zero,
-            // itemCount:
-            //     messages.isNotEmpty && messages.length >= 5 ? 5 : messages.length,
             itemCount: messages.length,
             controller: _scrollControllerForBottom,
             cacheExtent: 9999,
@@ -979,7 +977,7 @@ class _LivePage extends State<LiveDharamScreen>
                                         color: isBlocked
                                             ? Colors.red
                                             : isModerator
-                                                ? appColors.guideColor
+                                                ? appColors.white
                                                 : msg.fullGiftImage.isNotEmpty
                                                     ? appColors.black
                                                     : msg.message.contains(
@@ -1003,7 +1001,7 @@ class _LivePage extends State<LiveDharamScreen>
                                         color: isBlocked
                                             ? Colors.red
                                             : isModerator
-                                                ? appColors.guideColor
+                                                ? appColors.white
                                                 : msg.fullGiftImage.isNotEmpty
                                                     ? appColors.black
                                                     : msg.message.contains(
