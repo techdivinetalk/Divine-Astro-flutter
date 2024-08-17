@@ -1179,7 +1179,7 @@ class HomeUI extends GetView<HomeController> {
                                           child: Center(
                                             child: Row(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
+                                                  MainAxisAlignment.center,
                                               crossAxisAlignment:
                                                   CrossAxisAlignment.center,
                                               children: [
@@ -1191,7 +1191,7 @@ class HomeUI extends GetView<HomeController> {
                                                   placeHolder: Assets.images
                                                       .defaultProfile.path,
                                                 ),
-                                                SizedBox(height: 5),
+                                                SizedBox(width: 5),
                                                 Column(
                                                   mainAxisAlignment:
                                                       MainAxisAlignment.center,
@@ -1220,53 +1220,49 @@ class HomeUI extends GetView<HomeController> {
                                                                       FontWeight
                                                                           .w500),
                                                         ),
-                                                        SizedBox(width: 2),
-                                                        SizedBox(
-                                                          width: MediaQuery.of(
-                                                                      context)
-                                                                  .size
-                                                                  .width *
-                                                              0.17,
-                                                          child: Text(
-                                                            controller
-                                                                .getRitentionModel!
-                                                                .data!
-                                                                .level!
-                                                                .text
-                                                                .toString(),
-                                                            maxLines: 1,
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            style: AppTextStyle
-                                                                .textStyle10(
-                                                                    fontColor:
-                                                                        appColors
-                                                                            .black,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w400),
-                                                          ),
-                                                        ),
                                                       ],
                                                     ),
-                                                    Text(
-                                                      controller
-                                                          .getRitentionModel!
-                                                          .data!
-                                                          .level!
-                                                          .hours
-                                                          .toString(),
-                                                      style: AppTextStyle
-                                                          .textStyle10(
-                                                              fontColor:
-                                                                  appColors
-                                                                      .black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          controller
+                                                              .getRitentionModel!
+                                                              .data!
+                                                              .level!
+                                                              .hours
+                                                              .toString(),
+                                                          style: AppTextStyle
+                                                              .textStyle10(
+                                                                  fontColor:
+                                                                      appColors
+                                                                          .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
+                                                        ),
+                                                        SizedBox(width: 4),
+                                                        Text(
+                                                          controller
+                                                              .getRitentionModel!
+                                                              .data!
+                                                              .level!
+                                                              .text
+                                                              .toString(),
+                                                          maxLines: 1,
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: AppTextStyle
+                                                              .textStyle10(
+                                                                  fontColor:
+                                                                      appColors
+                                                                          .black,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .w400),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ],
                                                 )
@@ -2528,77 +2524,77 @@ class HomeUI extends GetView<HomeController> {
                       ],
                     ),
                   ),
-                  showHelp.value.toString() == "0"
-                      ? const SizedBox()
-                      : Positioned(
-                          top: controller.yPosition,
-                          left: controller.xPosition + 10,
-                          child: Container(
-                            margin: EdgeInsets.symmetric(horizontal: 20.w),
-                            child: GestureDetector(
-                                onPanUpdate: (tapInfo) {
-                                  double newXPosition =
-                                      controller.xPosition + tapInfo.delta.dx;
-                                  double newYPosition =
-                                      controller.yPosition + tapInfo.delta.dy;
-
-                                  // Ensure newXPosition is within screen bounds
-                                  newXPosition = newXPosition.clamp(
-                                      0.0,
-                                      maxWidth -
-                                          50); // Assuming widget width is 50
-                                  newYPosition = newYPosition.clamp(
-                                      0,
-                                      maxHeight -
-                                          50); // Assuming widget height is 50
-
-                                  controller.xPosition = newXPosition;
-                                  controller.yPosition = newYPosition;
-                                  controller.update();
-                                },
-                                onPanEnd: (details) {
-                                  if (controller.xPosition + 25 <
-                                      Get.width / 2) {
-                                    controller.xPosition = 0;
-                                  } else {
-                                    controller.xPosition = Get.width - 70;
-                                  }
-
-                                  controller.update();
-                                },
-                                onTap: () {
-                                  // Get.toNamed(
-                                  //   RouteName.technicalIssues,
-                                  // );
-                                  controller.whatsapp();
-                                },
-                                child: Container(
-                                    key: DashboardController(
-                                            PreDefineRepository())
-                                        .keyHelp,
-                                    height: 50,
-                                    width: 50,
-                                    decoration: BoxDecoration(
-                                      color: appColors.guideColor,
-                                      borderRadius: BorderRadius.circular(25.0),
-                                    ),
-                                    child: Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Assets.images.icHelp
-                                              .svg(color: appColors.white),
-                                          Text(
-                                            "help".tr,
-                                            style: AppTextStyle.textStyle10(
-                                                fontColor: appColors.white,
-                                                fontWeight: FontWeight.w700),
-                                          )
-                                        ],
-                                      ),
-                                    ))),
-                          ))
+                  // showHelp.value.toString() == "0"
+                  //     ? const SizedBox()
+                  //     : Positioned(
+                  //         top: controller.yPosition,
+                  //         left: controller.xPosition + 10,
+                  //         child: Container(
+                  //           margin: EdgeInsets.symmetric(horizontal: 20.w),
+                  //           child: GestureDetector(
+                  //               onPanUpdate: (tapInfo) {
+                  //                 double newXPosition =
+                  //                     controller.xPosition + tapInfo.delta.dx;
+                  //                 double newYPosition =
+                  //                     controller.yPosition + tapInfo.delta.dy;
+                  //
+                  //                 // Ensure newXPosition is within screen bounds
+                  //                 newXPosition = newXPosition.clamp(
+                  //                     0.0,
+                  //                     maxWidth -
+                  //                         50); // Assuming widget width is 50
+                  //                 newYPosition = newYPosition.clamp(
+                  //                     0,
+                  //                     maxHeight -
+                  //                         50); // Assuming widget height is 50
+                  //
+                  //                 controller.xPosition = newXPosition;
+                  //                 controller.yPosition = newYPosition;
+                  //                 controller.update();
+                  //               },
+                  //               onPanEnd: (details) {
+                  //                 if (controller.xPosition + 25 <
+                  //                     Get.width / 2) {
+                  //                   controller.xPosition = 0;
+                  //                 } else {
+                  //                   controller.xPosition = Get.width - 70;
+                  //                 }
+                  //
+                  //                 controller.update();
+                  //               },
+                  //               onTap: () {
+                  //                 // Get.toNamed(
+                  //                 //   RouteName.technicalIssues,
+                  //                 // );
+                  //                 controller.whatsapp();
+                  //               },
+                  //               child: Container(
+                  //                   key: DashboardController(
+                  //                           PreDefineRepository())
+                  //                       .keyHelp,
+                  //                   height: 50,
+                  //                   width: 50,
+                  //                   decoration: BoxDecoration(
+                  //                     color: appColors.guideColor,
+                  //                     borderRadius: BorderRadius.circular(25.0),
+                  //                   ),
+                  //                   child: Center(
+                  //                     child: Column(
+                  //                       mainAxisAlignment:
+                  //                           MainAxisAlignment.center,
+                  //                       children: [
+                  //                         Assets.images.icHelp
+                  //                             .svg(color: appColors.white),
+                  //                         Text(
+                  //                           "help".tr,
+                  //                           style: AppTextStyle.textStyle10(
+                  //                               fontColor: appColors.white,
+                  //                               fontWeight: FontWeight.w700),
+                  //                         )
+                  //                       ],
+                  //                     ),
+                  //                   ))),
+                  //         ))
                 ]);
               } else {
                 return const GenericLoadingWidget();
