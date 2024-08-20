@@ -995,6 +995,7 @@ class ChatMessageWithSocketController extends GetxController
   Future getImage(bool isCamera) async {
     isGalleryOpen = true;
     if (isCamera) {
+      AppFirebaseService().imagePath = "";
       List<CameraDescription> cameras = await availableCameras();
       final String? imagePath = await Get.to<String?>(
         () => CameraPage(cameras: cameras),
