@@ -325,18 +325,19 @@ class TechnicalIssueController extends GetxController {
         int imageSize =
         await File(result.path).length(); // Get the image size in bytes
 
-        if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
+        if (!FileUtils.isFileSizeValid(bytes: imageSize, maxSizeInMB: 5)) {
           oversizedCount++;
-          Fluttertoast.showToast(msg: "Image Size is more than 2 MB");
+          // Fluttertoast.showToast(msg: "Image Size is more than 2 MB");
+          Fluttertoast.showToast(msg: "Image Size should be less then 5 MB");
         } else {
           selectedImages.add(result.path);
           selectedFiles.add(File(result.path));
         }
 
-        if (oversizedCount > 0) {
-          Fluttertoast.showToast(
-              msg: "$oversizedCount images exceed 2 MB and cannot be uploaded");
-        }
+        // if (oversizedCount > 0) {
+        //   Fluttertoast.showToast(
+        //       msg: "$oversizedCount images exceed 2 MB and cannot be uploaded");
+        // }
       } else {
         debugPrint("Failed to compress the image.");
       }
