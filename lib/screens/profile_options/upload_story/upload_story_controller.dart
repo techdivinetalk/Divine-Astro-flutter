@@ -144,7 +144,7 @@ class UploadStoryController extends GetxController {
       'image',
       imageFile.path,
     ));
-    request.fields.addAll({"module_name": "astrologer_story"});
+    request.fields.addAll({"module_name": "astrologer_story" , "is_large_file" : "1"});
 
     print("call this one ----> 1");
     var response = await request.send();
