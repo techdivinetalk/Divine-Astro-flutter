@@ -86,31 +86,37 @@ class UploadYourPhotosController extends GetxController {
   }
 
   uploadImageToS3Bucket(List<File> selectedImages) async {
-    List<Future> futures = <Future>[];
-    var commonConstants = await userRepository.constantDetailsData();
-    var dataString = commonConstants.data!.awsCredentails.baseurl?.split(".");
+    List<String> futures = <String>[];
+
     for (int i = 0; i < selectedImages.length; i++) {
-      var extension = p.extension(selectedImages[i].path);
-      futures.add(
-        AwsS3.uploadFile(
-          accessKey: commonConstants.data!.awsCredentails.accesskey!,
-          secretKey: commonConstants.data!.awsCredentails.secretKey!,
-          file: selectedImages[i],
-          bucket: dataString![0].split("//")[1],
-          destDir: 'astrologer/${userData?.id}',
-          filename:
-              '${DateTime.now().millisecondsSinceEpoch.toString()}$extension',
-          region: dataString[2],
-        ),
+      String? uploadFile = await uploadImageFileToAws(
+        file: File(selectedImages[i].path),
+        moduleName: "gallery_images",
+        pathType: "path",
       );
+      futures.add(uploadFile!);
+      // var extension = p.extension(selectedImages[i].path);
+      // futures.add(
+      //   AwsS3.uploadFile(
+      //     accessKey: commonConstants.data!.awsCredentails.accesskey!,
+      //     secretKey: commonConstants.data!.awsCredentails.secretKey!,
+      //     file: selectedImages[i],
+      //     bucket: dataString![0].split("//")[1],
+      //     destDir: 'astrologer/${userData?.id}',
+      //     filename:
+      //         '${DateTime.now().millisecondsSinceEpoch.toString()}$extension',
+      //     region: dataString[2],
+      //   ),
+      // );
     }
-    List<dynamic> response = await Future.wait(futures);
-    if (response.isNotEmpty) {
+
+    // List<dynamic> response = await Future.wait(futures);
+    if (futures.isNotEmpty) {
       isLoading.value = true;
       try {
         final pref = Get.find<SharedPreferenceService>();
         UploadImageRequest request = UploadImageRequest(
-          images: response.map((e) => e.toString()).toList(),
+          images: futures.map((e) => e.toString()).toList(),
           astroId: "${pref.getUserDetail()?.id}",
         );
         final imageUpload =
@@ -119,7 +125,7 @@ class UploadYourPhotosController extends GetxController {
           isLoading.value = false;
           Get.back();
           divineSnackBar(data: "Image Under Review");
-          debugPrint("Uploaded Url : $response");
+          debugPrint("Uploaded Url : $futures");
         }
       } catch (err) {
         isLoading.value = false;
