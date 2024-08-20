@@ -34,6 +34,7 @@ RxInt isChat = 1.obs;
 RxInt isKundli = 1.obs;
 RxInt isTemplates = 1.obs;
 RxInt isCamera = 1.obs;
+RxInt isBeautyLive = 1.obs;
 RxInt isLive = 1.obs;
 RxInt isQueue = 1.obs;
 RxInt isGifts = 1.obs;
@@ -91,6 +92,7 @@ class AppFirebaseService {
   }
 
   String tableName = "";
+
   Future<void> userRealTime(String key, dynamic value, String path,
       [bool isRemoved = false]) async {
     debugPrint("test_userRealTime: value removed: $value");
@@ -453,6 +455,9 @@ class AppFirebaseService {
         break;
       case "chat_assistance":
         isChatAssistance(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "liveBeauty":
+        isBeautyLive(int.parse(dataSnapshot.value.toString()));
         break;
       case "gifts":
         isGifts(int.parse(dataSnapshot.value.toString()));
