@@ -2,24 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>CLIENT_ID</key>
-	<string>764246952124-o2nqves6l70ualttab3kd0dthfb0v7el.apps.googleusercontent.com</string>
-	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.764246952124-o2nqves6l70ualttab3kd0dthfb0v7el</string>
-	<key>ANDROID_CLIENT_ID</key>
-	<string>764246952124-ebi5t6dvglnm5picb03732ufvar0ekjm.apps.googleusercontent.com</string>
 	<key>API_KEY</key>
-	<string>AIzaSyCDS5CxwYMh9O5Ao7bwlYmy4Xu5BUvShKU</string>
+	<string>AIzaSyB8qPgVe6EJ2hdsp-FTVBVbP3oOQOK47xs</string>
 	<key>GCM_SENDER_ID</key>
-	<string>764246952124</string>
+	<string>507681862980</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>app.divine.astrologer</string>
+	<string>app.divinetalk.astrologer</string>
 	<key>PROJECT_ID</key>
-	<string>divine2-0-uat</string>
+	<string>divine-live-f7f79</string>
 	<key>STORAGE_BUCKET</key>
-	<string>divine2-0-uat.appspot.com</string>
+	<string>divine-live-f7f79.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -31,8 +25,8 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:764246952124:ios:a2ecc0ca842613b56fe8b9</string>
+	<string>1:507681862980:ios:1b767dddc6c35736e51311</string>
 	<key>DATABASE_URL</key>
-	<string>https://divine2-0-uat-default-rtdb.firebaseio.com</string>
+	<string>https://divine-live-f7f79-default-rtdb.asia-southeast1.firebasedatabase.app</string>
 </dict>
 </plist>
