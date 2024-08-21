@@ -32,10 +32,10 @@ class ApiProvider {
       "http://20.193.154.99:8080/api/v1/getAstroAgreement?astrologer_id=";
   static const String astrologerFaceVerification =
       "http://20.193.154.99:8080/api/v1/uploadAstroImage?astrologer_id=";
-  static const String astrologerAstroSign=
+  static const String astrologerAstroSign =
       "http://20.193.154.99:8080/api/v1/uploadAstroSign?astrologer_id=";
 
-  static const String astrologerSignPdf=
+  static const String astrologerSignPdf =
       "http://20.193.154.99:8080/api/v1/uploadAstroSignedPdf?astrologer_id=";
   static const String onlineOfflineStatus =
       "https://list.divinetalk.live/api/v3/getAstrologersData";

@@ -201,7 +201,7 @@ class HomeUI extends GetView<HomeController> {
                     // padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: Column(
                       children: [
-                        const SizedBox(height: 15),
+                        // const SizedBox(height: 15),
                         controller.showAgreement == 1
                             ? Padding(
                                 padding:

@@ -1,13 +1,10 @@
 import 'package:divine_astrologer/common/helper_widgets.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 
 import '../../common/SvgIconButton.dart';
 import '../../common/colors.dart';
@@ -17,7 +14,6 @@ import '../../common/custom_widgets.dart';
 import '../../common/generic_loading_widget.dart';
 import '../../common/routes.dart';
 import '../../gen/assets.gen.dart';
-import '../../gen/fonts.gen.dart';
 import '../../model/chat_assistant/CustomerDetailsResponse.dart';
 import '../../model/chat_assistant/chat_assistant_astrologer_response.dart';
 import '../../utils/enum.dart';
@@ -37,13 +33,31 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
       body: GetBuilder<ChatAssistanceController>(
           init: ChatAssistanceController(),
           builder: (controller) {
+            controller.scrollCon.addListener(() {
+              // Check if the user is at the bottom
+              if (controller.scrollCon.hasClients) {
+                final double maxScrollExtent =
+                    controller.scrollCon.position.maxScrollExtent;
+                final double currentScrollPosition =
+                    controller.scrollCon.position.pixels;
+
+                if (currentScrollPosition >= maxScrollExtent - 50 &&
+                    controller.checkin.value == false) {
+                  controller.checkin(true);
+                  // User is at the bottom
+                  controller.getConsulation();
+
+                  print("User is at the bottom of the screen");
+                }
+              }
+            });
             if (controller.loading == Loading.loading) {
               return const Center(child: GenericLoadingWidget());
             }
             if (controller.loading == Loading.loaded) {
               return Column(
                 children: [
-                  /*Padding(
+                  Padding(
                     padding: const EdgeInsets.fromLTRB(5, 0, 10, 0),
                     child: SizedBox(
                       child: Obx(
@@ -135,7 +149,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                         ),
                       ),
                     ),
-                  ),*/
+                  ),
                   Obx(() {
                     if (isUSerTabSelected.value) {
                       if (controller.chatAssistantAstrologerListResponse ==
@@ -190,37 +204,26 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                         return HelpersWidget().emptyChatWidget();
                       } else {
                         return Expanded(
-                            child: NotificationListener<ScrollNotification>(
-                          onNotification: (ScrollNotification scrollInfo) {
-                            if (scrollInfo.metrics.pixels ==
-                                scrollInfo.metrics.maxScrollExtent) {
-                              controller.getConsulation();
-                              return true;
-                            }
-                            return false;
+                            child: ListView.builder(
+                          shrinkWrap: true,
+                          controller: controller.scrollCon,
+                          padding: EdgeInsets.symmetric(vertical: 10.h),
+                          itemCount: (controller.filteredUserData).isNotEmpty ||
+                                  controller.searchController.text.isNotEmpty
+                              ? controller.filteredUserData.length
+                              : controller
+                                      .customerDetailsResponse?.data.length ??
+                                  0,
+                          itemBuilder: (context, index) {
+                            return ChatAssistanceDataTile(
+                              data: (controller.filteredUserData).isNotEmpty ||
+                                      controller
+                                          .searchController.text.isNotEmpty
+                                  ? controller.filteredUserData[index]
+                                  : controller
+                                      .customerDetailsResponse!.data[index],
+                            );
                           },
-                          child: ListView.builder(
-                            shrinkWrap: true,
-                            padding: EdgeInsets.symmetric(vertical: 10.h),
-                            itemCount: (controller.filteredUserData)
-                                        .isNotEmpty ||
-                                    controller.searchController.text.isNotEmpty
-                                ? controller.filteredUserData.length
-                                : controller
-                                        .customerDetailsResponse?.data.length ??
-                                    0,
-                            itemBuilder: (context, index) {
-                              return ChatAssistanceDataTile(
-                                data:
-                                    (controller.filteredUserData).isNotEmpty ||
-                                            controller.searchController.text
-                                                .isNotEmpty
-                                        ? controller.filteredUserData[index]
-                                        : controller.customerDetailsResponse!
-                                            .data[index],
-                              );
-                            },
-                          ),
                         ));
                       }
                     }
@@ -361,7 +364,7 @@ class ChatAssistanceTile extends StatelessWidget {
           await Get.toNamed(RouteName.chatMessageUI, arguments: data)
               ?.then((value) {
             print("refresh chat assistance");
-             controller.getAssistantAstrologerList();
+            controller.getAssistantAstrologerList();
           });
         },
         leading: ClipRRect(

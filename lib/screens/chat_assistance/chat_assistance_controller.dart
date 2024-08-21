@@ -1,10 +1,8 @@
-import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_broadcasts/flutter_broadcasts.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../app_socket/app_socket.dart';
-import '../../di/shared_preference_service.dart';
 import '../../model/chat_assistant/CustomerDetailsResponse.dart';
 import '../../model/chat_assistant/chat_assistant_astrologer_response.dart';
 import '../../repository/chat_assistant_repository.dart';
@@ -149,25 +147,52 @@ class ChatAssistanceController extends GetxController {
     update();
   }*/
 
+  // Future<void> getConsulation() async {
+  //   try {
+  //     if (loading == Loading.loading) return;
+  //     loading = Loading.loading;
+  //     CustomerDetailsResponse response =
+  //         await chatAssistantRepository.getConsulation(pageUsersData);
+  //     if (response.data.isNotEmpty) {
+  //       if (pageUsersData != 1 &&
+  //           customerDetailsResponse != null &&
+  //           customerDetailsResponse!.data.isNotEmpty) {
+  //         customerDetailsResponse!.data.addAll(response.data);
+  //       } else {
+  //         customerDetailsResponse = response;
+  //       }
+  //       pageUsersData++;
+  //     }
+  //     loading = Loading.loaded;
+  //   } catch (err) {
+  //     loading = Loading.error;
+  //   }
+  //   update();
+  // }
+  var checkin = false.obs;
+  var emptyRes = false.obs;
+  ScrollController scrollCon = ScrollController();
   Future<void> getConsulation() async {
-    try {
-      if (loading == Loading.loading) return;
-      loading = Loading.loading;
-      CustomerDetailsResponse response =
-          await chatAssistantRepository.getConsulation(pageUsersData);
+    CustomerDetailsResponse response =
+        await chatAssistantRepository.getConsulation(pageUsersData);
+    if (emptyRes.value == false) {
       if (response.data.isNotEmpty) {
         if (pageUsersData != 1 &&
             customerDetailsResponse != null &&
             customerDetailsResponse!.data.isNotEmpty) {
           customerDetailsResponse!.data.addAll(response.data);
+          checkin(false);
         } else {
           customerDetailsResponse = response;
         }
         pageUsersData++;
+      } else {
+        Fluttertoast.showToast(msg: "No more data");
+        print("data ---- ${response.data.toString()}");
+        emptyRes(true);
       }
-      loading = Loading.loaded;
-    } catch (err) {
-      loading = Loading.error;
+    } else {
+      print("There is no more data in user data");
     }
     update();
   }
