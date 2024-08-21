@@ -28,9 +28,10 @@ import '../../model/res_login.dart';
 import '../../model/send_otp.dart';
 import '../../model/verify_otp.dart';
 import '../../repository/user_repository.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 
 //var globalToken = "";
-class OtpVerificationController extends GetxController {
+class OtpVerificationController extends GetxController with CodeAutoFill {
   OtpVerificationController(this.userRepository);
 
   final UserRepository userRepository;
@@ -53,7 +54,7 @@ class OtpVerificationController extends GetxController {
 
   @override
   void onReady() async {
-    //  listenForCode();
+     listenForCode();
     var arguments = Get.arguments;
     if (arguments != null) {
       var args = arguments as List;
@@ -334,12 +335,12 @@ class OtpVerificationController extends GetxController {
     }
   }
 
-// void codeUpdated() {
-//   otpCode = code!;
-//   pinController.text = code ?? "";
-//   if (pinController.text.isNotEmpty) {
-//     verifyOtp();
-//   }
-//   update();
-// }
+  void codeUpdated() {
+    otpCode = code!;
+    pinController.text = code ?? "";
+    if (pinController.text.isNotEmpty) {
+      verifyOtp();
+    }
+    update();
+  }
 }
