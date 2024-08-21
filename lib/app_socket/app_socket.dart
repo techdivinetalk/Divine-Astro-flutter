@@ -70,28 +70,28 @@ class AppSocket {
     // debugPrint("test_socket: called on");
   }
 
-  saveMasterData(MasterData masterData) {
-    isCall(int.parse(masterData.call.toString()));
-    isServerMaintenance(int.parse(masterData.call.toString()));
-    maximumStorySize(int.parse(masterData.maximumStorySize.toString()));
-    isCamera(int.parse(masterData.camera.toString()));
-    isChat(int.parse(masterData.chat.toString()));
-    isChatAssistance(int.parse(masterData.chatAssistance.toString()));
-    isGifts(int.parse(masterData.gifts.toString()));
-    isRemidies(int.parse(masterData.remidies.toString()));
-    isEcom(int.parse(masterData.ecom.toString()));
-    isPrivacyPolicy(int.parse(masterData.isPrivacyPolicy.toString()));
-    isLiveCall(int.parse(masterData.isLiveCall.toString()));
-    isKundli(int.parse(masterData.kundli.toString()));
-    isLive(int.parse(masterData.live.toString()));
-    isQueue(int.parse(masterData.queue.toString()));
-    // isRemidies(int.parse(masterData.tarrotCard.toString()));
-    isTemplates(int.parse(masterData.templates.toString()));
-    // isTruecaller(int.parse(masterData.truecaller.toString()));
-    isVOIP(int.parse(masterData.voip.toString()));
-
-    debugPrint("test_masterData.voip: ${masterData.voip}");
-  }
+  // saveMasterData(MasterData masterData) {
+  //   isCall(int.parse(masterData.call.toString()));
+  //   isServerMaintenance(int.parse(masterData.call.toString()));
+  //   maximumStorySize(int.parse(masterData.maximumStorySize.toString()));
+  //   isCamera(int.parse(masterData.camera.toString()));
+  //   isChat(int.parse(masterData.chat.toString()));
+  //   isChatAssistance(int.parse(masterData.chatAssistance.toString()));
+  //   isGifts(int.parse(masterData.gifts.toString()));
+  //   isRemidies(int.parse(masterData.remidies.toString()));
+  //   isEcom(int.parse(masterData.ecom.toString()));
+  //   isPrivacyPolicy(int.parse(masterData.isPrivacyPolicy.toString()));
+  //   isLiveCall(int.parse(masterData.isLiveCall.toString()));
+  //   isKundli(int.parse(masterData.kundli.toString()));
+  //   isLive(int.parse(masterData.live.toString()));
+  //   isQueue(int.parse(masterData.queue.toString()));
+  //   // isRemidies(int.parse(masterData.tarrotCard.toString()));
+  //   isTemplates(int.parse(masterData.templates.toString()));
+  //   // isTruecaller(int.parse(masterData.truecaller.toString()));
+  //   isVOIP(int.parse(masterData.voip.toString()));
+  //
+  //   debugPrint("test_masterData.voip: ${masterData.voip}");
+  // }
 
   void emitForAstrologerEnterChatAssist(String? customerId, String? userId) {
     socket?.emit(ApiProvider().enterChatAssist,

@@ -422,7 +422,6 @@ class ChatMessageWithSocketController extends GetxController
       if (p0["status"] == null || p0["astroId"] == null) {
         print("realTimeChange backFunction");
         backFunction();
-        AppFirebaseService().database.child("order/${p0["orderId"]}").remove();
       } else {
         print("orderData Changed");
 
@@ -995,6 +994,7 @@ class ChatMessageWithSocketController extends GetxController
   Future getImage(bool isCamera) async {
     isGalleryOpen = true;
     if (isCamera) {
+      AppFirebaseService().imagePath = "";
       List<CameraDescription> cameras = await availableCameras();
       final String? imagePath = await Get.to<String?>(
         () => CameraPage(cameras: cameras),

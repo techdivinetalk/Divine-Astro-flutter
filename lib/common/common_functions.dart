@@ -54,7 +54,7 @@ Future<String> getUserData(String key) async {
  return prefs.getString(key) ?? "";
 }
 Future<String?> uploadImageFileToAws(
-    {required File file, required String moduleName}) async {
+    {required File file, required String moduleName,String? pathType}) async {
   var token = preferenceService.getToken();
 
   var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
@@ -79,14 +79,16 @@ Future<String?> uploadImageFileToAws(
 
   // Listen for the response
   String? url;
-  print(response.request);
-  print(response.request);
-  print("responseresponseresponseresponse");
+
   if (response.statusCode == 200) {
-    print("Image uploaded successfully.");
+
     var urlResponse = await http.Response.fromStream(response);
-    print(urlResponse.body);
-    url = json.decode(urlResponse.body)["data"]['full_path'];
+if(pathType == "path"){
+  url = json.decode(urlResponse.body)["data"]['path'];
+}else{
+  url = json.decode(urlResponse.body)["data"]['full_path'];
+}
+
   } else {
     url = null;
   }

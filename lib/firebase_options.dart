@@ -59,15 +59,13 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyCDS5CxwYMh9O5Ao7bwlYmy4Xu5BUvShKU',
-    appId: '1:507681862980:ios:3bdbdc4fdc0ae7eae51311',
+    apiKey: 'AIzaSyB8qPgVe6EJ2hdsp-FTVBVbP3oOQOK47xs',
+    appId: '1:507681862980:ios:1b767dddc6c35736e51311',
     messagingSenderId: '507681862980',
     projectId: 'divine-live-f7f79',
-    databaseURL:
-        'https://divine-live-f7f79-default-rtdb.asia-southeast1.firebasedatabase.app/',
+    databaseURL: 'https://divine-live-f7f79-default-rtdb.asia-southeast1.firebasedatabase.app/',
     storageBucket: 'divine-live-f7f79.appspot.com',
-    iosClientId:
-        '764246952124-o2nqves6l70ualttab3kd0dthfb0v7el.apps.googleusercontent.com',
-    iosBundleId: 'app.divine.astrologer',
+    // iosClientId: '764246952124-o2nqves6l70ualttab3kd0dthfb0v7el.apps.googleusercontent.com',
+    iosBundleId: 'app.divinetalk.astrologer',
   );
 }

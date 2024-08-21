@@ -128,13 +128,14 @@ dependencies:
   easy_debounce: ^2.0.3
   camerax: ^0.1.2
   webview_flutter: ^4.8.0
+  sms_autofill: ^2.3.1
   # awesome_notifications: ^0.9.3+1
 
 
 
 
 dependency_overrides:
-  zego_uikit: ^2.23.0
+#  zego_uikit: ^2.23.0
   fading_edge_scrollview: ^4.1.1
   intl: ^0.18.1
 

@@ -974,7 +974,7 @@ class _LivePage extends State<LiveDharamScreen>
                                       maxLines: 100000,
                                       style: TextStyle(
                                         fontSize: 14,
-                                        color: isBlocked
+                                        color: isBlocked || msg.userName == "Quality Team" ||msg.userName == "Live Monitoring Team"
                                             ? Colors.red
                                             : isModerator
                                                 ? appColors.white
@@ -998,7 +998,7 @@ class _LivePage extends State<LiveDharamScreen>
                                       maxLines: 100000,
                                       style: TextStyle(
                                         fontSize: 13,
-                                        color: isBlocked
+                                        color: isBlocked || msg.userName == "Quality Team" ||msg.userName == "Live Monitoring Team"
                                             ? Colors.red
                                             : isModerator
                                                 ? appColors.white
@@ -2941,7 +2941,7 @@ class _LivePage extends State<LiveDharamScreen>
                   ],
                 ),
         ),
-        GestureDetector(
+        isBeautyLive.value == 1 ?    GestureDetector(
           onTap: () {
             if (ZegoUIKit.instance.getPlugin(ZegoUIKitPluginType.beauty) !=
                 null) {
@@ -2965,7 +2965,7 @@ class _LivePage extends State<LiveDharamScreen>
               ],
             ),
           ),
-        ),
+        ):SizedBox(),
         Obx(() {
           return AnimatedOpacity(
             opacity: isLiveCall.value == 0 ? 0.0 : 1.0,
