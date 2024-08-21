@@ -3,7 +3,7 @@ class Assets {
   Assets._();
 
   static const String assetsAccept = 'assets/accept.mp3';
-  static const String assetsImagesGaneshJi = 'assets/images/ganesh_ji.svg';
+  // static const String assetsImagesGaneshJi = 'assets/images/ganesh_ji.svg';
   static const String assetsImagesMessage = 'assets/images/message.svg';
   static const String assetsLiveNewFollowerButton = 'assets/live_new_follower_button.png';
   static const String fontsPoppinsBold = 'assets/fonts/Poppins-Bold.ttf';
@@ -25,7 +25,7 @@ class Assets {
   static const String imagesBgDeleteAccount = 'assets/images/bg_delete_account.svg';
   static const String imagesBgHeart = 'assets/images/bg_heart.png';
   static const String imagesBgKundliDetail = 'assets/images/bg_kundli_detail.svg';
-  static const String imagesBgLiveTemp = 'assets/images/bg_liveTemp.png';
+ // static const String imagesBgLiveTemp = 'assets/images/bg_liveTemp.png';
   static const String imagesBgLogout = 'assets/images/bg_logout.svg';
   static const String imagesBgMeterFinal = 'assets/images/bg_MeterFinal.svg';
   static const String imagesBgRegisterLogo = 'assets/images/bg_register_logo.png';
@@ -70,7 +70,7 @@ class Assets {
   static const String imagesDone = 'assets/images/done.png';
   static const String imagesEmptyBox1 = 'assets/images/empty-box 1.png';
   static const String imagesGallery = 'assets/images/gallery.png';
-  static const String imagesGaneshJi = 'assets/images/ganesh_ji.png';
+  // static const String imagesGaneshJi = 'assets/images/ganesh_ji.png';
   static const String imagesGiftLive = 'assets/images/gift_live.svg';
   static const String imagesGiftTotal = 'assets/images/gift_total.svg';
   static const String imagesGroup = 'assets/images/Group.svg';

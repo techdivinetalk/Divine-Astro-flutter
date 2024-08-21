@@ -430,18 +430,7 @@ class AppFirebaseService {
       debugPrint("Error reading data from the database: $e");
     }
   }
-
-  void checkIfLoggedIn() {
-    if (preferenceService.getUserDetail() != null) {
-      print(
-          "dataSnapshot-Value-7 astrologer/${preferenceService.getUserDetail()!.id}/realTime");
-    } else {
-      print("dataSnapshot-Value-3");
-    }
-  }
-
   saveMasterData(DataSnapshot dataSnapshot) {
-    checkIfLoggedIn();
     print("dataSnapshot-Value ${dataSnapshot.value}");
     switch (dataSnapshot.key) {
       case "call":

@@ -82,8 +82,6 @@ import 'package:divine_astrologer/screens/support_issue/support_all_issues/all_s
 import 'package:divine_astrologer/screens/support_issue/support_issue_screen.dart';
 import 'package:divine_astrologer/screens/terms_and_condition/terms_and_condition_binding.dart';
 import 'package:divine_astrologer/screens/terms_and_condition/terms_and_condition_screen.dart';
-import 'package:divine_astrologer/screens/video_call_page/video_call_page.dart';
-import 'package:divine_astrologer/screens/video_call_page/video_call_page_binding.dart';
 import 'package:get/get.dart';
 
 import '../model/custom_product/custom_product_list_view.dart';
@@ -526,7 +524,11 @@ class Routes {
     ),
     GetPage(
       page: () => AddRemedies(),
-      name: RouteName.addRemedies,
+      name: RouteName.addRemedies,  // GetPage(
+      //   page: () => const VideoCallPage(),
+      //   name: RouteName.videoCallPage,
+      //   binding: VideoCallPageBinding(),
+      // ),
       binding: AddRemediesBindings(),
       // name: RouteName.remedies,
     ),
@@ -534,11 +536,7 @@ class Routes {
       page: () => TermsConditionUI(),
       name: RouteName.termsCondition,
     ),
-    GetPage(
-      page: () => const VideoCallPage(),
-      name: RouteName.videoCallPage,
-      binding: VideoCallPageBinding(),
-    ),
+
     GetPage(
         name: RouteName.chatAssistProductPage,
         page: () => const SuggestProducts(),
