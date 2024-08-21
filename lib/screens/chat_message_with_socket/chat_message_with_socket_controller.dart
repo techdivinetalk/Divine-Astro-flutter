@@ -422,7 +422,6 @@ class ChatMessageWithSocketController extends GetxController
       if (p0["status"] == null || p0["astroId"] == null) {
         print("realTimeChange backFunction");
         backFunction();
-        AppFirebaseService().database.child("order/${p0["orderId"]}").remove();
       } else {
         print("orderData Changed");
 
