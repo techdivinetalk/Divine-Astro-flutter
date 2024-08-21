@@ -386,9 +386,6 @@ class Routes {
       page: PoojaDharamSummaryScreen.new,
       binding: PoojaDharamSummaryBinding(),
     ),
-    /*// GetPage(
-    //     name: RouteName.editProfileUI, page: () => const EditProfileUI(),
-    // ),*/
     GetPage(
         page: () => const EditProfileUI(),
         name: RouteName.editProfileUI,
@@ -493,7 +490,7 @@ class Routes {
         name: RouteName.waitList,
         binding: WaitListBinding()),
     GetPage(
-      page: () => WalletPage(),
+      page: () => const WalletPage(),
       name: RouteName.wallet,
       binding: WalletBinding(),
     ),

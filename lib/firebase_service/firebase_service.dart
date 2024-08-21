@@ -39,6 +39,7 @@ RxInt isLive = 1.obs;
 RxInt isQueue = 1.obs;
 RxInt isGifts = 1.obs;
 RxInt isTime = 0.obs;
+RxInt isAgreement = 1.obs; 
 RxInt isCustomToken = 0.obs;
 RxInt isNetworkPopup = 0.obs;
 RxInt isPrivacyPolicy = 0.obs;
@@ -464,6 +465,9 @@ class AppFirebaseService {
         break;
       case "isTime":
         isTime(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isAgreement":
+        isAgreement(int.parse(dataSnapshot.value.toString()));
         break;
       case "remidies":
         isRemidies(int.parse(dataSnapshot.value.toString()));
