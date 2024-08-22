@@ -197,12 +197,11 @@ class HomeUI extends GetView<HomeController> {
                 return Stack(children: [
                   SingleChildScrollView(
                     controller: controller.scrollController,
-
                     // padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: Column(
                       children: [
                         // const SizedBox(height: 15),
-                        controller.showAgreement == 1
+                        controller.showAgreement == 1 && isAgreement.value == 1
                             ? Padding(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 10, vertical: 6),

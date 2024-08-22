@@ -421,7 +421,7 @@ class DashboardController extends GetxController
     loadPreDefineData();
     initMessaging();
     // firebaseMessagingConfig(Get.context!);
-    // getConstantDetailsData();
+    getConstantDetailsData();
     print("currentTime");
     cacheGift();
   }
@@ -576,7 +576,7 @@ class DashboardController extends GetxController
     }
   }
 
-  getConstantDetailsData(context) async {
+  getConstantDetailsData() async {
     try {
       final data = await userRepository.constantDetailsData();
       if (data.data != null) {

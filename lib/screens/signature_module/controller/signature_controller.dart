@@ -71,7 +71,8 @@ class SignatureController extends GetxController {
         await File(fileName).writeAsBytes(image!);
         uploadSignatureImage(File(fileName));
       } else {
-        divineSnackBar(data: "Permission denied");
+        divineSnackBar(data: "Please give permission of storage.");
+        openAppSettings();
         isLoading = false;
         update();
       }

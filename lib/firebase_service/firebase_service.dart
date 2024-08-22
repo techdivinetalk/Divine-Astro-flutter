@@ -39,6 +39,7 @@ RxInt isLive = 1.obs;
 RxInt isQueue = 1.obs;
 RxInt isGifts = 1.obs;
 RxInt isTime = 0.obs;
+RxInt isAgreement = 1.obs; 
 RxInt isCustomToken = 0.obs;
 RxInt isNetworkPopup = 0.obs;
 RxInt showStaticText = 0.obs;
@@ -434,18 +435,7 @@ class AppFirebaseService {
       debugPrint("Error reading data from the database: $e");
     }
   }
-
-  void checkIfLoggedIn() {
-    if (preferenceService.getUserDetail() != null) {
-      print(
-          "dataSnapshot-Value-7 astrologer/${preferenceService.getUserDetail()!.id}/realTime");
-    } else {
-      print("dataSnapshot-Value-3");
-    }
-  }
-
   saveMasterData(DataSnapshot dataSnapshot) {
-    checkIfLoggedIn();
     print("dataSnapshot-Value ${dataSnapshot.value}");
     switch (dataSnapshot.key) {
       case "call":
@@ -468,6 +458,9 @@ class AppFirebaseService {
         break;
       case "isTime":
         isTime(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isAgreement":
+        isAgreement(int.parse(dataSnapshot.value.toString()));
         break;
       case "remidies":
         isRemidies(int.parse(dataSnapshot.value.toString()));

@@ -2051,6 +2051,14 @@ class AstrologerChatAppBar extends StatelessWidget {
                                             fontSize: 10.sp,
                                             color: appColors.guideColor),
                                       ),
+                                      const SizedBox(width: 10),
+                                      Text(
+                                        "(ID ${AppFirebaseService().orderData["orderId"]})",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 10.sp,
+                                            color: appColors.black),
+                                      ),
                                     ],
                                   ),
                                 ),
