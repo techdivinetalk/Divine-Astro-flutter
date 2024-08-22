@@ -521,7 +521,7 @@ class Routes {
     ),
     GetPage(
       page: () => AddRemedies(),
-      name: RouteName.addRemedies,  // GetPage(
+      name: RouteName.addRemedies, // GetPage(
       //   page: () => const VideoCallPage(),
       //   name: RouteName.videoCallPage,
       //   binding: VideoCallPageBinding(),

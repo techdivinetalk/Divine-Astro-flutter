@@ -1898,6 +1898,7 @@ class HomeUI extends GetView<HomeController> {
                                     ),
                                     SizedBox(height: 10.h),
                                     noticeBoardWidget(controller: controller),
+                                    // noticeBoardPoll(controller: controller),
                                   ],
                                 ),
                               ),
@@ -2201,6 +2202,8 @@ class HomeUI extends GetView<HomeController> {
                               Get.toNamed(RouteName.referAstrologer);
                             }),
                         trainingVideoWidget(controller: controller),
+                        scheduledTrainingWidgetUpdated(controller: controller),
+
                         // Obx(() {
                         //   return showDailyLive.value.toString() == "1"
                         //       ? Visibility(
@@ -2367,7 +2370,6 @@ class HomeUI extends GetView<HomeController> {
                         // SizedBox(height: 10.h),
                         // noticeBoardWidget(),
                         // SizedBox(height: 15.h),
-                        // scheduledTrainingWidgetUpdated(controller: controller),
                         // viewKundliWidget(),
                         // viewKundliWidgetUpdated(),
 
@@ -2777,6 +2779,187 @@ class HomeUI extends GetView<HomeController> {
             )
           : const SizedBox();
     });
+  }
+
+  Widget noticeBoardPoll({HomeController? controller}) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 6),
+      child: Ink(
+        padding: EdgeInsets.all(16.h),
+        decoration: BoxDecoration(
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 4,
+              spreadRadius: 2,
+              color: appColors.grey.withOpacity(0.2),
+            ),
+          ],
+          color: Colors.white,
+          borderRadius: BorderRadius.all(Radius.circular(20.r)),
+          // border: Border.all(color: appColors.guideColor),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Are you facing any issue with the new update? I repeat my question to fill the space!",
+              style: TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+                color: Colors.black,
+                fontFamily: FontFamily.poppins,
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 40,
+              width: MediaQuery.of(Get.context!).size.width,
+              decoration: BoxDecoration(
+                  color: appColors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: appColors.red,
+                    width: 1,
+                  )),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 8, right: 8, top: 6, bottom: 6),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                height: 25,
+                                width: 25,
+                                decoration: BoxDecoration(
+                                    color: appColors.white,
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      color: appColors.grey,
+                                      width: 1,
+                                    )),
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                "Yes",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            "70%",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: appColors.red,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Filled container
+                    Positioned(
+                      left: 0,
+                      top: 0,
+                      child: Container(
+                        width: MediaQuery.of(Get.context!).size.width *
+                            (70 /
+                                100), // Adjust the width based on the percentage
+                        height: 40,
+                        color: Colors.red.withOpacity(0.3), // Fill color
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            SizedBox(height: 10),
+            Container(
+              height: 40,
+              width: MediaQuery.of(Get.context!).size.width,
+              decoration: BoxDecoration(
+                  color: appColors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.grey,
+                    width: 1,
+                  )),
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 8, right: 8, top: 6, bottom: 6),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                height: 25,
+                                width: 25,
+                                decoration: BoxDecoration(
+                                    color: appColors.white,
+                                    borderRadius: BorderRadius.circular(100),
+                                    border: Border.all(
+                                      color: appColors.grey,
+                                      width: 1,
+                                    )),
+                              ),
+                              SizedBox(width: 10),
+                              Text(
+                                "No",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            "30%",
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // Filled container
+                    Positioned(
+                      left: 0,
+                      top: 0,
+                      child: Container(
+                        width: MediaQuery.of(Get.context!).size.width *
+                            (30 /
+                                100), // Adjust the width based on the percentage
+                        height: 40,
+                        color: Colors.grey.withOpacity(0.3), // Fill color
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   Widget noticeBoardWidget({HomeController? controller}) {
