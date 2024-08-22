@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -70,7 +71,8 @@ class TermsAndConditionController extends GetxController {
       Map<String, dynamic> params = {
         "mobile_no": mobile,
         "device_token":
-            deviceToken ?? await FirebaseMessaging.instance.getToken()
+            deviceToken ?? await FirebaseMessaging.instance.getToken(),
+        "device_os": Platform.isIOS ? 2 : 1,
       };
       try {
         ResLogin data = await userRepository.userLogin(params);

@@ -1,5 +1,6 @@
 import 'dart:collection';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
@@ -19,7 +20,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:truecaller_sdk/truecaller_sdk.dart';
@@ -443,6 +443,7 @@ class LoginController extends GetxController {
       "device_token": await getToken(),
       // "gaid": await getAdvertisingId(),
       "verify_by": "TrueCaller",
+      "device_os": Platform.isIOS ? 2 : 1,
     };
     ResLogin data = ResLogin();
     data = await userRepository.astrologerLoginWithTrueCaller(params: params);
@@ -455,8 +456,9 @@ class LoginController extends GetxController {
       print("data.tokendata.token--->>> ${data.token}");
       var commonConstants = await userRepository.constantDetailsData();
 
-      if(commonConstants.data != null){
-        imageUploadBaseUrl.value = commonConstants.data?.imageUploadBaseUrl ?? "";
+      if (commonConstants.data != null) {
+        imageUploadBaseUrl.value =
+            commonConstants.data?.imageUploadBaseUrl ?? "";
       }
       if (isCustomToken.value.toString() == "1") {
         print("data.message--->>> firebaseAuthEmail");
@@ -467,7 +469,8 @@ class LoginController extends GetxController {
         print("data.message--->>> firebaseAuthPassword");
         if (commonConstants.data!.firebaseAuthEmail != null &&
             commonConstants.data!.firebaseAuthPassword != null) {
-          await Auth().handleSignInEmail(commonConstants.data!.firebaseAuthEmail!,
+          await Auth().handleSignInEmail(
+              commonConstants.data!.firebaseAuthEmail!,
               commonConstants.data!.firebaseAuthPassword!);
         }
       }
@@ -489,7 +492,7 @@ class LoginController extends GetxController {
   customTokenWithFirebase({String? token}) async {
     try {
       final userCredential =
-      await FirebaseAuth.instance.signInWithCustomToken(token!);
+          await FirebaseAuth.instance.signInWithCustomToken(token!);
       print(userCredential);
       print("Sign-in successful.");
     } on FirebaseAuthException catch (e) {

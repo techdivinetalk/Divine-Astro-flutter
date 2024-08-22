@@ -937,10 +937,10 @@ class ProfileUI extends GetView<ProfilePageController> {
                   controller.getMoreReviewRating();
                 },
                 child: Text(
-                  "loadMoreReviews".tr,
+                  "Load More Reviews".tr,
                   style: TextStyle(
                     fontSize: 12.sp,
-                    decoration: TextDecoration.underline,
+                    // decoration: TextDecoration.underline,
                     decorationColor: appColors.textColor,
                     color: appColors.textColor,
                   ),

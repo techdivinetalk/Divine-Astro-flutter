@@ -50,22 +50,25 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyD6TwQ1az8IU6mmhKZoeLa4kfdQa0BrbQY',
-    appId: '1:764246952124:android:dba9eba1fb1f4d806fe8b9',
-    messagingSenderId: '764246952124',
-    projectId: 'divine2-0-uat',
-    databaseURL: 'https://divine2-0-uat-default-rtdb.firebaseio.com/',
-    storageBucket: 'divine2-0-uat-default-rtdb.firebaseio.com/',
+    apiKey: 'AIzaSyC06RdHRB5jW2ri9DSbrd-fHh77yHaXJ1o',
+    appId: '1:507681862980:android:abf46c3e015ebea1e51311',
+    messagingSenderId: '507681862980',
+    projectId: 'divine-live-f7f79',
+    databaseURL:
+        'https://divine-live-f7f79-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'divine-live-f7f79.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyB8qPgVe6EJ2hdsp-FTVBVbP3oOQOK47xs',
-    appId: '1:507681862980:ios:1b767dddc6c35736e51311',
+    apiKey: 'AIzaSyCDS5CxwYMh9O5Ao7bwlYmy4Xu5BUvShKU',
+    appId: '1:507681862980:ios:3bdbdc4fdc0ae7eae51311',
     messagingSenderId: '507681862980',
     projectId: 'divine-live-f7f79',
-    databaseURL: 'https://divine-live-f7f79-default-rtdb.asia-southeast1.firebasedatabase.app/',
+    databaseURL:
+        'https://divine-live-f7f79-default-rtdb.asia-southeast1.firebasedatabase.app/',
     storageBucket: 'divine-live-f7f79.appspot.com',
-    // iosClientId: '764246952124-o2nqves6l70ualttab3kd0dthfb0v7el.apps.googleusercontent.com',
-    iosBundleId: 'app.divinetalk.astrologer',
+    iosClientId:
+        '764246952124-o2nqves6l70ualttab3kd0dthfb0v7el.apps.googleusercontent.com',
+    iosBundleId: 'app.divine.astrologer',
   );
 }

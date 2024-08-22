@@ -41,6 +41,7 @@ RxInt isGifts = 1.obs;
 RxInt isTime = 0.obs;
 RxInt isCustomToken = 0.obs;
 RxInt isNetworkPopup = 0.obs;
+RxInt showStaticText = 0.obs;
 RxInt isPrivacyPolicy = 0.obs;
 RxInt isServerMaintenance = 0.obs;
 RxInt showRetentionPopup = 1.obs;
@@ -235,6 +236,9 @@ class AppFirebaseService {
         break;
       case "isNetworkPopup":
         isNetworkPopup(value);
+        break;
+      case "showStaticText":
+        showStaticText(value);
         break;
       case "deliveredMsg":
         sendBroadcast(BroadcastMessage(
@@ -502,6 +506,9 @@ class AppFirebaseService {
         isNetworkPopup(int.parse(dataSnapshot.value.toString()));
         print(
             "internet checker -- ${int.parse(dataSnapshot.value.toString())}");
+        break;
+      case "showStaticText":
+        showStaticText(int.parse(dataSnapshot.value.toString()));
         break;
       // case "tarrotCard":
       //   isRemidies(int.parse(dataSnapshot.value.toString()));

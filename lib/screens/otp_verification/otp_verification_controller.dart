@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/di/firebase_network_service.dart';
@@ -18,7 +19,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-
+import 'package:sms_autofill/sms_autofill.dart';
 
 import '../../common/app_exception.dart';
 import '../../common/colors.dart';
@@ -28,7 +29,6 @@ import '../../model/res_login.dart';
 import '../../model/send_otp.dart';
 import '../../model/verify_otp.dart';
 import '../../repository/user_repository.dart';
-import 'package:sms_autofill/sms_autofill.dart';
 
 //var globalToken = "";
 class OtpVerificationController extends GetxController with CodeAutoFill {
@@ -54,7 +54,7 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
 
   @override
   void onReady() async {
-     listenForCode();
+    listenForCode();
     var arguments = Get.arguments;
     if (arguments != null) {
       var args = arguments as List;
@@ -123,10 +123,11 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
       VerifyOtpModel data = await userRepository.verifyOtp(params);
 
       // isPrivacyPolicy.value == 1 ? Get.offAllNamed(RouteName.termsAndConditionScreen, arguments: {"mobile" : number.value}) : await astroLogin();
-      if(isPrivacyPolicy.value == 1){
-        Get.offAllNamed(RouteName.termsAndConditionScreen, arguments: {"mobile" : number.value});
+      if (isPrivacyPolicy.value == 1) {
+        Get.offAllNamed(RouteName.termsAndConditionScreen,
+            arguments: {"mobile": number.value});
         enableSubmit.value = true;
-      } else{
+      } else {
         await astroLogin();
       }
       // enableSubmit.value = true;
@@ -149,7 +150,9 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
         "UserStatus login api ${await FirebaseMessaging.instance.getToken()}");
     Map<String, dynamic> params = {
       "mobile_no": number.value,
-      "device_token": deviceToken ?? await FirebaseMessaging.instance.getToken()
+      "device_token":
+          deviceToken ?? await FirebaseMessaging.instance.getToken(),
+      "device_os": Platform.isIOS ? 2 : 1,
     };
     try {
       ResLogin data = await userRepository.userLogin(params);
@@ -163,8 +166,9 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
       print("jsonEncode(data.data)");
       if (data.data != null) {
         var commonConstants = await userRepository.constantDetailsData();
-        if(commonConstants.data != null){
-          imageUploadBaseUrl.value = commonConstants.data?.imageUploadBaseUrl ?? "";
+        if (commonConstants.data != null) {
+          imageUploadBaseUrl.value =
+              commonConstants.data?.imageUploadBaseUrl ?? "";
         }
         if (isCustomToken.value.toString() == "1") {
           print("firebaseAuthEmail");
@@ -175,7 +179,8 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
           print("firebaseAuthPassword");
           if (commonConstants.data!.firebaseAuthEmail != null &&
               commonConstants.data!.firebaseAuthPassword != null) {
-            await Auth().handleSignInEmail(commonConstants.data!.firebaseAuthEmail!,
+            await Auth().handleSignInEmail(
+                commonConstants.data!.firebaseAuthEmail!,
                 commonConstants.data!.firebaseAuthPassword!);
           }
         }
