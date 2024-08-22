@@ -1079,125 +1079,127 @@ class HomeUI extends GetView<HomeController> {
                                         horizontal: 10, vertical: 6),
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceEvenly,
+                                          MainAxisAlignment.center,
                                       children: [
-                                        Padding(
-                                          padding: const EdgeInsets.only(
-                                            top: 5,
-                                            bottom: 5,
-                                          ),
-                                          child: Ink(
-                                            height: 50,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.45,
-                                            decoration: BoxDecoration(
-                                              color: appColors.white,
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                Radius.circular(10),
-                                              ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  blurRadius: 6,
-                                                  spreadRadius: 2,
-                                                  color: appColors.grey
-                                                      .withOpacity(0.2),
+                                        controller.getRitentionModel!.data!
+                                                    .badge ==
+                                                null
+                                            ? SizedBox()
+                                            : Expanded(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.only(
+                                                    top: 5,
+                                                    bottom: 5,
+                                                  ),
+                                                  child: Ink(
+                                                    height: 50,
+                                                    decoration: BoxDecoration(
+                                                      color: appColors.white,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .all(
+                                                        Radius.circular(10),
+                                                      ),
+                                                      boxShadow: [
+                                                        BoxShadow(
+                                                          blurRadius: 6,
+                                                          spreadRadius: 2,
+                                                          color: appColors.grey
+                                                              .withOpacity(0.2),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 5),
+                                                    child: Center(
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          CommonImageView(
+                                                            imagePath: controller
+                                                                .getRitentionModel!
+                                                                .data!
+                                                                .badge!
+                                                                .image
+                                                                .toString(),
+                                                            height: 30,
+                                                            width: 30,
+                                                            placeHolder: Assets
+                                                                .images
+                                                                .defaultProfile
+                                                                .path,
+                                                          ),
+                                                          SizedBox(
+                                                            width: 6,
+                                                          ),
+                                                          Text(
+                                                            controller
+                                                                .getRitentionModel!
+                                                                .data!
+                                                                .badge!
+                                                                .value
+                                                                .toString(),
+                                                            style: AppTextStyle
+                                                                .textStyle12(
+                                                                    fontColor:
+                                                                        appColors
+                                                                            .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
                                                 ),
-                                              ],
-                                            ),
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 5),
-                                            child: Center(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  CommonImageView(
-                                                    imagePath: controller
-                                                        .getRitentionModel!
-                                                        .data!
-                                                        .badge!
-                                                        .image
-                                                        .toString(),
-                                                    height: 30,
-                                                    width: 30,
-                                                    placeHolder: Assets.images
-                                                        .defaultProfile.path,
-                                                  ),
-                                                  SizedBox(
-                                                    width: 6,
-                                                  ),
-                                                  Text(
-                                                    controller
-                                                        .getRitentionModel!
-                                                        .data!
-                                                        .badge!
-                                                        .value
-                                                        .toString(),
-                                                    style: AppTextStyle
-                                                        .textStyle12(
-                                                            fontColor:
-                                                                appColors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500),
-                                                  ),
-                                                ],
                                               ),
-                                            ),
-                                          ),
-                                        ),
-                                        Ink(
-                                          height: 50,
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.45,
-                                          decoration: BoxDecoration(
-                                            color: appColors.white,
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(10),
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                blurRadius: 6,
-                                                spreadRadius: 2,
-                                                color: appColors.grey
-                                                    .withOpacity(0.2),
-                                              ),
-                                            ],
-                                          ),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 5),
-                                          // alignment: Alignment.center,
-                                          child: Center(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                CommonImageView(
-                                                  imagePath:
-                                                      "assets/images/clock.png",
-                                                  height: 30,
-                                                  width: 30,
-                                                  placeHolder: Assets.images
-                                                      .defaultProfile.path,
-                                                ),
-                                                SizedBox(width: 5),
-                                                Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  children: [
-                                                    Row(
+                                        controller.getRitentionModel!.data!
+                                                        .badge ==
+                                                    null &&
+                                                controller.getRitentionModel!
+                                                        .data!.level ==
+                                                    null
+                                            ? SizedBox()
+                                            : SizedBox(width: 10),
+                                        controller.getRitentionModel!.data!
+                                                    .level ==
+                                                null
+                                            ? SizedBox()
+                                            : Expanded(
+                                                child: Ink(
+                                                  height: 50,
+                                                  // width: MediaQuery.of(context)
+                                                  //         .size
+                                                  //         .width *
+                                                  //     0.45,
+                                                  decoration: BoxDecoration(
+                                                    color: appColors.white,
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                      Radius.circular(10),
+                                                    ),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        blurRadius: 6,
+                                                        spreadRadius: 2,
+                                                        color: appColors.grey
+                                                            .withOpacity(0.2),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  padding: EdgeInsets.symmetric(
+                                                      horizontal: 5),
+                                                  // alignment: Alignment.center,
+                                                  child: Center(
+                                                    child: Row(
                                                       mainAxisAlignment:
                                                           MainAxisAlignment
                                                               .center,
@@ -1205,70 +1207,99 @@ class HomeUI extends GetView<HomeController> {
                                                           CrossAxisAlignment
                                                               .center,
                                                       children: [
-                                                        Text(
-                                                          "Avg. Hrs",
-                                                          maxLines: 1,
-                                                          textAlign:
-                                                              TextAlign.left,
-                                                          style: AppTextStyle
-                                                              .textStyle12(
-                                                                  fontColor:
-                                                                      appColors
-                                                                          .black,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500),
+                                                        CommonImageView(
+                                                          imagePath:
+                                                              "assets/images/clock.png",
+                                                          height: 30,
+                                                          width: 30,
+                                                          placeHolder: Assets
+                                                              .images
+                                                              .defaultProfile
+                                                              .path,
                                                         ),
+                                                        SizedBox(width: 5),
+                                                        Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Row(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment
+                                                                      .center,
+                                                              children: [
+                                                                Text(
+                                                                  "Avg. Hrs",
+                                                                  maxLines: 1,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .left,
+                                                                  style: AppTextStyle.textStyle12(
+                                                                      fontColor:
+                                                                          appColors
+                                                                              .black,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w500),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                            Row(
+                                                              children: [
+                                                                Text(
+                                                                  controller
+                                                                      .getRitentionModel!
+                                                                      .data!
+                                                                      .level!
+                                                                      .hours
+                                                                      .toString(),
+                                                                  style: AppTextStyle.textStyle10(
+                                                                      fontColor:
+                                                                          appColors
+                                                                              .black,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400),
+                                                                ),
+                                                                SizedBox(
+                                                                    width: 4),
+                                                                Text(
+                                                                  controller
+                                                                      .getRitentionModel!
+                                                                      .data!
+                                                                      .level!
+                                                                      .text
+                                                                      .toString(),
+                                                                  maxLines: 1,
+                                                                  textAlign:
+                                                                      TextAlign
+                                                                          .center,
+                                                                  overflow:
+                                                                      TextOverflow
+                                                                          .ellipsis,
+                                                                  style: AppTextStyle.textStyle10(
+                                                                      fontColor:
+                                                                          appColors
+                                                                              .black,
+                                                                      fontWeight:
+                                                                          FontWeight
+                                                                              .w400),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ],
+                                                        )
                                                       ],
                                                     ),
-                                                    Row(
-                                                      children: [
-                                                        Text(
-                                                          controller
-                                                              .getRitentionModel!
-                                                              .data!
-                                                              .level!
-                                                              .hours
-                                                              .toString(),
-                                                          style: AppTextStyle
-                                                              .textStyle10(
-                                                                  fontColor:
-                                                                      appColors
-                                                                          .black,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400),
-                                                        ),
-                                                        SizedBox(width: 4),
-                                                        Text(
-                                                          controller
-                                                              .getRitentionModel!
-                                                              .data!
-                                                              .level!
-                                                              .text
-                                                              .toString(),
-                                                          maxLines: 1,
-                                                          textAlign:
-                                                              TextAlign.center,
-                                                          overflow: TextOverflow
-                                                              .ellipsis,
-                                                          style: AppTextStyle
-                                                              .textStyle10(
-                                                                  fontColor:
-                                                                      appColors
-                                                                          .black,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ],
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                        ),
+                                                  ),
+                                                ),
+                                              ),
                                       ],
                                     ),
                                   )
@@ -1898,10 +1929,11 @@ class HomeUI extends GetView<HomeController> {
                                     ),
                                     SizedBox(height: 10.h),
                                     noticeBoardWidget(controller: controller),
-                                    // noticeBoardPoll(controller: controller),
                                   ],
                                 ),
                               ),
+                        // noticeBoardPoll(controller: controller, maxWidth),
+
                         Obx(
                           () {
                             final bool cond1 = controller.isCallEnable.value;
@@ -2781,9 +2813,9 @@ class HomeUI extends GetView<HomeController> {
     });
   }
 
-  Widget noticeBoardPoll({HomeController? controller}) {
+  Widget noticeBoardPoll(maxWidth, {HomeController? controller}) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 6),
+      padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 16),
       child: Ink(
         padding: EdgeInsets.all(16.h),
         decoration: BoxDecoration(
@@ -2810,149 +2842,233 @@ class HomeUI extends GetView<HomeController> {
                 fontFamily: FontFamily.poppins,
               ),
             ),
-            SizedBox(height: 10),
-            Container(
-              height: 40,
-              width: MediaQuery.of(Get.context!).size.width,
-              decoration: BoxDecoration(
-                  color: appColors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: appColors.red,
-                    width: 1,
-                  )),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 8, right: 8, top: 6, bottom: 6),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                height: 25,
-                                width: 25,
-                                decoration: BoxDecoration(
-                                    color: appColors.white,
+            SizedBox(height: 13),
+            InkWell(
+              onTap: () {
+                if (controller.noticePollChecked == false) {
+                  controller.selectedPoll = "Yes";
+                  controller.noticePollChecked = true;
+                  controller.update();
+                } else {}
+              },
+              child: Container(
+                height: 40,
+                width: maxWidth,
+                decoration: BoxDecoration(
+                    color: appColors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: controller!.selectedPoll == null
+                          ? appColors.grey.withOpacity(0.3)
+                          : controller.selectedPoll == "Yes"
+                              ? appColors.red
+                              : appColors.grey,
+                      width: 1,
+                    )),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Stack(
+                    children: [
+                      // Filled container
+
+                      Positioned(
+                        left: 0,
+                        top: 0,
+                        child: Container(
+                          width: maxWidth *
+                              0.7 *
+                              (70 /
+                                  100), // Adjust the width based on the percentage
+                          height: 40,
+                          color: controller.selectedPoll == null
+                              ? null
+                              : controller.selectedPoll == "Yes"
+                                  ? Colors.red.withOpacity(0.3)
+                                  : appColors.grey
+                                      .withOpacity(0.3), // Fill color
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 8, right: 8, top: 6, bottom: 6),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  height: 25,
+                                  width: 25,
+                                  decoration: BoxDecoration(
+                                    color: controller.selectedPoll == null
+                                        ? appColors.white
+                                        : controller.selectedPoll == "Yes"
+                                            ? appColors.red
+                                            : appColors.grey.withOpacity(0.1),
                                     borderRadius: BorderRadius.circular(100),
                                     border: Border.all(
-                                      color: appColors.grey,
+                                      color: controller.selectedPoll == null
+                                          ? appColors.grey.withOpacity(0.3)
+                                          : controller.selectedPoll == "Yes"
+                                              ? appColors.red
+                                              : appColors.grey.withOpacity(0.3),
                                       width: 1,
-                                    )),
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                "Yes",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.black,
+                                    ),
+                                  ),
+                                  child: controller.selectedPoll == "Yes"
+                                      ? Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: Icon(
+                                            Icons.check,
+                                            size: 20,
+                                            color: appColors.white,
+                                          ),
+                                        )
+                                      : null,
                                 ),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            "70%",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: appColors.red,
+                                SizedBox(width: 10),
+                                Text(
+                                  "Yes",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                            controller.selectedPoll == null
+                                ? SizedBox()
+                                : Text(
+                                    "70%",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: controller.selectedPoll == "Yes"
+                                          ? appColors.red
+                                          : appColors.grey,
+                                    ),
+                                  ),
+                          ],
+                        ),
                       ),
-                    ),
-                    // Filled container
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      child: Container(
-                        width: MediaQuery.of(Get.context!).size.width *
-                            (70 /
-                                100), // Adjust the width based on the percentage
-                        height: 40,
-                        color: Colors.red.withOpacity(0.3), // Fill color
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
             SizedBox(height: 10),
-            Container(
-              height: 40,
-              width: MediaQuery.of(Get.context!).size.width,
-              decoration: BoxDecoration(
-                  color: appColors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: Colors.grey,
-                    width: 1,
-                  )),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(10),
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 8, right: 8, top: 6, bottom: 6),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Row(
-                            children: [
-                              Container(
-                                height: 25,
-                                width: 25,
-                                decoration: BoxDecoration(
-                                    color: appColors.white,
+            InkWell(
+              onTap: () {
+                if (controller.noticePollChecked == false) {
+                  controller.selectedPoll = "No";
+                  controller.noticePollChecked = true;
+                  controller.update();
+                } else {}
+              },
+              child: Container(
+                height: 40,
+                width: maxWidth,
+                decoration: BoxDecoration(
+                    color: appColors.white,
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
+                      color: controller.selectedPoll == null
+                          ? appColors.grey.withOpacity(0.3)
+                          : controller.selectedPoll == "No"
+                              ? appColors.red
+                              : appColors.grey,
+                      width: 1,
+                    )),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  child: Stack(
+                    children: [
+                      // Filled container
+                      Positioned(
+                        left: 0,
+                        top: 0,
+                        child: Container(
+                          width: maxWidth *
+                              (30 /
+                                  100), // Adjust the width based on the percentage
+                          height: 40,
+                          color: controller.selectedPoll == null
+                              ? null
+                              : controller.selectedPoll == "No"
+                                  ? Colors.red.withOpacity(0.3)
+                                  : appColors.grey
+                                      .withOpacity(0.3), // Fill color
+                        ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 8, right: 8, top: 6, bottom: 6),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Row(
+                              children: [
+                                Container(
+                                  height: 25,
+                                  width: 25,
+                                  decoration: BoxDecoration(
+                                    color: controller.selectedPoll == null
+                                        ? appColors.white
+                                        : controller.selectedPoll == "No"
+                                            ? appColors.red
+                                            : appColors.grey.withOpacity(0.1),
                                     borderRadius: BorderRadius.circular(100),
                                     border: Border.all(
-                                      color: appColors.grey,
+                                      color: controller.selectedPoll == null
+                                          ? appColors.grey.withOpacity(0.3)
+                                          : controller.selectedPoll == "No"
+                                              ? appColors.red
+                                              : appColors.grey.withOpacity(0.3),
                                       width: 1,
-                                    )),
-                              ),
-                              SizedBox(width: 10),
-                              Text(
-                                "No",
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.black,
+                                    ),
+                                  ),
+                                  child: controller.selectedPoll == "No"
+                                      ? Padding(
+                                          padding: const EdgeInsets.all(2.0),
+                                          child: Icon(
+                                            Icons.check,
+                                            size: 20,
+                                            color: appColors.white,
+                                          ),
+                                        )
+                                      : null,
                                 ),
-                              ),
-                            ],
-                          ),
-                          Text(
-                            "30%",
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.grey,
+                                SizedBox(width: 10),
+                                Text(
+                                  "No",
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w400,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+                            controller.selectedPoll == null
+                                ? SizedBox()
+                                : Text(
+                                    "30%",
+                                    style: TextStyle(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w600,
+                                      color: controller.selectedPoll == "No"
+                                          ? appColors.red
+                                          : appColors.grey,
+                                    ),
+                                  ),
+                          ],
+                        ),
                       ),
-                    ),
-                    // Filled container
-                    Positioned(
-                      left: 0,
-                      top: 0,
-                      child: Container(
-                        width: MediaQuery.of(Get.context!).size.width *
-                            (30 /
-                                100), // Adjust the width based on the percentage
-                        height: 40,
-                        color: Colors.grey.withOpacity(0.3), // Fill color
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),

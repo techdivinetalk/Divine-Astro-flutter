@@ -82,6 +82,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   RxBool isVideoCallEnable = true.obs;
   RxBool isLiveEnable = true.obs;
   bool istraininginfo = true;
+  bool noticePollChecked = false;
+  var selectedPoll ;
 
   double xPosition = 10.0;
   double yPosition = Get.height * 0.4;
