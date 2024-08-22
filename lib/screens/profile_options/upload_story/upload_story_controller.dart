@@ -8,6 +8,7 @@ import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:video_player/video_player.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
 import '../../../common/common_functions.dart';
@@ -41,6 +42,7 @@ class UploadStoryController extends GetxController {
     }
   }
 
+  String storyDuration = "";
   saveVideo() {
     progressVisibility.value = true;
     trimmer.saveTrimmedVideo(
@@ -50,6 +52,16 @@ class UploadStoryController extends GetxController {
       videoFolderName: "trimmer video",
       videoFileName: "vid_${DateTime.now().microsecond}_${DateTime.now().millisecond}",
       onSave: (outputPath) async {
+        storyDuration = "";
+        VideoPlayerController? videoPlayerController;
+        videoPlayerController = VideoPlayerController.file(File(outputPath ?? ""))
+          ..initialize().then((_) {
+            if(videoPlayerController?.value.duration.inSeconds != null){
+              storyDuration = videoPlayerController?.value.duration.inSeconds.toString() ?? "";
+            }
+            videoPlayerController?.dispose();
+          });
+
         int fileSizeInBytes = await File(outputPath ?? "").length();
         double sizeInKB = fileSizeInBytes / 1024;
         log("pick video size : $sizeInKB");
@@ -162,7 +174,7 @@ class UploadStoryController extends GetxController {
       update();
       print(
           "Image uploaded successfully. --  - ${jsonDecode(value)["data"]["full_path"].toString()}");
-      uploadStory(jsonDecode(value)["data"]["full_path"].toString());
+      uploadStory(jsonDecode(value)["data"]["full_path"].toString(), duration: storyDuration);
       print(
           "valuevaluevaluevaluevaluevaluevalue"); // Handle the response from the server
     });

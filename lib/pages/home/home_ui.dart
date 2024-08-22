@@ -197,7 +197,6 @@ class HomeUI extends GetView<HomeController> {
                 return Stack(children: [
                   SingleChildScrollView(
                     controller: controller.scrollController,
-
                     // padding: EdgeInsets.symmetric(horizontal: 20.w),
                     child: Column(
                       children: [
