@@ -39,7 +39,7 @@ RxInt isLive = 1.obs;
 RxInt isQueue = 1.obs;
 RxInt isGifts = 1.obs;
 RxInt isTime = 0.obs;
-RxInt isAgreement = 1.obs; 
+RxInt isAgreement = 1.obs;
 RxInt isCustomToken = 0.obs;
 RxInt isNetworkPopup = 0.obs;
 RxInt showStaticText = 0.obs;
@@ -50,6 +50,7 @@ RxInt showDailyLive = 0.obs;
 RxInt showHelp = 0.obs;
 RxInt maximumStorySize = 2048.obs;
 RxInt astroHome = 0.obs;
+RxInt showLatLng = 0.obs;
 // RxInt isTruecaller = 1.obs;
 RxInt isLiveCall = 1.obs;
 RxInt homePage = 1.obs;
@@ -435,6 +436,7 @@ class AppFirebaseService {
       debugPrint("Error reading data from the database: $e");
     }
   }
+
   saveMasterData(DataSnapshot dataSnapshot) {
     print("dataSnapshot-Value ${dataSnapshot.value}");
     switch (dataSnapshot.key) {
@@ -502,6 +504,9 @@ class AppFirebaseService {
         break;
       case "showStaticText":
         showStaticText(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "showLatLng":
+        showLatLng(int.parse(dataSnapshot.value.toString()));
         break;
       // case "tarrotCard":
       //   isRemidies(int.parse(dataSnapshot.value.toString()));
