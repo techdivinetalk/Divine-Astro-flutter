@@ -11,6 +11,7 @@ import '../../../common/custom_radio_button.dart';
 import '../../../common/custom_widgets.dart';
 import '../../../common/text_field_custom.dart';
 import '../../../gen/assets.gen.dart';
+import '../../../gen/fonts.gen.dart';
 import '../../../model/cityDataModel.dart';
 import '../../../utils/utils.dart';
 import 'kundli_controller.dart';
@@ -356,6 +357,7 @@ class CheckYours extends GetView<KundliController> {
                             latitude: value.latitude,
                             longitude: value.longitude,
                           ));
+                          controller.update();
                           Get.back();
                         },
                         country: "India",
@@ -377,6 +379,27 @@ class CheckYours extends GetView<KundliController> {
                     // });
                   },
                   readOnly: true,
+                ),
+
+                Obx(
+                  () => controller.yourParams.value.lat == null ||
+                          controller.yourParams.value.long == null
+                      ? SizedBox()
+                      : Padding(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              "${controller.yourParams.value.lat!.toStringAsFixed(3)} - ${controller.yourParams.value.long!.toStringAsFixed(3)}",
+                              style: TextStyle(
+                                fontFamily: FontFamily.poppins,
+                                fontWeight: FontWeight.w400,
+                                color: appColors.grey,
+                                fontSize: 12,
+                              ),
+                            ),
+                          ),
+                        ),
                 ),
               ],
             ),
