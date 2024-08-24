@@ -2236,23 +2236,23 @@ class HomeUI extends GetView<HomeController> {
                         trainingVideoWidget(controller: controller),
                         scheduledTrainingWidgetUpdated(controller: controller),
 
-                        // Obx(() {
-                        //   return showDailyLive.value.toString() == "1"
-                        //       ? Visibility(
-                        //           visible: controller.isLiveMonitor.value != 1,
-                        //           child: Padding(
-                        //             padding: const EdgeInsets.only(
-                        //                 top: 6, bottom: 6),
-                        //             child: Column(
-                        //               children: [
-                        //                 liveWidgetUpdated(),
-                        //                 // SizedBox(height: 10.h),
-                        //               ],
-                        //             ),
-                        //           ),
-                        //         )
-                        //       : SizedBox();
-                        // }),
+                        Obx(() {
+                          return showDailyLive.value.toString() == "1"
+                              ? Visibility(
+                                  visible: controller.isLiveMonitor.value != 1,
+                                  child: Padding(
+                                    padding: const EdgeInsets.only(
+                                        top: 6, bottom: 6),
+                                    child: Column(
+                                      children: [
+                                        liveWidgetUpdated(),
+                                        // SizedBox(height: 10.h),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : SizedBox();
+                        }),
                         (controller.customerDetailsResponse == null ||
                                 controller
                                     .customerDetailsResponse!.data.isEmpty)
@@ -2260,7 +2260,7 @@ class HomeUI extends GetView<HomeController> {
                             : Align(
                                 alignment: Alignment.centerLeft,
                                 child: Padding(
-                                  padding: EdgeInsets.symmetric(
+                                  padding: const EdgeInsets.symmetric(
                                       horizontal: 16, vertical: 5),
                                   child: Text(
                                     "User Data".tr,
@@ -4327,7 +4327,37 @@ class HomeUI extends GetView<HomeController> {
                     ],
                   ),
                   SwitchWidget(
-                    onTap: () {
+                    onTap: () async {
+                      // Check if another request is already in progress
+                      if (controller.offerTypeLoading.value ==
+                          Loading.loading) {
+                        return;
+                      }
+
+                      // if (data.isOn!) {
+                      //   data.isOn = !data.isOn!;
+                      //   controller.updateOfferType(
+                      //       value: data.isOn!,
+                      //       index: index,
+                      //       offerId: data.id!,
+                      //       offerType: 2);
+                      //
+                      //   controller.update();
+                      // } else if (controller.homeData!.offers!.customOffer!
+                      //     .any((element) => element.isOn!)) {
+                      //   divineSnackBar(
+                      //       data: "Only 1 custom offer is allowed at once",
+                      //       color: appColors.redColor);
+                      // } else {
+                      //   data.isOn = !data.isOn!;
+                      //   controller.updateOfferType(
+                      //       value: data.isOn!,
+                      //       index: index,
+                      //       offerId: data.id!,
+                      //       offerType: 2);
+                      //   controller.update();
+                      // }
+                      // If the current switch is already on
                       if (data.isOn!) {
                         data.isOn = !data.isOn!;
                         controller.updateOfferType(
@@ -4348,7 +4378,6 @@ class HomeUI extends GetView<HomeController> {
                             offerId: data.id!,
                             offerType: 2);
                       }
-
                       controller.update();
                     },
                     switchValue: data.isOn,
