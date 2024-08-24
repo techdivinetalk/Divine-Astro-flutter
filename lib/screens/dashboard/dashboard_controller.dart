@@ -186,10 +186,10 @@ class DashboardController extends GetxController
     }
     await Future.delayed(const Duration(seconds: 3));
 
-    if (isTime.toString() == "1") {
-      compareTimes(commonConstants.data!.currentTime!.toInt());
-      print(DateTime.now().millisecondsSinceEpoch / 1000);
-    }
+    // if (isTime.toString() == "1") {
+    //   compareTimes(commonConstants.data!.currentTime!.toInt());
+    //   print(DateTime.now().millisecondsSinceEpoch / 1000);
+    // }
   }
 
   void requestPermissions() async {
@@ -474,74 +474,74 @@ class DashboardController extends GetxController
     );
   }
 
-  void compareTimes(int serverTime) {
-    print("millisecondsSinceEpoch");
-    print(isTime.toString());
-    // Get the current local time in milliseconds since epoch
-    int localTime = DateTime.now().millisecondsSinceEpoch;
+  // void compareTimes(int serverTime) {
+  //   print("millisecondsSinceEpoch");
+  //   print(isTime.toString());
+  //   // Get the current local time in milliseconds since epoch
+  //   int localTime = DateTime.now().millisecondsSinceEpoch;
+  //
+  //   // Convert serverTime to milliseconds since epoch
+  //   int serverTimeMillis = serverTime * 1000;
+  //
+  //   // Calculate the absolute difference in milliseconds
+  //   int difference = serverTimeMillis > localTime
+  //       ? (serverTimeMillis - localTime).abs()
+  //       : (localTime - serverTimeMillis).abs();
+  //   print(serverTimeMillis);
+  //   print("serverTimeMillis");
+  //   // Check if the difference is less than 30 seconds (30000 milliseconds)
+  //   if (difference > 30000) {
+  //     print("if difference");
+  //     showTimeDIffBottomSheet(Get.context!);
+  //   } else {
+  //     print("else difference");
+  //   }
+  // }
 
-    // Convert serverTime to milliseconds since epoch
-    int serverTimeMillis = serverTime * 1000;
-
-    // Calculate the absolute difference in milliseconds
-    int difference = serverTimeMillis > localTime
-        ? (serverTimeMillis - localTime).abs()
-        : (localTime - serverTimeMillis).abs();
-    print(serverTimeMillis);
-    print("serverTimeMillis");
-    // Check if the difference is less than 30 seconds (30000 milliseconds)
-    if (difference > 30000) {
-      print("if difference");
-      showTimeDIffBottomSheet(Get.context!);
-    } else {
-      print("else difference");
-    }
-  }
-
-  void showTimeDIffBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (BuildContext context) {
-        return Container(
-          color: Colors.white,
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              const Text(
-                'Mobile Time issue',
-                style: TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 16.0),
-              const Text(
-                "Your mobile's time is incorrect. Please adjust it to proceed.",
-              ),
-              const SizedBox(height: 16.0),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: GestureDetector(
-                    onTap: () {
-                      const AndroidIntent intent = AndroidIntent(
-                        action: 'android.settings.DATE_SETTINGS',
-                        flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
-                      );
-                      intent.launch();
-                    },
-                    child: const Text('Change time')),
-              ),
-            ],
-          ),
-        );
-      },
-      isDismissible: true, // allows tapping outside to dismiss
-      enableDrag: false,
-    );
-  }
+  // void showTimeDIffBottomSheet(BuildContext context) {
+  //   showModalBottomSheet(
+  //     context: context,
+  //     builder: (BuildContext context) {
+  //       return Container(
+  //         color: Colors.white,
+  //         padding: const EdgeInsets.all(16.0),
+  //         child: Column(
+  //           mainAxisSize: MainAxisSize.min,
+  //           children: <Widget>[
+  //             const Text(
+  //               'Mobile Time issue',
+  //               style: TextStyle(
+  //                 fontSize: 24.0,
+  //                 fontWeight: FontWeight.bold,
+  //               ),
+  //             ),
+  //             const SizedBox(height: 16.0),
+  //             const Text(
+  //               "Your mobile's time is incorrect. Please adjust it to proceed.",
+  //             ),
+  //             const SizedBox(height: 16.0),
+  //             ElevatedButton(
+  //               onPressed: () {
+  //                 Navigator.pop(context);
+  //               },
+  //               child: GestureDetector(
+  //                   onTap: () {
+  //                     const AndroidIntent intent = AndroidIntent(
+  //                       action: 'android.settings.DATE_SETTINGS',
+  //                       flags: <int>[Flag.FLAG_ACTIVITY_NEW_TASK],
+  //                     );
+  //                     intent.launch();
+  //                   },
+  //                   child: const Text('Change time')),
+  //             ),
+  //           ],
+  //         ),
+  //       );
+  //     },
+  //     isDismissible: true, // allows tapping outside to dismiss
+  //     enableDrag: false,
+  //   );
+  // }
 
   @override
   void onReady() {

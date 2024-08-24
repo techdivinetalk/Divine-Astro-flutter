@@ -38,7 +38,8 @@ RxInt isBeautyLive = 1.obs;
 RxInt isLive = 1.obs;
 RxInt isQueue = 1.obs;
 RxInt isGifts = 1.obs;
-RxInt isTime = 0.obs;
+RxInt isAstroTime = 0.obs;
+//RxInt serverTime = 0.obs;
 RxInt isAgreement = 1.obs; 
 RxInt isCustomToken = 0.obs;
 RxInt isNetworkPopup = 0.obs;
@@ -87,7 +88,7 @@ class AppFirebaseService {
   }
 
   DateTime currentTime() {
-    return serverTime.value.toString() == "0"
+    return isAstroTime.value.toString() == "0"
         ? DateTime.now()
         : DateTime.fromMillisecondsSinceEpoch(
             DateTime.now().millisecondsSinceEpoch + serverTimeDiff);
@@ -190,7 +191,6 @@ class AppFirebaseService {
       case "isEngagedStatus":
         isEngagedStatus(value);
         break;
-
       case "callKundli":
         callKunadliUpdated({});
         if (isRemoved) {
@@ -456,9 +456,9 @@ class AppFirebaseService {
       case "gifts":
         isGifts(int.parse(dataSnapshot.value.toString()));
         break;
-      case "isTime":
-        isTime(int.parse(dataSnapshot.value.toString()));
-        break;
+      // case "isTime":
+      //   isTime(int.parse(dataSnapshot.value.toString()));
+      //   break;
       case "isAgreement":
         isAgreement(int.parse(dataSnapshot.value.toString()));
         break;
@@ -515,8 +515,8 @@ class AppFirebaseService {
       case "astroMsg":
         astroMsg = dataSnapshot.value.toString();
         break;
-      case "serverTime":
-        serverTime(int.parse(dataSnapshot.value.toString()));
+      case "isAstroTime":
+        isAstroTime(int.parse(dataSnapshot.value.toString()));
         break;
       case "showRetentionPopup":
         showRetentionPopup(int.parse(dataSnapshot.value.toString()));
@@ -529,6 +529,9 @@ class AppFirebaseService {
         break;
       case "astroHome":
         astroHome(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isCountDownTimer":
+        isCountDownTimer(int.parse(dataSnapshot.value.toString()));
         break;
       default:
         // preferenceService.setStringPref(

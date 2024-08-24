@@ -171,8 +171,10 @@ class ChatMessageWithSocketController extends GetxController
     ZegoGiftPlayer().clear();
     messgeScrollController.dispose();
     chatTimer?.cancel();
+    chatTimer = null;
     print("WentBack dispose-5");
     extraTimer?.cancel();
+    extraTimer = null;
     svgController.dispose();
     messgeScrollController.removeListener(_scrollListener);
     messgeScrollController.dispose();
@@ -383,6 +385,8 @@ class ChatMessageWithSocketController extends GetxController
     }
   }
 
+  var timeCountDown = 0;
+
   @override
   void onInit() {
     super.onInit();
@@ -547,9 +551,88 @@ class ChatMessageWithSocketController extends GetxController
     userDataKey = "chat_${currentUserId.value}";
     getChatList();
     socketReconnect();
+    if (AppFirebaseService().orderData.value["end_time"] != null) {
+      timeCountDown = AppFirebaseService().orderData.value["end_time"] -
+          (AppFirebaseService().currentTime().millisecondsSinceEpoch ~/ 1000);
+      print("timeCountDown $timeCountDown");
+    }
     initTask(AppFirebaseService().orderData.value);
     Future.delayed(const Duration(milliseconds: 3000)).then((value) {
       getMessageTemplates();
+    });
+    AppFirebaseService()
+        .database
+        .child("order/${AppFirebaseService().orderData.value["orderId"]}")
+        .onChildChanged
+        .listen((event) async {
+      var snapshot = event.snapshot;
+      print("onChildChanged ${snapshot.key}");
+      makeRealTimeOrderChanges(snapshot);
+    });
+    AppFirebaseService()
+        .database
+        .child("order/${AppFirebaseService().orderData.value["orderId"]}")
+        .onChildAdded
+        .listen((event) async {
+      var snapshot = event.snapshot;
+      if (snapshot.value != null) {
+        var snapshot = event.snapshot;
+        print("onChildAdded ${snapshot.key}");
+        makeRealTimeOrderChanges(snapshot);
+      }
+    });
+  }
+
+  makeRealTimeOrderChanges(DataSnapshot snapshot) {
+    switch (snapshot.key) {
+      case "end_time":
+        timeCountDown = int.parse(snapshot.value.toString()) -
+            (AppFirebaseService().currentTime().millisecondsSinceEpoch ~/ 1000);
+        break;
+      case "order_end_time":
+        print("order_end_time");
+        startExtraTimer2();
+        break;
+    }
+  }
+
+  void startExtraTimer2() {
+    Duration timeLeft = const Duration(minutes: 1);
+    extraTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (AppFirebaseService().orderData.value["status"] == null || AppFirebaseService().orderData.value["status"].toString() != "4") {
+        timer.cancel();
+      } else {
+        DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
+            AppFirebaseService().orderData.value["order_end_time"]);
+        final difference = dateTime.difference(DateTime.now());
+        if (difference.isNegative ||
+            (difference.inSeconds == 0 &&
+                difference.inMinutes == 0 &&
+                difference.inHours == 0)) {
+          if (AppFirebaseService().orderData.value["orderId"] != null ||
+              AppFirebaseService().orderData.value["status"] == "4") {
+            extraTimer?.cancel();
+            extraTalkTime.value = "0";
+            timer.cancel();
+            print("WentBack timeUp");
+            timeLeft = Duration.zero;
+            backFunction();
+          }
+        } else {
+          timeLeft = difference;
+          extraTalkTime.value =
+              "${timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
+              "${timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
+          print("time Left ${extraTalkTime.value}");
+          if (MiddleWare.instance.currentPage == RouteName.dashboard ||
+              AppFirebaseService().orderData.value["status"] == "3") {
+            print("ExtraTalktime is closing");
+            extraTimer?.cancel();
+            //AppFirebaseService().orderData.value={};
+            //  endChatApi();
+          }
+        }
+      }
     });
   }
 
@@ -576,86 +659,153 @@ class ChatMessageWithSocketController extends GetxController
     return prefs.getBool("${key}template") ?? false;
   }
 
-  void startExtraTimer(int futureTimeInEpochMillis) {
-    if (AppFirebaseService().orderData.value["status"] == "4") {
-      chatTimer?.cancel();
-      showTalkTime.value = "-1";
-    }
-    DateTime dateTime =
-        DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis);
-    Duration extratimeLeft = const Duration(minutes: 1);
-    extraTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      final difference =
-          dateTime.difference(AppFirebaseService().currentTime());
-      if (difference.isNegative) {
-        if (AppFirebaseService().orderData.value["orderId"] != null ||
-            AppFirebaseService().orderData.value["status"] == "4") {
-          extraTimer?.cancel();
-          extraTalkTime.value = "0";
-          timer.cancel();
-          print("ExtraTimeUp backFunction");
-          extratimeLeft = Duration.zero;
-          backFunction();
-        }
-      } else {
-        extratimeLeft = difference;
-        extraTalkTime.value =
-            "${extratimeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
-            "${extratimeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
-        print("time Left ${extraTalkTime.value}");
-        if (MiddleWare.instance.currentPage == RouteName.dashboard ||
-            AppFirebaseService().orderData.value["status"] == "3") {
-          print("ExtraTalktime is closing");
-          extraTimer?.cancel();
-          //AppFirebaseService().orderData.value={};
-          //  endChatApi();
-        }
-        print("time Left ${MiddleWare.instance.currentPage}");
-      }
-    });
-  }
+  // void startExtraTimer(int futureTimeInEpochMillis) {
+  //   if (AppFirebaseService().orderData.value["status"] == "4") {
+  //     chatTimer?.cancel();
+  //     chatTimer = null;
+  //     showTalkTime.value = "-1";
+  //   }
+  //   DateTime dateTime =
+  //   DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis);
+  //   Duration extraTimeLeft = const Duration(minutes: 1);
+  //   if(extraTimer != null){
+  //     extraTimer?.cancel();
+  //     extraTimer = null;
+  //   }
+  //   extraTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+  //     final difference =
+  //     dateTime.difference(AppFirebaseService().currentTime());
+  //     if (difference.isNegative ||
+  //         (difference.inSeconds == 0 &&
+  //             difference.inMinutes == 0 &&
+  //             difference.inHours == 0)) {
+  //       if (AppFirebaseService().orderData.value["orderId"] != null ||
+  //           AppFirebaseService().orderData.value["status"] == "4") {
+  //         extraTimer?.cancel();
+  //         extraTimer = null;
+  //         extraTalkTime.value = "0";
+  //         timer.cancel();
+  //         print("ExtraTimeUp backFunction");
+  //         extraTimeLeft = Duration.zero;
+  //         backFunction();
+  //       }
+  //     } else {
+  //       timeCountDown = timeCountDown - 1;
+  //       extraTimeLeft = difference;
+  //       extraTalkTime.value =
+  //       "${extraTimeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
+  //           "${extraTimeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
+  //       print("time Left ${extraTalkTime.value}");
+  //       if (MiddleWare.instance.currentPage == RouteName.dashboard ||
+  //           AppFirebaseService().orderData.value["status"] == "3") {
+  //         print("ExtraTalktime is closing");
+  //         extraTimer?.cancel();
+  //         //AppFirebaseService().orderData.value={};
+  //         //  endChatApi();
+  //       }
+  //       print("time Left ${MiddleWare.instance.currentPage}");
+  //     }
+  //   });
+  // }
 
   Duration? timeDifference;
+
   void talkTimeStartTimer(int futureTimeInEpochMillis) {
     print("futureTime.minute $futureTimeInEpochMillis");
     DateTime dateTime =
         DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
     if (chatTimer != null) {
       chatTimer?.cancel();
+      chatTimer = null;
     }
     chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
-      timeDifference = dateTime.difference(AppFirebaseService().currentTime());
-      // print("current time difference:  ${timeDifference.toString()}");
-      if (timeDifference! == Duration.zero ||
-          timeDifference!.inMilliseconds.abs() < 1000) {
-        await callHangup();
-        showTalkTime.value = "-1";
-        print("chatTimeLeft ---- ${showTalkTime.value}");
-        chatTimer?.cancel();
-        Future.delayed(const Duration(seconds: 4)).then((value) {
-          if (showTalkTime.value == "-1") {
-            print('showTalkTime Chat ending on cust app closed');
-            DatabaseReference ref = FirebaseDatabase.instance.ref(
-                "order/${AppFirebaseService().orderData.value["orderId"]}");
-            ref.update({
-              "status": "4",
-              "source": "astrorApp",
-              "order_end_time":
-                  AppFirebaseService().currentTime().millisecondsSinceEpoch +
-                      60000
-            });
-          }
-        });
+      if (AppFirebaseService().orderData.value["status"] == null) {
+        timer.cancel();
       } else {
-        extraTimer?.cancel();
-        showTalkTime.value =
-            "${timeDifference!.inHours.toString().padLeft(2, '0')}:"
-            "${timeDifference!.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
-            "${timeDifference!.inSeconds.remainder(60).toString().padLeft(2, '0')}";
-        if (MiddleWare.instance.currentPage == RouteName.dashboard) {
-          timer.cancel();
+        timeDifference =
+            dateTime.difference(AppFirebaseService().currentTime());
+        // print("current time difference:  ${timeDifference.toString()}");
+        print(
+            "timeCountDown:X - $isCountDownTimer ${DateTime.now().millisecondsSinceEpoch}");
+        if (isCountDownTimer.toString() == "1") {
+          if (timeCountDown == 0 || timeCountDown < 0) {
+            await closedChat();
+          } else {
+            workingChat2(timer);
+          }
+        } else {
+          if (timeDifference!.isNegative ||
+              (timeDifference!.inSeconds == 0 &&
+                  timeDifference!.inMinutes == 0 &&
+                  timeDifference!.inHours == 0)) {
+            await closedChat();
+          } else {
+            workingChat(timer);
+          }
         }
-        print("${MiddleWare.instance.currentPage}");
+      }
+    });
+  }
+
+  String formatTime(int seconds) {
+    // Calculate hours, minutes, and seconds
+    int hours = seconds ~/ 3600;
+    int minutes = (seconds % 3600) ~/ 60;
+    int remainingSeconds = seconds % 60;
+
+    // Format the time as HH:MM:SS
+    String formattedTime = '${hours.toString().padLeft(2, '0')}:'
+        '${minutes.toString().padLeft(2, '0')}:'
+        '${remainingSeconds.toString().padLeft(2, '0')}';
+
+    return formattedTime;
+  }
+
+  Future<void> workingChat2(Timer timer) async {
+    showTalkTime.value = formatTime(timeCountDown);
+    timeCountDown = timeCountDown - 1;
+    if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+      timer.cancel();
+    }
+    print("timeCountDown:1 - $timeCountDown");
+  }
+
+  Future<void> workingChat(Timer timer) async {
+    extraTimer?.cancel();
+    showTalkTime.value =
+        "${timeDifference!.inHours.toString().padLeft(2, '0')}:"
+        "${timeDifference!.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
+        "${timeDifference!.inSeconds.remainder(60).toString().padLeft(2, '0')}";
+    if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+      timer.cancel();
+    }
+    print("${MiddleWare.instance.currentPage}");
+  }
+
+  Future<void> closedChat() async {
+    await callHangup();
+    showTalkTime.value = "-1";
+    print("chatTimeLeft ---- ${showTalkTime.value}");
+    chatTimer?.cancel();
+    chatTimer = null;
+    extraTimer?.cancel();
+    extraTimer = null;
+    Future.delayed(const Duration(seconds: 3)).then((value) {
+      if (showTalkTime.value == "-1") {
+        print('showTalkTime Chat ending on cust app closed');
+        print('${AppFirebaseService().orderData.value["status"].toString()}');
+        if (AppFirebaseService().orderData.value["status"].toString() == "3" ||
+            AppFirebaseService().orderData.value["status"].toString() == "2") {
+          DatabaseReference ref = FirebaseDatabase.instance
+              .ref("order/${AppFirebaseService().orderData.value["orderId"]}");
+          ref.update({
+            "status": "4",
+            "source": "astrorApp",
+            "order_end_time":
+                AppFirebaseService().currentTime().millisecondsSinceEpoch +
+                    60000
+          });
+        }
       }
     });
   }
@@ -694,8 +844,10 @@ class ChatMessageWithSocketController extends GetxController
         (_) async {
           socket.socket?.disconnect();
           chatTimer?.cancel();
+          chatTimer = null;
           print("WentBack endChat");
           extraTimer?.cancel();
+          extraTimer = null;
           FirebaseDatabase.instance
               .ref(
                   "user/${AppFirebaseService().orderData.value["userId"]}/realTime/queue_list/${param["order_id"]}")
@@ -726,8 +878,10 @@ class ChatMessageWithSocketController extends GetxController
         socket.leavePrivateChatEmit(userData?.id.toString(),
             AppFirebaseService().orderData.value["userId"], "0");
         chatTimer?.cancel();
+        chatTimer = null;
         print("WentBack backFunc ${MiddleWare.instance.currentPage}");
         extraTimer?.cancel();
+        extraTimer = null;
         // Get.delete<ChatMessageWithSocketController>();
         if (MiddleWare.instance.currentPage ==
             RouteName.chatMessageWithSocketUI) {
@@ -1679,8 +1833,10 @@ class ChatMessageWithSocketController extends GetxController
         (_) async {
           socket.socket?.disconnect();
           chatTimer?.cancel();
+          chatTimer = null;
           print("WentBack Status- ${p0["status"]}");
           extraTimer?.cancel();
+          extraTimer = null;
           Get.until(
             (route) {
               return Get.currentRoute == RouteName.dashboard;
@@ -1690,16 +1846,16 @@ class ChatMessageWithSocketController extends GetxController
       );
       return;
     }
-    if (p0["status"] == "3" || p0["status"] == "2") {
+    if (p0["status"] == "4") {
+      chatTimer?.cancel();
+      chatTimer = null;
+      showTalkTime.value = "-1";
+    } else if (p0["status"] == "3" || p0["status"] == "2") {
       extraTimer?.cancel();
+      extraTimer = null;
       print("extraTime closing");
       int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
       talkTimeStartTimer(remainingTime);
-    } else {
-      print("ShutDown");
-      if (p0["order_end_time"] != null) {
-        startExtraTimer(p0["order_end_time"]);
-      }
     }
 
     isCardVisible.value =

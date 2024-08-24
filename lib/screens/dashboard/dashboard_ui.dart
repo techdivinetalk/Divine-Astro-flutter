@@ -336,7 +336,6 @@ class DashboardScreen extends GetView<DashboardController> {
       () {
         final dynamic cond =
             AppFirebaseService().orderData.value["status"] ?? "0";
-        print("order_Status $cond");
         return cond == "2" ||
                 cond == 2 ||
                 cond == "3" ||
