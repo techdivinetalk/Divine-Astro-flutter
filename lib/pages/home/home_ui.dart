@@ -4378,7 +4378,6 @@ class HomeUI extends GetView<HomeController> {
                             offerId: data.id!,
                             offerType: 2);
                       }
-
                       controller.update();
                     },
                     switchValue: data.isOn,
