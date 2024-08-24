@@ -4327,7 +4327,37 @@ class HomeUI extends GetView<HomeController> {
                     ],
                   ),
                   SwitchWidget(
-                    onTap: () {
+                    onTap: () async {
+                      // Check if another request is already in progress
+                      if (controller.offerTypeLoading.value ==
+                          Loading.loading) {
+                        return;
+                      }
+
+                      // if (data.isOn!) {
+                      //   data.isOn = !data.isOn!;
+                      //   controller.updateOfferType(
+                      //       value: data.isOn!,
+                      //       index: index,
+                      //       offerId: data.id!,
+                      //       offerType: 2);
+                      //
+                      //   controller.update();
+                      // } else if (controller.homeData!.offers!.customOffer!
+                      //     .any((element) => element.isOn!)) {
+                      //   divineSnackBar(
+                      //       data: "Only 1 custom offer is allowed at once",
+                      //       color: appColors.redColor);
+                      // } else {
+                      //   data.isOn = !data.isOn!;
+                      //   controller.updateOfferType(
+                      //       value: data.isOn!,
+                      //       index: index,
+                      //       offerId: data.id!,
+                      //       offerType: 2);
+                      //   controller.update();
+                      // }
+                      // If the current switch is already on
                       if (data.isOn!) {
                         data.isOn = !data.isOn!;
                         controller.updateOfferType(
