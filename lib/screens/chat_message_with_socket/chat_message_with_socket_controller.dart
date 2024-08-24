@@ -581,6 +581,67 @@ class ChatMessageWithSocketController extends GetxController
         makeRealTimeOrderChanges(snapshot);
       }
     });
+    runTimer();
+  }
+
+  runTimer() {
+    Timer.periodic(const Duration(seconds: 1), (timer) async {
+      if (AppFirebaseService().orderData.value["status"] == null) {
+        timer.cancel();
+      }
+      if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+        timer.cancel();
+      }
+      if (AppFirebaseService().orderData.value["status"].toString() == "2" ||
+          AppFirebaseService().orderData.value["status"].toString() == "3") {
+        DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
+            AppFirebaseService().orderData.value["end_time"] * 1000);
+        timeDifference =
+            dateTime.difference(AppFirebaseService().currentTime());
+        if (timeDifference!.isNegative ||
+            (timeDifference!.inSeconds == 0 &&
+                timeDifference!.inMinutes == 0 &&
+                timeDifference!.inHours == 0)) {
+          await closedChat();
+        } else {
+          workingChat(timer);
+        }
+      } else if (AppFirebaseService().orderData.value["status"].toString() ==
+          "4") {
+        Duration timeLeft = const Duration(minutes: 1);
+        DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
+            AppFirebaseService().orderData.value["order_end_time"]);
+        final difference =
+            dateTime.difference(AppFirebaseService().currentTime());
+        if (difference.isNegative ||
+            (difference.inSeconds == 0 &&
+                difference.inMinutes == 0 &&
+                difference.inHours == 0)) {
+          if (AppFirebaseService().orderData.value["orderId"] != null ||
+              AppFirebaseService().orderData.value["status"] == "4") {
+            extraTimer?.cancel();
+            extraTalkTime.value = "0";
+            timer.cancel();
+            print("WentBack timeUp");
+            timeLeft = Duration.zero;
+            backFunction();
+          }
+        } else {
+          timeLeft = difference;
+          extraTalkTime.value =
+              "${timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
+              "${timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
+          print("ExtraTime ${extraTalkTime.value}");
+          if (MiddleWare.instance.currentPage == RouteName.dashboard ||
+              AppFirebaseService().orderData.value["status"] == "3") {
+            print("ExtraTalktime is closing");
+            extraTimer?.cancel();
+          }
+        }
+      } else {
+        timer.cancel();
+      }
+    });
   }
 
   makeRealTimeOrderChanges(DataSnapshot snapshot) {
@@ -591,7 +652,7 @@ class ChatMessageWithSocketController extends GetxController
         break;
       case "order_end_time":
         print("order_end_time");
-        startExtraTimer2();
+        //  startExtraTimer2();
         break;
     }
   }
@@ -599,7 +660,8 @@ class ChatMessageWithSocketController extends GetxController
   void startExtraTimer2() {
     Duration timeLeft = const Duration(minutes: 1);
     extraTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (AppFirebaseService().orderData.value["status"] == null || AppFirebaseService().orderData.value["status"].toString() != "4") {
+      if (AppFirebaseService().orderData.value["status"] == null ||
+          AppFirebaseService().orderData.value["status"].toString() != "4") {
         timer.cancel();
       } else {
         DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
@@ -1855,7 +1917,7 @@ class ChatMessageWithSocketController extends GetxController
       extraTimer = null;
       print("extraTime closing");
       int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
-      talkTimeStartTimer(remainingTime);
+      //talkTimeStartTimer(remainingTime);
     }
 
     isCardVisible.value =
