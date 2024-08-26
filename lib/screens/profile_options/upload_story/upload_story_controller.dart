@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:math' as math;
 import 'dart:io';
 
 import 'package:divine_astrologer/common/colors.dart';
@@ -50,31 +49,36 @@ class UploadStoryController extends GetxController {
       endValue: endValue,
       storageDir: StorageDir.applicationDocumentsDirectory,
       videoFolderName: "trimmer video",
-      videoFileName: "vid_${DateTime.now().microsecond}_${DateTime.now().millisecond}",
+      videoFileName:
+          "vid_${DateTime.now().microsecond}_${DateTime.now().millisecond}",
       onSave: (outputPath) async {
         storyDuration = "";
         VideoPlayerController? videoPlayerController;
-        videoPlayerController = VideoPlayerController.file(File(outputPath ?? ""))
-          ..initialize().then((_) {
-            if(videoPlayerController?.value.duration.inSeconds != null){
-              storyDuration = videoPlayerController?.value.duration.inSeconds.toString() ?? "";
-            }
-            videoPlayerController?.dispose();
-          });
+        videoPlayerController =
+            VideoPlayerController.file(File(outputPath ?? ""))
+              ..initialize().then((_) {
+                if (videoPlayerController?.value.duration.inSeconds != null) {
+                  storyDuration = videoPlayerController
+                          ?.value.duration.inSeconds
+                          .toString() ??
+                      "";
+                }
+                videoPlayerController?.dispose();
+              });
 
         int fileSizeInBytes = await File(outputPath ?? "").length();
         double sizeInKB = fileSizeInBytes / 1024;
         log("pick video size : $sizeInKB");
         log("maximumStorySize : ${maximumStorySize.value}");
-        if(sizeInKB < double.parse(maximumStorySize.value.toString())){
+        if (sizeInKB < double.parse(maximumStorySize.value.toString())) {
           progressVisibility.value = false;
           Fluttertoast.showToast(msg: "${'uploadStory'.tr}..");
           await uploadImage(File(outputPath!));
-        } else{
+        } else {
           Fluttertoast.showToast(
-              msg: "Story video size should be maximum ${convertKBtoMB(double.parse(maximumStorySize.value.toString()))} MB",
-            backgroundColor: appColors.red
-          );
+              msg:
+                  "Story video size should be maximum ${convertKBtoMB(double.parse(maximumStorySize.value.toString()))} MB",
+              backgroundColor: appColors.red);
         }
         // uploadImageToS3Bucket(File(outputPath!),
         //     duration: ((endValue - startValue) / 1000).toString());
@@ -156,7 +160,8 @@ class UploadStoryController extends GetxController {
       'image',
       imageFile.path,
     ));
-    request.fields.addAll({"module_name": "astrologer_story" , "is_large_file" : "1"});
+    request.fields
+        .addAll({"module_name": "astrologer_story", "is_large_file": "1"});
 
     print("call this one ----> 1");
     var response = await request.send();
@@ -174,7 +179,12 @@ class UploadStoryController extends GetxController {
       update();
       print(
           "Image uploaded successfully. --  - ${jsonDecode(value)["data"]["full_path"].toString()}");
-      uploadStory(jsonDecode(value)["data"]["full_path"].toString(), duration: storyDuration);
+      if (jsonDecode(value)["data"]["full_path"] == null) {
+        Fluttertoast.showToast(msg: "Not able to upload");
+      } else {
+        uploadStory(jsonDecode(value)["data"]["full_path"].toString(),
+            duration: storyDuration);
+      }
       print(
           "valuevaluevaluevaluevaluevaluevalue"); // Handle the response from the server
     });

@@ -86,6 +86,9 @@ import 'package:get/get.dart';
 
 import '../model/custom_product/custom_product_list_view.dart';
 import '../pages/home/passbook/passbook_ui.dart';
+import '../pages/on_boarding/on_boarding.dart';
+import '../pages/on_boarding/on_boarding_binding.dart';
+import '../pages/on_boarding/on_boarding_screen/upload_image_screen.dart';
 import '../screens/add_message_template/add_message_template_binding.dart';
 import '../screens/add_message_template/add_message_template_ui.dart';
 import '../screens/bank_details/bank_detail_binding.dart';
@@ -239,6 +242,8 @@ class RouteName {
   static const String customProduct = "/customProduct";
   static const String passbook = "/passbook";
   static const String passbookUI = "/passbookUI";
+  static const String onBoardingScreen = "/onBoardingScreen";
+  static const String OnBoardingUploadImages = "/OnBoardingUploadImages";
 }
 
 final Set<String> validRoutes = {
@@ -343,6 +348,16 @@ class Routes {
       page: () => PassbookUi(),
       name: RouteName.passbookUI,
       binding: PassbookBinding(),
+    ),
+    GetPage(
+      page: () => OnBoarding(),
+      name: RouteName.onBoardingScreen,
+      binding: OnBoardingBinding(),
+    ),
+    GetPage(
+      page: () => OnBoardingUploadImages(),
+      name: RouteName.OnBoardingUploadImages,
+      binding: OnBoardingUploadImagesBinding(),
     ),
     GetPage(
       page: () => AllTechnicalIssueScreen(),

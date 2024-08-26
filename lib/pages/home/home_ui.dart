@@ -891,6 +891,9 @@ class HomeUI extends GetView<HomeController> {
                                                 Get.toNamed(
                                                   RouteName.passbookUI,
                                                 );
+                                                // Get.toNamed(
+                                                //   RouteName.onBoardingScreen,
+                                                // );
                                               },
                                               child: Ink(
                                                 height: 52,
