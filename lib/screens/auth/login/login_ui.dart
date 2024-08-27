@@ -130,7 +130,7 @@ class LoginUI extends GetView<LoginController> {
                                 ? () {
                                     if (_formKey.currentState!.validate()) {
                                       controller.login();
-                                      controller.enable.value = false;
+                                      // controller.enable.value = false;
                                     }
                                   }
                                 : () {},
@@ -263,7 +263,8 @@ class LoginUI extends GetView<LoginController> {
           onTapOutside: (value) => FocusScope.of(Get.context!).unfocus(),
           controller: controller.mobileNumberController,
           keyboardType: TextInputType.number,
-          enabled: controller.enable.value,
+          // enabled: controller.enable.value,
+          enabled: true,
           maxLength: 10,
           showCursor: true,
           inputFormatters: <TextInputFormatter>[

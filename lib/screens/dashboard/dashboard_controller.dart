@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:android_intent_plus/flag.dart';
@@ -585,16 +586,16 @@ class DashboardController extends GetxController
         update();
 
         PackageInfo packageInfo = await PackageInfo.fromPlatform();
-        print(data.data!.appVersion!.split(".").join(""));
-        print(packageInfo.version.split(".").join(""));
-        print('packageInfo.version!.split(".").join("")');
+
         if (int.parse(data.data!.appVersion!.split(".").join("")) >
             int.parse(packageInfo.version.split(".").join(""))) {
-          print("objectobjectobjectobject");
-          Get.bottomSheet(
-            const ForceUpdateSheet(),
-            isDismissible: false,
-          );
+          if(Platform.isAndroid){
+            /// need to change according ios
+            Get.bottomSheet(
+              const ForceUpdateSheet(),
+              isDismissible: false,
+            );
+          }
           // showTutorial(context);
         } else {
           // showTutorial(context);
