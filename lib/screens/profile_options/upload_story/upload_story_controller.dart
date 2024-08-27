@@ -43,6 +43,7 @@ class UploadStoryController extends GetxController {
   }
 
   String storyDuration = "";
+  bool isStoryMoreThan2MB = false;
   saveVideo() {
     progressVisibility.value = true;
     trimmer.saveTrimmedVideo(
@@ -52,22 +53,21 @@ class UploadStoryController extends GetxController {
       videoFolderName: "trimmer video",
       videoFileName: "vid_${DateTime.now().microsecond}_${DateTime.now().millisecond}",
       onSave: (outputPath) async {
-        storyDuration = "";
         VideoPlayerController? videoPlayerController;
-        videoPlayerController = VideoPlayerController.file(File(outputPath ?? ""))
-          ..initialize().then((_) {
-            if(videoPlayerController?.value.duration.inSeconds != null){
-              storyDuration = videoPlayerController?.value.duration.inSeconds.toString() ?? "";
-            }
-            videoPlayerController?.dispose();
-          });
-
+        videoPlayerController = VideoPlayerController.file(File(outputPath ?? ""));
+        await videoPlayerController.initialize();
+        storyDuration = videoPlayerController.value.duration.inSeconds.toString();
+        videoPlayerController.dispose();
         int fileSizeInBytes = await File(outputPath ?? "").length();
         double sizeInKB = fileSizeInBytes / 1024;
         log("pick video size : $sizeInKB");
         log("maximumStorySize : ${maximumStorySize.value}");
+        log("storyDuration : $storyDuration");
         if(sizeInKB < double.parse(maximumStorySize.value.toString())){
           progressVisibility.value = false;
+          if(sizeInKB > 2048){
+            isStoryMoreThan2MB = true;
+          }
           Fluttertoast.showToast(msg: "${'uploadStory'.tr}..");
           await uploadImage(File(outputPath!));
         } else{
@@ -143,6 +143,7 @@ class UploadStoryController extends GetxController {
     log("image length - ${imageFile.path}");
 
     var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+    print("api apia----->${"${ApiProvider.imageBaseUrl}uploadImage"}");
 
     var request = http.MultipartRequest('POST', uri);
     request.headers.addAll({
@@ -156,16 +157,19 @@ class UploadStoryController extends GetxController {
       'image',
       imageFile.path,
     ));
-    request.fields.addAll({"module_name": "astrologer_story" , "is_large_file" : "1"});
+    request.fields.addAll({"module_name": "astrologer_story"});
+    if(isStoryMoreThan2MB){
+      request.fields.addAll({"is_large_file" : "1"});
+    }
 
-    print("call this one ----> 1");
+    print("request : ${request.fields}");
     var response = await request.send();
-    print("call this one ----> 2");
 
     // Listen for the response
     log(response.toString());
     // Listen for the response
     response.stream.transform(utf8.decoder).listen((value) {
+      print("value ----> $value");
       if (value.isEmpty) {
         isLoading(false);
       }
@@ -214,6 +218,7 @@ class UploadStoryController extends GetxController {
         "duration": duration,
         "link": fullEncodeURL,
       };
+      print("param ------>$param");
       final response = await userRepository.uploadAstroStory(param);
       if (response.statusCode == 200 && response.success == true) {
         Get.back();
