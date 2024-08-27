@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../common/colors.dart';
@@ -333,31 +334,74 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                     children: [
                       InkWell(
                         onTap: () {
-                          controller.updatePage(3);
-                          controller.updateDonePage(2);
-                          controller.currentPage = 3;
-                          Get.toNamed(
-                            RouteName.onBoardingScreen3,
-                          );
+                          if (controller.selectedAadharBack == null ||
+                              controller.selectedAadharFront == null ||
+                              controller.selectedPanFront == null) {
+                            Fluttertoast.showToast(
+                                msg: "Image is not selected");
+                          } else {
+                            if (controller.photoUrlPanFront == null ||
+                                controller.photoUrlAadharBack == null ||
+                                controller.photoUrlAadharBack == null) {
+                              for (int i = 0; i < 3; i++) {
+                                // Your code here will run 3 times
+                                if (i == 1) {
+                                  controller.uploadImage(
+                                      controller.selectedAadharFront,
+                                      "aadharFront");
+                                  print("Iteration: ${i + 1}");
+                                } else if (i == 2) {
+                                  controller.uploadImage(
+                                      controller.selectedAadharBack,
+                                      "aadharBack");
+                                  print("Iteration: ${i + 1}");
+                                } else {
+                                  controller
+                                      .uploadImage(controller.selectedPanFront,
+                                          "panFront")
+                                      .then((val) {
+                                    Get.toNamed(
+                                      RouteName.onBoardingScreen3,
+                                    );
+                                  });
+                                  print("Iteration: ${i + 1}");
+                                }
+                              }
+                            } else {
+                              print(
+                                  "-------------------------------${controller.photoUrlAadharBack}");
+                              Get.toNamed(
+                                RouteName.onBoardingScreen3,
+                              );
+                            }
+                          }
                         },
                         child: Container(
                           height: 50,
                           width: MediaQuery.of(context).size.width * 0.9,
                           decoration: BoxDecoration(
-                            color: appColors.red,
+                            color: controller.selectedAadharBack == null ||
+                                    controller.selectedAadharFront == null ||
+                                    controller.selectedPanFront == null
+                                ? appColors.grey.withOpacity(0.4)
+                                : appColors.red,
                             borderRadius: BorderRadius.circular(14),
                           ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Next",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20.sp,
-                                color: AppColors().white,
-                              ),
-                            ),
-                          ),
+                          child: controller.loadingAadharFront == true
+                              ? Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Next",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 20.sp,
+                                      color: AppColors().white,
+                                    ),
+                                  ),
+                                ),
                         ),
                       ),
                     ],

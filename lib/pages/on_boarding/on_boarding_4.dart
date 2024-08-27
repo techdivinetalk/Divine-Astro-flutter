@@ -230,9 +230,7 @@ class OnBoarding4 extends GetView<OnBoardingController> {
                     children: [
                       InkWell(
                         onTap: () {
-                          controller.updatePage(5);
-                          controller.updateDonePage(4);
-                          controller.currentPage = 5;
+                          controller.submittingDetails();
                           Get.toNamed(
                             RouteName.onBoardingScreen5,
                           );

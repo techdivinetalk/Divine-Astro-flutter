@@ -1,12 +1,9 @@
-import 'dart:io';
-
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../common/colors.dart';
-import '../../common/routes.dart';
 import '../../gen/fonts.gen.dart';
 import 'on_boarding_controller.dart';
 
@@ -157,19 +154,14 @@ class OnBoarding3 extends GetView<OnBoardingController> {
                                 color: AppColors().grey.withOpacity(0.3),
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: controller.userImages.isEmpty ||
-                                      controller.userImages.contains(1) ||
-                                      controller.userImages.contains(2) ||
-                                      controller.userImages.contains(3) ||
-                                      controller.userImages.contains(4) ||
-                                      controller.userImages.contains(5)
+                              child: controller.userImages[index] is int
                                   ? Icon(
                                       Icons.add,
                                       color: AppColors().white,
                                       size: 80,
                                     )
                                   : Image.file(
-                                      File(controller.userImages[index]),
+                                      controller.userImages[index],
                                       fit: BoxFit.cover,
                                     ),
                             ),
@@ -178,6 +170,20 @@ class OnBoarding3 extends GetView<OnBoardingController> {
                       ),
                     ),
                   ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Text(
+                    "*Atleast Upload 2 Images",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16.sp,
+                      color: appColors.red,
+                    ),
+                  ),
                 ),
               ),
             ],
@@ -227,12 +233,7 @@ class OnBoarding3 extends GetView<OnBoardingController> {
                     children: [
                       InkWell(
                         onTap: () {
-                          controller.updatePage(4);
-                          controller.updateDonePage(3);
-                          controller.currentPage = 4;
-                          Get.toNamed(
-                            RouteName.onBoardingScreen4,
-                          );
+                          controller.checkSelectedImages();
                         },
                         child: Container(
                           height: 50,

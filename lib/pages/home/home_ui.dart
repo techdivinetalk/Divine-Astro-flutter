@@ -888,12 +888,12 @@ class HomeUI extends GetView<HomeController> {
                                           children: [
                                             InkWell(
                                               onTap: () {
-                                                Get.toNamed(
-                                                  RouteName.passbookUI,
-                                                );
                                                 // Get.toNamed(
-                                                //   RouteName.onBoardingScreen,
+                                                //   RouteName.passbookUI,
                                                 // );
+                                                Get.toNamed(
+                                                  RouteName.onBoardingScreen,
+                                                );
                                               },
                                               child: Ink(
                                                 height: 52,

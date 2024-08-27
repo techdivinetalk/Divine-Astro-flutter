@@ -3,10 +3,14 @@ import 'package:divine_astrologer/pages/on_boarding/widgets/widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../common/colors.dart';
 import '../../common/routes.dart';
+import '../../common/select_your_birth_place_sheet.dart';
+import '../../utils/utils.dart';
 import 'on_boarding_controller.dart';
 
 class OnBoarding1 extends GetView<OnBoardingController> {
@@ -115,13 +119,29 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                 Stack(
                   children: [
                     Center(
-                      child: CircleAvatar(
-                        radius: 50,
-                        backgroundColor: appColors.grey.withOpacity(0.5),
-                        child: Icon(
-                          Icons.image,
-                          color: appColors.white,
-                          size: 40,
+                      child: InkWell(
+                        onTap: () {
+                          controller.photoUrlprofile = null;
+                          controller.getImage("profile");
+                        },
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: CircleAvatar(
+                            radius: 50,
+                            backgroundColor: appColors.grey.withOpacity(0.5),
+                            child: controller.selectedProfile != null
+                                ? CircleAvatar(
+                                    radius: 50,
+                                    backgroundImage: FileImage(
+                                      controller.selectedProfile,
+                                    ),
+                                  )
+                                : Icon(
+                                    Icons.image,
+                                    color: appColors.white,
+                                    size: 40,
+                                  ),
+                          ),
                         ),
                       ),
                     ),
@@ -150,6 +170,14 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                   child: Column(
                     children: [
                       CustomTextField(
+                        controller: controller.nameController,
+                        focusNode: controller.nameNode,
+                        onFieldSubmitted: (value) {
+                          controller.nameNode.unfocus();
+                          FocusScope.of(context)
+                              .requestFocus(controller.skillsNode);
+                        },
+                        keyboardType: TextInputType.text,
                         prefix: Icon(
                           Icons.perm_identity_outlined,
                           color: appColors.black,
@@ -160,6 +188,14 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                         height: 10,
                       ),
                       CustomTextField(
+                        controller: controller.skillsController,
+                        focusNode: controller.skillsNode,
+                        onFieldSubmitted: (value) {
+                          controller.skillsNode.unfocus();
+                          FocusScope.of(context)
+                              .requestFocus(controller.experiencesNode);
+                        },
+                        keyboardType: TextInputType.text,
                         prefix: Icon(
                           Icons.emoji_objects_outlined,
                           color: appColors.black,
@@ -170,6 +206,14 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                         height: 10,
                       ),
                       CustomTextField(
+                        controller: controller.experiencesController,
+                        focusNode: controller.experiencesNode,
+                        onFieldSubmitted: (value) {
+                          controller.experiencesNode.unfocus();
+                          FocusScope.of(context)
+                              .requestFocus(controller.birthNode);
+                        },
+                        keyboardType: TextInputType.text,
                         prefix: Icon(
                           Icons.business_center_outlined,
                           color: appColors.black,
@@ -180,6 +224,37 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                         height: 10,
                       ),
                       CustomTextField(
+                        controller: controller.birthController,
+                        focusNode: controller.birthNode,
+                        readOnly: true,
+                        onFieldSubmitted: (value) {
+                          controller.birthNode.unfocus();
+                          FocusScope.of(context)
+                              .requestFocus(controller.locationNode);
+                        },
+                        onTap: () {
+                          Utils.selectDateOrTime(
+                            initialDate:
+                                controller.birthController.text.isNotEmpty
+                                    ? DateFormat("dd/MM/yyyy")
+                                        .parse(controller.birthController.text)
+                                    : DateTime.now(),
+                            title: "Select Date Of Birth".tr,
+                            btnTitle: "confirmDateBirth".tr,
+                            pickerStyle: "DateCalendar",
+                            looping: true,
+                            onConfirm: (value) {
+                              if (value != "") {
+                                DateTime data =
+                                    DateFormat("dd MMMM yyyy").parse(value);
+                                controller.birthController.text =
+                                    "${data.day.toString().padLeft(2, '0')}-${data.month.toString().padLeft(2, '0')}-${data.year.toString()}";
+                              }
+                            },
+                            onChange: (String datetime) {},
+                          );
+                        },
+                        keyboardType: TextInputType.text,
                         prefix: Icon(
                           Icons.calendar_month_outlined,
                           color: appColors.black,
@@ -190,6 +265,33 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                         height: 10,
                       ),
                       CustomTextField(
+                        controller: controller.locationController,
+                        focusNode: controller.locationNode,
+                        nextNode: controller.alterNoNode,
+                        readOnly: true,
+                        onTap: () {
+                          Get.bottomSheet(Padding(
+                            padding: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom),
+                            child: AllCityListSheet(
+                              onSelect: (value) {
+                                controller.locationController.text =
+                                    value.cityName ?? "";
+                                controller.update();
+                                Get.back();
+                              },
+                              country: "India",
+                              cityData: [],
+                            ),
+                          ));
+                        },
+                        onFieldSubmitted: (value) {
+                          controller.locationNode.unfocus();
+                          FocusScope.of(context)
+                              .requestFocus(controller.alterNoNode);
+                        },
+                        keyboardType: TextInputType.text,
                         prefix: Icon(
                           Icons.location_on_outlined,
                           color: appColors.black,
@@ -200,6 +302,13 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                         height: 10,
                       ),
                       CustomTextField(
+                        controller: controller.alterNoController,
+                        focusNode: controller.alterNoNode,
+                        nextNode: controller.alterNoNode,
+                        onFieldSubmitted: (value) {
+                          controller.alterNoNode.unfocus();
+                        },
+                        keyboardType: TextInputType.number,
                         prefix: Icon(
                           Icons.phone_outlined,
                           color: appColors.black,
@@ -257,31 +366,66 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                     children: [
                       InkWell(
                         onTap: () {
-                          controller.updatePage(2);
-                          controller.updateDonePage(1);
-                          controller.currentPage = 2;
-                          Get.toNamed(
-                            RouteName.onBoardingScreen2,
-                          );
+                          if (controller.selectedProfile == null ||
+                              controller.nameController.text.isEmpty ||
+                              controller.skills.isEmpty ||
+                              controller.experiencesController.text.isEmpty ||
+                              controller.locationController.text.isEmpty ||
+                              controller.birthController.text.isEmpty ||
+                              controller.alterNoController.text.isEmpty) {
+                            Fluttertoast.showToast(
+                                msg: "Some fields are empty");
+                          } else {
+                            if (controller.photoUrlprofile == null) {
+                              controller
+                                  .uploadImage(
+                                      controller.selectedProfile, "Profile")
+                                  .then((val) {
+                                Get.toNamed(
+                                  RouteName.onBoardingScreen2,
+                                );
+                              });
+                            } else {
+                              print(
+                                  "-------------------------------${controller.photoUrlprofile}");
+                              Get.toNamed(
+                                RouteName.onBoardingScreen2,
+                              );
+                            }
+                          }
                         },
                         child: Container(
                           height: 50,
                           width: MediaQuery.of(context).size.width * 0.9,
                           decoration: BoxDecoration(
-                            color: appColors.red,
+                            color: controller.selectedProfile == null ||
+                                    controller.nameController.text.isEmpty ||
+                                    controller.skills.isEmpty ||
+                                    controller
+                                        .experiencesController.text.isEmpty ||
+                                    controller
+                                        .locationController.text.isEmpty ||
+                                    controller.birthController.text.isEmpty ||
+                                    controller.alterNoController.text.isEmpty
+                                ? appColors.grey.withOpacity(0.4)
+                                : appColors.red,
                             borderRadius: BorderRadius.circular(14),
                           ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Next",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20.sp,
-                                color: AppColors().white,
-                              ),
-                            ),
-                          ),
+                          child: controller.loadingProfile == true
+                              ? Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Next",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 20.sp,
+                                      color: AppColors().white,
+                                    ),
+                                  ),
+                                ),
                         ),
                       ),
                     ],
