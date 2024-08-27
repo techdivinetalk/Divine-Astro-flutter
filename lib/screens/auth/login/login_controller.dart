@@ -40,8 +40,8 @@ class LoginController extends GetxController {
   final UserRepository userRepository;
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
-  late TextEditingController countryCodeController;
-  late TextEditingController mobileNumberController;
+  TextEditingController countryCodeController = TextEditingController();
+  TextEditingController mobileNumberController = TextEditingController();
   final appFirebaseService = AppFirebaseService();
 
   RxString get countryCode => countryCodeController.text.obs;
@@ -65,6 +65,8 @@ class LoginController extends GetxController {
       "country_code": countryCodeController.text,
       //"device_token": await FirebaseMessaging.instance.getToken()
     };
+
+    print("params ----->$params");
     try {
       isLoading.value = true;
       final data = await userRepository.sentOtp(params);
