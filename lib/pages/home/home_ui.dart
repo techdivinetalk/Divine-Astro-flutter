@@ -196,7 +196,8 @@ class HomeUI extends GetView<HomeController> {
               final double maxWidth = constraints.maxWidth;
               if (controller.loading == Loading.loaded) {
                 if (maxWidth.toString() != "") {
-                  controller.captureandSendSS();                } else {
+                  controller.captureandSendSS();
+                } else {
                   print("screenshot declined");
                 }
 
