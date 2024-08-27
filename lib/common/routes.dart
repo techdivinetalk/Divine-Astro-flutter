@@ -86,9 +86,19 @@ import 'package:get/get.dart';
 
 import '../model/custom_product/custom_product_list_view.dart';
 import '../pages/home/passbook/passbook_ui.dart';
-import '../pages/on_boarding/on_boarding.dart';
+import '../pages/on_boarding/add_ecom/add_ecom_binding.dart';
+import '../pages/on_boarding/add_ecom/add_ecom_screen.dart';
+import '../pages/on_boarding/bank/add_bank_details.dart';
+import '../pages/on_boarding/bank/bank_binding.dart';
+import '../pages/on_boarding/on_boarding_1.dart';
+import '../pages/on_boarding/on_boarding_2.dart';
+import '../pages/on_boarding/on_boarding_3.dart';
+import '../pages/on_boarding/on_boarding_4.dart';
+import '../pages/on_boarding/on_boarding_5.dart';
 import '../pages/on_boarding/on_boarding_binding.dart';
-import '../pages/on_boarding/on_boarding_screen/upload_image_screen.dart';
+import '../pages/on_boarding/schedule_training/schedule_training_1.dart';
+import '../pages/on_boarding/schedule_training/schedule_training_2.dart';
+import '../pages/on_boarding/schedule_training/schedule_training_binding.dart';
 import '../screens/add_message_template/add_message_template_binding.dart';
 import '../screens/add_message_template/add_message_template_ui.dart';
 import '../screens/bank_details/bank_detail_binding.dart';
@@ -242,8 +252,15 @@ class RouteName {
   static const String customProduct = "/customProduct";
   static const String passbook = "/passbook";
   static const String passbookUI = "/passbookUI";
-  static const String onBoardingScreen = "/onBoardingScreen";
-  static const String OnBoardingUploadImages = "/OnBoardingUploadImages";
+  static const String onBoardingScreen = "/OnBoarding1";
+  static const String onBoardingScreen2 = "/OnBoarding2";
+  static const String onBoardingScreen3 = "/OnBoarding3";
+  static const String onBoardingScreen4 = "/OnBoarding4";
+  static const String onBoardingScreen5 = "/OnBoarding5";
+  static const String scheduleTraining1 = "/scheduleTraining1";
+  static const String scheduleTraining2 = "/scheduleTraining2";
+  static const String addBankAutoMation = "/addBankAutoMation";
+  static const String addEcomAutomation = "/addEcomAutomation";
 }
 
 final Set<String> validRoutes = {
@@ -350,14 +367,49 @@ class Routes {
       binding: PassbookBinding(),
     ),
     GetPage(
-      page: () => OnBoarding(),
+      page: () => OnBoarding1(),
       name: RouteName.onBoardingScreen,
       binding: OnBoardingBinding(),
     ),
     GetPage(
-      page: () => OnBoardingUploadImages(),
-      name: RouteName.OnBoardingUploadImages,
-      binding: OnBoardingUploadImagesBinding(),
+      page: () => OnBoarding2(),
+      name: RouteName.onBoardingScreen2,
+      binding: OnBoarding2Binding(),
+    ),
+    GetPage(
+      page: () => OnBoarding3(),
+      name: RouteName.onBoardingScreen3,
+      binding: OnBoarding3Binding(),
+    ),
+    GetPage(
+      page: () => OnBoarding4(),
+      name: RouteName.onBoardingScreen4,
+      binding: OnBoarding4Binding(),
+    ),
+    GetPage(
+      page: () => OnBoarding5(),
+      name: RouteName.onBoardingScreen5,
+      binding: OnBoarding5Binding(),
+    ),
+    GetPage(
+      page: () => ScheduleTraining1(),
+      name: RouteName.scheduleTraining1,
+      binding: ScheduleTrainingBinding(),
+    ),
+    GetPage(
+      page: () => ScheduleTraining2(),
+      name: RouteName.scheduleTraining2,
+      binding: ScheduleTraining2Binding(),
+    ),
+    GetPage(
+      page: () => AddBankDetails(),
+      name: RouteName.addBankAutoMation,
+      binding: BankBinding(),
+    ),
+    GetPage(
+      page: () => AddEcomScreen(),
+      name: RouteName.addEcomAutomation,
+      binding: AddEcomBinding(),
     ),
     GetPage(
       page: () => AllTechnicalIssueScreen(),

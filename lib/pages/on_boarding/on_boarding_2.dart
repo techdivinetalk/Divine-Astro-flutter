@@ -1,19 +1,26 @@
-import 'dart:developer';
-
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../common/colors.dart';
 import '../../common/routes.dart';
+import '../../gen/fonts.gen.dart';
 import 'on_boarding_controller.dart';
 
-class OnBoarding extends GetView<OnBoardingController> {
+class OnBoarding2Binding extends Bindings {
+  @override
+  void dependencies() {
+    Get.put(OnBoardingController());
+  }
+}
+
+class OnBoarding2 extends GetView<OnBoardingController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<OnBoardingController>(
       assignId: true,
-      init: OnBoardingController(),
+      // init: OnBoardingController(),
       builder: (controller) {
         return Scaffold(
           backgroundColor: appColors.white,
@@ -46,19 +53,66 @@ class OnBoarding extends GetView<OnBoardingController> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  pageWidget("1", "Upload\nDocuments",
-                      controller.currentPage.toString()),
-                  pageWidget("2", "Upload\nPictures",
-                      controller.currentPage.toString()),
-                  pageWidget("3", "Signing\nAgreement",
-                      controller.currentPage.toString()),
-                  pageWidget("4", "Awaiting\nApproval",
-                      controller.currentPage.toString()),
-                ],
+              Padding(
+                padding: const EdgeInsets.only(left: 14, right: 14),
+                child: pageWidget('2'),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 14, right: 14),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      "Basic\nDetails",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.sp,
+                        color: appColors.black.withOpacity(0.7),
+                      ),
+                    ),
+                    buildSpace(),
+                    Text(
+                      "Upload\nDocuments",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.sp,
+                        color: appColors.black.withOpacity(0.7),
+                      ),
+                    ),
+                    buildSpace(),
+                    Text(
+                      "Upload\nPictures",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.sp,
+                        color: appColors.black.withOpacity(0.7),
+                      ),
+                    ),
+                    buildSpace(),
+                    Text(
+                      "Signing\nAgreement",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.sp,
+                        color: appColors.black.withOpacity(0.7),
+                      ),
+                    ),
+                    buildSpace(),
+                    Text(
+                      "Awaiting\nApproval",
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12.sp,
+                        color: appColors.black.withOpacity(0.7),
+                      ),
+                    ),
+                  ],
+                ),
               ),
               Padding(
                 padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
@@ -236,47 +290,80 @@ class OnBoarding extends GetView<OnBoardingController> {
           ),
           bottomNavigationBar: Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                InkWell(
-                  onTap: controller.selectedPanFront == null ||
-                          controller.selectedAadharFront == null ||
-                          controller.selectedAadharBack == null
-                      ? () {
-                          log("----");
-                        }
-                      : () {
-                          Get.toNamed(
-                            RouteName.OnBoardingUploadImages,
-                          );
-                        },
-                  child: Container(
-                    height: 60,
-                    width: MediaQuery.of(context).size.width * 0.9,
-                    decoration: BoxDecoration(
-                      color: controller.selectedPanFront == null ||
-                              controller.selectedAadharFront == null ||
-                              controller.selectedAadharBack == null
-                          ? appColors.grey.withOpacity(0.4)
-                          : appColors.red,
-                      borderRadius: BorderRadius.circular(14),
-                    ),
-                    child: Align(
-                      alignment: Alignment.center,
-                      child: Text(
-                        "Next",
+            child: SizedBox(
+              height: 110,
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 14, right: 14, top: 10, bottom: 10),
+                    child: RichText(
+                      text: TextSpan(
+                        text:
+                            '* Confused? Don’t worry, We are here to help you! ',
                         style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 20.sp,
-                          color: AppColors().white,
+                          fontFamily: FontFamily.poppins,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: appColors.grey,
                         ),
+                        children: [
+                          TextSpan(
+                            text: 'Click here for a tutorial video.',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: FontFamily.poppins,
+                              fontWeight: FontWeight.w400,
+                              color: appColors.red,
+                              decoration: TextDecoration.underline,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                // Handle tap
+                                print('Link tapped');
+                              },
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ),
-              ],
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          controller.updatePage(3);
+                          controller.updateDonePage(2);
+                          controller.currentPage = 3;
+                          Get.toNamed(
+                            RouteName.onBoardingScreen3,
+                          );
+                        },
+                        child: Container(
+                          height: 50,
+                          width: MediaQuery.of(context).size.width * 0.9,
+                          decoration: BoxDecoration(
+                            color: appColors.red,
+                            borderRadius: BorderRadius.circular(14),
+                          ),
+                          child: Align(
+                            alignment: Alignment.center,
+                            child: Text(
+                              "Next",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 20.sp,
+                                color: AppColors().white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         );
@@ -285,52 +372,122 @@ class OnBoarding extends GetView<OnBoardingController> {
   }
 }
 
-Widget pageWidget(page, detail, selectedPage) {
+Widget pageWidget(page) {
   return Row(
     mainAxisAlignment: MainAxisAlignment.center,
     crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          Container(
-            decoration: BoxDecoration(
-                color: selectedPage == page ? AppColors().red : appColors.white,
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color:
-                      selectedPage == page ? AppColors().red : appColors.grey,
-                  width: 1,
-                )),
-            padding: EdgeInsets.all(12),
-            child: Text(
-              page,
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 16.sp,
-                color: selectedPage == page ? appColors.white : appColors.grey,
-              ),
-            ),
+      Container(
+        decoration: BoxDecoration(
+            color: AppColors().red,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: AppColors().red,
+              width: 1,
+            )),
+        padding: EdgeInsets.all(12),
+        child: Text(
+          "1",
+          style: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 16.sp,
+            color: appColors.white,
           ),
-          Text(
-            detail,
-            textAlign: TextAlign.center,
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 12.sp,
-              color: appColors.black.withOpacity(0.7),
-            ),
-          ),
-        ],
+        ),
       ),
-      page == "4"
-          ? SizedBox()
-          : Container(
-              height: 2,
-              width: MediaQuery.of(Get.context!).size.width * 0.1,
-              color: AppColors().grey,
-            ),
+      buildLine(isActive: true),
+      Container(
+        decoration: BoxDecoration(
+            color: appColors.white,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: AppColors().red,
+              width: 1,
+            )),
+        padding: EdgeInsets.all(12),
+        child: Text(
+          "2",
+          style: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 16.sp,
+            color: AppColors().red,
+          ),
+        ),
+      ),
+      buildLine(isActive: false),
+      Container(
+        decoration: BoxDecoration(
+            color: appColors.white,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: appColors.grey,
+              width: 1,
+            )),
+        padding: EdgeInsets.all(12),
+        child: Text(
+          "3",
+          style: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 16.sp,
+            color: appColors.grey,
+          ),
+        ),
+      ),
+      buildLine(isActive: false),
+      Container(
+        decoration: BoxDecoration(
+            color: appColors.white,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: appColors.grey,
+              width: 1,
+            )),
+        padding: EdgeInsets.all(12),
+        child: Text(
+          "4",
+          style: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 16.sp,
+            color: appColors.grey,
+          ),
+        ),
+      ),
+      buildLine(isActive: false),
+      Container(
+        decoration: BoxDecoration(
+            color: appColors.white,
+            shape: BoxShape.circle,
+            border: Border.all(
+              color: appColors.grey,
+              width: 1,
+            )),
+        padding: EdgeInsets.all(12),
+        child: Text(
+          "5",
+          style: TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 16.sp,
+            color: appColors.grey,
+          ),
+        ),
+      ),
     ],
+  );
+}
+
+Widget buildLine({required bool isActive}) {
+  return Expanded(
+    child: Container(
+      height: 2,
+      color: isActive ? Colors.red : Colors.grey,
+    ),
+  );
+}
+
+Widget buildSpace() {
+  return Expanded(
+    child: Container(
+      height: 2,
+    ),
   );
 }

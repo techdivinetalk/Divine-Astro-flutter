@@ -31,9 +31,15 @@ class OnBoardingController extends GetxController {
   UserRepository userRepository = UserRepository();
 
   var currentPage = 1;
+  var donePage = 1;
 
   updatePage(page) {
     currentPage = page;
+    update();
+  }
+
+  updateDonePage(page) {
+    donePage = page;
     update();
   }
 

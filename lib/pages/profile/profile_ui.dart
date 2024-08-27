@@ -463,17 +463,33 @@ class ProfileUI extends GetView<ProfilePageController> {
                           ),
                         );
                       } else if (index == 1) {
-                        if (await PermissionHelper()
-                            .askStoragePermission(Permission.videos)) {
-                          FilePickerResult? result =
-                              await FilePicker.platform.pickFiles(
-                            type: FileType.video,
-                            allowCompression: false,
-                          );
-                          if (result != null) {
-                            Get.toNamed(RouteName.uploadStoryUi,
-                                arguments: "${result.files.single.path}");
+                        print("objectobjectobjectobjectobject----${index}");
+
+                        print("Tapped on index: $index");
+                        try {
+                          print("Attempting to pick video...");
+                          if (await PermissionHelper()
+                              .askStoragePermission(Permission.videos)) {
+                            print("Permission granted");
+                            FilePickerResult? result =
+                                await FilePicker.platform.pickFiles(
+                              type: FileType.video,
+                              allowCompression: false,
+                            );
+                            if (result != null) {
+                              print(
+                                  "Video picked: ${result.files.single.path}");
+                              Get.toNamed(RouteName.uploadStoryUi,
+                                  arguments: "${result.files.single.path}");
+                            } else {
+                              print("No video selected");
+                            }
+                          } else {
+                            print("Permission denied");
                           }
+                          // other conditions here...
+                        } catch (e) {
+                          print("Error: $e");
                         }
                       } else if (index == 3) {
                         controller.whatsapp();
