@@ -42,7 +42,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import "package:permission_handler/permission_handler.dart";
+import 'package:screenshot/screenshot.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/PopupManager.dart';
@@ -83,11 +85,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   RxBool isLiveEnable = true.obs;
   bool istraininginfo = true;
   bool noticePollChecked = false;
-  var selectedPoll ;
+  var selectedPoll;
 
   double xPosition = 10.0;
   double yPosition = Get.height * 0.4;
   RxList<bool> customOfferSwitch = RxList([]);
+  //Create an instance of ScreenshotController
+  ScreenshotController screenshotController = ScreenshotController();
 
   RxString appbarTitle = "Astrologer Name ".obs;
   RxBool isShowTitle = true.obs;
@@ -120,6 +124,25 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     if (scoreIndex > 0) {
       scoreIndex--;
       update(['score_update']);
+    }
+  }
+
+  int ssTimes = 0;
+  captureandSendSS() {
+    if (ssTimes == 0) {
+      screenshotController.capture().then(
+        (value) async {
+          final directory = await getApplicationDocumentsDirectory();
+          final imagePath =
+              await File('${directory.path}/dashboard.png').create();
+          ssTimes = 1;
+          print("screenshot taken ----");
+
+          print("${value..toString()}");
+          print("${imagePath.toString()}");
+          print("screenshot taken ----");
+        },
+      );
     }
   }
 

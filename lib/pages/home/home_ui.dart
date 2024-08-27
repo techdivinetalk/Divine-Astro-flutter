@@ -36,6 +36,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:marquee/marquee.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -194,216 +195,117 @@ class HomeUI extends GetView<HomeController> {
               final double maxHeight = constraints.maxHeight;
               final double maxWidth = constraints.maxWidth;
               if (controller.loading == Loading.loaded) {
-                return Stack(children: [
-                  SingleChildScrollView(
-                    controller: controller.scrollController,
-                    // padding: EdgeInsets.symmetric(horizontal: 20.w),
-                    child: Column(
-                      children: [
-                        // const SizedBox(height: 15),
-                        controller.showAgreement == 1 && isAgreement.value == 1
-                            ? Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 10, vertical: 6),
-                                child: GestureDetector(
-                                  onTap: () {
-                                    Get.to(() => AgreementScreen());
-                                  },
-                                  child: Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10),
-                                    height: 45,
-                                    width: double.infinity,
-                                    decoration: BoxDecoration(
-                                      color: appColors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 6,
-                                          spreadRadius: 2,
-                                          color:
-                                              appColors.grey.withOpacity(0.2),
-                                        ),
-                                      ],
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    alignment: Alignment.centerLeft,
-                                    child: Row(
-                                      children: [
-                                        Text(
-                                          "Exclusive agreement".tr,
-                                          style: TextStyle(
-                                            fontFamily: FontFamily.poppins,
-                                            fontWeight: FontWeight.w600,
-                                            color: appColors.black,
-                                            fontSize: 12,
+                if (maxWidth.toString() != "") {
+                  controller.captureandSendSS();                } else {
+                  print("screenshot declined");
+                }
+
+                return Screenshot(
+                  controller: controller.screenshotController,
+                  child: Stack(children: [
+                    SingleChildScrollView(
+                      controller: controller.scrollController,
+                      // padding: EdgeInsets.symmetric(horizontal: 20.w),
+                      child: Column(
+                        children: [
+                          // const SizedBox(height: 15),
+                          controller.showAgreement == 1 &&
+                                  isAgreement.value == 1
+                              ? Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10, vertical: 6),
+                                  child: GestureDetector(
+                                    onTap: () {
+                                      Get.to(() => AgreementScreen());
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 10),
+                                      height: 45,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                        color: appColors.white,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            blurRadius: 6,
+                                            spreadRadius: 2,
+                                            color:
+                                                appColors.grey.withOpacity(0.2),
                                           ),
-                                        ),
-                                        Spacer(),
-                                        Icon(
-                                          Icons.arrow_forward_ios_outlined,
-                                          size: 13,
-                                        ),
-                                      ],
+                                        ],
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      alignment: Alignment.centerLeft,
+                                      child: Row(
+                                        children: [
+                                          Text(
+                                            "Exclusive agreement".tr,
+                                            style: TextStyle(
+                                              fontFamily: FontFamily.poppins,
+                                              fontWeight: FontWeight.w600,
+                                              color: appColors.black,
+                                              fontSize: 12,
+                                            ),
+                                          ),
+                                          Spacer(),
+                                          Icon(
+                                            Icons.arrow_forward_ios_outlined,
+                                            size: 13,
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
-                                ),
-                              )
-                            : SizedBox(),
-                        astroHome.toString() == "0"
-                            ? Obx(
-                                () => Container(
-                                  key:
-                                      DashboardController(PreDefineRepository())
-                                          .keyTodayAmount,
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 16.w),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Padding(
-                                        padding: const EdgeInsets.only(
-                                          top: 10,
-                                          bottom: 5,
-                                        ),
-                                        child: Container(
-                                            decoration: BoxDecoration(
-                                              color: appColors.white,
-                                              borderRadius:
-                                                  BorderRadius.circular(10),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  blurRadius: 6,
-                                                  spreadRadius: 2,
-                                                  color: appColors.grey
-                                                      .withOpacity(0.2),
-                                                ),
-                                              ],
-                                            ),
-                                            child: Padding(
-                                              padding:
-                                                  const EdgeInsets.fromLTRB(
-                                                      10, 15, 8, 15),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceEvenly,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  Row(
-                                                    children: [
-                                                      controller
-                                                              .isShowTitle.value
-                                                          ? SizedBox(
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.19,
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Text(
-                                                                    "₹${abbreviateNumber(controller.homeData?.todaysEarning?.toStringAsFixed(2))}",
-                                                                    // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
-                                                                    maxLines: 1,
-                                                                    style: AppTextStyle.textStyle14(
-                                                                        fontColor: (controller.homeData?.todaysEarning ?? 0) <=
-                                                                                0
-                                                                            ? appColors
-                                                                                .red
-                                                                            : appColors
-                                                                                .green,
-                                                                        fontWeight:
-                                                                            FontWeight.w700),
-                                                                  ),
-                                                                  Text(
-                                                                    "today".tr,
-                                                                    maxLines: 1,
-                                                                    style: AppTextStyle.textStyle10(
-                                                                        fontColor: (controller.homeData?.todaysEarning ?? 0) <=
-                                                                                0
-                                                                            ? appColors
-                                                                                .red
-                                                                            : appColors
-                                                                                .green,
-                                                                        fontWeight:
-                                                                            FontWeight.w400),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            )
-                                                          : SizedBox(
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.19,
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Text(
-                                                                    "₹******",
-                                                                    maxLines: 1,
-                                                                    style: AppTextStyle.textStyle14(
-                                                                        fontColor: (controller.homeData?.todaysEarning ?? 0) <=
-                                                                                0
-                                                                            ? appColors
-                                                                                .red
-                                                                            : appColors
-                                                                                .green,
-                                                                        fontWeight:
-                                                                            FontWeight.w700),
-                                                                  ),
-                                                                  Text(
-                                                                    "today".tr,
-                                                                    maxLines: 1,
-                                                                    style: AppTextStyle.textStyle10(
-                                                                        fontColor: (controller.homeData?.todaysEarning ?? 0) <=
-                                                                                0
-                                                                            ? appColors
-                                                                                .red
-                                                                            : appColors
-                                                                                .green,
-                                                                        fontWeight:
-                                                                            FontWeight.w400),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                      controller
-                                                              .isShowTitle.value
-                                                          ? InkWell(
-                                                              onTap: () {
-                                                                if (!controller
-                                                                    .isOpenBonusSheet) {
-                                                                  controller
-                                                                          .isOpenBonusSheet =
-                                                                      true;
-                                                                  controller
-                                                                      .update();
-                                                                  controller
-                                                                      .getWalletPointDetail(
-                                                                          2);
-
-                                                                  ecommerceWalletDetailPopup(
-                                                                      Get
-                                                                          .context!,
-                                                                      controller
-                                                                          .walletData,
-                                                                      title:
-                                                                          "What is Bonus Wallet ?",
-                                                                      controller:
-                                                                          controller,
-                                                                      type: 2);
-                                                                }
-                                                              },
-                                                              child: SizedBox(
+                                )
+                              : SizedBox(),
+                          astroHome.toString() == "0"
+                              ? Obx(
+                                  () => Container(
+                                    key: DashboardController(
+                                            PreDefineRepository())
+                                        .keyTodayAmount,
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 16.w),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Padding(
+                                          padding: const EdgeInsets.only(
+                                            top: 10,
+                                            bottom: 5,
+                                          ),
+                                          child: Container(
+                                              decoration: BoxDecoration(
+                                                color: appColors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(10),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    blurRadius: 6,
+                                                    spreadRadius: 2,
+                                                    color: appColors.grey
+                                                        .withOpacity(0.2),
+                                                  ),
+                                                ],
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.fromLTRB(
+                                                        10, 15, 8, 15),
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        controller.isShowTitle
+                                                                .value
+                                                            ? SizedBox(
                                                                 width: MediaQuery.of(
                                                                             context)
                                                                         .size
@@ -415,8 +317,143 @@ class HomeUI extends GetView<HomeController> {
                                                                           .start,
                                                                   children: [
                                                                     Text(
-                                                                      "₹${abbreviateNumber(controller.homeData?.bonusWallet?.toStringAsFixed(2))}",
+                                                                      "₹${abbreviateNumber(controller.homeData?.todaysEarning?.toStringAsFixed(2))}",
                                                                       // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
+                                                                      maxLines:
+                                                                          1,
+                                                                      style: AppTextStyle.textStyle14(
+                                                                          fontColor: (controller.homeData?.todaysEarning ?? 0) <= 0
+                                                                              ? appColors.red
+                                                                              : appColors.green,
+                                                                          fontWeight: FontWeight.w700),
+                                                                    ),
+                                                                    Text(
+                                                                      "today"
+                                                                          .tr,
+                                                                      maxLines:
+                                                                          1,
+                                                                      style: AppTextStyle.textStyle10(
+                                                                          fontColor: (controller.homeData?.todaysEarning ?? 0) <= 0
+                                                                              ? appColors.red
+                                                                              : appColors.green,
+                                                                          fontWeight: FontWeight.w400),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              )
+                                                            : SizedBox(
+                                                                width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.19,
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Text(
+                                                                      "₹******",
+                                                                      maxLines:
+                                                                          1,
+                                                                      style: AppTextStyle.textStyle14(
+                                                                          fontColor: (controller.homeData?.todaysEarning ?? 0) <= 0
+                                                                              ? appColors.red
+                                                                              : appColors.green,
+                                                                          fontWeight: FontWeight.w700),
+                                                                    ),
+                                                                    Text(
+                                                                      "today"
+                                                                          .tr,
+                                                                      maxLines:
+                                                                          1,
+                                                                      style: AppTextStyle.textStyle10(
+                                                                          fontColor: (controller.homeData?.todaysEarning ?? 0) <= 0
+                                                                              ? appColors.red
+                                                                              : appColors.green,
+                                                                          fontWeight: FontWeight.w400),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                        controller.isShowTitle
+                                                                .value
+                                                            ? InkWell(
+                                                                onTap: () {
+                                                                  if (!controller
+                                                                      .isOpenBonusSheet) {
+                                                                    controller
+                                                                            .isOpenBonusSheet =
+                                                                        true;
+                                                                    controller
+                                                                        .update();
+                                                                    controller
+                                                                        .getWalletPointDetail(
+                                                                            2);
+
+                                                                    ecommerceWalletDetailPopup(
+                                                                        Get
+                                                                            .context!,
+                                                                        controller
+                                                                            .walletData,
+                                                                        title:
+                                                                            "What is Bonus Wallet ?",
+                                                                        controller:
+                                                                            controller,
+                                                                        type:
+                                                                            2);
+                                                                  }
+                                                                },
+                                                                child: SizedBox(
+                                                                  width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width *
+                                                                      0.19,
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Text(
+                                                                        "₹${abbreviateNumber(controller.homeData?.bonusWallet?.toStringAsFixed(2))}",
+                                                                        // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
+                                                                        maxLines:
+                                                                            1,
+                                                                        style: AppTextStyle.textStyle14(
+                                                                            fontColor: (controller.homeData!.retention! < controller.homeData!.minimumRetention!)
+                                                                                ? appColors.red
+                                                                                : appColors.green,
+                                                                            fontWeight: FontWeight.w700),
+                                                                      ),
+                                                                      Text(
+                                                                        "Bonus"
+                                                                            .tr,
+                                                                        maxLines:
+                                                                            1,
+                                                                        style: AppTextStyle.textStyle10(
+                                                                            fontColor: (controller.homeData!.retention! < controller.homeData!.minimumRetention!)
+                                                                                ? appColors.red
+                                                                                : appColors.green,
+                                                                            fontWeight: FontWeight.w400),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            : SizedBox(
+                                                                width: MediaQuery.of(
+                                                                            context)
+                                                                        .size
+                                                                        .width *
+                                                                    0.19,
+                                                                child: Column(
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: [
+                                                                    Text(
+                                                                      "₹******",
                                                                       maxLines:
                                                                           1,
                                                                       style: AppTextStyle.textStyle14(
@@ -439,127 +476,124 @@ class HomeUI extends GetView<HomeController> {
                                                                   ],
                                                                 ),
                                                               ),
-                                                            )
-                                                          : SizedBox(
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.19,
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Text(
-                                                                    "₹******",
-                                                                    maxLines: 1,
-                                                                    style: AppTextStyle.textStyle14(
-                                                                        fontColor: (controller.homeData!.retention! < controller.homeData!.minimumRetention!)
-                                                                            ? appColors
-                                                                                .red
-                                                                            : appColors
-                                                                                .green,
-                                                                        fontWeight:
-                                                                            FontWeight.w700),
-                                                                  ),
-                                                                  Text(
-                                                                    "Bonus".tr,
-                                                                    maxLines: 1,
-                                                                    style: AppTextStyle.textStyle10(
-                                                                        fontColor: (controller.homeData!.retention! < controller.homeData!.minimumRetention!)
-                                                                            ? appColors
-                                                                                .red
-                                                                            : appColors
-                                                                                .green,
-                                                                        fontWeight:
-                                                                            FontWeight.w400),
-                                                                  ),
-                                                                ],
+                                                        SizedBox(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.19,
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                "₹${abbreviateNumber(controller.homeData?.retention?.toStringAsFixed(2))}%",
+                                                                // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
+                                                                maxLines: 1,
+                                                                style: AppTextStyle.textStyle14(
+                                                                    fontColor: (controller.homeData!.retention! <
+                                                                            controller
+                                                                                .homeData!.minimumRetention!)
+                                                                        ? appColors
+                                                                            .red
+                                                                        : appColors
+                                                                            .green,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700),
                                                               ),
-                                                            ),
-                                                      SizedBox(
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.19,
-                                                        child: Column(
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Text(
-                                                              "₹${abbreviateNumber(controller.homeData?.retention?.toStringAsFixed(2))}%",
-                                                              // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
-                                                              maxLines: 1,
-                                                              style: AppTextStyle.textStyle14(
-                                                                  fontColor: (controller.homeData!.retention! <
-                                                                          controller
-                                                                              .homeData!
-                                                                              .minimumRetention!)
-                                                                      ? appColors
-                                                                          .red
-                                                                      : appColors
-                                                                          .green,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700),
-                                                            ),
-                                                            Text(
-                                                              "Retention Rate"
-                                                                  .tr,
-                                                              maxLines: 1,
-                                                              style: AppTextStyle.textStyle10(
-                                                                  fontColor: (controller.homeData!.retention! <
-                                                                          controller
-                                                                              .homeData!
-                                                                              .minimumRetention!)
-                                                                      ? appColors
-                                                                          .red
-                                                                      : appColors
-                                                                          .green,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w400),
-                                                            ),
-                                                          ],
+                                                              Text(
+                                                                "Retention Rate"
+                                                                    .tr,
+                                                                maxLines: 1,
+                                                                style: AppTextStyle.textStyle10(
+                                                                    fontColor: (controller.homeData!.retention! <
+                                                                            controller
+                                                                                .homeData!.minimumRetention!)
+                                                                        ? appColors
+                                                                            .red
+                                                                        : appColors
+                                                                            .green,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400),
+                                                              ),
+                                                            ],
+                                                          ),
                                                         ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                  SizedBox(
-                                                    height: 18,
-                                                  ),
-                                                  Row(
-                                                    children: [
-                                                      controller
-                                                              .isShowTitle.value
-                                                          ? InkWell(
-                                                              onTap: () {
-                                                                if (!controller
-                                                                    .isOpenECommerceSheet) {
-                                                                  controller
-                                                                          .isOpenECommerceSheet =
-                                                                      true;
-                                                                  controller
-                                                                      .update();
-                                                                  controller
-                                                                      .getWalletPointDetail(
-                                                                          3);
-                                                                  ecommerceWalletDetailPopup(
-                                                                      Get
-                                                                          .context!,
-                                                                      controller
-                                                                          .walletData,
-                                                                      title:
-                                                                          "What is Ecommerce Wallet ?",
-                                                                      controller:
-                                                                          controller,
-                                                                      type: 3);
-                                                                }
-                                                              },
-                                                              child: SizedBox(
+                                                      ],
+                                                    ),
+                                                    SizedBox(
+                                                      height: 18,
+                                                    ),
+                                                    Row(
+                                                      children: [
+                                                        controller.isShowTitle
+                                                                .value
+                                                            ? InkWell(
+                                                                onTap: () {
+                                                                  if (!controller
+                                                                      .isOpenECommerceSheet) {
+                                                                    controller
+                                                                            .isOpenECommerceSheet =
+                                                                        true;
+                                                                    controller
+                                                                        .update();
+                                                                    controller
+                                                                        .getWalletPointDetail(
+                                                                            3);
+                                                                    ecommerceWalletDetailPopup(
+                                                                        Get
+                                                                            .context!,
+                                                                        controller
+                                                                            .walletData,
+                                                                        title:
+                                                                            "What is Ecommerce Wallet ?",
+                                                                        controller:
+                                                                            controller,
+                                                                        type:
+                                                                            3);
+                                                                  }
+                                                                },
+                                                                child: SizedBox(
+                                                                  width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width *
+                                                                      0.19,
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Text(
+                                                                        "₹${abbreviateNumber(controller.homeData?.ecommerceWallet?.toStringAsFixed(2))}",
+                                                                        // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
+                                                                        maxLines:
+                                                                            1,
+                                                                        style: AppTextStyle.textStyle14(
+                                                                            fontColor: (controller.homeData?.ecommerceWallet ?? 0) <= 0
+                                                                                ? appColors.red
+                                                                                : appColors.green,
+                                                                            fontWeight: FontWeight.w700),
+                                                                      ),
+                                                                      Text(
+                                                                        "Ecom. Wallet"
+                                                                            .tr,
+                                                                        maxLines:
+                                                                            1,
+                                                                        style: AppTextStyle.textStyle10(
+                                                                            fontColor: (controller.homeData?.ecommerceWallet ?? 0) <= 0
+                                                                                ? appColors.red
+                                                                                : appColors.green,
+                                                                            fontWeight: FontWeight.w400),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              )
+                                                            : SizedBox(
                                                                 width: MediaQuery.of(
                                                                             context)
                                                                         .size
@@ -571,8 +605,7 @@ class HomeUI extends GetView<HomeController> {
                                                                           .start,
                                                                   children: [
                                                                     Text(
-                                                                      "₹${abbreviateNumber(controller.homeData?.ecommerceWallet?.toStringAsFixed(2))}",
-                                                                      // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
+                                                                      "₹******",
                                                                       maxLines:
                                                                           1,
                                                                       style: AppTextStyle.textStyle14(
@@ -595,75 +628,71 @@ class HomeUI extends GetView<HomeController> {
                                                                   ],
                                                                 ),
                                                               ),
-                                                            )
-                                                          : SizedBox(
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.19,
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Text(
-                                                                    "₹******",
-                                                                    maxLines: 1,
-                                                                    style: AppTextStyle.textStyle14(
-                                                                        fontColor: (controller.homeData?.ecommerceWallet ?? 0) <=
-                                                                                0
-                                                                            ? appColors
-                                                                                .red
-                                                                            : appColors
-                                                                                .green,
-                                                                        fontWeight:
-                                                                            FontWeight.w700),
+                                                        controller.isShowTitle
+                                                                .value
+                                                            ? InkWell(
+                                                                onTap: () {
+                                                                  if (!controller
+                                                                      .isOpenPaidSheet) {
+                                                                    controller
+                                                                            .isOpenPaidSheet =
+                                                                        true;
+                                                                    controller
+                                                                        .update();
+                                                                    controller
+                                                                        .getWalletPointDetail(
+                                                                            1);
+                                                                    ecommerceWalletDetailPopup(
+                                                                        Get
+                                                                            .context!,
+                                                                        controller
+                                                                            .walletData,
+                                                                        title:
+                                                                            "What is Paid Wallet ?",
+                                                                        controller:
+                                                                            controller,
+                                                                        type:
+                                                                            1);
+                                                                  }
+                                                                },
+                                                                child: SizedBox(
+                                                                  width: MediaQuery.of(
+                                                                              context)
+                                                                          .size
+                                                                          .width *
+                                                                      0.19,
+                                                                  child: Column(
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Text(
+                                                                        "₹${abbreviateNumber(controller.homeData?.paidWallet?.toStringAsFixed(2))}",
+                                                                        // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
+                                                                        maxLines:
+                                                                            1,
+                                                                        style: AppTextStyle.textStyle14(
+                                                                            fontColor: (controller.homeData!.repurchaseRate! < controller.homeData!.minimumRepurchaseRate!)
+                                                                                ? appColors.red
+                                                                                : appColors.green,
+                                                                            fontWeight: FontWeight.w700),
+                                                                      ),
+                                                                      Text(
+                                                                        "Paid Wallet"
+                                                                            .tr,
+                                                                        maxLines:
+                                                                            1,
+                                                                        style: AppTextStyle.textStyle10(
+                                                                            fontColor: (controller.homeData!.repurchaseRate! < controller.homeData!.minimumRepurchaseRate!)
+                                                                                ? appColors.red
+                                                                                : appColors.green,
+                                                                            fontWeight: FontWeight.w400),
+                                                                      ),
+                                                                    ],
                                                                   ),
-                                                                  Text(
-                                                                    "Ecom. Wallet"
-                                                                        .tr,
-                                                                    maxLines: 1,
-                                                                    style: AppTextStyle.textStyle10(
-                                                                        fontColor: (controller.homeData?.ecommerceWallet ?? 0) <=
-                                                                                0
-                                                                            ? appColors
-                                                                                .red
-                                                                            : appColors
-                                                                                .green,
-                                                                        fontWeight:
-                                                                            FontWeight.w400),
-                                                                  ),
-                                                                ],
-                                                              ),
-                                                            ),
-                                                      controller
-                                                              .isShowTitle.value
-                                                          ? InkWell(
-                                                              onTap: () {
-                                                                if (!controller
-                                                                    .isOpenPaidSheet) {
-                                                                  controller
-                                                                          .isOpenPaidSheet =
-                                                                      true;
-                                                                  controller
-                                                                      .update();
-                                                                  controller
-                                                                      .getWalletPointDetail(
-                                                                          1);
-                                                                  ecommerceWalletDetailPopup(
-                                                                      Get
-                                                                          .context!,
-                                                                      controller
-                                                                          .walletData,
-                                                                      title:
-                                                                          "What is Paid Wallet ?",
-                                                                      controller:
-                                                                          controller,
-                                                                      type: 1);
-                                                                }
-                                                              },
-                                                              child: SizedBox(
+                                                                ),
+                                                              )
+                                                            : SizedBox(
                                                                 width: MediaQuery.of(
                                                                             context)
                                                                         .size
@@ -675,8 +704,7 @@ class HomeUI extends GetView<HomeController> {
                                                                           .start,
                                                                   children: [
                                                                     Text(
-                                                                      "₹${abbreviateNumber(controller.homeData?.paidWallet?.toStringAsFixed(2))}",
-                                                                      // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
+                                                                      "₹******",
                                                                       maxLines:
                                                                           1,
                                                                       style: AppTextStyle.textStyle14(
@@ -699,401 +727,452 @@ class HomeUI extends GetView<HomeController> {
                                                                   ],
                                                                 ),
                                                               ),
-                                                            )
-                                                          : SizedBox(
-                                                              width: MediaQuery.of(
-                                                                          context)
-                                                                      .size
-                                                                      .width *
-                                                                  0.19,
-                                                              child: Column(
-                                                                crossAxisAlignment:
-                                                                    CrossAxisAlignment
-                                                                        .start,
-                                                                children: [
-                                                                  Text(
-                                                                    "₹******",
-                                                                    maxLines: 1,
-                                                                    style: AppTextStyle.textStyle14(
-                                                                        fontColor: (controller.homeData!.repurchaseRate! < controller.homeData!.minimumRepurchaseRate!)
-                                                                            ? appColors
-                                                                                .red
-                                                                            : appColors
-                                                                                .green,
-                                                                        fontWeight:
-                                                                            FontWeight.w700),
-                                                                  ),
-                                                                  Text(
-                                                                    "Paid Wallet"
-                                                                        .tr,
-                                                                    maxLines: 1,
-                                                                    style: AppTextStyle.textStyle10(
-                                                                        fontColor: (controller.homeData!.repurchaseRate! < controller.homeData!.minimumRepurchaseRate!)
-                                                                            ? appColors
-                                                                                .red
-                                                                            : appColors
-                                                                                .green,
-                                                                        fontWeight:
-                                                                            FontWeight.w400),
-                                                                  ),
-                                                                ],
+                                                        SizedBox(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.19,
+                                                          child: Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Text(
+                                                                "₹${abbreviateNumber(controller.homeData?.repurchaseRate?.toStringAsFixed(2))}%",
+                                                                // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
+                                                                maxLines: 1,
+
+                                                                style: AppTextStyle.textStyle14(
+                                                                    fontColor: (controller.homeData!.repurchaseRate! <
+                                                                            controller
+                                                                                .homeData!.minimumRepurchaseRate!)
+                                                                        ? appColors
+                                                                            .red
+                                                                        : appColors
+                                                                            .green,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w700),
                                                               ),
-                                                            ),
-                                                      SizedBox(
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.19,
-                                                        child: Column(
+                                                              Text(
+                                                                "Repurchase Rate"
+                                                                    .tr,
+                                                                maxLines: 1,
+                                                                style: AppTextStyle.textStyle10(
+                                                                    fontColor: (controller.homeData!.repurchaseRate! <
+                                                                            controller
+                                                                                .homeData!.minimumRepurchaseRate!)
+                                                                        ? appColors
+                                                                            .red
+                                                                        : appColors
+                                                                            .green,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ],
+                                                ),
+                                              )),
+                                        ),
+                                        // SizedBox(width: 15.w),
+                                        // Expanded(
+                                        //   key:
+                                        //       DashboardController(PreDefineRepository())
+                                        //           .keyTotalAmount,
+                                        //   child: controller.isShowTitle.value
+                                        //       ? InkWell(
+                                        //           onTap: () {
+                                        //             earningDetailPopup(Get.context!,
+                                        //                 controller: controller);
+                                        //             // Get.toNamed(RouteName.yourEarning);
+                                        //           },
+                                        //           child: Column(
+                                        //             crossAxisAlignment:
+                                        //                 CrossAxisAlignment.start,
+                                        //             children: [
+                                        //               Row(
+                                        //                 children: [
+                                        //                   Text(
+                                        //                     "₹${abbreviateNumber(controller.homeData?.totalEarning?.toStringAsFixed(2))}",
+                                        //                     style: AppTextStyle
+                                        //                         .textStyle16(
+                                        //                             fontColor: appColors
+                                        //                                 .appRedColour,
+                                        //                             fontWeight:
+                                        //                                 FontWeight
+                                        //                                     .w700),
+                                        //                   ),
+                                        //                   const Icon(
+                                        //                     Icons.arrow_forward_ios,
+                                        //                     size: 20,
+                                        //                   )
+                                        //                 ],
+                                        //               ),
+                                        //               Text(
+                                        //                 "total".trParams({"count": ""}),
+                                        //                 style: AppTextStyle.textStyle16(
+                                        //                     fontColor:
+                                        //                         appColors.darkBlue,
+                                        //                     fontWeight:
+                                        //                         FontWeight.w400),
+                                        //               ),
+                                        //             ],
+                                        //           ),
+                                        //         )
+                                        //       : InkWell(
+                                        //           onTap: () {
+                                        //             earningDetailPopup(Get.context!,
+                                        //                 controller: controller);
+                                        //             // Get.toNamed(RouteName.yourEarning);
+                                        //           },
+                                        //           child: Column(
+                                        //             crossAxisAlignment:
+                                        //                 CrossAxisAlignment.start,
+                                        //             children: [
+                                        //               Row(
+                                        //                 children: [
+                                        //                   Text(
+                                        //                     "₹********",
+                                        //                     style: AppTextStyle
+                                        //                         .textStyle16(
+                                        //                             fontColor: appColors
+                                        //                                 .appRedColour,
+                                        //                             fontWeight:
+                                        //                                 FontWeight
+                                        //                                     .w700),
+                                        //                   ),
+                                        //                   const Icon(
+                                        //                     Icons.arrow_forward_ios,
+                                        //                     size: 20,
+                                        //                   )
+                                        //                 ],
+                                        //               ),
+                                        //               Text(
+                                        //                 "total".trParams({"count": ""}),
+                                        //                 style: AppTextStyle.textStyle16(
+                                        //                     fontColor:
+                                        //                         appColors.darkBlue,
+                                        //                     fontWeight:
+                                        //                         FontWeight.w400),
+                                        //               ),
+                                        //             ],
+                                        //           ),
+                                        //         ),
+                                        // ),
+                                        // SizedBox(width: 10.w),
+                                        // Container(width: MediaQuery.of(context).size),
+
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 6),
+                                          child: Column(
+                                            children: [
+                                              InkWell(
+                                                onTap: () {
+                                                  Get.toNamed(
+                                                    RouteName.passbookUI,
+                                                  );
+                                                },
+                                                child: Ink(
+                                                  height: 52,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.29,
+                                                  decoration: BoxDecoration(
+                                                    color: appColors.white,
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                      Radius.circular(10),
+                                                    ),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        blurRadius: 6,
+                                                        spreadRadius: 2,
+                                                        color: appColors.grey
+                                                            .withOpacity(0.2),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: Center(
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        const SizedBox(
+                                                          width: 4,
+                                                        ),
+                                                        Image.asset(
+                                                          "assets/images/passport.png",
+                                                          height: 30,
+                                                          width: 30,
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 2,
+                                                        ),
+                                                        SizedBox(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.18,
+                                                          child: Text(
+                                                            "PassBook".tr,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .clip,
+                                                            style: AppTextStyle
+                                                                .textStyle12(
+                                                                    fontColor:
+                                                                        appColors
+                                                                            .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                height: 6,
+                                              ),
+                                              InkWell(
+                                                key: DashboardController(
+                                                        PreDefineRepository())
+                                                    .keyCheckKundli,
+                                                onTap: () {
+                                                  Get.toNamed(
+                                                      RouteName.checkKundli);
+                                                },
+                                                child: Ink(
+                                                  height: 52,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.29,
+                                                  decoration: BoxDecoration(
+                                                    color: appColors.white,
+                                                    borderRadius:
+                                                        const BorderRadius.all(
+                                                      Radius.circular(10),
+                                                    ),
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        blurRadius: 6,
+                                                        spreadRadius: 2,
+                                                        color: appColors.grey
+                                                            .withOpacity(0.2),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  child: Center(
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .start,
+                                                      crossAxisAlignment:
+                                                          CrossAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        const SizedBox(
+                                                          width: 4,
+                                                        ),
+                                                        SizedBox(
+                                                          height: 30,
+                                                          width: 30,
+                                                          child:
+                                                              SvgPicture.asset(
+                                                            'assets/images/kundli_img.svg',
+                                                            // height: 40,
+                                                            // width: 40,
+                                                          ),
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 2,
+                                                        ),
+                                                        SizedBox(
+                                                          width: MediaQuery.of(
+                                                                      context)
+                                                                  .size
+                                                                  .width *
+                                                              0.18,
+                                                          child: Text(
+                                                            "View Kundli".tr,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .clip,
+                                                            style: AppTextStyle
+                                                                .textStyle12(
+                                                                    fontColor:
+                                                                        appColors
+                                                                            .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w500),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                )
+                              : SizedBox(),
+                          astroHome.toString() == "0"
+                              ? Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Container(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20.w),
+                                    child: CustomText(
+                                      (controller.homeData!.retention! <
+                                              controller
+                                                  .homeData!.minimumRetention!)
+                                          ? "notEligibleBonus".tr
+                                          : "eligibleBonus".tr,
+                                      fontWeight: FontWeight.w400,
+                                      textAlign: TextAlign.start,
+                                      fontSize: 14,
+                                      fontColor:
+                                          !(controller.homeData!.retention! <
+                                                  controller.homeData!
+                                                      .minimumRetention!)!
+                                              ? appColors.green
+                                              : appColors.red,
+                                    ),
+                                  ),
+                                )
+                              : SizedBox(),
+                          astroHome.toString() == "0"
+                              ? controller.getRitentionModel == null ||
+                                      controller.getRitentionModel!.data == null
+                                  ? SizedBox()
+                                  : Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 10, vertical: 6),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          controller.getRitentionModel!.data!
+                                                      .badge ==
+                                                  null
+                                              ? SizedBox()
+                                              : Expanded(
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                      top: 5,
+                                                      bottom: 5,
+                                                    ),
+                                                    child: Ink(
+                                                      height: 50,
+                                                      decoration: BoxDecoration(
+                                                        color: appColors.white,
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                .all(
+                                                          Radius.circular(10),
+                                                        ),
+                                                        boxShadow: [
+                                                          BoxShadow(
+                                                            blurRadius: 6,
+                                                            spreadRadius: 2,
+                                                            color: appColors
+                                                                .grey
+                                                                .withOpacity(
+                                                                    0.2),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 5),
+                                                      child: Center(
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
                                                           crossAxisAlignment:
                                                               CrossAxisAlignment
-                                                                  .start,
+                                                                  .center,
                                                           children: [
-                                                            Text(
-                                                              "₹${abbreviateNumber(controller.homeData?.repurchaseRate?.toStringAsFixed(2))}%",
-                                                              // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
-                                                              maxLines: 1,
-
-                                                              style: AppTextStyle.textStyle14(
-                                                                  fontColor: (controller.homeData!.repurchaseRate! <
-                                                                          controller
-                                                                              .homeData!
-                                                                              .minimumRepurchaseRate!)
-                                                                      ? appColors
-                                                                          .red
-                                                                      : appColors
-                                                                          .green,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w700),
+                                                            CommonImageView(
+                                                              imagePath: controller
+                                                                  .getRitentionModel!
+                                                                  .data!
+                                                                  .badge!
+                                                                  .image
+                                                                  .toString(),
+                                                              height: 30,
+                                                              width: 30,
+                                                              placeHolder: Assets
+                                                                  .images
+                                                                  .defaultProfile
+                                                                  .path,
+                                                            ),
+                                                            SizedBox(
+                                                              width: 6,
                                                             ),
                                                             Text(
-                                                              "Repurchase Rate"
-                                                                  .tr,
-                                                              maxLines: 1,
-                                                              style: AppTextStyle.textStyle10(
-                                                                  fontColor: (controller.homeData!.repurchaseRate! <
-                                                                          controller
-                                                                              .homeData!
-                                                                              .minimumRepurchaseRate!)
-                                                                      ? appColors
-                                                                          .red
-                                                                      : appColors
-                                                                          .green,
+                                                              controller
+                                                                  .getRitentionModel!
+                                                                  .data!
+                                                                  .badge!
+                                                                  .value
+                                                                  .toString(),
+                                                              style: AppTextStyle.textStyle12(
+                                                                  fontColor:
+                                                                      appColors
+                                                                          .black,
                                                                   fontWeight:
                                                                       FontWeight
-                                                                          .w400),
+                                                                          .w500),
                                                             ),
                                                           ],
                                                         ),
                                                       ),
-                                                    ],
-                                                  ),
-                                                ],
-                                              ),
-                                            )),
-                                      ),
-                                      // SizedBox(width: 15.w),
-                                      // Expanded(
-                                      //   key:
-                                      //       DashboardController(PreDefineRepository())
-                                      //           .keyTotalAmount,
-                                      //   child: controller.isShowTitle.value
-                                      //       ? InkWell(
-                                      //           onTap: () {
-                                      //             earningDetailPopup(Get.context!,
-                                      //                 controller: controller);
-                                      //             // Get.toNamed(RouteName.yourEarning);
-                                      //           },
-                                      //           child: Column(
-                                      //             crossAxisAlignment:
-                                      //                 CrossAxisAlignment.start,
-                                      //             children: [
-                                      //               Row(
-                                      //                 children: [
-                                      //                   Text(
-                                      //                     "₹${abbreviateNumber(controller.homeData?.totalEarning?.toStringAsFixed(2))}",
-                                      //                     style: AppTextStyle
-                                      //                         .textStyle16(
-                                      //                             fontColor: appColors
-                                      //                                 .appRedColour,
-                                      //                             fontWeight:
-                                      //                                 FontWeight
-                                      //                                     .w700),
-                                      //                   ),
-                                      //                   const Icon(
-                                      //                     Icons.arrow_forward_ios,
-                                      //                     size: 20,
-                                      //                   )
-                                      //                 ],
-                                      //               ),
-                                      //               Text(
-                                      //                 "total".trParams({"count": ""}),
-                                      //                 style: AppTextStyle.textStyle16(
-                                      //                     fontColor:
-                                      //                         appColors.darkBlue,
-                                      //                     fontWeight:
-                                      //                         FontWeight.w400),
-                                      //               ),
-                                      //             ],
-                                      //           ),
-                                      //         )
-                                      //       : InkWell(
-                                      //           onTap: () {
-                                      //             earningDetailPopup(Get.context!,
-                                      //                 controller: controller);
-                                      //             // Get.toNamed(RouteName.yourEarning);
-                                      //           },
-                                      //           child: Column(
-                                      //             crossAxisAlignment:
-                                      //                 CrossAxisAlignment.start,
-                                      //             children: [
-                                      //               Row(
-                                      //                 children: [
-                                      //                   Text(
-                                      //                     "₹********",
-                                      //                     style: AppTextStyle
-                                      //                         .textStyle16(
-                                      //                             fontColor: appColors
-                                      //                                 .appRedColour,
-                                      //                             fontWeight:
-                                      //                                 FontWeight
-                                      //                                     .w700),
-                                      //                   ),
-                                      //                   const Icon(
-                                      //                     Icons.arrow_forward_ios,
-                                      //                     size: 20,
-                                      //                   )
-                                      //                 ],
-                                      //               ),
-                                      //               Text(
-                                      //                 "total".trParams({"count": ""}),
-                                      //                 style: AppTextStyle.textStyle16(
-                                      //                     fontColor:
-                                      //                         appColors.darkBlue,
-                                      //                     fontWeight:
-                                      //                         FontWeight.w400),
-                                      //               ),
-                                      //             ],
-                                      //           ),
-                                      //         ),
-                                      // ),
-                                      // SizedBox(width: 10.w),
-                                      // Container(width: MediaQuery.of(context).size),
-
-                                      Padding(
-                                        padding: const EdgeInsets.only(top: 6),
-                                        child: Column(
-                                          children: [
-                                            InkWell(
-                                              onTap: () {
-                                                Get.toNamed(
-                                                  RouteName.passbookUI,
-                                                );
-                                              },
-                                              child: Ink(
-                                                height: 52,
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.29,
-                                                decoration: BoxDecoration(
-                                                  color: appColors.white,
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                    Radius.circular(10),
-                                                  ),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      blurRadius: 6,
-                                                      spreadRadius: 2,
-                                                      color: appColors.grey
-                                                          .withOpacity(0.2),
                                                     ),
-                                                  ],
-                                                ),
-                                                child: Center(
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      const SizedBox(
-                                                        width: 4,
-                                                      ),
-                                                      Image.asset(
-                                                        "assets/images/passport.png",
-                                                        height: 30,
-                                                        width: 30,
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 2,
-                                                      ),
-                                                      SizedBox(
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.18,
-                                                        child: Text(
-                                                          "PassBook".tr,
-                                                          overflow:
-                                                              TextOverflow.clip,
-                                                          style: AppTextStyle
-                                                              .textStyle12(
-                                                                  fontColor:
-                                                                      appColors
-                                                                          .black,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500),
-                                                        ),
-                                                      ),
-                                                    ],
                                                   ),
                                                 ),
-                                              ),
-                                            ),
-                                            const SizedBox(
-                                              height: 6,
-                                            ),
-                                            InkWell(
-                                              key: DashboardController(
-                                                      PreDefineRepository())
-                                                  .keyCheckKundli,
-                                              onTap: () {
-                                                Get.toNamed(
-                                                    RouteName.checkKundli);
-                                              },
-                                              child: Ink(
-                                                height: 52,
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.29,
-                                                decoration: BoxDecoration(
-                                                  color: appColors.white,
-                                                  borderRadius:
-                                                      const BorderRadius.all(
-                                                    Radius.circular(10),
-                                                  ),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      blurRadius: 6,
-                                                      spreadRadius: 2,
-                                                      color: appColors.grey
-                                                          .withOpacity(0.2),
-                                                    ),
-                                                  ],
-                                                ),
-                                                child: Center(
-                                                  child: Row(
-                                                    mainAxisAlignment:
-                                                        MainAxisAlignment.start,
-                                                    crossAxisAlignment:
-                                                        CrossAxisAlignment
-                                                            .center,
-                                                    children: [
-                                                      const SizedBox(
-                                                        width: 4,
-                                                      ),
-                                                      SizedBox(
-                                                        height: 30,
-                                                        width: 30,
-                                                        child: SvgPicture.asset(
-                                                          'assets/images/kundli_img.svg',
-                                                          // height: 40,
-                                                          // width: 40,
-                                                        ),
-                                                      ),
-                                                      const SizedBox(
-                                                        width: 2,
-                                                      ),
-                                                      SizedBox(
-                                                        width: MediaQuery.of(
-                                                                    context)
-                                                                .size
-                                                                .width *
-                                                            0.18,
-                                                        child: Text(
-                                                          "View Kundli".tr,
-                                                          overflow:
-                                                              TextOverflow.clip,
-                                                          style: AppTextStyle
-                                                              .textStyle12(
-                                                                  fontColor:
-                                                                      appColors
-                                                                          .black,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w500),
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : SizedBox(),
-                        astroHome.toString() == "0"
-                            ? Align(
-                                alignment: Alignment.centerLeft,
-                                child: Container(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 20.w),
-                                  child: CustomText(
-                                    (controller.homeData!.retention! <
-                                            controller
-                                                .homeData!.minimumRetention!)
-                                        ? "notEligibleBonus".tr
-                                        : "eligibleBonus".tr,
-                                    fontWeight: FontWeight.w400,
-                                    textAlign: TextAlign.start,
-                                    fontSize: 14,
-                                    fontColor:
-                                        !(controller.homeData!.retention! <
-                                                controller.homeData!
-                                                    .minimumRetention!)!
-                                            ? appColors.green
-                                            : appColors.red,
-                                  ),
-                                ),
-                              )
-                            : SizedBox(),
-                        astroHome.toString() == "0"
-                            ? controller.getRitentionModel == null ||
-                                    controller.getRitentionModel!.data == null
-                                ? SizedBox()
-                                : Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 10, vertical: 6),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        controller.getRitentionModel!.data!
-                                                    .badge ==
-                                                null
-                                            ? SizedBox()
-                                            : Expanded(
-                                                child: Padding(
-                                                  padding:
-                                                      const EdgeInsets.only(
-                                                    top: 5,
-                                                    bottom: 5,
-                                                  ),
+                                          controller.getRitentionModel!.data!
+                                                          .badge ==
+                                                      null &&
+                                                  controller.getRitentionModel!
+                                                          .data!.level ==
+                                                      null
+                                              ? SizedBox()
+                                              : SizedBox(width: 10),
+                                          controller.getRitentionModel!.data!
+                                                      .level ==
+                                                  null
+                                              ? SizedBox()
+                                              : Expanded(
                                                   child: Ink(
                                                     height: 50,
+                                                    // width: MediaQuery.of(context)
+                                                    //         .size
+                                                    //         .width *
+                                                    //     0.45,
                                                     decoration: BoxDecoration(
                                                       color: appColors.white,
                                                       borderRadius:
@@ -1110,9 +1189,10 @@ class HomeUI extends GetView<HomeController> {
                                                         ),
                                                       ],
                                                     ),
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 5),
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                            horizontal: 5),
+                                                    // alignment: Alignment.center,
                                                     child: Center(
                                                       child: Row(
                                                         mainAxisAlignment:
@@ -1123,12 +1203,8 @@ class HomeUI extends GetView<HomeController> {
                                                                 .center,
                                                         children: [
                                                           CommonImageView(
-                                                            imagePath: controller
-                                                                .getRitentionModel!
-                                                                .data!
-                                                                .badge!
-                                                                .image
-                                                                .toString(),
+                                                            imagePath:
+                                                                "assets/images/clock.png",
                                                             height: 30,
                                                             width: 30,
                                                             placeHolder: Assets
@@ -1136,197 +1212,187 @@ class HomeUI extends GetView<HomeController> {
                                                                 .defaultProfile
                                                                 .path,
                                                           ),
-                                                          SizedBox(
-                                                            width: 6,
-                                                          ),
-                                                          Text(
-                                                            controller
-                                                                .getRitentionModel!
-                                                                .data!
-                                                                .badge!
-                                                                .value
-                                                                .toString(),
-                                                            style: AppTextStyle
-                                                                .textStyle12(
-                                                                    fontColor:
-                                                                        appColors
-                                                                            .black,
-                                                                    fontWeight:
-                                                                        FontWeight
-                                                                            .w500),
-                                                          ),
+                                                          SizedBox(width: 5),
+                                                          Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .center,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                              Row(
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment
+                                                                        .center,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment
+                                                                        .center,
+                                                                children: [
+                                                                  Text(
+                                                                    "Avg. Hrs",
+                                                                    maxLines: 1,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .left,
+                                                                    style: AppTextStyle.textStyle12(
+                                                                        fontColor:
+                                                                            appColors
+                                                                                .black,
+                                                                        fontWeight:
+                                                                            FontWeight.w500),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              Row(
+                                                                children: [
+                                                                  Text(
+                                                                    controller
+                                                                        .getRitentionModel!
+                                                                        .data!
+                                                                        .level!
+                                                                        .hours
+                                                                        .toString(),
+                                                                    style: AppTextStyle.textStyle10(
+                                                                        fontColor:
+                                                                            appColors
+                                                                                .black,
+                                                                        fontWeight:
+                                                                            FontWeight.w400),
+                                                                  ),
+                                                                  SizedBox(
+                                                                      width: 4),
+                                                                  Text(
+                                                                    controller
+                                                                        .getRitentionModel!
+                                                                        .data!
+                                                                        .level!
+                                                                        .text
+                                                                        .toString(),
+                                                                    maxLines: 1,
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                    overflow:
+                                                                        TextOverflow
+                                                                            .ellipsis,
+                                                                    style: AppTextStyle.textStyle10(
+                                                                        fontColor:
+                                                                            appColors
+                                                                                .black,
+                                                                        fontWeight:
+                                                                            FontWeight.w400),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ],
+                                                          )
                                                         ],
                                                       ),
                                                     ),
                                                   ),
                                                 ),
-                                              ),
-                                        controller.getRitentionModel!.data!
-                                                        .badge ==
-                                                    null &&
-                                                controller.getRitentionModel!
-                                                        .data!.level ==
-                                                    null
-                                            ? SizedBox()
-                                            : SizedBox(width: 10),
-                                        controller.getRitentionModel!.data!
-                                                    .level ==
-                                                null
-                                            ? SizedBox()
-                                            : Expanded(
-                                                child: Ink(
-                                                  height: 50,
-                                                  // width: MediaQuery.of(context)
-                                                  //         .size
-                                                  //         .width *
-                                                  //     0.45,
-                                                  decoration: BoxDecoration(
-                                                    color: appColors.white,
-                                                    borderRadius:
-                                                        const BorderRadius.all(
-                                                      Radius.circular(10),
-                                                    ),
-                                                    boxShadow: [
-                                                      BoxShadow(
-                                                        blurRadius: 6,
-                                                        spreadRadius: 2,
-                                                        color: appColors.grey
-                                                            .withOpacity(0.2),
+                                        ],
+                                      ),
+                                    )
+                              : SizedBox(),
+                          astroHome.toString() == "1"
+                              ? Obx(
+                                  () => Container(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20.w),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          key: DashboardController(
+                                                  PreDefineRepository())
+                                              .keyTodayAmount,
+                                          child: controller.isShowTitle.value
+                                              ? InkWell(
+                                                  onTap: () {},
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        "₹${abbreviateNumber(controller.homeData?.todaysEarning?.toStringAsFixed(2))}",
+                                                        // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
+                                                        style: AppTextStyle
+                                                            .textStyle16(
+                                                                fontColor: appColors
+                                                                    .appRedColour,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700),
+                                                      ),
+                                                      Text(
+                                                        "today".tr,
+                                                        style: AppTextStyle
+                                                            .textStyle16(
+                                                                fontColor:
+                                                                    appColors
+                                                                        .darkBlue,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400),
                                                       ),
                                                     ],
                                                   ),
-                                                  padding: EdgeInsets.symmetric(
-                                                      horizontal: 5),
-                                                  // alignment: Alignment.center,
-                                                  child: Center(
-                                                    child: Row(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      crossAxisAlignment:
-                                                          CrossAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        CommonImageView(
-                                                          imagePath:
-                                                              "assets/images/clock.png",
-                                                          height: 30,
-                                                          width: 30,
-                                                          placeHolder: Assets
-                                                              .images
-                                                              .defaultProfile
-                                                              .path,
-                                                        ),
-                                                        SizedBox(width: 5),
-                                                        Column(
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment
-                                                                  .center,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment
-                                                                  .start,
-                                                          children: [
-                                                            Row(
-                                                              mainAxisAlignment:
-                                                                  MainAxisAlignment
-                                                                      .center,
-                                                              crossAxisAlignment:
-                                                                  CrossAxisAlignment
-                                                                      .center,
-                                                              children: [
-                                                                Text(
-                                                                  "Avg. Hrs",
-                                                                  maxLines: 1,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .left,
-                                                                  style: AppTextStyle.textStyle12(
-                                                                      fontColor:
-                                                                          appColors
-                                                                              .black,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w500),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                            Row(
-                                                              children: [
-                                                                Text(
-                                                                  controller
-                                                                      .getRitentionModel!
-                                                                      .data!
-                                                                      .level!
-                                                                      .hours
-                                                                      .toString(),
-                                                                  style: AppTextStyle.textStyle10(
-                                                                      fontColor:
-                                                                          appColors
-                                                                              .black,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400),
-                                                                ),
-                                                                SizedBox(
-                                                                    width: 4),
-                                                                Text(
-                                                                  controller
-                                                                      .getRitentionModel!
-                                                                      .data!
-                                                                      .level!
-                                                                      .text
-                                                                      .toString(),
-                                                                  maxLines: 1,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  style: AppTextStyle.textStyle10(
-                                                                      fontColor:
-                                                                          appColors
-                                                                              .black,
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w400),
-                                                                ),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        )
-                                                      ],
-                                                    ),
+                                                )
+                                              : InkWell(
+                                                  onTap: () {},
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    children: [
+                                                      Text(
+                                                        "₹******",
+                                                        style: AppTextStyle
+                                                            .textStyle16(
+                                                                fontColor: appColors
+                                                                    .appRedColour,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w700),
+                                                      ),
+                                                      Text(
+                                                        "today".tr,
+                                                        style: AppTextStyle
+                                                            .textStyle16(
+                                                                fontColor:
+                                                                    appColors
+                                                                        .darkBlue,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w400),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ),
-                                              ),
-                                      ],
-                                    ),
-                                  )
-                            : SizedBox(),
-                        astroHome.toString() == "1"
-                            ? Obx(
-                                () => Container(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 20.w),
-                                  child: Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        key: DashboardController(
-                                                PreDefineRepository())
-                                            .keyTodayAmount,
-                                        child: controller.isShowTitle.value
-                                            ? InkWell(
-                                                onTap: () {},
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                        ),
+                                        // SizedBox(width: 15.w),
+                                        /*Expanded(
+                                    key: DashboardController(PreDefineRepository())
+                                        .keyTotalAmount,
+                                    child: controller.isShowTitle.value
+                                        ? InkWell(
+                                            onTap: () {
+                                              earningDetailPopup(Get.context!,
+                                                  controller: controller);
+                                              // Get.toNamed(RouteName.yourEarning);
+                                            },
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
                                                   children: [
                                                     Text(
-                                                      "₹${abbreviateNumber(controller.homeData?.todaysEarning?.toStringAsFixed(2))}",
-                                                      // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
+                                                      "₹${abbreviateNumber(controller.homeData?.totalEarning?.toStringAsFixed(2))}",
                                                       style: AppTextStyle
                                                           .textStyle16(
                                                               fontColor: appColors
@@ -1335,28 +1401,37 @@ class HomeUI extends GetView<HomeController> {
                                                                   FontWeight
                                                                       .w700),
                                                     ),
-                                                    Text(
-                                                      "today".tr,
-                                                      style: AppTextStyle
-                                                          .textStyle16(
-                                                              fontColor:
-                                                                  appColors
-                                                                      .darkBlue,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
-                                                    ),
+                                                    const Icon(
+                                                      Icons.arrow_forward_ios,
+                                                      size: 20,
+                                                    )
                                                   ],
                                                 ),
-                                              )
-                                            : InkWell(
-                                                onTap: () {},
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
+                                                Text(
+                                                  "total".trParams({"count": ""}),
+                                                  style: AppTextStyle.textStyle16(
+                                                      fontColor:
+                                                          appColors.darkBlue,
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                ),
+                                              ],
+                                            ),
+                                          )
+                                        : InkWell(
+                                            onTap: () {
+                                              earningDetailPopup(Get.context!,
+                                                  controller: controller);
+                                              // Get.toNamed(RouteName.yourEarning);
+                                            },
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
                                                   children: [
                                                     Text(
-                                                      "₹******",
+                                                      "₹********",
                                                       style: AppTextStyle
                                                           .textStyle16(
                                                               fontColor: appColors
@@ -1365,130 +1440,119 @@ class HomeUI extends GetView<HomeController> {
                                                                   FontWeight
                                                                       .w700),
                                                     ),
-                                                    Text(
-                                                      "today".tr,
-                                                      style: AppTextStyle
-                                                          .textStyle16(
-                                                              fontColor:
-                                                                  appColors
-                                                                      .darkBlue,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
-                                                    ),
+                                                    const Icon(
+                                                      Icons.arrow_forward_ios,
+                                                      size: 20,
+                                                    )
                                                   ],
                                                 ),
-                                              ),
-                                      ),
-                                      // SizedBox(width: 15.w),
-                                      /*Expanded(
-                                  key: DashboardController(PreDefineRepository())
-                                      .keyTotalAmount,
-                                  child: controller.isShowTitle.value
-                                      ? InkWell(
-                                          onTap: () {
-                                            earningDetailPopup(Get.context!,
-                                                controller: controller);
-                                            // Get.toNamed(RouteName.yourEarning);
-                                          },
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    "₹${abbreviateNumber(controller.homeData?.totalEarning?.toStringAsFixed(2))}",
-                                                    style: AppTextStyle
-                                                        .textStyle16(
-                                                            fontColor: appColors
-                                                                .appRedColour,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w700),
-                                                  ),
-                                                  const Icon(
-                                                    Icons.arrow_forward_ios,
-                                                    size: 20,
-                                                  )
-                                                ],
-                                              ),
-                                              Text(
-                                                "total".trParams({"count": ""}),
-                                                style: AppTextStyle.textStyle16(
-                                                    fontColor:
-                                                        appColors.darkBlue,
-                                                    fontWeight:
-                                                        FontWeight.w400),
-                                              ),
-                                            ],
+                                                Text(
+                                                  "total".trParams({"count": ""}),
+                                                  style: AppTextStyle.textStyle16(
+                                                      fontColor:
+                                                          appColors.darkBlue,
+                                                      fontWeight:
+                                                          FontWeight.w400),
+                                                ),
+                                              ],
+                                            ),
                                           ),
-                                        )
-                                      : InkWell(
+                                  ),*/
+                                        // SizedBox(width: 10.w),
+                                        InkWell(
                                           onTap: () {
-                                            earningDetailPopup(Get.context!,
-                                                controller: controller);
-                                            // Get.toNamed(RouteName.yourEarning);
+                                            // showModalBottomSheet(
+                                            //   context: context,
+                                            //   builder: (BuildContext context) {
+                                            //     return Container(
+                                            //       height: 250,
+                                            //       width: double.infinity,
+                                            //       color: appColors.white,
+                                            //       child: Image.asset(
+                                            //           "assets/images/coming-soon-red-blue-3d-text-white-surface-clear-lighting.jpg"),
+                                            //     );
+                                            //   },
+                                            // );
+
+                                            Get.toNamed(
+                                              RouteName.passbookUI,
+                                            );
                                           },
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    "₹********",
-                                                    style: AppTextStyle
-                                                        .textStyle16(
-                                                            fontColor: appColors
-                                                                .appRedColour,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w700),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                              top: 5,
+                                              bottom: 5,
+                                            ),
+                                            child: Ink(
+                                              height: 50,
+                                              width: 100,
+                                              decoration: BoxDecoration(
+                                                color: appColors.white,
+                                                borderRadius:
+                                                    const BorderRadius.all(
+                                                  Radius.circular(10),
+                                                ),
+                                                boxShadow: [
+                                                  BoxShadow(
+                                                    blurRadius: 6,
+                                                    spreadRadius: 2,
+                                                    color: appColors.grey
+                                                        .withOpacity(0.2),
                                                   ),
-                                                  const Icon(
-                                                    Icons.arrow_forward_ios,
-                                                    size: 20,
-                                                  )
                                                 ],
                                               ),
-                                              Text(
-                                                "total".trParams({"count": ""}),
-                                                style: AppTextStyle.textStyle16(
-                                                    fontColor:
-                                                        appColors.darkBlue,
-                                                    fontWeight:
-                                                        FontWeight.w400),
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 5),
+                                              // alignment: Alignment.center,
+                                              child: Center(
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceEvenly,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    Image.asset(
+                                                      "assets/images/passport.png",
+                                                      height: 30,
+                                                      width: 30,
+                                                    ),
+                                                    // CommonImageView(
+                                                    //   imagePath:
+                                                    //       "assets/images/passport.png",
+                                                    //   height: 30,
+                                                    //   width: 30,
+                                                    //   placeHolder: Assets
+                                                    //       .images.defaultProfile.path,
+                                                    //   radius:
+                                                    //       BorderRadius.circular(100.r),
+
+                                                    // ),
+                                                    Text(
+                                                      "PassBook".tr,
+                                                      style: AppTextStyle
+                                                          .textStyle10(
+                                                              fontColor:
+                                                                  appColors
+                                                                      .black,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .w500),
+                                                    ),
+                                                  ],
+                                                ),
                                               ),
-                                            ],
+                                            ),
                                           ),
                                         ),
-                                ),*/
-                                      // SizedBox(width: 10.w),
-                                      InkWell(
-                                        onTap: () {
-                                          // showModalBottomSheet(
-                                          //   context: context,
-                                          //   builder: (BuildContext context) {
-                                          //     return Container(
-                                          //       height: 250,
-                                          //       width: double.infinity,
-                                          //       color: appColors.white,
-                                          //       child: Image.asset(
-                                          //           "assets/images/coming-soon-red-blue-3d-text-white-surface-clear-lighting.jpg"),
-                                          //     );
-                                          //   },
-                                          // );
-
-                                          Get.toNamed(
-                                            RouteName.passbookUI,
-                                          );
-                                        },
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                            top: 5,
-                                            bottom: 5,
-                                          ),
+                                        SizedBox(width: 10.w),
+                                        InkWell(
+                                          key: DashboardController(
+                                                  PreDefineRepository())
+                                              .keyCheckKundli,
+                                          onTap: () {
+                                            Get.toNamed(RouteName.checkKundli);
+                                          },
                                           child: Ink(
                                             height: 50,
                                             width: 100,
@@ -1518,24 +1582,27 @@ class HomeUI extends GetView<HomeController> {
                                                 crossAxisAlignment:
                                                     CrossAxisAlignment.center,
                                                 children: [
-                                                  Image.asset(
-                                                    "assets/images/passport.png",
+                                                  SizedBox(
                                                     height: 30,
                                                     width: 30,
+                                                    child: SvgPicture.asset(
+                                                      'assets/images/kundli_img.svg',
+                                                      // height: 40,
+                                                      // width: 40,
+                                                    ),
                                                   ),
                                                   // CommonImageView(
                                                   //   imagePath:
-                                                  //       "assets/images/passport.png",
-                                                  //   height: 30,
-                                                  //   width: 30,
-                                                  //   placeHolder: Assets
+                                                  //       "assets/images/kundli_img.svg",
+                                                  //   height: 40,
+                                                  //    placeHolder: Assets
                                                   //       .images.defaultProfile.path,
                                                   //   radius:
                                                   //       BorderRadius.circular(100.r),
 
                                                   // ),
                                                   Text(
-                                                    "PassBook".tr,
+                                                    "View Kundli".tr,
                                                     style: AppTextStyle
                                                         .textStyle10(
                                                             fontColor:
@@ -1549,1086 +1616,1046 @@ class HomeUI extends GetView<HomeController> {
                                             ),
                                           ),
                                         ),
-                                      ),
-                                      SizedBox(width: 10.w),
-                                      InkWell(
-                                        key: DashboardController(
-                                                PreDefineRepository())
-                                            .keyCheckKundli,
-                                        onTap: () {
-                                          Get.toNamed(RouteName.checkKundli);
-                                        },
-                                        child: Ink(
-                                          height: 50,
-                                          width: 100,
-                                          decoration: BoxDecoration(
-                                            color: appColors.white,
-                                            borderRadius:
-                                                const BorderRadius.all(
-                                              Radius.circular(10),
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                blurRadius: 6,
-                                                spreadRadius: 2,
-                                                color: appColors.grey
-                                                    .withOpacity(0.2),
-                                              ),
-                                            ],
-                                          ),
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 5),
-                                          // alignment: Alignment.center,
-                                          child: Center(
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.spaceEvenly,
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.center,
-                                              children: [
-                                                SizedBox(
-                                                  height: 30,
-                                                  width: 30,
-                                                  child: SvgPicture.asset(
-                                                    'assets/images/kundli_img.svg',
-                                                    // height: 40,
-                                                    // width: 40,
-                                                  ),
-                                                ),
-                                                // CommonImageView(
-                                                //   imagePath:
-                                                //       "assets/images/kundli_img.svg",
-                                                //   height: 40,
-                                                //    placeHolder: Assets
-                                                //       .images.defaultProfile.path,
-                                                //   radius:
-                                                //       BorderRadius.circular(100.r),
-
-                                                // ),
-                                                Text(
-                                                  "View Kundli".tr,
-                                                  style:
-                                                      AppTextStyle.textStyle10(
-                                                          fontColor:
-                                                              appColors.black,
-                                                          fontWeight:
-                                                              FontWeight.w500),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              )
-                            : SizedBox(),
-
-                        /// new widget
-                        astroHome.toString() == "1"
-                            ? Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 6),
-                                child: Row(
-                                  children: [
-                                    Expanded(
-                                        key: DashboardController(
-                                                PreDefineRepository())
-                                            .keyRetentionRate,
-                                        child: RetentionWidget(
-                                          isEligible: true,
-                                          title:
-                                              "${"bonusWallet".tr} \n ₹${abbreviateNumber(controller.homeData?.bonusWallet)}",
-                                          subTitle:
-                                              "${"retentionRate".tr} \n ${controller.homeData?.retention ?? 0}%",
-                                          borderColor:
-                                              (controller.homeData!.retention! <
-                                                      controller.homeData!
-                                                          .minimumRetention!)
-                                                  ? appColors.red
-                                                  : appColors.green,
-                                          onTap: () async {
-                                            if (!controller.isOpenBonusSheet) {
-                                              controller.isOpenBonusSheet =
-                                                  true;
-                                              controller.update();
-                                              controller
-                                                  .getWalletPointDetail(2);
-
-                                              ecommerceWalletDetailPopup(
-                                                  Get.context!,
-                                                  controller.walletData,
-                                                  title:
-                                                      "What is Bonus Wallet ?",
-                                                  controller: controller,
-                                                  type: 2);
-                                            }
-                                          },
-                                        )),
-                                    SizedBox(width: 7.w),
-                                    Expanded(
-                                      key: DashboardController(
-                                              PreDefineRepository())
-                                          .keyRepurchaseRate,
-                                      child: RetentionWidget(
-                                        title:
-                                            "${"paidWallet".tr} \n ₹${abbreviateNumber(controller.homeData?.paidWallet)}",
-                                        subTitle:
-                                            "${"rePurchaseRate".tr} \n ${controller.homeData?.repurchaseRate ?? 0}%",
-                                        borderColor: (controller
-                                                    .homeData!.repurchaseRate! <
-                                                controller.homeData!
-                                                    .minimumRepurchaseRate!)
-                                            ? appColors.red
-                                            : appColors.green,
-                                        onTap: () async {
-                                          if (!controller.isOpenPaidSheet) {
-                                            controller.isOpenPaidSheet = true;
-                                            controller.update();
-                                            controller.getWalletPointDetail(1);
-                                            ecommerceWalletDetailPopup(
-                                                Get.context!,
-                                                controller.walletData,
-                                                title: "What is Paid Wallet ?",
-                                                controller: controller,
-                                                type: 1);
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                    SizedBox(width: 7.w),
-                                    Expanded(
-                                        key: DashboardController(
-                                                PreDefineRepository())
-                                            .keyEcommerceWallet,
-                                        child: RetentionWidget(
-                                          borderColor: appColors.textColor,
-                                          bottomTextColor: appColors.textColor,
-                                          bottomColor: appColors.transparent,
-                                          onTap: () async {
-                                            if (!controller
-                                                .isOpenECommerceSheet) {
-                                              controller.isOpenECommerceSheet =
-                                                  true;
-                                              controller.update();
-                                              controller
-                                                  .getWalletPointDetail(3);
-                                              ecommerceWalletDetailPopup(
-                                                  Get.context!,
-                                                  controller.walletData,
-                                                  title:
-                                                      "What is Ecommerce Wallet ?",
-                                                  controller: controller,
-                                                  type: 3);
-                                            }
-                                          },
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              CustomText(
-                                                "ecommerceWallet".tr,
-                                                fontWeight: FontWeight.w500,
-                                                textAlign: TextAlign.center,
-                                                fontSize: 9.sp,
-                                                fontColor: appColors.textColor,
-                                              ),
-                                              SizedBox(height: 5.h),
-                                              CustomText(
-                                                "₹${abbreviateNumber(controller.homeData?.ecommerceWallet)}",
-                                                fontWeight: FontWeight.w400,
-                                                textAlign: TextAlign.center,
-                                                fontSize: 9.sp,
-                                                fontColor: appColors.textColor,
-                                              ),
-                                            ],
-                                          ),
-                                        )),
-                                  ],
-                                ),
-                              )
-                            : SizedBox(),
-                        astroHome.toString() == "1"
-                            ? Align(
-                                alignment: Alignment.centerLeft,
-                                child: Container(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 20.w),
-                                  child: CustomText(
-                                    (controller.homeData!.retention! <
-                                            controller
-                                                .homeData!.minimumRetention!)
-                                        ? "notEligibleBonus".tr
-                                        : "eligibleBonus".tr,
-                                    fontWeight: FontWeight.w400,
-                                    textAlign: TextAlign.start,
-                                    fontSize: 14,
-                                    fontColor:
-                                        !(controller.homeData!.retention! <
-                                                controller.homeData!
-                                                    .minimumRetention!)!
-                                            ? appColors.green
-                                            : appColors.red,
-                                  ),
-                                ),
-                              )
-                            : SizedBox(),
-                        Obx(() {
-                          return Visibility(
-                            visible: controller.marqueeText.value.isNotEmpty,
-                            child: Container(
-                              height: 30.h,
-                              // color: appColors.marqueeBgColor,
-                              child: Marquee(
-                                text: Utils().parseHtmlString(
-                                    controller.marqueeText.value),
-                                style: TextStyle(
-                                  color: appColors.black,
-                                  fontSize: 15.sp,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: FontFamily.metropolis,
-                                ),
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                blankSpace: 20.0,
-                                velocity: 60.0,
-                                startPadding: 10.0,
-                                accelerationCurve: Curves.linear,
-                                decelerationCurve: Curves.easeOut,
-                              ),
-                            ),
-                          );
-                        }),
-                        astroHome.toString() == "0"
-                            ? PerformanceTab(context, controller: controller)
-                            : SizedBox(),
-                        Obx(
-                          () => controller.isFeedbackAvailable.value
-                              ? controller.homeData?.feedback == null
-                                  ? const SizedBox.shrink()
-                                  : Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16, vertical: 6),
-                                      child: Column(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              Get.toNamed(
-                                                  RouteName.orderFeedback,
-                                                  arguments: [
-                                                    controller.feedbacksList
-                                                  ]);
-                                            },
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Text(
-                                                  'Order Feedback',
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        FontFamily.poppins,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: appColors.darkBlue,
-                                                    fontSize: 16,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  "viewAll".tr,
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        FontFamily.poppins,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: appColors.darkBlue,
-                                                    fontSize: 12,
-                                                  ),
-                                                )
-                                              ],
-                                            ),
-                                          ),
-                                          SizedBox(height: 10.h),
-                                          FeedbackCardWidget(
-                                              feedback: controller
-                                                      .homeData?.feedback ??
-                                                  FeedbackData(
-                                                    id: controller
-                                                        .homeData?.feedback?.id,
-                                                    orderId: controller.homeData
-                                                        ?.feedback?.orderId,
-                                                    remark: controller.homeData
-                                                        ?.feedback?.remark,
-                                                    order: OrderDetails(
-                                                      astrologerId: controller
-                                                          .homeData
-                                                          ?.feedback
-                                                          ?.order
-                                                          ?.astrologerId,
-                                                      id: controller.homeData
-                                                          ?.feedback?.order?.id,
-                                                      productType: controller
-                                                          .homeData
-                                                          ?.feedback
-                                                          ?.order
-                                                          ?.productType,
-                                                      orderId: controller
-                                                          .homeData
-                                                          ?.feedback
-                                                          ?.order
-                                                          ?.orderId,
-                                                      createdAt: controller
-                                                          .homeData
-                                                          ?.feedback
-                                                          ?.order
-                                                          ?.createdAt,
-                                                    ),
-                                                  )),
-                                        ],
-                                      ),
-                                    )
-                              : const SizedBox(),
-                        ),
-                        controller.astroNoticeBoardResponse.value.data
-                                    ?.noticeBoard ==
-                                null
-                            ? const SizedBox()
-                            : Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 6),
-                                child: Column(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        Get.toNamed(RouteName.noticeBoard);
-                                      },
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          Text(
-                                            "noticeBoard".tr,
-                                            style: TextStyle(
-                                              fontFamily: FontFamily.poppins,
-                                              fontWeight: FontWeight.w400,
-                                              color: appColors.darkBlue,
-                                              fontSize: 16,
-                                            ),
-                                          ),
-                                          Text(
-                                            "viewAll".tr,
-                                            style: TextStyle(
-                                              fontFamily: FontFamily.poppins,
-                                              fontWeight: FontWeight.w400,
-                                              color: appColors.darkBlue,
-                                              fontSize: 12,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    SizedBox(height: 10.h),
-                                    noticeBoardWidget(controller: controller),
-                                  ],
-                                ),
-                              ),
-                        // noticeBoardPoll(controller: controller, maxWidth),
-
-                        Obx(
-                          () {
-                            final bool cond1 = controller.isCallEnable.value;
-                            final bool cond2 = controller.isChatEnable.value;
-                            final bool cond3 =
-                                controller.isVideoCallEnable.value;
-
-                            return cond1 || cond2 || cond3
-                                ? Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 16, vertical: 6),
-                                    child: sessionTypeWidget(
-                                        controller: controller))
-                                : const SizedBox();
-                          },
-                        ),
-                        Obx(
-                          () {
-                            return isLive.value == 1
-                                ? controller.isLiveEnable.value //== false
-                                    ? Container(
-                                        margin: EdgeInsets.symmetric(
-                                            horizontal: 16, vertical: 6),
-                                        child: Column(
-                                          children: [
-                                            // SizedBox(height: 10.h),
-                                            GestureDetector(
-                                              onTap: () async {
-                                                bool hasOpenOrder = false;
-                                                // hasOpenOrder = await controller.hasOpenOrder();
-                                                if (hasOpenOrder) {
-                                                  // divineSnackBar(
-                                                  //   data:
-                                                  //       "Unable to Go Live due to your active order.",
-                                                  //   color: appColors.guideColor,
-                                                  //   duration: const Duration(seconds: 6),
-                                                  // );
-                                                } else {
-                                                  bool isChatOn =
-                                                      chatSwitch.value;
-                                                  bool isAudioCallOn =
-                                                      callSwitch.value;
-                                                  bool isVideoCallOn =
-                                                      videoSwitch.value;
-                                                  if (isChatOn == false &&
-                                                      isAudioCallOn == false &&
-                                                      isVideoCallOn == false) {
-                                                    await Get.toNamed(
-                                                        RouteName.liveTipsUI);
-                                                  } else {
-                                                    divineSnackBar(
-                                                      data:
-                                                          "Please turn off all session types in order to go live.",
-                                                      color:
-                                                          appColors.guideColor,
-                                                      duration: const Duration(
-                                                          seconds: 6),
-                                                    );
-                                                  }
-                                                }
-                                              },
-                                              child: Container(
-                                                height: 60,
-                                                decoration: BoxDecoration(
-                                                  color: appColors.white,
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      blurRadius: 6,
-                                                      spreadRadius: 2,
-                                                      color: appColors.grey
-                                                          .withOpacity(0.2),
-                                                    ),
-                                                  ],
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10.0),
-                                                ),
-                                                child: Row(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    CommonImageView(
-                                                      imagePath:
-                                                          "assets/images/live_image.png",
-                                                      height: 35,
-                                                      width: 35,
-                                                      placeHolder: Assets.images
-                                                          .defaultProfile.path,
-                                                    ),
-                                                    const SizedBox(width: 15),
-                                                    Text(
-                                                      "goLive".tr,
-                                                      style: TextStyle(
-                                                        fontFamily:
-                                                            FontFamily.poppins,
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        color: appColors.black,
-                                                        fontSize: 20,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                            // SizedBox(height: 10.h),
-                                          ],
-                                        ),
-                                      )
-                                    : const SizedBox()
-                                : const SizedBox();
-                          },
-                        ),
-
-                        viewKundliWidgetUpdated(),
-
-                        Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GestureDetector(
-                                onTap: () =>
-                                    Get.toNamed(RouteName.messageTemplate),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 55,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.28,
-                                  decoration: BoxDecoration(
-                                    color: appColors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        blurRadius: 6,
-                                        spreadRadius: 2,
-                                        color: appColors.grey.withOpacity(0.2),
-                                      ),
-                                    ],
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        CommonImageView(
-                                          imagePath:
-                                              "assets/images/message.png",
-                                          height: 30,
-                                          width: 30,
-                                          placeHolder:
-                                              Assets.images.defaultProfile.path,
-                                        ),
-                                        const SizedBox(width: 5),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.15,
-                                          child: Text(
-                                            "Message Template",
-                                            style: AppTextStyle.textStyle10(
-                                              fontWeight: FontWeight.w500,
-                                              fontColor: appColors.black,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () =>
-                                    Get.toNamed(RouteName.suggestRemediesView),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 55,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.28,
-                                  decoration: BoxDecoration(
-                                    color: appColors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        blurRadius: 6,
-                                        spreadRadius: 2,
-                                        color: appColors.grey.withOpacity(0.2),
-                                      ),
-                                    ],
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        CommonImageView(
-                                          imagePath:
-                                              "assets/images/service.png",
-                                          height: 30,
-                                          width: 30,
-                                          placeHolder:
-                                              Assets.images.defaultProfile.path,
-                                        ),
-                                        const SizedBox(width: 5),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.15,
-                                          child: Text(
-                                            "Suggested Remedies",
-                                            style: AppTextStyle.textStyle10(
-                                              fontWeight: FontWeight.w500,
-                                              fontColor: appColors.black,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () =>
-                                    Get.toNamed(RouteName.customProduct),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 55,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.28,
-                                  decoration: BoxDecoration(
-                                    color: appColors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        blurRadius: 6,
-                                        spreadRadius: 2,
-                                        color: appColors.grey.withOpacity(0.2),
-                                      ),
-                                    ],
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        CommonImageView(
-                                          imagePath:
-                                              "assets/images/product.png",
-                                          height: 30,
-                                          width: 30,
-                                          placeHolder:
-                                              Assets.images.defaultProfile.path,
-                                        ),
-                                        const SizedBox(width: 5),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.15,
-                                          child: Text(
-                                            "Custom Product",
-                                            style: AppTextStyle.textStyle10(
-                                              fontWeight: FontWeight.w500,
-                                              fontColor: appColors.black,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        controller.homeData?.offers?.orderOffer!.length != 0
-                            ? Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 6),
-                                child: orderOfferWidget(
-                                    homeController: controller))
-                            : SizedBox(),
-
-                        controller.homeData?.offers?.customOffer!.length != 0
-                            ? Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 6),
-                                child: customerOfferWidget(context,
-                                    controller: controller),
-                              )
-                            : const SizedBox(),
-                        fullScreenBtnWidget(
-                            btnTitle: "referAnAstrologer".tr,
-                            onbtnTap: () {
-                              Get.toNamed(RouteName.referAstrologer);
-                            }),
-                        trainingVideoWidget(controller: controller),
-                        scheduledTrainingWidgetUpdated(controller: controller),
-
-                        Obx(() {
-                          return showDailyLive.value.toString() == "1"
-                              ? Visibility(
-                                  visible: controller.isLiveMonitor.value != 1,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 6, bottom: 6),
-                                    child: Column(
-                                      children: [
-                                        liveWidgetUpdated(),
-                                        // SizedBox(height: 10.h),
                                       ],
                                     ),
                                   ),
                                 )
-                              : SizedBox();
-                        }),
-                        (controller.customerDetailsResponse == null ||
-                                controller
-                                    .customerDetailsResponse!.data.isEmpty)
-                            ? SizedBox()
-                            : Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 5),
-                                  child: Text(
-                                    "User Data".tr,
-                                    style: TextStyle(
-                                      fontFamily: FontFamily.poppins,
+                              : SizedBox(),
+
+                          /// new widget
+                          astroHome.toString() == "1"
+                              ? Container(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 6),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                          key: DashboardController(
+                                                  PreDefineRepository())
+                                              .keyRetentionRate,
+                                          child: RetentionWidget(
+                                            isEligible: true,
+                                            title:
+                                                "${"bonusWallet".tr} \n ₹${abbreviateNumber(controller.homeData?.bonusWallet)}",
+                                            subTitle:
+                                                "${"retentionRate".tr} \n ${controller.homeData?.retention ?? 0}%",
+                                            borderColor: (controller
+                                                        .homeData!.retention! <
+                                                    controller.homeData!
+                                                        .minimumRetention!)
+                                                ? appColors.red
+                                                : appColors.green,
+                                            onTap: () async {
+                                              if (!controller
+                                                  .isOpenBonusSheet) {
+                                                controller.isOpenBonusSheet =
+                                                    true;
+                                                controller.update();
+                                                controller
+                                                    .getWalletPointDetail(2);
+
+                                                ecommerceWalletDetailPopup(
+                                                    Get.context!,
+                                                    controller.walletData,
+                                                    title:
+                                                        "What is Bonus Wallet ?",
+                                                    controller: controller,
+                                                    type: 2);
+                                              }
+                                            },
+                                          )),
+                                      SizedBox(width: 7.w),
+                                      Expanded(
+                                        key: DashboardController(
+                                                PreDefineRepository())
+                                            .keyRepurchaseRate,
+                                        child: RetentionWidget(
+                                          title:
+                                              "${"paidWallet".tr} \n ₹${abbreviateNumber(controller.homeData?.paidWallet)}",
+                                          subTitle:
+                                              "${"rePurchaseRate".tr} \n ${controller.homeData?.repurchaseRate ?? 0}%",
+                                          borderColor: (controller.homeData!
+                                                      .repurchaseRate! <
+                                                  controller.homeData!
+                                                      .minimumRepurchaseRate!)
+                                              ? appColors.red
+                                              : appColors.green,
+                                          onTap: () async {
+                                            if (!controller.isOpenPaidSheet) {
+                                              controller.isOpenPaidSheet = true;
+                                              controller.update();
+                                              controller
+                                                  .getWalletPointDetail(1);
+                                              ecommerceWalletDetailPopup(
+                                                  Get.context!,
+                                                  controller.walletData,
+                                                  title:
+                                                      "What is Paid Wallet ?",
+                                                  controller: controller,
+                                                  type: 1);
+                                            }
+                                          },
+                                        ),
+                                      ),
+                                      SizedBox(width: 7.w),
+                                      Expanded(
+                                          key: DashboardController(
+                                                  PreDefineRepository())
+                                              .keyEcommerceWallet,
+                                          child: RetentionWidget(
+                                            borderColor: appColors.textColor,
+                                            bottomTextColor:
+                                                appColors.textColor,
+                                            bottomColor: appColors.transparent,
+                                            onTap: () async {
+                                              if (!controller
+                                                  .isOpenECommerceSheet) {
+                                                controller
+                                                        .isOpenECommerceSheet =
+                                                    true;
+                                                controller.update();
+                                                controller
+                                                    .getWalletPointDetail(3);
+                                                ecommerceWalletDetailPopup(
+                                                    Get.context!,
+                                                    controller.walletData,
+                                                    title:
+                                                        "What is Ecommerce Wallet ?",
+                                                    controller: controller,
+                                                    type: 3);
+                                              }
+                                            },
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                CustomText(
+                                                  "ecommerceWallet".tr,
+                                                  fontWeight: FontWeight.w500,
+                                                  textAlign: TextAlign.center,
+                                                  fontSize: 9.sp,
+                                                  fontColor:
+                                                      appColors.textColor,
+                                                ),
+                                                SizedBox(height: 5.h),
+                                                CustomText(
+                                                  "₹${abbreviateNumber(controller.homeData?.ecommerceWallet)}",
+                                                  fontWeight: FontWeight.w400,
+                                                  textAlign: TextAlign.center,
+                                                  fontSize: 9.sp,
+                                                  fontColor:
+                                                      appColors.textColor,
+                                                ),
+                                              ],
+                                            ),
+                                          )),
+                                    ],
+                                  ),
+                                )
+                              : SizedBox(),
+                          astroHome.toString() == "1"
+                              ? Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Container(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20.w),
+                                    child: CustomText(
+                                      (controller.homeData!.retention! <
+                                              controller
+                                                  .homeData!.minimumRetention!)
+                                          ? "notEligibleBonus".tr
+                                          : "eligibleBonus".tr,
                                       fontWeight: FontWeight.w400,
-                                      color: appColors.darkBlue,
-                                      fontSize: 16,
+                                      textAlign: TextAlign.start,
+                                      fontSize: 14,
+                                      fontColor:
+                                          !(controller.homeData!.retention! <
+                                                  controller.homeData!
+                                                      .minimumRetention!)!
+                                              ? appColors.green
+                                              : appColors.red,
+                                    ),
+                                  ),
+                                )
+                              : SizedBox(),
+                          Obx(() {
+                            return Visibility(
+                              visible: controller.marqueeText.value.isNotEmpty,
+                              child: Container(
+                                height: 30.h,
+                                // color: appColors.marqueeBgColor,
+                                child: Marquee(
+                                  text: Utils().parseHtmlString(
+                                      controller.marqueeText.value),
+                                  style: TextStyle(
+                                    color: appColors.black,
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: FontFamily.metropolis,
+                                  ),
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  blankSpace: 20.0,
+                                  velocity: 60.0,
+                                  startPadding: 10.0,
+                                  accelerationCurve: Curves.linear,
+                                  decelerationCurve: Curves.easeOut,
+                                ),
+                              ),
+                            );
+                          }),
+                          astroHome.toString() == "0"
+                              ? PerformanceTab(context, controller: controller)
+                              : SizedBox(),
+                          Obx(
+                            () => controller.isFeedbackAvailable.value
+                                ? controller.homeData?.feedback == null
+                                    ? const SizedBox.shrink()
+                                    : Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16, vertical: 6),
+                                        child: Column(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.toNamed(
+                                                    RouteName.orderFeedback,
+                                                    arguments: [
+                                                      controller.feedbacksList
+                                                    ]);
+                                              },
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    'Order Feedback',
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          FontFamily.poppins,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: appColors.darkBlue,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    "viewAll".tr,
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          FontFamily.poppins,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: appColors.darkBlue,
+                                                      fontSize: 12,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(height: 10.h),
+                                            FeedbackCardWidget(
+                                                feedback: controller
+                                                        .homeData?.feedback ??
+                                                    FeedbackData(
+                                                      id: controller.homeData
+                                                          ?.feedback?.id,
+                                                      orderId: controller
+                                                          .homeData
+                                                          ?.feedback
+                                                          ?.orderId,
+                                                      remark: controller
+                                                          .homeData
+                                                          ?.feedback
+                                                          ?.remark,
+                                                      order: OrderDetails(
+                                                        astrologerId: controller
+                                                            .homeData
+                                                            ?.feedback
+                                                            ?.order
+                                                            ?.astrologerId,
+                                                        id: controller
+                                                            .homeData
+                                                            ?.feedback
+                                                            ?.order
+                                                            ?.id,
+                                                        productType: controller
+                                                            .homeData
+                                                            ?.feedback
+                                                            ?.order
+                                                            ?.productType,
+                                                        orderId: controller
+                                                            .homeData
+                                                            ?.feedback
+                                                            ?.order
+                                                            ?.orderId,
+                                                        createdAt: controller
+                                                            .homeData
+                                                            ?.feedback
+                                                            ?.order
+                                                            ?.createdAt,
+                                                      ),
+                                                    )),
+                                          ],
+                                        ),
+                                      )
+                                : const SizedBox(),
+                          ),
+                          controller.astroNoticeBoardResponse.value.data
+                                      ?.noticeBoard ==
+                                  null
+                              ? const SizedBox()
+                              : Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 6),
+                                  child: Column(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed(RouteName.noticeBoard);
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "noticeBoard".tr,
+                                              style: TextStyle(
+                                                fontFamily: FontFamily.poppins,
+                                                fontWeight: FontWeight.w400,
+                                                color: appColors.darkBlue,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            Text(
+                                              "viewAll".tr,
+                                              style: TextStyle(
+                                                fontFamily: FontFamily.poppins,
+                                                fontWeight: FontWeight.w400,
+                                                color: appColors.darkBlue,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(height: 10.h),
+                                      noticeBoardWidget(controller: controller),
+                                    ],
+                                  ),
+                                ),
+                          // noticeBoardPoll(controller: controller, maxWidth),
+
+                          Obx(
+                            () {
+                              final bool cond1 = controller.isCallEnable.value;
+                              final bool cond2 = controller.isChatEnable.value;
+                              final bool cond3 =
+                                  controller.isVideoCallEnable.value;
+
+                              return cond1 || cond2 || cond3
+                                  ? Container(
+                                      margin: const EdgeInsets.symmetric(
+                                          horizontal: 16, vertical: 6),
+                                      child: sessionTypeWidget(
+                                          controller: controller))
+                                  : const SizedBox();
+                            },
+                          ),
+                          Obx(
+                            () {
+                              return isLive.value == 1
+                                  ? controller.isLiveEnable.value //== false
+                                      ? Container(
+                                          margin: EdgeInsets.symmetric(
+                                              horizontal: 16, vertical: 6),
+                                          child: Column(
+                                            children: [
+                                              // SizedBox(height: 10.h),
+                                              GestureDetector(
+                                                onTap: () async {
+                                                  bool hasOpenOrder = false;
+                                                  // hasOpenOrder = await controller.hasOpenOrder();
+                                                  if (hasOpenOrder) {
+                                                    // divineSnackBar(
+                                                    //   data:
+                                                    //       "Unable to Go Live due to your active order.",
+                                                    //   color: appColors.guideColor,
+                                                    //   duration: const Duration(seconds: 6),
+                                                    // );
+                                                  } else {
+                                                    bool isChatOn =
+                                                        chatSwitch.value;
+                                                    bool isAudioCallOn =
+                                                        callSwitch.value;
+                                                    bool isVideoCallOn =
+                                                        videoSwitch.value;
+                                                    if (isChatOn == false &&
+                                                        isAudioCallOn ==
+                                                            false &&
+                                                        isVideoCallOn ==
+                                                            false) {
+                                                      await Get.toNamed(
+                                                          RouteName.liveTipsUI);
+                                                    } else {
+                                                      divineSnackBar(
+                                                        data:
+                                                            "Please turn off all session types in order to go live.",
+                                                        color: appColors
+                                                            .guideColor,
+                                                        duration:
+                                                            const Duration(
+                                                                seconds: 6),
+                                                      );
+                                                    }
+                                                  }
+                                                },
+                                                child: Container(
+                                                  height: 60,
+                                                  decoration: BoxDecoration(
+                                                    color: appColors.white,
+                                                    boxShadow: [
+                                                      BoxShadow(
+                                                        blurRadius: 6,
+                                                        spreadRadius: 2,
+                                                        color: appColors.grey
+                                                            .withOpacity(0.2),
+                                                      ),
+                                                    ],
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10.0),
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      CommonImageView(
+                                                        imagePath:
+                                                            "assets/images/live_image.png",
+                                                        height: 35,
+                                                        width: 35,
+                                                        placeHolder: Assets
+                                                            .images
+                                                            .defaultProfile
+                                                            .path,
+                                                      ),
+                                                      const SizedBox(width: 15),
+                                                      Text(
+                                                        "goLive".tr,
+                                                        style: TextStyle(
+                                                          fontFamily: FontFamily
+                                                              .poppins,
+                                                          fontWeight:
+                                                              FontWeight.w600,
+                                                          color:
+                                                              appColors.black,
+                                                          fontSize: 20,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
+                                              ),
+                                              // SizedBox(height: 10.h),
+                                            ],
+                                          ),
+                                        )
+                                      : const SizedBox()
+                                  : const SizedBox();
+                            },
+                          ),
+
+                          viewKundliWidgetUpdated(),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 6),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                GestureDetector(
+                                  onTap: () =>
+                                      Get.toNamed(RouteName.messageTemplate),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: 55,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.28,
+                                    decoration: BoxDecoration(
+                                      color: appColors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 6,
+                                          spreadRadius: 2,
+                                          color:
+                                              appColors.grey.withOpacity(0.2),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CommonImageView(
+                                            imagePath:
+                                                "assets/images/message.png",
+                                            height: 30,
+                                            width: 30,
+                                            placeHolder: Assets
+                                                .images.defaultProfile.path,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.15,
+                                            child: Text(
+                                              "Message Template",
+                                              style: AppTextStyle.textStyle10(
+                                                fontWeight: FontWeight.w500,
+                                                fontColor: appColors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                        (controller.customerDetailsResponse == null ||
-                                controller
-                                    .customerDetailsResponse!.data.isEmpty)
-                            ? SizedBox()
-                            : ListView.builder(
-                                shrinkWrap: true,
-                                padding: EdgeInsets.symmetric(horizontal: 10.h),
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount:
-                                    (controller.filteredUserData).isNotEmpty ||
-                                            controller.searchController.text
-                                                .isNotEmpty
-                                        ? controller.filteredUserData.length
-                                        : controller.customerDetailsResponse
-                                                ?.data.length ??
-                                            0,
-                                itemBuilder: (context, index) {
-                                  return ChatAssistanceDataTile(
-                                    data: (controller.filteredUserData)
-                                                .isNotEmpty ||
-                                            controller.searchController.text
-                                                .isNotEmpty
-                                        ? controller.filteredUserData[index]
-                                        : controller.customerDetailsResponse!
-                                            .data[index],
-                                  );
-                                },
-                              ),
-                        // NotificationListener<ScrollNotification>(
-                        //         onNotification:
-                        //             (ScrollNotification scrollInfo) {
-                        //           if (scrollInfo.metrics.pixels ==
-                        //               scrollInfo.metrics.maxScrollExtent) {
-                        //             print(
-                        //                 "getConsulation getConsulation getConsulation");
-                        //             // controller.getConsulation();
-                        //             return true;
-                        //           }
-                        //           return false;
-                        //         },
-                        //         child:
-                        //       ),
-                        SizedBox(height: 20.h),
-                        // feedbackWidget(controller: controller),
-                        // Obx(() {
-                        //   return Visibility(
-                        //     visible: controller.marqueeText.isNotEmpty,
-                        //     child: Container(
-                        //       margin: EdgeInsets.only(bottom: 15.h),
-                        //       height: 45.h,
-                        //       color: appColors.marqueeBgColor,
-                        //       child: CustomWidgetMarquee(
-                        //         child: ListView(
-                        //           padding: EdgeInsets.zero,
-                        //           scrollDirection: Axis.horizontal,
-                        //           shrinkWrap: true,
-                        //           children: List.generate(
-                        //             controller.marqueeText.length,
-                        //                 (index) {
-                        //               return Container(
-                        //                   alignment:
-                        //                   AlignmentDirectional.center,
-                        //                   child: HtmlWidget(
-                        //                     controller.marqueeText[index],
-                        //                   ));
-                        //             },
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   );
-                        // }),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     Get.toNamed(RouteName.customProduct);
-                        //   },
-                        //   child: Container(
-                        //     margin:
-                        //         const EdgeInsets.symmetric(horizontal: 20.0),
-                        //     alignment: Alignment.center,
-                        //     height: 55,
-                        //     decoration: BoxDecoration(
-                        //       color: appColors.guideColor,
-                        //       boxShadow: [
-                        //         BoxShadow(
-                        //           color: Colors.black.withOpacity(0.2),
-                        //           blurRadius: 1.0,
-                        //           offset: const Offset(0.0, 3.0),
-                        //         ),
-                        //       ],
-                        //       borderRadius: BorderRadius.circular(10.0),
-                        //     ),
-                        //     child: Text(
-                        //       "Custom Product",
-                        //       style: AppTextStyle.textStyle14(
-                        //         fontWeight: FontWeight.w500,
-                        //         fontColor: appColors.white,
-                        //       ),
-                        //     ),
-                        //   ),
-                        // )
-                        // Align(
-                        //   alignment: Alignment.centerLeft,
-                        //   child: Container(
-                        //     padding: EdgeInsets.symmetric(horizontal: 20.w),
-                        //     child: CustomText(
-                        //       (controller.homeData!.retention! <
-                        //               controller.homeData!.minimumRetention!)
-                        //           ? "notEligibleBonus".tr
-                        //           : "eligibleBonus".tr,
-                        //       fontWeight: FontWeight.w400,
-                        //       textAlign: TextAlign.start,
-                        //       fontSize: 14,
-                        //       fontColor: !(controller.homeData!.retention! <
-                        //               controller.homeData!.minimumRetention!)!
-                        //           ? appColors.green
-                        //           : appColors.red,
-                        //     ),
-                        //   ),
-                        // ),
-                        // SizedBox(height: 10.h),
+                                GestureDetector(
+                                  onTap: () => Get.toNamed(
+                                      RouteName.suggestRemediesView),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: 55,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.28,
+                                    decoration: BoxDecoration(
+                                      color: appColors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 6,
+                                          spreadRadius: 2,
+                                          color:
+                                              appColors.grey.withOpacity(0.2),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CommonImageView(
+                                            imagePath:
+                                                "assets/images/service.png",
+                                            height: 30,
+                                            width: 30,
+                                            placeHolder: Assets
+                                                .images.defaultProfile.path,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.15,
+                                            child: Text(
+                                              "Suggested Remedies",
+                                              style: AppTextStyle.textStyle10(
+                                                fontWeight: FontWeight.w500,
+                                                fontColor: appColors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () =>
+                                      Get.toNamed(RouteName.customProduct),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: 55,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.28,
+                                    decoration: BoxDecoration(
+                                      color: appColors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 6,
+                                          spreadRadius: 2,
+                                          color:
+                                              appColors.grey.withOpacity(0.2),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          CommonImageView(
+                                            imagePath:
+                                                "assets/images/product.png",
+                                            height: 30,
+                                            width: 30,
+                                            placeHolder: Assets
+                                                .images.defaultProfile.path,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                0.15,
+                                            child: Text(
+                                              "Custom Product",
+                                              style: AppTextStyle.textStyle10(
+                                                fontWeight: FontWeight.w500,
+                                                fontColor: appColors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          controller.homeData?.offers?.orderOffer!.length != 0
+                              ? Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 6),
+                                  child: orderOfferWidget(
+                                      homeController: controller))
+                              : SizedBox(),
 
-                        // SizedBox(height: 10.h),
-                        // availableFeedbackWidget(controller.feedbackResponse ?? FeedbackData()),
-                        // SizedBox(height: 10.h),
-
-                        // SizedBox(height: 10.h),
-                        // noticeBoardWidget(),
-                        // SizedBox(height: 15.h),
-                        // viewKundliWidget(),
-                        // viewKundliWidgetUpdated(),
-
-                        // SizedBox(height: 10.h),
-                        // Container(
-                        //     margin: EdgeInsets.symmetric(horizontal: 20.w),
-                        //     height: 1.h,
-                        //     color: appColors.darkBlue.withOpacity(0.5)),
-                        // SizedBox(height: 10.h),
-                        // Obx(
-                        //   () {
-                        //     final bool cond1 = controller.isCallEnable.value;
-                        //     final bool cond2 = controller.isChatEnable.value;
-                        //     final bool cond3 =
-                        //         controller.isVideoCallEnable.value;
-                        //
-                        //     return cond1 || cond2 || cond3
-                        //         ? Container(
-                        //             margin:
-                        //                 EdgeInsets.symmetric(horizontal: 20.w),
-                        //             child: sessionTypeWidget(
-                        //                 controller: controller))
-                        //         : const SizedBox();
-                        //   },
-                        // ),
-                        // if (controller.homeData?.offerType != null &&
-                        //     controller.homeData?.offerType != [])
-                        //   offerTypeWidget(),
-                        // SizedBox(height: 20.h),
-                        // Padding(
-                        //   padding: EdgeInsets.symmetric(horizontal: 20.0),
-                        //   child: Row(
-                        //     children: [
-                        //       Expanded(
-                        //         child: GestureDetector(
-                        //           onTap: () =>
-                        //               Get.toNamed(RouteName.messageTemplate),
-                        //           child: Container(
-                        //             alignment: Alignment.center,
-                        //             height: 55,
-                        //             decoration: BoxDecoration(
-                        //               color: appColors.guideColor,
-                        //               boxShadow: [
-                        //                 BoxShadow(
-                        //                   color: Colors.black.withOpacity(0.2),
-                        //                   blurRadius: 1.0,
-                        //                   offset: const Offset(0.0, 3.0),
-                        //                 ),
-                        //               ],
-                        //               borderRadius: BorderRadius.circular(10.0),
-                        //             ),
-                        //             child: Text(
-                        //               "Message Template",
-                        //               style: AppTextStyle.textStyle14(
-                        //                 fontWeight: FontWeight.w500,
-                        //                 fontColor: appColors.white,
-                        //               ),
-                        //             ),
-                        //           ),
-                        //         ),
-                        //       ),
-                        //       SizedBox(
-                        //         width: 5.w,
-                        //       ),
-                        //       Expanded(
-                        //         child: GestureDetector(
-                        //           onTap: () => Get.toNamed(
-                        //               RouteName.suggestRemediesView),
-                        //           child: Container(
-                        //             alignment: Alignment.center,
-                        //             height: 55,
-                        //             decoration: BoxDecoration(
-                        //               color: appColors.guideColor,
-                        //               boxShadow: [
-                        //                 BoxShadow(
-                        //                   color: Colors.black.withOpacity(0.2),
-                        //                   blurRadius: 1.0,
-                        //                   offset: const Offset(0.0, 3.0),
-                        //                 ),
-                        //               ],
-                        //               borderRadius: BorderRadius.circular(10.0),
-                        //             ),
-                        //             child: Text(
-                        //               "Suggested Remedies",
-                        //               style: AppTextStyle.textStyle14(
-                        //                 fontWeight: FontWeight.w500,
-                        //                 fontColor: appColors.white,
-                        //               ),
-                        //             ),
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ],
-                        //   ),
-                        // ),
-                        // SizedBox(height: 10.h),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     Get.toNamed(RouteName.customProduct);
-                        //   },
-                        //   child: Container(
-                        //     margin:
-                        //         const EdgeInsets.symmetric(horizontal: 20.0),
-                        //     alignment: Alignment.center,
-                        //     height: 55,
-                        //     decoration: BoxDecoration(
-                        //       color: appColors.guideColor,
-                        //       boxShadow: [
-                        //         BoxShadow(
-                        //           color: Colors.black.withOpacity(0.2),
-                        //           blurRadius: 1.0,
-                        //           offset: const Offset(0.0, 3.0),
-                        //         ),
-                        //       ],
-                        //       borderRadius: BorderRadius.circular(10.0),
-                        //     ),
-                        //     child: Text(
-                        //       "Custom Product",
-                        //       style: AppTextStyle.textStyle14(
-                        //         fontWeight: FontWeight.w500,
-                        //         fontColor: appColors.white,
-                        //       ),
-                        //     ),
-                        //   ),
-                        // ),
-                        // controller.homeData?.offers?.orderOffer!.length != 0
-                        //     ? Container(
-                        //         margin: EdgeInsets.symmetric(horizontal: 20.w),
-                        //         child: orderOfferWidget(
-                        //             homeController: controller))
-                        //     : const SizedBox(),
-
-                        // SizedBox(height: 10.h),
-                        // fullScreenBtnWidget(
-                        //     imageName: Assets.images.icReferAFriend.svg(),
-                        //     btnTitle: "referAnAstrologer".tr,
-                        //     onbtnTap: () {
-                        //       Get.toNamed(RouteName.referAstrologer);
-                        //     }),
-                        // SizedBox(height: 10.h),
-                        // trainingVideoWidget(controller: controller),
-                        /*  SizedBox(height: 10.h),
+                          controller.homeData?.offers?.customOffer!.length != 0
+                              ? Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 6),
+                                  child: customerOfferWidget(context,
+                                      controller: controller),
+                                )
+                              : const SizedBox(),
                           fullScreenBtnWidget(
-                              imageName: Assets.images.icEcommerce.svg(),
-                              btnTitle: "eCommerce".tr,
-                              onbtnTap: () async {
-                                if (await PermissionHelper().askPermissions()) {
-                                  Get.toNamed(RouteName.videoCallPage);
-                                }
-                              }),*/
-                        // SizedBox(height: 20.h),
-                        // feedbackWidget(controller: controller),
-                      ],
+                              btnTitle: "referAnAstrologer".tr,
+                              onbtnTap: () {
+                                Get.toNamed(RouteName.referAstrologer);
+                              }),
+                          trainingVideoWidget(controller: controller),
+                          scheduledTrainingWidgetUpdated(
+                              controller: controller),
+
+                          Obx(() {
+                            return showDailyLive.value.toString() == "1"
+                                ? Visibility(
+                                    visible:
+                                        controller.isLiveMonitor.value != 1,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 6, bottom: 6),
+                                      child: Column(
+                                        children: [
+                                          liveWidgetUpdated(),
+                                          // SizedBox(height: 10.h),
+                                        ],
+                                      ),
+                                    ),
+                                  )
+                                : SizedBox();
+                          }),
+                          (controller.customerDetailsResponse == null ||
+                                  controller
+                                      .customerDetailsResponse!.data.isEmpty)
+                              ? SizedBox()
+                              : Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 5),
+                                    child: Text(
+                                      "User Data".tr,
+                                      style: TextStyle(
+                                        fontFamily: FontFamily.poppins,
+                                        fontWeight: FontWeight.w400,
+                                        color: appColors.darkBlue,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                          (controller.customerDetailsResponse == null ||
+                                  controller
+                                      .customerDetailsResponse!.data.isEmpty)
+                              ? SizedBox()
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 10.h),
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: (controller.filteredUserData)
+                                              .isNotEmpty ||
+                                          controller
+                                              .searchController.text.isNotEmpty
+                                      ? controller.filteredUserData.length
+                                      : controller.customerDetailsResponse?.data
+                                              .length ??
+                                          0,
+                                  itemBuilder: (context, index) {
+                                    return ChatAssistanceDataTile(
+                                      data: (controller.filteredUserData)
+                                                  .isNotEmpty ||
+                                              controller.searchController.text
+                                                  .isNotEmpty
+                                          ? controller.filteredUserData[index]
+                                          : controller.customerDetailsResponse!
+                                              .data[index],
+                                    );
+                                  },
+                                ),
+                          // NotificationListener<ScrollNotification>(
+                          //         onNotification:
+                          //             (ScrollNotification scrollInfo) {
+                          //           if (scrollInfo.metrics.pixels ==
+                          //               scrollInfo.metrics.maxScrollExtent) {
+                          //             print(
+                          //                 "getConsulation getConsulation getConsulation");
+                          //             // controller.getConsulation();
+                          //             return true;
+                          //           }
+                          //           return false;
+                          //         },
+                          //         child:
+                          //       ),
+                          SizedBox(height: 20.h),
+                          // feedbackWidget(controller: controller),
+                          // Obx(() {
+                          //   return Visibility(
+                          //     visible: controller.marqueeText.isNotEmpty,
+                          //     child: Container(
+                          //       margin: EdgeInsets.only(bottom: 15.h),
+                          //       height: 45.h,
+                          //       color: appColors.marqueeBgColor,
+                          //       child: CustomWidgetMarquee(
+                          //         child: ListView(
+                          //           padding: EdgeInsets.zero,
+                          //           scrollDirection: Axis.horizontal,
+                          //           shrinkWrap: true,
+                          //           children: List.generate(
+                          //             controller.marqueeText.length,
+                          //                 (index) {
+                          //               return Container(
+                          //                   alignment:
+                          //                   AlignmentDirectional.center,
+                          //                   child: HtmlWidget(
+                          //                     controller.marqueeText[index],
+                          //                   ));
+                          //             },
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   );
+                          // }),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     Get.toNamed(RouteName.customProduct);
+                          //   },
+                          //   child: Container(
+                          //     margin:
+                          //         const EdgeInsets.symmetric(horizontal: 20.0),
+                          //     alignment: Alignment.center,
+                          //     height: 55,
+                          //     decoration: BoxDecoration(
+                          //       color: appColors.guideColor,
+                          //       boxShadow: [
+                          //         BoxShadow(
+                          //           color: Colors.black.withOpacity(0.2),
+                          //           blurRadius: 1.0,
+                          //           offset: const Offset(0.0, 3.0),
+                          //         ),
+                          //       ],
+                          //       borderRadius: BorderRadius.circular(10.0),
+                          //     ),
+                          //     child: Text(
+                          //       "Custom Product",
+                          //       style: AppTextStyle.textStyle14(
+                          //         fontWeight: FontWeight.w500,
+                          //         fontColor: appColors.white,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // )
+                          // Align(
+                          //   alignment: Alignment.centerLeft,
+                          //   child: Container(
+                          //     padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          //     child: CustomText(
+                          //       (controller.homeData!.retention! <
+                          //               controller.homeData!.minimumRetention!)
+                          //           ? "notEligibleBonus".tr
+                          //           : "eligibleBonus".tr,
+                          //       fontWeight: FontWeight.w400,
+                          //       textAlign: TextAlign.start,
+                          //       fontSize: 14,
+                          //       fontColor: !(controller.homeData!.retention! <
+                          //               controller.homeData!.minimumRetention!)!
+                          //           ? appColors.green
+                          //           : appColors.red,
+                          //     ),
+                          //   ),
+                          // ),
+                          // SizedBox(height: 10.h),
+
+                          // SizedBox(height: 10.h),
+                          // availableFeedbackWidget(controller.feedbackResponse ?? FeedbackData()),
+                          // SizedBox(height: 10.h),
+
+                          // SizedBox(height: 10.h),
+                          // noticeBoardWidget(),
+                          // SizedBox(height: 15.h),
+                          // viewKundliWidget(),
+                          // viewKundliWidgetUpdated(),
+
+                          // SizedBox(height: 10.h),
+                          // Container(
+                          //     margin: EdgeInsets.symmetric(horizontal: 20.w),
+                          //     height: 1.h,
+                          //     color: appColors.darkBlue.withOpacity(0.5)),
+                          // SizedBox(height: 10.h),
+                          // Obx(
+                          //   () {
+                          //     final bool cond1 = controller.isCallEnable.value;
+                          //     final bool cond2 = controller.isChatEnable.value;
+                          //     final bool cond3 =
+                          //         controller.isVideoCallEnable.value;
+                          //
+                          //     return cond1 || cond2 || cond3
+                          //         ? Container(
+                          //             margin:
+                          //                 EdgeInsets.symmetric(horizontal: 20.w),
+                          //             child: sessionTypeWidget(
+                          //                 controller: controller))
+                          //         : const SizedBox();
+                          //   },
+                          // ),
+                          // if (controller.homeData?.offerType != null &&
+                          //     controller.homeData?.offerType != [])
+                          //   offerTypeWidget(),
+                          // SizedBox(height: 20.h),
+                          // Padding(
+                          //   padding: EdgeInsets.symmetric(horizontal: 20.0),
+                          //   child: Row(
+                          //     children: [
+                          //       Expanded(
+                          //         child: GestureDetector(
+                          //           onTap: () =>
+                          //               Get.toNamed(RouteName.messageTemplate),
+                          //           child: Container(
+                          //             alignment: Alignment.center,
+                          //             height: 55,
+                          //             decoration: BoxDecoration(
+                          //               color: appColors.guideColor,
+                          //               boxShadow: [
+                          //                 BoxShadow(
+                          //                   color: Colors.black.withOpacity(0.2),
+                          //                   blurRadius: 1.0,
+                          //                   offset: const Offset(0.0, 3.0),
+                          //                 ),
+                          //               ],
+                          //               borderRadius: BorderRadius.circular(10.0),
+                          //             ),
+                          //             child: Text(
+                          //               "Message Template",
+                          //               style: AppTextStyle.textStyle14(
+                          //                 fontWeight: FontWeight.w500,
+                          //                 fontColor: appColors.white,
+                          //               ),
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //       SizedBox(
+                          //         width: 5.w,
+                          //       ),
+                          //       Expanded(
+                          //         child: GestureDetector(
+                          //           onTap: () => Get.toNamed(
+                          //               RouteName.suggestRemediesView),
+                          //           child: Container(
+                          //             alignment: Alignment.center,
+                          //             height: 55,
+                          //             decoration: BoxDecoration(
+                          //               color: appColors.guideColor,
+                          //               boxShadow: [
+                          //                 BoxShadow(
+                          //                   color: Colors.black.withOpacity(0.2),
+                          //                   blurRadius: 1.0,
+                          //                   offset: const Offset(0.0, 3.0),
+                          //                 ),
+                          //               ],
+                          //               borderRadius: BorderRadius.circular(10.0),
+                          //             ),
+                          //             child: Text(
+                          //               "Suggested Remedies",
+                          //               style: AppTextStyle.textStyle14(
+                          //                 fontWeight: FontWeight.w500,
+                          //                 fontColor: appColors.white,
+                          //               ),
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ],
+                          //   ),
+                          // ),
+                          // SizedBox(height: 10.h),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     Get.toNamed(RouteName.customProduct);
+                          //   },
+                          //   child: Container(
+                          //     margin:
+                          //         const EdgeInsets.symmetric(horizontal: 20.0),
+                          //     alignment: Alignment.center,
+                          //     height: 55,
+                          //     decoration: BoxDecoration(
+                          //       color: appColors.guideColor,
+                          //       boxShadow: [
+                          //         BoxShadow(
+                          //           color: Colors.black.withOpacity(0.2),
+                          //           blurRadius: 1.0,
+                          //           offset: const Offset(0.0, 3.0),
+                          //         ),
+                          //       ],
+                          //       borderRadius: BorderRadius.circular(10.0),
+                          //     ),
+                          //     child: Text(
+                          //       "Custom Product",
+                          //       style: AppTextStyle.textStyle14(
+                          //         fontWeight: FontWeight.w500,
+                          //         fontColor: appColors.white,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
+                          // controller.homeData?.offers?.orderOffer!.length != 0
+                          //     ? Container(
+                          //         margin: EdgeInsets.symmetric(horizontal: 20.w),
+                          //         child: orderOfferWidget(
+                          //             homeController: controller))
+                          //     : const SizedBox(),
+
+                          // SizedBox(height: 10.h),
+                          // fullScreenBtnWidget(
+                          //     imageName: Assets.images.icReferAFriend.svg(),
+                          //     btnTitle: "referAnAstrologer".tr,
+                          //     onbtnTap: () {
+                          //       Get.toNamed(RouteName.referAstrologer);
+                          //     }),
+                          // SizedBox(height: 10.h),
+                          // trainingVideoWidget(controller: controller),
+                          /*  SizedBox(height: 10.h),
+                            fullScreenBtnWidget(
+                                imageName: Assets.images.icEcommerce.svg(),
+                                btnTitle: "eCommerce".tr,
+                                onbtnTap: () async {
+                                  if (await PermissionHelper().askPermissions()) {
+                                    Get.toNamed(RouteName.videoCallPage);
+                                  }
+                                }),*/
+                          // SizedBox(height: 20.h),
+                          // feedbackWidget(controller: controller),
+                        ],
+                      ),
                     ),
-                  ),
-                  // showHelp.value.toString() == "0"
-                  //     ? const SizedBox()
-                  //     : Positioned(
-                  //         top: controller.yPosition,
-                  //         left: controller.xPosition + 10,
-                  //         child: Container(
-                  //           margin: EdgeInsets.symmetric(horizontal: 20.w),
-                  //           child: GestureDetector(
-                  //               onPanUpdate: (tapInfo) {
-                  //                 double newXPosition =
-                  //                     controller.xPosition + tapInfo.delta.dx;
-                  //                 double newYPosition =
-                  //                     controller.yPosition + tapInfo.delta.dy;
-                  //
-                  //                 // Ensure newXPosition is within screen bounds
-                  //                 newXPosition = newXPosition.clamp(
-                  //                     0.0,
-                  //                     maxWidth -
-                  //                         50); // Assuming widget width is 50
-                  //                 newYPosition = newYPosition.clamp(
-                  //                     0,
-                  //                     maxHeight -
-                  //                         50); // Assuming widget height is 50
-                  //
-                  //                 controller.xPosition = newXPosition;
-                  //                 controller.yPosition = newYPosition;
-                  //                 controller.update();
-                  //               },
-                  //               onPanEnd: (details) {
-                  //                 if (controller.xPosition + 25 <
-                  //                     Get.width / 2) {
-                  //                   controller.xPosition = 0;
-                  //                 } else {
-                  //                   controller.xPosition = Get.width - 70;
-                  //                 }
-                  //
-                  //                 controller.update();
-                  //               },
-                  //               onTap: () {
-                  //                 // Get.toNamed(
-                  //                 //   RouteName.technicalIssues,
-                  //                 // );
-                  //                 controller.whatsapp();
-                  //               },
-                  //               child: Container(
-                  //                   key: DashboardController(
-                  //                           PreDefineRepository())
-                  //                       .keyHelp,
-                  //                   height: 50,
-                  //                   width: 50,
-                  //                   decoration: BoxDecoration(
-                  //                     color: appColors.guideColor,
-                  //                     borderRadius: BorderRadius.circular(25.0),
-                  //                   ),
-                  //                   child: Center(
-                  //                     child: Column(
-                  //                       mainAxisAlignment:
-                  //                           MainAxisAlignment.center,
-                  //                       children: [
-                  //                         Assets.images.icHelp
-                  //                             .svg(color: appColors.white),
-                  //                         Text(
-                  //                           "help".tr,
-                  //                           style: AppTextStyle.textStyle10(
-                  //                               fontColor: appColors.white,
-                  //                               fontWeight: FontWeight.w700),
-                  //                         )
-                  //                       ],
-                  //                     ),
-                  //                   ))),
-                  //         ))
-                ]);
+                    // showHelp.value.toString() == "0"
+                    //     ? const SizedBox()
+                    //     : Positioned(
+                    //         top: controller.yPosition,
+                    //         left: controller.xPosition + 10,
+                    //         child: Container(
+                    //           margin: EdgeInsets.symmetric(horizontal: 20.w),
+                    //           child: GestureDetector(
+                    //               onPanUpdate: (tapInfo) {
+                    //                 double newXPosition =
+                    //                     controller.xPosition + tapInfo.delta.dx;
+                    //                 double newYPosition =
+                    //                     controller.yPosition + tapInfo.delta.dy;
+                    //
+                    //                 // Ensure newXPosition is within screen bounds
+                    //                 newXPosition = newXPosition.clamp(
+                    //                     0.0,
+                    //                     maxWidth -
+                    //                         50); // Assuming widget width is 50
+                    //                 newYPosition = newYPosition.clamp(
+                    //                     0,
+                    //                     maxHeight -
+                    //                         50); // Assuming widget height is 50
+                    //
+                    //                 controller.xPosition = newXPosition;
+                    //                 controller.yPosition = newYPosition;
+                    //                 controller.update();
+                    //               },
+                    //               onPanEnd: (details) {
+                    //                 if (controller.xPosition + 25 <
+                    //                     Get.width / 2) {
+                    //                   controller.xPosition = 0;
+                    //                 } else {
+                    //                   controller.xPosition = Get.width - 70;
+                    //                 }
+                    //
+                    //                 controller.update();
+                    //               },
+                    //               onTap: () {
+                    //                 // Get.toNamed(
+                    //                 //   RouteName.technicalIssues,
+                    //                 // );
+                    //                 controller.whatsapp();
+                    //               },
+                    //               child: Container(
+                    //                   key: DashboardController(
+                    //                           PreDefineRepository())
+                    //                       .keyHelp,
+                    //                   height: 50,
+                    //                   width: 50,
+                    //                   decoration: BoxDecoration(
+                    //                     color: appColors.guideColor,
+                    //                     borderRadius: BorderRadius.circular(25.0),
+                    //                   ),
+                    //                   child: Center(
+                    //                     child: Column(
+                    //                       mainAxisAlignment:
+                    //                           MainAxisAlignment.center,
+                    //                       children: [
+                    //                         Assets.images.icHelp
+                    //                             .svg(color: appColors.white),
+                    //                         Text(
+                    //                           "help".tr,
+                    //                           style: AppTextStyle.textStyle10(
+                    //                               fontColor: appColors.white,
+                    //                               fontWeight: FontWeight.w700),
+                    //                         )
+                    //                       ],
+                    //                     ),
+                    //                   ))),
+                    //         ))
+                  ]),
+                );
               } else {
                 return const GenericLoadingWidget();
               }
