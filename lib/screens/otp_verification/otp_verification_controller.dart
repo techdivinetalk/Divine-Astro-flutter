@@ -19,6 +19,7 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
 import '../../common/app_exception.dart';
@@ -161,6 +162,7 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
       await preferenceService.setUserDetail(data.data!);
       await preferenceService.setToken(data.token!);
       await preferenceService.setDeviceToken(deviceToken ?? "");
+
       log('😈😈😈😈😈😈😈😈');
       log(jsonEncode(data.data));
       print("jsonEncode(data.data)");
@@ -224,10 +226,11 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
     final String uniqueId = await getDeviceId() ?? '';
     final String firebaseNodeUrl = 'astrologer/${data.data?.id}';
     final FirebaseDatabase firebaseDatabase = FirebaseDatabase.instance;
-    await firebaseDatabase
+    /*await firebaseDatabase
         .ref()
         .child("$firebaseNodeUrl/realTime/uniqueId")
-        .remove();
+        .remove();*/
+
     //final DatabaseReference ref = firebaseDatabase.ref();
     // final DataSnapshot dataSnapshot = await ref.child(firebaseNodeUrl).get();
     // if (dataSnapshot.exists) {

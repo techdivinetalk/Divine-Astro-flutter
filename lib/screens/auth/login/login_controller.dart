@@ -278,7 +278,7 @@ class LoginController extends GetxController {
     // maintenanceCheck();
     // getLoginImages();
     countryCodeController = TextEditingController(text: "+91");
-    mobileNumberController = TextEditingController(text: "");
+    mobileNumberController = TextEditingController();
 
     if (isTruecaller.value == 1) {
       TrueCallerService().isTrueCallerInstalled().then((value) {
