@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -161,76 +162,78 @@ class TechnicalIssueController extends GetxController {
 
   /// Get Image Picker method
   Future getImage(bool isCamera) async {
-    List<XFile>? pickedFiles;
+    if (await PermissionHelper().askMediaPermission()) {
+      List<XFile>? pickedFiles;
 
-    if (isCamera) {
-      // Pick a single image from the camera
-      XFile? pickedFile = await picker.pickImage(
-        source: ImageSource.camera,
-        // imageQuality: 90,
-        // maxWidth: 250,
-      );
-      if (pickedFile != null) {
-        // selectedImages.add(pickedFile.path);
-        // selectedFiles.add(File(pickedFile.path));
-        final imageTemp = File(pickedFile.path);
-
-        int imageSize =
-            await File(pickedFile.path).length(); // Get the image size in bytes
-        await compressImages(XFile(pickedFile.path));
-
-        // if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
-        //   Fluttertoast.showToast(
-        //       msg:
-        //           "Image Size is more then 2 MB"); // Optionally, you can show an alert to the user or handle it accordingly
-        // } else {
-        //   selectedImages.add(pickedFile.path);
-        //   selectedFiles.add(File(pickedFile.path));
-        // }
-      }
-    } else {
-      // Pick multiple images from the gallery
-      pickedFiles = await picker.pickMultiImage(
+      if (isCamera) {
+        // Pick a single image from the camera
+        XFile? pickedFile = await picker.pickImage(
+          source: ImageSource.camera,
           // imageQuality: 90,
           // maxWidth: 250,
-          );
-      // if (pickedFiles != null && pickedFiles.isNotEmpty) {
-      //   selectedImages.addAll(pickedFiles.map((pickedFile) => pickedFile.path));
-      //   selectedFiles.addAll(
-      //       pickedFiles.map((pickedFile) => File(pickedFile.path)).toList());
-      // }
+        );
+        if (pickedFile != null) {
+          // selectedImages.add(pickedFile.path);
+          // selectedFiles.add(File(pickedFile.path));
+          final imageTemp = File(pickedFile.path);
 
-      int oversizedCount = 0;
+          int imageSize = await File(pickedFile.path)
+              .length(); // Get the image size in bytes
+          await compressImages(XFile(pickedFile.path));
 
-      final imageTemp = File(pickedFiles[0].path);
-      for (var pickedFile in pickedFiles) {
-        int imageSize =
-            await File(pickedFile.path).length(); // Get the image size in bytes
-        await compressImages(XFile(pickedFile.path));
+          // if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
+          //   Fluttertoast.showToast(
+          //       msg:
+          //           "Image Size is more then 2 MB"); // Optionally, you can show an alert to the user or handle it accordingly
+          // } else {
+          //   selectedImages.add(pickedFile.path);
+          //   selectedFiles.add(File(pickedFile.path));
+          // }
+        }
+      } else {
+        // Pick multiple images from the gallery
+        pickedFiles = await picker.pickMultiImage(
+            // imageQuality: 90,
+            // maxWidth: 250,
+            );
+        // if (pickedFiles != null && pickedFiles.isNotEmpty) {
+        //   selectedImages.addAll(pickedFiles.map((pickedFile) => pickedFile.path));
+        //   selectedFiles.addAll(
+        //       pickedFiles.map((pickedFile) => File(pickedFile.path)).toList());
+        // }
 
-        // selectedImages.add(pickedFile.path);
-        // selectedFiles.add(File(pickedFile.path));
+        int oversizedCount = 0;
 
-        // if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
-        //   oversizedCount++;
-        // } else {
-        //   selectedImages.add(pickedFile.path);
-        //   selectedFiles.add(File(pickedFile.path));
+        final imageTemp = File(pickedFiles[0].path);
+        for (var pickedFile in pickedFiles) {
+          int imageSize = await File(pickedFile.path)
+              .length(); // Get the image size in bytes
+          await compressImages(XFile(pickedFile.path));
+
+          // selectedImages.add(pickedFile.path);
+          // selectedFiles.add(File(pickedFile.path));
+
+          // if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
+          //   oversizedCount++;
+          // } else {
+          //   selectedImages.add(pickedFile.path);
+          //   selectedFiles.add(File(pickedFile.path));
+          // }
+        }
+        if (oversizedCount > 0) {
+          Fluttertoast.showToast(
+              msg: "$oversizedCount images exceed 2 MB and cannot be uploaded");
+        }
+        // if (selectedImages.isNotEmpty) {
+        //   Fluttertoast.showToast(
+        //       msg:
+        //           "Images selected successfully: ${selectedImages.length} images");
         // }
       }
-      if (oversizedCount > 0) {
-        Fluttertoast.showToast(
-            msg: "$oversizedCount images exceed 2 MB and cannot be uploaded");
-      }
-      // if (selectedImages.isNotEmpty) {
-      //   Fluttertoast.showToast(
-      //       msg:
-      //           "Images selected successfully: ${selectedImages.length} images");
-      // }
+      print("selectedImages - $selectedImages");
+      print("selectedImages - $selectedFiles");
+      update();
     }
-    print("selectedImages - $selectedImages");
-    print("selectedImages - $selectedFiles");
-    update();
   }
 
   /*compressImages(croppedFile) async {
@@ -323,7 +326,7 @@ class TechnicalIssueController extends GetxController {
 
       if (result != null) {
         int imageSize =
-        await File(result.path).length(); // Get the image size in bytes
+            await File(result.path).length(); // Get the image size in bytes
 
         if (!FileUtils.isFileSizeValid(bytes: imageSize, maxSizeInMB: 5)) {
           oversizedCount++;
