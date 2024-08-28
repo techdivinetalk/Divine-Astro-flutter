@@ -70,24 +70,51 @@ class AddBankDetails extends GetView<BankController> {
                     children: [
                       CustomTextField(
                         hint: "Enter Bank Name",
+                        controller: controller.bankNameController,
+                        focusNode: controller.bankNameNode,
+                        onFieldSubmitted: (value) {
+                          controller.bankNameNode.unfocus();
+                          FocusScope.of(context)
+                              .requestFocus(controller.bankHolderNode);
+                        },
                       ),
                       SizedBox(
                         height: 15,
                       ),
                       CustomTextField(
                         hint: "Account Holder Name",
+                        controller: controller.bankHolderController,
+                        focusNode: controller.bankHolderNode,
+                        onFieldSubmitted: (value) {
+                          controller.bankHolderNode.unfocus();
+                          FocusScope.of(context)
+                              .requestFocus(controller.bankAccountNode);
+                        },
                       ),
                       SizedBox(
                         height: 15,
                       ),
                       CustomTextField(
                         hint: "Bank Account Number",
+                        controller: controller.bankAccountController,
+                        keyboardType: TextInputType.number,
+                        focusNode: controller.bankAccountNode,
+                        onFieldSubmitted: (value) {
+                          controller.bankAccountNode.unfocus();
+                          FocusScope.of(context)
+                              .requestFocus(controller.bankIFSCNode);
+                        },
                       ),
                       SizedBox(
                         height: 15,
                       ),
                       CustomTextField(
                         hint: "IFSC Code",
+                        controller: controller.bankIFSCController,
+                        focusNode: controller.bankIFSCNode,
+                        onFieldSubmitted: (value) {
+                          controller.bankIFSCNode.unfocus();
+                        },
                       ),
                     ],
                   ),

@@ -236,7 +236,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                           Utils.selectDateOrTime(
                             initialDate:
                                 controller.birthController.text.isNotEmpty
-                                    ? DateFormat("dd/MM/yyyy")
+                                    ? DateFormat("dd-MM-yyyy")
                                         .parse(controller.birthController.text)
                                     : DateTime.now(),
                             title: "Select Date Of Birth".tr,
@@ -413,7 +413,10 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                           ),
                           child: controller.loadingProfile == true
                               ? Center(
-                                  child: CircularProgressIndicator(),
+                                  child: CircularProgressIndicator(
+                                    color: appColors.white,
+                                    strokeWidth: 1,
+                                  ),
                                 )
                               : Align(
                                   alignment: Alignment.center,

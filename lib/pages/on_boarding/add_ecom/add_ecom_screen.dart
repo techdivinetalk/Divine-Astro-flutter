@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:divine_astrologer/pages/on_boarding/add_ecom/add_ecom_controller.dart';
 import 'package:divine_astrologer/pages/on_boarding/widgets/widget.dart';
@@ -397,15 +399,27 @@ class AddEcomScreen extends GetView<AddEcomController> {
                   onTap: () {
                     controller.updateProfileImage();
                   },
-                  child: CircleAvatar(
-                    backgroundColor: appColors.grey.withOpacity(0.3),
-                    radius: 40,
-                    child: Icon(
-                      Icons.add,
-                      color: appColors.white,
-                      size: 50,
-                    ),
-                  ),
+                  child: controller.selectedImage == null
+                      ? CircleAvatar(
+                          backgroundColor: appColors.grey.withOpacity(0.3),
+                          radius: 40,
+                          child: Icon(
+                            Icons.add,
+                            color: appColors.white,
+                            size: 50,
+                          ),
+                        )
+                      : ClipRRect(
+                          borderRadius: BorderRadius.circular(100),
+                          child: CircleAvatar(
+                            radius: 40,
+                            backgroundColor: appColors.grey.withOpacity(0.1),
+                            child: Image.file(
+                              File(controller.selectedImage.toString()),
+                              fit: BoxFit.fitWidth,
+                            ),
+                          ),
+                        ),
                 ),
                 Padding(
                   padding: const EdgeInsets.only(left: 20, right: 20, top: 10),
@@ -515,7 +529,7 @@ class AddEcomScreen extends GetView<AddEcomController> {
           bottomNavigationBar: Padding(
             padding: const EdgeInsets.all(8.0),
             child: SizedBox(
-              height: 110,
+              height: controller.selected == null ? 60 : 110,
               child: Column(
                 children: [
                   Padding(
@@ -551,36 +565,39 @@ class AddEcomScreen extends GetView<AddEcomController> {
                       ),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          updateProfileImage(controller.selected.toString());
-                        },
-                        child: Container(
-                          height: 50,
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          decoration: BoxDecoration(
-                            color: appColors.red,
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Submit ${controller.selected.toString()}",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20.sp,
-                                color: AppColors().white,
+                  controller.selected == null
+                      ? SizedBox()
+                      : Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                updateProfileImage(
+                                    controller.selected.toString());
+                              },
+                              child: Container(
+                                height: 50,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                decoration: BoxDecoration(
+                                  color: appColors.red,
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Submit ${controller.selected.toString()}",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 20.sp,
+                                      color: AppColors().white,
+                                    ),
+                                  ),
+                                ),
                               ),
                             ),
-                          ),
+                          ],
                         ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),

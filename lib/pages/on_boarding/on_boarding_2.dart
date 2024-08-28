@@ -389,7 +389,10 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                           ),
                           child: controller.loadingAadharFront == true
                               ? Center(
-                                  child: CircularProgressIndicator(),
+                                  child: CircularProgressIndicator(
+                                    color: appColors.white,
+                                    strokeWidth: 1,
+                                  ),
                                 )
                               : Align(
                                   alignment: Alignment.center,

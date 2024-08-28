@@ -16,6 +16,23 @@ import '../../../screens/financial_support/financial_support_controller.dart';
 
 class BankController extends GetxController {
   UserRepository userRepository = UserRepository();
+  late TextEditingController bankNameController;
+  late TextEditingController bankHolderController;
+  late TextEditingController bankAccountController;
+  late TextEditingController bankIFSCController;
+  FocusNode bankNameNode = FocusNode();
+  FocusNode bankHolderNode = FocusNode();
+  FocusNode bankAccountNode = FocusNode();
+  FocusNode bankIFSCNode = FocusNode();
+
+  @override
+  void onInit() async {
+    super.onInit();
+    bankNameController = TextEditingController();
+    bankHolderController = TextEditingController();
+    bankAccountController = TextEditingController();
+    bankIFSCController = TextEditingController();
+  }
 
   var passBookImage;
   var blankChequeImage;

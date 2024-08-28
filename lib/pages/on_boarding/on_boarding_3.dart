@@ -116,7 +116,7 @@ class OnBoarding3 extends GetView<OnBoardingController> {
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Text(
-                    "Upload Aadhar Card",
+                    "Upload Your Profile Picture",
                     style: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 16.sp,

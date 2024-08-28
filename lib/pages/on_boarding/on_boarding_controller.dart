@@ -57,6 +57,7 @@ class OnBoardingController extends GetxController {
     update();
   }
 
+  List userImages2 = [1, 2, 3, 4, 5];
   List userImages = [1, 2, 3, 4, 5];
 
   updateDonePage(page) {
@@ -76,18 +77,43 @@ class OnBoardingController extends GetxController {
   }
 
   void checkSelectedImages() {
+    print("image - 1");
     int selectedCount = userImages.where((element) => element is File).length;
-    if (selectedCount >= 2) {
+    if (uploadedImages.isNotEmpty) {
       Get.toNamed(
         RouteName.onBoardingScreen4,
       );
-      print("User has selected 2 or more images.");
-      // You can proceed with your logic here
-      // For example, enabling a submit button or showing a message
     } else {
-      Fluttertoast.showToast(msg: "Please select more then 2 images");
-      print("User has not selected enough images.");
-      // Handle the case where less than 2 images are selected
+      if (selectedCount >= 2) {
+        print("image - 1");
+
+        for (int i = 0; i < 5; i++) {
+          print("image - 1");
+
+          print("Loop iteration: $i");
+          if (userImages[i] == 1 ||
+              userImages[i] == 2 ||
+              userImages[i] == 3 ||
+              userImages[i] == 4 ||
+              userImages[i] == 5) {
+            print("image - 1");
+          } else {
+            print("image - 2");
+
+            uploadImage(userImages[i], "astroimages");
+          }
+        }
+        Get.toNamed(
+          RouteName.onBoardingScreen4,
+        );
+        print("User has selected 2 or more images.");
+        // You can proceed with your logic here
+        // For example, enabling a submit button or showing a message
+      } else {
+        Fluttertoast.showToast(msg: "Please select more then 2 images");
+        print("User has not selected enough images.");
+        // Handle the case where less than 2 images are selected
+      }
     }
   }
 
@@ -110,6 +136,7 @@ class OnBoardingController extends GetxController {
   var photoUrlAadharFront;
   var photoUrlAadharBack;
   var photoUrlPanFront;
+  List uploadedImages = [];
 
   /// Get Image Picker method
   Future getImage(selected) async {
@@ -190,25 +217,29 @@ class OnBoardingController extends GetxController {
     }
   }
 
-  Future<void> uploadImage(imageFile, imageType) async {
+  updateLoading(imageType, value) {
     switch (imageType) {
       case 'Profile':
-        loadingProfile = true;
+        loadingProfile = value;
         break;
       case 'aadharFront':
-        loadingAadharFront = true;
+        loadingAadharFront = value;
         break;
       case 'aadharBack':
-        loadingAadharFront = true;
+        loadingAadharFront = value;
         break;
       case 'panFront':
-        loadingAadharFront = true;
+        loadingAadharFront = value;
         break;
     }
+    update();
+  }
+
+  Future<void> uploadImage(imageFile, imageType) async {
     var token = await preferenceService.getToken();
 
     print("image length - ${imageFile.path}");
-
+    updateLoading(imageType, true);
     var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
 
     var request = http.MultipartRequest('POST', uri);
@@ -241,30 +272,30 @@ class OnBoardingController extends GetxController {
           Fluttertoast.showToast(msg: "Not able to upload");
         } else {
           // Update the corresponding URL variable based on the image type
+
           switch (imageType) {
             case 'Profile':
-              loadingProfile = false;
-
               photoUrlprofile = imageUrl;
 
               break;
             case 'aadharFront':
-              loadingAadharFront = false;
-
               photoUrlAadharFront = imageUrl;
               break;
             case 'aadharBack':
-              loadingAadharFront = false;
-
               photoUrlAadharBack = imageUrl;
               break;
             case 'panFront':
-              loadingAadharFront = false;
-
               photoUrlPanFront = imageUrl;
+              break;
+            case 'astroimages':
+              print("image - 2");
+
+              uploadedImages.add(imageUrl);
+              print(uploadedImages.toString());
               break;
           }
         }
+        updateLoading(imageType, false);
 
         // if (image.isNotEmpty) {
         //   poojaImageUrl = image;
@@ -294,12 +325,14 @@ class OnBoardingController extends GetxController {
       "dob": birthController.text,
       "location": locationController.text,
       "alternate_no": alterNoController.text,
-      "profile_picture": selectedProfile,
-      "aadhar_front": selectedAadharFront,
-      "aadhar_back": selectedAadharBack,
+      "profile_picture": photoUrlprofile,
+      "aadhar_front": photoUrlAadharFront,
+      "aadhar_back": photoUrlAadharBack,
       "pancard": selectedPanFront,
-      "astro_images": userImages,
+      "astro_images": uploadedImages,
     };
-    print("-----------data------${jsonData.toString()}");
+
+    print(
+        "${jsonData.toString().length >= 150 ? "${jsonData.toString()}\n" : jsonData.toString()}");
   }
 }
