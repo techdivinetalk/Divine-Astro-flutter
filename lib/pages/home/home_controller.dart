@@ -364,6 +364,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
       if (preferenceService.getUserDetail() != null) {
         // Check for null user details
+        print("what is screen ----> home");
         AppFirebaseService().readData(
             'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
       } else {
