@@ -8,7 +8,7 @@ import '../../../common/common_elevated_button.dart';
 import '../../../common/routes.dart';
 import '../home_controller.dart';
 
-Future<void> showTechnicalPopupAlert() async {
+Future<void>    showTechnicalPopupAlert() async {
   // Ensure the HomeController is available
   if (!Get.isRegistered<HomeController>()) {
     Get.put<HomeController>(HomeController(), permanent: true);

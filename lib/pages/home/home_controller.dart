@@ -28,6 +28,7 @@ import 'package:divine_astrologer/pages/home/widgets/common_info_sheet.dart';
 import 'package:divine_astrologer/pages/home/widgets/technical_popup.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/product/pooja/widgets/custom_widget/pooja_common_list.dart';
+import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:divine_astrologer/screens/dashboard/model/astrologer_nord_data_model.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
@@ -153,6 +154,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   final searchController = TextEditingController();
   var checkin = false.obs;
   var emptyRes = false.obs;
+  var isLoadMoreData = false.obs;
 
   Future<void> getConsulation() async {
     CustomerDetailsResponse response =
@@ -169,11 +171,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         }
         pageUsersData++;
       } else {
-        Fluttertoast.showToast(msg: "No more data");
+        // Fluttertoast.showToast(msg: "No more data");
         print("data ---- ${response.data.toString()}");
         emptyRes(true);
       }
+      isLoadMoreData.value = false;
     } else {
+      isLoadMoreData.value = false;
       print("There is no more data in user data");
     }
     update();
@@ -333,6 +337,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
               final offers = map["offers"];
               if (offers != null) {
+                final homeData = this.homeData;
                 if (homeData != null) {
                   for (int i = 0;
                       i < homeData!.offers!.orderOffer!.length;
@@ -674,32 +679,38 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       var response = await HomePageRepository().getDashboardData(params);
       isFeedbackAvailable.value = response.success ?? false;
       homeData = response.data;
-
       loading = Loading.loaded;
       updateCurrentData();
       shopDataSync.value = true;
 
       showOnceInDay();
       update();
-      if (homeData?.retention < 10) {
-        print("homeData.retention----${homeData?.retention}");
+
+      String currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      String lastShownDate = await SharedPreferenceService().getLastShowDate();
+      if (homeData?.retention < 10 && lastShownDate != currentDate) {
+        await SharedPreferenceService().setLastShowDate(currentDate);
         Get.bottomSheet(CommonInfoSheet(
+          isBackButton: false,
           title: "⚠ Warning Astrologer ⚠".tr,
           subTitle:
-              "Your user retention is below industry standard. Your retention is less than 10% Your are not eligible for Bonus wallet. Please review and improve strategies promptly to increase User retention rate. Thank you. 🌟"
-                  .tr,
+          "Your user retention is below industry standard. Your retention is less than 10% Your are not eligible for Bonus wallet. Please review and improve strategies promptly to increase User retention rate. Thank you. 🌟"
+              .tr,
           onTap: () {
             Get.back();
           },
         ));
       }
 
+
       if (homeData?.technical_support == null ||
           homeData?.technical_support == [] ||
           homeData?.technical_support!.isEmpty) {
       } else {
         log("Technical_Support -- ${homeData?.technical_support.toString()}");
-        showTechnicalPopupAlert();
+        if(Get.find<DashboardController>().selectedIndex.value == 0){
+          showTechnicalPopupAlert();
+        }
       }
       //getFeedbackData();
       //log("DashboardData==>${jsonEncode(homeData)}");

@@ -171,6 +171,7 @@ class ChatAssistanceController extends GetxController {
   // }
   var checkin = false.obs;
   var emptyRes = false.obs;
+  RxBool isLoadMoreData = false.obs;
   ScrollController scrollCon = ScrollController();
   Future<void> getConsulation() async {
     CustomerDetailsResponse response =
@@ -187,11 +188,13 @@ class ChatAssistanceController extends GetxController {
         }
         pageUsersData++;
       } else {
-        Fluttertoast.showToast(msg: "No more data");
+        // Fluttertoast.showToast(msg: "No more data");
         print("data ---- ${response.data.toString()}");
         emptyRes(true);
       }
+      isLoadMoreData.value = false;
     } else {
+      isLoadMoreData.value = false;
       print("There is no more data in user data");
     }
     update();

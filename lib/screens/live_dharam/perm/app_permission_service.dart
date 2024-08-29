@@ -296,11 +296,11 @@ class AppPermissionService {
   }
 
   Future<bool> hasAllPermissions() async {
-    final PermissionStatus perm1 = await Permission.systemAlertWindow.status;
+    // final PermissionStatus perm1 = await Permission.systemAlertWindow.status;
     final PermissionStatus perm2 = await Permission.camera.status;
     final PermissionStatus perm3 = await Permission.microphone.status;
 
-    final bool value = perm1.isGranted && perm2.isGranted && perm3.isGranted;
+    final bool value = /*perm1.isGranted &&*/ perm2.isGranted && perm3.isGranted;
 
     return Future<bool>.value(value);
   }

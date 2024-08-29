@@ -10,6 +10,8 @@ import 'package:divine_astrologer/common/switch_component.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/model/astrologer_training_session_response.dart';
+import 'package:divine_astrologer/model/chat_assistant/CustomerDetailsResponse.dart';
+import 'package:divine_astrologer/model/chat_assistant/chat_assistant_astrologer_response.dart';
 import 'package:divine_astrologer/model/home_model/astrologer_live_data_response.dart';
 import 'package:divine_astrologer/model/home_page_model_class.dart';
 import 'package:divine_astrologer/model/notice_response.dart';
@@ -71,7 +73,7 @@ class HomeUI extends GetView<HomeController> {
           //       controller.scrollController.position.pixels) {
           //   }
           // });
-          controller.scrollController.addListener(() {
+          controller.scrollController.addListener(() async {
             // Check if the user is at the bottom
             if (controller.scrollController.hasClients) {
               final double maxScrollExtent =
@@ -84,8 +86,10 @@ class HomeUI extends GetView<HomeController> {
                   controller.checkin.value == false) {
                 controller.checkin(true);
                 // User is at the bottom
+                controller.isLoadMoreData.value = true;
+                await Future.delayed(const Duration(milliseconds: 100));
+                controller.scrollController.jumpToBottom();
                 controller.getConsulation();
-
                 print("User is at the bottom of the screen");
               }
             }
@@ -1662,283 +1666,465 @@ class HomeUI extends GetView<HomeController> {
                                               controller
                                                   .getWalletPointDetail(2);
 
-                                              ecommerceWalletDetailPopup(
-                                                  Get.context!,
-                                                  controller.walletData,
-                                                  title:
-                                                      "What is Bonus Wallet ?",
-                                                  controller: controller,
-                                                  type: 2);
-                                            }
-                                          },
-                                        )),
-                                    SizedBox(width: 7.w),
-                                    Expanded(
-                                      key: DashboardController(
-                                              PreDefineRepository())
-                                          .keyRepurchaseRate,
-                                      child: RetentionWidget(
-                                        title:
-                                            "${"paidWallet".tr} \n ₹${abbreviateNumber(controller.homeData?.paidWallet)}",
-                                        subTitle:
-                                            "${"rePurchaseRate".tr} \n ${controller.homeData?.repurchaseRate ?? 0}%",
-                                        borderColor: (controller
-                                                    .homeData!.repurchaseRate! <
-                                                controller.homeData!
-                                                    .minimumRepurchaseRate!)
-                                            ? appColors.red
-                                            : appColors.green,
-                                        onTap: () async {
-                                          if (!controller.isOpenPaidSheet) {
-                                            controller.isOpenPaidSheet = true;
-                                            controller.update();
-                                            controller.getWalletPointDetail(1);
-                                            ecommerceWalletDetailPopup(
-                                                Get.context!,
-                                                controller.walletData,
-                                                title: "What is Paid Wallet ?",
-                                                controller: controller,
-                                                type: 1);
-                                          }
-                                        },
-                                      ),
-                                    ),
-                                    SizedBox(width: 7.w),
-                                    Expanded(
+                                                ecommerceWalletDetailPopup(
+                                                    Get.context!,
+                                                    controller.walletData,
+                                                    title:
+                                                        "What is Bonus Wallet ?",
+                                                    controller: controller,
+                                                    type: 2);
+                                              }
+                                            },
+                                          )),
+                                      SizedBox(width: 7.w),
+                                      Expanded(
                                         key: DashboardController(
                                                 PreDefineRepository())
-                                            .keyEcommerceWallet,
+                                            .keyRepurchaseRate,
                                         child: RetentionWidget(
-                                          borderColor: appColors.textColor,
-                                          bottomTextColor: appColors.textColor,
-                                          bottomColor: appColors.transparent,
+                                          title:
+                                              "${"paidWallet".tr} \n ₹${abbreviateNumber(controller.homeData?.paidWallet)}",
+                                          subTitle:
+                                              "${"rePurchaseRate".tr} \n ${controller.homeData?.repurchaseRate ?? 0}%",
+                                          borderColor: (controller.homeData!
+                                                      .repurchaseRate! <
+                                                  controller.homeData!
+                                                      .minimumRepurchaseRate!)
+                                              ? appColors.red
+                                              : appColors.green,
                                           onTap: () async {
-                                            if (!controller
-                                                .isOpenECommerceSheet) {
-                                              controller.isOpenECommerceSheet =
-                                                  true;
+                                            if (!controller.isOpenPaidSheet) {
+                                              controller.isOpenPaidSheet = true;
                                               controller.update();
                                               controller
-                                                  .getWalletPointDetail(3);
+                                                  .getWalletPointDetail(1);
                                               ecommerceWalletDetailPopup(
                                                   Get.context!,
                                                   controller.walletData,
                                                   title:
-                                                      "What is Ecommerce Wallet ?",
+                                                      "What is Paid Wallet ?",
                                                   controller: controller,
-                                                  type: 3);
+                                                  type: 1);
                                             }
                                           },
-                                          child: Column(
-                                            mainAxisSize: MainAxisSize.min,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              CustomText(
-                                                "ecommerceWallet".tr,
-                                                fontWeight: FontWeight.w500,
-                                                textAlign: TextAlign.center,
-                                                fontSize: 9.sp,
-                                                fontColor: appColors.textColor,
-                                              ),
-                                              SizedBox(height: 5.h),
-                                              CustomText(
-                                                "₹${abbreviateNumber(controller.homeData?.ecommerceWallet)}",
-                                                fontWeight: FontWeight.w400,
-                                                textAlign: TextAlign.center,
-                                                fontSize: 9.sp,
-                                                fontColor: appColors.textColor,
-                                              ),
-                                            ],
-                                          ),
-                                        )),
-                                  ],
-                                ),
-                              )
-                            : SizedBox(),
-                        astroHome.toString() == "1"
-                            ? Align(
-                                alignment: Alignment.centerLeft,
-                                child: Container(
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 20.w),
-                                  child: CustomText(
-                                    (controller.homeData!.retention! <
-                                            controller
-                                                .homeData!.minimumRetention!)
-                                        ? "notEligibleBonus".tr
-                                        : "eligibleBonus".tr,
-                                    fontWeight: FontWeight.w400,
-                                    textAlign: TextAlign.start,
-                                    fontSize: 14,
-                                    fontColor:
-                                        !(controller.homeData!.retention! <
-                                                controller.homeData!
-                                                    .minimumRetention!)!
-                                            ? appColors.green
-                                            : appColors.red,
-                                  ),
-                                ),
-                              )
-                            : SizedBox(),
-                        Obx(() {
-                          return Visibility(
-                            visible: controller.marqueeText.value.isNotEmpty,
-                            child: Container(
-                              height: 30.h,
-                              // color: appColors.marqueeBgColor,
-                              child: Marquee(
-                                text: Utils().parseHtmlString(
-                                    controller.marqueeText.value),
-                                style: TextStyle(
-                                  color: appColors.black,
-                                  fontSize: 15.sp,
-                                  fontWeight: FontWeight.w500,
-                                  fontFamily: FontFamily.metropolis,
-                                ),
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                blankSpace: 20.0,
-                                velocity: 60.0,
-                                startPadding: 10.0,
-                                accelerationCurve: Curves.linear,
-                                decelerationCurve: Curves.easeOut,
-                              ),
-                            ),
-                          );
-                        }),
-                        astroHome.toString() == "0"
-                            ? PerformanceTab(context, controller: controller)
-                            : SizedBox(),
-                        Obx(
-                          () => controller.isFeedbackAvailable.value
-                              ? controller.homeData?.feedback == null
-                                  ? const SizedBox.shrink()
-                                  : Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 16, vertical: 6),
-                                      child: Column(
-                                        children: [
-                                          GestureDetector(
-                                            onTap: () {
-                                              Get.toNamed(
-                                                  RouteName.orderFeedback,
-                                                  arguments: [
-                                                    controller.feedbacksList
-                                                  ]);
+                                        ),
+                                      ),
+                                      SizedBox(width: 7.w),
+                                      Expanded(
+                                          key: DashboardController(
+                                                  PreDefineRepository())
+                                              .keyEcommerceWallet,
+                                          child: RetentionWidget(
+                                            borderColor: appColors.textColor,
+                                            bottomTextColor:
+                                                appColors.textColor,
+                                            bottomColor: appColors.transparent,
+                                            onTap: () async {
+                                              if (!controller
+                                                  .isOpenECommerceSheet) {
+                                                controller
+                                                        .isOpenECommerceSheet =
+                                                    true;
+                                                controller.update();
+                                                controller
+                                                    .getWalletPointDetail(3);
+                                                ecommerceWalletDetailPopup(
+                                                    Get.context!,
+                                                    controller.walletData,
+                                                    title:
+                                                        "What is Ecommerce Wallet ?",
+                                                    controller: controller,
+                                                    type: 3);
+                                              }
                                             },
-                                            child: Row(
+                                            child: Column(
+                                              mainAxisSize: MainAxisSize.min,
                                               mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
+                                                  MainAxisAlignment.center,
                                               children: [
-                                                Text(
-                                                  'Order Feedback',
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        FontFamily.poppins,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: appColors.darkBlue,
-                                                    fontSize: 16,
-                                                  ),
+                                                CustomText(
+                                                  "ecommerceWallet".tr,
+                                                  fontWeight: FontWeight.w500,
+                                                  textAlign: TextAlign.center,
+                                                  fontSize: 9.sp,
+                                                  fontColor:
+                                                      appColors.textColor,
                                                 ),
-                                                Text(
-                                                  "viewAll".tr,
-                                                  style: TextStyle(
-                                                    fontFamily:
-                                                        FontFamily.poppins,
-                                                    fontWeight: FontWeight.w400,
-                                                    color: appColors.darkBlue,
-                                                    fontSize: 12,
-                                                  ),
-                                                )
+                                                SizedBox(height: 5.h),
+                                                CustomText(
+                                                  "₹${abbreviateNumber(controller.homeData?.ecommerceWallet)}",
+                                                  fontWeight: FontWeight.w400,
+                                                  textAlign: TextAlign.center,
+                                                  fontSize: 9.sp,
+                                                  fontColor:
+                                                      appColors.textColor,
+                                                ),
                                               ],
                                             ),
-                                          ),
-                                          SizedBox(height: 10.h),
-                                          FeedbackCardWidget(
-                                              feedback: controller
-                                                      .homeData?.feedback ??
-                                                  FeedbackData(
-                                                    id: controller
-                                                        .homeData?.feedback?.id,
-                                                    orderId: controller.homeData
-                                                        ?.feedback?.orderId,
-                                                    remark: controller.homeData
-                                                        ?.feedback?.remark,
-                                                    order: OrderDetails(
-                                                      astrologerId: controller
-                                                          .homeData
-                                                          ?.feedback
-                                                          ?.order
-                                                          ?.astrologerId,
+                                          )),
+                                    ],
+                                  ),
+                                )
+                              : SizedBox(),
+                          astroHome.toString() == "1"
+                              ? Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Container(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 20.w),
+                                    child: CustomText(
+                                      (controller.homeData!.retention! <
+                                              controller
+                                                  .homeData!.minimumRetention!)
+                                          ? "notEligibleBonus".tr
+                                          : "eligibleBonus".tr,
+                                      fontWeight: FontWeight.w400,
+                                      textAlign: TextAlign.start,
+                                      fontSize: 14,
+                                      fontColor:
+                                          !(controller.homeData!.retention! <
+                                                  controller.homeData!
+                                                      .minimumRetention!)!
+                                              ? appColors.green
+                                              : appColors.red,
+                                    ),
+                                  ),
+                                )
+                              : SizedBox(),
+                          Obx(() {
+                            return Visibility(
+                              visible: controller.marqueeText.value.isNotEmpty,
+                              child: Container(
+                                height: 30.h,
+                                // color: appColors.marqueeBgColor,
+                                child: Marquee(
+                                  text: Utils().parseHtmlString(
+                                      controller.marqueeText.value),
+                                  style: TextStyle(
+                                    color: appColors.black,
+                                    fontSize: 15.sp,
+                                    fontWeight: FontWeight.w500,
+                                    fontFamily: FontFamily.metropolis,
+                                  ),
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  blankSpace: 20.0,
+                                  velocity: 60.0,
+                                  startPadding: 10.0,
+                                  accelerationCurve: Curves.linear,
+                                  decelerationCurve: Curves.easeOut,
+                                ),
+                              ),
+                            );
+                          }),
+                          astroHome.toString() == "0"
+                              ? PerformanceTab(context, controller: controller)
+                              : SizedBox(),
+                          Obx(
+                            () => controller.isFeedbackAvailable.value
+                                ? controller.homeData?.feedback == null
+                                    ? const SizedBox.shrink()
+                                    : Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16, vertical: 6),
+                                        child: Column(
+                                          children: [
+                                            GestureDetector(
+                                              onTap: () {
+                                                Get.toNamed(
+                                                    RouteName.orderFeedback,
+                                                    arguments: [
+                                                      controller.feedbacksList
+                                                    ]);
+                                              },
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    'Order Feedback',
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          FontFamily.poppins,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: appColors.darkBlue,
+                                                      fontSize: 16,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    "viewAll".tr,
+                                                    style: TextStyle(
+                                                      fontFamily:
+                                                          FontFamily.poppins,
+                                                      fontWeight:
+                                                          FontWeight.w400,
+                                                      color: appColors.darkBlue,
+                                                      fontSize: 12,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                            SizedBox(height: 10.h),
+                                            FeedbackCardWidget(
+                                                feedback: controller
+                                                        .homeData?.feedback ??
+                                                    FeedbackData(
                                                       id: controller.homeData
-                                                          ?.feedback?.order?.id,
-                                                      productType: controller
-                                                          .homeData
-                                                          ?.feedback
-                                                          ?.order
-                                                          ?.productType,
+                                                          ?.feedback?.id,
                                                       orderId: controller
                                                           .homeData
                                                           ?.feedback
-                                                          ?.order
                                                           ?.orderId,
-                                                      createdAt: controller
+                                                      remark: controller
                                                           .homeData
                                                           ?.feedback
-                                                          ?.order
-                                                          ?.createdAt,
-                                                    ),
-                                                  )),
-                                        ],
-                                      ),
-                                    )
-                              : const SizedBox(),
-                        ),
-                        controller.astroNoticeBoardResponse.value.data
-                                    ?.noticeBoard ==
-                                null
-                            ? const SizedBox()
-                            : Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 6),
-                                child: Column(
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        Get.toNamed(RouteName.noticeBoard);
-                                      },
+                                                          ?.remark,
+                                                      order: OrderDetails(
+                                                        astrologerId: controller
+                                                            .homeData
+                                                            ?.feedback
+                                                            ?.order
+                                                            ?.astrologerId,
+                                                        id: controller
+                                                            .homeData
+                                                            ?.feedback
+                                                            ?.order
+                                                            ?.id,
+                                                        productType: controller
+                                                            .homeData
+                                                            ?.feedback
+                                                            ?.order
+                                                            ?.productType,
+                                                        orderId: controller
+                                                            .homeData
+                                                            ?.feedback
+                                                            ?.order
+                                                            ?.orderId,
+                                                        createdAt: controller
+                                                            .homeData
+                                                            ?.feedback
+                                                            ?.order
+                                                            ?.createdAt,
+                                                      ),
+                                                    )),
+                                          ],
+                                        ),
+                                      )
+                                : const SizedBox(),
+                          ),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 6),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                GestureDetector(
+                                  onTap: () =>
+                                      Get.toNamed(RouteName.messageTemplate),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: 55,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.28,
+                                    decoration: BoxDecoration(
+                                      color: appColors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 6,
+                                          spreadRadius: 2,
+                                          color:
+                                          appColors.grey.withOpacity(0.2),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Center(
                                       child: Row(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.center,
                                         children: [
-                                          Text(
-                                            "noticeBoard".tr,
-                                            style: TextStyle(
-                                              fontFamily: FontFamily.poppins,
-                                              fontWeight: FontWeight.w400,
-                                              color: appColors.darkBlue,
-                                              fontSize: 16,
-                                            ),
+                                          CommonImageView(
+                                            imagePath:
+                                            "assets/images/message.png",
+                                            height: 30,
+                                            width: 30,
+                                            placeHolder: Assets
+                                                .images.defaultProfile.path,
                                           ),
-                                          Text(
-                                            "viewAll".tr,
-                                            style: TextStyle(
-                                              fontFamily: FontFamily.poppins,
-                                              fontWeight: FontWeight.w400,
-                                              color: appColors.darkBlue,
-                                              fontSize: 12,
+                                          const SizedBox(width: 5),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                0.15,
+                                            child: Text(
+                                              "Message Template",
+                                              style: AppTextStyle.textStyle10(
+                                                fontWeight: FontWeight.w500,
+                                                fontColor: appColors.black,
+                                              ),
                                             ),
                                           ),
                                         ],
                                       ),
                                     ),
-                                    SizedBox(height: 10.h),
-                                    noticeBoardWidget(controller: controller),
-                                  ],
+                                  ),
                                 ),
-                              ),
-                        // noticeBoardPoll(controller: controller, maxWidth),
+                                GestureDetector(
+                                  onTap: () => Get.toNamed(
+                                      RouteName.suggestRemediesView),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: 55,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.28,
+                                    decoration: BoxDecoration(
+                                      color: appColors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 6,
+                                          spreadRadius: 2,
+                                          color:
+                                          appColors.grey.withOpacity(0.2),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          CommonImageView(
+                                            imagePath:
+                                            "assets/images/service.png",
+                                            height: 30,
+                                            width: 30,
+                                            placeHolder: Assets
+                                                .images.defaultProfile.path,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                0.15,
+                                            child: Text(
+                                              "Suggested Remedies",
+                                              style: AppTextStyle.textStyle10(
+                                                fontWeight: FontWeight.w500,
+                                                fontColor: appColors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () =>
+                                      Get.toNamed(RouteName.customProduct),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: 55,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.28,
+                                    decoration: BoxDecoration(
+                                      color: appColors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 6,
+                                          spreadRadius: 2,
+                                          color:
+                                          appColors.grey.withOpacity(0.2),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          CommonImageView(
+                                            imagePath:
+                                            "assets/images/product.png",
+                                            height: 30,
+                                            width: 30,
+                                            placeHolder: Assets
+                                                .images.defaultProfile.path,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                0.15,
+                                            child: Text(
+                                              "Custom Product",
+                                              style: AppTextStyle.textStyle10(
+                                                fontWeight: FontWeight.w500,
+                                                fontColor: appColors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          controller.astroNoticeBoardResponse.value.data
+                                      ?.noticeBoard ==
+                                  null
+                              ? const SizedBox()
+                              : Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 6),
+                                  child: Column(
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          Get.toNamed(RouteName.noticeBoard);
+                                        },
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text(
+                                              "noticeBoard".tr,
+                                              style: TextStyle(
+                                                fontFamily: FontFamily.poppins,
+                                                fontWeight: FontWeight.w400,
+                                                color: appColors.darkBlue,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            Text(
+                                              "viewAll".tr,
+                                              style: TextStyle(
+                                                fontFamily: FontFamily.poppins,
+                                                fontWeight: FontWeight.w400,
+                                                color: appColors.darkBlue,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      SizedBox(height: 10.h),
+                                      noticeBoardWidget(controller: controller),
+                                    ],
+                                  ),
+                                ),
+                          // noticeBoardPoll(controller: controller, maxWidth),
 
                         Obx(
                           () {
@@ -2056,175 +2242,13 @@ class HomeUI extends GetView<HomeController> {
 
                         viewKundliWidgetUpdated(),
 
-                        Padding(
-                          padding:
-                              EdgeInsets.symmetric(horizontal: 16, vertical: 6),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              GestureDetector(
-                                onTap: () =>
-                                    Get.toNamed(RouteName.messageTemplate),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 55,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.28,
-                                  decoration: BoxDecoration(
-                                    color: appColors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        blurRadius: 6,
-                                        spreadRadius: 2,
-                                        color: appColors.grey.withOpacity(0.2),
-                                      ),
-                                    ],
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        CommonImageView(
-                                          imagePath:
-                                              "assets/images/message.png",
-                                          height: 30,
-                                          width: 30,
-                                          placeHolder:
-                                              Assets.images.defaultProfile.path,
-                                        ),
-                                        const SizedBox(width: 5),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.15,
-                                          child: Text(
-                                            "Message Template",
-                                            style: AppTextStyle.textStyle10(
-                                              fontWeight: FontWeight.w500,
-                                              fontColor: appColors.black,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () =>
-                                    Get.toNamed(RouteName.suggestRemediesView),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 55,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.28,
-                                  decoration: BoxDecoration(
-                                    color: appColors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        blurRadius: 6,
-                                        spreadRadius: 2,
-                                        color: appColors.grey.withOpacity(0.2),
-                                      ),
-                                    ],
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        CommonImageView(
-                                          imagePath:
-                                              "assets/images/service.png",
-                                          height: 30,
-                                          width: 30,
-                                          placeHolder:
-                                              Assets.images.defaultProfile.path,
-                                        ),
-                                        const SizedBox(width: 5),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.15,
-                                          child: Text(
-                                            "Suggested Remedies",
-                                            style: AppTextStyle.textStyle10(
-                                              fontWeight: FontWeight.w500,
-                                              fontColor: appColors.black,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () =>
-                                    Get.toNamed(RouteName.customProduct),
-                                child: Container(
-                                  alignment: Alignment.center,
-                                  height: 55,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.28,
-                                  decoration: BoxDecoration(
-                                    color: appColors.white,
-                                    boxShadow: [
-                                      BoxShadow(
-                                        blurRadius: 6,
-                                        spreadRadius: 2,
-                                        color: appColors.grey.withOpacity(0.2),
-                                      ),
-                                    ],
-                                    borderRadius: BorderRadius.circular(10.0),
-                                  ),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        CommonImageView(
-                                          imagePath:
-                                              "assets/images/product.png",
-                                          height: 30,
-                                          width: 30,
-                                          placeHolder:
-                                              Assets.images.defaultProfile.path,
-                                        ),
-                                        const SizedBox(width: 5),
-                                        SizedBox(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              0.15,
-                                          child: Text(
-                                            "Custom Product",
-                                            style: AppTextStyle.textStyle10(
-                                              fontWeight: FontWeight.w500,
-                                              fontColor: appColors.black,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        controller.homeData?.offers?.orderOffer!.length != 0
-                            ? Container(
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 6),
-                                child: orderOfferWidget(
-                                    homeController: controller))
-                            : SizedBox(),
+                          controller.homeData?.offers?.orderOffer!.length != 0
+                              ? Container(
+                                  margin: EdgeInsets.symmetric(
+                                      horizontal: 16, vertical: 6),
+                                  child: orderOfferWidget(
+                                      homeController: controller))
+                              : SizedBox(),
 
                         controller.homeData?.offers?.customOffer!.length != 0
                             ? Container(
@@ -2242,164 +2266,168 @@ class HomeUI extends GetView<HomeController> {
                         trainingVideoWidget(controller: controller),
                         scheduledTrainingWidgetUpdated(controller: controller),
 
-                        Obx(() {
-                          return showDailyLive.value.toString() == "1"
-                              ? Visibility(
-                                  visible: controller.isLiveMonitor.value != 1,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        top: 6, bottom: 6),
-                                    child: Column(
-                                      children: [
-                                        liveWidgetUpdated(),
-                                        // SizedBox(height: 10.h),
-                                      ],
+                          Obx(() {
+                            return showDailyLive.value.toString() == "1"
+                                ? Visibility(
+                                    visible:
+                                        controller.isLiveMonitor.value != 1,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 6, bottom: 6),
+                                      child: Column(
+                                        children: [
+                                          liveWidgetUpdated(),
+                                          // SizedBox(height: 10.h),
+                                        ],
+                                      ),
                                     ),
-                                  ),
-                                )
-                              : SizedBox();
-                        }),
-                        (controller.customerDetailsResponse == null ||
-                                controller
-                                    .customerDetailsResponse!.data.isEmpty)
-                            ? SizedBox()
-                            : Align(
-                                alignment: Alignment.centerLeft,
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 16, vertical: 5),
-                                  child: Text(
-                                    "User Data".tr,
-                                    style: TextStyle(
-                                      fontFamily: FontFamily.poppins,
-                                      fontWeight: FontWeight.w400,
-                                      color: appColors.darkBlue,
-                                      fontSize: 16,
+                                  )
+                                : SizedBox();
+                          }),
+                          (controller.customerDetailsResponse == null ||
+                                  controller
+                                      .customerDetailsResponse!.data.isEmpty)
+                              ? SizedBox()
+                              : Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 16, vertical: 5),
+                                    child: Text(
+                                      "User Data".tr,
+                                      style: TextStyle(
+                                        fontFamily: FontFamily.poppins,
+                                        fontWeight: FontWeight.w400,
+                                        color: appColors.darkBlue,
+                                        fontSize: 16,
+                                      ),
                                     ),
                                   ),
                                 ),
-                              ),
-                        (controller.customerDetailsResponse == null ||
-                                controller
-                                    .customerDetailsResponse!.data.isEmpty)
-                            ? SizedBox()
-                            : ListView.builder(
-                                shrinkWrap: true,
-                                padding: EdgeInsets.symmetric(horizontal: 10.h),
-                                physics: NeverScrollableScrollPhysics(),
-                                itemCount:
-                                    (controller.filteredUserData).isNotEmpty ||
-                                            controller.searchController.text
-                                                .isNotEmpty
-                                        ? controller.filteredUserData.length
-                                        : controller.customerDetailsResponse
-                                                ?.data.length ??
-                                            0,
-                                itemBuilder: (context, index) {
-                                  return ChatAssistanceDataTile(
-                                    data: (controller.filteredUserData)
-                                                .isNotEmpty ||
-                                            controller.searchController.text
-                                                .isNotEmpty
-                                        ? controller.filteredUserData[index]
-                                        : controller.customerDetailsResponse!
-                                            .data[index],
-                                  );
-                                },
-                              ),
-                        // NotificationListener<ScrollNotification>(
-                        //         onNotification:
-                        //             (ScrollNotification scrollInfo) {
-                        //           if (scrollInfo.metrics.pixels ==
-                        //               scrollInfo.metrics.maxScrollExtent) {
-                        //             print(
-                        //                 "getConsulation getConsulation getConsulation");
-                        //             // controller.getConsulation();
-                        //             return true;
-                        //           }
-                        //           return false;
-                        //         },
-                        //         child:
-                        //       ),
-                        SizedBox(height: 20.h),
-                        // feedbackWidget(controller: controller),
-                        // Obx(() {
-                        //   return Visibility(
-                        //     visible: controller.marqueeText.isNotEmpty,
-                        //     child: Container(
-                        //       margin: EdgeInsets.only(bottom: 15.h),
-                        //       height: 45.h,
-                        //       color: appColors.marqueeBgColor,
-                        //       child: CustomWidgetMarquee(
-                        //         child: ListView(
-                        //           padding: EdgeInsets.zero,
-                        //           scrollDirection: Axis.horizontal,
-                        //           shrinkWrap: true,
-                        //           children: List.generate(
-                        //             controller.marqueeText.length,
-                        //                 (index) {
-                        //               return Container(
-                        //                   alignment:
-                        //                   AlignmentDirectional.center,
-                        //                   child: HtmlWidget(
-                        //                     controller.marqueeText[index],
-                        //                   ));
-                        //             },
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     ),
-                        //   );
-                        // }),
-                        // GestureDetector(
-                        //   onTap: () {
-                        //     Get.toNamed(RouteName.customProduct);
-                        //   },
-                        //   child: Container(
-                        //     margin:
-                        //         const EdgeInsets.symmetric(horizontal: 20.0),
-                        //     alignment: Alignment.center,
-                        //     height: 55,
-                        //     decoration: BoxDecoration(
-                        //       color: appColors.guideColor,
-                        //       boxShadow: [
-                        //         BoxShadow(
-                        //           color: Colors.black.withOpacity(0.2),
-                        //           blurRadius: 1.0,
-                        //           offset: const Offset(0.0, 3.0),
-                        //         ),
-                        //       ],
-                        //       borderRadius: BorderRadius.circular(10.0),
-                        //     ),
-                        //     child: Text(
-                        //       "Custom Product",
-                        //       style: AppTextStyle.textStyle14(
-                        //         fontWeight: FontWeight.w500,
-                        //         fontColor: appColors.white,
-                        //       ),
-                        //     ),
-                        //   ),
-                        // )
-                        // Align(
-                        //   alignment: Alignment.centerLeft,
-                        //   child: Container(
-                        //     padding: EdgeInsets.symmetric(horizontal: 20.w),
-                        //     child: CustomText(
-                        //       (controller.homeData!.retention! <
-                        //               controller.homeData!.minimumRetention!)
-                        //           ? "notEligibleBonus".tr
-                        //           : "eligibleBonus".tr,
-                        //       fontWeight: FontWeight.w400,
-                        //       textAlign: TextAlign.start,
-                        //       fontSize: 14,
-                        //       fontColor: !(controller.homeData!.retention! <
-                        //               controller.homeData!.minimumRetention!)!
-                        //           ? appColors.green
-                        //           : appColors.red,
-                        //     ),
-                        //   ),
-                        // ),
-                        // SizedBox(height: 10.h),
+                          (controller.customerDetailsResponse == null ||
+                                  controller
+                                      .customerDetailsResponse!.data.isEmpty)
+                              ? SizedBox()
+                              : ListView.builder(
+                                  shrinkWrap: true,
+                                  padding:
+                                      EdgeInsets.symmetric(horizontal: 10.h),
+                                  physics: NeverScrollableScrollPhysics(),
+                                  itemCount: (controller.filteredUserData)
+                                              .isNotEmpty ||
+                                          controller
+                                              .searchController.text.isNotEmpty
+                                      ? controller.filteredUserData.length
+                                      : controller.customerDetailsResponse?.data
+                                              .length ??
+                                          0,
+                                  itemBuilder: (context, index) {
+                                    return ChatAssistanceDataTileHome(
+                                      data: (controller.filteredUserData)
+                                                  .isNotEmpty ||
+                                              controller.searchController.text
+                                                  .isNotEmpty
+                                          ? controller.filteredUserData[index]
+                                          : controller.customerDetailsResponse!
+                                              .data[index],
+                                      index: index,
+                                      controller: controller,
+                                    );
+                                  },
+                                ),
+                          // NotificationListener<ScrollNotification>(
+                          //         onNotification:
+                          //             (ScrollNotification scrollInfo) {
+                          //           if (scrollInfo.metrics.pixels ==
+                          //               scrollInfo.metrics.maxScrollExtent) {
+                          //             print(
+                          //                 "getConsulation getConsulation getConsulation");
+                          //             // controller.getConsulation();
+                          //             return true;
+                          //           }
+                          //           return false;
+                          //         },
+                          //         child:
+                          //       ),
+                          SizedBox(height: 20.h),
+                          // feedbackWidget(controller: controller),
+                          // Obx(() {
+                          //   return Visibility(
+                          //     visible: controller.marqueeText.isNotEmpty,
+                          //     child: Container(
+                          //       margin: EdgeInsets.only(bottom: 15.h),
+                          //       height: 45.h,
+                          //       color: appColors.marqueeBgColor,
+                          //       child: CustomWidgetMarquee(
+                          //         child: ListView(
+                          //           padding: EdgeInsets.zero,
+                          //           scrollDirection: Axis.horizontal,
+                          //           shrinkWrap: true,
+                          //           children: List.generate(
+                          //             controller.marqueeText.length,
+                          //                 (index) {
+                          //               return Container(
+                          //                   alignment:
+                          //                   AlignmentDirectional.center,
+                          //                   child: HtmlWidget(
+                          //                     controller.marqueeText[index],
+                          //                   ));
+                          //             },
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   );
+                          // }),
+                          // GestureDetector(
+                          //   onTap: () {
+                          //     Get.toNamed(RouteName.customProduct);
+                          //   },
+                          //   child: Container(
+                          //     margin:
+                          //         const EdgeInsets.symmetric(horizontal: 20.0),
+                          //     alignment: Alignment.center,
+                          //     height: 55,
+                          //     decoration: BoxDecoration(
+                          //       color: appColors.guideColor,
+                          //       boxShadow: [
+                          //         BoxShadow(
+                          //           color: Colors.black.withOpacity(0.2),
+                          //           blurRadius: 1.0,
+                          //           offset: const Offset(0.0, 3.0),
+                          //         ),
+                          //       ],
+                          //       borderRadius: BorderRadius.circular(10.0),
+                          //     ),
+                          //     child: Text(
+                          //       "Custom Product",
+                          //       style: AppTextStyle.textStyle14(
+                          //         fontWeight: FontWeight.w500,
+                          //         fontColor: appColors.white,
+                          //       ),
+                          //     ),
+                          //   ),
+                          // )
+                          // Align(
+                          //   alignment: Alignment.centerLeft,
+                          //   child: Container(
+                          //     padding: EdgeInsets.symmetric(horizontal: 20.w),
+                          //     child: CustomText(
+                          //       (controller.homeData!.retention! <
+                          //               controller.homeData!.minimumRetention!)
+                          //           ? "notEligibleBonus".tr
+                          //           : "eligibleBonus".tr,
+                          //       fontWeight: FontWeight.w400,
+                          //       textAlign: TextAlign.start,
+                          //       fontSize: 14,
+                          //       fontColor: !(controller.homeData!.retention! <
+                          //               controller.homeData!.minimumRetention!)!
+                          //           ? appColors.green
+                          //           : appColors.red,
+                          //     ),
+                          //   ),
+                          // ),
+                          // SizedBox(height: 10.h),
 
                         // SizedBox(height: 10.h),
                         // availableFeedbackWidget(controller.feedbackResponse ?? FeedbackData()),
@@ -5685,3 +5713,134 @@ class SelectedTimeForVideoCall extends StatelessWidget {
 //     }),
 //   );
 // }
+
+
+class ChatAssistanceDataTileHome extends StatelessWidget {
+  final ConsultationData data;
+  final HomeController controller;
+  final int index;
+
+  const ChatAssistanceDataTileHome({super.key, required this.data, required this.controller, required this.index});
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        DataList dataList = DataList();
+        dataList.name = data.customerName;
+        dataList.id = data.customerId;
+        dataList.image = data.customerImage;
+        Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
+      },
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                ClipRRect(
+                    borderRadius: BorderRadius.circular(50.r),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle, color: appColors.guideColor),
+                      height: 50.w,
+                      width: 50.w,
+                      child: LoadImage(
+                        imageModel: ImageModel(
+                          assetImage: false,
+                          placeHolderPath: Assets.images.defaultProfile.path,
+                          imagePath: (data.customerImage ?? '').startsWith(
+                              'https://divineprod.blob.core.windows.net/divineprod/')
+                              ? data.customerImage ?? ''
+                              : "${preferenceService.getAmazonUrl()}/${data.customerImage ?? ''}",
+                          loadingIndicator: SizedBox(
+                            height: 25.h,
+                            width: 25.w,
+                            child: CircularProgressIndicator(
+                              color: appColors.guideColor,
+                              strokeWidth: 2,
+                            ),
+                          ),
+                        ),
+                      ),
+                    )),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CustomText(
+                              // data.customerName ?? '',
+                              data.customerName ?? '',
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                border:
+                                Border.all(color: appColors.white, width: 1.5),
+                                borderRadius:
+                                const BorderRadius.all(Radius.circular(50.0)),
+                                color: appColors.darkGreen),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                              child: CustomText("Connect",
+                                  fontColor: Colors.white, fontSize: 12.sp),
+                            ),
+                          )
+                        ],
+                      ),
+                      CustomText(
+                        "Total Consultation : ${data.totalConsultation}",
+                        fontColor:
+                        // (index == 0) ? appColors.darkBlue:
+                        appColors.grey,
+                        fontSize: 12.sp,
+                        fontWeight:
+                        //(index == 0) ? FontWeight.w600 :
+                        FontWeight.normal,
+                      ),
+                      CustomText(
+                        "Last Consulted : ${data.lastConsulted}",
+                        fontColor:
+                        // (index == 0) ? appColors.darkBlue:
+                        appColors.grey,
+                        fontSize: 12.sp,
+                        fontWeight:
+                        //(index == 0) ? FontWeight.w600 :
+                        FontWeight.normal,
+                      ),
+                      CustomText(
+                        "Days Since Last Consulted : ${data.daySinceLastConsulted}",
+                        fontColor:
+                        // (index == 0) ? appColors.darkBlue:
+                        appColors.grey,
+                        fontSize: 12.sp,
+                        fontWeight:
+                        //(index == 0) ? FontWeight.w600 :
+                        FontWeight.normal,
+                      )
+                    ],
+                  ),
+                ),
+                const Center(child: Icon(Icons.keyboard_arrow_right_outlined))
+              ],
+            ),
+            Obx(() => controller.isLoadMoreData.value && !controller.emptyRes.value && controller.customerDetailsResponse!.data.length -1 == index ?  Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: CircularProgressIndicator(
+                strokeWidth: 1.0,
+              ),
+            ) : const SizedBox())
+          ],
+        ),
+      ),
+    );
+  }
+}
