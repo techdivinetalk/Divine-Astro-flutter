@@ -277,8 +277,8 @@ class LoginController extends GetxController {
     super.onInit();
     // maintenanceCheck();
     // getLoginImages();
-    countryCodeController = TextEditingController(text: "+91");
-    mobileNumberController = TextEditingController();
+    /*countryCodeController = TextEditingController(text: "+91");
+    mobileNumberController = TextEditingController();*/
 
     if (isTruecaller.value == 1) {
       TrueCallerService().isTrueCallerInstalled().then((value) {
@@ -604,8 +604,8 @@ class LoginController extends GetxController {
   @override
   void dispose() {
     super.dispose();
-    countryCodeController.dispose();
-    mobileNumberController.dispose();
+    // countryCodeController.dispose();
+    // mobileNumberController.dispose();
   }
 
   LoginImages? loginImages;
