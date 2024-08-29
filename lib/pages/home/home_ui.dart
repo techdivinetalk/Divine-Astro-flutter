@@ -1907,6 +1907,173 @@ class HomeUI extends GetView<HomeController> {
                                       )
                                 : const SizedBox(),
                           ),
+
+                          Padding(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 6),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                GestureDetector(
+                                  onTap: () =>
+                                      Get.toNamed(RouteName.messageTemplate),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: 55,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.28,
+                                    decoration: BoxDecoration(
+                                      color: appColors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 6,
+                                          spreadRadius: 2,
+                                          color:
+                                          appColors.grey.withOpacity(0.2),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          CommonImageView(
+                                            imagePath:
+                                            "assets/images/message.png",
+                                            height: 30,
+                                            width: 30,
+                                            placeHolder: Assets
+                                                .images.defaultProfile.path,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                0.15,
+                                            child: Text(
+                                              "Message Template",
+                                              style: AppTextStyle.textStyle10(
+                                                fontWeight: FontWeight.w500,
+                                                fontColor: appColors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () => Get.toNamed(
+                                      RouteName.suggestRemediesView),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: 55,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.28,
+                                    decoration: BoxDecoration(
+                                      color: appColors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 6,
+                                          spreadRadius: 2,
+                                          color:
+                                          appColors.grey.withOpacity(0.2),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          CommonImageView(
+                                            imagePath:
+                                            "assets/images/service.png",
+                                            height: 30,
+                                            width: 30,
+                                            placeHolder: Assets
+                                                .images.defaultProfile.path,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                0.15,
+                                            child: Text(
+                                              "Suggested Remedies",
+                                              style: AppTextStyle.textStyle10(
+                                                fontWeight: FontWeight.w500,
+                                                fontColor: appColors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () =>
+                                      Get.toNamed(RouteName.customProduct),
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    height: 55,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.28,
+                                    decoration: BoxDecoration(
+                                      color: appColors.white,
+                                      boxShadow: [
+                                        BoxShadow(
+                                          blurRadius: 6,
+                                          spreadRadius: 2,
+                                          color:
+                                          appColors.grey.withOpacity(0.2),
+                                        ),
+                                      ],
+                                      borderRadius: BorderRadius.circular(10.0),
+                                    ),
+                                    child: Center(
+                                      child: Row(
+                                        mainAxisAlignment:
+                                        MainAxisAlignment.center,
+                                        children: [
+                                          CommonImageView(
+                                            imagePath:
+                                            "assets/images/product.png",
+                                            height: 30,
+                                            width: 30,
+                                            placeHolder: Assets
+                                                .images.defaultProfile.path,
+                                          ),
+                                          const SizedBox(width: 5),
+                                          SizedBox(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                0.15,
+                                            child: Text(
+                                              "Custom Product",
+                                              style: AppTextStyle.textStyle10(
+                                                fontWeight: FontWeight.w500,
+                                                fontColor: appColors.black,
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
                           controller.astroNoticeBoardResponse.value.data
                                       ?.noticeBoard ==
                                   null
@@ -2075,171 +2242,6 @@ class HomeUI extends GetView<HomeController> {
 
                           viewKundliWidgetUpdated(),
 
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 6),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                GestureDetector(
-                                  onTap: () =>
-                                      Get.toNamed(RouteName.messageTemplate),
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    height: 55,
-                                    width: MediaQuery.of(context).size.width *
-                                        0.28,
-                                    decoration: BoxDecoration(
-                                      color: appColors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 6,
-                                          spreadRadius: 2,
-                                          color:
-                                              appColors.grey.withOpacity(0.2),
-                                        ),
-                                      ],
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: Center(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          CommonImageView(
-                                            imagePath:
-                                                "assets/images/message.png",
-                                            height: 30,
-                                            width: 30,
-                                            placeHolder: Assets
-                                                .images.defaultProfile.path,
-                                          ),
-                                          const SizedBox(width: 5),
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.15,
-                                            child: Text(
-                                              "Message Template",
-                                              style: AppTextStyle.textStyle10(
-                                                fontWeight: FontWeight.w500,
-                                                fontColor: appColors.black,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () => Get.toNamed(
-                                      RouteName.suggestRemediesView),
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    height: 55,
-                                    width: MediaQuery.of(context).size.width *
-                                        0.28,
-                                    decoration: BoxDecoration(
-                                      color: appColors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 6,
-                                          spreadRadius: 2,
-                                          color:
-                                              appColors.grey.withOpacity(0.2),
-                                        ),
-                                      ],
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: Center(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          CommonImageView(
-                                            imagePath:
-                                                "assets/images/service.png",
-                                            height: 30,
-                                            width: 30,
-                                            placeHolder: Assets
-                                                .images.defaultProfile.path,
-                                          ),
-                                          const SizedBox(width: 5),
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.15,
-                                            child: Text(
-                                              "Suggested Remedies",
-                                              style: AppTextStyle.textStyle10(
-                                                fontWeight: FontWeight.w500,
-                                                fontColor: appColors.black,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () =>
-                                      Get.toNamed(RouteName.customProduct),
-                                  child: Container(
-                                    alignment: Alignment.center,
-                                    height: 55,
-                                    width: MediaQuery.of(context).size.width *
-                                        0.28,
-                                    decoration: BoxDecoration(
-                                      color: appColors.white,
-                                      boxShadow: [
-                                        BoxShadow(
-                                          blurRadius: 6,
-                                          spreadRadius: 2,
-                                          color:
-                                              appColors.grey.withOpacity(0.2),
-                                        ),
-                                      ],
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    child: Center(
-                                      child: Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          CommonImageView(
-                                            imagePath:
-                                                "assets/images/product.png",
-                                            height: 30,
-                                            width: 30,
-                                            placeHolder: Assets
-                                                .images.defaultProfile.path,
-                                          ),
-                                          const SizedBox(width: 5),
-                                          SizedBox(
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.15,
-                                            child: Text(
-                                              "Custom Product",
-                                              style: AppTextStyle.textStyle10(
-                                                fontWeight: FontWeight.w500,
-                                                fontColor: appColors.black,
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
                           controller.homeData?.offers?.orderOffer!.length != 0
                               ? Container(
                                   margin: EdgeInsets.symmetric(

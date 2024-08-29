@@ -33,6 +33,7 @@ class SharedPreferenceService extends GetxService {
   static const performanceDialog = "performanceDialog";
   static const talkTime = "talkTime";
   static const messageTemplate = "messageTemplate";
+  static const lastShownDate = "lastShownDate";
 
   Future<SharedPreferenceService> init() async {
     prefs = await SharedPreferences.getInstance();
@@ -65,6 +66,16 @@ class SharedPreferenceService extends GetxService {
     print("setAmazonUrl:: $url");
     //
     return await prefs!.setString(baseAmazonUrl, url);
+  }
+
+  Future<void> setLastShowDate(String value) async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    await sharedPreferences.setString(lastShownDate, value);
+  }
+
+  Future<String> getLastShowDate() async {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getString(lastShownDate) ?? "";
   }
 
   Future<int> getIntPrefs(String key) async {

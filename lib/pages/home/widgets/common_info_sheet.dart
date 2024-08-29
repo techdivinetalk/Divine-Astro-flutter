@@ -10,10 +10,11 @@ import 'package:get/get.dart';
 class CommonInfoSheet extends StatelessWidget {
   final String? title;
   final String? subTitle;
+  final bool isBackButton;
   final dynamic argument;
   final Function()? onTap;
 
-  const CommonInfoSheet({this.title, this.subTitle, this.argument, this.onTap});
+  CommonInfoSheet({this.title, this.subTitle, this.argument, this.onTap, this.isBackButton = true});
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +22,7 @@ class CommonInfoSheet extends StatelessWidget {
       alignment: WrapAlignment.center,
       runSpacing: 20,
       children: [
-        GestureDetector(
+        if(isBackButton)GestureDetector(
           onTap: () {
             Get.back();
           },

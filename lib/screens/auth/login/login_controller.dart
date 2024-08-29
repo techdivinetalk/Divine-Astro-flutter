@@ -40,11 +40,12 @@ class LoginController extends GetxController {
   final UserRepository userRepository;
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
-  TextEditingController countryCodeController = TextEditingController();
+  TextEditingController countryCodeController = TextEditingController(text: "+91");
   TextEditingController mobileNumberController = TextEditingController();
   final appFirebaseService = AppFirebaseService();
 
-  RxString get countryCode => countryCodeController.text.obs;
+  // RxString get countryCode => countryCodeController.text.obs;
+  RxString countryCode = "+91".obs;
   var enable = true.obs;
   String? deviceToken;
   FocusNode numberFocus = FocusNode();
@@ -53,6 +54,7 @@ class LoginController extends GetxController {
   void setCode(String value) {
     if (!value.contains("+")) value = "+$value";
     countryCodeController.text = value;
+    countryCode.value = countryCodeController.text;
     update();
   }
 
