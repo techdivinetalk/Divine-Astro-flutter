@@ -28,6 +28,7 @@ import 'package:divine_astrologer/pages/home/widgets/common_info_sheet.dart';
 import 'package:divine_astrologer/pages/home/widgets/technical_popup.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/product/pooja/widgets/custom_widget/pooja_common_list.dart';
+import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:divine_astrologer/screens/dashboard/model/astrologer_nord_data_model.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
@@ -707,7 +708,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           homeData?.technical_support!.isEmpty) {
       } else {
         log("Technical_Support -- ${homeData?.technical_support.toString()}");
-        showTechnicalPopupAlert();
+        if(Get.find<DashboardController>().selectedIndex.value == 0){
+          showTechnicalPopupAlert();
+        }
       }
       //getFeedbackData();
       //log("DashboardData==>${jsonEncode(homeData)}");
