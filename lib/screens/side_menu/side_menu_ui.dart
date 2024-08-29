@@ -1,5 +1,6 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/screens/signature_module/view/agreement_screen.dart';
 import 'package:flutter/foundation.dart';
@@ -91,7 +92,7 @@ class SideMenuDrawer extends GetView<HomeController> {
                 Get.toNamed(RouteName.settingsUI);
               },
             ),*/
-            ListTile(
+            if(isAstroCare.value == 1)ListTile(
               leading: Assets.images.icCustomerCare.svg(),
               title: Text('customerCare'.tr),
               onTap: () {

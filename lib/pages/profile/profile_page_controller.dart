@@ -314,7 +314,8 @@ class ProfilePageController extends GetxController {
   }
 
   int pageCount = 1;
-
+  RxBool isLoadMoreReview = false.obs;
+  RxBool isNoMoreReview = false.obs;
   getMoreReviewRating() async {
     pageCount++;
     try {
@@ -333,10 +334,13 @@ class ProfilePageController extends GetxController {
         update();
         log("Data==>${jsonEncode(ratingsData)}");
       } else {
+        isNoMoreReview.value = true;
         // No more data to load, show a toast message
         divineSnackBar(data: "No more reviews to load");
       }
+      isLoadMoreReview.value = false;
     } catch (error) {
+      isLoadMoreReview.value = false;
       debugPrint("error $error");
       if (error is AppException) {
         error.onException();

@@ -929,12 +929,17 @@ class ProfileUI extends GetView<ProfilePageController> {
             ],
           );
         } else {
-          return Row(
+          return Obx(() => !controller.isLoadMoreReview.value ? Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               CustomButton(
                 onTap: () {
-                  controller.getMoreReviewRating();
+                  if(!controller.isNoMoreReview.value){
+                    controller.isLoadMoreReview.value = true;
+                    controller.getMoreReviewRating();
+                  } else{
+                    divineSnackBar(data: "No more reviews to load");
+                  }
                 },
                 child: Text(
                   "Load More Reviews".tr,
@@ -947,7 +952,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                 ),
               ),
             ],
-          );
+          )
+          : const Center(child: CircularProgressIndicator(strokeWidth: 1.0)));
         }
       },
     );

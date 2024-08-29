@@ -153,6 +153,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   final searchController = TextEditingController();
   var checkin = false.obs;
   var emptyRes = false.obs;
+  var isLoadMoreData = false.obs;
 
   Future<void> getConsulation() async {
     CustomerDetailsResponse response =
@@ -169,11 +170,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         }
         pageUsersData++;
       } else {
-        Fluttertoast.showToast(msg: "No more data");
+        // Fluttertoast.showToast(msg: "No more data");
         print("data ---- ${response.data.toString()}");
         emptyRes(true);
       }
+      isLoadMoreData.value = false;
     } else {
+      isLoadMoreData.value = false;
       print("There is no more data in user data");
     }
     update();
@@ -333,6 +336,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
               final offers = map["offers"];
               if (offers != null) {
+                final homeData = this.homeData;
                 if (homeData != null) {
                   for (int i = 0;
                       i < homeData!.offers!.orderOffer!.length;
@@ -674,7 +678,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       var response = await HomePageRepository().getDashboardData(params);
       isFeedbackAvailable.value = response.success ?? false;
       homeData = response.data;
-
       loading = Loading.loaded;
       updateCurrentData();
       shopDataSync.value = true;
