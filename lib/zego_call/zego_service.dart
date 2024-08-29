@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/constants.dart';
@@ -627,7 +628,7 @@ class ZegoService {
           ? await ZegoUIKitPrebuiltCallInvitationService().send(
               invitees: [ZegoCallUser(targetUserID, targetUserName)],
               isVideoCall: isVideoCall,
-              resourceID: "zego_call",
+              resourceID:Platform.isAndroid ? "zego_call" :"zego_call_ios",
               customData: json.encode(customData),
             )
           : checkOppositeSidePermGranted();
