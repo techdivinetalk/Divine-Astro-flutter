@@ -291,7 +291,9 @@ class SupportIssueScreen extends GetView<SupportIssueController> {
                         splashColor: Colors.red.withOpacity(0.5),
                         highlightColor: Colors.transparent,
                         onTap: () {
-                          controller.uploadImagesListsFun();
+                          if(!controller.isLoading.value){
+                            controller.uploadImagesListsFun();
+                          }
                         },
                         child: Center(
                           child: controller.isLoading.value == true
