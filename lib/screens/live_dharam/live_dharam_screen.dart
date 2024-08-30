@@ -41,6 +41,7 @@ import "package:divine_astrologer/screens/live_dharam/widgets/extend_time_widget
 import "package:divine_astrologer/screens/live_dharam/widgets/follow_player.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/gift_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/leaderboard_widget.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/live_end_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
 import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
@@ -97,6 +98,7 @@ class _LivePage extends State<LiveDharamScreen>
   late SVGAAnimationController _svgController;
 
   bool _isKeyboardSheetOpen = false;
+  bool isAstrologerLive = true;
   Timer? _timer;
   Timer? _msgTimerForFollowPopup;
   Timer? _msgTimerForTarotCardPopup;
@@ -194,6 +196,9 @@ class _LivePage extends State<LiveDharamScreen>
           // }
         }
       } else {
+        await _controller.liveCount.doc(_controller.userId).delete();
+        isAstrologerLive = false;
+        setState(() {});
         print('Document does not exist');
       }
     }, onError: (error) {
@@ -521,141 +526,154 @@ class _LivePage extends State<LiveDharamScreen>
         resizeToAvoidBottomInset: false,
         body: Obx(
           () {
-            return _controller.userId == ""
-                ? const Center(child: GenericLoadingWidget())
-                : ZegoUIKitPrebuiltLiveStreaming(
-                    appID: appID,
-                    appSign: appSign,
-                    userID: _controller.userId,
-                    userName: _controller.userName,
-                    liveID: _controller.userId,
-                    config: streamingConfig
-                      ..beautyConfig = ZegoBeautyPluginConfig(
-                        effectsTypes:
-                            ZegoBeautyPluginConfig.beautifyEffectsTypes(
-                                  enableBasic: true,
-                                  enableAdvanced: true,
-                                  enableMakeup: true,
-                                  enableStyle: true,
-                                ) +
-                                ZegoBeautyPluginConfig.filterEffectsTypes(),
-                      )
-                      ..video = ZegoUIKitVideoConfig.preset540P()
-                      ..preview.showPreviewForHost = false
-                      // ..audioVideoView.isVideoMirror = false
-                      ..coHost.maxCoHostCount = 1
-                      ..confirmDialogInfo = null
-                      ..coHost.disableCoHostInvitationReceivedDialog = true
-                      ..audioVideoView = ZegoLiveStreamingAudioVideoViewConfig(
-                        showUserNameOnView: false,
-                        showAvatarInAudioMode: true,
-                        isVideoMirror: false,
-                        useVideoViewAspectFill: true,
-                        showSoundWavesInAudioMode: true,
-                        visible: (
-                          ZegoUIKitUser localUser,
-                          ZegoLiveStreamingRole localRole,
-                          ZegoUIKitUser targetUser,
-                          ZegoLiveStreamingRole targetUserRole,
-                        ) {
-                          return true;
-                        },
-                      )
-                      ..coHost.turnOnCameraWhenCohosted = () {
-                        final callType = _controller.currentCaller.callType!;
-                        //
-                        if (callType == "video") {
-                          return true;
-                        } else if (callType == "private" ||
-                            callType == "audio") {
-                          return false;
-                        }
-                        return false;
-                      }
-                      ..audioVideoView.playCoHostAudio = (
-                        ZegoUIKitUser localUser,
-                        ZegoLiveStreamingRole localRole,
-                        ZegoUIKitUser coHost,
-                      ) {
-                        final callType = _controller.currentCaller.callType!;
-                        //
-                        if (callType == "private") {
-                          if (ZegoLiveStreamingRole.host == localRole ||
-                              ZegoLiveStreamingRole.coHost == localRole) {
+            return isAstrologerLive
+                ? _controller.userId == ""
+                    ? const Center(child: GenericLoadingWidget())
+                    : ZegoUIKitPrebuiltLiveStreaming(
+                        appID: appID,
+                        appSign: appSign,
+                        userID: _controller.userId,
+                        userName: _controller.userName,
+                        liveID: _controller.userId,
+                        config: streamingConfig
+                          ..beautyConfig = ZegoBeautyPluginConfig(
+                            effectsTypes:
+                                ZegoBeautyPluginConfig.beautifyEffectsTypes(
+                                      enableBasic: true,
+                                      enableAdvanced: true,
+                                      enableMakeup: true,
+                                      enableStyle: true,
+                                    ) +
+                                    ZegoBeautyPluginConfig.filterEffectsTypes(),
+                          )
+                          ..video = ZegoUIKitVideoConfig.preset540P()
+                          ..preview.showPreviewForHost = false
+                          // ..audioVideoView.isVideoMirror = false
+                          ..coHost.maxCoHostCount = 1
+                          ..confirmDialogInfo = null
+                          ..coHost.disableCoHostInvitationReceivedDialog = true
+                          ..audioVideoView =
+                              ZegoLiveStreamingAudioVideoViewConfig(
+                            showUserNameOnView: false,
+                            showAvatarInAudioMode: true,
+                            isVideoMirror: false,
+                            useVideoViewAspectFill: true,
+                            showSoundWavesInAudioMode: true,
+                            visible: (
+                              ZegoUIKitUser localUser,
+                              ZegoLiveStreamingRole localRole,
+                              ZegoUIKitUser targetUser,
+                              ZegoLiveStreamingRole targetUserRole,
+                            ) {
+                              return true;
+                            },
+                          )
+                          ..coHost.turnOnCameraWhenCohosted = () {
+                            final callType =
+                                _controller.currentCaller.callType!;
+                            //
+                            if (callType == "video") {
+                              return true;
+                            } else if (callType == "private" ||
+                                callType == "audio") {
+                              return false;
+                            }
+                            return false;
+                          }
+                          ..audioVideoView.playCoHostAudio = (
+                            ZegoUIKitUser localUser,
+                            ZegoLiveStreamingRole localRole,
+                            ZegoUIKitUser coHost,
+                          ) {
+                            final callType =
+                                _controller.currentCaller.callType!;
+                            //
+                            if (callType == "private") {
+                              if (ZegoLiveStreamingRole.host == localRole ||
+                                  ZegoLiveStreamingRole.coHost == localRole) {
+                                return true;
+                              }
+                              return false;
+                            }
                             return true;
                           }
-                          return false;
-                        }
-                        return true;
-                      }
-                      ..audioVideoView.playCoHostVideo = (
-                        ZegoUIKitUser localUser,
-                        ZegoLiveStreamingRole localRole,
-                        ZegoUIKitUser coHost,
-                      ) {
-                        // if (_controller.isHost) {
-                        // } else {
-                        //   callJoinConfiguration();
-                        // }
-                        final callType = _controller.currentCaller.callType!;
-                        //
-                        if (callType == "private" || callType == "audio") {
-                          return false;
-                        }
-                        return true;
-                      }
-                      ..bottomMenuBar = ZegoLiveStreamingBottomMenuBarConfig(
-                        showInRoomMessageButton: false,
-                        hostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
-                        coHostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
+                          ..audioVideoView.playCoHostVideo = (
+                            ZegoUIKitUser localUser,
+                            ZegoLiveStreamingRole localRole,
+                            ZegoUIKitUser coHost,
+                          ) {
+                            // if (_controller.isHost) {
+                            // } else {
+                            //   callJoinConfiguration();
+                            // }
+                            final callType =
+                                _controller.currentCaller.callType!;
+                            //
+                            if (callType == "private" || callType == "audio") {
+                              return false;
+                            }
+                            return true;
+                          }
+                          ..bottomMenuBar =
+                              ZegoLiveStreamingBottomMenuBarConfig(
+                            showInRoomMessageButton: false,
+                            hostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
+                            coHostButtons: <ZegoLiveStreamingMenuBarButtonName>[],
+                          )
+                          ..layout = galleryLayout()
+                          ..avatarBuilder = avatarWidget
+                          ..topMenuBar = ZegoLiveStreamingTopMenuBarConfig(
+                            hostAvatarBuilder: (ZegoUIKitUser host) {
+                              return const SizedBox();
+                            },
+                            showCloseButton: false,
+                          )
+                          ..memberButton = ZegoLiveStreamingMemberButtonConfig(
+                            icon: const Icon(Icons.remove_red_eye_outlined),
+                            builder: (int memberCount) {
+                              return const SizedBox();
+                            },
+                          )
+                          ..memberList = ZegoLiveStreamingMemberListConfig(
+                            itemBuilder: (
+                              BuildContext context,
+                              Size size,
+                              ZegoUIKitUser user,
+                              Map<String, dynamic> extraInfo,
+                            ) {
+                              return ListTile(
+                                dense: true,
+                                title: Text(
+                                  user.name,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              );
+                            },
+                          )
+                          ..foreground = foregroundWidget()
+                          ..inRoomMessage =
+                              ZegoLiveStreamingInRoomMessageConfig(
+                            itemBuilder: (
+                              BuildContext context,
+                              ZegoInRoomMessage message,
+                              Map<String, dynamic> extraInfo,
+                            ) {
+                              return const SizedBox();
+                            },
+                          )
+                          ..slideSurfaceToHide = false
+                          ..duration.isVisible = false,
+                        events: events,
                       )
-                      ..layout = galleryLayout()
-                      ..avatarBuilder = avatarWidget
-                      ..topMenuBar = ZegoLiveStreamingTopMenuBarConfig(
-                        hostAvatarBuilder: (ZegoUIKitUser host) {
-                          return const SizedBox();
-                        },
-                        showCloseButton: false,
-                      )
-                      ..memberButton = ZegoLiveStreamingMemberButtonConfig(
-                        icon: const Icon(Icons.remove_red_eye_outlined),
-                        builder: (int memberCount) {
-                          return const SizedBox();
-                        },
-                      )
-                      ..memberList = ZegoLiveStreamingMemberListConfig(
-                        itemBuilder: (
-                          BuildContext context,
-                          Size size,
-                          ZegoUIKitUser user,
-                          Map<String, dynamic> extraInfo,
-                        ) {
-                          return ListTile(
-                            dense: true,
-                            title: Text(
-                              user.name,
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          );
-                        },
-                      )
-                      ..foreground = foregroundWidget()
-                      ..inRoomMessage = ZegoLiveStreamingInRoomMessageConfig(
-                        itemBuilder: (
-                          BuildContext context,
-                          ZegoInRoomMessage message,
-                          Map<String, dynamic> extraInfo,
-                        ) {
-                          return const SizedBox();
-                        },
-                      )
-                      ..slideSurfaceToHide = false
-                      ..duration.isVisible = false,
-                    events: events,
+                : LiveEndedWidget(
+                    init: () {},
+                    callback: () {
+                      Get.back();
+                    },
                   );
           },
         ),
@@ -797,6 +815,7 @@ class _LivePage extends State<LiveDharamScreen>
                   final String title = noticeBoardResData.title ?? "";
                   final String description =
                       noticeBoardResData.description ?? "";
+                  print("description-->live--->>notice${description}");
                   return DecoratedBox(
                     decoration: BoxDecoration(
                       borderRadius: const BorderRadius.all(
@@ -974,7 +993,11 @@ class _LivePage extends State<LiveDharamScreen>
                                       maxLines: 100000,
                                       style: TextStyle(
                                         fontSize: 14,
-                                        color: isBlocked || msg.userName == "Quality Team" ||msg.userName == "Live Monitoring Team"
+                                        color: isBlocked ||
+                                                msg.userName ==
+                                                    "Quality Team" ||
+                                                msg.userName ==
+                                                    "Live Monitoring Team"
                                             ? Colors.red
                                             : isModerator
                                                 ? appColors.white
@@ -998,7 +1021,11 @@ class _LivePage extends State<LiveDharamScreen>
                                       maxLines: 100000,
                                       style: TextStyle(
                                         fontSize: 13,
-                                        color: isBlocked || msg.userName == "Quality Team" ||msg.userName == "Live Monitoring Team"
+                                        color: isBlocked ||
+                                                msg.userName ==
+                                                    "Quality Team" ||
+                                                msg.userName ==
+                                                    "Live Monitoring Team"
                                             ? Colors.red
                                             : isModerator
                                                 ? appColors.white
@@ -2655,8 +2682,8 @@ class _LivePage extends State<LiveDharamScreen>
                                   () => Expanded(
                                     child: ListView.builder(
                                       shrinkWrap: true,
-                                      itemCount:
-                                          _controller.blockedCustomerList.length,
+                                      itemCount: _controller
+                                          .blockedCustomerList.length,
                                       itemBuilder: (context, index) {
                                         BlockedCustomerListResData item =
                                             _controller
@@ -2667,7 +2694,8 @@ class _LivePage extends State<LiveDharamScreen>
                                           leading: Container(
                                             height: 30,
                                             width: 30,
-                                            margin: const EdgeInsets.only(top: 3),
+                                            margin:
+                                                const EdgeInsets.only(top: 3),
                                             alignment: Alignment.center,
                                             decoration: BoxDecoration(
                                               shape: BoxShape.circle,
@@ -2680,8 +2708,8 @@ class _LivePage extends State<LiveDharamScreen>
                                                         .toUpperCase() ??
                                                     'N',
                                                 style: TextStyle(
-                                                  color:
-                                                      appColors.whiteGuidedColor,
+                                                  color: appColors
+                                                      .whiteGuidedColor,
                                                   fontSize: 12,
                                                   fontFamily: "Metropolis",
                                                   fontWeight: FontWeight.w500,
@@ -2941,31 +2969,34 @@ class _LivePage extends State<LiveDharamScreen>
                   ],
                 ),
         ),
-        isBeautyLive.value == 1 ?    GestureDetector(
-          onTap: () {
-            if (ZegoUIKit.instance.getPlugin(ZegoUIKitPluginType.beauty) !=
-                null) {
-              ZegoUIKit.instance.getBeautyPlugin().showBeautyUI(context);
-            }
-          },
-          child: Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: Column(
-              children: [
-                SvgPicture.asset(
-                  "assets/svg/beauty_icon.svg",
-                  height: 50,
-                  width: 50,
+        isBeautyLive.value == 1
+            ? GestureDetector(
+                onTap: () {
+                  if (ZegoUIKit.instance
+                          .getPlugin(ZegoUIKitPluginType.beauty) !=
+                      null) {
+                    ZegoUIKit.instance.getBeautyPlugin().showBeautyUI(context);
+                  }
+                },
+                child: Padding(
+                  padding: const EdgeInsets.only(bottom: 8.0),
+                  child: Column(
+                    children: [
+                      SvgPicture.asset(
+                        "assets/svg/beauty_icon.svg",
+                        height: 50,
+                        width: 50,
+                      ),
+                      const Text(
+                        "Beautify",
+                        style: TextStyle(
+                            fontFamily: "Metropolis", color: Colors.white),
+                      ),
+                    ],
+                  ),
                 ),
-                const Text(
-                  "Beautify",
-                  style:
-                      TextStyle(fontFamily: "Metropolis", color: Colors.white),
-                ),
-              ],
-            ),
-          ),
-        ):SizedBox(),
+              )
+            : SizedBox(),
         Obx(() {
           return AnimatedOpacity(
             opacity: isLiveCall.value == 0 ? 0.0 : 1.0,
