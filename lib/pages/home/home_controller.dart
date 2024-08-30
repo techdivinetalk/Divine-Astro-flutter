@@ -40,7 +40,6 @@ import 'package:flutter/services.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
@@ -255,11 +254,18 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   final ScrollController scrollController = ScrollController();
   final threshold = 50.0; // Adjust as needed
+  bool isInit = false;
+  @override
+  void onReady() {
+    isInit = false;
+    super.onReady();
+  }
 
   @override
   void onInit() async {
     super.onInit();
     debugPrint("test_onInit: call");
+    isInit = true;
 
     initData();
 // // Log when the scroll controller is attached
@@ -694,21 +700,20 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           isBackButton: false,
           title: "⚠ Warning Astrologer ⚠".tr,
           subTitle:
-          "Your user retention is below industry standard. Your retention is less than 10% Your are not eligible for Bonus wallet. Please review and improve strategies promptly to increase User retention rate. Thank you. 🌟"
-              .tr,
+              "Your user retention is below industry standard. Your retention is less than 10% Your are not eligible for Bonus wallet. Please review and improve strategies promptly to increase User retention rate. Thank you. 🌟"
+                  .tr,
           onTap: () {
             Get.back();
           },
         ));
       }
 
-
       if (homeData?.technical_support == null ||
           homeData?.technical_support == [] ||
           homeData?.technical_support!.isEmpty) {
       } else {
         log("Technical_Support -- ${homeData?.technical_support.toString()}");
-        if(Get.find<DashboardController>().selectedIndex.value == 0){
+        if (Get.find<DashboardController>().selectedIndex.value == 0) {
           showTechnicalPopupAlert();
         }
       }

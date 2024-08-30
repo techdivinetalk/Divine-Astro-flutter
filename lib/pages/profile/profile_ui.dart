@@ -463,16 +463,42 @@ class ProfileUI extends GetView<ProfilePageController> {
                           ),
                         );
                       } else if (index == 1) {
+                        // if (await PermissionHelper()
+                        //     .askStoragePermission(Permission.videos)) {
+                        //   FilePickerResult? result =
+                        //       await FilePicker.platform.pickFiles(
+                        //     type: FileType.video,
+                        //     allowCompression: false,
+                        //   );
+                        //   if (result != null) {
+                        //     Get.toNamed(RouteName.uploadStoryUi,
+                        //         arguments: "${result.files.single.path}");
+                        //   }
+                        // }
+
+                        if (controller.isFilePickerActive) {
+                          print("File picker is already active. Please wait.");
+                          return;
+                        }
+
                         if (await PermissionHelper()
                             .askStoragePermission(Permission.videos)) {
-                          FilePickerResult? result =
-                              await FilePicker.platform.pickFiles(
-                            type: FileType.video,
-                            allowCompression: false,
-                          );
-                          if (result != null) {
-                            Get.toNamed(RouteName.uploadStoryUi,
-                                arguments: "${result.files.single.path}");
+                          controller.isFilePickerActive = true;
+                          try {
+                            FilePickerResult? result =
+                                await FilePicker.platform.pickFiles(
+                              type: FileType.video,
+                              allowCompression: false,
+                              allowMultiple: false,
+                            );
+                            if (result != null) {
+                              Get.toNamed(RouteName.uploadStoryUi,
+                                  arguments: "${result.files.single.path}");
+                            }
+                          } catch (e) {
+                            print("An error occurred: $e");
+                          } finally {
+                            controller.isFilePickerActive = false;
                           }
                         }
                       } else if (index == 3) {
@@ -929,31 +955,33 @@ class ProfileUI extends GetView<ProfilePageController> {
             ],
           );
         } else {
-          return Obx(() => !controller.isLoadMoreReview.value ? Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomButton(
-                onTap: () {
-                  if(!controller.isNoMoreReview.value){
-                    controller.isLoadMoreReview.value = true;
-                    controller.getMoreReviewRating();
-                  } else{
-                    divineSnackBar(data: "No more reviews to load");
-                  }
-                },
-                child: Text(
-                  "Load More Reviews".tr,
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    // decoration: TextDecoration.underline,
-                    decorationColor: appColors.textColor,
-                    color: appColors.textColor,
-                  ),
-                ),
-              ),
-            ],
-          )
-          : const Center(child: CircularProgressIndicator(strokeWidth: 1.0)));
+          return Obx(() => !controller.isLoadMoreReview.value
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomButton(
+                      onTap: () {
+                        if (!controller.isNoMoreReview.value) {
+                          controller.isLoadMoreReview.value = true;
+                          controller.getMoreReviewRating();
+                        } else {
+                          divineSnackBar(data: "No more reviews to load");
+                        }
+                      },
+                      child: Text(
+                        "Load More Reviews".tr,
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          // decoration: TextDecoration.underline,
+                          decorationColor: appColors.textColor,
+                          color: appColors.textColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : const Center(
+                  child: CircularProgressIndicator(strokeWidth: 1.0)));
         }
       },
     );
