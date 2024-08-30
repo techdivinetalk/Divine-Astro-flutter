@@ -67,14 +67,17 @@ class ZegoService {
       userName: _pref.getUserDetail()?.name ?? "",
       plugins: [ZegoUIKitSignalingPlugin()],
       notificationConfig: ZegoCallInvitationNotificationConfig(
-        androidNotificationConfig: ZegoCallAndroidNotificationConfig(
-          showFullScreen: true,
-          channelID: "ZegoUIKit",
-          channelName: "Call Notifications",
-          sound: "accept_ring",
-          icon: "call",
-        ),
-      ),
+          androidNotificationConfig: ZegoCallAndroidNotificationConfig(
+            showFullScreen: true,
+            channelID: "ZegoUIKit",
+            channelName: "Call Notifications",
+            sound: "accept_ring",
+            icon: "call",
+          ),
+          iOSNotificationConfig: ZegoCallIOSNotificationConfig(
+            systemCallingIconName: 'CallKitIcon',
+          )),
+
       invitationEvents: ZegoUIKitPrebuiltCallInvitationEvents(
         onIncomingCallAcceptButtonPressed: () {
           endTime(DateTime(1970, 01, 01));
@@ -84,20 +87,21 @@ class ZegoService {
         },
       ),
       uiConfig: ZegoCallInvitationUIConfig(
-        prebuiltWithSafeArea: false,
-        inviter: ZegoCallInvitationInviterUIConfig(backgroundBuilder: (context, size, info) {
-          return info.callType == ZegoCallType.voiceCall
-              ? backgroundImage(needBlendedColor: true)
-              : null;
-        },),
-        invitee: ZegoCallInvitationInviteeUIConfig(
-          backgroundBuilder: (context, size, info) {
-            return info.callType == ZegoCallType.voiceCall
-                ? backgroundImage(needBlendedColor: true)
-                : null;
-          },
-        )
-      ),
+          prebuiltWithSafeArea: false,
+          inviter: ZegoCallInvitationInviterUIConfig(
+            backgroundBuilder: (context, size, info) {
+              return info.callType == ZegoCallType.voiceCall
+                  ? backgroundImage(needBlendedColor: true)
+                  : null;
+            },
+          ),
+          invitee: ZegoCallInvitationInviteeUIConfig(
+            backgroundBuilder: (context, size, info) {
+              return info.callType == ZegoCallType.voiceCall
+                  ? backgroundImage(needBlendedColor: true)
+                  : null;
+            },
+          )),
       // events: ZegoUIKitPrebuiltCallEvents(
       //   onCallEnd: (
       //     ZegoCallEndEvent event,
@@ -607,7 +611,6 @@ class ZegoService {
               : isAccepting
                   ? "assets/svg/new_chat_call.svg"
                   : "assets/svg/new_chat_call_diabled.svg",
-
         ),
       ),
     );
@@ -622,13 +625,14 @@ class ZegoService {
   }) async {
     final bool value = await AppPermissionService.instance.hasAllPermissions();
     if (value) {
+      print("AppPermissionService.instance.hasAllPermissions-->>$value");
       await canInit();
       final bool checkOppositeSidePerm = await checkOppositeSidePermission();
       checkOppositeSidePerm
           ? await ZegoUIKitPrebuiltCallInvitationService().send(
               invitees: [ZegoCallUser(targetUserID, targetUserName)],
               isVideoCall: isVideoCall,
-              resourceID:Platform.isAndroid ? "zego_call" :"zego_call_ios",
+              resourceID: "zego_call",
               customData: json.encode(customData),
             )
           : checkOppositeSidePermGranted();
@@ -663,7 +667,9 @@ class ZegoService {
     if (orderId != 0) {
       final DatabaseReference ref = FirebaseDatabase.instance.ref();
       await ref.child("order/$orderId").update(
-        {"astrologer_permission": value},
+        {
+          "astrologer_permission": value,
+        },
       );
     } else {}
     return Future<void>.value();

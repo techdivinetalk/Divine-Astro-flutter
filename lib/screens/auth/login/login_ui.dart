@@ -25,7 +25,7 @@ class LoginUI extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(LoginController(UserRepository()));
+    // Get.put(LoginController(UserRepository()));
 
     return GetBuilder<LoginController>(
         init: LoginController(UserRepository()),

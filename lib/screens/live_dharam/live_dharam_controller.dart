@@ -130,6 +130,7 @@ class LiveDharamController extends GetxController {
       AppFirebaseService().isInterNetConnected.value =
           !AppFirebaseService().isInterNetConnected.value;
     });
+
     // ever(
     //   AppFirebaseService().isInterNetConnected,
     //   (bool value) {
