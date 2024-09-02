@@ -4,6 +4,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/screens/financial_support/financial_support_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../common/SvgIconButton.dart';
@@ -291,7 +292,23 @@ class FinancialSupportScreen extends GetView<FinancialSupportController> {
                         splashColor: Colors.red.withOpacity(0.5),
                         highlightColor: Colors.transparent,
                         onTap: () {
-                          controller.uploadImagesListsFun();
+                          // if (controller.descriptionController.text.length >
+                          //     100) {
+                          //   controller.uploadImagesListsFun();
+                          // } else {
+                          //   Fluttertoast.showToast(msg: "Detail is to short");
+                          // }
+                          if (controller.selected == null) {
+                            Fluttertoast.showToast(msg: "Select Issue type");
+                          } else if (controller
+                                  .descriptionController.text.length <
+                              100) {
+                            Fluttertoast.showToast(msg: "Detail is to short");
+                          } else if (controller.selectedFiles.isEmpty) {
+                            Fluttertoast.showToast(msg: "Select Images");
+                          } else {
+                            controller.uploadImagesListsFun();
+                          }
                         },
                         child: Center(
                           child: controller.isLoading.value == true
