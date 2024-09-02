@@ -25,7 +25,7 @@ class LoginUI extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    // Get.put(LoginController(UserRepository()));
+    Get.put(LoginController(UserRepository()));
 
     return GetBuilder<LoginController>(
         init: LoginController(UserRepository()),
@@ -157,7 +157,8 @@ class LoginUI extends GetView<LoginController> {
                         }),
                         SizedBox(height: 20.h),
                         Obx(() => Visibility(
-                            visible: controller.enable.value && isTruecaller.value.toString() == "1",
+                            visible: controller.enable.value &&
+                                isTruecaller.value.toString() == "1",
                             child: TextWithDivider(
                               text: 'Or',
                               textColor: appColors.greyColor,
@@ -165,11 +166,15 @@ class LoginUI extends GetView<LoginController> {
                             ))),
                         SizedBox(height: 20.h),
                         Obx(() {
-                          print("showTrueCaller ${controller.showTrueCaller.value}");
+                          print(
+                              "showTrueCaller ${controller.showTrueCaller.value}");
                           return Visibility(
-                            visible: (controller.showTrueCaller.value && controller.enable.value && isTruecaller.value.toString() == "1"),
+                            visible: (controller.showTrueCaller.value &&
+                                controller.enable.value &&
+                                isTruecaller.value.toString() == "1"),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 10.0),
+                              padding:
+                                  const EdgeInsets.symmetric(vertical: 10.0),
                               child: SizedBox(
                                 height: 50,
                                 width: double.infinity,
@@ -185,11 +190,12 @@ class LoginUI extends GetView<LoginController> {
                                   ),
                                   onPressed: () async {
                                     bool oAuthFlowUsable = false;
-                                    oAuthFlowUsable =
-                                        await TrueCallerService().isOAuthFlowUsable();
+                                    oAuthFlowUsable = await TrueCallerService()
+                                        .isOAuthFlowUsable();
 
                                     oAuthFlowUsable
-                                        ? await TrueCallerService().startTrueCaller()
+                                        ? await TrueCallerService()
+                                            .startTrueCaller()
                                         : trueCallerFaultPopup();
                                   },
                                   child: Row(
