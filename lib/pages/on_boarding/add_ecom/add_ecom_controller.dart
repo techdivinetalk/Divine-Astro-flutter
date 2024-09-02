@@ -10,10 +10,15 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../../../common/app_exception.dart';
 import '../../../common/colors.dart';
+import '../../../common/common_functions.dart';
+import '../../../common/common_image_view.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../model/categories_list.dart';
 import '../../../repository/user_repository.dart';
+import '../../../screens/add_puja/model/puja_product_categories_model.dart';
+import '../../../screens/puja/model/pooja_listing_model.dart';
 
 class FileUtils {
   static String getfilesizestring({required int bytes, int decimals = 0}) {
@@ -33,13 +38,39 @@ class FileUtils {
 
 class AddEcomController extends GetxController {
   UserRepository userRepository = UserRepository();
-  List<String> dropDownItems = ["Product", "Puja"];
+  var dropDownItems = ['Puja', "Product"].obs;
+
+  TextEditingController nameC = TextEditingController();
+  TextEditingController detailC = TextEditingController();
+  TextEditingController pricC = TextEditingController();
+  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  List<PujaProductCategoriesData> tagType = [];
+  List<PujaProductCategoriesData> selectedTag = [];
+  List<PujaProductCategoriesData> categoriesType = [];
+  List<PujaProductCategoriesData> pujaNamesList = [];
+  PujaProductCategoriesData? selectedPujaName;
+  PujaProductCategoriesData? selectedCategory;
+
+  PujaListingData? pujaListingData;
+
+  var isEdit = false.obs;
+  var id = 0.obs;
+  RxString selectedValue = "Puja".obs;
 
   var selected;
   selectedDropDown(value) {
     selected = value;
     selectedImage = null;
     update();
+  }
+
+  @override
+  void onInit() {
+    getCategoriesData();
+    getPujaNamesData();
+    getTag();
+
+    super.onInit();
   }
 
   var selectedImage;
@@ -87,14 +118,13 @@ class AddEcomController extends GetxController {
                   children: [
                     SizedBox(height: 16.h),
                     CustomText(
-                      'Choose Options'.tr,
+                      'chooseOptions'.tr,
                       fontSize: 20.sp,
                       fontWeight: FontWeight.w600,
                     ),
                     CustomText(
-                      'Only photos can be shared'.tr,
+                      'shareOptions'.tr,
                       fontSize: 16.sp,
-                      fontWeight: FontWeight.w400,
                       fontColor: appColors.grey,
                     ),
                     const SizedBox(height: 32),
@@ -224,5 +254,248 @@ class AddEcomController extends GetxController {
           msg: "The file path does not contain a valid extension.");
     }
     update();
+  }
+
+  // https://uat-divine-partner.divinetalk.live/api/astro/v7/addProductByAstrologer
+  // [log] body: {"prod_cat_id":9,"prod_name":"dfdfd","prod_image":"images/pooja/September2024/mPv2AeKQGTdIQ6hCOIefwLAtIcGHe8m8bOLY9u7L.jpg","prod_desc":"fdf","product_price_inr":"232323","product_long_desc":"fdf"}
+
+  getTag() async {
+    Map<String, dynamic> param = {};
+    try {
+      final response = await userRepository.getTagProductAndPooja(param);
+      if (response.data != null) {
+        tagType = response.data!;
+      }
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  getCategoriesData({String? type}) async {
+    categoriesType.clear();
+    for (int i = 0; i < tagType.length; i++) {
+      tagType[i].isSelected = false;
+    }
+    selectedTag.clear();
+
+    selectedCategory = null;
+
+    update();
+
+    Map<String, dynamic> param = {
+      "type": type ?? "pooja",
+    };
+
+    try {
+      final response = await userRepository.getCategoriesProductAndPooja(param);
+      if (response.data != null) {
+        categoriesType = response.data!;
+
+        print(categoriesType);
+        print("categoriesTypecategoriesTypecategoriesType");
+      }
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  bool validation() {
+    // if (poojaDes.text.length < 100) {
+    //   Fluttertoast.showToast(
+    //       msg: "Puja description must be more than 100 character.");
+    //   return false;
+    // }
+
+    if (selectedCategory == null || selectedCategory?.id == null) {
+      Fluttertoast.showToast(msg: "Please select category");
+      return false;
+    } else if (selectedTag.isEmpty) {
+      Fluttertoast.showToast(msg: "Please select tag");
+      return false;
+    }
+
+    return true;
+  }
+
+  getPujaNamesData() async {
+    try {
+      final response = await userRepository.getPoojaNamesApi({});
+      if (response.data != null) {
+        pujaNamesList = response.data!;
+        print(pujaNamesList.length);
+        print("pujaNamesList.length");
+      }
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  bool loading = false;
+
+  /// add puja or edit api function
+  bool isPujaLoading = false;
+
+  void addEditPoojaApi() async {
+    isPujaLoading = true;
+    update();
+    List tagList = [];
+    for (int i = 0; i < selectedTag.length; i++) {
+      tagList.add(selectedTag[i].id.toString());
+    }
+    Map<String, dynamic> param = {
+      "pooja_name": nameC.text,
+      "pooja_img": productImageUrl,
+      "pooja_desc": detailC.text,
+      "pooja_name_id": selectedPujaName != null && selectedPujaName!.id != null
+          ? selectedPujaName!.id
+          : "",
+      "pooja_starting_price_inr": pricC.text,
+      "pooja_short_desc": detailC.text,
+      "pooja_category_id": selectedCategory?.id,
+      "tag": tagList,
+      "pooja_banner_image": "https://example.com/pooja_banner_image.jpg",
+      "in_onboarding": 1,
+    };
+    param.addIf(id.value != 0, "pooja_id", id.value);
+    try {
+      final response = await userRepository.addEditPujaApi(param);
+      if (response.data != null) {
+        isPujaLoading = false;
+        update();
+        uploadeddddd("Puja");
+      }
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  void addEditProduct() async {
+    isPujaLoading = true;
+    update();
+    Map<String, dynamic> param = {
+      "prod_cat_id": selectedCategory?.id,
+      "prod_name": nameC.text,
+      "prod_image": productImageUrl,
+      "prod_desc": detailC.text,
+      "product_price_inr": pricC.text,
+      //"offer_price_inr": poojaPrice.text,
+      //"product_price_usd": 10.0,
+      "product_long_desc": detailC.text,
+      // "product_banner_image": "https://example.com/banner_image.jpg",
+      "in_onboarding": 1,
+    };
+    param.addIf(id.value != 0, "product_id", id.value);
+    try {
+      final response = await userRepository.addEditProductApi(param);
+      if (response.data != null) {
+        isPujaLoading = false;
+        update();
+        uploadeddddd("Product");
+      }
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  uploadeddddd(selected) {
+    showCupertinoModalPopup(
+      context: Get.context!,
+      barrierColor: appColors.darkBlue.withOpacity(0.5),
+      builder: (BuildContext context) {
+        return Material(
+          color: appColors.transparent,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: double.maxFinite,
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                decoration: BoxDecoration(
+                  borderRadius:
+                      BorderRadius.vertical(top: Radius.circular(20.r)),
+                  color: appColors.white,
+                ),
+                child: Column(
+                  children: [
+                    SizedBox(height: 10.h),
+                    CommonImageView(
+                      imagePath: "assets/images/done.png",
+                      height: 50,
+                      width: 50,
+                      placeHolder: Assets.images.defaultProfile.path,
+                    ),
+                    SizedBox(height: 10.h),
+                    CustomText(
+                      '$selected Submitted'.tr,
+                      fontSize: 20.sp,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    CustomText(
+                      'We will review your product details to begin showcasing on your profile for purchase.'
+                          .tr,
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w400,
+                      fontColor: appColors.grey,
+                    ),
+                    const SizedBox(height: 10),
+                    InkWell(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Container(
+                        height: 50,
+                        width: MediaQuery.of(context).size.width * 0.9,
+                        decoration: BoxDecoration(
+                          color: appColors.red,
+                          borderRadius: BorderRadius.circular(14),
+                        ),
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Okay",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 20.sp,
+                              color: AppColors().white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }

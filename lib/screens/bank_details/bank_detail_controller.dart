@@ -105,6 +105,7 @@ class BankDetailController extends GetxController {
         the1: cancelledChequeUrl.toString(),
       ),
     );
+    print("-----${request.toJson()}");
     final response =
         await userRepository.updateBankDetailsApi(request.toJson());
     status = response.data.status!;

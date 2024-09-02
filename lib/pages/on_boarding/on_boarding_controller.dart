@@ -306,6 +306,29 @@ class OnBoardingController extends GetxController {
     });
   }
 
+  submittingBasicDetails() {
+    var body = {
+      "name": "Raj",
+      "skills": ["Cards", "data"],
+      "experience": "1 Years",
+      "dob": "20-08-2001",
+      "location": "Mumbai, Maharashtra",
+      "alternate_no": "84393849384",
+      "profile_picture": "link",
+      "page": 1,
+    };
+    var body2 = {
+      "aadhar_front": "link",
+      "aadhar_back": "link",
+      "pancard": "link",
+      "page": 2,
+    };
+    var body3 = {
+      "astro_images": ["link", "link", "link"],
+      "page": 3,
+    };
+  }
+
   submittingDetails() {
     if (userImages.contains(1) ||
         userImages.contains(2) ||

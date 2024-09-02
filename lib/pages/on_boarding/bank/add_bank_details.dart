@@ -5,10 +5,13 @@ import 'package:divine_astrologer/pages/on_boarding/widgets/widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../../common/colors.dart';
+import '../../../common/common_image_view.dart';
 import '../../../common/routes.dart';
+import '../../../gen/assets.gen.dart';
 import 'bank_controller.dart';
 
 class AddBankDetails extends GetView<BankController> {
@@ -45,13 +48,20 @@ class AddBankDetails extends GetView<BankController> {
               ),
             ),
             actions: [
-              Text(
-                "Skip",
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 16.sp,
-                  color: appColors.grey,
-                  decoration: TextDecoration.underline,
+              InkWell(
+                onTap: () {
+                  Get.toNamed(
+                    RouteName.addEcomAutomation,
+                  );
+                },
+                child: Text(
+                  "Skip",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16.sp,
+                    color: appColors.grey,
+                    decoration: TextDecoration.underline,
+                  ),
                 ),
               ),
               SizedBox(
@@ -133,103 +143,122 @@ class AddBankDetails extends GetView<BankController> {
                     ),
                   ),
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              controller.updateProfileImage("passBook");
-                            },
-                            child: Container(
-                              height: 120,
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              decoration: BoxDecoration(
-                                color: appColors.grey.withOpacity(0.4),
-                                borderRadius: BorderRadius.circular(14),
+                GetBuilder<BankController>(builder: (controller) {
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                controller.updateProfileImage("passBook");
+                              },
+                              child: Container(
+                                height: 120,
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                decoration: BoxDecoration(
+                                  color: appColors.grey.withOpacity(0.4),
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: controller.uploadImagePan != null
+                                    ? CommonImageView(
+                                        imagePath: controller.uploadImagePan
+                                            .toString(),
+                                        fit: BoxFit.cover,
+                                        placeHolder:
+                                            Assets.images.defaultProfile.path,
+                                      )
+                                    : controller.passBookImage != null
+                                        ? Image.file(
+                                            File(controller.passBookImage
+                                                .toString()),
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Icon(
+                                            Icons.add,
+                                            color: appColors.white,
+                                            size: 80,
+                                          ),
                               ),
-                              child: controller.passBookImage != null
-                                  ? Image.file(
-                                      File(controller.passBookImage.toString()),
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Icon(
-                                      Icons.add,
-                                      color: appColors.white,
-                                      size: 80,
-                                    ),
                             ),
-                          ),
-                          SizedBox(height: 5.h),
-                          Text(
-                            "Upload Passbook".tr,
-                            style: TextStyle(
-                              fontFamily: FontFamily.poppins,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w400,
-                              color: appColors.grey,
+                            SizedBox(height: 5.h),
+                            Text(
+                              "Upload Passbook".tr,
+                              style: TextStyle(
+                                fontFamily: FontFamily.poppins,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w400,
+                                color: appColors.grey,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                    SizedBox(width: 12.w),
-                    Expanded(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              controller.updateProfileImage("cheque");
-                            },
-                            child: Container(
-                              height: 120,
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              decoration: BoxDecoration(
-                                color: appColors.grey.withOpacity(0.4),
-                                borderRadius: BorderRadius.circular(14),
+                      SizedBox(width: 12.w),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            InkWell(
+                              onTap: () {
+                                controller.updateProfileImage("cheque");
+                              },
+                              child: Container(
+                                height: 120,
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                decoration: BoxDecoration(
+                                  color: appColors.grey.withOpacity(0.4),
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: controller.uploadImageCheque != null
+                                    ? CommonImageView(
+                                        imagePath: controller.uploadImageCheque
+                                            .toString(),
+                                        fit: BoxFit.cover,
+                                        placeHolder:
+                                            Assets.images.defaultProfile.path,
+                                      )
+                                    : controller.blankChequeImage != null
+                                        ? Image.file(
+                                            File(controller.blankChequeImage
+                                                .toString()),
+                                            fit: BoxFit.cover,
+                                          )
+                                        : Icon(
+                                            Icons.add,
+                                            color: appColors.white,
+                                            size: 80,
+                                          ),
                               ),
-                              child: controller.blankChequeImage != null
-                                  ? Image.file(
-                                      File(controller.blankChequeImage
-                                          .toString()),
-                                      fit: BoxFit.cover,
-                                    )
-                                  : Icon(
-                                      Icons.add,
-                                      color: appColors.white,
-                                      size: 80,
-                                    ),
                             ),
-                          ),
 
-                          // CommonImageView(
-                          //     imagePath: Assets.images.defaultProfile.path,
-                          //     radius: BorderRadius.circular(10.h),
-                          //     height: 120,
-                          //     width: MediaQuery.of(context).size.width * 0.4,
-                          //     onTap: () {}),
-                          SizedBox(height: 5.h),
-                          Text(
-                            "Upload Cancelled Cheque".tr,
-                            style: TextStyle(
-                              fontFamily: FontFamily.poppins,
-                              fontSize: 12.sp,
-                              fontWeight: FontWeight.w400,
-                              color: appColors.grey,
+                            // CommonImageView(
+                            //     imagePath: Assets.images.defaultProfile.path,
+                            //     radius: BorderRadius.circular(10.h),
+                            //     height: 120,
+                            //     width: MediaQuery.of(context).size.width * 0.4,
+                            //     onTap: () {}),
+                            SizedBox(height: 5.h),
+                            Text(
+                              "Upload Cancelled Cheque".tr,
+                              style: TextStyle(
+                                fontFamily: FontFamily.poppins,
+                                fontSize: 12.sp,
+                                fontWeight: FontWeight.w400,
+                                color: appColors.grey,
+                              ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
-                    ),
-                  ],
-                ),
+                    ],
+                  );
+                }),
               ],
             ),
           ),
@@ -272,38 +301,70 @@ class AddBankDetails extends GetView<BankController> {
                       ),
                     ),
                   ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Get.toNamed(
-                            RouteName.addEcomAutomation,
-                          );
-                        },
-                        child: Container(
-                          height: 50,
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          decoration: BoxDecoration(
-                            color: appColors.red,
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Submit",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20.sp,
-                                color: AppColors().white,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
+                  controller.status == "" || controller.status == "Approved"
+                      ? Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            GetBuilder<BankController>(builder: (controller) {
+                              return InkWell(
+                                onTap: () {
+                                  if (controller
+                                      .bankNameController.text.isEmpty) {
+                                    Fluttertoast.showToast(
+                                        msg: "Bank Name is Empty");
+                                  } else if (controller
+                                      .bankHolderController.text.isEmpty) {
+                                    Fluttertoast.showToast(
+                                        msg: "Bank Holder is Empty");
+                                  } else if (controller
+                                      .bankAccountController.text.isEmpty) {
+                                    Fluttertoast.showToast(
+                                        msg: "Bank Account is Empty");
+                                  } else if (controller
+                                      .bankIFSCController.text.isEmpty) {
+                                    Fluttertoast.showToast(
+                                        msg: "Bank IFSC is Empty");
+                                  } else if (controller.passBookImage == null ||
+                                      controller.blankChequeImage == null) {
+                                    Fluttertoast.showToast(
+                                        msg: "Image is Empty");
+                                  } else {
+                                    controller.submitBankDetails();
+                                  }
+                                  // Get.toNamed(
+                                  //   RouteName.addEcomAutomation,
+                                  // );
+                                },
+                                child: Container(
+                                  height: 50,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
+                                  decoration: BoxDecoration(
+                                    color: appColors.red,
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                  child: controller.submittingBankDetails.value
+                                      ? Center(
+                                          child: CircularProgressIndicator(),
+                                        )
+                                      : Align(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            "Submit",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 20.sp,
+                                              color: AppColors().white,
+                                            ),
+                                          ),
+                                        ),
+                                ),
+                              );
+                            }),
+                          ],
+                        )
+                      : SizedBox(),
                 ],
               ),
             ),
