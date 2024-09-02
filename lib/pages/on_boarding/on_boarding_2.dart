@@ -21,7 +21,7 @@ class OnBoarding2 extends GetView<OnBoardingController> {
   Widget build(BuildContext context) {
     return GetBuilder<OnBoardingController>(
       assignId: true,
-      // init: OnBoardingController(),
+      init: OnBoardingController(),
       builder: (controller) {
         return Scaffold(
           backgroundColor: appColors.white,

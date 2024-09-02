@@ -18,6 +18,8 @@ class OnBoarding3 extends GetView<OnBoardingController> {
   @override
   Widget build(BuildContext context) {
     return GetBuilder<OnBoardingController>(
+      assignId: true,
+      init: OnBoardingController(),
       builder: (OnBoardingController controller) {
         return Scaffold(
           backgroundColor: appColors.white,
