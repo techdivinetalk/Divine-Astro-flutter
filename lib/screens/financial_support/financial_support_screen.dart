@@ -178,7 +178,7 @@ class FinancialSupportScreen extends GetView<FinancialSupportController> {
                     maxLines: 5,
                     textInputFormatter: [CustomSpaceInputFormatter()],
                     controller: controller.descriptionController,
-                    maxLength: 500,
+                    maxLength: 50,
                     keyboardType: TextInputType.text,
                     onChanged: (value) {
                       controller.update();

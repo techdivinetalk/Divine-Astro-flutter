@@ -178,7 +178,7 @@ class SupportIssueScreen extends GetView<SupportIssueController> {
                     maxLines: 5,
                     textInputFormatter: [CustomSpaceInputFormatter()],
                     controller: controller.descriptionController,
-                    maxLength: 500,
+                    maxLength: 50,
                     keyboardType: TextInputType.text,
                     onChanged: (value) {
                       controller.update();
