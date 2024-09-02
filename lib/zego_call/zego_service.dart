@@ -637,10 +637,10 @@ class ZegoService {
             )
           : checkOppositeSidePermGranted();
     } else {
-      await AppPermissionService.instance.showAlertDialog(
-        "Chat",
-        ["Allow display over other apps", "Camera", "Microphone"],
-      );
+      // await AppPermissionService.instance.showAlertDialog(
+      //   "Chat",
+      //   ["Allow display over other apps", "Camera", "Microphone"],
+      // );
       await AppPermissionService.instance.zegoOnPressedJoinButton(() {});
       await canInit();
     }
@@ -682,10 +682,10 @@ class ZegoService {
   }
 
   Future<void> newOnBannerPressed() async {
-    await AppPermissionService.instance.showAlertDialog(
-      "Chat",
-      ["Allow display over other apps", "Camera", "Microphone"],
-    );
+    // await AppPermissionService.instance.showAlertDialog(
+    //   "Chat",
+    //   ["Allow display over other apps", "Camera", "Microphone"],
+    // );
     await AppPermissionService.instance.zegoOnPressedJoinButton(() {});
     await canInit();
     return Future<void>.value();

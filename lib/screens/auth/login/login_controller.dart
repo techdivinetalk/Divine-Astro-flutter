@@ -229,7 +229,7 @@ class LoginController extends GetxController {
                     ),
                   ),
                   onTap: () {
-                    // Get.put(LoginController(UserRepository()));
+                    Get.put(LoginController(UserRepository()));
 
                     final splitResult = splitNumber(number);
                     String countryCode = splitResult['countryCode'] ?? '+91';
