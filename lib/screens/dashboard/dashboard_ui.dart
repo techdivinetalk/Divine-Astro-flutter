@@ -181,8 +181,6 @@ class DashboardScreen extends GetView<DashboardController> {
                                                       .isInit) {
                                                 Get.find<HomeController>()
                                                     .onInit();
-                                                Get.find<HomeController>()
-                                                    .isInit = false;
                                               }
                                             },
                                             child: Column(

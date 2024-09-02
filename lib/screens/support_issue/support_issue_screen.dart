@@ -4,6 +4,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/screens/support_issue/support_issue_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../common/SvgIconButton.dart';
@@ -291,8 +292,26 @@ class SupportIssueScreen extends GetView<SupportIssueController> {
                         splashColor: Colors.red.withOpacity(0.5),
                         highlightColor: Colors.transparent,
                         onTap: () {
-                          if(!controller.isLoading.value){
-                            controller.uploadImagesListsFun();
+                          // if (controller.descriptionController.text.length >
+                          //     100) {
+                          //   if (!controller.isLoading.value) {
+                          //     controller.uploadImagesListsFun();
+                          //   }
+                          // } else {
+                          //   Fluttertoast.showToast(msg: "Detail is to short");
+                          // }
+                          if (controller.selected == null) {
+                            Fluttertoast.showToast(msg: "Select Issue type");
+                          } else if (controller
+                                  .descriptionController.text.length <
+                              100) {
+                            Fluttertoast.showToast(msg: "Detail is to short");
+                          } else if (controller.selectedFiles.isEmpty) {
+                            Fluttertoast.showToast(msg: "Select Images");
+                          } else {
+                            if (!controller.isLoading.value) {
+                              controller.uploadImagesListsFun();
+                            }
                           }
                         },
                         child: Center(

@@ -138,8 +138,9 @@ class ProfilePageController extends GetxController {
           '/resignation'),
     ].obs;
   }
-  bool isFilePickerActive = false;
 
+  bool isFilePickerActive = false;
+  bool pickingFileLoading = false;
   ChangeLanguageModelClass? selectedLanguage;
   var profileList = <ProfileOptionModelClass>[
     ProfileOptionModelClass(

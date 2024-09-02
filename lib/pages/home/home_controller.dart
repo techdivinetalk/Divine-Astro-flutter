@@ -41,6 +41,7 @@ import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import "package:permission_handler/permission_handler.dart";
@@ -127,23 +128,105 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  var imageSS;
   int ssTimes = 0;
   captureandSendSS() {
+    print("111111111111");
+
     if (ssTimes == 0) {
       screenshotController.capture().then(
         (value) async {
-          final directory = await getApplicationDocumentsDirectory();
-          final imagePath =
-              await File('${directory.path}/dashboard.png').create();
-          ssTimes = 1;
-          print("screenshot taken ----");
+          if (value != null) {
+            final directory = await getApplicationDocumentsDirectory();
+            final imagePath =
+                await File('${directory.path}/image.png').create();
+            await imagePath.writeAsBytes(value);
 
-          print("${value..toString()}");
-          print("${imagePath.toString()}");
-          print("screenshot taken ----");
+            ssTimes = 1;
+            print("screenshot taken ----");
+            uploadImage(imagePath.path);
+            imageSS = imagePath.path;
+            update();
+            print("${value.toString()}");
+            print("screenshot taken ----");
+          }
         },
       );
     }
+  }
+
+  var currentUploadedFile;
+  Future<void> uploadImage(imageFile) async {
+    var token = await preferenceService.getToken();
+
+    print("image length - ${imageFile.toString()}");
+
+    var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+
+    var request = http.MultipartRequest('POST', uri);
+    request.headers.addAll({
+      'Authorization': 'Bearer $token',
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    });
+
+    // Attach the image file to the request
+    request.files.add(await http.MultipartFile.fromPath(
+      'image',
+      imageFile.toString(),
+    ));
+    request.fields.addAll({"module_name": "dashboardSS"});
+
+    var response = await request.send();
+
+    // Listen for the response
+
+    print("responseresponseresponse");
+    response.stream.transform(utf8.decoder).listen((value) {
+      print("response ---- ${value.toString()}");
+
+      if (response.statusCode == 200) {
+        print("Image uploaded successfully.");
+
+        submitIssues(jsonDecode(value)["data"]["path"]);
+      } else {
+        print("Failed to upload image.");
+      }
+      update();
+    });
+  }
+
+  var submitSS;
+  submitIssues(image) async {
+    Map<String, dynamic> param = {
+      "screenshot": image ?? "",
+    };
+
+    print("paramssss${param.toString()}");
+
+    try {
+      print(222.toString());
+
+      final response = await userRepository.screenShotSend(param);
+      if (response.success == true) {
+        submitSS = response;
+        // divineSnackBar(
+        //     data: response.message.toString(), color: appColors.green);
+      } else {
+        print(3.toString());
+      }
+      print("Data Of submit ==> ${jsonEncode(response.data)}");
+    } catch (error) {
+      print(33.toString());
+
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+    update();
   }
 
   final chatAssistantRepository = ChatAssistantRepository();
@@ -420,6 +503,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         getFeedbackData();
         tarotCardData();
         getUserImage();
+        print("----------------loaded");
+
+        if (getConstantDetails!.data!.is_screenshot_require.toString() == "1") {
+          captureandSendSS();
+        } else {
+          print("screenshot declined");
+        }
         update();
       }
     } else {
@@ -993,6 +1083,16 @@ class HomeController extends GetxController with WidgetsBindingObserver {
                 .then((value) {
               print("in side going");
               getAllDashboardData();
+              print("----------------loaded");
+
+              if (homeData != null ||
+                  getConstantDetails!.data != null ||
+                  getConstantDetails!.data!.is_screenshot_require.toString() ==
+                      "0") {
+                captureandSendSS();
+              } else {
+                print("screenshot declined");
+              }
             });
             print("isReapeting ----- ${isReapeting}");
           } else {
