@@ -560,12 +560,14 @@ class DashboardController extends GetxController
   }
 
   askPermissionCameraMicrophone() async {
-    if(!await Permission.systemAlertWindow.status.isGranted){
-      await AppPermissionService.instance.showAlertDialog(
-        "Chat",
-        ["Allow display over other apps"],
-      );
-      await AppPermissionService.instance.permissionOvr();
+    if(isOverLayPermissionDashboard.value == 1){
+      if(!await Permission.systemAlertWindow.status.isGranted){
+        await AppPermissionService.instance.showAlertDialog(
+          "Chat",
+          ["Allow display over other apps"],
+        );
+        await AppPermissionService.instance.permissionOvr();
+      }
     }
   }
 
