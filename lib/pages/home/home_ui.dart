@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -104,7 +103,8 @@ class HomeUI extends GetView<HomeController> {
               leading: IconButton(
                 onPressed: () {
                   controller.showPopup = false;
-                    controller.homeScreenKey.currentState?.openDrawer();},
+                  controller.homeScreenKey.currentState?.openDrawer();
+                },
                 highlightColor: appColors.transparent,
                 splashColor: appColors.transparent,
                 icon: const Icon(Icons.menu),

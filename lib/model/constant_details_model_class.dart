@@ -161,7 +161,8 @@ class Data {
         is_onboarding_in_process:
             is_onboarding_in_process ?? this.is_onboarding_in_process,
         stage_no: stage_no ?? this.stage_no,
-        is_screenshot_require: is_screenshot_require ?? this.is_screenshot_require,
+        is_screenshot_require:
+            is_screenshot_require ?? this.is_screenshot_require,
       );
 
   factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
@@ -196,7 +197,7 @@ class Data {
         taroCard: json['taro_card'],
         currentTime: json['current_time'],
         notice: json['notice'],
-    is_screenshot_require: json['is_screenshot_require'],
+        is_screenshot_require: json['is_screenshot_require'],
         is_onboarding_in_process: json['is_onboarding_in_process'],
         stage_no: json['stage_no'],
       );
