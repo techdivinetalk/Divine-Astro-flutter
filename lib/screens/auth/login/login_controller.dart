@@ -40,7 +40,8 @@ class LoginController extends GetxController {
   final UserRepository userRepository;
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
-  TextEditingController countryCodeController = TextEditingController(text: "+91");
+  TextEditingController countryCodeController =
+      TextEditingController(text: "+91");
   TextEditingController mobileNumberController = TextEditingController();
   final appFirebaseService = AppFirebaseService();
 

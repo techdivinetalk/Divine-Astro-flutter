@@ -17,6 +17,7 @@ import 'package:divine_astrologer/model/ChatOrderResponse.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/screens/dashboard/widgets/terms_and_condition_popup.dart';
+import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/force_update_sheet.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -95,6 +96,8 @@ class DashboardController extends GetxController
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
+
+
 
   var commonConstants;
 
@@ -552,7 +555,20 @@ class DashboardController extends GetxController
     isServerMaintenance.value == 1
         ? CommonDialogue().serverMaintenancePopUp()
         : null;
+    askPermissionCameraMicrophone();
     super.onReady();
+  }
+
+  askPermissionCameraMicrophone() async {
+    if(isOverLayPermissionDashboard.value == 1){
+      if(!await Permission.systemAlertWindow.status.isGranted){
+        await AppPermissionService.instance.showAlertDialog(
+          "Chat",
+          ["Allow display over other apps"],
+        );
+        await AppPermissionService.instance.permissionOvr();
+      }
+    }
   }
 
   Future<void> requestPermissions1() async {

@@ -2,7 +2,6 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
-import 'package:divine_astrologer/screens/signature_module/view/agreement_screen.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,6 +38,7 @@ class SideMenuDrawer extends GetView<HomeController> {
                         .homeScreenKey
                         .currentState
                         ?.closeDrawer();
+                    Get.put(HomeController()).showPopup = true;
 
                     Get.back();
                   },
@@ -54,6 +54,7 @@ class SideMenuDrawer extends GetView<HomeController> {
               onTap: () {
                 Get.put(HomeController()).homeScreenKey
                   ..currentState?.closeDrawer();
+                Get.put(HomeController()).showPopup = false;
 
                 Get.back();
                 Get.toNamed(RouteName.waitList);
@@ -65,6 +66,7 @@ class SideMenuDrawer extends GetView<HomeController> {
               onTap: () {
                 Get.put(HomeController()).homeScreenKey
                   ..currentState?.closeDrawer();
+                Get.put(HomeController()).showPopup = false;
 
                 Get.back();
                 Get.toNamed(RouteName.orderHistory);
@@ -76,6 +78,7 @@ class SideMenuDrawer extends GetView<HomeController> {
               onTap: () {
                 Get.put(HomeController()).homeScreenKey
                   ..currentState?.closeDrawer();
+                Get.put(HomeController()).showPopup = false;
 
                 Get.back();
                 Get.toNamed(RouteName.messageTemplate);
@@ -92,23 +95,26 @@ class SideMenuDrawer extends GetView<HomeController> {
                 Get.toNamed(RouteName.settingsUI);
               },
             ),*/
-            if(isAstroCare.value == 1)ListTile(
-              leading: Assets.images.icCustomerCare.svg(),
-              title: Text('customerCare'.tr),
-              onTap: () {
-                Get.put(HomeController()).homeScreenKey
-                  ..currentState?.closeDrawer();
+            if (isAstroCare.value == 1)
+              ListTile(
+                leading: Assets.images.icCustomerCare.svg(),
+                title: Text('customerCare'.tr),
+                onTap: () {
+                  Get.put(HomeController()).homeScreenKey
+                    ..currentState?.closeDrawer();
+                  Get.put(HomeController()).showPopup = false;
 
-                Get.back();
-                controller.whatsapp();
-              },
-            ),
+                  Get.back();
+                  controller.whatsapp();
+                },
+              ),
             ListTile(
               leading: Assets.images.icImportContact.svg(),
               title: Text('importantNumbers'.tr),
               onTap: () async {
                 Get.put(HomeController()).homeScreenKey
                   ..currentState?.closeDrawer();
+                Get.put(HomeController()).showPopup = false;
 
                 Get.back();
                 bool isPermission = await requestPermissions();
@@ -127,6 +133,7 @@ class SideMenuDrawer extends GetView<HomeController> {
                     .homeScreenKey
                     .currentState
                     ?.closeDrawer();
+                Get.put(HomeController()).showPopup = false;
 
                 Get.back();
                 Get.toNamed(RouteName.noticeBoard);
@@ -138,6 +145,7 @@ class SideMenuDrawer extends GetView<HomeController> {
               onTap: () {
                 Get.put(HomeController()).homeScreenKey
                   ..currentState?.closeDrawer();
+                Get.put(HomeController()).showPopup = false;
 
                 Get.back();
                 Get.toNamed(RouteName.technicalIssues);
@@ -149,6 +157,7 @@ class SideMenuDrawer extends GetView<HomeController> {
               onTap: () {
                 Get.put(HomeController()).homeScreenKey
                   ..currentState?.closeDrawer();
+                Get.put(HomeController()).showPopup = false;
 
                 Get.back();
                 Get.toNamed(RouteName.financialSupport);
@@ -160,6 +169,7 @@ class SideMenuDrawer extends GetView<HomeController> {
               onTap: () {
                 Get.put(HomeController()).homeScreenKey
                   ..currentState?.closeDrawer();
+                Get.put(HomeController()).showPopup = false;
 
                 Get.back();
                 Get.toNamed(RouteName.newSupportScreen);
@@ -172,6 +182,7 @@ class SideMenuDrawer extends GetView<HomeController> {
                     onTap: () {
                       Get.put(HomeController()).homeScreenKey
                         ..currentState?.closeDrawer();
+                      Get.put(HomeController()).showPopup = false;
 
                       Get.back();
                       Get.toNamed(RouteName.testingScreen);
@@ -186,6 +197,8 @@ class SideMenuDrawer extends GetView<HomeController> {
                     .homeScreenKey
                     .currentState
                     ?.closeDrawer();
+                Get.put(HomeController()).showPopup = false;
+
                 // Navigator.of(context).pop(),
                 Get.toNamed(RouteName.settingsUI);
               },

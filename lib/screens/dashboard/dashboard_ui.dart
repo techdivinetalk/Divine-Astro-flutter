@@ -171,19 +171,33 @@ class DashboardScreen extends GetView<DashboardController> {
                                       items: <BottomNavigationBarItem>[
                                         BottomNavigationBarItem(
                                           key: controller.keyHome,
-                                          icon: Column(
-                                            children: [
-                                              Assets.images.icSelectedHome.svg(
-                                                  height: 22.h,
-                                                  colorFilter: ColorFilter.mode(
-                                                      controller.selectedIndex
-                                                                  .value ==
-                                                              0
-                                                          ? appColors.darkBlue
-                                                          : appColors.lightGrey,
-                                                      BlendMode.srcIn)),
-                                              const SizedBox(height: 5),
-                                            ],
+                                          icon: InkWell(
+                                            onTap: () {
+                                              controller.selectedIndex.value =
+                                                  0;
+                                              if (Get.isRegistered<
+                                                      HomeController>() &&
+                                                  !Get.find<HomeController>()
+                                                      .isInit) {
+                                                Get.find<HomeController>()
+                                                    .onInit();
+                                              }
+                                            },
+                                            child: Column(
+                                              children: [
+                                                Assets.images.icSelectedHome.svg(
+                                                    height: 22.h,
+                                                    colorFilter: ColorFilter.mode(
+                                                        controller.selectedIndex
+                                                                    .value ==
+                                                                0
+                                                            ? appColors.darkBlue
+                                                            : appColors
+                                                                .lightGrey,
+                                                        BlendMode.srcIn)),
+                                                const SizedBox(height: 5),
+                                              ],
+                                            ),
                                           ),
                                           label: 'home'.tr,
                                         ),

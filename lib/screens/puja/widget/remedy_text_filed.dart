@@ -46,7 +46,7 @@ class PoojaRemedyTextFiled extends StatelessWidget {
         SizedBox(height: 5.h),
         TextFormField(
           maxLines: maxLines,
-          maxLength: maxLength,
+          maxLength: maxLength == 50 ? null : maxLength,
           controller: controller,
           validator: validator,
           onChanged: onChanged,
