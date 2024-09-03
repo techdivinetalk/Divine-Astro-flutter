@@ -183,7 +183,7 @@ class FinancialSupportScreen extends GetView<FinancialSupportController> {
                     onChanged: (value) {
                       controller.update();
                     },
-                    isSuffix: false,
+                    isSuffix: true,
                   ),
                   const SizedBox(
                     height: 20,

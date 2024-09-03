@@ -183,7 +183,7 @@ class SupportIssueScreen extends GetView<SupportIssueController> {
                     onChanged: (value) {
                       controller.update();
                     },
-                    isSuffix: false,
+                    isSuffix: true,
                   ),
                   const SizedBox(
                     height: 20,
