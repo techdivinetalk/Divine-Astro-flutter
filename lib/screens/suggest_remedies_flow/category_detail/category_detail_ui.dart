@@ -254,14 +254,17 @@ class CategoryDetailUi extends GetView<CategoryDetailController> {
                                             fontWeight: FontWeight.w600,
                                           ),
                                         ),
-                                        const SizedBox(height: 10),
-                                        Text(
-                                          "On purchase upto 50% referral bonus will be added in your wallet",
-                                          style: AppTextStyle.textStyle12(
-                                              fontWeight: FontWeight.w600,
-                                              fontColor: appColors.darkBlue
-                                                  .withOpacity(0.5)),
-                                        ),
+                                        if(controller.productDetail?.discount != null)...[
+                                          const SizedBox(height: 10),
+                                          Text(
+                                            // "On purchase upto 50% referral bonus will be added in your wallet",
+                                            controller.productDetail?.discount ?? "",
+                                            style: AppTextStyle.textStyle12(
+                                                fontWeight: FontWeight.w600,
+                                                fontColor: appColors.darkBlue
+                                                    .withOpacity(0.5)),
+                                          ),
+                                        ],
                                         Padding(
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 10.w, vertical: 15.h),

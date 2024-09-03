@@ -463,33 +463,52 @@ class ProfileUI extends GetView<ProfilePageController> {
                           ),
                         );
                       } else if (index == 1) {
-                        print("objectobjectobjectobjectobject----${index}");
+                        // if (await PermissionHelper()
+                        //     .askStoragePermission(Permission.videos)) {
+                        //   FilePickerResult? result =
+                        //       await FilePicker.platform.pickFiles(
+                        //     type: FileType.video,
+                        //     allowCompression: false,
+                        //   );
+                        //   if (result != null) {
+                        //     Get.toNamed(RouteName.uploadStoryUi,
+                        //         arguments: "${result.files.single.path}");
+                        //   }
+                        // }
+                        controller.pickingFileLoading = true;
+                        if (controller.isFilePickerActive) {
+                          print("File picker is already active. Please wait.");
+                          controller.pickingFileLoading = true;
+                          return;
+                        }
+                        controller.update();
+                        if (await PermissionHelper()
+                            .askStoragePermission(Permission.videos)) {
+                          controller.isFilePickerActive = true;
 
-                        print("Tapped on index: $index");
-                        try {
-                          print("Attempting to pick video...");
-                          if (await PermissionHelper()
-                              .askStoragePermission(Permission.videos)) {
-                            print("Permission granted");
+                          try {
                             FilePickerResult? result =
                                 await FilePicker.platform.pickFiles(
                               type: FileType.video,
                               allowCompression: false,
+                              allowMultiple: false,
                             );
+                            controller.pickingFileLoading = false;
                             if (result != null) {
-                              print(
-                                  "Video picked: ${result.files.single.path}");
                               Get.toNamed(RouteName.uploadStoryUi,
                                   arguments: "${result.files.single.path}");
-                            } else {
-                              print("No video selected");
                             }
-                          } else {
-                            print("Permission denied");
+                            controller.update();
+                          } catch (e) {
+                            controller.pickingFileLoading = false;
+                            controller.update();
+                            print("An error occurred: $e");
+                          } finally {
+                            controller.pickingFileLoading = false;
+
+                            controller.isFilePickerActive = false;
+                            controller.update();
                           }
-                          // other conditions here...
-                        } catch (e) {
-                          print("Error: $e");
                         }
                       } else if (index == 3) {
                         controller.whatsapp();
@@ -523,23 +542,52 @@ class ProfileUI extends GetView<ProfilePageController> {
                     },
                     child: Container(
                       padding: const EdgeInsets.all(10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          item.widget ?? const SizedBox(),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          Text(
-                            item.name.toString(),
-                            textAlign: TextAlign.center,
-                            style: AppTextStyle.textStyle10(
-                                fontWeight: FontWeight.w500,
-                                fontColor: appColors.darkBlue),
-                          ),
-                        ],
-                      ),
+                      child: index == 1
+                          ? controller.pickingFileLoading == true
+                              ? const Padding(
+                                  padding: EdgeInsets.all(14.0),
+                                  child: SizedBox(
+                                    height: 30,
+                                    width: 30,
+                                    child: CircularProgressIndicator(
+                                      strokeWidth: 1,
+                                    ),
+                                  ),
+                                )
+                              : Column(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    item.widget ?? const SizedBox(),
+                                    SizedBox(
+                                      height: 10.h,
+                                    ),
+                                    Text(
+                                      item.name.toString(),
+                                      textAlign: TextAlign.center,
+                                      style: AppTextStyle.textStyle10(
+                                          fontWeight: FontWeight.w500,
+                                          fontColor: appColors.darkBlue),
+                                    ),
+                                  ],
+                                )
+                          : Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                item.widget ?? const SizedBox(),
+                                SizedBox(
+                                  height: 10.h,
+                                ),
+                                Text(
+                                  item.name.toString(),
+                                  textAlign: TextAlign.center,
+                                  style: AppTextStyle.textStyle10(
+                                      fontWeight: FontWeight.w500,
+                                      fontColor: appColors.darkBlue),
+                                ),
+                              ],
+                            ),
                     ),
                   ),
                 ),
@@ -945,25 +993,33 @@ class ProfileUI extends GetView<ProfilePageController> {
             ],
           );
         } else {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomButton(
-                onTap: () {
-                  controller.getMoreReviewRating();
-                },
-                child: Text(
-                  "Load More Reviews".tr,
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    // decoration: TextDecoration.underline,
-                    decorationColor: appColors.textColor,
-                    color: appColors.textColor,
-                  ),
-                ),
-              ),
-            ],
-          );
+          return Obx(() => !controller.isLoadMoreReview.value
+              ? Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomButton(
+                      onTap: () {
+                        if (!controller.isNoMoreReview.value) {
+                          controller.isLoadMoreReview.value = true;
+                          controller.getMoreReviewRating();
+                        } else {
+                          divineSnackBar(data: "No more reviews to load");
+                        }
+                      },
+                      child: Text(
+                        "Load More Reviews".tr,
+                        style: TextStyle(
+                          fontSize: 12.sp,
+                          // decoration: TextDecoration.underline,
+                          decorationColor: appColors.textColor,
+                          color: appColors.textColor,
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : const Center(
+                  child: CircularProgressIndicator(strokeWidth: 1.0)));
         }
       },
     );

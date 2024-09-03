@@ -74,6 +74,8 @@ class Data {
   int? showAgreement;
   num? currentTime;
   Map? notice;
+  dynamic is_screenshot_require;
+
   dynamic is_onboarding_in_process;
   dynamic stage_no;
   Data({
@@ -100,6 +102,7 @@ class Data {
     this.firebaseAuthPassword,
     this.currentTime,
     required this.notice,
+    required this.is_screenshot_require,
     this.is_onboarding_in_process,
     this.stage_no,
   });
@@ -127,6 +130,7 @@ class Data {
     int? isForceTraningVideo,
     num? currentTime,
     Map? notice,
+    dynamic is_screenshot_require,
     dynamic is_onboarding_in_process,
     dynamic stage_no,
   }) =>
@@ -157,6 +161,7 @@ class Data {
         is_onboarding_in_process:
             is_onboarding_in_process ?? this.is_onboarding_in_process,
         stage_no: stage_no ?? this.stage_no,
+        is_screenshot_require: is_screenshot_require ?? this.is_screenshot_require,
       );
 
   factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
@@ -191,6 +196,7 @@ class Data {
         taroCard: json['taro_card'],
         currentTime: json['current_time'],
         notice: json['notice'],
+    is_screenshot_require: json['is_screenshot_require'],
         is_onboarding_in_process: json['is_onboarding_in_process'],
         stage_no: json['stage_no'],
       );
@@ -222,6 +228,7 @@ class Data {
         'firebase_auth_password': firebaseAuthPassword,
         'current_time': currentTime,
         'notice': notice,
+        'is_screenshot_require': is_screenshot_require,
         'is_onboarding_in_process': is_onboarding_in_process,
         'stage_no': stage_no,
       };

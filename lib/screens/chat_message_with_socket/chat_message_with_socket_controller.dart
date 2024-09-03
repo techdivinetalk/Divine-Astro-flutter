@@ -581,6 +581,27 @@ class ChatMessageWithSocketController extends GetxController
         makeRealTimeOrderChanges(snapshot);
       }
     });
+    AppFirebaseService()
+        .database
+        .child(
+        "order/${AppFirebaseService().orderData.value["orderId"]}/isCustTyping")
+        .onValue
+        .listen((event) async {
+      print("endTimeChanged");
+      var snapshot = event.snapshot;
+      if (snapshot.value != null) {
+        isTyping.value = true;
+        startTimer();
+        scrollToBottomFunc();
+      }
+    });
+    messageController.addListener(() {
+      String text = messageController.text;
+      if (text.length % 3 == 0 && text.isNotEmpty) {
+        FirebaseDatabase.instance.ref(
+            "order/${AppFirebaseService().orderData.value["orderId"]}/isAstroTyping").set(AppFirebaseService().currentTime().millisecondsSinceEpoch);
+      }
+    });
     runTimer();
   }
 
@@ -1055,7 +1076,7 @@ class ChatMessageWithSocketController extends GetxController
           '${data['data']["typist"].toString()}  ${AppFirebaseService().orderData.value["userId"].toString()}');
       if (data['data']["typist"].toString() ==
           AppFirebaseService().orderData.value["userId"].toString()) {
-        isTyping.value = true;
+      //  isTyping.value = true;
         //chatStatus.value = "Typing";
         // if (isScrollAtBottom()) {
         //   scrollToBottomFunc();
@@ -1104,7 +1125,7 @@ class ChatMessageWithSocketController extends GetxController
       debugPrint("sendMessageListenerSocket context ${Get.context!}");
       if (fireChat.value == 0) {
         if (data is Map<String, dynamic>) {
-          isTyping.value = false;
+        //  isTyping.value = false;
           final ChatMessage chatMessage =
               ChatMessage.fromOfflineJson(data["data"]);
           final String time =

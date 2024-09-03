@@ -41,6 +41,7 @@ import '../model/FinancialCreateIssueModel.dart';
 import '../model/OnBoardingStageModel.dart';
 import '../model/PassBookDataModel.dart';
 import '../model/RitentionPopupModel.dart';
+import '../model/ScreenshotUploadModel.dart';
 import '../model/TechnicalIssuesData.dart';
 import '../model/TechnicalSupport.dart';
 import "../model/blocked_customers_response.dart";
@@ -1511,6 +1512,58 @@ class UserRepository extends ApiProvider {
           log(responseBody.toString());
 
           final submitResignation = AllSupportIssueModel.fromJson(responseBody);
+          return submitResignation;
+        }
+      } else {
+        log(22.toString());
+
+        final errorBody = json.decode(response.body);
+        throw CustomException(
+            errorBody["message"]?.toString() ?? 'Unknown error');
+      }
+    } catch (e, s) {
+      log(222.toString());
+
+      debugPrint("Exception occurred: $e\nStack trace: $s");
+      rethrow;
+    }
+  }
+
+
+
+  Future<ScreenshotUploadModel> screenShotSend(
+      Map<String, dynamic> param) async {
+    log(1.toString());
+
+    try {
+      log(11.toString());
+
+      final response = await post(addAstroScreenshot,
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
+      log(111.toString());
+
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+        throw CustomException('Unauthorized access');
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+        throw CustomException('Bad request');
+      }
+
+      if (response.statusCode == HttpStatus.ok ||
+          response.statusCode == HttpStatus.created) {
+        log(1111.toString());
+
+        final responseBody = json.decode(response.body);
+        if (responseBody["status_code"] == HttpStatus.unauthorized) {
+          log(2.toString());
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(responseBody["error"] ?? 'Unauthorized access');
+        } else {
+          log(11111.toString());
+
+          final submitResignation = ScreenshotUploadModel.fromJson(responseBody);
           return submitResignation;
         }
       } else {

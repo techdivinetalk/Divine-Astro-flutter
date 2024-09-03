@@ -28,6 +28,7 @@ import 'package:divine_astrologer/pages/home/widgets/common_info_sheet.dart';
 import 'package:divine_astrologer/pages/home/widgets/technical_popup.dart';
 import 'package:divine_astrologer/pages/home/widgets/training_video.dart';
 import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/product/pooja/widgets/custom_widget/pooja_common_list.dart';
+import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:divine_astrologer/screens/dashboard/model/astrologer_nord_data_model.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/custom_extension.dart';
@@ -39,10 +40,12 @@ import 'package:flutter/services.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 import "package:permission_handler/permission_handler.dart";
+import 'package:screenshot/screenshot.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/PopupManager.dart';
@@ -83,11 +86,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   RxBool isLiveEnable = true.obs;
   bool istraininginfo = true;
   bool noticePollChecked = false;
-  var selectedPoll ;
+  var selectedPoll;
 
   double xPosition = 10.0;
   double yPosition = Get.height * 0.4;
   RxList<bool> customOfferSwitch = RxList([]);
+  //Create an instance of ScreenshotController
+  ScreenshotController screenshotController = ScreenshotController();
 
   RxString appbarTitle = "Astrologer Name ".obs;
   RxBool isShowTitle = true.obs;
@@ -123,6 +128,107 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  var imageSS;
+  int ssTimes = 0;
+  captureandSendSS() {
+    print("111111111111");
+
+    if (ssTimes == 0) {
+      screenshotController.capture().then(
+        (value) async {
+          if (value != null) {
+            final directory = await getApplicationDocumentsDirectory();
+            final imagePath =
+                await File('${directory.path}/image.png').create();
+            await imagePath.writeAsBytes(value);
+
+            ssTimes = 1;
+            print("screenshot taken ----");
+            uploadImage(imagePath.path);
+            imageSS = imagePath.path;
+            update();
+            print("${value.toString()}");
+            print("screenshot taken ----");
+          }
+        },
+      );
+    }
+  }
+
+  var currentUploadedFile;
+  Future<void> uploadImage(imageFile) async {
+    var token = await preferenceService.getToken();
+
+    print("image length - ${imageFile.toString()}");
+
+    var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+
+    var request = http.MultipartRequest('POST', uri);
+    request.headers.addAll({
+      'Authorization': 'Bearer $token',
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    });
+
+    // Attach the image file to the request
+    request.files.add(await http.MultipartFile.fromPath(
+      'image',
+      imageFile.toString(),
+    ));
+    request.fields.addAll({"module_name": "dashboardSS"});
+
+    var response = await request.send();
+
+    // Listen for the response
+
+    print("responseresponseresponse");
+    response.stream.transform(utf8.decoder).listen((value) {
+      print("response ---- ${value.toString()}");
+
+      if (response.statusCode == 200) {
+        print("Image uploaded successfully.");
+
+        submitIssues(jsonDecode(value)["data"]["path"]);
+      } else {
+        print("Failed to upload image.");
+      }
+      update();
+    });
+  }
+
+  var submitSS;
+  submitIssues(image) async {
+    Map<String, dynamic> param = {
+      "screenshot": image ?? "",
+    };
+
+    print("paramssss${param.toString()}");
+
+    try {
+      print(222.toString());
+
+      final response = await userRepository.screenShotSend(param);
+      if (response.success == true) {
+        submitSS = response;
+        // divineSnackBar(
+        //     data: response.message.toString(), color: appColors.green);
+      } else {
+        print(3.toString());
+      }
+      print("Data Of submit ==> ${jsonEncode(response.data)}");
+    } catch (error) {
+      print(33.toString());
+
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+    update();
+  }
+
   final chatAssistantRepository = ChatAssistantRepository();
   int pageUsersData = 1;
   CustomerDetailsResponse? customerDetailsResponse;
@@ -130,6 +236,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   final searchController = TextEditingController();
   var checkin = false.obs;
   var emptyRes = false.obs;
+  var isLoadMoreData = false.obs;
 
   Future<void> getConsulation() async {
     CustomerDetailsResponse response =
@@ -146,11 +253,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         }
         pageUsersData++;
       } else {
-        Fluttertoast.showToast(msg: "No more data");
+        // Fluttertoast.showToast(msg: "No more data");
         print("data ---- ${response.data.toString()}");
         emptyRes(true);
       }
+      isLoadMoreData.value = false;
     } else {
+      isLoadMoreData.value = false;
       print("There is no more data in user data");
     }
     update();
@@ -228,11 +337,18 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   final ScrollController scrollController = ScrollController();
   final threshold = 50.0; // Adjust as needed
+  bool isInit = false;
+  @override
+  void onReady() {
+    isInit = false;
+    super.onReady();
+  }
 
   @override
   void onInit() async {
     super.onInit();
     debugPrint("test_onInit: call");
+    isInit = true;
 
     initData();
 // // Log when the scroll controller is attached
@@ -310,6 +426,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
               final offers = map["offers"];
               if (offers != null) {
+                final homeData = this.homeData;
                 if (homeData != null) {
                   for (int i = 0;
                       i < homeData!.offers!.orderOffer!.length;
@@ -341,6 +458,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
       if (preferenceService.getUserDetail() != null) {
         // Check for null user details
+        print("what is screen ----> home");
         AppFirebaseService().readData(
             'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
       } else {
@@ -385,6 +503,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         getFeedbackData();
         tarotCardData();
         getUserImage();
+        print("----------------loaded");
+
+        if (getConstantDetails!.data!.is_screenshot_require.toString() == "1") {
+          captureandSendSS();
+        } else {
+          print("screenshot declined");
+        }
         update();
       }
     } else {
@@ -639,6 +764,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  bool showPopup = true;
   getDashboardDetail() async {
     loading = Loading.initial;
     update();
@@ -650,16 +776,19 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       var response = await HomePageRepository().getDashboardData(params);
       isFeedbackAvailable.value = response.success ?? false;
       homeData = response.data;
-
       loading = Loading.loaded;
       updateCurrentData();
       shopDataSync.value = true;
 
       showOnceInDay();
       update();
-      if (homeData?.retention < 10) {
-        print("homeData.retention----${homeData?.retention}");
+
+      String currentDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+      String lastShownDate = await SharedPreferenceService().getLastShowDate();
+      if (homeData?.retention < 10 && lastShownDate != currentDate) {
+        await SharedPreferenceService().setLastShowDate(currentDate);
         Get.bottomSheet(CommonInfoSheet(
+          isBackButton: false,
           title: "⚠ Warning Astrologer ⚠".tr,
           subTitle:
               "Your user retention is below industry standard. Your retention is less than 10% Your are not eligible for Bonus wallet. Please review and improve strategies promptly to increase User retention rate. Thank you. 🌟"
@@ -675,7 +804,14 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           homeData?.technical_support!.isEmpty) {
       } else {
         log("Technical_Support -- ${homeData?.technical_support.toString()}");
-        showTechnicalPopupAlert();
+        update();
+        if (Get.find<DashboardController>().selectedIndex.value == 0 &&
+            showPopup == true &&
+            !homeScreenKey.currentState!.isDrawerOpen) {
+          showTechnicalPopupAlert();
+        } else {
+          log("--------------------------------------");
+        }
       }
       //getFeedbackData();
       //log("DashboardData==>${jsonEncode(homeData)}");
@@ -953,6 +1089,16 @@ class HomeController extends GetxController with WidgetsBindingObserver {
                 .then((value) {
               print("in side going");
               getAllDashboardData();
+              print("----------------loaded");
+
+              if (homeData != null ||
+                  getConstantDetails!.data != null ||
+                  getConstantDetails!.data!.is_screenshot_require.toString() ==
+                      "0") {
+                captureandSendSS();
+              } else {
+                print("screenshot declined");
+              }
             });
             print("isReapeting ----- ${isReapeting}");
           } else {

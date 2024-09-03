@@ -60,6 +60,7 @@ class Pooja {
   int? poojaStartingPriceUsd;
   String? poojaShortDesc;
   String? poojaBannerImage;
+  String? discount;
   int? gst;
   int? referalAmount;
   int? payoutType;
@@ -78,6 +79,7 @@ class Pooja {
       this.poojaBannerImage,
       this.gst,
       this.referalAmount,
+      this.discount,
       this.payoutType,
       this.payoutValue,
       this.cashbackType,
@@ -98,6 +100,7 @@ class Pooja {
     payoutValue = json['payout_value'];
     cashbackType = json['cashback_type'];
     cashbackValue = json['cashback_value'];
+    discount = json['discount'];
   }
 
   Map<String, dynamic> toJson() {
@@ -116,6 +119,7 @@ class Pooja {
     data['payout_value'] = payoutValue;
     data['cashback_type'] = cashbackType;
     data['cashback_value'] = cashbackValue;
+    data['discount'] = discount;
     return data;
   }
 }

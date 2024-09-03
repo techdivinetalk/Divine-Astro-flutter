@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 // import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:contacts_service/contacts_service.dart';
@@ -14,6 +15,7 @@ import 'package:divine_astrologer/model/ChatOrderResponse.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/screens/dashboard/widgets/terms_and_condition_popup.dart';
+import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/force_update_sheet.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -92,6 +94,8 @@ class DashboardController extends GetxController
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
+
+
 
   var commonConstants;
 
@@ -575,7 +579,20 @@ class DashboardController extends GetxController
     isServerMaintenance.value == 1
         ? CommonDialogue().serverMaintenancePopUp()
         : null;
+    askPermissionCameraMicrophone();
     super.onReady();
+  }
+
+  askPermissionCameraMicrophone() async {
+    if(isOverLayPermissionDashboard.value == 1){
+      if(!await Permission.systemAlertWindow.status.isGranted){
+        await AppPermissionService.instance.showAlertDialog(
+          "Chat",
+          ["Allow display over other apps"],
+        );
+        await AppPermissionService.instance.permissionOvr();
+      }
+    }
   }
 
   Future<void> requestPermissions1() async {
@@ -609,16 +626,16 @@ class DashboardController extends GetxController
         update();
 
         PackageInfo packageInfo = await PackageInfo.fromPlatform();
-        print(data.data!.appVersion!.split(".").join(""));
-        print(packageInfo.version.split(".").join(""));
-        print('packageInfo.version!.split(".").join("")');
+
         if (int.parse(data.data!.appVersion!.split(".").join("")) >
             int.parse(packageInfo.version.split(".").join(""))) {
-          print("objectobjectobjectobject");
-          Get.bottomSheet(
-            const ForceUpdateSheet(),
-            isDismissible: false,
-          );
+          if(Platform.isAndroid){
+            /// need to change according ios
+            Get.bottomSheet(
+              const ForceUpdateSheet(),
+              isDismissible: false,
+            );
+          }
           // showTutorial(context);
         } else {
           // showTutorial(context);

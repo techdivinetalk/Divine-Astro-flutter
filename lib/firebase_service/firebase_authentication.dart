@@ -7,6 +7,7 @@ class Auth {
     UserCredential result =
     await auth.signInWithEmailAndPassword(email: email, password: password);
     print(result);
+    print("call this one -------> 8");
     print("resultresultresultresult");
     final User user = result.user!;
 

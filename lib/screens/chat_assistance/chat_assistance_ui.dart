@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../../common/SvgIconButton.dart';
 import '../../common/colors.dart';
@@ -33,7 +34,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
       body: GetBuilder<ChatAssistanceController>(
           init: ChatAssistanceController(),
           builder: (controller) {
-            controller.scrollCon.addListener(() {
+            controller.scrollCon.addListener(() async {
               // Check if the user is at the bottom
               if (controller.scrollCon.hasClients) {
                 final double maxScrollExtent =
@@ -44,9 +45,10 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                 if (currentScrollPosition >= maxScrollExtent - 50 &&
                     controller.checkin.value == false) {
                   controller.checkin(true);
-                  // User is at the bottom
+                  controller.isLoadMoreData.value = true;
+                  await Future.delayed(const Duration(milliseconds: 100));
+                  controller.scrollCon.jumpToBottom();
                   controller.getConsulation();
-
                   print("User is at the bottom of the screen");
                 }
               }
@@ -199,7 +201,20 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                         ));
                       }
                     } else {
-                      if (controller.customerDetailsResponse == null ||
+                      if (controller.userDataLoading.value == true) {
+                        return const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 150,
+                            ),
+                            Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ],
+                        );
+                      } else if (controller.customerDetailsResponse == null ||
                           controller.customerDetailsResponse!.data.isEmpty) {
                         return HelpersWidget().emptyChatWidget();
                       } else {
@@ -222,6 +237,8 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                                   ? controller.filteredUserData[index]
                                   : controller
                                       .customerDetailsResponse!.data[index],
+                              controller: controller,
+                              index: index,
                             );
                           },
                         ));
@@ -549,8 +566,14 @@ class ChatAssistanceTile extends StatelessWidget {
 
 class ChatAssistanceDataTile extends StatelessWidget {
   final ConsultationData data;
+  final ChatAssistanceController controller;
+  final int index;
 
-  const ChatAssistanceDataTile({super.key, required this.data});
+  const ChatAssistanceDataTile(
+      {super.key,
+      required this.data,
+      required this.controller,
+      required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -564,99 +587,114 @@ class ChatAssistanceDataTile extends StatelessWidget {
       },
       child: Padding(
         padding: const EdgeInsets.all(8.0),
-        child: Row(
+        child: Column(
           children: [
-            ClipRRect(
-                borderRadius: BorderRadius.circular(50.r),
-                child: Container(
-                  decoration: BoxDecoration(
-                      shape: BoxShape.circle, color: appColors.guideColor),
-                  height: 50.w,
-                  width: 50.w,
-                  child: LoadImage(
-                    imageModel: ImageModel(
-                      assetImage: false,
-                      placeHolderPath: Assets.images.defaultProfile.path,
-                      imagePath: (data.customerImage ?? '').startsWith(
-                              'https://divineprod.blob.core.windows.net/divineprod/')
-                          ? data.customerImage ?? ''
-                          : "${preferenceService.getAmazonUrl()}/${data.customerImage ?? ''}",
-                      loadingIndicator: SizedBox(
-                        height: 25.h,
-                        width: 25.w,
-                        child: CircularProgressIndicator(
-                          color: appColors.guideColor,
-                          strokeWidth: 2,
+            Row(
+              children: [
+                ClipRRect(
+                    borderRadius: BorderRadius.circular(50.r),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          shape: BoxShape.circle, color: appColors.guideColor),
+                      height: 50.w,
+                      width: 50.w,
+                      child: LoadImage(
+                        imageModel: ImageModel(
+                          assetImage: false,
+                          placeHolderPath: Assets.images.defaultProfile.path,
+                          imagePath: (data.customerImage ?? '').startsWith(
+                                  'https://divineprod.blob.core.windows.net/divineprod/')
+                              ? data.customerImage ?? ''
+                              : "${preferenceService.getAmazonUrl()}/${data.customerImage ?? ''}",
+                          loadingIndicator: SizedBox(
+                            height: 25.h,
+                            width: 25.w,
+                            child: CircularProgressIndicator(
+                              color: appColors.guideColor,
+                              strokeWidth: 2,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                )),
-            const SizedBox(
-              width: 10,
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
+                    )),
+                const SizedBox(
+                  width: 10,
+                ),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Expanded(
-                        child: CustomText(
-                          data.customerName ?? '',
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                        ),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: CustomText(
+                              // data.customerName ?? '',
+                              data.customerName ?? '',
+                              fontSize: 16.sp,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          Container(
+                            decoration: BoxDecoration(
+                                border: Border.all(
+                                    color: appColors.white, width: 1.5),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(50.0)),
+                                color: appColors.darkGreen),
+                            child: Padding(
+                              padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                              child: CustomText("Connect",
+                                  fontColor: Colors.white, fontSize: 12.sp),
+                            ),
+                          )
+                        ],
                       ),
-                      Container(
-                        decoration: BoxDecoration(
-                            border:
-                                Border.all(color: appColors.white, width: 1.5),
-                            borderRadius:
-                                const BorderRadius.all(Radius.circular(50.0)),
-                            color: appColors.darkGreen),
-                        child: Padding(
-                          padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-                          child: CustomText("Connect",
-                              fontColor: Colors.white, fontSize: 12.sp),
-                        ),
+                      CustomText(
+                        "Total Consultation : ${data.totalConsultation}",
+                        fontColor:
+                            // (index == 0) ? appColors.darkBlue:
+                            appColors.grey,
+                        fontSize: 12.sp,
+                        fontWeight:
+                            //(index == 0) ? FontWeight.w600 :
+                            FontWeight.normal,
+                      ),
+                      CustomText(
+                        "Last Consulted : ${data.lastConsulted}",
+                        fontColor:
+                            // (index == 0) ? appColors.darkBlue:
+                            appColors.grey,
+                        fontSize: 12.sp,
+                        fontWeight:
+                            //(index == 0) ? FontWeight.w600 :
+                            FontWeight.normal,
+                      ),
+                      CustomText(
+                        "Days Since Last Consulted : ${data.daySinceLastConsulted}",
+                        fontColor:
+                            // (index == 0) ? appColors.darkBlue:
+                            appColors.grey,
+                        fontSize: 12.sp,
+                        fontWeight:
+                            //(index == 0) ? FontWeight.w600 :
+                            FontWeight.normal,
                       )
                     ],
                   ),
-                  CustomText(
-                    "Total Consultation : ${data.totalConsultation}",
-                    fontColor:
-                        // (index == 0) ? appColors.darkBlue:
-                        appColors.grey,
-                    fontSize: 12.sp,
-                    fontWeight:
-                        //(index == 0) ? FontWeight.w600 :
-                        FontWeight.normal,
-                  ),
-                  CustomText(
-                    "Last Consulted : ${data.lastConsulted}",
-                    fontColor:
-                        // (index == 0) ? appColors.darkBlue:
-                        appColors.grey,
-                    fontSize: 12.sp,
-                    fontWeight:
-                        //(index == 0) ? FontWeight.w600 :
-                        FontWeight.normal,
-                  ),
-                  CustomText(
-                    "Days Since Last Consulted : ${data.daySinceLastConsulted}",
-                    fontColor:
-                        // (index == 0) ? appColors.darkBlue:
-                        appColors.grey,
-                    fontSize: 12.sp,
-                    fontWeight:
-                        //(index == 0) ? FontWeight.w600 :
-                        FontWeight.normal,
-                  )
-                ],
-              ),
+                ),
+                const Center(child: Icon(Icons.keyboard_arrow_right_outlined))
+              ],
             ),
-            const Center(child: Icon(Icons.keyboard_arrow_right_outlined))
+            Obx(() => controller.isLoadMoreData.value &&
+                    !controller.emptyRes.value &&
+                    controller.customerDetailsResponse!.data.length - 1 == index
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 1.0,
+                    ),
+                  )
+                : const SizedBox())
           ],
         ),
       ),

@@ -195,23 +195,23 @@ class AppPermissionService {
 
   Future<void> zegoOnPressedJoinButton(Function() callback) async {
     bool hasAllPerm = false;
-    bool hasOvrPerm = false;
+    // bool hasOvrPerm = false;
     bool hasCamPerm = false;
     bool hasMicPerm = false;
-    hasOvrPerm = await AppPermissionService.instance.permissionOvr();
+    // hasOvrPerm = await AppPermissionService.instance.permissionOvr();
     hasCamPerm = await AppPermissionService.instance.permissionCam();
     hasMicPerm = await AppPermissionService.instance.permissionMic();
-    hasAllPerm = hasOvrPerm && hasCamPerm && hasMicPerm;
+    hasAllPerm = /*hasOvrPerm && */hasCamPerm && hasMicPerm;
     if (hasAllPerm) {
       log("hasAllPerm");
       callback();
     } else {
-      if (!hasOvrPerm) {
+      /*if (!hasOvrPerm) {
         await showPermissionDialog(
           permissionName: 'Draw Over Other Apps',
           isForOverlayPermission: true,
         );
-      } else if (!hasCamPerm) {
+      } else*/ if (!hasCamPerm) {
         await showPermissionDialog(
           permissionName: 'Camera',
           isForOverlayPermission: false,
@@ -296,11 +296,11 @@ class AppPermissionService {
   }
 
   Future<bool> hasAllPermissions() async {
-    final PermissionStatus perm1 = await Permission.systemAlertWindow.status;
+    // final PermissionStatus perm1 = await Permission.systemAlertWindow.status;
     final PermissionStatus perm2 = await Permission.camera.status;
     final PermissionStatus perm3 = await Permission.microphone.status;
 
-    final bool value = perm1.isGranted && perm2.isGranted && perm3.isGranted;
+    final bool value = /*perm1.isGranted &&*/ perm2.isGranted && perm3.isGranted;
 
     return Future<bool>.value(value);
   }
