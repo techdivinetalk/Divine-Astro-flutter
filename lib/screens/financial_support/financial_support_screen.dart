@@ -302,7 +302,7 @@ class FinancialSupportScreen extends GetView<FinancialSupportController> {
                             Fluttertoast.showToast(msg: "Select Issue type");
                           } else if (controller
                                   .descriptionController.text.length <
-                              100) {
+                              50) {
                             Fluttertoast.showToast(msg: "Detail is to short");
                           } else if (controller.selectedFiles.isEmpty) {
                             Fluttertoast.showToast(msg: "Select Images");
