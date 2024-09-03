@@ -1,3 +1,4 @@
+import 'package:chips_choice/chips_choice.dart';
 import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:divine_astrologer/pages/on_boarding/widgets/widget.dart';
 import 'package:flutter/gestures.dart';
@@ -7,8 +8,13 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
+import '../../common/app_textstyle.dart';
 import '../../common/colors.dart';
+import '../../common/common_bottomsheet.dart';
+import '../../common/common_image_view.dart';
 import '../../common/select_your_birth_place_sheet.dart';
+import '../../gen/assets.gen.dart';
+import '../../screens/live_page/constant.dart';
 import '../../utils/utils.dart';
 import 'on_boarding_controller.dart';
 
@@ -128,18 +134,27 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                           child: CircleAvatar(
                             radius: 50,
                             backgroundColor: appColors.grey.withOpacity(0.5),
-                            child: controller.selectedProfile != null
-                                ? CircleAvatar(
-                                    radius: 50,
-                                    backgroundImage: FileImage(
-                                      controller.selectedProfile,
-                                    ),
+                            child: controller.photoUrlprofile != null
+                                ? CommonImageView(
+                                    imagePath: controller.photoUrlprofile,
+                                    fit: BoxFit.cover,
+                                    width: 100,
+                                    placeHolder:
+                                        Assets.images.defaultProfile.path,
+                                    radius: BorderRadius.circular(80.h),
                                   )
-                                : Icon(
-                                    Icons.image,
-                                    color: appColors.white,
-                                    size: 40,
-                                  ),
+                                : controller.selectedProfile != null
+                                    ? CircleAvatar(
+                                        radius: 50,
+                                        backgroundImage: FileImage(
+                                          controller.selectedProfile,
+                                        ),
+                                      )
+                                    : Icon(
+                                        Icons.image,
+                                        color: appColors.white,
+                                        size: 40,
+                                      ),
                           ),
                         ),
                       ),
@@ -179,7 +194,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                         keyboardType: TextInputType.text,
                         prefix: Icon(
                           Icons.perm_identity_outlined,
-                          color: appColors.black,
+                          color: appColors.black.withOpacity(0.5),
                         ),
                         readOnly:
                             controller.userData!.name == null ? false : true,
@@ -188,21 +203,215 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                       SizedBox(
                         height: 10,
                       ),
-                      CustomTextField(
-                        controller: controller.skillsController,
-                        focusNode: controller.skillsNode,
-                        onFieldSubmitted: (value) {
-                          controller.skillsNode.unfocus();
-                          FocusScope.of(context)
-                              .requestFocus(controller.experiencesNode);
-                        },
-                        keyboardType: TextInputType.text,
-                        prefix: Icon(
-                          Icons.emoji_objects_outlined,
-                          color: appColors.black,
+                      Obx(
+                        () => Container(
+                          width: MediaQuery.of(context).size.width,
+                          padding: const EdgeInsets.all(10),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: Colors.grey.withOpacity(0.5),
+                            ),
+                          ),
+                          child: Wrap(
+                            direction: Axis.horizontal,
+                            children: controller.tags
+                                .map<Widget>((element) => Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 0, vertical: 6.h),
+                                      child: Wrap(
+                                        crossAxisAlignment:
+                                            WrapCrossAlignment.center,
+                                        children: [
+                                          Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 15.w,
+                                                vertical: 8.h),
+                                            decoration: BoxDecoration(
+                                              color: appColors.guideColor,
+                                              borderRadius:
+                                                  const BorderRadius.all(
+                                                      Radius.circular(20)),
+                                            ),
+                                            child: Text(
+                                              element.name.toString(),
+                                              style: AppTextStyle.textStyle14(
+                                                  fontColor: appColors.white),
+                                            ),
+                                          ),
+                                          SizedBox(width: 8.w),
+                                          InkWell(
+                                            onTap: () {
+                                              controller.tagIndexes.removeWhere(
+                                                  (index) =>
+                                                      controller
+                                                          .options[index].id ==
+                                                      element.id);
+                                              controller.tags.remove(element);
+                                              controller.skills
+                                                  .remove(element.name);
+                                              controller.update();
+                                            },
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  border: Border.all()),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(4.0),
+                                                child: Icon(
+                                                  Icons.clear,
+                                                  size: 15.sp,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ))
+                                .toList()
+                              ..add(InkWell(
+                                onTap: () {
+                                  openBottomSheet(
+                                    context,
+                                    functionalityWidget: StatefulBuilder(
+                                      builder: (context, setState) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              ChipsChoice<int>.multiple(
+                                                spacing: 10,
+                                                value: controller.tagIndexes,
+                                                onChanged: (val) {
+                                                  setState(() {
+                                                    controller.tagIndexes
+                                                        .clear();
+                                                    controller.tags.clear();
+                                                    controller.skills.clear();
+                                                    for (int element in val) {
+                                                      controller.tagIndexes
+                                                          .add(element);
+                                                      controller.tags.add(
+                                                          controller.options[
+                                                              element]);
+                                                      controller.skills.add(
+                                                          controller
+                                                              .options[element]
+                                                              .name!);
+                                                    }
+                                                  });
+                                                },
+                                                choiceItems: C2Choice.listFrom<
+                                                    int, String>(
+                                                  source: controller.options
+                                                      .map((e) =>
+                                                          e.name.toString())
+                                                      .toList(),
+                                                  value: (i, v) => i,
+                                                  label: (i, v) => v,
+                                                ),
+                                                choiceStyle: C2ChipStyle.toned(
+                                                  iconSize: 0,
+                                                  backgroundColor: Colors.white,
+                                                  selectedStyle:
+                                                      C2ChipStyle.filled(
+                                                    selectedStyle: C2ChipStyle(
+                                                      foregroundStyle:
+                                                          AppTextStyle
+                                                              .textStyle16(
+                                                                  fontColor:
+                                                                      appColors
+                                                                          .white),
+                                                      borderWidth: 1,
+                                                      backgroundColor:
+                                                          appColors.darkBlue,
+                                                      borderStyle:
+                                                          BorderStyle.solid,
+                                                      borderRadius:
+                                                          const BorderRadius
+                                                              .all(
+                                                              Radius.circular(
+                                                                  25)),
+                                                    ),
+                                                  ),
+                                                  borderWidth: 1,
+                                                  borderStyle:
+                                                      BorderStyle.solid,
+                                                  borderColor:
+                                                      appColors.darkBlue,
+                                                  borderRadius:
+                                                      const BorderRadius.all(
+                                                    Radius.circular(20),
+                                                  ),
+                                                ),
+                                                wrapped: true,
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  );
+                                },
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 8.h, top: 4.h),
+                                  child: Container(
+                                    width: ScreenUtil().screenWidth / 3.2,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(20),
+                                        border: Border.all(
+                                            width: 1,
+                                            color: appColors.darkBlue)),
+                                    child: Padding(
+                                      padding: EdgeInsets.only(
+                                          top: 9.h, bottom: 9.h),
+                                      child: Row(
+                                        mainAxisSize: MainAxisSize.min,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Icon(
+                                            Icons.add,
+                                            color: appColors.darkBlue,
+                                            size: 19.sp,
+                                          ),
+                                          SizedBox(width: 5.w),
+                                          Text(
+                                            "Add Skills".tr,
+                                            style: AppTextStyle.textStyle12(
+                                                fontColor: appColors.darkBlue,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              )),
+                          ),
                         ),
-                        hint: "Select Skills",
                       ),
+                      // CustomTextField(
+                      //   controller: controller.skillsController,
+                      //   focusNode: controller.skillsNode,
+                      //   onFieldSubmitted: (value) {
+                      //     controller.skillsNode.unfocus();
+                      //     FocusScope.of(context)
+                      //         .requestFocus(controller.experiencesNode);
+                      //   },
+                      //   keyboardType: TextInputType.text,
+                      //   prefix: Icon(
+                      //     Icons.emoji_objects_outlined,
+                      //     color: appColors.black,
+                      //   ),
+                      //   hint: "Select Skills",
+                      // ),
                       SizedBox(
                         height: 10,
                       ),
@@ -217,8 +426,11 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                         keyboardType: TextInputType.text,
                         prefix: Icon(
                           Icons.business_center_outlined,
-                          color: appColors.black,
+                          color: appColors.black.withOpacity(0.5),
                         ),
+                        readOnly: controller.userData!.experiance == null
+                            ? false
+                            : true,
                         hint: "Experience",
                       ),
                       SizedBox(
@@ -258,7 +470,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                         keyboardType: TextInputType.text,
                         prefix: Icon(
                           Icons.calendar_month_outlined,
-                          color: appColors.black,
+                          color: appColors.black.withOpacity(0.5),
                         ),
                         hint: "Birth Date",
                       ),
@@ -295,7 +507,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                         keyboardType: TextInputType.text,
                         prefix: Icon(
                           Icons.location_on_outlined,
-                          color: appColors.black,
+                          color: appColors.black.withOpacity(0.5),
                         ),
                         hint: "Location",
                       ),
@@ -312,7 +524,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                         keyboardType: TextInputType.number,
                         prefix: Icon(
                           Icons.phone_outlined,
-                          color: appColors.black,
+                          color: appColors.black.withOpacity(0.5),
                         ),
                         hint: "Alternative Number",
                       ),
@@ -367,7 +579,10 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                     children: [
                       InkWell(
                         onTap: () {
-                          if (controller.selectedProfile == null ||
+                          if (controller.photoUrlprofile == null) {
+                            Fluttertoast.showToast(
+                                msg: "Profile picture is empty");
+                          } else if (controller.selectedProfile == null ||
                               controller.nameController.text.isEmpty ||
                               controller.skills.isEmpty ||
                               controller.experiencesController.text.isEmpty ||
@@ -377,8 +592,16 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                               controller.photoUrlprofile == null) {
                             Fluttertoast.showToast(
                                 msg: "Some fields are empty");
+                          } else if (controller.alterNoController.text.length !=
+                              10) {
+                            Fluttertoast.showToast(
+                                msg: "Please enter valid mobile number");
                           } else {
-                            controller.submitStage1();
+                            if (isRejected.value == true) {
+                              controller.submitStage1();
+                            } else {
+                              controller.navigateToStage();
+                            }
 
                             // if (controller.photoUrlprofile == null) {
                             //   controller
@@ -398,7 +621,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                             // }
                           }
                         },
-                        child: controller.stage1Submitting == true
+                        child: controller.stage1Submitting.value == true
                             ? Center(
                                 child: CircularProgressIndicator(),
                               )

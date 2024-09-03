@@ -883,7 +883,7 @@ class HomeUI extends GetView<HomeController> {
                                               InkWell(
                                                 onTap: () {
                                                   Get.toNamed(
-                                                    RouteName.passbookUI,
+                                                    RouteName.scheduleTraining1,
                                                   );
                                                 },
                                                 child: Ink(

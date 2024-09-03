@@ -42,6 +42,7 @@ import '../../model/chat/req_common_chat_model.dart';
 import '../../model/chat/res_common_chat_success.dart';
 import '../../model/chat_assistant/chat_assistant_astrologer_response.dart';
 import '../../model/res_login.dart';
+import '../../pages/home/home_controller.dart';
 import '../../repository/astrologer_profile_repository.dart';
 import '../../repository/chat_repository.dart';
 
@@ -94,8 +95,6 @@ class DashboardController extends GetxController
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
-
-
 
   var commonConstants;
 
@@ -427,28 +426,146 @@ class DashboardController extends GetxController
     getConstantDetailsData();
     print("currentTime");
     cacheGift();
-    if (commonConstants.data.is_onboarding_in_process.toString() == "1") {
-      Get.toNamed(
-        RouteName.onBoardingScreen,
-      );
+    if (commonConstants.data.is_onboarding_in_process.toString() == "2" ||
+        commonConstants.data.is_onboarding_in_process.toString() == "1") {
+      Get.put(DashboardController(PreDefineRepository()));
+      Get.put(HomeController()).showPopup = false;
+      if (commonConstants.data.onboarding_reject_stage_no != null) {
+        print("--------1------");
+        isRejected.value = true;
+        onBoardingList = onBoardingList2;
+        if (onBoardingList2.first == 1) {
+          onBoardingList
+              .remove(commonConstants.data.onboarding_reject_stage_no.first);
+          Get.toNamed(
+            RouteName.onBoardingScreen,
+          );
+        } else if (onBoardingList2.first == 2) {
+          onBoardingList
+              .remove(commonConstants.data.onboarding_reject_stage_no.first);
+
+          Get.toNamed(
+            RouteName.onBoardingScreen2,
+          );
+        } else if (onBoardingList2.first == 3) {
+          // onBoardingList
+          //     .remove(commonConstants.data.onboarding_reject_stage_no.first);
+          onBoardingList.remove(onBoardingList2.first);
+
+          Get.toNamed(
+            RouteName.onBoardingScreen3,
+          );
+        } else if (onBoardingList2.first == 4) {
+          onBoardingList
+              .remove(commonConstants.data.onboarding_reject_stage_no.first);
+
+          Get.toNamed(
+            RouteName.onBoardingScreen4,
+          );
+        } else if (onBoardingList2.first == 5) {
+          onBoardingList
+              .remove(commonConstants.data.onboarding_reject_stage_no.first);
+
+          Get.toNamed(
+            RouteName.onBoardingScreen5,
+          );
+        }
+
+        // for (int stage in commonConstants.data.onboarding_reject_stage_no) {
+        //   // Navigate to the screen based on the stage number
+        //   switch (stage) {
+        //     case 1:
+        //       // Navigate to the screen for stage 1
+        //       Get.toNamed(
+        //         RouteName.onBoardingScreen,
+        //       );
+        //       break;
+        //     case 2:
+        //       // Navigate to the screen for stage 1
+        //       Get.toNamed(
+        //         RouteName.onBoardingScreen2,
+        //       );
+        //       break;
+        //     case 3:
+        //       // Navigate to the screen for stage 2
+        //       Get.toNamed(
+        //         RouteName.onBoardingScreen3,
+        //       );
+        //       break;
+        //     case 4:
+        //       // Navigate to the screen for stage 3
+        //       Get.toNamed(
+        //         RouteName.onBoardingScreen4,
+        //       );
+        //       break;
+        //     default:
+        //       // Handle unexpected stage numbers
+        //       print('Unknown stage number: $stage');
+        //       break;
+        //   }
+        // }
+      }
+
+      // Get.toNamed(
+      //   RouteName.onBoardingScreen,
+      // );
     } else if (commonConstants.data.is_onboarding_in_process.toString() ==
-        "0") {
-      if (commonConstants.data.stage_no.toString() == "1") {
-        Get.toNamed(
-          RouteName.onBoardingScreen2,
-        );
-      } else if (commonConstants.data.stage_no.toString() == "2") {
-        Get.toNamed(
-          RouteName.onBoardingScreen3,
-        );
-      } else if (commonConstants.data.stage_no.toString() == "3") {
-        Get.toNamed(
-          RouteName.onBoardingScreen4,
-        );
-      } else if (commonConstants.data.stage_no.toString() == "3") {
-        Get.toNamed(
-          RouteName.onBoardingScreen4,
-        );
+        "2") {
+      Get.put(DashboardController(PreDefineRepository()));
+
+      Get.put(HomeController()).showPopup = false;
+      if (commonConstants.data.onboarding_reject_stage_no != null) {
+        for (int stage in commonConstants.data.onboarding_reject_stage_no) {
+          // Navigate to the screen based on the stage number
+          switch (stage) {
+            case 0:
+              // Navigate to the screen for stage 1
+              Get.toNamed(
+                RouteName.onBoardingScreen,
+              );
+              break;
+            case 1:
+              // Navigate to the screen for stage 1
+              Get.toNamed(
+                RouteName.onBoardingScreen2,
+              );
+              break;
+            case 2:
+              // Navigate to the screen for stage 2
+              Get.toNamed(
+                RouteName.onBoardingScreen3,
+              );
+              break;
+            case 3:
+              // Navigate to the screen for stage 3
+              Get.toNamed(
+                RouteName.onBoardingScreen4,
+              );
+              break;
+            default:
+              // Handle unexpected stage numbers
+              print('Unknown stage number: $stage');
+              break;
+          }
+        }
+      } else {
+        if (commonConstants.data.stage_no.toString() == "1") {
+          Get.toNamed(
+            RouteName.onBoardingScreen2,
+          );
+        } else if (commonConstants.data.stage_no.toString() == "2") {
+          Get.toNamed(
+            RouteName.onBoardingScreen3,
+          );
+        } else if (commonConstants.data.stage_no.toString() == "3") {
+          Get.toNamed(
+            RouteName.onBoardingScreen4,
+          );
+        } else if (commonConstants.data.stage_no.toString() == "4") {
+          Get.toNamed(
+            RouteName.onBoardingScreen5,
+          );
+        }
       }
     } else if (commonConstants.data.is_onboarding_in_process.toString() ==
         "3") {}
@@ -584,8 +701,8 @@ class DashboardController extends GetxController
   }
 
   askPermissionCameraMicrophone() async {
-    if(isOverLayPermissionDashboard.value == 1){
-      if(!await Permission.systemAlertWindow.status.isGranted){
+    if (isOverLayPermissionDashboard.value == 1) {
+      if (!await Permission.systemAlertWindow.status.isGranted) {
         await AppPermissionService.instance.showAlertDialog(
           "Chat",
           ["Allow display over other apps"],
@@ -629,7 +746,7 @@ class DashboardController extends GetxController
 
         if (int.parse(data.data!.appVersion!.split(".").join("")) >
             int.parse(packageInfo.version.split(".").join(""))) {
-          if(Platform.isAndroid){
+          if (Platform.isAndroid) {
             /// need to change according ios
             Get.bottomSheet(
               const ForceUpdateSheet(),

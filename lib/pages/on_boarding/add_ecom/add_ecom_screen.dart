@@ -106,7 +106,7 @@ class AddEcomScreen extends GetView<AddEcomController> {
                       child: FilledButton(
                         style: FilledButton.styleFrom(
                           backgroundColor: appColors.guideColor,
-                          padding: EdgeInsets.symmetric(vertical: 16.h),
+                          padding: EdgeInsets.symmetric(vertical: 5.h),
                           shape: const RoundedRectangleBorder(
                             borderRadius: BorderRadius.all(Radius.circular(10)),
                           ),
@@ -136,8 +136,11 @@ class AddEcomScreen extends GetView<AddEcomController> {
                                   fontColor: appColors.white,
                                 ),
                               )
-                            : CircularProgressIndicator(
-                                backgroundColor: appColors.whiteGuidedColor,
+                            : SizedBox(
+                                height: 35,
+                                child: CircularProgressIndicator(
+                                  backgroundColor: appColors.whiteGuidedColor,
+                                ),
                               ),
                       ),
                     ),

@@ -7,6 +7,7 @@ import '../../common/colors.dart';
 import '../../common/common_image_view.dart';
 import '../../gen/assets.gen.dart';
 import '../../gen/fonts.gen.dart';
+import '../../screens/live_page/constant.dart';
 import 'on_boarding_controller.dart';
 
 class OnBoarding3Binding extends Bindings {
@@ -166,9 +167,12 @@ class OnBoarding3 extends GetView<OnBoardingController> {
                                         color: AppColors().white,
                                         size: 80,
                                       )
-                                    : Image.file(
-                                        controller.userImages[index],
-                                        fit: BoxFit.cover,
+                                    : ClipRRect(
+                                        borderRadius: BorderRadius.circular(20),
+                                        child: Image.file(
+                                          controller.userImages[index],
+                                          fit: BoxFit.cover,
+                                        ),
                                       ),
                               ),
                             );
@@ -329,31 +333,38 @@ class OnBoarding3 extends GetView<OnBoardingController> {
                     children: [
                       InkWell(
                         onTap: () {
-                          controller.checkSelectedImages();
+                          if (isRejected.value == true) {
+                            controller.checkSelectedImages();
+                          } else {
+                            controller.navigateToStage();
+                          }
                         },
-                        child: controller.stage1Submitting == true
-                            ? Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : Container(
-                                height: 50,
-                                width: MediaQuery.of(context).size.width * 0.9,
-                                decoration: BoxDecoration(
-                                  color: appColors.red,
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                                child: Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    "Next",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 20.sp,
-                                      color: AppColors().white,
+                        child: Obx(() {
+                          return controller.stage1Submitting.value == true
+                              ? const Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Container(
+                                  height: 50,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
+                                  decoration: BoxDecoration(
+                                    color: appColors.red,
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                  child: Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      "Next",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 20.sp,
+                                        color: AppColors().white,
+                                      ),
                                     ),
                                   ),
-                                ),
-                              ),
+                                );
+                        }),
                       ),
                     ],
                   ),

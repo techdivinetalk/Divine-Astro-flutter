@@ -37,11 +37,13 @@ import '../model/AddSupportIssueDataModel.dart';
 import '../model/AllFinancialIssuesModel.dart';
 import '../model/AllSupportIssueModel.dart';
 import '../model/AstroRitentionModel.dart';
+import '../model/AstroTrainingSessionModel.dart';
 import '../model/FinancialCreateIssueModel.dart';
 import '../model/OnBoardingStageModel.dart';
 import '../model/PassBookDataModel.dart';
 import '../model/RitentionPopupModel.dart';
 import '../model/ScreenshotUploadModel.dart';
+import '../model/SubmitScheduleTrainingModel.dart';
 import '../model/TechnicalIssuesData.dart';
 import '../model/TechnicalSupport.dart';
 import "../model/blocked_customers_response.dart";
@@ -828,7 +830,96 @@ class UserRepository extends ApiProvider {
           return data;
         }
       } else {
-        throw CustomException(json.decode(response.body)["error"]);
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<OnBoardingStageModel> getOnBoardingApiFun(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await post(getAstroOnboarding,
+          body: jsonEncode(param), headers: await getJsonHeaderURL());
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final data = OnBoardingStageModel.fromJson(jsonDecode(response.body));
+          return data;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<AstroTrainingSessionModel> getScheduleTrainingsss(
+      Map<String, dynamic> param) async {
+    try {
+      final response =
+          await get(getScheduleMeetings, headers: await getJsonHeaderURL());
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final data =
+              AstroTrainingSessionModel.fromJson(jsonDecode(response.body));
+          return data;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<SubmitScheduleTrainingModel> submitScheduleTrainingsss(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await post(addAstroScheduleMeetings,
+          body: jsonEncode(param), headers: await getJsonHeaderURL());
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final data =
+              SubmitScheduleTrainingModel.fromJson(jsonDecode(response.body));
+          return data;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
       }
     } catch (e, s) {
       debugPrint("we got $e $s");
@@ -1529,8 +1620,6 @@ class UserRepository extends ApiProvider {
     }
   }
 
-
-
   Future<ScreenshotUploadModel> screenShotSend(
       Map<String, dynamic> param) async {
     log(1.toString());
@@ -1563,7 +1652,8 @@ class UserRepository extends ApiProvider {
         } else {
           log(11111.toString());
 
-          final submitResignation = ScreenshotUploadModel.fromJson(responseBody);
+          final submitResignation =
+              ScreenshotUploadModel.fromJson(responseBody);
           return submitResignation;
         }
       } else {

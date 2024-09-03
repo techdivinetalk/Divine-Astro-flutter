@@ -5,7 +5,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../common/colors.dart';
+import '../../common/common_image_view.dart';
+import '../../gen/assets.gen.dart';
 import '../../gen/fonts.gen.dart';
+import '../../screens/live_page/constant.dart';
 import 'on_boarding_controller.dart';
 
 class OnBoarding2Binding extends Bindings {
@@ -148,16 +151,24 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                               color: AppColors().grey.withOpacity(0.3),
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: controller.selectedAadharFront != null
-                                ? Image.file(
-                                    controller.selectedAadharFront,
+                            child: controller.photoUrlAadharFront != null
+                                ? CommonImageView(
+                                    imagePath: controller.photoUrlAadharFront,
                                     fit: BoxFit.cover,
+                                    placeHolder:
+                                        Assets.images.defaultProfile.path,
+                                    radius: BorderRadius.circular(20.h),
                                   )
-                                : Icon(
-                                    Icons.add,
-                                    color: AppColors().white,
-                                    size: 80,
-                                  ),
+                                : controller.selectedAadharFront != null
+                                    ? Image.file(
+                                        controller.selectedAadharFront,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Icon(
+                                        Icons.add,
+                                        color: AppColors().white,
+                                        size: 80,
+                                      ),
                           ),
                         ),
                         Padding(
@@ -190,16 +201,24 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                               color: AppColors().grey.withOpacity(0.3),
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: controller.selectedAadharBack != null
-                                ? Image.file(
-                                    controller.selectedAadharBack,
+                            child: controller.photoUrlAadharBack != null
+                                ? CommonImageView(
+                                    imagePath: controller.photoUrlAadharBack,
                                     fit: BoxFit.cover,
+                                    placeHolder:
+                                        Assets.images.defaultProfile.path,
+                                    radius: BorderRadius.circular(20.h),
                                   )
-                                : Icon(
-                                    Icons.add,
-                                    color: AppColors().white,
-                                    size: 80,
-                                  ),
+                                : controller.selectedAadharBack != null
+                                    ? Image.file(
+                                        controller.selectedAadharBack,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Icon(
+                                        Icons.add,
+                                        color: AppColors().white,
+                                        size: 80,
+                                      ),
                           ),
                         ),
                         Padding(
@@ -255,16 +274,24 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                               color: AppColors().grey.withOpacity(0.3),
                               borderRadius: BorderRadius.circular(20),
                             ),
-                            child: controller.selectedPanFront != null
-                                ? Image.file(
-                                    controller.selectedPanFront,
+                            child: controller.photoUrlPanFront != null
+                                ? CommonImageView(
+                                    imagePath: controller.photoUrlPanFront,
                                     fit: BoxFit.cover,
+                                    placeHolder:
+                                        Assets.images.defaultProfile.path,
+                                    radius: BorderRadius.circular(20.h),
                                   )
-                                : Icon(
-                                    Icons.add,
-                                    color: AppColors().white,
-                                    size: 80,
-                                  ),
+                                : controller.selectedPanFront != null
+                                    ? Image.file(
+                                        controller.selectedPanFront,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Icon(
+                                        Icons.add,
+                                        color: AppColors().white,
+                                        size: 80,
+                                      ),
                           ),
                         ),
                         Padding(
@@ -357,11 +384,15 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                                 } else {}
                               }
                             } else {
-                              controller.submitStage2();
+                              if (isRejected.value == true) {
+                                controller.submitStage2();
+                              } else {
+                                controller.navigateToStage();
+                              }
                             }
                           }
                         },
-                        child: controller.stage1Submitting == true
+                        child: controller.stage1Submitting.value == true
                             ? Center(
                                 child: CircularProgressIndicator(),
                               )

@@ -3,10 +3,10 @@ import 'package:divine_astrologer/pages/on_boarding/schedule_training/schedule_t
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../../common/colors.dart';
-import '../../../common/routes.dart';
 
 class ScheduleTraining1 extends GetView<ScheduleTrainingController> {
   @override
@@ -42,289 +42,248 @@ class ScheduleTraining1 extends GetView<ScheduleTrainingController> {
               ),
             ),
           ),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 20, bottom: 10, right: 10),
-                child: Text(
-                  "Please choose a convenient date and time for your onboarding training.",
-                  style: TextStyle(
-                    fontFamily: FontFamily.poppins,
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16.sp,
-                    color: appColors.grey,
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 20, bottom: 10),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Availability",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16.sp,
-                      color: appColors.red,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Divider(
-                  color: appColors.grey.withOpacity(0.6),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 20, bottom: 10),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "23rd, August 2024",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16.sp,
-                      color: appColors.black,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: SizedBox(
-                  height: 40,
-                  child: ListView.builder(
-                    itemCount: controller.times.length,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          if (controller.times2[index]['isEnabled'] == false) {
-                          } else {
-                            controller.selectedTime =
-                                controller.times[index]['time'];
-                            controller.update();
-                          }
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(right: 10),
-                          height: 35,
-                          width: MediaQuery.of(context).size.width * 0.2,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            color: controller.selectedTime ==
-                                    controller.times[index]['time']
-                                ? appColors.red.withOpacity(0.4)
-                                : controller.times[index]['isEnabled'] == false
-                                    ? appColors.grey.withOpacity(0.5)
-                                    : appColors.white,
-                            border: Border.all(
-                              color: controller.selectedTime ==
-                                      controller.times[index]['time']
-                                  ? appColors.red
-                                  : controller.times[index]['isEnabled'] ==
-                                          false
-                                      ? appColors.grey.withOpacity(0.1)
-                                      : Colors.black,
+          body: controller.loadingTrainingssss == true
+              ? Center(
+                  child: CircularProgressIndicator(),
+                )
+              : controller.astroTrainingSessionModel == null
+                  ? Center()
+                  : Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              left: 20, bottom: 10, right: 10),
+                          child: Text(
+                            "Please choose a convenient date and time for your onboarding training.",
+                            style: TextStyle(
+                              fontFamily: FontFamily.poppins,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 16.sp,
+                              color: appColors.grey,
                             ),
                           ),
-                          child: Center(
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 20, bottom: 10),
+                          child: Align(
+                            alignment: Alignment.centerLeft,
                             child: Text(
-                              controller.times[index]['time'] ?? "",
+                              "Availability",
                               style: TextStyle(
-                                color: controller.selectedTime ==
-                                        controller.times[index]['time']
-                                    ? appColors.red
-                                    : controller.times[index]['isEnabled'] ==
-                                            false
-                                        ? appColors.white
-                                        : Colors.black,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 14.sp,
-                                fontFamily: FontFamily.poppins,
+                                fontWeight: FontWeight.w600,
+                                fontSize: 16.sp,
+                                color: appColors.red,
                               ),
                             ),
                           ),
                         ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "24th, August 2024",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16.sp,
-                      color: appColors.black,
+                        Padding(
+                          padding: const EdgeInsets.only(left: 20, right: 20),
+                          child: Divider(
+                            color: appColors.grey.withOpacity(0.6),
+                          ),
+                        ),
+                        Expanded(
+                          child: ListView.builder(
+                            itemCount: controller
+                                .astroTrainingSessionModel!.data!.length,
+                            itemBuilder: (context, index) {
+                              var data = controller
+                                  .astroTrainingSessionModel!.data![index];
+                              return Column(
+                                children: [
+                                  Padding(
+                                    padding:
+                                        EdgeInsets.only(left: 20, bottom: 10),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Text(
+                                        data.meetingDate.toString(),
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          fontSize: 16.sp,
+                                          color: appColors.black,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 20, bottom: 10, right: 20),
+                                    child: SizedBox(
+                                      height: 40,
+                                      child: Row(
+                                        children: [
+                                          ListView.builder(
+                                            itemCount: data.detail!.length,
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.horizontal,
+                                            itemBuilder: (context, indx) {
+                                              return InkWell(
+                                                onTap: () {
+                                                  controller.selectedTime =
+                                                      data.detail![indx].id;
+                                                  controller.update();
+                                                },
+                                                child: Container(
+                                                  margin: EdgeInsets.only(
+                                                      right: 10),
+                                                  height: 35,
+                                                  width: MediaQuery.of(context)
+                                                          .size
+                                                          .width *
+                                                      0.2,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
+                                                    color: controller
+                                                                .selectedTime ==
+                                                            data.detail![indx]
+                                                                .id
+                                                        ? appColors.appRedColour
+                                                            .withOpacity(0.2)
+                                                        : appColors.white,
+                                                    border: Border.all(
+                                                      color: controller
+                                                                  .selectedTime ==
+                                                              data.detail![indx]
+                                                                  .id
+                                                          ? appColors
+                                                              .appRedColour
+                                                          : Colors.black,
+                                                    ),
+                                                  ),
+                                                  child: Center(
+                                                    child: Text(
+                                                      data.detail![indx]
+                                                          .meetingTime
+                                                          .toString(),
+                                                      style: TextStyle(
+                                                        color: controller
+                                                                    .selectedTime ==
+                                                                data
+                                                                    .detail![
+                                                                        indx]
+                                                                    .id
+                                                            ? appColors
+                                                                .appRedColour
+                                                            : Colors.black,
+                                                        fontWeight:
+                                                            FontWeight.w400,
+                                                        fontSize: 14.sp,
+                                                        fontFamily:
+                                                            FontFamily.poppins,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 15,
+                                  width: 15,
+                                  decoration: BoxDecoration(
+                                      color: appColors.grey.withOpacity(0.5),
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: appColors.grey.withOpacity(0.5),
+                                      )),
+                                ),
+                                SizedBox(
+                                  width: 7,
+                                ),
+                                Text(
+                                  "No Available",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14.sp,
+                                    fontFamily: FontFamily.poppins,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 15,
+                                  width: 15,
+                                  decoration: BoxDecoration(
+                                      color: appColors.white,
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: appColors.black,
+                                      )),
+                                ),
+                                SizedBox(
+                                  width: 7,
+                                ),
+                                Text(
+                                  "Available",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14.sp,
+                                    fontFamily: FontFamily.poppins,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                Container(
+                                  height: 15,
+                                  width: 15,
+                                  decoration: BoxDecoration(
+                                      color: appColors.red.withOpacity(0.5),
+                                      shape: BoxShape.circle,
+                                      border: Border.all(
+                                        color: appColors.red,
+                                      )),
+                                ),
+                                SizedBox(
+                                  width: 7,
+                                ),
+                                Text(
+                                  "Selected",
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 14.sp,
+                                    fontFamily: FontFamily.poppins,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 20, right: 20),
-                child: SizedBox(
-                  height: 40,
-                  child: ListView.builder(
-                    itemCount: controller.times2.length,
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemBuilder: (context, index) {
-                      return InkWell(
-                        onTap: () {
-                          if (controller.times2[index]['isEnabled'] == false) {
-                          } else {
-                            controller.selectedTime =
-                                controller.times2[index]['time'];
-                            controller.update();
-                          }
-                        },
-                        child: Container(
-                          margin: EdgeInsets.only(right: 10),
-                          height: 35,
-                          width: MediaQuery.of(context).size.width * 0.2,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            color: controller.selectedTime ==
-                                    controller.times2[index]['time']
-                                ? appColors.red.withOpacity(0.4)
-                                : controller.times2[index]['isEnabled'] == false
-                                    ? appColors.grey.withOpacity(0.5)
-                                    : appColors.white,
-                            border: Border.all(
-                              color: controller.selectedTime ==
-                                      controller.times2[index]['time']
-                                  ? appColors.red
-                                  : controller.times2[index]['isEnabled'] ==
-                                          false
-                                      ? appColors.grey.withOpacity(0.1)
-                                      : Colors.black,
-                            ),
-                          ),
-                          child: Center(
-                            child: Text(
-                              controller.times2[index]['time'] ?? "",
-                              style: TextStyle(
-                                color: controller.selectedTime ==
-                                        controller.times2[index]['time']
-                                    ? appColors.red
-                                    : controller.times2[index]['isEnabled'] ==
-                                            false
-                                        ? appColors.white
-                                        : Colors.black,
-                                fontWeight: FontWeight.w400,
-                                fontSize: 14.sp,
-                                fontFamily: FontFamily.poppins,
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    },
-                  ),
-                ),
-              ),
-              Expanded(child: Container()),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.end,
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 15,
-                        width: 15,
-                        decoration: BoxDecoration(
-                            color: appColors.grey.withOpacity(0.5),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: appColors.grey.withOpacity(0.5),
-                            )),
-                      ),
-                      SizedBox(
-                        width: 7,
-                      ),
-                      Text(
-                        "No Available",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14.sp,
-                          fontFamily: FontFamily.poppins,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 15,
-                        width: 15,
-                        decoration: BoxDecoration(
-                            color: appColors.white,
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: appColors.black,
-                            )),
-                      ),
-                      SizedBox(
-                        width: 7,
-                      ),
-                      Text(
-                        "Available",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14.sp,
-                          fontFamily: FontFamily.poppins,
-                        ),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        height: 15,
-                        width: 15,
-                        decoration: BoxDecoration(
-                            color: appColors.red.withOpacity(0.5),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: appColors.red,
-                            )),
-                      ),
-                      SizedBox(
-                        width: 7,
-                      ),
-                      Text(
-                        "Selected",
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14.sp,
-                          fontFamily: FontFamily.poppins,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
           bottomNavigationBar: Padding(
             padding: const EdgeInsets.all(8.0),
             child: SizedBox(
@@ -370,9 +329,11 @@ class ScheduleTraining1 extends GetView<ScheduleTrainingController> {
                     children: [
                       InkWell(
                         onTap: () {
-                          Get.toNamed(
-                            RouteName.scheduleTraining2,
-                          );
+                          if (controller.selectedTime == null) {
+                            Fluttertoast.showToast(msg: "Please Select Time");
+                          } else {
+                            controller.submittingTraings();
+                          }
                         },
                         child: Container(
                           height: 50,
@@ -381,17 +342,21 @@ class ScheduleTraining1 extends GetView<ScheduleTrainingController> {
                             color: appColors.red,
                             borderRadius: BorderRadius.circular(14),
                           ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Schedule Training",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20.sp,
-                                color: AppColors().white,
-                              ),
-                            ),
-                          ),
+                          child: controller.submittingTrainingss == true
+                              ? Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Schedule Training",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 20.sp,
+                                      color: AppColors().white,
+                                    ),
+                                  ),
+                                ),
                         ),
                       ),
                     ],

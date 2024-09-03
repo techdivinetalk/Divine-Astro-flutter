@@ -77,7 +77,9 @@ class Data {
   dynamic is_screenshot_require;
 
   dynamic is_onboarding_in_process;
+  dynamic onboarding_reject_stage_no;
   dynamic stage_no;
+  dynamic onBoardingrejected;
   Data({
     required this.leaderboardRankImage,
     required this.lottiFile,
@@ -105,6 +107,7 @@ class Data {
     required this.is_screenshot_require,
     this.is_onboarding_in_process,
     this.stage_no,
+    this.onboarding_reject_stage_no,
   });
 
   Data copyWith({
@@ -133,6 +136,7 @@ class Data {
     dynamic is_screenshot_require,
     dynamic is_onboarding_in_process,
     dynamic stage_no,
+    dynamic onboarding_reject_stage_no,
   }) =>
       Data(
         leaderboardRankImage: leaderboardRankImage ?? this.leaderboardRankImage,
@@ -163,6 +167,8 @@ class Data {
         stage_no: stage_no ?? this.stage_no,
         is_screenshot_require:
             is_screenshot_require ?? this.is_screenshot_require,
+        onboarding_reject_stage_no:
+            onboarding_reject_stage_no ?? this.onboarding_reject_stage_no,
       );
 
   factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
@@ -200,6 +206,7 @@ class Data {
         is_screenshot_require: json['is_screenshot_require'],
         is_onboarding_in_process: json['is_onboarding_in_process'],
         stage_no: json['stage_no'],
+        onboarding_reject_stage_no: json['onboarding_reject_stage_no'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -232,6 +239,7 @@ class Data {
         'is_screenshot_require': is_screenshot_require,
         'is_onboarding_in_process': is_onboarding_in_process,
         'stage_no': stage_no,
+        'onboarding_reject_stage_no': onboarding_reject_stage_no,
       };
 }
 

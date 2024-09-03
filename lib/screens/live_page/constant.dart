@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import '../../di/timer_duration_service.dart';
@@ -35,6 +34,9 @@ RxInt isEngagedStatus = 0.obs;
 RxInt dasboardCurrentIndex = 0.obs;
 RxInt isCountDownTimer = 0.obs;
 RxList<MessageTemplates> messageTemplateList = <MessageTemplates>[].obs;
+List onBoardingList = [];
+List onBoardingList2 = [3, 1, 2];
+RxBool isRejected = false.obs;
 const userChatData = "userChatData";
 RxInt currentChatUserId = 8693.obs;
 int roleId = 7;

@@ -14,9 +14,13 @@ import 'package:image_picker/image_picker.dart';
 class FaceVerificationController extends GetxController
     with WidgetsBindingObserver {
   String kycImage = "";
-
+  String argu = "";
   @override
   void onInit() {
+    if (Get.arguments != null) {
+      argu = Get.arguments;
+      print(argu);
+    }
     WidgetsBinding.instance.addObserver(this);
 
     super.onInit();
@@ -62,8 +66,7 @@ class FaceVerificationController extends GetxController
         Get.to(() => SignatureView(), arguments: {
           "astrologerProfilePhoto": agreementModel.data!.imageLink,
         });
-        log(
-            "agreementModel.data!.imageLink----->>>${agreementModel.data!.imageLink}");
+        log("agreementModel.data!.imageLink----->>>${agreementModel.data!.imageLink}");
       }
     } on DioException catch (e) {
       log("objectobjectobjectobject----${e}");
