@@ -40,7 +40,8 @@ class LoginController extends GetxController {
   final UserRepository userRepository;
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
-  TextEditingController countryCodeController = TextEditingController(text: "+91");
+  TextEditingController countryCodeController =
+      TextEditingController(text: "+91");
   TextEditingController mobileNumberController = TextEditingController();
   final appFirebaseService = AppFirebaseService();
 
@@ -229,7 +230,7 @@ class LoginController extends GetxController {
                     ),
                   ),
                   onTap: () {
-                    // Get.put(LoginController(UserRepository()));
+                    Get.put(LoginController(UserRepository()));
 
                     final splitResult = splitNumber(number);
                     String countryCode = splitResult['countryCode'] ?? '+91';
@@ -240,7 +241,7 @@ class LoginController extends GetxController {
 
                     countryCodeController.text = countryCode;
                     mobileNumberController.text = phoneNumber;
-                    // update();
+                    update();
                     Get.back();
                   },
                 );

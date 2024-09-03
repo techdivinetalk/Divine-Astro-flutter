@@ -28,8 +28,13 @@ class CustomProductListController extends GetxController {
       CustomProductListModel savedRemediesData =
           CustomProductListModel.fromJson(jsonDecode(response.body));
       if (savedRemediesData.statusCode == 200) {
-        customProductData = savedRemediesData.data!;
-        noData = "";
+        if(savedRemediesData.data != null && savedRemediesData.data!.isNotEmpty){
+          customProductData = savedRemediesData.data!;
+          noData = "";
+        } else{
+          noData = "No data available!";
+          customProductData = [];
+        }
         update();
       } else {
         noData = "No data available!";

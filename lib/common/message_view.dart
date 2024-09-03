@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/gestures.dart';
 import "package:simple_waveform_progressbar/simple_waveform_progressbar.dart";
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -24,10 +25,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:voice_message_package/voice_message_package.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../screens/chat_assistance/chat_message/widgets/product/pooja/widgets/custom_widget/pooja_common_list.dart';
+import '../screens/live_page/constant.dart';
 
 var chatController = Get.find<ChatMessageWithSocketController>();
 
@@ -434,15 +437,35 @@ class MessageView extends StatelessWidget {
                         Wrap(
                           alignment: WrapAlignment.end,
                           children: [
-                            Text(chatMessage.message ?? "",
+                            chatMessage.message == razorPay.value
+                                ? RichText(
+                              text: TextSpan(
+                                text: chatMessage.message ?? "",
                                 style: AppTextStyle.textStyle14(
-                                  fontColor: chatMessage.id.toString() ==
-                                          AppFirebaseService()
-                                              .orderData["astroId"]
-                                              .toString()
-                                      ? appColors.red
-                                      : appColors.black,
-                                )),
+                                  fontColor: Colors.blue, // Set the color for the link
+                                  decoration: TextDecoration.underline, // Add underline to signify a link
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () async {
+                                    final url = chatMessage.message;
+                                    if (url != null && await canLaunch(url)) {
+                                      await launch(url);
+                                    } else {
+                                      // Handle error, e.g., show a message that the URL can't be opened
+                                    }
+                                  },
+                              ),
+                            )
+                                : Text(
+                              chatMessage.message ?? "",
+                              style: AppTextStyle.textStyle14(
+                                fontColor: yourMessage
+                                    ? chatMessage.msgType == "warningMsg"
+                                    ? appColors.red
+                                    : appColors.textColor
+                                    : appColors.textColor,
+                              ),
+                            ),
                           ],
                         ),
                         SizedBox(

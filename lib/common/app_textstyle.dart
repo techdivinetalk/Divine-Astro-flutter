@@ -2,6 +2,8 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import '../gen/fonts.gen.dart';
+
 class AppTextStyle {
   AppTextStyle._();
 
@@ -43,11 +45,13 @@ class AppTextStyle {
         overflow: TextOverflow.ellipsis);
   }
 
-  static TextStyle textStyle14({Color? fontColor, FontWeight? fontWeight}) {
+  static TextStyle textStyle14(
+      {Color? fontColor, FontWeight? fontWeight, TextDecoration? decoration}) {
     return TextStyle(
       fontSize: 14.sp,
       fontWeight: fontWeight ?? FontWeight.w400,
       color: fontColor ?? appColors.textColor,
+      decoration: decoration,
     );
   }
 

@@ -201,7 +201,20 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                         ));
                       }
                     } else {
-                      if (controller.customerDetailsResponse == null ||
+                      if (controller.userDataLoading.value == true) {
+                        return const Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 150,
+                            ),
+                            Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                          ],
+                        );
+                      } else if (controller.customerDetailsResponse == null ||
                           controller.customerDetailsResponse!.data.isEmpty) {
                         return HelpersWidget().emptyChatWidget();
                       } else {
@@ -556,7 +569,11 @@ class ChatAssistanceDataTile extends StatelessWidget {
   final ChatAssistanceController controller;
   final int index;
 
-  const ChatAssistanceDataTile({super.key, required this.data, required this.controller, required this.index});
+  const ChatAssistanceDataTile(
+      {super.key,
+      required this.data,
+      required this.controller,
+      required this.index});
 
   @override
   Widget build(BuildContext context) {
@@ -619,10 +636,10 @@ class ChatAssistanceDataTile extends StatelessWidget {
                           ),
                           Container(
                             decoration: BoxDecoration(
-                                border:
-                                    Border.all(color: appColors.white, width: 1.5),
-                                borderRadius:
-                                    const BorderRadius.all(Radius.circular(50.0)),
+                                border: Border.all(
+                                    color: appColors.white, width: 1.5),
+                                borderRadius: const BorderRadius.all(
+                                    Radius.circular(50.0)),
                                 color: appColors.darkGreen),
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
@@ -668,12 +685,16 @@ class ChatAssistanceDataTile extends StatelessWidget {
                 const Center(child: Icon(Icons.keyboard_arrow_right_outlined))
               ],
             ),
-            Obx(() => controller.isLoadMoreData.value && !controller.emptyRes.value && controller.customerDetailsResponse!.data.length -1 == index ?  Padding(
-              padding: const EdgeInsets.only(top: 10.0),
-              child: CircularProgressIndicator(
-                strokeWidth: 1.0,
-              ),
-            ) : const SizedBox())
+            Obx(() => controller.isLoadMoreData.value &&
+                    !controller.emptyRes.value &&
+                    controller.customerDetailsResponse!.data.length - 1 == index
+                ? Padding(
+                    padding: const EdgeInsets.only(top: 10.0),
+                    child: CircularProgressIndicator(
+                      strokeWidth: 1.0,
+                    ),
+                  )
+                : const SizedBox())
           ],
         ),
       ),

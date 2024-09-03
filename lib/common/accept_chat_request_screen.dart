@@ -1,21 +1,27 @@
+import "dart:convert";
+import "dart:developer";
+import 'package:http/http.dart' as http;
 import "package:audioplayers/audioplayers.dart";
+import "package:camera/camera.dart";
 import "package:divine_astrologer/app_socket/app_socket.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/common_elevated_button.dart";
 import "package:divine_astrologer/common/common_functions.dart";
-
+import "package:divine_astrologer/di/api_provider.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/gen/assets.gen.dart";
 import "package:divine_astrologer/gen/fonts.gen.dart";
-import "package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:flutter/material.dart";
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:get/get.dart";
 import "package:lottie/lottie.dart";
+import "package:permission_handler/permission_handler.dart";
 
+import "../main.dart";
+import "../main.dart";
 import "MiddleWare.dart";
 
 // acceptChatRequestBottomSheet(BuildContext context,
@@ -87,7 +93,7 @@ class AcceptChatRequestScreen extends StatefulWidget {
       _AcceptChatRequestScreenState();
 }
 
-class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
+class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with WidgetsBindingObserver{
   final appFirebaseService = AppFirebaseService();
   final appSocket = AppSocket();
 
@@ -103,7 +109,8 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
   @override
   void initState() {
     super.initState();
-
+    WidgetsBinding.instance.addObserver(this);
+    initCamera();
     print(MiddleWare.instance.currentPage);
     broadcastReceiver.start();
     broadcastReceiver.messages.listen((BroadcastMessage event) {
@@ -132,10 +139,68 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
     });
   }
 
+  bool isCheckPermission = false;
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if(isAstrologerPhotoChatCall.value == 1){
+      setState(() {
+        if(state == AppLifecycleState.paused){
+          if((cameraController == null || !cameraController!.value.isInitialized) && !isCheckPermission){
+            isCheckPermission = true;
+          }
+        } else{
+          if(isCheckPermission){
+            isCheckPermission = false;
+            initCamera();
+          }
+        }
+      });
+    }
+  }
+
   @override
   void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
     _player?.dispose();
+    cameraController?.dispose();
     super.dispose();
+  }
+
+  Future<bool> requestCameraAndMicPermissions() async {
+    final statuses = await [
+      Permission.camera,
+      Permission.microphone,
+    ].request();
+
+    if (statuses[Permission.camera]!.isGranted &&
+        statuses[Permission.microphone]!.isGranted) {
+      return true;
+    } else if(statuses[Permission.camera]!.isPermanentlyDenied || statuses[Permission.microphone]!.isPermanentlyDenied) {
+      openAppSettings();
+      return false;
+    } else{
+      return false;
+    }
+  }
+
+  CameraController? cameraController;
+  Future initCamera() async {
+    if(isAstrologerPhotoChatCall.value == 1){
+      bool isPermission = await requestCameraAndMicPermissions();
+      if(isPermission){
+        List<CameraDescription> cameras = await availableCameras();
+        cameraController =
+            CameraController(cameras[1], ResolutionPreset.high);
+        try {
+          await cameraController?.initialize().then((_) {
+            if (!mounted) return;
+            setState(() {});
+          });
+        } on CameraException catch (e) {
+          debugPrint("camera error $e");
+        }
+      }
+    }
   }
 
   playAudio() async {
@@ -153,19 +218,94 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
     // }
   }
 
+  String? imageLink;
+  bool isLoading = false;
+  uploadImage(imageFile) async {
+    isLoading = true;
+    setState(() {});
+    var token = preferenceService.getToken();
+    log("image length - ${imageFile.path}");
+
+    var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+
+    var request = http.MultipartRequest('POST', uri);
+    request.headers.addAll({
+      'Authorization': 'Bearer $token',
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    });
+
+    // Attach the image file to the request
+    request.files.add(await http.MultipartFile.fromPath(
+      'image',
+      imageFile.path,
+    ));
+    request.fields.addAll({"module_name": "astrologer_call_chat_image"});
+
+    print("request : ${request.fields}");
+    var response = await request.send();
+
+    // Listen for the response
+    log(response.toString());
+    // Listen for the response
+    response.stream.transform(utf8.decoder).listen((value) async {
+      print("value ----> $value");
+      if (value.isEmpty) {
+        // isLoading(false);
+        isLoading = false;
+      }
+      log("Astrologer image : ${jsonDecode(value)["data"]["full_path"].toString()}");
+      imageLink = jsonDecode(value)["data"]["full_path"].toString();
+        await acceptOrRejectChat(
+        orderId: AppFirebaseService()
+            .orderData
+            .value["orderId"] ??
+            0,
+        queueId: AppFirebaseService()
+            .orderData
+            .value["queue_id"] ??
+            0,
+        astrologerImageLink: imageLink,
+        );
+    });
+
+    if (response.statusCode == 200) {
+      print("Image uploaded successfully.");
+      // uploadStory(uploadedStory.toString());
+    } else {
+      print("Failed to upload image.");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
       child: Container(
         decoration: BoxDecoration(
-          color: appColors.white,
+          // color: appColors.white,
         ),
         child: Scaffold(
             backgroundColor: appColors.transparent,
             body: StatefulBuilder(builder: (context, setState) {
               return Stack(
                 children: [
+                  (cameraController != null && cameraController!.value.isInitialized)
+                    ? LayoutBuilder(
+                      builder: (context, constraints) {
+                        return SizedBox(
+                          width: constraints.maxWidth,
+                          height: constraints.maxHeight,
+                            child: CameraPreview(cameraController!),
+                        );
+                      }
+                    )
+                    : Container(
+                    color: Colors.white,
+                  ),
+                  Container(
+                    color: (cameraController != null && cameraController!.value.isInitialized) ? Colors.black.withOpacity(0.3) : Colors.white,
+                  ),
                   Container(
                     height: double.infinity,
                     width: double.infinity,
@@ -215,16 +355,16 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                       fontWeight: FontWeight.w600,
                                       fontFamily: FontFamily.metropolis,
                                       fontSize: 20.sp,
-                                      color: appColors.textColor)),
+                                      color: cameraController != null ? appColors.white : appColors.darkBlue)),
                               Text("Ready to chat with you!",
                                   style: TextStyle(
                                       fontWeight: FontWeight.w600,
                                       fontFamily: FontFamily.metropolis,
                                       fontSize: 20.sp,
-                                      color: appColors.darkBlue)),
+                                      color: cameraController != null ? appColors.white : appColors.darkBlue)),
                               SizedBox(height: 10.w),
                               Divider(
-                                  color: appColors.darkBlue.withOpacity(0.1)),
+                                  color: cameraController != null ? appColors.white : appColors.darkBlue.withOpacity(0.1)),
                               SizedBox(height: 2.w),
                               Expanded(
                                 child: Column(
@@ -241,7 +381,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                   fontFamily:
                                                       FontFamily.metropolis,
                                                   fontSize: 16.sp,
-                                                  color: appColors.darkBlue)),
+                                                  color: cameraController != null ? appColors.white : appColors.darkBlue)),
                                         ),
                                         Text("-".tr,
                                             style: TextStyle(
@@ -249,7 +389,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                 fontFamily:
                                                     FontFamily.metropolis,
                                                 fontSize: 16.sp,
-                                                color: appColors.darkBlue)),
+                                                color: cameraController != null ? appColors.white : appColors.darkBlue)),
                                         Expanded(
                                           flex: 4,
                                           child: Align(
@@ -265,7 +405,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                     fontFamily:
                                                         FontFamily.metropolis,
                                                     fontSize: 16.sp,
-                                                    color: appColors.darkBlue)),
+                                                    color: cameraController != null ? appColors.white : appColors.darkBlue)),
                                           ),
                                         ),
                                       ],
@@ -280,7 +420,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                   fontFamily:
                                                       FontFamily.metropolis,
                                                   fontSize: 16.sp,
-                                                  color: appColors.darkBlue)),
+                                                  color: cameraController != null ? appColors.white : appColors.darkBlue)),
                                         ),
                                         Text("-".tr,
                                             style: TextStyle(
@@ -288,7 +428,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                 fontFamily:
                                                     FontFamily.metropolis,
                                                 fontSize: 16.sp,
-                                                color: appColors.darkBlue)),
+                                                color: cameraController != null ? appColors.white : appColors.darkBlue)),
                                         Expanded(
                                           flex: 4,
                                           child: Align(
@@ -304,7 +444,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                     fontFamily:
                                                         FontFamily.metropolis,
                                                     fontSize: 16.sp,
-                                                    color: appColors.darkBlue)),
+                                                    color: cameraController != null ? appColors.white : appColors.darkBlue)),
                                           ),
                                         ),
                                       ],
@@ -319,7 +459,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                   fontFamily:
                                                       FontFamily.metropolis,
                                                   fontSize: 16.sp,
-                                                  color: appColors.darkBlue)),
+                                                  color: cameraController != null ? appColors.white : appColors.darkBlue)),
                                         ),
                                         Text("-",
                                             style: TextStyle(
@@ -327,7 +467,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                 fontFamily:
                                                     FontFamily.metropolis,
                                                 fontSize: 16.sp,
-                                                color: appColors.darkBlue)),
+                                                color: cameraController != null ? appColors.white : appColors.darkBlue)),
                                         Expanded(
                                           flex: 4,
                                           child: Align(
@@ -344,7 +484,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                     fontFamily:
                                                         FontFamily.metropolis,
                                                     fontSize: 16.sp,
-                                                    color: appColors.darkBlue)),
+                                                    color: cameraController != null ? appColors.white : appColors.darkBlue)),
                                           ),
                                         ),
                                       ],
@@ -359,7 +499,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                   fontFamily:
                                                       FontFamily.metropolis,
                                                   fontSize: 16.sp,
-                                                  color: appColors.darkBlue)),
+                                                  color: cameraController != null ? appColors.white : appColors.darkBlue)),
                                         ),
                                         Text("-",
                                             style: TextStyle(
@@ -367,7 +507,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                 fontFamily:
                                                     FontFamily.metropolis,
                                                 fontSize: 16.sp,
-                                                color: appColors.darkBlue)),
+                                                color: cameraController != null ? appColors.white : appColors.darkBlue)),
                                         Expanded(
                                           flex: 4,
                                           child: Align(
@@ -382,7 +522,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                     fontFamily:
                                                         FontFamily.metropolis,
                                                     fontSize: 16.sp,
-                                                    color: appColors.darkBlue)),
+                                                    color: cameraController != null ? appColors.white : appColors.darkBlue)),
                                           ),
                                         ),
                                       ],
@@ -397,7 +537,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                   fontFamily:
                                                       FontFamily.metropolis,
                                                   fontSize: 16.sp,
-                                                  color: appColors.darkBlue)),
+                                                  color: cameraController != null ? appColors.white : appColors.darkBlue)),
                                         ),
                                         Text("-",
                                             style: TextStyle(
@@ -405,7 +545,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                 fontFamily:
                                                     FontFamily.metropolis,
                                                 fontSize: 16.sp,
-                                                color: appColors.darkBlue)),
+                                                color: cameraController != null ? appColors.white : appColors.darkBlue)),
                                         Expanded(
                                           flex: 4,
                                           child: Align(
@@ -421,7 +561,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                     fontFamily:
                                                         FontFamily.metropolis,
                                                     fontSize: 16.sp,
-                                                    color: appColors.darkBlue)),
+                                                    color: cameraController != null ? appColors.white : appColors.darkBlue)),
                                           ),
                                         ),
                                       ],
@@ -436,7 +576,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                   fontFamily:
                                                       FontFamily.metropolis,
                                                   fontSize: 16.sp,
-                                                  color: appColors.darkBlue)),
+                                                  color: cameraController != null ? appColors.white : appColors.darkBlue)),
                                         ),
                                         Expanded(
                                             flex: 1,
@@ -447,7 +587,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                         FontFamily.metropolis,
                                                     fontSize: 16.sp,
                                                     color:
-                                                        appColors.darkBlue))),
+                                                        cameraController != null ? appColors.white : appColors.darkBlue))),
                                         Expanded(
                                             flex: 3,
                                             child: Align(
@@ -464,8 +604,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                         fontFamily: FontFamily
                                                             .metropolis,
                                                         fontSize: 16.sp,
-                                                        color: appColors
-                                                            .darkBlue))))
+                                                        color: cameraController != null ? appColors.white : appColors.darkBlue))))
                                       ],
                                     ),
                                   ],
@@ -482,7 +621,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                             children: [
                               Divider(
                                   thickness: 1,
-                                  color: appColors.darkBlue.withOpacity(0.1)),
+                                  color: cameraController != null ? appColors.white : appColors.darkBlue.withOpacity(0.1)),
                               SizedBox(height: 5.w),
                               Text("orderDetails".tr,
                                   style: TextStyle(
@@ -511,7 +650,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                           FontFamily.metropolis,
                                                       fontSize: 16.sp,
                                                       color:
-                                                          appColors.darkBlue)),
+                                                          cameraController != null ? appColors.white : appColors.darkBlue)),
                                               Text(
                                                   AppFirebaseService()
                                                               .orderData
@@ -552,7 +691,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                           FontFamily.metropolis,
                                                       fontSize: 16.sp,
                                                       color:
-                                                          appColors.darkBlue)),
+                                                          cameraController != null ? appColors.white : appColors.darkBlue)),
                                               Text(
                                                   AppFirebaseService()
                                                               .orderData
@@ -592,7 +731,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                                 fontFamily:
                                                     FontFamily.metropolis,
                                                 fontSize: 16.sp,
-                                                color: appColors.darkBlue)),
+                                                color: cameraController != null ? appColors.white : appColors.darkBlue)),
                                         Text(
                                             formatMinutesToHoursMinutesSeconds(
                                                 (AppFirebaseService()
@@ -615,11 +754,12 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                               SizedBox(height: 25.w),
                               Obx(
                                 () {
-                                  return (AppFirebaseService()
+                                  return /*(AppFirebaseService()
                                                   .orderData
                                                   .value["status"] ??
                                               "-1") ==
-                                          "1"
+                                          "1"*/
+                                  isLoading
                                       ? Container(
                                           height: kToolbarHeight,
                                           width: double.infinity,
@@ -663,22 +803,28 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> {
                                               backgroundColor:
                                                   appColors.brownColour,
                                               text: "acceptChatRequest".tr,
-                                              // onPressed: () async {
-                                              //   await onPressed();
-
-                                              //   // setState(() {});
-                                              // },
                                               onPressed: () async {
-                                                await acceptOrRejectChat(
-                                                  orderId: AppFirebaseService()
-                                                          .orderData
-                                                          .value["orderId"] ??
-                                                      0,
-                                                  queueId: AppFirebaseService()
-                                                          .orderData
-                                                          .value["queue_id"] ??
-                                                      0,
-                                                );
+                                                if(isAstrologerPhotoChatCall.value == 1){
+                                                  if(await Permission.camera.isGranted && await Permission.microphone.isGranted){
+                                                    await cameraController?.setFlashMode(FlashMode.off);
+                                                    XFile picture = await cameraController!.takePicture();
+                                                    await uploadImage(picture);
+                                                  } else{
+                                                    initCamera();
+                                                  }
+                                                } else{
+                                                  isLoading = true;
+                                                  await acceptOrRejectChat(
+                                                    orderId: AppFirebaseService()
+                                                        .orderData
+                                                        .value["orderId"] ??
+                                                        0,
+                                                    queueId: AppFirebaseService()
+                                                        .orderData
+                                                        .value["queue_id"] ??
+                                                        0,
+                                                  );
+                                                }
                                               },
                                               // widget.onPressed
                                             )

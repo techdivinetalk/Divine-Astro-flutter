@@ -245,6 +245,9 @@ class ApiProvider {
   final String getSupportDetails = "getSupportDetails"; //Api
   final String getSupportlist = "getSupportlist"; //Get Api
 
+  //Screenshot to backend
+  final String addAstroScreenshot = "addAstroScreenshot"; //Post Api
+
   //privacy policy & terms
   final String termsAndCondition = "termsAndCondition";
   final String privacyPolicy = "privacyPolicy";

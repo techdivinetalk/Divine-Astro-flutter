@@ -74,6 +74,7 @@ class Data {
   int? showAgreement;
   num? currentTime;
   Map? notice;
+  dynamic is_screenshot_require;
 
   Data({
     required this.leaderboardRankImage,
@@ -99,6 +100,7 @@ class Data {
     this.firebaseAuthPassword,
     this.currentTime,
     required this.notice,
+    required this.is_screenshot_require,
   });
 
   Data copyWith({
@@ -124,6 +126,7 @@ class Data {
     int? isForceTraningVideo,
     num? currentTime,
     Map? notice,
+    dynamic is_screenshot_require,
   }) =>
       Data(
         leaderboardRankImage: leaderboardRankImage ?? this.leaderboardRankImage,
@@ -149,6 +152,7 @@ class Data {
         currentTime: currentTime ?? this.currentTime,
         taroCard: taroCard ?? this.taroCard,
         notice: notice ?? this.notice,
+        is_screenshot_require: is_screenshot_require ?? this.is_screenshot_require,
       );
 
   factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
@@ -183,6 +187,7 @@ class Data {
         taroCard: json['taro_card'],
         currentTime: json['current_time'],
         notice: json['notice'],
+    is_screenshot_require: json['is_screenshot_require'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -212,6 +217,7 @@ class Data {
         'firebase_auth_password': firebaseAuthPassword,
         'current_time': currentTime,
         'notice': notice,
+        'is_screenshot_require': is_screenshot_require,
       };
 }
 

@@ -17,6 +17,7 @@ import 'package:divine_astrologer/model/ChatOrderResponse.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/screens/dashboard/widgets/terms_and_condition_popup.dart';
+import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/utils/force_update_sheet.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
@@ -95,6 +96,8 @@ class DashboardController extends GetxController
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
+
+
 
   var commonConstants;
 
@@ -311,9 +314,10 @@ class DashboardController extends GetxController
             dataList.name = remoteMessage.data["title"];
             Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
           } else if (remoteMessage.data["type"] == "2") {
-            acceptOrRejectChat(
-                orderId: int.parse(remoteMessage.data["order_id"]),
-                queueId: int.parse(remoteMessage.data["queue_id"]));
+            Get.toNamed(RouteName.acceptChatRequestScreen);
+            // acceptOrRejectChat(
+            //     orderId: int.parse(remoteMessage.data["order_id"]),
+            //     queueId: int.parse(remoteMessage.data["queue_id"]));
           } else if(remoteMessage.data["type"] == "20"){
             if(MiddleWare.instance.currentPage == RouteName.dashboard){
               if(Get.isRegistered<DashboardController>()){
@@ -334,9 +338,10 @@ class DashboardController extends GetxController
         dataList.name = message.data["title"];
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
       } else if (message.data["type"] == "2") {
-        acceptOrRejectChat(
-            orderId: int.parse(message.data["order_id"]),
-            queueId: int.parse(message.data["queue_id"]));
+        Get.toNamed(RouteName.acceptChatRequestScreen);
+        // acceptOrRejectChat(
+        //     orderId: int.parse(message.data["order_id"]),
+        //     queueId: int.parse(message.data["queue_id"]));
       } else if(message.data["type"] == "20"){
         if(MiddleWare.instance.currentPage == RouteName.dashboard){
           if(Get.isRegistered<DashboardController>()){
@@ -552,7 +557,20 @@ class DashboardController extends GetxController
     isServerMaintenance.value == 1
         ? CommonDialogue().serverMaintenancePopUp()
         : null;
+    askPermissionCameraMicrophone();
     super.onReady();
+  }
+
+  askPermissionCameraMicrophone() async {
+    if(isOverLayPermissionDashboard.value == 1){
+      if(!await Permission.systemAlertWindow.status.isGranted){
+        await AppPermissionService.instance.showAlertDialog(
+          "Chat",
+          ["Allow display over other apps"],
+        );
+        await AppPermissionService.instance.permissionOvr();
+      }
+    }
   }
 
   Future<void> requestPermissions1() async {
