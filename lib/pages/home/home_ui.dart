@@ -892,7 +892,7 @@ class HomeUI extends GetView<HomeController> {
                                                 //   RouteName.passbookUI,
                                                 // );
                                                 Get.toNamed(
-                                                  RouteName.addBankAutoMation,
+                                                  RouteName.onBoardingScreen,
                                                 );
                                               },
                                               child: Ink(

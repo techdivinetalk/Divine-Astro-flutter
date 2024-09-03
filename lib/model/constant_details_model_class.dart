@@ -74,7 +74,8 @@ class Data {
   int? showAgreement;
   num? currentTime;
   Map? notice;
-
+  dynamic is_onboarding_in_process;
+  dynamic stage_no;
   Data({
     required this.leaderboardRankImage,
     required this.lottiFile,
@@ -99,6 +100,8 @@ class Data {
     this.firebaseAuthPassword,
     this.currentTime,
     required this.notice,
+    this.is_onboarding_in_process,
+    this.stage_no,
   });
 
   Data copyWith({
@@ -124,6 +127,8 @@ class Data {
     int? isForceTraningVideo,
     num? currentTime,
     Map? notice,
+    dynamic is_onboarding_in_process,
+    dynamic stage_no,
   }) =>
       Data(
         leaderboardRankImage: leaderboardRankImage ?? this.leaderboardRankImage,
@@ -149,6 +154,9 @@ class Data {
         currentTime: currentTime ?? this.currentTime,
         taroCard: taroCard ?? this.taroCard,
         notice: notice ?? this.notice,
+        is_onboarding_in_process:
+            is_onboarding_in_process ?? this.is_onboarding_in_process,
+        stage_no: stage_no ?? this.stage_no,
       );
 
   factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
@@ -183,6 +191,8 @@ class Data {
         taroCard: json['taro_card'],
         currentTime: json['current_time'],
         notice: json['notice'],
+        is_onboarding_in_process: json['is_onboarding_in_process'],
+        stage_no: json['stage_no'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -212,6 +222,8 @@ class Data {
         'firebase_auth_password': firebaseAuthPassword,
         'current_time': currentTime,
         'notice': notice,
+        'is_onboarding_in_process': is_onboarding_in_process,
+        'stage_no': stage_no,
       };
 }
 

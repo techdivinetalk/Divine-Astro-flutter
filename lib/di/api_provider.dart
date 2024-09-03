@@ -252,6 +252,9 @@ class ApiProvider {
   final String astroScheduleOnline = "astroScheduleOnline";
   final String getChatAssistCustomerData = "getChatAssistCustomerData";
 
+  // OnBoarding Apis
+  final String addAstroOnboarding = "addAstroOnboarding";
+
   //Basic Auth
   final String username = "625170";
   final String password = "4eb3e540da68887ac72d4d45d7da9906";

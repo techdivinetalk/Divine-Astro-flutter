@@ -9,10 +9,15 @@ import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
 
+import '../../common/app_exception.dart';
+import '../../common/colors.dart';
 import '../../common/common_functions.dart';
 import '../../common/permission_handler.dart';
 import '../../common/routes.dart';
 import '../../di/api_provider.dart';
+import '../../di/shared_preference_service.dart';
+import '../../model/OnBoardingStageModel.dart';
+import '../../model/res_login.dart';
 import '../../repository/user_repository.dart';
 
 class FileUtils {
@@ -33,6 +38,8 @@ class FileUtils {
 
 class OnBoardingController extends GetxController {
   UserRepository userRepository = UserRepository();
+  UserData? userData;
+  var preference = Get.find<SharedPreferenceService>();
 
   late TextEditingController nameController;
   late TextEditingController skillsController;
@@ -50,7 +57,7 @@ class OnBoardingController extends GetxController {
 
   var currentPage = 1;
   var donePage = 1;
-  List skills = [""];
+  List skills = ["dfdfd", "fdfd"];
   List astroImages = [];
   updatePage(page) {
     currentPage = page;
@@ -74,46 +81,66 @@ class OnBoardingController extends GetxController {
     birthController = TextEditingController();
     locationController = TextEditingController();
     alterNoController = TextEditingController();
+    userData = preference.getUserDetail();
+    if (userData!.name != null) {
+      nameController.text = userData!.name ?? "";
+    }
   }
 
+  // void checkSelectedImages() {
+  //   print("image - 1");
+  //   int selectedCount = userImages.where((element) => element is File).length;
+  //   if (uploadedImages.isNotEmpty) {
+  //     Get.toNamed(
+  //       RouteName.onBoardingScreen4,
+  //     );
+  //   } else {
+  //     if (selectedCount >= 2) {
+  //       print("image - 1");
+  //
+  //       for (int i = 0; i < 5; i++) {
+  //         print("image - 1");
+  //
+  //         print("Loop iteration: $i");
+  //         if (userImages[i] == 1 ||
+  //             userImages[i] == 2 ||
+  //             userImages[i] == 3 ||
+  //             userImages[i] == 4 ||
+  //             userImages[i] == 5) {
+  //           print("image - 1");
+  //         } else {
+  //           print("image - 2");
+  //
+  //           uploadImage(userImages[i], "astroimages");
+  //         }
+  //       }
+  //       submitStage3();
+  //       print("User has selected 2 or more images.");
+  //       // You can proceed with your logic here
+  //       // For example, enabling a submit button or showing a message
+  //     } else {
+  //       Fluttertoast.showToast(msg: "Please select more then 2 images");
+  //       print("User has not selected enough images.");
+  //       // Handle the case where less than 2 images are selected
+  //     }
+  //   }
+  // }
+
   void checkSelectedImages() {
-    print("image - 1");
     int selectedCount = userImages.where((element) => element is File).length;
-    if (uploadedImages.isNotEmpty) {
-      Get.toNamed(
-        RouteName.onBoardingScreen4,
-      );
-    } else {
+    if (uploadedImages.isEmpty) {
       if (selectedCount >= 2) {
-        print("image - 1");
-
-        for (int i = 0; i < 5; i++) {
-          print("image - 1");
-
-          print("Loop iteration: $i");
-          if (userImages[i] == 1 ||
-              userImages[i] == 2 ||
-              userImages[i] == 3 ||
-              userImages[i] == 4 ||
-              userImages[i] == 5) {
-            print("image - 1");
-          } else {
-            print("image - 2");
-
+        for (int i = 0; i < userImages.length; i++) {
+          // Check if the current item is a File before uploading
+          if (userImages[i] is File) {
             uploadImage(userImages[i], "astroimages");
           }
         }
-        Get.toNamed(
-          RouteName.onBoardingScreen4,
-        );
+
         print("User has selected 2 or more images.");
-        // You can proceed with your logic here
-        // For example, enabling a submit button or showing a message
-      } else {
-        Fluttertoast.showToast(msg: "Please select more then 2 images");
-        print("User has not selected enough images.");
-        // Handle the case where less than 2 images are selected
       }
+    } else {
+      submitStage3();
     }
   }
 
@@ -191,18 +218,30 @@ class OnBoardingController extends GetxController {
           Fluttertoast.showToast(msg: "Image Size should be less then 5 MB");
         } else {
           if (selected == "af") {
+            uploadImage(File(result.path.toString()), selected);
+            Fluttertoast.showToast(msg: "Image uploaded");
+
             selectedAadharFront = File(result.path);
           } else if (selected == "ab") {
+            uploadImage(File(result.path.toString()), selected);
+            Fluttertoast.showToast(msg: "Image uploaded");
+
             selectedAadharBack = File(result.path);
-          } else if (selected == "pan") {
+          } else if (selected == "panFront") {
+            uploadImage(File(result.path.toString()), selected);
+            Fluttertoast.showToast(msg: "Image uploaded");
+
             selectedPanFront = File(result.path);
           } else if (selected == "profile") {
             selectedProfile = File(result.path.toString());
+            uploadImage(File(result.path.toString()), selected);
+            Fluttertoast.showToast(msg: "Image uploaded");
           } else {
             print("----image---- ${userImages.toString()}");
 
             userImages[selected] = File(result.path
                 .toString()); // Update the value with the selected image
+            // uploadImage(userImages, "astroimages");
             print("----image---- ${userImages.toString()}");
           }
           // selected = File(result.path);
@@ -222,10 +261,10 @@ class OnBoardingController extends GetxController {
       case 'Profile':
         loadingProfile = value;
         break;
-      case 'aadharFront':
+      case 'af':
         loadingAadharFront = value;
         break;
-      case 'aadharBack':
+      case 'ab':
         loadingAadharFront = value;
         break;
       case 'panFront':
@@ -274,23 +313,27 @@ class OnBoardingController extends GetxController {
           // Update the corresponding URL variable based on the image type
 
           switch (imageType) {
-            case 'Profile':
+            case 'profile':
               photoUrlprofile = imageUrl;
-
               break;
-            case 'aadharFront':
+            case 'af':
+              print(imageType);
               photoUrlAadharFront = imageUrl;
               break;
-            case 'aadharBack':
+            case 'ab':
+              print(imageType);
+
               photoUrlAadharBack = imageUrl;
               break;
             case 'panFront':
+              print(imageType);
+
               photoUrlPanFront = imageUrl;
               break;
             case 'astroimages':
               print("image - 2");
-
               uploadedImages.add(imageUrl);
+
               print(uploadedImages.toString());
               break;
           }
@@ -306,7 +349,121 @@ class OnBoardingController extends GetxController {
     });
   }
 
-  submittingBasicDetails() {
+  OnBoardingStageModel? onBoardingStageModel1;
+  OnBoardingStageModel? onBoardingStageModel2;
+  OnBoardingStageModel? onBoardingStageModel3;
+  OnBoardingStageModel? onBoardingStageModel4;
+
+  bool stage1Submitting = false;
+  submitStage1() async {
+    stage1Submitting = true;
+    var body = {
+      "name": nameController.text,
+      "skills": ["dfdfd", "fdfdd"],
+      "experience": experiencesController.text,
+      "dob": birthController.text,
+      "location": locationController.text,
+      "alternate_no": alterNoController.text,
+      "profile_picture": photoUrlprofile,
+      "page": 1,
+    };
+    try {
+      final response = await userRepository.onBoardingApiFun(body);
+      if (response.success == true) {
+        stage1Submitting = false;
+        onBoardingStageModel1 = response;
+        divineSnackBar(
+            data: onBoardingStageModel1!.message.toString(),
+            color: appColors.redColor);
+
+        Get.offNamed(
+          RouteName.onBoardingScreen2,
+        );
+
+        update();
+      }
+    } catch (error) {
+      stage1Submitting = false;
+
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  bool stage2Submitting = false;
+
+  submitStage2() async {
+    stage2Submitting = true;
+    var body = {
+      "aadhar_front": photoUrlAadharFront,
+      "aadhar_back": photoUrlAadharBack,
+      "pancard": photoUrlPanFront,
+      "page": 2,
+    };
+    try {
+      final response = await userRepository.onBoardingApiFun(body);
+      if (response.success == true) {
+        stage2Submitting = false;
+        onBoardingStageModel2 = response;
+        divineSnackBar(
+            data: onBoardingStageModel2!.message.toString(),
+            color: appColors.redColor);
+
+        Get.offNamed(
+          RouteName.onBoardingScreen3,
+        );
+        update();
+      }
+    } catch (error) {
+      stage2Submitting = false;
+
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  bool stage3Submitting = false;
+
+  submitStage3() async {
+    stage3Submitting = true;
+    var body = {
+      "astro_images": uploadedImages,
+      "page": 3,
+    };
+    try {
+      final response = await userRepository.onBoardingApiFun(body);
+      if (response.success == true) {
+        stage3Submitting = false;
+        onBoardingStageModel3 = response;
+        Get.offNamed(
+          RouteName.onBoardingScreen4,
+        );
+        update();
+      }
+    } catch (error) {
+      stage3Submitting = false;
+
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  bool stage4Submitting = false;
+
+  submitStage4() async {
+    stage4Submitting = true;
     var body = {
       "name": "Raj",
       "skills": ["Cards", "data"],
@@ -317,16 +474,22 @@ class OnBoardingController extends GetxController {
       "profile_picture": "link",
       "page": 1,
     };
-    var body2 = {
-      "aadhar_front": "link",
-      "aadhar_back": "link",
-      "pancard": "link",
-      "page": 2,
-    };
-    var body3 = {
-      "astro_images": ["link", "link", "link"],
-      "page": 3,
-    };
+    try {
+      final response = await userRepository.onBoardingApiFun(body);
+      if (response.success == true) {
+        stage4Submitting = false;
+        update();
+      }
+    } catch (error) {
+      stage4Submitting = false;
+
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
   }
 
   submittingDetails() {

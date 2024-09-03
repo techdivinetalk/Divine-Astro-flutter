@@ -5,7 +5,6 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../common/colors.dart';
-import '../../common/routes.dart';
 import '../../gen/fonts.gen.dart';
 import 'on_boarding_controller.dart';
 
@@ -247,7 +246,7 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                         InkWell(
                           borderRadius: BorderRadius.circular(20),
                           onTap: () {
-                            controller.getImage('pan');
+                            controller.getImage('panFront');
                           },
                           child: Container(
                             height: 150,
@@ -355,57 +354,49 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                                       controller.selectedAadharBack,
                                       "aadharBack");
                                   print("Iteration: ${i + 1}");
-                                } else {
-                                  controller
-                                      .uploadImage(controller.selectedPanFront,
-                                          "panFront")
-                                      .then((val) {
-                                    Get.toNamed(
-                                      RouteName.onBoardingScreen3,
-                                    );
-                                  });
-                                  print("Iteration: ${i + 1}");
-                                }
+                                } else {}
                               }
                             } else {
-                              print(
-                                  "-------------------------------${controller.photoUrlAadharBack}");
-                              Get.toNamed(
-                                RouteName.onBoardingScreen3,
-                              );
+                              controller.submitStage2();
                             }
                           }
                         },
-                        child: Container(
-                          height: 50,
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          decoration: BoxDecoration(
-                            color: controller.selectedAadharBack == null ||
-                                    controller.selectedAadharFront == null ||
-                                    controller.selectedPanFront == null
-                                ? appColors.grey.withOpacity(0.4)
-                                : appColors.red,
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: controller.loadingAadharFront == true
-                              ? Center(
-                                  child: CircularProgressIndicator(
-                                    color: appColors.white,
-                                    strokeWidth: 1,
-                                  ),
-                                )
-                              : Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    "Next",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 20.sp,
-                                      color: AppColors().white,
-                                    ),
-                                  ),
+                        child: controller.stage1Submitting == true
+                            ? Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : Container(
+                                height: 50,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                decoration: BoxDecoration(
+                                  color: controller.selectedAadharBack ==
+                                              null ||
+                                          controller.selectedAadharFront ==
+                                              null ||
+                                          controller.selectedPanFront == null
+                                      ? appColors.grey.withOpacity(0.4)
+                                      : appColors.red,
+                                  borderRadius: BorderRadius.circular(14),
                                 ),
-                        ),
+                                child: controller.loadingAadharFront == true
+                                    ? Center(
+                                        child: CircularProgressIndicator(
+                                          color: appColors.white,
+                                          strokeWidth: 1,
+                                        ),
+                                      )
+                                    : Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Next",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 20.sp,
+                                            color: AppColors().white,
+                                          ),
+                                        ),
+                                      ),
+                              ),
                       ),
                     ],
                   ),

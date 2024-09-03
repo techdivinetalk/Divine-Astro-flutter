@@ -1,8 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:android_intent_plus/android_intent.dart';
-import 'package:android_intent_plus/flag.dart';
 // import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -313,9 +311,9 @@ class DashboardController extends GetxController
             acceptOrRejectChat(
                 orderId: int.parse(remoteMessage.data["order_id"]),
                 queueId: int.parse(remoteMessage.data["queue_id"]));
-          } else if(remoteMessage.data["type"] == "20"){
-            if(MiddleWare.instance.currentPage == RouteName.dashboard){
-              if(Get.isRegistered<DashboardController>()){
+          } else if (remoteMessage.data["type"] == "20") {
+            if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+              if (Get.isRegistered<DashboardController>()) {
                 Get.find<DashboardController>().selectedIndex.value = 3;
               }
             }
@@ -336,9 +334,9 @@ class DashboardController extends GetxController
         acceptOrRejectChat(
             orderId: int.parse(message.data["order_id"]),
             queueId: int.parse(message.data["queue_id"]));
-      } else if(message.data["type"] == "20"){
-        if(MiddleWare.instance.currentPage == RouteName.dashboard){
-          if(Get.isRegistered<DashboardController>()){
+      } else if (message.data["type"] == "20") {
+        if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+          if (Get.isRegistered<DashboardController>()) {
             Get.find<DashboardController>().selectedIndex.value = 3;
           }
         }
@@ -391,6 +389,7 @@ class DashboardController extends GetxController
     preferenceService.setConstantDetails(commonConstants);
     preferenceService
         .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
+
     if (commonConstants.data.notice == null ||
         commonConstants.data.notice == "null") {
     } else {
@@ -424,6 +423,31 @@ class DashboardController extends GetxController
     getConstantDetailsData();
     print("currentTime");
     cacheGift();
+    if (commonConstants.data.is_onboarding_in_process.toString() == "1") {
+      Get.toNamed(
+        RouteName.onBoardingScreen,
+      );
+    } else if (commonConstants.data.is_onboarding_in_process.toString() ==
+        "0") {
+      if (commonConstants.data.stage_no.toString() == "1") {
+        Get.toNamed(
+          RouteName.onBoardingScreen2,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "2") {
+        Get.toNamed(
+          RouteName.onBoardingScreen3,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "3") {
+        Get.toNamed(
+          RouteName.onBoardingScreen4,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "3") {
+        Get.toNamed(
+          RouteName.onBoardingScreen4,
+        );
+      }
+    } else if (commonConstants.data.is_onboarding_in_process.toString() ==
+        "3") {}
   }
 
   Future<void> checkForUpdate() async {

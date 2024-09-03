@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
 import '../../common/colors.dart';
+import '../../common/common_image_view.dart';
+import '../../gen/assets.gen.dart';
 import '../../gen/fonts.gen.dart';
 import 'on_boarding_controller.dart';
 
@@ -48,147 +50,239 @@ class OnBoarding3 extends GetView<OnBoardingController> {
               ),
             ),
           ),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 14, right: 14),
-                child: pageWidget("3"),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 14, right: 14),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Basic\nDetails",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12.sp,
-                        color: appColors.black.withOpacity(0.7),
-                      ),
-                    ),
-                    buildSpace(),
-                    Text(
-                      "Upload\nDocuments",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12.sp,
-                        color: appColors.black.withOpacity(0.7),
-                      ),
-                    ),
-                    buildSpace(),
-                    Text(
-                      "Upload\nPictures",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12.sp,
-                        color: appColors.black.withOpacity(0.7),
-                      ),
-                    ),
-                    buildSpace(),
-                    Text(
-                      "Signing\nAgreement",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12.sp,
-                        color: appColors.black.withOpacity(0.7),
-                      ),
-                    ),
-                    buildSpace(),
-                    Text(
-                      "Awaiting\nApproval",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12.sp,
-                        color: appColors.black.withOpacity(0.7),
-                      ),
-                    ),
-                  ],
+          body: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 14, right: 14),
+                  child: pageWidget("3"),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Upload Your Profile Picture",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16.sp,
-                      color: appColors.black,
+                Padding(
+                  padding: const EdgeInsets.only(left: 14, right: 14),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        "Basic\nDetails",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12.sp,
+                          color: appColors.black.withOpacity(0.7),
+                        ),
+                      ),
+                      buildSpace(),
+                      Text(
+                        "Upload\nDocuments",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12.sp,
+                          color: appColors.black.withOpacity(0.7),
+                        ),
+                      ),
+                      buildSpace(),
+                      Text(
+                        "Upload\nPictures",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12.sp,
+                          color: appColors.black.withOpacity(0.7),
+                        ),
+                      ),
+                      buildSpace(),
+                      Text(
+                        "Signing\nAgreement",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12.sp,
+                          color: appColors.black.withOpacity(0.7),
+                        ),
+                      ),
+                      buildSpace(),
+                      Text(
+                        "Awaiting\nApproval",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12.sp,
+                          color: appColors.black.withOpacity(0.7),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Upload Your Profile Picture",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.sp,
+                        color: appColors.black,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        child: GridView.builder(
+                          shrinkWrap: true,
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3, // 2 boxes per row
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                          ),
+                          itemCount: controller.userImages.length,
+                          itemBuilder: (context, index) {
+                            var item = controller.userImages[index];
+                            return InkWell(
+                              borderRadius: BorderRadius.circular(20),
+                              onTap: () {
+                                controller.getImage(index);
+                              },
+                              child: Container(
+                                height: 80,
+                                width: MediaQuery.of(context).size.width * 0.25,
+                                decoration: BoxDecoration(
+                                  color: AppColors().grey.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: controller.userImages[index] is int
+                                    ? Icon(
+                                        Icons.add,
+                                        color: AppColors().white,
+                                        size: 80,
+                                      )
+                                    : Image.file(
+                                        controller.userImages[index],
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "*Atleast Upload 2 Images",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16.sp,
+                        color: appColors.red,
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "*Valid Profile Picture Examples",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 16.sp,
+                        color: appColors.grey,
+                      ),
+                    ),
+                  ),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(
-                      child: GridView.builder(
-                        shrinkWrap: true,
-                        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                          crossAxisCount: 3, // 2 boxes per row
-                          crossAxisSpacing: 10,
-                          mainAxisSpacing: 10,
+                    Column(
+                      children: [
+                        CommonImageView(
+                          imagePath: "assets/images/demo-1.png",
+                          height: 80.h,
+                          width: 80.h,
+                          placeHolder: Assets.images.defaultProfile.path,
+                          radius: BorderRadius.circular(20.h),
                         ),
-                        itemCount: controller.userImages.length,
-                        itemBuilder: (context, index) {
-                          var item = controller.userImages[index];
-                          return InkWell(
-                            borderRadius: BorderRadius.circular(20),
-                            onTap: () {
-                              controller.getImage(index);
-                            },
-                            child: Container(
-                              height: 80,
-                              width: MediaQuery.of(context).size.width * 0.25,
-                              decoration: BoxDecoration(
-                                color: AppColors().grey.withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: controller.userImages[index] is int
-                                  ? Icon(
-                                      Icons.add,
-                                      color: AppColors().white,
-                                      size: 80,
-                                    )
-                                  : Image.file(
-                                      controller.userImages[index],
-                                      fit: BoxFit.cover,
-                                    ),
-                            ),
-                          );
-                        },
-                      ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        CircleAvatar(
+                          radius: 12,
+                          backgroundColor: appColors.appRedColour,
+                          child: Icon(
+                            Icons.clear,
+                            color: appColors.white,
+                            size: 15,
+                          ),
+                        )
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        CommonImageView(
+                          imagePath: "assets/images/demo-2.png",
+                          height: 80.h,
+                          width: 80.h,
+                          placeHolder: Assets.images.defaultProfile.path,
+                          radius: BorderRadius.circular(20.h),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        CircleAvatar(
+                          radius: 12,
+                          backgroundColor: appColors.appRedColour,
+                          child: Icon(
+                            Icons.clear,
+                            color: appColors.white,
+                            size: 15,
+                          ),
+                        )
+                      ],
+                    ),
+                    Column(
+                      children: [
+                        CommonImageView(
+                          imagePath: "assets/images/demo-3.png",
+                          height: 80.h,
+                          width: 80.h,
+                          placeHolder: Assets.images.defaultProfile.path,
+                          radius: BorderRadius.circular(20.h),
+                        ),
+                        SizedBox(
+                          height: 8,
+                        ),
+                        CircleAvatar(
+                          radius: 12,
+                          backgroundColor: appColors.green,
+                          child: Icon(
+                            Icons.check,
+                            color: appColors.white,
+                            size: 15,
+                          ),
+                        )
+                      ],
                     ),
                   ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "*Atleast Upload 2 Images",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16.sp,
-                      color: appColors.red,
-                    ),
-                  ),
-                ),
-              ),
-            ],
+                )
+              ],
+            ),
           ),
           bottomNavigationBar: Padding(
             padding: const EdgeInsets.all(8.0),
@@ -237,25 +331,29 @@ class OnBoarding3 extends GetView<OnBoardingController> {
                         onTap: () {
                           controller.checkSelectedImages();
                         },
-                        child: Container(
-                          height: 50,
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          decoration: BoxDecoration(
-                            color: appColors.red,
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Next",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20.sp,
-                                color: AppColors().white,
+                        child: controller.stage1Submitting == true
+                            ? Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : Container(
+                                height: 50,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                decoration: BoxDecoration(
+                                  color: appColors.red,
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: Align(
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    "Next",
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontSize: 20.sp,
+                                      color: AppColors().white,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
                       ),
                     ],
                   ),

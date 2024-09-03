@@ -38,6 +38,7 @@ import '../model/AllFinancialIssuesModel.dart';
 import '../model/AllSupportIssueModel.dart';
 import '../model/AstroRitentionModel.dart';
 import '../model/FinancialCreateIssueModel.dart';
+import '../model/OnBoardingStageModel.dart';
 import '../model/PassBookDataModel.dart';
 import '../model/RitentionPopupModel.dart';
 import '../model/TechnicalIssuesData.dart';
@@ -674,7 +675,6 @@ class UserRepository extends ApiProvider {
             ConstantDetailsModelClass.fromJson(json.decode(response.body));
         if (constantDetailsModelClass.statusCode == successResponse &&
             constantDetailsModelClass.success == true) {
-
           log("1111111 - ${constantDetailsModelClass.toString()}");
           return constantDetailsModelClass;
         } else {
@@ -796,6 +796,35 @@ class UserRepository extends ApiProvider {
           final editResponse =
               AddEditPujaModel.fromJson(jsonDecode(response.body));
           return editResponse;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<OnBoardingStageModel> onBoardingApiFun(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await post(addAstroOnboarding,
+          body: jsonEncode(param), headers: await getJsonHeaderURL());
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final data = OnBoardingStageModel.fromJson(jsonDecode(response.body));
+          return data;
         }
       } else {
         throw CustomException(json.decode(response.body)["error"]);

@@ -8,7 +8,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../common/colors.dart';
-import '../../common/routes.dart';
 import '../../common/select_your_birth_place_sheet.dart';
 import '../../utils/utils.dart';
 import 'on_boarding_controller.dart';
@@ -182,6 +181,8 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                           Icons.perm_identity_outlined,
                           color: appColors.black,
                         ),
+                        readOnly:
+                            controller.userData!.name == null ? false : true,
                         hint: "Profile Name",
                       ),
                       SizedBox(
@@ -372,64 +373,74 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                               controller.experiencesController.text.isEmpty ||
                               controller.locationController.text.isEmpty ||
                               controller.birthController.text.isEmpty ||
-                              controller.alterNoController.text.isEmpty) {
+                              controller.alterNoController.text.isEmpty ||
+                              controller.photoUrlprofile == null) {
                             Fluttertoast.showToast(
                                 msg: "Some fields are empty");
                           } else {
-                            if (controller.photoUrlprofile == null) {
-                              controller
-                                  .uploadImage(
-                                      controller.selectedProfile, "Profile")
-                                  .then((val) {
-                                Get.toNamed(
-                                  RouteName.onBoardingScreen2,
-                                );
-                              });
-                            } else {
-                              print(
-                                  "-------------------------------${controller.photoUrlprofile}");
-                              Get.toNamed(
-                                RouteName.onBoardingScreen2,
-                              );
-                            }
+                            controller.submitStage1();
+
+                            // if (controller.photoUrlprofile == null) {
+                            //   controller
+                            //       .uploadImage(
+                            //           controller.selectedProfile, "Profile")
+                            //       .then((val) {
+                            //     Get.toNamed(
+                            //       RouteName.onBoardingScreen2,
+                            //     );
+                            //   });
+                            // } else {
+                            //   print(
+                            //       "-------------------------------${controller.photoUrlprofile}");
+                            //   // Get.toNamed(
+                            //   //   RouteName.onBoardingScreen2,
+                            //   // );
+                            // }
                           }
                         },
-                        child: Container(
-                          height: 50,
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          decoration: BoxDecoration(
-                            color: controller.selectedProfile == null ||
-                                    controller.nameController.text.isEmpty ||
-                                    controller.skills.isEmpty ||
-                                    controller
-                                        .experiencesController.text.isEmpty ||
-                                    controller
-                                        .locationController.text.isEmpty ||
-                                    controller.birthController.text.isEmpty ||
-                                    controller.alterNoController.text.isEmpty
-                                ? appColors.grey.withOpacity(0.4)
-                                : appColors.red,
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: controller.loadingProfile == true
-                              ? Center(
-                                  child: CircularProgressIndicator(
-                                    color: appColors.white,
-                                    strokeWidth: 1,
-                                  ),
-                                )
-                              : Align(
-                                  alignment: Alignment.center,
-                                  child: Text(
-                                    "Next",
-                                    style: TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                      fontSize: 20.sp,
-                                      color: AppColors().white,
-                                    ),
-                                  ),
+                        child: controller.stage1Submitting == true
+                            ? Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : Container(
+                                height: 50,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                decoration: BoxDecoration(
+                                  color: controller.selectedProfile == null ||
+                                          controller
+                                              .nameController.text.isEmpty ||
+                                          controller.skills.isEmpty ||
+                                          controller.experiencesController.text
+                                              .isEmpty ||
+                                          controller.locationController.text
+                                              .isEmpty ||
+                                          controller
+                                              .birthController.text.isEmpty ||
+                                          controller
+                                              .alterNoController.text.isEmpty
+                                      ? appColors.grey.withOpacity(0.4)
+                                      : appColors.red,
+                                  borderRadius: BorderRadius.circular(14),
                                 ),
-                        ),
+                                child: controller.loadingProfile == true
+                                    ? Center(
+                                        child: CircularProgressIndicator(
+                                          color: appColors.white,
+                                          strokeWidth: 1,
+                                        ),
+                                      )
+                                    : Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Next",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 20.sp,
+                                            color: AppColors().white,
+                                          ),
+                                        ),
+                                      ),
+                              ),
                       ),
                     ],
                   ),
