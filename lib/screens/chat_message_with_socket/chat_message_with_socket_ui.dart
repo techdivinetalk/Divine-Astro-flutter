@@ -1319,7 +1319,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           height: 5.0,
                         ),
                         Text(
-                          "Remedy",
+                          "My Remedy",
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontWeight: FontWeight.w400,

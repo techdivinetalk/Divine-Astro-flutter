@@ -59,6 +59,7 @@ class Products {
   int? productPriceUsd;
   int? productStatus;
   String? productLongDesc;
+  String? discount;
   int? gst;
   String? productBannerImage;
   ProductShop? productShop;
@@ -81,6 +82,7 @@ class Products {
     this.productBannerImage,
     this.productShop,
     this.productFaq,
+    this.discount,
   });
 
   Products.fromJson(Map<String, dynamic> json) {
@@ -91,6 +93,7 @@ class Products {
     prodImage = json['prod_image'];
     prodDesc = json['prod_desc'];
     gst = json['gst'];
+    discount = json['discount'];
     productPriceInr = json['product_price_inr'];
     productPriceUsd = json['product_price_usd'];
     productStatus = json['product_status'];
@@ -108,6 +111,7 @@ class Products {
     data['prod_shop_id'] = prodShopId;
     data['prod_cat_id'] = prodCatId;
     data['gst'] = gst;
+    data['discount'] = discount;
     data['prod_name'] = prodName;
     data['prod_image'] = prodImage;
     data['prod_desc'] = prodDesc;
