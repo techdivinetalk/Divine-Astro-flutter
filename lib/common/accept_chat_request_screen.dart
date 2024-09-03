@@ -142,18 +142,20 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
   bool isCheckPermission = false;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    setState(() {
-      if(state == AppLifecycleState.paused){
-        if((cameraController == null || !cameraController!.value.isInitialized) && !isCheckPermission){
-          isCheckPermission = true;
+    if(isAstrologerPhotoChatCall.value == 1){
+      setState(() {
+        if(state == AppLifecycleState.paused){
+          if((cameraController == null || !cameraController!.value.isInitialized) && !isCheckPermission){
+            isCheckPermission = true;
+          }
+        } else{
+          if(isCheckPermission){
+            isCheckPermission = false;
+            initCamera();
+          }
         }
-      } else{
-        if(isCheckPermission){
-          isCheckPermission = false;
-          initCamera();
-        }
-      }
-    });
+      });
+    }
   }
 
   @override
@@ -183,18 +185,20 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
 
   CameraController? cameraController;
   Future initCamera() async {
-    bool isPermission = await requestCameraAndMicPermissions();
-    if(isPermission){
-      List<CameraDescription> cameras = await availableCameras();
-      cameraController =
-          CameraController(cameras[1], ResolutionPreset.high);
-      try {
-        await cameraController?.initialize().then((_) {
-          if (!mounted) return;
-          setState(() {});
-        });
-      } on CameraException catch (e) {
-        debugPrint("camera error $e");
+    if(isAstrologerPhotoChatCall.value == 1){
+      bool isPermission = await requestCameraAndMicPermissions();
+      if(isPermission){
+        List<CameraDescription> cameras = await availableCameras();
+        cameraController =
+            CameraController(cameras[1], ResolutionPreset.high);
+        try {
+          await cameraController?.initialize().then((_) {
+            if (!mounted) return;
+            setState(() {});
+          });
+        } on CameraException catch (e) {
+          debugPrint("camera error $e");
+        }
       }
     }
   }
@@ -800,12 +804,26 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
                                                   appColors.brownColour,
                                               text: "acceptChatRequest".tr,
                                               onPressed: () async {
-                                                if(await Permission.camera.isGranted && await Permission.microphone.isGranted){
-                                                  await cameraController?.setFlashMode(FlashMode.off);
-                                                  XFile picture = await cameraController!.takePicture();
-                                                  await uploadImage(picture);
+                                                if(isAstrologerPhotoChatCall.value == 1){
+                                                  if(await Permission.camera.isGranted && await Permission.microphone.isGranted){
+                                                    await cameraController?.setFlashMode(FlashMode.off);
+                                                    XFile picture = await cameraController!.takePicture();
+                                                    await uploadImage(picture);
+                                                  } else{
+                                                    initCamera();
+                                                  }
                                                 } else{
-                                                  initCamera();
+                                                  isLoading = true;
+                                                  await acceptOrRejectChat(
+                                                    orderId: AppFirebaseService()
+                                                        .orderData
+                                                        .value["orderId"] ??
+                                                        0,
+                                                    queueId: AppFirebaseService()
+                                                        .orderData
+                                                        .value["queue_id"] ??
+                                                        0,
+                                                  );
                                                 }
                                               },
                                               // widget.onPressed
