@@ -14,6 +14,7 @@ import '../../../common/colors.dart';
 import '../../../common/common_image_view.dart';
 import '../../../common/custom_widgets.dart';
 import '../../../common/permission_handler.dart';
+import '../../../common/routes.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../gen/fonts.gen.dart';
 import '../../../screens/add_puja/add_puja_controller.dart';
@@ -31,14 +32,36 @@ class AddEcomScreen extends GetView<AddEcomController> {
       builder: (controller) {
         return Scaffold(
           appBar: AppBar(
-              backgroundColor: appColors.white,
-              surfaceTintColor: appColors.white,
-              leading: IconButton(
-                  onPressed: () => Get.back(),
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded)),
-              title: CustomText(
-                'Add Ecommerce',
-              )),
+            backgroundColor: appColors.white,
+            surfaceTintColor: appColors.white,
+            leading: IconButton(
+                onPressed: () => Get.back(),
+                icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+            title: CustomText(
+              'Add Ecommerce',
+            ),
+            actions: [
+              InkWell(
+                onTap: () {
+                  Get.toNamed(
+                    RouteName.dashboard,
+                  );
+                },
+                child: Text(
+                  "Skip",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16.sp,
+                    color: appColors.grey,
+                    decoration: TextDecoration.underline,
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+            ],
+          ),
           bottomNavigationBar: Container(
             height: 120,
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
