@@ -144,7 +144,8 @@ void initMessaging() async {
         Get.toNamed(RouteName.chatMessageWithSocketUI);
       } else if (payloadMap["type"] == "2") {
         print(" 1111111111111" + payloadMap.toString());
-        acceptOrRejectChat(orderId: int.parse(payloadMap["order_id"]), queueId: int.parse(payloadMap["queue_id"]));
+        Get.toNamed(RouteName.acceptChatRequestScreen);
+        // acceptOrRejectChat(orderId: int.parse(payloadMap["order_id"]), queueId: int.parse(payloadMap["queue_id"]));
 
         /*Future<bool> acceptOrRejectChat(
             {required int? orderId, required int? queueId}) async {
