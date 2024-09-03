@@ -764,6 +764,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  bool showPopup = true;
   getDashboardDetail() async {
     loading = Loading.initial;
     update();
@@ -803,8 +804,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           homeData?.technical_support!.isEmpty) {
       } else {
         log("Technical_Support -- ${homeData?.technical_support.toString()}");
-        if (Get.find<DashboardController>().selectedIndex.value == 0) {
+        update();
+        if (Get.find<DashboardController>().selectedIndex.value == 0 &&
+            showPopup == true &&
+            !homeScreenKey.currentState!.isDrawerOpen) {
           showTechnicalPopupAlert();
+        } else {
+          log("--------------------------------------");
         }
       }
       //getFeedbackData();

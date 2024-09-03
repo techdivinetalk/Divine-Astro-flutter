@@ -102,8 +102,9 @@ class HomeUI extends GetView<HomeController> {
             drawer: const SideMenuDrawer(),
             appBar: AppBar(
               leading: IconButton(
-                onPressed: () =>
-                    controller.homeScreenKey.currentState?.openDrawer(),
+                onPressed: () {
+                  controller.showPopup = false;
+                    controller.homeScreenKey.currentState?.openDrawer();},
                 highlightColor: appColors.transparent,
                 splashColor: appColors.transparent,
                 icon: const Icon(Icons.menu),
