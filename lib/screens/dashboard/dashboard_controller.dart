@@ -314,9 +314,10 @@ class DashboardController extends GetxController
             dataList.name = remoteMessage.data["title"];
             Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
           } else if (remoteMessage.data["type"] == "2") {
-            acceptOrRejectChat(
-                orderId: int.parse(remoteMessage.data["order_id"]),
-                queueId: int.parse(remoteMessage.data["queue_id"]));
+            Get.toNamed(RouteName.acceptChatRequestScreen);
+            // acceptOrRejectChat(
+            //     orderId: int.parse(remoteMessage.data["order_id"]),
+            //     queueId: int.parse(remoteMessage.data["queue_id"]));
           } else if(remoteMessage.data["type"] == "20"){
             if(MiddleWare.instance.currentPage == RouteName.dashboard){
               if(Get.isRegistered<DashboardController>()){
@@ -337,9 +338,10 @@ class DashboardController extends GetxController
         dataList.name = message.data["title"];
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
       } else if (message.data["type"] == "2") {
-        acceptOrRejectChat(
-            orderId: int.parse(message.data["order_id"]),
-            queueId: int.parse(message.data["queue_id"]));
+        Get.toNamed(RouteName.acceptChatRequestScreen);
+        // acceptOrRejectChat(
+        //     orderId: int.parse(message.data["order_id"]),
+        //     queueId: int.parse(message.data["queue_id"]));
       } else if(message.data["type"] == "20"){
         if(MiddleWare.instance.currentPage == RouteName.dashboard){
           if(Get.isRegistered<DashboardController>()){

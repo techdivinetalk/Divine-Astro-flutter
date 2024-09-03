@@ -1,4 +1,5 @@
 import 'package:camera/camera.dart';
+import 'package:divine_astrologer/common/colors.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -35,7 +36,9 @@ class _FrontCameraViewState extends State<FrontCameraView> {
       body: SafeArea(
         child: Stack(children: [
           (_cameraController.value.isInitialized)
-              ? CameraPreview(_cameraController)
+              ? CameraPreview(
+                _cameraController,
+          )
               : Container(
               color: Colors.black,
               child: const Center(child: CircularProgressIndicator())),
