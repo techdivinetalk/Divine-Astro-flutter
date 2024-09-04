@@ -76,6 +76,7 @@ class ZegoService {
           ),
           iOSNotificationConfig: ZegoCallIOSNotificationConfig(
             systemCallingIconName: 'CallKitIcon',
+            certificateIndex: ZegoSignalingPluginMultiCertificate.secondCertificate,
           )),
 
       invitationEvents: ZegoUIKitPrebuiltCallInvitationEvents(
