@@ -376,6 +376,7 @@ class UserRepository extends ApiProvider {
       final response = await post(getReviewRatingUrl,
           body: jsonEncode(param).toString(),
           headers: await getJsonHeaderURL());
+      print("data -----> ${response.body}");
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
       } else if (response.statusCode == HttpStatus.badRequest) {
