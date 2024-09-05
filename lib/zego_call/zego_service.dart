@@ -215,7 +215,7 @@ class ZegoService {
                     return Column(
                       mainAxisSize: MainAxisSize.min,
                       children: <Widget>[
-                        const SizedBox(height: 32),
+                        SizedBox(height: MediaQuery.of(context).padding.top),
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.center,
