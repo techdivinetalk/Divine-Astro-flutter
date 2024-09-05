@@ -1,6 +1,8 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/appbar.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/select_your_birth_place_sheet.dart';
+import 'package:divine_astrologer/model/cityDataModel.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -117,6 +119,46 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   inputType: TextInputType.number,
                   inputAction: TextInputAction.done,
                   hintText: "enterExperienceMsg".tr,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  "City*",
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
+                const SizedBox(height: 5),
+                WhiteTextField(
+                  validator: (value) {
+                    if (value! == "") {
+                      return "";
+                    }
+                    return null;
+                  },
+                  controller: controller.state.cityController,
+                  inputType: TextInputType.name,
+                  inputAction: TextInputAction.done,
+                  readOnly: true,
+                  hintText: "Enter Astrologer's City",
+                  onTap: () {
+                    Get.bottomSheet(Padding(
+                      padding: EdgeInsets.only(
+                          bottom: MediaQuery.of(context).viewInsets.bottom),
+                      child: AllCityListSheet(
+                        onSelect: (value) {
+                          controller.state.cityController.text =
+                              value.cityName ?? "";
+                          controller.state.cityList.add(CityStateData(
+                            cityName: value.cityName,
+                            latitude: value.latitude,
+                            longitude: value.longitude,
+                          ));
+                          controller.update();
+                          Get.back();
+                        },
+                        country: "India",
+                        cityData: controller.state.cityList,
+                      ),
+                    ));
+                  },
                 ),
                 const SizedBox(height: 10),
                 Text(
@@ -363,6 +405,8 @@ class WhiteTextField extends StatelessWidget {
   final void Function(String? val)? onChanged;
   final List<TextInputFormatter>? inputFormatter;
   final int? maxCount;
+  final void Function()? onTap;
+  final bool readOnly;
 
   const WhiteTextField({
     super.key,
@@ -377,6 +421,8 @@ class WhiteTextField extends StatelessWidget {
     this.onChanged,
     this.inputFormatter,
     this.maxCount,
+    this.onTap,
+    this.readOnly = false,
   });
 
   @override
@@ -399,6 +445,8 @@ class WhiteTextField extends StatelessWidget {
         keyboardType: inputType,
         validator: validator,
         textInputAction: inputAction,
+        onTap: onTap,
+        readOnly: readOnly,
         onTapOutside: (event) {
           FocusScope.of(context).unfocus();
         },

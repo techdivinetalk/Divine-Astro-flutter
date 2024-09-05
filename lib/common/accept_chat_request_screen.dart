@@ -1,5 +1,7 @@
 import "dart:convert";
 import "dart:developer";
+import "package:divine_astrologer/common/custom_widgets.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/common_button.dart";
 import 'package:http/http.dart' as http;
 import "package:audioplayers/audioplayers.dart";
 import "package:camera/camera.dart";
@@ -151,7 +153,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
         } else{
           if(isCheckPermission){
             isCheckPermission = false;
-            initCamera();
+            initCamera(isOpenSetting: false);
           }
         }
       });
@@ -166,7 +168,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
     super.dispose();
   }
 
-  Future<bool> requestCameraAndMicPermissions() async {
+  Future<bool> requestCameraAndMicPermissions({bool isOpenSetting = true}) async {
     final statuses = await [
       Permission.camera,
       Permission.microphone,
@@ -176,7 +178,43 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
         statuses[Permission.microphone]!.isGranted) {
       return true;
     } else if(statuses[Permission.camera]!.isPermanentlyDenied || statuses[Permission.microphone]!.isPermanentlyDenied) {
-      openAppSettings();
+      if(isOpenSetting){
+        Get.bottomSheet(
+          Container(
+            padding: EdgeInsets.symmetric(horizontal: 20.0),
+            decoration: BoxDecoration(
+                borderRadius: const BorderRadius.vertical(top: Radius.circular(40.0)),
+                color: appColors.white
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                20.verticalSpace,
+                Icon(
+                  Icons.query_builder_rounded,
+                  color: appColors.red,
+                  size: 60.h,
+                ),
+                10.verticalSpace,
+                const CustomText(
+                  "please allow camera and microphone permissions for accept chat request",
+                  fontSize: 16.0,
+                  maxLines: 5,
+                  textAlign: TextAlign.center,
+                ),
+                10.verticalSpace,
+                CommonButton(
+                  buttonText: "Open setting",
+                  buttonCallback: () {
+                    Get.back();
+                    openAppSettings();
+                  }),
+                SizedBox(height: MediaQuery.of(context).padding.bottom + 20.0),
+              ],
+            ),
+          ),
+        );
+      }
       return false;
     } else{
       return false;
@@ -184,9 +222,9 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
   }
 
   CameraController? cameraController;
-  Future initCamera() async {
+  Future initCamera({bool isOpenSetting = true}) async {
     if(isAstrologerPhotoChatCall.value == 1){
-      bool isPermission = await requestCameraAndMicPermissions();
+      bool isPermission = await requestCameraAndMicPermissions(isOpenSetting: isOpenSetting);
       if(isPermission){
         List<CameraDescription> cameras = await availableCameras();
         cameraController =
@@ -752,6 +790,19 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
                                 ],
                               ),
                               SizedBox(height: 25.w),
+                              (cameraController != null && cameraController!.value.isInitialized) ? Padding(
+                                padding: const EdgeInsets.only(bottom: 10.0),
+                                child: Align(
+                                  alignment: Alignment.topLeft,
+                                  child: CustomText(
+                                      "Note* : Make sure your image clearly visible",
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.w400,
+                                    fontColor: appColors.red,
+                                  ),
+                                ),
+                              )
+                              : const SizedBox(),
                               Obx(
                                 () {
                                   return /*(AppFirebaseService()

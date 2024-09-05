@@ -16,6 +16,7 @@ import 'package:divine_astrologer/true_caller_divine/true_caller_divine_service.
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -283,7 +284,7 @@ class LoginController extends GetxController {
     /*countryCodeController = TextEditingController(text: "+91");
     mobileNumberController = TextEditingController();*/
 
-    if (isTruecaller.value == 1) {
+    if (kDebugMode || isTruecaller.value == 1) {
       TrueCallerService().isTrueCallerInstalled().then((value) {
         showTrueCaller.value = value;
 
@@ -601,7 +602,10 @@ class LoginController extends GetxController {
     //   }
     // });
 
-    requestPermissions();
+    bool isTrueCaller = await TrueCallerService().isTrueCallerInstalled();
+    if(isTruecaller.value == 0 && !isTrueCaller){
+      requestPermissions();
+    }
   }
 
   @override
