@@ -315,9 +315,9 @@ class DashboardController extends GetxController
             // acceptOrRejectChat(
             //     orderId: int.parse(remoteMessage.data["order_id"]),
             //     queueId: int.parse(remoteMessage.data["queue_id"]));
-          } else if(remoteMessage.data["type"] == "20"){
-            if(MiddleWare.instance.currentPage == RouteName.dashboard){
-              if(Get.isRegistered<DashboardController>()){
+          } else if (remoteMessage.data["type"] == "20") {
+            if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+              if (Get.isRegistered<DashboardController>()) {
                 Get.find<DashboardController>().selectedIndex.value = 3;
               }
             }
@@ -339,9 +339,9 @@ class DashboardController extends GetxController
         // acceptOrRejectChat(
         //     orderId: int.parse(message.data["order_id"]),
         //     queueId: int.parse(message.data["queue_id"]));
-      } else if(message.data["type"] == "20"){
-        if(MiddleWare.instance.currentPage == RouteName.dashboard){
-          if(Get.isRegistered<DashboardController>()){
+      } else if (message.data["type"] == "20") {
+        if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+          if (Get.isRegistered<DashboardController>()) {
             Get.find<DashboardController>().selectedIndex.value = 3;
           }
         }

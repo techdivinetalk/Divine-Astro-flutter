@@ -99,7 +99,6 @@ Future<void> main() async {
   }
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-
     print("check on message notification : ${message.data}");
     print("pushNotification1 ${message.notification?.title ?? ""}");
     if (message.data["type"] == "2" || message.data["type"] == "20") {
