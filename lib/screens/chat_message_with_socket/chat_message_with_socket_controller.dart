@@ -10,6 +10,7 @@ import "package:camera/camera.dart";
 import "package:device_info_plus/device_info_plus.dart";
 import "package:divine_astrologer/app_socket/app_socket.dart";
 import "package:divine_astrologer/common/colors.dart";
+import "package:divine_astrologer/common/custom_widgets.dart";
 import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/di/shared_preference_service.dart";
 import "package:divine_astrologer/model/chat_histroy_response.dart";
@@ -20,6 +21,7 @@ import "package:divine_astrologer/repository/user_repository.dart";
 import "package:divine_astrologer/screens/chat_message_with_socket/custom_puja/saved_remedies.dart";
 import "package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_list_model.dart";
 import "package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_model.dart";
+import "package:divine_astrologer/screens/live_dharam/widgets/common_button.dart";
 import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
 import "package:divine_astrologer/zego_call/zego_service.dart";
@@ -184,30 +186,86 @@ class ChatMessageWithSocketController extends GetxController
   bool isRecordingCompleted = false;
 
   void startOrStopRecording() async {
-    try {
-      print("is working");
-      if (isRecording.value) {
-        recorderController!.reset();
-        print(isRecording.value);
-        print("isRecording.value");
+    bool isPermission = await requestMicroPhone();
+    if(isPermission){
+      try {
+        print("is working");
+        if (isRecording.value) {
+          recorderController!.reset();
+          print(isRecording.value);
+          print("isRecording.value");
 
-        final path = await recorderController!.stop(false);
-        print(path);
-        print("pathpathpathpathpath");
-        if (path != null) {
-          isRecordingCompleted = true;
+          final path = await recorderController!.stop(false);
+          print(path);
+          print("pathpathpathpathpath");
+          if (path != null) {
+            isRecordingCompleted = true;
 
-          uploadAudioFile(File(path));
-          debugPrint("Recorded file size: ${File(path).lengthSync()}");
+            uploadAudioFile(File(path));
+            debugPrint("Recorded file size: ${File(path).lengthSync()}");
+          }
+        } else {
+          await recorderController!.record(path: path);
         }
-      } else {
-        await recorderController!.record(path: path);
+      } catch (e) {
+        debugPrint(e.toString());
+      } finally {
+        isRecording.value = !isRecording.value;
+        update();
       }
-    } catch (e) {
-      debugPrint(e.toString());
-    } finally {
-      isRecording.value = !isRecording.value;
-      update();
+    }
+  }
+
+  Future<bool> requestMicroPhone() async {
+    final status = await Permission.microphone.status;
+    if (status.isGranted) {
+      return true;
+    } else if(status.isPermanentlyDenied) {
+      Get.bottomSheet(
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 20.0),
+          decoration: BoxDecoration(
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(40.0)),
+              color: appColors.white
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              20.verticalSpace,
+              Icon(
+                Icons.query_builder_rounded,
+                color: appColors.red,
+                size: 60.h,
+              ),
+              10.verticalSpace,
+              const CustomText(
+                "please allow microphone permission for send voice message",
+                fontSize: 16.0,
+                maxLines: 5,
+                textAlign: TextAlign.center,
+              ),
+              10.verticalSpace,
+              CommonButton(
+                  buttonText: "Open setting",
+                  buttonCallback: () {
+                    Get.back();
+                    openAppSettings();
+                  }),
+              SizedBox(height: MediaQuery.of(Get.context!).padding.bottom + 20.0),
+            ],
+          ),
+        ),
+      );
+      return false;
+    } else if(status.isDenied){
+      final statusAsk = await Permission.microphone.request();
+      if(statusAsk.isGranted){
+        return true;
+      } else{
+        return false;
+      }
+    } else{
+      return false;
     }
   }
 

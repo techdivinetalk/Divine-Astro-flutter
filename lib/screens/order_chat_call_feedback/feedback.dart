@@ -28,7 +28,7 @@ class FeedBack extends GetView<FeedbackController> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: commonDetailAppbar(
-        title: "Order Feedback",
+        title: "Order Feedback 1",
         trailingWidget: InkWell(
           onTap: () => HomeController().whatsapp(),
           child: Container(
@@ -96,7 +96,7 @@ class FeedBack extends GetView<FeedbackController> {
                       ],
                     ),
                   ),
-            SizedBox(
+            controller.order?.productType != null && controller.chatMessageList.isNotEmpty ? SizedBox(
               height: Get.height * 0.4,
               child: Stack(
                 children: [
@@ -104,60 +104,56 @@ class FeedBack extends GetView<FeedbackController> {
                       width: MediaQuery.of(context).size.width,
                       fit: BoxFit.cover,
                       height: double.infinity),
-                  Visibility(
-                    visible: controller.chatMessageList.isNotEmpty,
-                    replacement: const Center(
-                      child: Text("No data found!"),
-                    ),
-                    child: ListView.builder(
-                      itemCount: controller.chatMessageList.length,
-                      controller: controller.messageScrollController,
-                      reverse: false,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        final data = controller.chatMessageList[index];
-                        return controller.order?.productType == 12
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 12.w, vertical: 4.h),
-                                    child: MessageHistoryView(
-                                      unreadMessageShow: true,
-                                      index: index,
-                                      userName: '',
-                                      nextChatMessage: index ==
-                                              controller
-                                                      .chatMessageList.length -
-                                                  1
-                                          ? controller.chatMessageList[index]
-                                          : controller
-                                              .chatMessageList[index + 1],
-                                      chatMessage: data,
-                                      yourMessage: controller
-                                              .chatMessageList[index]
-                                              .msgSendBy ==
-                                          "1",
-                                    ),
-                                  )
-                                ],
-                              )
-                            : Column(
-                                children: [
-                                  const SizedBox(height: 10),
-                                  CustomVoicePlayer(
-                                    playUrl: data.callRecording ?? "",
-                                    callDuration: data.callDuration,
+                  controller.order?.productType != null ? controller.chatMessageList.isNotEmpty ? ListView.builder(
+                    itemCount: controller.chatMessageList.length,
+                    controller: controller.messageScrollController,
+                    reverse: false,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      final data = controller.chatMessageList[index];
+                      return controller.order?.productType == 12
+                          ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.symmetric(
+                                      horizontal: 12.w, vertical: 4.h),
+                                  child: MessageHistoryView(
+                                    unreadMessageShow: true,
+                                    index: index,
+                                    userName: '',
+                                    nextChatMessage: index ==
+                                            controller
+                                                    .chatMessageList.length -
+                                                1
+                                        ? controller.chatMessageList[index]
+                                        : controller
+                                            .chatMessageList[index + 1],
+                                    chatMessage: data,
+                                    yourMessage: controller
+                                            .chatMessageList[index]
+                                            .msgSendBy ==
+                                        "1",
                                   ),
-                                ],
-                              );
-                      },
-                    ),
-                  ),
+                                )
+                              ],
+                            )
+                          : Column(
+                              children: [
+                                const SizedBox(height: 10),
+                                CustomVoicePlayer(
+                                  playUrl: data.callRecording ?? "",
+                                  callDuration: data.callDuration,
+                                ),
+                              ],
+                            );
+                    },
+                  ) : const Center(
+                    child: Text("No data found!"),
+                  ) : SizedBox(),
                 ],
               ),
-            ),
+            ) : SizedBox(),
             controller.order?.productType == null
                 ? ShimmerLoader()
                 : Padding(
