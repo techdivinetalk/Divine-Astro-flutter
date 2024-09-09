@@ -182,7 +182,7 @@ void divineSnackBar({required String data, Color? color, Duration? duration}) {
 }
 
 Future<bool> acceptOrRejectChat(
-    {required int? orderId, required int? queueId}) async {
+    {required int? orderId, required int? queueId, String? astrologerImageLink}) async {
 // *accept_or_reject: 1 = accept, 3 = chat reject by timeout
 // * is_timeout: should be 1 when reject by timeout"
   print("chat_reject 1");
@@ -191,7 +191,9 @@ Future<bool> acceptOrRejectChat(
               queueId: queueId,
               orderId: orderId,
               isTimeout: 0,
-              acceptOrReject: 1)
+              acceptOrReject: 1,
+        astrologerImage: astrologerImageLink
+      )
           .toJson());
   print("chat_reject 2");
   if (response.statusCode == 200) {

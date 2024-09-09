@@ -1,4 +1,5 @@
 import "package:divine_astrologer/di/shared_preference_service.dart";
+import 'package:divine_astrologer/model/cityDataModel.dart';
 import 'package:divine_astrologer/model/refer_astrologer/refer_astrologer_request.dart';
 import 'package:divine_astrologer/model/refer_astrologer/refer_astrologer_response.dart';
 import 'package:divine_astrologer/repository/refer_astrologer_repository.dart';
@@ -87,8 +88,10 @@ class ReferAstrologerState {
   late final TextEditingController mobileNumber;
   late final TextEditingController astrologySkills;
   late final TextEditingController astrologerExperience;
+  late final TextEditingController cityController;
   late final TextEditingController otherPlatform;
   UserData? user;
+  List<CityStateData> cityList = [];
 
   void init() {
     formKey = GlobalKey<FormState>();
@@ -97,6 +100,7 @@ class ReferAstrologerState {
     astrologySkills = TextEditingController();
     astrologerExperience = TextEditingController();
     otherPlatform = TextEditingController();
+    cityController = TextEditingController();
     user = pref.getUserDetail();
   }
 

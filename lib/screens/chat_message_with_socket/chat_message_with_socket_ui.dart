@@ -789,60 +789,60 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
       child: Obx(() {
         print("controllerMessageTemplates");
         print(controller.messageTemplatesList.length);
-          return ListView.separated(
-            padding: const EdgeInsets.symmetric(horizontal: 12),
-            scrollDirection: Axis.horizontal,
-            itemCount: controller.messageTemplatesList.length + 1,
-            separatorBuilder: (_, index) => SizedBox(width: 10.w),
-            itemBuilder: (context, index) {
-              late final MessageTemplates msg;
-              return index == 0
-                  ? GestureDetector(
-                      onTap: () async {
-                        await Get.toNamed(RouteName.messageTemplate);
-                        controller.messageTemplatesList.value.clear();
-                        controller.messageTemplatesList.refresh();
-                        controller.getMessageTemplates();
-                        // controller.getMessageTemplatesLocally();
-                        // controller.update();
-                      },
-                      child: Container(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        decoration: BoxDecoration(
-                          color: Color(0xffFFEEF0),
-                          borderRadius: const BorderRadius.all(Radius.circular(18)),
-                        ),
-                        child: Text(
-                          '+ Add',
-                          style: AppTextStyle.textStyle12(
-                              fontColor: Color(0xff0E2339)),
-                        ),
+        return ListView.separated(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          scrollDirection: Axis.horizontal,
+          itemCount: controller.messageTemplatesList.length + 1,
+          separatorBuilder: (_, index) => SizedBox(width: 10.w),
+          itemBuilder: (context, index) {
+            late final MessageTemplates msg;
+            return index == 0
+                ? GestureDetector(
+                    onTap: () async {
+                      await Get.toNamed(RouteName.messageTemplate);
+                      controller.messageTemplatesList.value.clear();
+                      controller.messageTemplatesList.refresh();
+                      controller.getMessageTemplates();
+                      // controller.getMessageTemplatesLocally();
+                      // controller.update();
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      decoration: BoxDecoration(
+                        color: Color(0xffFFEEF0),
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(18)),
                       ),
-                    )
-                  : GestureDetector(
-                      onTap: () {
-                        controller.sendMsgTemplate(
-                            controller.messageTemplatesList[index - 1]);
-                      },
-                      child: Container(
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                        decoration: const BoxDecoration(
-                          color: Color(0xffFFEEF0),
-                          borderRadius: BorderRadius.all(Radius.circular(18)),
-                        ),
-                        child: Text(
-                          '${controller.messageTemplatesList[index - 1].message}',
-                          style: AppTextStyle.textStyle12(
-                              fontColor: Color(0xff0E2339)),
-                        ),
+                      child: Text(
+                        '+ Add',
+                        style: AppTextStyle.textStyle12(
+                            fontColor: Color(0xff0E2339)),
                       ),
-                    );
-            },
-          );
-        }
-      ),
+                    ),
+                  )
+                : GestureDetector(
+                    onTap: () {
+                      controller.sendMsgTemplate(
+                          controller.messageTemplatesList[index - 1]);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 8),
+                      decoration: const BoxDecoration(
+                        color: Color(0xffFFEEF0),
+                        borderRadius: BorderRadius.all(Radius.circular(18)),
+                      ),
+                      child: Text(
+                        '${controller.messageTemplatesList[index - 1].message}',
+                        style: AppTextStyle.textStyle12(
+                            fontColor: Color(0xff0E2339)),
+                      ),
+                    ),
+                  );
+          },
+        );
+      }),
     );
   }
 
@@ -1086,12 +1086,13 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                     style: AppTextStyle
                                                         .textStyle14(),
                                                   ),
-                                                  SizedBox(height: 20),
+                                                  const SizedBox(height: 20),
                                                   Align(
                                                     alignment: Alignment.center,
                                                     child: CustomButton(
                                                       padding:
-                                                          EdgeInsets.all(12),
+                                                          const EdgeInsets.all(
+                                                              12),
                                                       color: AppColors().red,
                                                       onTap: () {
                                                         log("fjdfkdjfkdjkdjkfjd");
@@ -1171,7 +1172,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                             ),
                                           );
                                           debugPrint(
-                                              "kundali datails ${AppFirebaseService().orderData["customerName"]}");
+                                              "kundli datails ${AppFirebaseService().orderData["customerName"]}");
                                         },
                                         child: Container(
                                           // width: 30,
@@ -1256,6 +1257,34 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
+                    razorPayLink.value.toString() == "1" ?
+                    Column(
+                      children: [
+                        GestureDetector(
+                            onTap: () {
+                              String message =
+                              razorPay.value.toString();
+                              controller.messageController.text =
+                                  message;
+                              controller.sendMsg();
+                            },
+                            child: Center(
+                                child: SvgPicture.asset(
+                                    "assets/svg/new_chat_kundli.svg"))),
+                        const SizedBox(
+                          height: 5.0,
+                        ),
+                        Text(
+                          "RazorPay",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 10.sp,
+                            color: appColors.black,
+                          ),
+                        )
+                      ],
+                    ) :
                     isKundli.value == 1
                         ? Column(
                             children: [
@@ -1333,11 +1362,15 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                       children: [
                         GestureDetector(
                           onTap: () {
-                           if(!AppFirebaseService().orderData.value.containsKey("card")) {
-                             controller.openShowDeck(context, controller);
-                           }else{
-                             Fluttertoast.showToast(msg: 'Tarot Card is still in progress...');
-                           }
+                            if (!AppFirebaseService()
+                                .orderData
+                                .value
+                                .containsKey("card")) {
+                              controller.openShowDeck(context, controller);
+                            } else {
+                              Fluttertoast.showToast(
+                                  msg: 'Tarot Card is still in progress...');
+                            }
                           },
                           child: Center(
                             child: SvgPicture.asset(
@@ -1470,7 +1503,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                           orderData["customerName"] ?? "",
                                       "cust_image": appendedCustImage,
                                       // "time": "00:20:00",
-                                      "time":showTalkTime.value,
+                                      "time": showTalkTime.value,
                                     },
                                     isAstrologer: true,
                                     astrologerDisabledCalls: () {
@@ -2041,6 +2074,10 @@ class AstrologerChatAppBar extends StatelessWidget {
                                             fontSize: 14.sp,
                                             color: appColors.black),
                                       ),
+                                      if(AppFirebaseService().orderData.value["level"] != null && AppFirebaseService().orderData.value["level"] != "")...[
+                                        const SizedBox(width: 10),
+                                        LevelWidget(level: AppFirebaseService().orderData.value["level"] ?? ""),
+                                      ],
                                       const SizedBox(width: 10),
                                       Text(
                                         showTalkTime.value == "-1"

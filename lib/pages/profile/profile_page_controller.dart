@@ -289,6 +289,7 @@ class ProfilePageController extends GetxController {
   }
 
   var isGettingReviews = false.obs;
+  List<String> uniqueUsers = [];
   getReviewRating() async {
     isGettingReviews(true);
     try {
@@ -299,7 +300,6 @@ class ProfilePageController extends GetxController {
       allReviews.value = response.data!.allReviews ?? [];
       isGettingReviews(false);
       update();
-      log("Data==>${jsonEncode(ratingsData.value.data)}");
     } catch (error) {
       isGettingReviews(false);
 

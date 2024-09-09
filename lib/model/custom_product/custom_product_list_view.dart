@@ -53,6 +53,7 @@ class CustomProductListView extends GetView<CustomProductListController> {
               : controller.noData.isEmpty
                   ? ListView.separated(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
+                      // itemCount: controller.customProductData!.length,
                       itemCount: controller.customProductData!.length,
                       shrinkWrap: true,
                       clipBehavior: Clip.antiAliasWithSaveLayer,

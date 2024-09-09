@@ -32,6 +32,7 @@ class ConsultationData {
   final String customerImage;
   final String customerEmail;
   final String daySinceLastConsulted;
+  final dynamic level;
 
   ConsultationData({
     required this.userId,
@@ -44,6 +45,7 @@ class ConsultationData {
     required this.customerImage,
     required this.customerEmail,
     required this.daySinceLastConsulted,
+    this.level,
   });
 
   factory ConsultationData.fromJson(Map<String, dynamic> json) {
@@ -58,6 +60,7 @@ class ConsultationData {
       customerImage: json['customer_image'] ?? "",
       customerEmail: json['customer_email'] ?? "",
       daySinceLastConsulted: json['day_since_last_consulted'],
+      level: json['level'],
     );
   }
 }

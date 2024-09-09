@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/model/waiting_list_queue.dart';
 import 'package:divine_astrologer/repository/waiting_list_queue_repository.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
@@ -70,12 +71,15 @@ class WaitListUI extends GetView<WaitListUIController> {
             width: 50,
           ),
           SizedBox(width: 10.w),
-          Expanded(
-            child: Text(
-              waitingCustomer.name ?? "",
-              style: AppTextStyle.textStyle16(fontColor: appColors.darkBlue),
-            ),
+          Text(
+            waitingCustomer.name ?? "",
+            style: AppTextStyle.textStyle16(fontColor: appColors.darkBlue),
           ),
+          if(waitingCustomer.level != null && waitingCustomer.level != "") Padding(
+            padding: const EdgeInsets.only(left: 5.0),
+            child: LevelWidget(level: waitingCustomer.level ?? ""),
+          ),
+          const Spacer(),
           InkWell(
             onTap: () async {
               if (chatSwitch.value == false &&

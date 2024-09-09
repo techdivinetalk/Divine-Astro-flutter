@@ -112,16 +112,18 @@ class DataList {
   String? name;
   String? image;
   String? lastMessage;
+  dynamic level;
   MsgType? msgType;
   int? unreadMessage;
 
-  DataList({this.id, this.name, this.image, this.lastMessage, this.msgType});
+  DataList({this.id, this.name, this.image, this.lastMessage, this.msgType, this.level});
 
   DataList.fromJson(Map<String, dynamic> json) {
     id = json["id"];
     name = json["name"];
     image = json["avatar"];
     lastMessage = json["last_message"];
+    level = json["level"];
     unreadMessage = json["not_seen_count"];
     msgType = json['msg_type'] != null
         ? msgTypeValues.map[json["msg_type"].toString()]
@@ -133,6 +135,7 @@ class DataList {
     _data["id"] = id;
     _data["name"] = name;
     _data["avatar"] = image;
+    _data["level"] = level;
     _data["last_message"] = lastMessage;
     _data["not_seen_count"] = unreadMessage;
     _data["msg_type"] = msgTypeValues.reverse[msgType];

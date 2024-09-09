@@ -90,3 +90,34 @@ class CustomButton extends StatelessWidget {
     );
   }
 }
+
+class LevelWidget extends StatelessWidget {
+
+  final String level;
+
+  const LevelWidget({super.key, required this.level});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0, vertical: 2.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(9.0),
+        gradient: const LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xffFCD13C),
+              Color(0xffFC9E1A),
+            ]),
+      ),
+      child: CustomText(
+        "L.v. $level",
+        fontSize: 10.0,
+        fontWeight: FontWeight.w400,
+        fontColor: appColors.white,
+      ),
+    );
+  }
+}
+

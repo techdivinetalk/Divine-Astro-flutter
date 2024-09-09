@@ -832,6 +832,10 @@ class ProfileUI extends GetView<ProfilePageController> {
             }
           }
 
+          bool isFirstOccurrence = !controller.uniqueUsers.contains(reviewData.customerId.toString());
+          if (isFirstOccurrence) {
+            controller.uniqueUsers.add(reviewData.customerId.toString());
+          }
           return Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -852,13 +856,24 @@ class ProfileUI extends GetView<ProfilePageController> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          shortenName(reviewData),
-                          style: AppTextStyle.textStyle14(),
+                        ConstrainedBox(
+                          constraints: BoxConstraints(maxWidth: MediaQuery.of(context).size.width * 0.25),
+                          child: Text(
+                            shortenName(reviewData),
+                            style: AppTextStyle.textStyle14(),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
                         ),
+                        if(reviewData.level != null && reviewData.level != "" && isFirstOccurrence) Padding(
+                          padding: const EdgeInsets.only(left: 5.0),
+                          child: LevelWidget(level: reviewData.level ?? ""),
+                        ),
+                        Spacer(),
                         Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             RatingBar.readOnly(
                               filledIcon: Icons.star,

@@ -34,6 +34,7 @@ RxInt isEngagedStatus = 0.obs;
 RxInt isOnboarding = 0.obs;
 RxInt dasboardCurrentIndex = 0.obs;
 RxInt isCountDownTimer = 0.obs;
+RxString razorPay = "https://rzp.io/l/nf14i1U".obs;
 RxList<MessageTemplates> messageTemplateList = <MessageTemplates>[].obs;
 List onBoardingList = [];
 RxBool isRejected = false.obs;
