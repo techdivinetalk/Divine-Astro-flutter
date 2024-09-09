@@ -97,8 +97,6 @@ class DashboardController extends GetxController
     super.dispose();
   }
 
-
-
   var commonConstants;
 
   @override
@@ -342,9 +340,9 @@ class DashboardController extends GetxController
         // acceptOrRejectChat(
         //     orderId: int.parse(message.data["order_id"]),
         //     queueId: int.parse(message.data["queue_id"]));
-      } else if(message.data["type"] == "20"){
-        if(MiddleWare.instance.currentPage == RouteName.dashboard){
-          if(Get.isRegistered<DashboardController>()){
+      } else if (message.data["type"] == "20") {
+        if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+          if (Get.isRegistered<DashboardController>()) {
             Get.find<DashboardController>().selectedIndex.value = 3;
           }
         }
@@ -562,8 +560,8 @@ class DashboardController extends GetxController
   }
 
   askPermissionCameraMicrophone() async {
-    if(isOverLayPermissionDashboard.value == 1){
-      if(!await Permission.systemAlertWindow.status.isGranted){
+    if (isOverLayPermissionDashboard.value == 1) {
+      if (!await Permission.systemAlertWindow.status.isGranted) {
         await AppPermissionService.instance.showAlertDialog(
           "Chat",
           ["Allow display over other apps"],
@@ -607,13 +605,11 @@ class DashboardController extends GetxController
 
         if (int.parse(data.data!.appVersion!.split(".").join("")) >
             int.parse(packageInfo.version.split(".").join(""))) {
-          if(Platform.isAndroid){
-            /// need to change according ios
-            Get.bottomSheet(
-              const ForceUpdateSheet(),
-              isDismissible: false,
-            );
-          }
+
+          Get.bottomSheet(
+            const ForceUpdateSheet(),
+            isDismissible: false,
+          );
           // showTutorial(context);
         } else {
           // showTutorial(context);

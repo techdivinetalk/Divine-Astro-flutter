@@ -645,16 +645,27 @@ class UserRepository extends ApiProvider {
         iosDeviceInfo = await deviceInfo.iosInfo;
       }
 
-      Map<String, dynamic> param = new Map();
+      Map<String, dynamic> param = Map();
       if (Platform.isAndroid) {
         param["device_brand"] = androidInfo!.brand;
         param["device_model"] = androidInfo.model;
         param["device_manufacture"] = androidInfo.manufacturer;
         param["device_sdk_code"] = buildNumber;
         param["appCurrentVersion"] = version;
+        param["device_os"] = 1;
         print('🥹🥹🥹🥹🥹🥹🥹🥹');
         print(jsonEncode(param).toString());
         print('🥹🥹🥹🥹🥹🥹🥹🥹');
+      } else {
+        IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
+        String release = iosDeviceInfo.systemVersion;
+        param["device_brand"] = iosDeviceInfo.name;
+        param["device_model"] = iosDeviceInfo.data["machine"];
+        param["device_manufacture"] = iosDeviceInfo.model;
+        param["device_sdk_code"] = release;
+        param["appCurrentVersion"] = version;
+        param["device_os"] = 2;
+        print('ios data ---- >>>> ${version}');
       }
 
       final response = await post(
@@ -676,7 +687,6 @@ class UserRepository extends ApiProvider {
             ConstantDetailsModelClass.fromJson(json.decode(response.body));
         if (constantDetailsModelClass.statusCode == successResponse &&
             constantDetailsModelClass.success == true) {
-
           log("1111111 - ${constantDetailsModelClass.toString()}");
           return constantDetailsModelClass;
         } else {
@@ -1501,8 +1511,6 @@ class UserRepository extends ApiProvider {
     }
   }
 
-
-
   Future<ScreenshotUploadModel> screenShotSend(
       Map<String, dynamic> param) async {
     log(1.toString());
@@ -1535,7 +1543,8 @@ class UserRepository extends ApiProvider {
         } else {
           log(11111.toString());
 
-          final submitResignation = ScreenshotUploadModel.fromJson(responseBody);
+          final submitResignation =
+              ScreenshotUploadModel.fromJson(responseBody);
           return submitResignation;
         }
       } else {
