@@ -144,9 +144,7 @@ class ScheduleTrainingController extends GetxController {
             data: submitastroTrainingSessionModel!.message.toString(),
             color: appColors.green);
 
-        Get.offNamed(
-          RouteName.scheduleTraining2,
-        );
+        submitStage7();
         update();
       } else {
         submittingTrainingss = false;
@@ -159,6 +157,30 @@ class ScheduleTrainingController extends GetxController {
         error.onException();
       } else {
         divineSnackBar(data: error.toString(), color: appColors.red);
+      }
+    }
+  }
+
+  submitStage7() async {
+    update();
+    var body = {
+      "meeting_id": selectedTime ?? "",
+      "page": 7,
+    };
+    try {
+      final response = await userRepository.onBoardingApiFun(body);
+      if (response.success == true) {
+        Get.offNamed(
+          RouteName.scheduleTraining2,
+        );
+        update();
+      }
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
   }

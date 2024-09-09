@@ -361,7 +361,6 @@ class ScheduleTraining2 extends GetView<ScheduleTrainingController> {
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
                                         // Handle tap
-
                                         print('Link tapped');
                                       },
                                   ),
