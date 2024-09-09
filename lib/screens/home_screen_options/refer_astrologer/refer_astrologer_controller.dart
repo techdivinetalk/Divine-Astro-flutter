@@ -121,6 +121,7 @@ class ReferAstrologerState {
       notes: "came from ${otherPlatform.text.trim()}",
       experience: astrologerExperience.text.trim(),
       referBy: user?.id,
+      state: cityController.text.trim(),
     );
   }
 
