@@ -63,9 +63,19 @@ class FaceVerificationController extends GetxController
           }));
       AgreementModel agreementModel = AgreementModel.fromJson(data.data);
       if (agreementModel.status!.code == 200) {
-        Get.to(() => SignatureView(), arguments: {
-          "astrologerProfilePhoto": agreementModel.data!.imageLink,
-        });
+        if (argu == "") {
+          Get.to(() => SignatureView(), arguments: {
+            "astrologerProfilePhoto": agreementModel.data!.imageLink,
+          });
+        } else {
+          Get.to(() => SignatureView(), arguments: {
+            "astrologerProfilePhoto": agreementModel.data!.imageLink,
+            "from": argu
+          });
+        }
+        // Get.to(() => SignatureView(), arguments: {
+        //   "astrologerProfilePhoto": agreementModel.data!.imageLink,
+        // });
         log("agreementModel.data!.imageLink----->>>${agreementModel.data!.imageLink}");
       }
     } on DioException catch (e) {

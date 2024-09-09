@@ -50,13 +50,13 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyC06RdHRB5jW2ri9DSbrd-fHh77yHaXJ1o',
-    appId: '1:507681862980:android:abf46c3e015ebea1e51311',
-    messagingSenderId: '507681862980',
-    projectId: 'divine-live-f7f79',
+    apiKey: 'AIzaSyD6TwQ1az8IU6mmhKZoeLa4kfdQa0BrbQY',
+    appId: '1:764246952124:android:c9f563c3a9416b276fe8b9',
+    messagingSenderId: '764246952124',
+    projectId: 'divine2-0-uat',
     databaseURL:
-        'https://divine-live-f7f79-default-rtdb.asia-southeast1.firebasedatabase.app',
-    storageBucket: 'divine-live-f7f79.appspot.com',
+        "https://divine2-0-uat-default-rtdb.firebaseio.com", // 'https://divine-live-f7f79-default-rtdb.asia-southeast1.firebasedatabase.app',
+    storageBucket: 'divine2-0-uat.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(

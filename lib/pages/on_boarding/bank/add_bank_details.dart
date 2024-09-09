@@ -28,258 +28,231 @@ class AddBankDetails extends GetView<BankController> {
       assignId: true,
       init: BankController(),
       builder: (controller) {
-        return Theme(
-          data: ThemeData(useMaterial3: false),
-          child: Scaffold(
-            backgroundColor: appColors.white,
-            bottomNavigationBar:
-                controller.status == "" || controller.status == "Approved"
-                    ? Container(
-                        margin: EdgeInsets.symmetric(horizontal: 12.w),
-                        child: CustomMaterialButton(
-                          height: 50.h,
-                          buttonName: "submit".tr,
-                          onPressed: () => controller.submit(),
-                        ),
-                      )
-                    : const SizedBox(),
-            body: SafeArea(
-              child: Column(
-                children: [
-                  BackNavigationWidget(
-                    title: "yourBankDetails".tr,
-                    onPressedBack: () => Get.back(),
+        return PopScope(
+          canPop: false,
+          onPopInvoked: (bool) async {
+            controller.showExitAppDialog();
+          },
+          child: Theme(
+            data: ThemeData(useMaterial3: false),
+            child: Scaffold(
+              backgroundColor: appColors.white,
+              appBar: AppBar(
+                backgroundColor: AppColors().white,
+                forceMaterialTransparency: true,
+                automaticallyImplyLeading: false,
+                titleSpacing: 20,
+                title: Text(
+                  "Bank Details".tr,
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16.sp,
+                    color: appColors.darkBlue,
                   ),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      physics: const BouncingScrollPhysics(),
-                      child: Padding(
-                        padding: EdgeInsets.symmetric(
-                          horizontal: 17.w,
+                ),
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(10, 20, 15, 20),
+                    child: InkWell(
+                      onTap: () {
+                        controller.submitStage52();
+                      },
+                      child: Text(
+                        "Skip",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16.sp,
+                          color: appColors.grey,
+                          decoration: TextDecoration.underline,
                         ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Form(
-                                key: controller.formState,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              bottomNavigationBar:
+                  controller.status == "" || controller.status == "Approved"
+                      ? Container(
+                          margin: EdgeInsets.symmetric(horizontal: 12.w),
+                          child: CustomMaterialButton(
+                            height: 50.h,
+                            buttonName: "submit".tr,
+                            onPressed: () => controller.submit(),
+                          ),
+                        )
+                      : const SizedBox(),
+              body: SafeArea(
+                child: Column(
+                  children: [
+                    // BackNavigationWidget(
+                    //   title: "       yourBankDetails".tr,
+                    //   // onPressedBack: () => Get.back(),
+                    //   trailingIcon: InkWell(
+                    //     onTap: () {
+                    //       Get.offNamed(
+                    //         RouteName.addEcomAutomation,
+                    //       );
+                    //     },
+                    //     child: Text(
+                    //       "Skip",
+                    //       style: TextStyle(
+                    //         fontWeight: FontWeight.w400,
+                    //         fontSize: 16.sp,
+                    //         color: appColors.grey,
+                    //         decoration: TextDecoration.underline,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(
+                            horizontal: 17.w,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Form(
+                                  key: controller.formState,
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      // title("bankName".tr),
+                                      // sizedBox5,
+                                      WrapperContainer(
+                                        child: BankDetailsField(
+                                            validator: bankDetailValidator,
+                                            controller: controller.bankName,
+                                            hintText: "Enter Bank Name".tr,
+                                            inputAction: TextInputAction.next,
+                                            inputType: TextInputType.text,
+                                            from: "onBoarding"),
+                                      ),
+                                      sizedBox25,
+                                      // title("accountHolderName".tr),
+                                      // sizedBox5,
+                                      WrapperContainer(
+                                        child: BankDetailsField(
+                                            validator: bankDetailValidator,
+                                            controller: controller.holderName,
+                                            hintText: "Account Holder Name".tr,
+                                            inputAction: TextInputAction.next,
+                                            inputType: TextInputType.text,
+                                            from: "onBoarding"),
+                                      ),
+                                      sizedBox25,
+                                      // title("bankAccountNumber".tr),
+                                      // sizedBox5,
+                                      WrapperContainer(
+                                        child: BankDetailsField(
+                                            validator: bankDetailValidator,
+                                            controller:
+                                                controller.accountNumber,
+                                            hintText: "Bank Account Number".tr,
+                                            inputAction: TextInputAction.next,
+                                            inputType: TextInputType.number,
+                                            from: "onBoarding"),
+                                      ),
+                                      sizedBox25,
+                                      // title("iFSCCode".tr),
+                                      // sizedBox5,
+                                      WrapperContainer(
+                                        child: BankDetailsField(
+                                            validator: bankDetailValidator,
+                                            controller: controller.ifscCode,
+                                            hintText: "IFSC Code".tr,
+                                            inputAction: TextInputAction.next,
+                                            inputType: TextInputType.text,
+                                            from: "onBoarding"),
+                                      ),
+                                      sizedBox25,
+                                      Row(
+                                        children: [
+                                          title("attachments".tr),
+                                          const Spacer(),
+                                          controller.status.isNotEmpty
+                                              ? title(
+                                                  "status".tr +
+                                                      " : " +
+                                                      controller.status,
+                                                  color: controller.status ==
+                                                          "Approved"
+                                                      ? appColors.lightGreen
+                                                      : appColors.textColor)
+                                              : SizedBox()
+                                        ],
+                                      ),
+                                      sizedBox5,
+                                    ],
+                                  )),
+                              GetBuilder<BankController>(
+                                builder: (controller) => Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    title("bankName".tr),
-                                    sizedBox5,
-                                    WrapperContainer(
-                                      child: BankDetailsField(
-                                        validator: bankDetailValidator,
-                                        controller: controller.bankName,
-                                        hintText: "holderNameHintText".tr,
-                                        inputAction: TextInputAction.next,
-                                        inputType: TextInputType.text,
-                                      ),
-                                    ),
-                                    sizedBox25,
-                                    title("accountHolderName".tr),
-                                    sizedBox5,
-                                    WrapperContainer(
-                                      child: BankDetailsField(
-                                        validator: bankDetailValidator,
-                                        controller: controller.holderName,
-                                        hintText: "holderNameHintText".tr,
-                                        inputAction: TextInputAction.next,
-                                        inputType: TextInputType.text,
-                                      ),
-                                    ),
-                                    sizedBox25,
-                                    title("bankAccountNumber".tr),
-                                    sizedBox5,
-                                    WrapperContainer(
-                                      child: BankDetailsField(
-                                        validator: bankDetailValidator,
-                                        controller: controller.accountNumber,
-                                        hintText: "accountNumHintText".tr,
-                                        inputAction: TextInputAction.next,
-                                        inputType: TextInputType.number,
-                                      ),
-                                    ),
-                                    sizedBox25,
-                                    title("iFSCCode".tr),
-                                    sizedBox5,
-                                    WrapperContainer(
-                                      child: BankDetailsField(
-                                        validator: bankDetailValidator,
-                                        controller: controller.ifscCode,
-                                        hintText: "ifscCodeHintText".tr,
-                                        inputAction: TextInputAction.next,
-                                        inputType: TextInputType.text,
-                                      ),
-                                    ),
-                                    sizedBox25,
-                                    Row(
-                                      children: [
-                                        title("attachments".tr),
-                                        const Spacer(),
-                                        controller.status.isNotEmpty
-                                            ? title(
-                                                "status".tr +
-                                                    " : " +
-                                                    controller.status,
-                                                color: controller.status ==
-                                                        "Approved"
-                                                    ? appColors.lightGreen
-                                                    : appColors.textColor)
-                                            : SizedBox()
-                                      ],
-                                    ),
-                                    sizedBox5,
-                                  ],
-                                )),
-                            GetBuilder<BankController>(
-                              builder: (controller) => Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        controller.passBook == null &&
-                                                controller.passBookUrl.isEmpty
-                                            ? GestureDetector(
-                                                onTap: () {
-                                                  controller
-                                                      .pickFile()
-                                                      .then((value) {
-                                                    print(value);
-                                                    print(
-                                                        "valuevaluevaluevaluevalue");
-                                                    if (value != null) {
-                                                      controller
-                                                          .addPassBook(value);
-                                                      controller.passBookUrl =
-                                                          "";
-                                                      print(controller
-                                                              .passBookUrl
-                                                              .isEmpty
-                                                          ? controller
-                                                              .passBook!.path
-                                                          : controller
-                                                              .passBookUrl);
-
-                                                      controller.update();
-                                                    }
-                                                  });
-                                                },
-                                                child: Container(
-                                                  alignment: Alignment.center,
-                                                  decoration: BoxDecoration(
-                                                    color: appColors.grey
-                                                        .withOpacity(0.4),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.h),
-                                                  ),
-                                                  height: 120,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.4,
-                                                  child: Assets.svg.icAdd.svg(),
-                                                ),
-                                              )
-                                            : CommonImageView(
-                                                imagePath: controller
-                                                        .passBookUrl.isEmpty
-                                                    ? ("file://" +
+                                    Expanded(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          controller.passBook == null &&
+                                                  controller.passBookUrl.isEmpty
+                                              ? GestureDetector(
+                                                  onTap: () {
+                                                    controller
+                                                        .pickFile()
+                                                        .then((value) {
+                                                      print(value);
+                                                      print(
+                                                          "valuevaluevaluevaluevalue");
+                                                      if (value != null) {
                                                         controller
-                                                            .passBook!.path)
-                                                    : controller.passBookUrl,
-                                                height: 120,
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.4,
-                                                onTap: () {
-                                                  controller
-                                                      .pickFile()
-                                                      .then((value) {
-                                                    if (value != null) {
-                                                      controller
-                                                          .addPassBook(value);
-                                                    }
-                                                  });
-                                                },
-                                                radius:
-                                                    BorderRadius.circular(10.h),
-                                              ),
-                                        SizedBox(height: 5.h),
-                                        Text("passBook".tr),
-                                      ],
-                                    ),
-                                  ),
-                                  SizedBox(width: 12.w),
-                                  Expanded(
-                                    child: controller.cancelledCheque == null &&
-                                            controller
-                                                .cancelledChequeUrl.isEmpty
-                                        ? Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              GestureDetector(
-                                                onTap: () {
-                                                  controller
-                                                      .pickFile()
-                                                      .then((value) {
-                                                    if (value != null) {
-                                                      controller
-                                                          .addCancelledCheque(
-                                                              value);
-                                                    }
-                                                  });
-                                                },
-                                                child: Container(
-                                                  alignment: Alignment.center,
-                                                  decoration: BoxDecoration(
-                                                    color: appColors.grey
-                                                        .withOpacity(0.4),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10.h),
+                                                            .addPassBook(value);
+                                                        controller.passBookUrl =
+                                                            "";
+                                                        print(controller
+                                                                .passBookUrl
+                                                                .isEmpty
+                                                            ? controller
+                                                                .passBook!.path
+                                                            : controller
+                                                                .passBookUrl);
+
+                                                        controller.update();
+                                                      }
+                                                    });
+                                                  },
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                      color: appColors.grey
+                                                          .withOpacity(0.4),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.h),
+                                                    ),
+                                                    height: 120,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.4,
+                                                    child:
+                                                        Assets.svg.icAdd.svg(),
                                                   ),
-                                                  height: 120,
-                                                  width: MediaQuery.of(context)
-                                                          .size
-                                                          .width *
-                                                      0.4,
-                                                  child: Assets.svg.icAdd.svg(),
-                                                ),
-                                              ),
-                                              SizedBox(height: 5.h),
-                                              Text("cancelledCheque".tr),
-                                            ],
-                                          )
-                                        : Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              CommonImageView(
+                                                )
+                                              : CommonImageView(
                                                   imagePath: controller
-                                                          .cancelledChequeUrl
-                                                          .isEmpty
+                                                          .passBookUrl.isEmpty
                                                       ? ("file://" +
                                                           controller
-                                                              .cancelledCheque!
-                                                              .path)
-                                                      : controller
-                                                          .cancelledChequeUrl,
-                                                  radius: BorderRadius.circular(
-                                                      10.h),
+                                                              .passBook!.path)
+                                                      : controller.passBookUrl,
                                                   height: 120,
                                                   width: MediaQuery.of(context)
                                                           .size
@@ -291,25 +264,116 @@ class AddBankDetails extends GetView<BankController> {
                                                         .then((value) {
                                                       if (value != null) {
                                                         controller
+                                                            .addPassBook(value);
+                                                      }
+                                                    });
+                                                  },
+                                                  radius: BorderRadius.circular(
+                                                      10.h),
+                                                ),
+                                          SizedBox(height: 5.h),
+                                          Text("passBook".tr),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(width: 12.w),
+                                    Expanded(
+                                      child: controller.cancelledCheque ==
+                                                  null &&
+                                              controller
+                                                  .cancelledChequeUrl.isEmpty
+                                          ? Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    controller
+                                                        .pickFile()
+                                                        .then((value) {
+                                                      if (value != null) {
+                                                        controller
                                                             .addCancelledCheque(
                                                                 value);
                                                       }
                                                     });
-                                                  }),
-                                              SizedBox(height: 5.h),
-                                              Text("cancelledCheque".tr),
-                                            ],
-                                          ),
-                                  ),
-                                ],
+                                                  },
+                                                  child: Container(
+                                                    alignment: Alignment.center,
+                                                    decoration: BoxDecoration(
+                                                      color: appColors.grey
+                                                          .withOpacity(0.4),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10.h),
+                                                    ),
+                                                    height: 120,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.4,
+                                                    child:
+                                                        Assets.svg.icAdd.svg(),
+                                                  ),
+                                                ),
+                                                SizedBox(height: 5.h),
+                                                Text("cancelledCheque".tr),
+                                              ],
+                                            )
+                                          : Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                CommonImageView(
+                                                    imagePath: controller
+                                                            .cancelledChequeUrl
+                                                            .isEmpty
+                                                        ? ("file://" +
+                                                            controller
+                                                                .cancelledCheque!
+                                                                .path)
+                                                        : controller
+                                                            .cancelledChequeUrl,
+                                                    radius:
+                                                        BorderRadius.circular(
+                                                            10.h),
+                                                    height: 120,
+                                                    width:
+                                                        MediaQuery.of(context)
+                                                                .size
+                                                                .width *
+                                                            0.4,
+                                                    onTap: () {
+                                                      controller
+                                                          .pickFile()
+                                                          .then((value) {
+                                                        if (value != null) {
+                                                          controller
+                                                              .addCancelledCheque(
+                                                                  value);
+                                                        }
+                                                      });
+                                                    }),
+                                                SizedBox(height: 5.h),
+                                                Text("cancelledCheque".tr),
+                                              ],
+                                            ),
+                                    ),
+                                  ],
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

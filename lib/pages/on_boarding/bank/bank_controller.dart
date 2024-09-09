@@ -2,15 +2,18 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
+import '../../../common/app_exception.dart';
 import '../../../common/colors.dart';
 import '../../../common/common_functions.dart';
+import '../../../common/routes.dart';
 import '../../../di/api_provider.dart';
 import '../../../di/shared_preference_service.dart';
+import '../../../gen/fonts.gen.dart';
 import '../../../model/update_bank_request.dart';
 import '../../../model/update_bank_response.dart';
 
@@ -120,11 +123,17 @@ class BankController extends GetxController {
       },
       "in_onboarding": 1
     };
+    print("------------body -- ${body}");
     final response = await userRepository.updateBankDetailsApi(body);
     status = response.data.status!;
+    if (response.success == true) {
+      Fluttertoast.showToast(msg: response.message);
+
+      await saveUpdatedBankDetails(response.toPrettyString());
+
+      submitStage5();
+    }
     update();
-    await saveUpdatedBankDetails(response.toPrettyString());
-    divineSnackBar(data: response.message);
   }
 
   UpdateBankRequest getFormData() {
@@ -134,6 +143,70 @@ class BankController extends GetxController {
       ifscCode: ifscCode.text.trim(),
       accountHolderName: holderName.text.trim(),
     );
+  }
+
+  submitStage5() async {
+    update();
+    var body = {
+      "bank_name": bankName.text.trim(),
+      "account_number": accountNumber.text.trim(),
+      "ifsc_code": ifscCode.text.trim(),
+      "account_holder_name": holderName.text.trim(),
+      "legal_documents": {
+        "0": passBookUrl.toString(),
+        "1": cancelledChequeUrl.toString(),
+      },
+      "in_onboarding": 1,
+      "page": 5,
+    };
+    try {
+      final response = await userRepository.onBoardingApiFun(body);
+      if (response.success == true) {
+        Get.offNamed(
+          RouteName.addEcomAutomation,
+        );
+        update();
+      }
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  submitStage52() async {
+    update();
+    var body = {
+      "bank_name": "",
+      "account_number": "",
+      "ifsc_code": "",
+      "account_holder_name": "",
+      "legal_documents": {
+        "0": "",
+        "1": "",
+      },
+      "in_onboarding": 1,
+      "page": 5,
+    };
+    try {
+      final response = await userRepository.onBoardingApiFun(body);
+      if (response.success == true) {
+        Get.offNamed(
+          RouteName.addEcomAutomation,
+        );
+        update();
+      }
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
   }
 
   Future<void> saveUpdatedBankDetails(String json) async {
@@ -291,6 +364,77 @@ class BankController extends GetxController {
       accountNumber.text = userData?.accountNumber ?? "";
       ifscCode.text = userData?.ifscCode ?? "";
     }
+  }
+
+  void showExitAppDialog() {
+    Get.defaultDialog(
+      title: 'Close App?',
+      titleStyle: TextStyle(
+        fontSize: 20,
+        fontFamily: FontFamily.metropolis,
+        fontWeight: FontWeight.w600,
+        color: appColors.appRedColour,
+      ),
+      titlePadding: EdgeInsets.only(top: 20, bottom: 5),
+      middleText:
+          'You\'re just a few steps away from getting started with divinetalk.',
+      middleTextStyle: TextStyle(
+        fontSize: 14,
+        fontFamily: FontFamily.poppins,
+        fontWeight: FontWeight.w400,
+        color: appColors.black.withOpacity(0.8),
+      ),
+      backgroundColor: appColors.white,
+      radius: 10,
+      barrierDismissible: true, // Can tap outside to close the dialog
+      actions: [
+        TextButton(
+          onPressed: () {
+            // Handle exit action
+            exit(0);
+          },
+          child: Text(
+            'Exit App',
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: FontFamily.metropolis,
+              fontWeight: FontWeight.w600,
+              color: appColors.darkBlue,
+            ),
+          ),
+          style: TextButton.styleFrom(
+            side: BorderSide(color: appColors.darkBlue),
+            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            // Handle continue action
+            Get.back(); // Close dialog
+            // Add any other functionality you need
+          },
+          child: Text(
+            'Continue',
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: FontFamily.metropolis,
+              fontWeight: FontWeight.w600,
+              color: appColors.white,
+            ),
+          ),
+          style: TextButton.styleFrom(
+            backgroundColor: appColors.appRedColour,
+            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 //   // Method to submit bank details

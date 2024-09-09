@@ -39,6 +39,7 @@ import '../model/AllSupportIssueModel.dart';
 import '../model/AstroRitentionModel.dart';
 import '../model/AstroTrainingSessionModel.dart';
 import '../model/FinancialCreateIssueModel.dart';
+import '../model/GetAstroOnboarding.dart';
 import '../model/OnBoardingStageModel.dart';
 import '../model/PassBookDataModel.dart';
 import '../model/RitentionPopupModel.dart';
@@ -46,6 +47,7 @@ import '../model/ScreenshotUploadModel.dart';
 import '../model/SubmitScheduleTrainingModel.dart';
 import '../model/TechnicalIssuesData.dart';
 import '../model/TechnicalSupport.dart';
+import '../model/astrologer_training_session_response.dart';
 import "../model/blocked_customers_response.dart";
 import '../model/cityDataModel.dart';
 import '../model/constant_details_model_class.dart';
@@ -693,6 +695,73 @@ class UserRepository extends ApiProvider {
     }
   }
 
+  Future<ConstantDetailsModelClass> constantDetailsData2api() async {
+    try {
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      String version = packageInfo.version;
+      String buildNumber = packageInfo.buildNumber;
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      AndroidDeviceInfo? androidInfo;
+      IosDeviceInfo iosDeviceInfo;
+      if (Platform.isAndroid) {
+        androidInfo = await deviceInfo.androidInfo;
+        print('Running on ${androidInfo!.model}'); // e.g., "Pixel 3"
+        print('App Version: $version');
+      } else {
+        iosDeviceInfo = await deviceInfo.iosInfo;
+      }
+
+      Map<String, dynamic> param = new Map();
+      if (Platform.isAndroid) {
+        param["device_brand"] = androidInfo!.brand;
+        param["device_model"] = androidInfo.model;
+        param["device_manufacture"] = androidInfo.manufacturer;
+        param["device_sdk_code"] = buildNumber;
+        param["appCurrentVersion"] = version;
+        print('🥹🥹🥹🥹🥹🥹🥹🥹');
+        print(jsonEncode(param).toString());
+        print('🥹🥹🥹🥹🥹🥹🥹🥹');
+      }
+
+      final response = await post(
+        constantDetails,
+        headers: await getJsonHeaderURL(),
+        body: jsonEncode(param).toString(),
+      );
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+      log('😇😇😇😇😇😇😇😇');
+      log(response.body);
+      log('😇😇😇😇😇😇😇😇');
+      log("response.body");
+      final constantDetailsModelClass =
+          ConstantDetailsModelClass.fromJson(json.decode(response.body));
+
+      if (response.statusCode == 200) {
+        final constantDetailsModelClass =
+            ConstantDetailsModelClass.fromJson(json.decode(response.body));
+        if (constantDetailsModelClass.statusCode == successResponse &&
+            constantDetailsModelClass.success == true) {
+          log("1111111 - ${constantDetailsModelClass.toString()}");
+          return constantDetailsModelClass;
+        } else {
+          return constantDetailsModelClass;
+
+          // throw CustomException(json.decode(response.body)["error"]);
+        }
+      } else {
+        throw CustomException(json.decode(response.body)[0]["message"]);
+      }
+    } catch (e, s) {
+      Utils().handleCatchPreferenceServiceErase();
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
   Future<UpdateProfileResponse> updateProfile(
       Map<String, dynamic> param) async {
     try {
@@ -838,7 +907,7 @@ class UserRepository extends ApiProvider {
     }
   }
 
-  Future<OnBoardingStageModel> getOnBoardingApiFun(
+  Future<GetAstroOnboarding> getOnBoardingApiFun(
       Map<String, dynamic> param) async {
     try {
       final response = await post(getAstroOnboarding,
@@ -855,7 +924,7 @@ class UserRepository extends ApiProvider {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
-          final data = OnBoardingStageModel.fromJson(jsonDecode(response.body));
+          final data = GetAstroOnboarding.fromJson(jsonDecode(response.body));
           return data;
         }
       } else {
@@ -920,6 +989,45 @@ class UserRepository extends ApiProvider {
         }
       } else {
         throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<AstrologerTrainingSessionResponse?>
+      doGetAstrologerTrainingSession() async {
+    try {
+      final response = await post(getAstrologerTrainingSession);
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      } else if (response.statusCode == 110 ||
+          response.statusCode == HttpStatus.networkConnectTimeoutError ||
+          response.statusCode == HttpStatus.networkAuthenticationRequired) {
+        divineSnackBar(
+            data: "No Internet connection", color: appColors.redColor);
+      }
+      if (response.statusCode == 200 && json.decode(response.body) != null) {
+        print("test_body: ${response.body}");
+        print("test_body_decode: ${json.decode(response.body)}");
+
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else if (json.decode(response.body)["status_code"] == 200 &&
+            json.decode(response.body)["success"] == true &&
+            json.decode(response.body)["data"] != null) {
+          return AstrologerTrainingSessionResponse.fromJson(
+              json.decode(response.body));
+        } else {
+          return null;
+        }
+      } else {
+        return null;
       }
     } catch (e, s) {
       debugPrint("we got $e $s");

@@ -41,7 +41,7 @@ RxInt isGifts = 1.obs;
 RxInt isAstroTime = 0.obs;
 RxInt isOverLayPermissionDashboard = 0.obs;
 //RxInt serverTime = 0.obs;
-RxInt isAgreement = 1.obs; 
+RxInt isAgreement = 1.obs;
 RxInt isCustomToken = 0.obs;
 RxInt isNetworkPopup = 0.obs;
 RxInt showStaticText = 0.obs;
@@ -193,6 +193,15 @@ class AppFirebaseService {
         break;
       case "isEngagedStatus":
         isEngagedStatus(value);
+        break;
+      case "isOnboarding":
+        print("isOnboarding $isOnboarding");
+        print("isOnboarding $isOnboarding");
+        print("isOnboarding $isOnboarding");
+        isOnboarding(value);
+        print("isOnboarding $isOnboarding");
+        print("isOnboarding $isOnboarding");
+
         break;
       case "callKundli":
         callKunadliUpdated({});

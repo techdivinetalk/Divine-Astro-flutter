@@ -8,7 +8,6 @@ import '../../common/colors.dart';
 import '../../common/common_image_view.dart';
 import '../../gen/assets.gen.dart';
 import '../../gen/fonts.gen.dart';
-import '../../screens/live_page/constant.dart';
 import 'on_boarding_controller.dart';
 
 class OnBoarding2Binding extends Bindings {
@@ -25,413 +24,474 @@ class OnBoarding2 extends GetView<OnBoardingController> {
       assignId: true,
       init: OnBoardingController(),
       builder: (controller) {
-        return Scaffold(
-          backgroundColor: appColors.white,
-          appBar: AppBar(
-            backgroundColor: AppColors().white,
-            forceMaterialTransparency: true,
-            automaticallyImplyLeading: false,
-            leading: Padding(
-              padding: const EdgeInsets.only(bottom: 2.0),
-              child: IconButton(
-                visualDensity: const VisualDensity(horizontal: -4),
-                constraints: BoxConstraints.loose(Size.zero),
-                icon: Icon(Icons.arrow_back_ios, color: Colors.black, size: 14),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+        return PopScope(
+          canPop: false,
+          onPopInvoked: (bool) async {
+            controller.showExitAppDialog();
+          },
+          child: Scaffold(
+            backgroundColor: appColors.white,
+            appBar: AppBar(
+              backgroundColor: AppColors().white,
+              forceMaterialTransparency: true,
+              automaticallyImplyLeading: false,
+              // leading: Padding(
+              // padding: const EdgeInsets.only(bottom: 2.0),
+              // child: IconButton(
+              //   visualDensity: const VisualDensity(horizontal: -4),
+              //   constraints: BoxConstraints.loose(Size.zero),
+              //   icon:
+              //       Icon(Icons.arrow_back_ios, color: Colors.black, size: 14),
+              //   onPressed: () {
+              //     Get.until(
+              //       (route) {
+              //         return Get.currentRoute == RouteName.dashboard;
+              //       },
+              //     );
+              //   },
+              // ),
+              // ),
+              titleSpacing: 20,
+              title: Text(
+                "Onboarding Process",
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 16.sp,
+                  color: appColors.darkBlue,
+                ),
               ),
             ),
-            titleSpacing: 0,
-            title: Text(
-              "Onboarding Process",
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 16.sp,
-                color: appColors.darkBlue,
-              ),
-            ),
-          ),
-          body: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(left: 14, right: 14),
-                child: pageWidget('2'),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 14, right: 14),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Basic\nDetails",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12.sp,
-                        color: appColors.black.withOpacity(0.7),
-                      ),
-                    ),
-                    buildSpace(),
-                    Text(
-                      "Upload\nDocuments",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12.sp,
-                        color: appColors.black.withOpacity(0.7),
-                      ),
-                    ),
-                    buildSpace(),
-                    Text(
-                      "Upload\nPictures",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12.sp,
-                        color: appColors.black.withOpacity(0.7),
-                      ),
-                    ),
-                    buildSpace(),
-                    Text(
-                      "Signing\nAgreement",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12.sp,
-                        color: appColors.black.withOpacity(0.7),
-                      ),
-                    ),
-                    buildSpace(),
-                    Text(
-                      "Awaiting\nApproval",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w400,
-                        fontSize: 12.sp,
-                        color: appColors.black.withOpacity(0.7),
-                      ),
-                    ),
-                  ],
+            body: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.only(left: 14, right: 14),
+                  child: pageWidget('2'),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Upload Aadhar Card",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16.sp,
-                      color: appColors.black,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      children: [
-                        InkWell(
-                          borderRadius: BorderRadius.circular(20),
-                          onTap: () {
-                            controller.getImage("af");
-                          },
-                          child: Container(
-                            height: 150,
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            decoration: BoxDecoration(
-                              color: AppColors().grey.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: controller.photoUrlAadharFront != null
-                                ? CommonImageView(
-                                    imagePath: controller.photoUrlAadharFront,
-                                    fit: BoxFit.cover,
-                                    placeHolder:
-                                        Assets.images.defaultProfile.path,
-                                    radius: BorderRadius.circular(20.h),
-                                  )
-                                : controller.selectedAadharFront != null
-                                    ? Image.file(
-                                        controller.selectedAadharFront,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : Icon(
-                                        Icons.add,
-                                        color: AppColors().white,
-                                        size: 80,
-                                      ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 10, bottom: 10),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Front Side",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12.sp,
-                                color: AppColors().grey,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Column(
-                      children: [
-                        InkWell(
-                          borderRadius: BorderRadius.circular(20),
-                          onTap: () {
-                            controller.getImage("ab");
-                          },
-                          child: Container(
-                            height: 150,
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            decoration: BoxDecoration(
-                              color: AppColors().grey.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: controller.photoUrlAadharBack != null
-                                ? CommonImageView(
-                                    imagePath: controller.photoUrlAadharBack,
-                                    fit: BoxFit.cover,
-                                    placeHolder:
-                                        Assets.images.defaultProfile.path,
-                                    radius: BorderRadius.circular(20.h),
-                                  )
-                                : controller.selectedAadharBack != null
-                                    ? Image.file(
-                                        controller.selectedAadharBack,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : Icon(
-                                        Icons.add,
-                                        color: AppColors().white,
-                                        size: 80,
-                                      ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 10, bottom: 10),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Back Side",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12.sp,
-                                color: AppColors().grey,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 20, bottom: 10),
-                child: Align(
-                  alignment: Alignment.centerLeft,
-                  child: Text(
-                    "Upload Pan Card",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 16.sp,
-                      color: appColors.black,
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Column(
-                      children: [
-                        InkWell(
-                          borderRadius: BorderRadius.circular(20),
-                          onTap: () {
-                            controller.getImage('panFront');
-                          },
-                          child: Container(
-                            height: 150,
-                            width: MediaQuery.of(context).size.width * 0.4,
-                            decoration: BoxDecoration(
-                              color: AppColors().grey.withOpacity(0.3),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: controller.photoUrlPanFront != null
-                                ? CommonImageView(
-                                    imagePath: controller.photoUrlPanFront,
-                                    fit: BoxFit.cover,
-                                    placeHolder:
-                                        Assets.images.defaultProfile.path,
-                                    radius: BorderRadius.circular(20.h),
-                                  )
-                                : controller.selectedPanFront != null
-                                    ? Image.file(
-                                        controller.selectedPanFront,
-                                        fit: BoxFit.cover,
-                                      )
-                                    : Icon(
-                                        Icons.add,
-                                        color: AppColors().white,
-                                        size: 80,
-                                      ),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 10, bottom: 10),
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              "Front Side",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w400,
-                                fontSize: 12.sp,
-                                color: AppColors().grey,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              height: 110,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 14, right: 14, top: 10, bottom: 10),
-                    child: RichText(
-                      text: TextSpan(
-                        text:
-                            '* Confused? Don’t worry, We are here to help you! ',
-                        style: TextStyle(
-                          fontFamily: FontFamily.poppins,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: appColors.grey,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'Click here for a tutorial video.',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: FontFamily.poppins,
-                              fontWeight: FontWeight.w400,
-                              color: appColors.red,
-                              decoration: TextDecoration.underline,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                // Handle tap
-                                print('Link tapped');
-                              },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Row(
+                Padding(
+                  padding: const EdgeInsets.only(left: 14, right: 14),
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      InkWell(
-                        onTap: () {
-                          if (controller.selectedAadharBack == null ||
-                              controller.selectedAadharFront == null ||
-                              controller.selectedPanFront == null) {
-                            Fluttertoast.showToast(
-                                msg: "Image is not selected");
-                          } else {
-                            if (controller.photoUrlPanFront == null ||
-                                controller.photoUrlAadharBack == null ||
-                                controller.photoUrlAadharBack == null) {
-                              for (int i = 0; i < 3; i++) {
-                                // Your code here will run 3 times
-                                if (i == 1) {
-                                  controller.uploadImage(
-                                      controller.selectedAadharFront,
-                                      "aadharFront");
-                                  print("Iteration: ${i + 1}");
-                                } else if (i == 2) {
-                                  controller.uploadImage(
-                                      controller.selectedAadharBack,
-                                      "aadharBack");
-                                  print("Iteration: ${i + 1}");
-                                } else {}
-                              }
-                            } else {
-                              if (isRejected.value == true) {
-                                controller.submitStage2();
-                              } else {
-                                controller.navigateToStage();
-                              }
-                            }
-                          }
-                        },
-                        child: controller.stage1Submitting.value == true
-                            ? Center(
-                                child: CircularProgressIndicator(),
-                              )
-                            : Container(
-                                height: 50,
-                                width: MediaQuery.of(context).size.width * 0.9,
-                                decoration: BoxDecoration(
-                                  color: controller.selectedAadharBack ==
-                                              null ||
-                                          controller.selectedAadharFront ==
-                                              null ||
-                                          controller.selectedPanFront == null
-                                      ? appColors.grey.withOpacity(0.4)
-                                      : appColors.red,
-                                  borderRadius: BorderRadius.circular(14),
-                                ),
-                                child: controller.loadingAadharFront == true
-                                    ? Center(
-                                        child: CircularProgressIndicator(
-                                          color: appColors.white,
-                                          strokeWidth: 1,
-                                        ),
-                                      )
-                                    : Align(
-                                        alignment: Alignment.center,
-                                        child: Text(
-                                          "Next",
-                                          style: TextStyle(
-                                            fontWeight: FontWeight.w600,
-                                            fontSize: 20.sp,
-                                            color: AppColors().white,
-                                          ),
-                                        ),
-                                      ),
-                              ),
+                      Text(
+                        "Basic\nDetails",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12.sp,
+                          color: appColors.black.withOpacity(0.7),
+                        ),
+                      ),
+                      buildSpace(),
+                      Text(
+                        "Upload\nDocuments",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12.sp,
+                          color: appColors.black.withOpacity(0.7),
+                        ),
+                      ),
+                      buildSpace(),
+                      Text(
+                        "Upload\nPictures",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12.sp,
+                          color: appColors.black.withOpacity(0.7),
+                        ),
+                      ),
+                      buildSpace(),
+                      Text(
+                        "Signing\nAgreement",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12.sp,
+                          color: appColors.black.withOpacity(0.7),
+                        ),
+                      ),
+                      buildSpace(),
+                      Text(
+                        "Awaiting\nApproval",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12.sp,
+                          color: appColors.black.withOpacity(0.7),
+                        ),
                       ),
                     ],
                   ),
-                ],
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Upload Aadhar Card",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.sp,
+                        color: appColors.black,
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: [
+                          InkWell(
+                            borderRadius: BorderRadius.circular(20),
+                            onTap: () {
+                              controller.getImage("af");
+                            },
+                            child: Container(
+                              height: 150,
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              decoration: BoxDecoration(
+                                color: AppColors().grey.withOpacity(0.3),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: controller.verifyAadharFront != null &&
+                                      controller.selectedAadharFront == null
+                                  ? CommonImageView(
+                                      imagePath: controller.verifyAadharFront,
+                                      fit: BoxFit.cover,
+                                      placeHolder:
+                                          Assets.images.defaultProfile.path,
+                                      radius: BorderRadius.circular(20.h),
+                                    )
+                                  : controller.photoUrlAadharFront != null
+                                      ? CommonImageView(
+                                          imagePath:
+                                              controller.photoUrlAadharFront,
+                                          fit: BoxFit.cover,
+                                          placeHolder:
+                                              Assets.images.defaultProfile.path,
+                                          radius: BorderRadius.circular(20.h),
+                                        )
+                                      : controller.selectedAadharFront != null
+                                          ? ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.h),
+                                              child: Image.file(
+                                                controller.selectedAadharFront,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            )
+                                          : Icon(
+                                              Icons.add,
+                                              color: AppColors().white,
+                                              size: 80,
+                                            ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10, bottom: 10),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Front Side",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12.sp,
+                                  color: AppColors().grey,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      Column(
+                        children: [
+                          InkWell(
+                            borderRadius: BorderRadius.circular(20),
+                            onTap: () {
+                              controller.getImage("ab");
+                            },
+                            child: Container(
+                              height: 150,
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              decoration: BoxDecoration(
+                                color: AppColors().grey.withOpacity(0.3),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: controller.verifyAadharBack != null &&
+                                      controller.selectedAadharBack == null
+                                  ? CommonImageView(
+                                      imagePath: controller.verifyAadharBack,
+                                      fit: BoxFit.cover,
+                                      placeHolder:
+                                          Assets.images.defaultProfile.path,
+                                      radius: BorderRadius.circular(20.h),
+                                    )
+                                  : controller.photoUrlAadharBack != null
+                                      ? CommonImageView(
+                                          imagePath:
+                                              controller.photoUrlAadharBack,
+                                          fit: BoxFit.cover,
+                                          placeHolder:
+                                              Assets.images.defaultProfile.path,
+                                          radius: BorderRadius.circular(20.h),
+                                        )
+                                      : controller.selectedAadharBack != null
+                                          ? ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.h),
+                                              child: Image.file(
+                                                controller.selectedAadharBack,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            )
+                                          : Icon(
+                                              Icons.add,
+                                              color: AppColors().white,
+                                              size: 80,
+                                            ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10, bottom: 10),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Back Side",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12.sp,
+                                  color: AppColors().grey,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.only(left: 20, bottom: 10),
+                  child: Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      "Upload Pan Card",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16.sp,
+                        color: appColors.black,
+                      ),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 20),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Column(
+                        children: [
+                          InkWell(
+                            borderRadius: BorderRadius.circular(20),
+                            onTap: () {
+                              controller.getImage('panFront');
+                            },
+                            child: Container(
+                              height: 150,
+                              width: MediaQuery.of(context).size.width * 0.4,
+                              decoration: BoxDecoration(
+                                color: AppColors().grey.withOpacity(0.3),
+                                borderRadius: BorderRadius.circular(20),
+                              ),
+                              child: controller.verifyPanFront != null &&
+                                      controller.selectedPanFront == null
+                                  ? CommonImageView(
+                                      imagePath: controller.verifyPanFront,
+                                      fit: BoxFit.cover,
+                                      placeHolder:
+                                          Assets.images.defaultProfile.path,
+                                      radius: BorderRadius.circular(20.h),
+                                    )
+                                  : controller.photoUrlPanFront != null
+                                      ? CommonImageView(
+                                          imagePath:
+                                              controller.photoUrlPanFront,
+                                          fit: BoxFit.cover,
+                                          placeHolder:
+                                              Assets.images.defaultProfile.path,
+                                          radius: BorderRadius.circular(20.h),
+                                        )
+                                      : controller.selectedPanFront != null
+                                          ? ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(20.h),
+                                              child: Image.file(
+                                                controller.selectedPanFront,
+                                                fit: BoxFit.cover,
+                                              ),
+                                            )
+                                          : Icon(
+                                              Icons.add,
+                                              color: AppColors().white,
+                                              size: 80,
+                                            ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(top: 10, bottom: 10),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: Text(
+                                "Front Side",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12.sp,
+                                  color: AppColors().grey,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            bottomNavigationBar: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: SizedBox(
+                height: 110,
+                child: Column(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          left: 14, right: 14, top: 10, bottom: 10),
+                      child: RichText(
+                        text: TextSpan(
+                          text:
+                              '* Confused? Don’t worry, We are here to help you! ',
+                          style: TextStyle(
+                            fontFamily: FontFamily.poppins,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                            color: appColors.grey,
+                          ),
+                          children: [
+                            TextSpan(
+                              text: 'Click here for a tutorial video.',
+                              style: TextStyle(
+                                fontSize: 12,
+                                fontFamily: FontFamily.poppins,
+                                fontWeight: FontWeight.w400,
+                                color: appColors.red,
+                                decoration: TextDecoration.underline,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  // Handle tap
+                                  print('Link tapped');
+                                },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        InkWell(
+                          onTap: () {
+                            if (controller.selectedAadharBack == null ||
+                                controller.selectedAadharFront == null ||
+                                controller.selectedPanFront == null) {
+                              Fluttertoast.showToast(
+                                  msg: "Image is not selected");
+                            } else {
+                              // if (controller.photoUrlPanFront == null ||
+                              //     controller.photoUrlAadharBack == null ||
+                              //
+                              //     controller.photoUrlAadharBack == null) {
+                              //   print("uploadinggggg");
+                              //   for (int i = 0; i < 3; i++) {
+                              //     // Your code here will run 3 times
+                              //     if (i == 1) {
+                              //       controller.uploadImage(
+                              //           controller.selectedAadharFront,
+                              //           "aadharFront");
+                              //       print("Iteration: ${i + 1}");
+                              //     } else if (i == 2) {
+                              //       controller.uploadImage(
+                              //           controller.selectedAadharBack,
+                              //           "aadharBack");
+                              //       print("Iteration: ${i + 1}");
+                              //     } else {
+                              //       controller.uploadImage(
+                              //           controller.selectedAadharFront,
+                              //           "aadharFront");
+                              //     }
+                              //   }
+                              // } else {
+                              controller.submitStage2();
+                              // if (isRejected.value == true) {
+                              //   controller.submitStage2();
+                              // } else {
+                              //   controller.navigateToStage();
+                              // }
+                              // }
+                            }
+                          },
+                          child: controller.stage2Submitting.value == true
+                              ? Center(
+                                  child: CircularProgressIndicator(),
+                                )
+                              : Container(
+                                  height: 50,
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.9,
+                                  decoration: BoxDecoration(
+                                    color: controller.selectedAadharBack ==
+                                                null ||
+                                            controller.selectedAadharFront ==
+                                                null ||
+                                            controller.selectedPanFront == null
+                                        ? appColors.grey.withOpacity(0.4)
+                                        : appColors.red,
+                                    borderRadius: BorderRadius.circular(14),
+                                  ),
+                                  child: controller.stage2Submitting == true
+                                      ? Center(
+                                          child: CircularProgressIndicator(
+                                            color: appColors.white,
+                                            strokeWidth: 1,
+                                          ),
+                                        )
+                                      : Align(
+                                          alignment: Alignment.center,
+                                          child: Text(
+                                            "Next",
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w600,
+                                              fontSize: 20.sp,
+                                              color: AppColors().white,
+                                            ),
+                                          ),
+                                        ),
+                                ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -489,7 +549,7 @@ Widget pageWidget(page) {
             color: appColors.white,
             shape: BoxShape.circle,
             border: Border.all(
-              color: appColors.grey,
+              color: appColors.grey.withOpacity(0.7),
               width: 1,
             )),
         padding: EdgeInsets.all(12),
@@ -498,7 +558,7 @@ Widget pageWidget(page) {
           style: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 16.sp,
-            color: appColors.grey,
+            color: appColors.grey.withOpacity(0.7),
           ),
         ),
       ),
@@ -508,7 +568,7 @@ Widget pageWidget(page) {
             color: appColors.white,
             shape: BoxShape.circle,
             border: Border.all(
-              color: appColors.grey,
+              color: appColors.grey.withOpacity(0.7),
               width: 1,
             )),
         padding: EdgeInsets.all(12),
@@ -517,7 +577,7 @@ Widget pageWidget(page) {
           style: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 16.sp,
-            color: appColors.grey,
+            color: appColors.grey.withOpacity(0.7),
           ),
         ),
       ),
@@ -527,7 +587,7 @@ Widget pageWidget(page) {
             color: appColors.white,
             shape: BoxShape.circle,
             border: Border.all(
-              color: appColors.grey,
+              color: appColors.grey.withOpacity(0.7),
               width: 1,
             )),
         padding: EdgeInsets.all(12),
@@ -536,7 +596,7 @@ Widget pageWidget(page) {
           style: TextStyle(
             fontWeight: FontWeight.w400,
             fontSize: 16.sp,
-            color: appColors.grey,
+            color: appColors.grey.withOpacity(0.7),
           ),
         ),
       ),
@@ -548,7 +608,7 @@ Widget buildLine({required bool isActive}) {
   return Expanded(
     child: Container(
       height: 2,
-      color: isActive ? Colors.red : Colors.grey,
+      color: isActive ? Colors.red : appColors.grey.withOpacity(0.7),
     ),
   );
 }

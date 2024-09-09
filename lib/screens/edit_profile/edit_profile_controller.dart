@@ -2,7 +2,6 @@ import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/categories_list.dart';
 import 'package:divine_astrologer/model/res_login.dart';
-import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
@@ -35,7 +34,7 @@ class EditProfileController extends GetxController {
     super.onInit();
     state.init();
     userData = pref.getUserDetail();
-     if (userData != null) {
+    if (userData != null) {
       userData?.astroCatPivot?.asMap().entries.forEach((element) {
         tagIndexes.add(element.key);
         tags.add(CategoriesData.fromAstrologerSpeciality(element.value));
@@ -49,6 +48,7 @@ class EditProfileController extends GetxController {
     super.dispose();
     state.dispose();
   }
+
   void editProfile() async {
     print(tags.map((element) => element.id).toList().join(","));
     print("tags.map((element) => element.id).toList()");

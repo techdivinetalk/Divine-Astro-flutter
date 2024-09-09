@@ -14,7 +14,6 @@ import '../../../common/colors.dart';
 import '../../../common/common_image_view.dart';
 import '../../../common/custom_widgets.dart';
 import '../../../common/permission_handler.dart';
-import '../../../common/routes.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../gen/fonts.gen.dart';
 import '../../../screens/add_puja/add_puja_controller.dart';
@@ -30,259 +29,304 @@ class AddEcomScreen extends GetView<AddEcomController> {
       assignId: true,
       init: AddEcomController(),
       builder: (controller) {
-        return Scaffold(
-          appBar: AppBar(
-            backgroundColor: appColors.white,
-            surfaceTintColor: appColors.white,
-            leading: IconButton(
-                onPressed: () => Get.back(),
-                icon: const Icon(Icons.arrow_back_ios_new_rounded)),
-            title: CustomText(
-              'Add Ecommerce',
-            ),
-            actions: [
-              InkWell(
-                onTap: () {
-                  Get.toNamed(
-                    RouteName.dashboard,
-                  );
-                },
-                child: Text(
-                  "Skip",
-                  style: TextStyle(
-                    fontWeight: FontWeight.w400,
-                    fontSize: 16.sp,
-                    color: appColors.grey,
-                    decoration: TextDecoration.underline,
-                  ),
-                ),
+        return PopScope(
+          canPop: false,
+          onPopInvoked: (bool) async {
+            controller.showExitAppDialog();
+          },
+          child: Scaffold(
+            appBar: AppBar(
+              backgroundColor: appColors.white,
+              surfaceTintColor: appColors.white,
+              automaticallyImplyLeading: false,
+              // leading: IconButton(
+              //     onPressed: () => Get.back(),
+              //     icon: const Icon(Icons.arrow_back_ios_new_rounded)),
+              title: CustomText(
+                'Add Ecommerce',
               ),
-              SizedBox(
-                width: 10,
-              ),
-            ],
-          ),
-          bottomNavigationBar: Container(
-            height: 120,
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
-            child: Column(
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(
-                      left: 14, right: 14, top: 10, bottom: 10),
-                  child: RichText(
-                    text: TextSpan(
-                      text:
-                          '* Confused? Don’t worry, We are here to help you! ',
-                      style: TextStyle(
-                        fontFamily: FontFamily.poppins,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                        color: appColors.grey,
-                      ),
-                      children: [
-                        TextSpan(
-                          text: 'Click here for a tutorial video.',
-                          style: TextStyle(
-                            fontSize: 12,
-                            fontFamily: FontFamily.poppins,
-                            fontWeight: FontWeight.w400,
-                            color: appColors.red,
-                            decoration: TextDecoration.underline,
-                          ),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              // Handle tap
-                              print('Link tapped');
-                            },
-                        ),
-                      ],
+              actions: [
+                InkWell(
+                  onTap: () {
+                    controller.submitStage62();
+                  },
+                  child: Text(
+                    "Skip",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16.sp,
+                      color: appColors.grey,
+                      decoration: TextDecoration.underline,
                     ),
                   ),
                 ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: FilledButton(
-                        style: FilledButton.styleFrom(
-                          backgroundColor: appColors.guideColor,
-                          padding: EdgeInsets.symmetric(vertical: 5.h),
-                          shape: const RoundedRectangleBorder(
-                            borderRadius: BorderRadius.all(Radius.circular(10)),
-                          ),
+                SizedBox(
+                  width: 10,
+                ),
+              ],
+            ),
+            bottomNavigationBar: Container(
+              height: 120,
+              padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(
+                        left: 14, right: 14, top: 10, bottom: 10),
+                    child: RichText(
+                      text: TextSpan(
+                        text:
+                            '* Confused? Don’t worry, We are here to help you! ',
+                        style: TextStyle(
+                          fontFamily: FontFamily.poppins,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
+                          color: appColors.grey,
                         ),
-                        onPressed: !controller.isPujaLoading
-                            ? () {
-                                if (controller.formKey.currentState
-                                        ?.validate() ??
-                                    false) {
-                                  print("going in inside");
-                                  if (controller.validation()) {
-                                    if (controller.selectedValue.value ==
-                                        "Puja") {
-                                      controller.addEditPoojaApi();
-                                    } else {
-                                      controller.addEditProduct();
+                        children: [
+                          TextSpan(
+                            text: 'Click here for a tutorial video.',
+                            style: TextStyle(
+                              fontSize: 12,
+                              fontFamily: FontFamily.poppins,
+                              fontWeight: FontWeight.w400,
+                              color: appColors.red,
+                              decoration: TextDecoration.underline,
+                            ),
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                // Handle tap
+                                print('Link tapped');
+                              },
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: FilledButton(
+                          style: FilledButton.styleFrom(
+                            backgroundColor: appColors.guideColor,
+                            padding: EdgeInsets.symmetric(vertical: 5.h),
+                            shape: const RoundedRectangleBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
+                          ),
+                          onPressed: !controller.isPujaLoading
+                              ? () {
+                                  if (controller.formKey.currentState
+                                          ?.validate() ??
+                                      false) {
+                                    print("going in inside");
+                                    if (controller.validation()) {
+                                      if (controller.selectedValue.value ==
+                                          "Puja") {
+                                        controller.addEditPoojaApi();
+                                      } else {
+                                        controller.addEditProduct();
+                                      }
                                     }
                                   }
                                 }
-                              }
-                            : () {},
-                        child: !controller.isPujaLoading
-                            ? Text(
-                                'Add ${controller.selectedValue}',
-                                style: AppTextStyle.textStyle16(
-                                  fontWeight: FontWeight.w600,
-                                  fontColor: appColors.white,
+                              : () {},
+                          child: !controller.isPujaLoading
+                              ? Text(
+                                  'Add ${controller.selectedValue}',
+                                  style: AppTextStyle.textStyle16(
+                                    fontWeight: FontWeight.w600,
+                                    fontColor: appColors.white,
+                                  ),
+                                )
+                              : SizedBox(
+                                  height: 35,
+                                  child: CircularProgressIndicator(
+                                    backgroundColor: appColors.whiteGuidedColor,
+                                  ),
                                 ),
-                              )
-                            : SizedBox(
-                                height: 35,
-                                child: CircularProgressIndicator(
-                                  backgroundColor: appColors.whiteGuidedColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            body: Form(
+              key: controller.formKey,
+              child: ListView(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(bottom: 10),
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: appColors.red.withOpacity(0.1),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.shopping_cart_outlined,
+                              size: 25,
+                              color: appColors.red,
+                            ),
+                            SizedBox(
+                              width: 6,
+                            ),
+                            Expanded(
+                              child: Text(
+                                "You can upload products or pujas, which will be listed on your profile with a chat option for users to purchase, after approval.",
+                                textAlign: TextAlign.start,
+                                overflow: TextOverflow.clip,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 12.sp,
+                                  color: appColors.black,
                                 ),
                               ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          body: Form(
-            key: controller.formKey,
-            child: ListView(
-              padding: const EdgeInsets.only(left: 20, right: 20),
-              children: [
-                AllDropDownWidget(),
-                SizedBox(height: 40.h),
-                Column(
-                  children: [
-                    Stack(
-                      alignment: Alignment.bottomRight,
-                      children: [
-                        InkWell(
-                            onTap: () async {
-                              if (!controller.isEdit.value) {
-                                if (await PermissionHelper()
-                                    .askMediaPermission()) {
-                                  controller.updateProfileImage();
+                  ),
+                  AllDropDownWidget(),
+                  SizedBox(height: 40.h),
+                  Column(
+                    children: [
+                      Stack(
+                        alignment: Alignment.bottomRight,
+                        children: [
+                          InkWell(
+                              onTap: () async {
+                                if (!controller.isEdit.value) {
+                                  if (await PermissionHelper()
+                                      .askMediaPermission()) {
+                                    controller.updateProfileImage();
+                                  }
                                 }
-                              }
-                            },
-                            child: controller.selectedImage == null
-                                ? CommonImageView(
-                                    imagePath: Assets.images.icUploadStory.path,
-                                    fit: BoxFit.cover,
-                                    height: 90.h,
-                                    width: 90.h,
-                                    placeHolder:
-                                        Assets.images.defaultProfile.path,
-                                    radius: BorderRadius.circular(100.h),
-                                  )
-                                : SizedBox(
-                                    height: 90.h,
-                                    width: 90.h,
-                                    child: ClipRRect(
-                                        borderRadius:
-                                            BorderRadius.circular(100),
-                                        child: Image.file(
-                                          File(controller.selectedImage),
-                                          fit: BoxFit.cover,
-                                        )),
-                                  )),
-                        Container(
-                          height: 30,
-                          width: 30,
-                          decoration: BoxDecoration(
-                            color: appColors.textColor,
-                            shape: BoxShape.circle,
-                          ),
-                          child: SvgIconButton(
-                            height: 25.h,
-                            width: 25.w,
-                            svg: Assets.svg.icPoojaAddress.svg(
-                              color: appColors.white,
+                              },
+                              child: controller.selectedImage == null
+                                  ? CommonImageView(
+                                      imagePath:
+                                          Assets.images.icUploadStory.path,
+                                      fit: BoxFit.cover,
+                                      height: 90.h,
+                                      width: 90.h,
+                                      placeHolder:
+                                          Assets.images.defaultProfile.path,
+                                      radius: BorderRadius.circular(100.h),
+                                    )
+                                  : SizedBox(
+                                      height: 90.h,
+                                      width: 90.h,
+                                      child: ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(100),
+                                          child: Image.file(
+                                            File(controller.selectedImage),
+                                            fit: BoxFit.cover,
+                                          )),
+                                    )),
+                          Container(
+                            height: 30,
+                            width: 30,
+                            decoration: BoxDecoration(
+                              color: appColors.textColor,
+                              shape: BoxShape.circle,
+                            ),
+                            child: SvgIconButton(
                               height: 25.h,
                               width: 25.w,
-                            ),
-                            onPressed: () async {
-                              if (controller.isEdit.value) {
-                                if (await PermissionHelper()
-                                    .askMediaPermission()) {
-                                  controller.updateProfileImage();
+                              svg: Assets.svg.icPoojaAddress.svg(
+                                color: appColors.white,
+                                height: 25.h,
+                                width: 25.w,
+                              ),
+                              onPressed: () async {
+                                if (controller.isEdit.value) {
+                                  if (await PermissionHelper()
+                                      .askMediaPermission()) {
+                                    controller.updateProfileImage();
+                                  }
                                 }
-                              }
-                            },
-                          ),
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 10.h),
+                      CustomText(
+                        'Upload ${controller.selectedValue} Image',
+                        fontColor: appColors.textColor,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 20.h),
+                  controller.selectedPujaName != null &&
+                              controller.selectedPujaName!.id == 0 ||
+                          controller.selectedValue.value == "Product"
+                      ? PoojaRemedyTextFiled(
+                          title: "${controller.selectedValue} Name",
+                          maxLength: 20,
+                          controller: controller.nameC,
+                          keyboardType: TextInputType.text,
+                          textInputFormatter: [CustomSpaceInputFormatter()],
+                          onChanged: (value) {
+                            controller.update();
+                          },
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return '${controller.selectedValue} Name is required';
+                            }
+                            return null;
+                          },
                         )
-                      ],
-                    ),
-                    SizedBox(height: 10.h),
-                    CustomText(
-                      'Upload ${controller.selectedValue} Image',
-                      fontColor: appColors.textColor,
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20.h),
-                controller.selectedPujaName != null &&
-                            controller.selectedPujaName!.id == 0 ||
-                        controller.selectedValue.value == "Product"
-                    ? PoojaRemedyTextFiled(
-                        title: "${controller.selectedValue} Name",
-                        maxLength: 20,
-                        controller: controller.nameC,
-                        keyboardType: TextInputType.text,
-                        textInputFormatter: [CustomSpaceInputFormatter()],
-                        onChanged: (value) {
-                          controller.update();
-                        },
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return '${controller.selectedValue} Name is required';
-                          }
-                          return null;
-                        },
-                      )
-                    : SizedBox(),
-                SizedBox(height: 20.h),
-                PoojaRemedyTextFiled(
-                  title: "${controller.selectedValue} Description",
-                  maxLines: 5,
-                  textInputFormatter: [CustomSpaceInputFormatter()],
-                  controller: controller.detailC,
-                  maxLength: 500, keyboardType: TextInputType.text,
-                  onChanged: (value) {
-                    controller.update();
-                  },
-                  // validator: (value) {
-                  //   if (value == null || value.isEmpty) {
-                  //     return '${controller.selectedValue} Description is required';
-                  //   }
-                  //   return null;
-                  // },
-                ),
-                SizedBox(height: 20.h),
-                PoojaRemedyTextFiled(
-                  textInputFormatter: [
-                    LengthLimitingTextInputFormatter(10),
-                    CustomSpaceInputFormatter(),
-                    FilteringTextInputFormatter.digitsOnly
-                  ],
-                  isSuffix: false,
-                  keyboardType: TextInputType.number,
-                  title: '${controller.selectedValue} Price ( In INR )',
-                  controller: controller.pricC,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return '${controller.selectedValue} Price is required';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 100.h),
-              ],
+                      : SizedBox(),
+                  SizedBox(height: 20.h),
+                  PoojaRemedyTextFiled(
+                    title: "${controller.selectedValue} Description",
+                    maxLines: 5,
+                    textInputFormatter: [CustomSpaceInputFormatter()],
+                    controller: controller.detailC,
+                    maxLength: 500, keyboardType: TextInputType.text,
+                    onChanged: (value) {
+                      controller.update();
+                    },
+                    // validator: (value) {
+                    //   if (value == null || value.isEmpty) {
+                    //     return '${controller.selectedValue} Description is required';
+                    //   }
+                    //   return null;
+                    // },
+                  ),
+                  SizedBox(height: 20.h),
+                  PoojaRemedyTextFiled(
+                    textInputFormatter: [
+                      LengthLimitingTextInputFormatter(10),
+                      CustomSpaceInputFormatter(),
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    isSuffix: false,
+                    keyboardType: TextInputType.number,
+                    title: '${controller.selectedValue} Price ( In INR )',
+                    controller: controller.pricC,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return '${controller.selectedValue} Price is required';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 100.h),
+                ],
+              ),
             ),
           ),
         );

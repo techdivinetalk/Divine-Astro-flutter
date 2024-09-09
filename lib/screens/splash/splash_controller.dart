@@ -8,10 +8,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../common/common_functions.dart';
 import '../../common/routes.dart';
 import '../../di/shared_preference_service.dart';
+import '../../pages/home/home_controller.dart';
 import '../../repository/important_number_repository.dart';
-import '../server_maintenance_popup/server_maintenance_popup.dart';
+import '../live_page/constant.dart';
 
 class SplashController extends GetxController with WidgetsBindingObserver {
   SharedPreferenceService preferenceService =
@@ -138,20 +140,254 @@ class SplashController extends GetxController with WidgetsBindingObserver {
     return false;
   }
 
+  bool wherego = false;
   navigation() async {
+    log("jsonEncode(preferenceService.getUserDetail())");
+    log("jsonEncode(preferenceService.getUserDetail())");
+    log("jsonEncode(preferenceService.getUserDetail())");
+    log("jsonEncode(preferenceService.getUserDetail())");
+    log("jsonEncode(preferenceService.getUserDetail())");
+
     log(jsonEncode(preferenceService.getUserDetail()));
     log("jsonEncode(preferenceService.getUserDetail())");
     if (preferenceService.getUserDetail() == null) {
       Get.offAllNamed(RouteName.login);
     } else {
       print("goining in else part");
+      // if (wherego == true) {
+      //   Future.delayed(
+      //     const Duration(seconds: 1),
+      //     () => Get.offAllNamed(RouteName.dashboard),
+      //   );
+      // } else {}
+      fetchconstantsApi();
+    }
+  }
+
+  fetchconstantsApi() async {
+    print("------comes to hit constants api");
+    try {
+      var commonConstants = await userRepository.constantDetailsData();
+      print("------hit constants api");
+      if (commonConstants.success == true || commonConstants.data != null) {
+        print("------get Data From constants api");
+
+        handleNavigate(commonConstants);
+        update();
+      } else {
+        print("------Not get Data From constants api");
+      }
+    } catch (e) {
+      debugPrint("------Throw error in the constants api" + e.toString());
+    }
+  }
+
+  handleNavigate(commonConstants) {
+    if (commonConstants.data!.is_onboarding_in_process.toString() == "0" ||
+        commonConstants.data!.is_onboarding_in_process.toString() == "1") {
+      print("--------on------");
+
+      // Get.put(DashboardController(PreDefineRepository()));
+      Get.put(HomeController()).showPopup = false;
+      onBoardingList = [1, 2, 3, 4, 5];
+      isOnPage.value = 1;
+
+      Get.toNamed(
+        RouteName.onBoardingScreen,
+      );
+    } else if (commonConstants.data!.is_onboarding_in_process.toString() ==
+        "2") {
+      print("--------2------");
+
+      // Get.put(DashboardController(PreDefineRepository()));
+
+      Get.put(HomeController()).showPopup = false;
+      if (
+          //commonConstants.data.onboarding_reject_stage_no != null ||
+          //    commonConstants.data.onboarding_reject_stage_no != [] ||
+          commonConstants.data!.onboarding_reject_stage_no!.isNotEmpty) {
+        print(
+            "--------2------${commonConstants.data!.onboarding_reject_stage_no}");
+
+        // for (int stage in commonConstants.data.onboarding_reject_stage_no) {
+        //   // Navigate to the screen based on the stage number
+        //   switch (stage) {
+        //     case 0:
+        //       // Navigate to the screen for stage 1
+        //       isOnPage.value = 1;
+        //       onBoardingList = [2, 3, 4, 5];
+        //
+        //       Get.toNamed(
+        //         RouteName.onBoardingScreen,
+        //       );
+        //       break;
+        //     case 1:
+        //       // Navigate to the screen for stage 1
+        //       isOnPage.value = 2;
+        //       onBoardingList = [3, 4, 5];
+        //
+        //       Get.toNamed(
+        //         RouteName.onBoardingScreen2,
+        //       );
+        //       break;
+        //     case 2:
+        //       // Navigate to the screen for stage 2
+        //       isOnPage.value = 3;
+        //       onBoardingList = [4, 5];
+        //
+        //       Get.toNamed(
+        //         RouteName.onBoardingScreen3,
+        //       );
+        //       break;
+        //     case 3:
+        //       // Navigate to the screen for stage 3
+        //       isOnPage.value = 4;
+        //       onBoardingList = [5];
+        //
+        //       Get.toNamed(
+        //         RouteName.onBoardingScreen4,
+        //       );
+        //       break;
+        //     case 5:
+        //       // Navigate to the screen for stage 3
+        //       isOnPage.value = 5;
+        //       onBoardingList = [];
+        //
+        //       Get.toNamed(
+        //         RouteName.onBoardingScreen5,
+        //       );
+        //       break;
+        //     default:
+        //       // Handle unexpected stage numbers
+        //       print('Unknown stage number: $stage');
+        //       break;
+        //   }
+        // }
+        isRejected.value = true;
+        onBoardingList = commonConstants.data!.onboarding_reject_stage_no!;
+        if (onBoardingList.first == 1) {
+          // onBoardingList = [1];
+          isOnPage.value = 1;
+          Get.toNamed(
+            RouteName.onBoardingScreen,
+          );
+        } else if (onBoardingList.first == 2) {
+          // onBoardingList = [2];
+          //
+          // onBoardingList
+          //     .remove(commonConstants.data!.onboarding_reject_stage_no!.first);
+          isOnPage.value = 2;
+          Get.toNamed(
+            RouteName.onBoardingScreen2,
+          );
+        } else if (onBoardingList.first == 3) {
+          // onBoardingList = [3];
+
+          // onBoardingList
+          //     .remove(commonConstants.data!.onboarding_reject_stage_no!.first);
+          isOnPage.value = 3;
+
+          Get.toNamed(
+            RouteName.onBoardingScreen3,
+          );
+        } else if (onBoardingList.first == 4) {
+          // onBoardingList = [4];
+
+          // onBoardingList
+          //     .remove(commonConstants.data!.onboarding_reject_stage_no!.first);
+          isOnPage.value = 4;
+
+          Get.toNamed(
+            RouteName.onBoardingScreen4,
+          );
+        } else if (onBoardingList.first == 5) {
+          // onBoardingList = [5];
+
+          // onBoardingList
+          //     .remove(commonConstants.data!.onboarding_reject_stage_no!.first);
+          isOnPage.value = 5;
+
+          Get.toNamed(
+            RouteName.onBoardingScreen5,
+          );
+        }
+      } else {
+        if (commonConstants.data!.stage_no.toString() == "0") {
+          onBoardingList = [1, 2, 3, 4, 5];
+          isOnPage.value = 1;
+          Get.toNamed(
+            RouteName.onBoardingScreen,
+          );
+        } else if (commonConstants.data!.stage_no.toString() == "1") {
+          onBoardingList = [2, 3, 4, 5];
+          isOnPage.value = 2;
+
+          Get.toNamed(
+            RouteName.onBoardingScreen2,
+          );
+        } else if (commonConstants.data!.stage_no.toString() == "2") {
+          onBoardingList = [3, 4, 5];
+          isOnPage.value = 3;
+
+          Get.toNamed(
+            RouteName.onBoardingScreen3,
+          );
+        } else if (commonConstants.data!.stage_no.toString() == "3") {
+          onBoardingList = [4, 5];
+          isOnPage.value = 4;
+          Get.toNamed(
+            RouteName.onBoardingScreen4,
+          );
+        } else if (commonConstants.data!.stage_no.toString() == "4") {
+          onBoardingList = [5];
+          isOnPage.value = 5;
+
+          Get.toNamed(
+            RouteName.onBoardingScreen5,
+          );
+        } else if (commonConstants.data.stage_no.toString() == "5") {
+          // onBoardingList = [6];
+          // isOnPage.value = 5;
+
+          Get.toNamed(
+            RouteName.addBankAutoMation,
+          );
+        } else if (commonConstants.data.stage_no.toString() == "6") {
+          // onBoardingList = [6];
+          // isOnPage.value = 5;
+
+          Get.toNamed(
+            RouteName.addEcomAutomation,
+          );
+        } else if (commonConstants.data.stage_no.toString() == "7") {
+          // onBoardingList = [5];
+          // isOnPage.value = 5;
+
+          Get.toNamed(
+            RouteName.scheduleTraining1,
+          );
+        } else if (commonConstants.data.stage_no.toString() == "8") {
+          // onBoardingList = [5];
+          // isOnPage.value = 5;
+
+          Get.toNamed(
+            RouteName.scheduleTraining2,
+          );
+        }
+      }
+    } else if (commonConstants.data!.is_onboarding_in_process.toString() ==
+        "3") {
+      Future.delayed(
+        const Duration(seconds: 1),
+        () => Get.offAllNamed(RouteName.dashboard),
+      );
+    } else {
       Future.delayed(
         const Duration(seconds: 1),
         () => Get.offAllNamed(RouteName.dashboard),
       );
     }
   }
-
   // Future<LoginImages> getInitialLoginImages() async {
   //   final response = await repository.getInitialLoginImages();
   //   return response;

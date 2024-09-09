@@ -20,234 +20,255 @@ class OnBoarding5Binding extends Bindings {
 class OnBoarding5 extends GetView<OnBoardingController> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder<OnBoardingController>(
-      assignId: true,
-      init: OnBoardingController(),
-      builder: (OnBoardingController controller) {
-        return Scaffold(
-          backgroundColor: appColors.white,
-          appBar: AppBar(
-            backgroundColor: AppColors().white,
-            forceMaterialTransparency: true,
-            automaticallyImplyLeading: false,
-            leading: Padding(
-              padding: const EdgeInsets.only(bottom: 2.0),
-              child: IconButton(
-                visualDensity: const VisualDensity(horizontal: -4),
-                constraints: BoxConstraints.loose(Size.zero),
-                icon: Icon(Icons.arrow_back_ios, color: Colors.black, size: 14),
-                onPressed: () {
-                  Navigator.pop(context);
-                },
+    return PopScope(
+      canPop: true,
+      // onPopInvoked: (bool) async {
+      //   Get.until(
+      //     (route) {
+      //       return Get.currentRoute == RouteName.dashboard;
+      //     },
+      //   );
+      // },
+      child: GetBuilder<OnBoardingController>(
+        assignId: true,
+        init: OnBoardingController(),
+        builder: (OnBoardingController controller) {
+          return PopScope(
+            canPop: false,
+            onPopInvoked: (bool) async {
+              controller.showExitAppDialog();
+            },
+            child: Scaffold(
+              backgroundColor: appColors.white,
+              appBar: AppBar(
+                backgroundColor: AppColors().white,
+                forceMaterialTransparency: true,
+                automaticallyImplyLeading: false,
+                // leading: Padding(
+                //   padding: const EdgeInsets.only(bottom: 2.0),
+                //   child: IconButton(
+                //     visualDensity: const VisualDensity(horizontal: -4),
+                //     constraints: BoxConstraints.loose(Size.zero),
+                //     icon: Icon(Icons.arrow_back_ios,
+                //         color: Colors.black, size: 14),
+                //     onPressed: () {
+                //       Get.until(
+                //         (route) {
+                //           return Get.currentRoute == RouteName.dashboard;
+                //         },
+                //       );
+                //     },
+                //   ),
+                // ),
+                titleSpacing: 20,
+                title: Text(
+                  "Onboarding Process",
+                  style: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 16.sp,
+                    color: appColors.darkBlue,
+                  ),
+                ),
               ),
-            ),
-            titleSpacing: 0,
-            title: Text(
-              "Onboarding Process",
-              style: TextStyle(
-                fontWeight: FontWeight.w400,
-                fontSize: 16.sp,
-                color: appColors.darkBlue,
-              ),
-            ),
-          ),
-          body: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 14, right: 14),
-                  child: pageWidget("3"),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 14, right: 14),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Basic\nDetails",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.sp,
-                          color: appColors.black.withOpacity(0.7),
-                        ),
-                      ),
-                      buildSpace(),
-                      Text(
-                        "Upload\nDocuments",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.sp,
-                          color: appColors.black.withOpacity(0.7),
-                        ),
-                      ),
-                      buildSpace(),
-                      Text(
-                        "Upload\nPictures",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.sp,
-                          color: appColors.black.withOpacity(0.7),
-                        ),
-                      ),
-                      buildSpace(),
-                      Text(
-                        "Signing\nAgreement",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.sp,
-                          color: appColors.black.withOpacity(0.7),
-                        ),
-                      ),
-                      buildSpace(),
-                      Text(
-                        "Awaiting\nApproval",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.sp,
-                          color: appColors.black.withOpacity(0.7),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 80,
-                ),
-                Center(
-                  child: CommonImageView(
-                    imagePath: "assets/images/profile_review.png",
-                    height: 100,
-                    width: 100,
-                    placeHolder: Assets.images.defaultProfile.path,
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Container(
-                  height: 5,
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  color: appColors.grey,
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Awaiting Approval",
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 20.sp,
-                      color: appColors.red,
+              body: SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(left: 14, right: 14),
+                      child: pageWidget("3"),
                     ),
-                  ),
-                ),
-                SizedBox(
-                  height: 10,
-                ),
-                Align(
-                  alignment: Alignment.center,
-                  child: Text(
-                    "Our team is reviewing your documents. Once approved, you’ll be able to schedule your training.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w400,
-                      fontSize: 16.sp,
-                      color: appColors.black,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SizedBox(
-              height: 110,
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 14, right: 14, top: 10, bottom: 10),
-                    child: RichText(
-                      text: TextSpan(
-                        text:
-                            '* Confused? Don’t worry, We are here to help you! ',
-                        style: TextStyle(
-                          fontFamily: FontFamily.poppins,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: appColors.grey,
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.only(left: 14, right: 14),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          TextSpan(
-                            text: 'Click here for a tutorial video.',
+                          Text(
+                            "Basic\nDetails",
+                            textAlign: TextAlign.center,
                             style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: FontFamily.poppins,
                               fontWeight: FontWeight.w400,
-                              color: appColors.red,
-                              decoration: TextDecoration.underline,
+                              fontSize: 12.sp,
+                              color: appColors.black.withOpacity(0.7),
                             ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                // Handle tap
-                                print('Link tapped');
-                              },
+                          ),
+                          buildSpace(),
+                          Text(
+                            "Upload\nDocuments",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12.sp,
+                              color: appColors.black.withOpacity(0.7),
+                            ),
+                          ),
+                          buildSpace(),
+                          Text(
+                            "Upload\nPictures",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12.sp,
+                              color: appColors.black.withOpacity(0.7),
+                            ),
+                          ),
+                          buildSpace(),
+                          Text(
+                            "Signing\nAgreement",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12.sp,
+                              color: appColors.black.withOpacity(0.7),
+                            ),
+                          ),
+                          buildSpace(),
+                          Text(
+                            "Awaiting\nApproval",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontWeight: FontWeight.w400,
+                              fontSize: 12.sp,
+                              color: appColors.black.withOpacity(0.7),
+                            ),
                           ),
                         ],
                       ),
                     ),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.center,
+                    SizedBox(
+                      height: 80,
+                    ),
+                    Center(
+                      child: CommonImageView(
+                        imagePath: "assets/images/profile_review.png",
+                        height: 100,
+                        width: 100,
+                        placeHolder: Assets.images.defaultProfile.path,
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Container(
+                      height: 5,
+                      width: MediaQuery.of(context).size.width * 0.5,
+                      color: appColors.grey.withOpacity(0.5),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Awaiting Approval",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 20.sp,
+                          color: appColors.red,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Align(
+                      alignment: Alignment.center,
+                      child: Text(
+                        "Our team is reviewing your documents. Once approved, you’ll be able to schedule your training.",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 16.sp,
+                          color: appColors.black,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              bottomNavigationBar: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  height: 110,
+                  child: Column(
                     children: [
-                      InkWell(
-                        onTap: () {
-                          controller.updatePage(5);
-                          controller.updateDonePage(4);
-                          controller.currentPage = 5;
-                          Get.toNamed(
-                            RouteName.scheduleTraining1,
-                          );
-                        },
-                        child: Container(
-                          height: 50,
-                          width: MediaQuery.of(context).size.width * 0.9,
-                          decoration: BoxDecoration(
-                            color: appColors.red,
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              "Schedule Training",
-                              style: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                fontSize: 20.sp,
-                                color: AppColors().white,
-                              ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 14, right: 14, top: 10, bottom: 10),
+                        child: RichText(
+                          text: TextSpan(
+                            text:
+                                '* Confused? Don’t worry, We are here to help you! ',
+                            style: TextStyle(
+                              fontFamily: FontFamily.poppins,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: appColors.grey,
                             ),
+                            children: [
+                              TextSpan(
+                                text: 'Click here for a tutorial video.',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: FontFamily.poppins,
+                                  fontWeight: FontWeight.w400,
+                                  color: appColors.red,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    // Handle tap
+                                    print('Link tapped');
+                                  },
+                              ),
+                            ],
                           ),
                         ),
                       ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              controller.updatePage(5);
+                              controller.updateDonePage(4);
+                              controller.currentPage = 5;
+                              Get.offNamed(
+                                RouteName.addBankAutoMation,
+                              );
+                            },
+                            child: Container(
+                              height: 50,
+                              width: MediaQuery.of(context).size.width * 0.9,
+                              decoration: BoxDecoration(
+                                color: appColors.red,
+                                borderRadius: BorderRadius.circular(14),
+                              ),
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Add Bank Details",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 20.sp,
+                                    color: AppColors().white,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ],
                   ),
-                ],
+                ),
               ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }
@@ -356,7 +377,7 @@ Widget buildLine({required bool isActive}) {
   return Expanded(
     child: Container(
       height: 2,
-      color: isActive ? Colors.red : Colors.grey,
+      color: isActive ? Colors.red : appColors.grey.withOpacity(0.7),
     ),
   );
 }

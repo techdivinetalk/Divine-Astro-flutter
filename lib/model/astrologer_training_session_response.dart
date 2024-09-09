@@ -40,6 +40,7 @@ class AstrologerTrainingSessionModel {
   final int? createdBy;
   final String? createdAt;
   final String? updatedAt;
+  final String? meeting_date_epoch;
   dynamic isStart;
   final List<dynamic>? astrologerMeeting;
 
@@ -55,6 +56,7 @@ class AstrologerTrainingSessionModel {
     this.createdBy,
     this.createdAt,
     this.updatedAt,
+    this.meeting_date_epoch,
     this.isStart,
     this.astrologerMeeting,
   });
@@ -71,6 +73,7 @@ class AstrologerTrainingSessionModel {
         createdBy = json['created_by'] as int?,
         createdAt = json['created_at'] as String?,
         updatedAt = json['updated_at'] as String?,
+        meeting_date_epoch = json['meeting_date_epoch'] as String?,
         isStart = json['is_start'] == null ? "" : json['is_start'].toString(),
         astrologerMeeting = json['astrologer_meeting'] as List?;
 
@@ -86,6 +89,7 @@ class AstrologerTrainingSessionModel {
         'created_by': createdBy,
         'created_at': createdAt,
         'updated_at': updatedAt,
+        'meeting_date_epoch': meeting_date_epoch,
         'is_start': isStart,
         'astrologer_meeting': astrologerMeeting
       };

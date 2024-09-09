@@ -14,7 +14,9 @@ import '../../../common/app_exception.dart';
 import '../../../common/colors.dart';
 import '../../../common/common_functions.dart';
 import '../../../common/common_image_view.dart';
+import '../../../common/routes.dart';
 import '../../../gen/assets.gen.dart';
+import '../../../gen/fonts.gen.dart';
 import '../../../model/categories_list.dart';
 import '../../../repository/user_repository.dart';
 import '../../../screens/add_puja/model/puja_product_categories_model.dart';
@@ -379,6 +381,11 @@ class AddEcomController extends GetxController {
       if (response.data != null) {
         isPujaLoading = false;
         update();
+        submitStage6("2", param);
+
+        // Get.toNamed(
+        //   RouteName.scheduleTraining1,
+        // );
         uploadeddddd("Puja");
       }
     } catch (error) {
@@ -392,8 +399,8 @@ class AddEcomController extends GetxController {
   }
 
   void addEditProduct() async {
-    isPujaLoading = true;
-    update();
+    isPujaLoading = false;
+    // update();
     Map<String, dynamic> param = {
       "prod_cat_id": selectedCategory?.id,
       "prod_name": nameC.text,
@@ -412,6 +419,8 @@ class AddEcomController extends GetxController {
       if (response.data != null) {
         isPujaLoading = false;
         update();
+        print("-------------------${param}");
+        submitStage6("1", param);
         uploadeddddd("Product");
       }
     } catch (error) {
@@ -422,6 +431,131 @@ class AddEcomController extends GetxController {
         divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
+  }
+
+  submitStage6(from, param) async {
+    update();
+    var body = param;
+    body.addAll({
+      "page": 6,
+    });
+    try {
+      final response = await userRepository.onBoardingApiFun(body);
+      if (response.success == true) {
+        Get.toNamed(
+          RouteName.scheduleTraining1,
+        );
+        update();
+      }
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  submitStage62() async {
+    update();
+    var body = {
+      "prod_cat_id": "",
+      "prod_name": "",
+      "prod_image": "",
+      "prod_desc": "",
+      "product_price_inr": "",
+      "product_long_desc": "",
+      "in_onboarding": 1,
+      "page": 6,
+    };
+    try {
+      final response = await userRepository.onBoardingApiFun(body);
+      if (response.success == true) {
+        Get.offNamed(
+          RouteName.scheduleTraining1,
+        );
+        update();
+      }
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  void showExitAppDialog() {
+    Get.defaultDialog(
+      title: 'Close App?',
+      titleStyle: TextStyle(
+        fontSize: 20,
+        fontFamily: FontFamily.metropolis,
+        fontWeight: FontWeight.w600,
+        color: appColors.appRedColour,
+      ),
+      titlePadding: EdgeInsets.only(top: 20, bottom: 5),
+      middleText:
+          'You\'re just a few steps away from getting started with divinetalk.',
+      middleTextStyle: TextStyle(
+        fontSize: 14,
+        fontFamily: FontFamily.poppins,
+        fontWeight: FontWeight.w400,
+        color: appColors.black.withOpacity(0.8),
+      ),
+      backgroundColor: appColors.white,
+      radius: 10,
+      barrierDismissible: true, // Can tap outside to close the dialog
+      actions: [
+        TextButton(
+          onPressed: () {
+            // Handle exit action
+            exit(0);
+          },
+          child: Text(
+            'Exit App',
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: FontFamily.metropolis,
+              fontWeight: FontWeight.w600,
+              color: appColors.darkBlue,
+            ),
+          ),
+          style: TextButton.styleFrom(
+            side: BorderSide(color: appColors.darkBlue),
+            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            // Handle continue action
+            Get.back(); // Close dialog
+            // Add any other functionality you need
+          },
+          child: Text(
+            'Continue',
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: FontFamily.metropolis,
+              fontWeight: FontWeight.w600,
+              color: appColors.white,
+            ),
+          ),
+          style: TextButton.styleFrom(
+            backgroundColor: appColors.appRedColour,
+            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   uploadeddddd(selected) {

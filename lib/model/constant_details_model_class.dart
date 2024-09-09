@@ -77,7 +77,7 @@ class Data {
   dynamic is_screenshot_require;
 
   dynamic is_onboarding_in_process;
-  dynamic onboarding_reject_stage_no;
+  List? onboarding_reject_stage_no;
   dynamic stage_no;
   dynamic onBoardingrejected;
   Data({
@@ -136,7 +136,7 @@ class Data {
     dynamic is_screenshot_require,
     dynamic is_onboarding_in_process,
     dynamic stage_no,
-    dynamic onboarding_reject_stage_no,
+    List? onboarding_reject_stage_no,
   }) =>
       Data(
         leaderboardRankImage: leaderboardRankImage ?? this.leaderboardRankImage,

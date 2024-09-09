@@ -53,6 +53,12 @@ class CustomTextField extends StatelessWidget {
       onTap: onTap,
       keyboardType: keyboardType ?? TextInputType.text,
       readOnly: readOnly ?? false,
+      style: TextStyle(
+        fontFamily: FontFamily.poppins,
+        fontSize: 14,
+        fontWeight: FontWeight.w400,
+        color: appColors.black,
+      ),
       decoration: InputDecoration(
           hintText: hint,
           hintStyle: TextStyle(

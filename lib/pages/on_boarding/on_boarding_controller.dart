@@ -2,12 +2,16 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
-import 'package:flutter/cupertino.dart';
+import 'package:dio/dio.dart';
+import 'package:divine_astrologer/gen/fonts.gen.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path_provider/path_provider.dart';
 
 import '../../common/app_exception.dart';
 import '../../common/colors.dart';
@@ -16,11 +20,13 @@ import '../../common/permission_handler.dart';
 import '../../common/routes.dart';
 import '../../di/api_provider.dart';
 import '../../di/shared_preference_service.dart';
+import '../../model/GetAstroOnboarding.dart';
 import '../../model/OnBoardingStageModel.dart';
 import '../../model/categories_list.dart';
 import '../../model/res_login.dart';
 import '../../repository/user_repository.dart';
 import '../../screens/live_page/constant.dart';
+import '../../screens/signature_module/model/agreement_model.dart';
 
 class FileUtils {
   static String getfilesizestring({required int bytes, int decimals = 0}) {
@@ -40,20 +46,59 @@ class FileUtils {
 
 class OnBoardingController extends GetxController {
   final state = EditStttate();
+  ScrollController scrollController3 = ScrollController();
+  var isAgrementSigned = false.obs;
+  updateAgrementStatus(status) {
+    print("printing status -- ${isAgrementSigned.value.toString()}");
 
-  bool isAgrementSigned = false;
-  Future<String>? pdfPath;
-  bool isLastPage = false;
+    isAgrementSigned.value = status;
+    print("printing status -- ${isAgrementSigned.value.toString()}");
+    update();
+  }
 
   UserRepository userRepository = UserRepository();
   UserData? userData;
   var preference = Get.find<SharedPreferenceService>();
+  // RxInt tag = (-0).obs;
+  // RxList<int> tagIndexes = <int>[].obs;
+  // RxList<String> skills = <String>[].obs;
+  //
+  // RxList<CategoriesData> tags = <CategoriesData>[].obs;
+  // List<CategoriesData> options = <CategoriesData>[].obs;
+  // Observables
   RxInt tag = (-0).obs;
   RxList<int> tagIndexes = <int>[].obs;
   RxList<String> skills = <String>[].obs;
-
   RxList<CategoriesData> tags = <CategoriesData>[].obs;
   List<CategoriesData> options = <CategoriesData>[].obs;
+
+  // Fetch user data and assign it to the form fields
+  void _assignData() {
+    userData = preference.getUserDetail();
+    // Fetch the categories list
+    String specialityString = preference.getSpecialAbility()!;
+    categoriesList = categoriesDataFromJson(specialityString);
+  }
+
+  // Initialize the tag-related data
+  void _initializeTags() {
+    if (userData != null) {
+      userData?.astroCatPivot?.asMap().entries.forEach((element) {
+        tagIndexes.add(element.key);
+        tags.add(CategoriesData.fromAstrologerSpeciality(element.value));
+        skills
+            .add(CategoriesData.fromAstrologerSpeciality(element.value).name!);
+
+        // Join the 'name' fields of the Skill objects into a single string separated by commas
+        String s = tags.map((skill) => skill.name).join(', ');
+        skillsController.text = s;
+      });
+    }
+
+    // Reorder the list based on tags
+    options = reorderList(categoriesList.data, tags);
+    print('Options loaded: ${options.map((e) => e.name)}');
+  }
 
   late TextEditingController nameController;
   late TextEditingController skillsController;
@@ -85,9 +130,11 @@ class OnBoardingController extends GetxController {
     update();
   }
 
+  late CategoriesList categoriesList;
   @override
   void onInit() async {
     super.onInit();
+    loadPreDefineData();
     nameController = TextEditingController();
     skillsController = TextEditingController();
     experiencesController = TextEditingController();
@@ -99,82 +146,98 @@ class OnBoardingController extends GetxController {
     if (userData!.name != null) {
       nameController.text = userData!.name ?? "";
     }
+    getAstrologerStatus();
+
+    fetchAutofiledData();
     if (userData!.experiance != null) {
       experiencesController.text = userData!.experiance ?? "";
     }
 
-    if (userData != null) {
-      userData?.astroCatPivot?.asMap().entries.forEach((element) {
-        tagIndexes.add(element.key);
-        tags.add(CategoriesData.fromAstrologerSpeciality(element.value));
-      });
-    }
-    options = reorderList(tags);
+    print('User data: $userData');
+    _assignData();
+    _initializeTags();
+    // if (userData != null) {
+    //   userData?.astroCatPivot?.asMap().entries.forEach((element) {
+    //     tagIndexes.add(element.key);
+    //     tags.add(CategoriesData.fromAstrologerSpeciality(element.value));
+    //     skills
+    //         .add(CategoriesData.fromAstrologerSpeciality(element.value).name!);
+    //
+    //     // Join the 'name' fields of the Skill objects into a single string separated by commas
+    //     String s = tags.map((skill) => skill.name).join(', ');
+    //     skillsController.text = s;
+    //   });
+    // }
+    //
+    // // Reorder the list based on tags
+    // options = reorderList(tags);
+    // print('Options loaded: ${options.map((e) => e.name)}');
   }
 
-  late CategoriesList categoriesList;
+  void loadPreDefineData() async {
+    String specialityString = preference.getSpecialAbility()!;
+    categoriesList = categoriesDataFromJson(specialityString);
+  }
 
+  // late CategoriesList categoriesList;
+  //
+  // List<CategoriesData> reorderList(
+  //   List<CategoriesData> selectedItems,
+  // ) {
+  //   String specialityString = preferenceService.getSpecialAbility()!;
+  //
+  //   var categoriesList = categoriesDataFromJson(specialityString);
+  //
+  //   // Create a copy of the original list
+  //   List<CategoriesData> resultList = List.from(categoriesList.data);
+  //
+  //   // Remove the selected items from the copy
+  //   for (CategoriesData item in selectedItems) {
+  //     resultList.removeWhere(
+  //       (element) => element.id == item.id,
+  //     );
+  //   }
+  //
+  //   // Insert the selected items at the beginning of the list
+  //   resultList.insertAll(0, selectedItems);
+  //
+  //   return resultList;
+  // }
+  // List<CategoriesData> reorderList(
+  //   List<CategoriesData> originalList,
+  //   List<CategoriesData> selectedItems,
+  // ) {
+  //   // Create a copy of the original list
+  //   List<CategoriesData> resultList = List.from(originalList);
+  //
+  //   // Remove the selected items from the copy
+  //   for (CategoriesData item in selectedItems) {
+  //     resultList.removeWhere(
+  //       (element) => element.id == item.id,
+  //     );
+  //   }
+  //
+  //   // Insert the selected items at the beginning of the list
+  //   resultList.insertAll(0, selectedItems);
+  //
+  //   return resultList;
+  // }
+
+  // Reorder list based on selected items
   List<CategoriesData> reorderList(
+    List<CategoriesData> originalList,
     List<CategoriesData> selectedItems,
   ) {
-    String specialityString = preferenceService.getSpecialAbility()!;
+    List<CategoriesData> resultList = List.from(originalList);
 
-    categoriesList = categoriesDataFromJson(specialityString);
-
-    // Create a copy of the original list
-    List<CategoriesData> resultList = List.from(categoriesList.data);
-
-    // Remove the selected items from the copy
     for (CategoriesData item in selectedItems) {
-      resultList.removeWhere(
-        (element) => element.id == item.id,
-      );
+      resultList.removeWhere((element) => element.id == item.id);
     }
 
-    // Insert the selected items at the beginning of the list
     resultList.insertAll(0, selectedItems);
-
     return resultList;
   }
 
-  // void checkSelectedImages() {
-  //   print("image - 1");
-  //   int selectedCount = userImages.where((element) => element is File).length;
-  //   if (uploadedImages.isNotEmpty) {
-  //     Get.toNamed(
-  //       RouteName.onBoardingScreen4,
-  //     );
-  //   } else {
-  //     if (selectedCount >= 2) {
-  //       print("image - 1");
-  //
-  //       for (int i = 0; i < 5; i++) {
-  //         print("image - 1");
-  //
-  //         print("Loop iteration: $i");
-  //         if (userImages[i] == 1 ||
-  //             userImages[i] == 2 ||
-  //             userImages[i] == 3 ||
-  //             userImages[i] == 4 ||
-  //             userImages[i] == 5) {
-  //           print("image - 1");
-  //         } else {
-  //           print("image - 2");
-  //
-  //           uploadImage(userImages[i], "astroimages");
-  //         }
-  //       }
-  //       submitStage3();
-  //       print("User has selected 2 or more images.");
-  //       // You can proceed with your logic here
-  //       // For example, enabling a submit button or showing a message
-  //     } else {
-  //       Fluttertoast.showToast(msg: "Please select more then 2 images");
-  //       print("User has not selected enough images.");
-  //       // Handle the case where less than 2 images are selected
-  //     }
-  //   }
-  // }
   List<dynamic> newList = [];
   List<dynamic> uploadedAstroImages = [];
   var selectedUploadedAstroImage;
@@ -213,40 +276,10 @@ class OnBoardingController extends GetxController {
               msg: "Astrologer must select 2 or more images.");
         }
       } else {
-        submitStage3();
+        // submitStage3();
       }
     }
   }
-  // void checkSelectedImages() async {
-  //   int selectedCount = userImages.where((element) => element is File).length;
-  //   bool containsFile = userImages.any((element) => element is File);
-  //
-  //   if (!containsFile) {
-  //     Fluttertoast.showToast(msg: "Astrologer must select 2 or more images.");
-  //   } else {
-  //     if (selectedCount >= 2) {
-  //       // Upload images first
-  //       for (int i = 0; i < userImages.length; i++) {
-  //         // Check if the current item is a File before uploading
-  //         if (userImages[i] is File) {
-  //           await uploadImage(userImages[i], "astroimages");
-  //         }
-  //       }
-  //       // After uploading all images, check if at least 2 were successfully uploaded
-  //       if (uploadedImages.length >= 2) {
-  //         // Submit the form with all successfully uploaded images
-  //         submitStage3();
-  //         print(
-  //             "User has selected and uploaded $uploadedImages.length images.");
-  //       } else {
-  //         Fluttertoast.showToast(msg: "Failed to upload 2 or more images.");
-  //       }
-  //       print("User has selected and uploaded 2 or more images.");
-  //     } else {
-  //       Fluttertoast.showToast(msg: "Astrologer must select 2 or more images.");
-  //     }
-  //   }
-  // }
 
   File? image;
   final picker = ImagePicker();
@@ -267,7 +300,60 @@ class OnBoardingController extends GetxController {
   var photoUrlAadharFront;
   var photoUrlAadharBack;
   var photoUrlPanFront;
+
+  var verifyAadharFront;
+  var verifyAadharBack;
+  var verifyPanFront;
   List uploadedImages = [];
+
+  fetchAutofiledData() {
+    print("printing list ------ ${onBoardingList.toString()}");
+    print("printing list ------ ${onBoardingList.first.toString()}");
+    getAutofill(onBoardingList.first);
+  }
+
+  GetAstroOnboarding? getAstroOnboarding;
+  GetAstroOnboarding? getAstroOnboarding2;
+  GetAstroOnboarding? getAstroOnboarding3;
+  List<String> astroImagess = [];
+  String pancard = "";
+  List demoImage = [];
+
+  bool loadingTrainingssss = false;
+  getAutofill(screen) async {
+    loadingTrainingssss = true;
+    var body = {
+      "page": screen,
+    };
+    print(body.toString());
+    var jsonData;
+    try {
+      final data = await userRepository.getOnBoardingApiFun(body);
+      print(data.toString());
+      if (data.success == true) {
+        getAstroOnboarding = data;
+        jsonData = getAstroOnboarding!.data?.data;
+        demoImage = data.images == null ? [] : data.images!;
+        // Parse the JSON string into a Map
+        Map<String, dynamic> dataMap =
+            jsonData == null ? {} : jsonDecode(jsonData);
+        getAutoFillDataAssign(dataMap);
+        loadingTrainingssss = false;
+        update();
+      } else {
+        loadingTrainingssss = false;
+      }
+
+      update();
+    } catch (error) {
+      debugPrint("error::::: $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.red);
+      }
+    }
+  }
 
   /// Get Image Picker method
   Future getImage(selected) async {
@@ -322,28 +408,42 @@ class OnBoardingController extends GetxController {
           Fluttertoast.showToast(msg: "Image Size should be less then 5 MB");
         } else {
           if (selected == "af") {
-            uploadImage(File(result.path.toString()), selected);
-            Fluttertoast.showToast(msg: "Image uploaded");
+            CroppedFile? croppedFile = await cropImage(File(result.path));
+            if (croppedFile != null) {
+              uploadImage(File(croppedFile.path.toString()), selected);
 
-            selectedAadharFront = File(result.path);
+              selectedAadharFront = File(croppedFile.path);
+            }
           } else if (selected == "ab") {
-            uploadImage(File(result.path.toString()), selected);
-            Fluttertoast.showToast(msg: "Image uploaded");
+            CroppedFile? croppedFile = await cropImage(File(result.path));
+            if (croppedFile != null) {
+              uploadImage(File(croppedFile.path.toString()), selected);
 
-            selectedAadharBack = File(result.path);
+              selectedAadharBack = File(croppedFile.path);
+            }
           } else if (selected == "panFront") {
-            uploadImage(File(result.path.toString()), selected);
-            Fluttertoast.showToast(msg: "Image uploaded");
+            CroppedFile? croppedFile = await cropImage(File(result.path));
+            if (croppedFile != null) {
+              uploadImage(File(croppedFile.path.toString()), selected);
 
-            selectedPanFront = File(result.path);
+              selectedPanFront = File(croppedFile.path);
+            }
           } else if (selected == "profile") {
-            selectedProfile = File(result.path.toString());
-            uploadImage(File(result.path.toString()), selected);
-            Fluttertoast.showToast(msg: "Image uploaded");
-          } else {
-            print("----image---- ${userImages.toString()}");
+            // selectedProfile = File(result.path.toString());
+            // uploadImage(File(result.path.toString()), selected);
+            // Fluttertoast.showToast(msg: "Image uploaded");
+            CroppedFile? croppedFile = await cropImage(File(result.path));
+            if (croppedFile != null) {
+              uploadImage(File(croppedFile.path.toString()), selected);
 
-            userImages[selected] = File(result.path.toString());
+              selectedProfile = File(croppedFile.path);
+            }
+          } else {
+            CroppedFile? croppedFile = await cropImage(File(result.path));
+            if (croppedFile != null) {
+              userImages[selected] = File(croppedFile.path.toString());
+            }
+            print("----image---- ${userImages.toString()}");
           }
           // selected = File(result.path);
         }
@@ -357,23 +457,42 @@ class OnBoardingController extends GetxController {
     }
   }
 
-  updateLoading(imageType, value) {
-    switch (imageType) {
-      case 'Profile':
-        loadingProfile = value;
-        break;
-      case 'af':
-        loadingAadharFront = value;
-        break;
-      case 'ab':
-        loadingAadharFront = value;
-        break;
-      case 'panFront':
-        loadingAadharFront = value;
-        break;
-    }
-    update();
+  Future<CroppedFile?> cropImage(File imageFile) async {
+    CroppedFile? croppedFile = await ImageCropper().cropImage(
+      sourcePath: imageFile.path,
+      aspectRatio: const CropAspectRatio(ratioX: 1, ratioY: 1),
+      aspectRatioPresets: [
+        CropAspectRatioPreset.square,
+      ],
+      uiSettings: [
+        AndroidUiSettings(
+          toolbarTitle: 'Crop Image',
+          toolbarColor: appColors.white,
+          toolbarWidgetColor: appColors.blackColor,
+          initAspectRatio: CropAspectRatioPreset.square,
+          lockAspectRatio: true,
+        ),
+      ],
+    );
+    return croppedFile;
   }
+  // updateLoading(imageType, value) {
+  //   switch (imageType) {
+  //     case 'Profile':
+  //       loadingProfile = value;
+  //       break;
+  //     case 'af':
+  //       loadingAadharFront = value;
+  //       break;
+  //     case 'ab':
+  //       loadingAadharFront = value;
+  //       break;
+  //     case 'panFront':
+  //       loadingAadharFront = value;
+  //       break;
+  //   }
+  //   update();
+  // }
 
   // Future<void> uploadImage(imageFile, imageType) async {
   //   var token = await preferenceService.getToken();
@@ -452,9 +571,8 @@ class OnBoardingController extends GetxController {
     var token = await preferenceService.getToken();
 
     print("Uploading image: ${imageFile.path}");
-    updateLoading(imageType, true);
     var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
-
+    print("------------${uri}");
     var request = http.MultipartRequest('POST', uri);
     request.headers.addAll({
       'Authorization': 'Bearer $token',
@@ -479,7 +597,7 @@ class OnBoardingController extends GetxController {
         print("Image uploaded successfully.");
         var jsonResponse = jsonDecode(responseBody);
         var imageUrl = jsonResponse["data"]["full_path"];
-
+        print("----------${imageUrl}");
         if (imageUrl == null) {
           Fluttertoast.showToast(msg: "Not able to upload");
         } else {
@@ -487,18 +605,28 @@ class OnBoardingController extends GetxController {
           switch (imageType) {
             case 'profile':
               photoUrlprofile = imageUrl;
+              Fluttertoast.showToast(msg: "Image uploaded");
+
               break;
             case 'af':
               photoUrlAadharFront = imageUrl;
+              Fluttertoast.showToast(msg: "Image uploaded");
+
               break;
             case 'ab':
               photoUrlAadharBack = imageUrl;
+              Fluttertoast.showToast(msg: "Image uploaded");
+
               break;
             case 'panFront':
               photoUrlPanFront = imageUrl;
+              Fluttertoast.showToast(msg: "Image uploaded");
+
               break;
             case 'astroimages':
               selectedUploadedAstroImage = imageUrl;
+              Fluttertoast.showToast(msg: "Image uploaded");
+
               uploadedImages.add(imageUrl);
               break;
           }
@@ -516,9 +644,10 @@ class OnBoardingController extends GetxController {
   OnBoardingStageModel? onBoardingStageModel3;
   OnBoardingStageModel? onBoardingStageModel4;
 
-  RxBool stage1Submitting = false.obs;
+  var stage1Submitting = false.obs;
   submitStage1() async {
     stage1Submitting.value = true;
+    update();
     var body = {
       "name": nameController.text,
       "skills": skills,
@@ -526,7 +655,7 @@ class OnBoardingController extends GetxController {
       "dob": birthController.text,
       "location": locationController.text,
       "alternate_no": alterNoController.text,
-      "profile_picture": photoUrlprofile,
+      "profile_picture": ".com",
       "page": 1,
     };
     try {
@@ -537,10 +666,19 @@ class OnBoardingController extends GetxController {
         divineSnackBar(
             data: onBoardingStageModel1!.message.toString(),
             color: appColors.green);
+        // onBoardingList.remove(1);
+        if (onBoardingList.contains(1)) {
+          print("1 delete");
+          onBoardingList.remove(1);
+        } else {
+          // print("1 not delete");
+          // navigateToStage();
+        }
+        navigateToStage();
 
-        Get.offNamed(
-          RouteName.onBoardingScreen2,
-        );
+        // Get.offNamed(
+        //   RouteName.onBoardingScreen2,
+        // );
 
         update();
       } else {
@@ -560,10 +698,12 @@ class OnBoardingController extends GetxController {
     }
   }
 
-  RxBool stage2Submitting = false.obs;
+  var stage2Submitting = false.obs;
 
   submitStage2() async {
     stage2Submitting.value = true;
+    update();
+
     var body = {
       "aadhar_front": photoUrlAadharFront,
       "aadhar_back": photoUrlAadharBack,
@@ -578,10 +718,14 @@ class OnBoardingController extends GetxController {
         divineSnackBar(
             data: onBoardingStageModel2!.message.toString(),
             color: appColors.green);
+        if (onBoardingList.contains(2)) {
+          onBoardingList.remove(2);
+        } else {}
+        navigateToStage();
 
-        Get.offNamed(
-          RouteName.onBoardingScreen3,
-        );
+        // Get.offNamed(
+        //   RouteName.onBoardingScreen3,
+        // );
         update();
       }
     } catch (error) {
@@ -596,10 +740,11 @@ class OnBoardingController extends GetxController {
     }
   }
 
-  RxBool stage3Submitting = false.obs;
+  var stage3Submitting = false.obs;
 
   submitStage3() async {
     stage3Submitting.value = true;
+    update();
     var body = {
       "astro_images": uploadedImages,
       "page": 3,
@@ -609,9 +754,16 @@ class OnBoardingController extends GetxController {
       if (response.success == true) {
         stage3Submitting.value = false;
         onBoardingStageModel3 = response;
-        Get.offNamed(
-          RouteName.onBoardingScreen4,
-        );
+        print(onBoardingList.toString());
+        update();
+        if (onBoardingList.contains(3)) {
+          onBoardingList.remove(3);
+        } else {}
+        navigateToStage();
+
+        // Get.offNamed(
+        //   RouteName.onBoardingScreen4,
+        // );
         update();
       }
     } catch (error) {
@@ -626,25 +778,26 @@ class OnBoardingController extends GetxController {
     }
   }
 
-  RxBool stage4Submitting = false.obs;
+  var stage4Submitting = false.obs;
 
   submitStage4() async {
     stage4Submitting.value = true;
+    update();
     var body = {
-      "name": "Raj",
-      "skills": ["Cards", "data"],
-      "experience": "1 Years",
-      "dob": "20-08-2001",
-      "location": "Mumbai, Maharashtra",
-      "alternate_no": "84393849384",
-      "profile_picture": "link",
-      "page": 1,
+      "agreementData": agreementSignData.value,
+      "page": 4,
     };
+    print("body ----- ${body}");
     try {
       final response = await userRepository.onBoardingApiFun(body);
       if (response.success == true) {
         stage4Submitting.value = false;
         update();
+        if (onBoardingList.contains(4)) {
+          onBoardingList.remove(4);
+        } else {}
+
+        navigateToStage();
       }
     } catch (error) {
       stage4Submitting.value = false;
@@ -658,106 +811,527 @@ class OnBoardingController extends GetxController {
     }
   }
 
-  // submittingDetails() {
-  //   if (userImages.contains(1) ||
-  //       userImages.contains(2) ||
-  //       userImages.contains(3) ||
-  //       userImages.contains(4) ||
-  //       userImages.contains(5)) {
-  //     userImages.remove(1);
-  //     userImages.remove(2);
-  //     userImages.remove(3);
-  //     userImages.remove(4);
-  //     userImages.remove(5);
-  //   } else {}
-  //   var jsonData = {
-  //     "name": nameController.text,
-  //     "skills": skills,
-  //     "experience": experiencesController.text,
-  //     "dob": birthController.text,
-  //     "location": locationController.text,
-  //     "alternate_no": alterNoController.text,
-  //     "profile_picture": photoUrlprofile,
-  //     "aadhar_front": photoUrlAadharFront,
-  //     "aadhar_back": photoUrlAadharBack,
-  //     "pancard": selectedPanFront,
-  //     "astro_images": uploadedImages,
-  //   };
-  //
-  //   print(
-  //       "${jsonData.toString().length >= 150 ? "${jsonData.toString()}\n" : jsonData.toString()}");
-  // }
+  Future<String> loadPdfFromFile(String filePath) async {
+    // Check if the file exists
+    final File file = File(filePath);
 
+    if (await file.exists()) {
+      return file.path;
+    } else {
+      throw Exception("File not found");
+    }
+  }
+
+  getAstrologerStatus() async {
+    UserData? userData = await preference.getUserDetail();
+    print("---------------${userData!.toJson().toString()}");
+    try {
+      print(
+          "ApiProvider.astrologerAgreement - > ${ApiProvider.astrologerAgreement}${userData!.id}");
+      Dio().options.headers = {
+        'Connection': 'keep-alive',
+        'Keep-Alive': 'timeout=5, max=1000',
+      };
+      final response =
+          await Dio().get("${ApiProvider.astrologerAgreement}${userData!.id}");
+      print("astrologerAgreement.data${jsonEncode(response.data)}");
+      AgreementModel agreementModel = AgreementModel.fromJson(response.data);
+      if (agreementModel.data != null) {
+        exclusiveAgreementStages =
+            agreementModel.data!.exclusiveAgreementStages!;
+        print("exclusiveAgreementStages--->>$exclusiveAgreementStages");
+        if (agreementModel.data!.stageMessage != null) {
+          stageMessage = agreementModel.data!.stageMessage ?? "";
+        } else {
+          stageMessage = exclusiveAgreementStages == 2
+              ? "Your Agreement is under-review"
+              : exclusiveAgreementStages == 3
+                  ? "Your Agreement is approved"
+                  : exclusiveAgreementStages == 4
+                      ? "Your Agreement not approved please retry aga"
+                      : "";
+        }
+
+        update();
+        downloadPDF(agreementModel.data!.pdfLink ?? "");
+      }
+    } catch (e) {
+      print("getting error --- astrologerAgreement ${e}");
+    }
+  }
+
+  String progressMessage = "";
+
+  Future<void> downloadPDF(String url) async {
+    try {
+      // Get the directory to save the file
+      final directory = await getApplicationDocumentsDirectory();
+      final filePath = '${directory.path}/astrologer_agreement.pdf';
+
+      // Create Dio instance
+      Dio dio = Dio();
+
+      // Download the file
+      await dio.download(url, filePath);
+      pdfPath = loadPdfFromFile(filePath);
+      update();
+    } catch (e) {
+      progressMessage = "Download failed: $e";
+    }
+  }
+
+  Future<String>? pdfPath;
+  bool isLastPage = false;
+
+  /// 0(NotSend),1(pending sign),2(underRevie),3(approved),4(not approved)
+  int exclusiveAgreementStages = 0;
+  String stageMessage = "";
+
+  // void navigateToStage() {
+  //   if (onBoardingList.isEmpty) {
+  //     // If the list is empty, go to the dashboard
+  //     print("Navigating to onBoardingScreen5");
+  //     if (isNextPage.value == 0) {
+  //       Get.toNamed(RouteName.onBoardingScreen5);
+  //     } else {
+  //       if (isNextPage.value == 0) {
+  //         switch (isNextPage.value) {
+  //           case 1:
+  //             print("Navigating to OnBoardingScreen1");
+  //             isOnPage.value = 1;
+  //             Get.offNamed(RouteName.onBoardingScreen);
+  //             break;
+  //           case 2:
+  //             print("Navigating to OnBoardingScreen2");
+  //             isOnPage.value = 2;
+  //             Get.offNamed(RouteName.onBoardingScreen2);
+  //             break;
+  //           case 3:
+  //             print("Navigating to OnBoardingScreen3");
+  //             isOnPage.value = 3;
+  //             Get.offNamed(RouteName.onBoardingScreen3);
+  //             break;
+  //           case 4:
+  //             print("Navigating to OnBoardingScreen4");
+  //             isOnPage.value = 4;
+  //             Get.offNamed(RouteName.onBoardingScreen4);
+  //             break;
+  //           case 5:
+  //             print("Navigating to addBankAutoMation");
+  //             isOnPage.value = 5;
+  //             Get.offNamed(RouteName.addBankAutoMation);
+  //             break;
+  //           case 6:
+  //             print("Navigating to addEcomAutomation");
+  //             isOnPage.value = 6;
+  //             Get.offNamed(RouteName.addEcomAutomation);
+  //             break;
+  //           case 7:
+  //             print("Navigating to scheduleTraining1");
+  //             isOnPage.value = 7;
+  //             Get.offNamed(RouteName.scheduleTraining1);
+  //             break;
+  //           case 8:
+  //             print("Navigating to scheduleTraining2");
+  //             isOnPage.value = 8;
+  //             Get.offNamed(RouteName.scheduleTraining2);
+  //             break;
+  //         }
+  //       }
+  //     }
+  //   } else {
+  //     // Get the first value in the list
+  //     int firstStage = onBoardingList.first;
+  //
+  //     // Check the first value and navigate accordingly
+  //     switch (firstStage) {
+  //       case 1:
+  //         print("Navigating to OnBoardingScreen1");
+  //         isOnPage.value = 1;
+  //         Get.offNamed(RouteName.onBoardingScreen);
+  //         break;
+  //       case 2:
+  //         print("Navigating to OnBoardingScreen2");
+  //         isOnPage.value = 2;
+  //         Get.offNamed(RouteName.onBoardingScreen2);
+  //         break;
+  //       case 3:
+  //         print("Navigating to OnBoardingScreen3");
+  //         isOnPage.value = 3;
+  //         Get.offNamed(RouteName.onBoardingScreen3);
+  //         break;
+  //       case 4:
+  //         print("Navigating to OnBoardingScreen4");
+  //         isOnPage.value = 4;
+  //         Get.offNamed(RouteName.onBoardingScreen4);
+  //         break;
+  //       case 5:
+  //         print("Navigating to OnBoardingScreen5");
+  //         isOnPage.value = 5;
+  //         Get.offNamed(RouteName.onBoardingScreen5);
+  //         break;
+  //       default:
+  //         if (isNextPage.value == 0) {
+  //           switch (isNextPage.value) {
+  //             case 1:
+  //               print("Navigating to OnBoardingScreen1");
+  //               isOnPage.value = 1;
+  //               Get.offNamed(RouteName.onBoardingScreen);
+  //               break;
+  //             case 2:
+  //               print("Navigating to OnBoardingScreen2");
+  //               isOnPage.value = 2;
+  //               Get.offNamed(RouteName.onBoardingScreen2);
+  //               break;
+  //             case 3:
+  //               print("Navigating to OnBoardingScreen3");
+  //               isOnPage.value = 3;
+  //               Get.offNamed(RouteName.onBoardingScreen3);
+  //               break;
+  //             case 4:
+  //               print("Navigating to OnBoardingScreen4");
+  //               isOnPage.value = 4;
+  //               Get.offNamed(RouteName.onBoardingScreen4);
+  //               break;
+  //             case 5:
+  //               print("Navigating to addBankAutoMation");
+  //               isOnPage.value = 5;
+  //               Get.offNamed(RouteName.addBankAutoMation);
+  //               break;
+  //             case 6:
+  //               print("Navigating to addEcomAutomation");
+  //               isOnPage.value = 6;
+  //               Get.offNamed(RouteName.addEcomAutomation);
+  //               break;
+  //             case 7:
+  //               print("Navigating to scheduleTraining1");
+  //               isOnPage.value = 7;
+  //               Get.offNamed(RouteName.scheduleTraining1);
+  //               break;
+  //             case 8:
+  //               print("Navigating to scheduleTraining2");
+  //               isOnPage.value = 8;
+  //               Get.offNamed(RouteName.scheduleTraining2);
+  //               break;
+  //           }
+  //         }
+  //         {}
+  //         // If the value doesn't match any case, go to the dashboard
+  //         print("Navigating to onBoardingScreen5 (default case)");
+  //         Get.toNamed(RouteName.onBoardingScreen5);
+  //         break;
+  //     }
+  //   }
+  // }
   void navigateToStage() {
-    for (int stage in onBoardingList) {
-      print(onBoardingList.toString());
-      // Navigate to the screen based on the stage number
-      switch (stage) {
+    // Helper function to handle navigation
+    void navigateTo(int page, String routeName) {
+      isOnPage.value = page;
+      Get.offNamed(routeName);
+      print("Navigating to $routeName");
+    }
+
+    // Check if onBoardingList is empty
+    if (onBoardingList.isEmpty) {
+      if (isNextPage.value == 0) {
+        print("Navigating to onBoardingScreen5");
+        Get.toNamed(RouteName.onBoardingScreen5);
+      } else {
+        // Navigate based on isNextPage value
+        switch (isNextPage.value) {
+          case 0:
+            navigateTo(1, RouteName.onBoardingScreen);
+            break;
+          case 1:
+            navigateTo(2, RouteName.onBoardingScreen2);
+            break;
+          case 2:
+            navigateTo(3, RouteName.onBoardingScreen3);
+            break;
+          case 3:
+            navigateTo(4, RouteName.onBoardingScreen4);
+            break;
+          case 4:
+            navigateTo(5, RouteName.addBankAutoMation);
+            break;
+          case 5:
+            navigateTo(6, RouteName.addEcomAutomation);
+            break;
+          case 6:
+            navigateTo(7, RouteName.scheduleTraining1);
+            break;
+          case 7:
+            navigateTo(8, RouteName.scheduleTraining2);
+            break;
+          default:
+            print("Navigating to onBoardingScreen5 (default case)");
+            Get.toNamed(RouteName.onBoardingScreen5);
+            break;
+        }
+      }
+    } else {
+      // Navigate based on the first value in onBoardingList
+      int firstStage = onBoardingList.first;
+      switch (firstStage) {
         case 1:
-          if (onBoardingList.length == 1) {
-          } else {
-            onBoardingList.remove(1);
-          }
-          Get.toNamed(
-            RouteName.onBoardingScreen,
-          );
+          navigateTo(1, RouteName.onBoardingScreen);
           break;
         case 2:
-          if (onBoardingList.length == 1) {
-          } else {
-            onBoardingList.remove(2);
-          }
-          // Navigate to the screen for stage 2
-          Get.toNamed(
-            RouteName.onBoardingScreen2,
-          );
+          navigateTo(2, RouteName.onBoardingScreen2);
           break;
         case 3:
-          if (onBoardingList.length == 1) {
-          } else {
-            onBoardingList.remove(3);
-          }
-          // Navigate to the screen for stage 3
-          Get.toNamed(
-            RouteName.onBoardingScreen3,
-          );
+          navigateTo(3, RouteName.onBoardingScreen3);
           break;
         case 4:
-          if (onBoardingList.length == 1) {
-          } else {
-            onBoardingList.remove(4);
-          }
-          // Navigate to the screen for stage 4
-          Get.toNamed(
-            RouteName.onBoardingScreen4,
-          );
+          navigateTo(4, RouteName.onBoardingScreen4);
           break;
         case 5:
-          if (onBoardingList.length == 1) {
-          } else {
-            onBoardingList.remove(5);
-          }
-          // Navigate to the screen for stage 5
-
-          Get.toNamed(
-            RouteName.onBoardingScreen5,
-          );
+          navigateTo(5, RouteName.onBoardingScreen5);
           break;
         default:
-
-          // Handle unexpected stage numbers
-          print('Unknown stage number: $stage');
+          // Fallback for unexpected values
+          print("Navigating to onBoardingScreen5 (default case)");
+          Get.toNamed(RouteName.onBoardingScreen5);
           break;
       }
     }
+  }
+
+  // void navigateToStage() {
+  //   if (onBoardingList.isEmpty) {
+  //     print("dashboard");
+  //     Get.toNamed(
+  //       RouteName.dashboard,
+  //     );
+  //   } else {
+  //     // Create a copy of the list to iterate over
+  //     List<int> stagesToNavigate = List<int>.from(onBoardingList);
+  //
+  //     for (int stage in stagesToNavigate) {
+  //       print(onBoardingList.toString());
+  //       // Navigate to the screen based on the stage number
+  //       switch (stage) {
+  //         case 1:
+  //           print(stage);
+  //
+  //           if (onBoardingList.length == 1) {
+  //           } else {
+  //             // onBoardingList.remove(1);
+  //           }
+  //           isOnPage.value == 1;
+  //
+  //           Get.toNamed(
+  //             RouteName.onBoardingScreen,
+  //           );
+  //           break;
+  //         case 2:
+  //           print(stage);
+  //
+  //           if (onBoardingList.length == 1) {
+  //           } else {
+  //             // onBoardingList.remove(2);
+  //           }
+  //           // Navigate to the screen for stage 2
+  //           isOnPage.value == 2;
+  //
+  //           Get.toNamed(
+  //             RouteName.onBoardingScreen2,
+  //           );
+  //           break;
+  //         case 3:
+  //           if (onBoardingList.length == 1) {
+  //           } else {
+  //             // onBoardingList.remove(3);
+  //           }
+  //           // Navigate to the screen for stage 3
+  //           isOnPage.value == 3;
+  //
+  //           Get.toNamed(
+  //             RouteName.onBoardingScreen3,
+  //           );
+  //           break;
+  //         case 4:
+  //           if (onBoardingList.length == 1) {
+  //           } else {
+  //             // onBoardingList.remove(4);
+  //           }
+  //           // Navigate to the screen for stage 4
+  //           isOnPage.value == 4;
+  //
+  //           Get.toNamed(
+  //             RouteName.onBoardingScreen4,
+  //           );
+  //           break;
+  //         case 5:
+  //           if (onBoardingList.length == 1) {
+  //           } else {
+  //             // onBoardingList.remove(5);
+  //           }
+  //           isOnPage.value == 5;
+  //
+  //           // Navigate to the screen for stage 5
+  //
+  //           Get.toNamed(
+  //             RouteName.onBoardingScreen5,
+  //           );
+  //           break;
+  //         default:
+  //           Get.toNamed(
+  //             RouteName.dashboard,
+  //           );
+  //           break;
+  //       }
+  //     }
+  //   }
+  // }
+  getAutoFillDataAssign(dataMap) {
+    if (dataMap == null) {
+    } else {
+      // Example to handle different keys
+      if (dataMap.containsKey('page')) {
+        int page = dataMap['page'];
+        print('Page: $page');
+      }
+      if (dataMap.containsKey('name')) {
+        nameController.text = dataMap['name'].toString();
+      }
+      if (dataMap.containsKey('skills')) {
+        // Assuming dataMap['skills'] is a List<dynamic>, convert it to List<String>
+        List<String> skillsList = List<String>.from(dataMap['skills']);
+
+        // Update the text field
+        skillsController.text = skillsList.join(', ').toString();
+
+        // Assign the list to skills
+        skills.assignAll(skillsList);
+      }
+      if (dataMap.containsKey('experience')) {
+        experiencesController.text = dataMap['experience'].toString();
+      }
+      if (dataMap.containsKey('dob')) {
+        birthController.text = dataMap['dob'].toString();
+      }
+      if (dataMap.containsKey('location')) {
+        locationController.text = dataMap['location'].toString();
+      }
+      if (dataMap.containsKey('alternate_no')) {
+        alterNoController.text = dataMap['alternate_no'].toString();
+      }
+      // For Page 2
+      if (dataMap.containsKey('pancard')) {
+        verifyPanFront = dataMap['pancard'];
+        print('Pancard Image URL: $verifyPanFront');
+      }
+      if (dataMap.containsKey('aadhar_back')) {
+        verifyAadharBack = dataMap['aadhar_back'];
+        print('Pancard Image URL: $verifyAadharBack');
+      }
+      if (dataMap.containsKey('aadhar_front')) {
+        verifyAadharFront = dataMap['aadhar_front'];
+        print('Pancard Image URL: $verifyAadharFront');
+      }
+      // For Page 3
+      if (dataMap.containsKey('astro_images')) {
+        astroImagess = List<String>.from(dataMap['astro_images']);
+
+        astroImages = List<String>.from(dataMap['astro_images']);
+        // Replace values in the static list with images from the API
+        for (int i = 0; i < astroImages.length && i < userImages.length; i++) {
+          userImages[i] = astroImages[i];
+        }
+      }
+
+      update();
+      // if (dataMap.containsKey('skills')) {
+      //   List<String> skills = List<String>.from(dataMap['skills']);
+      //   print('Skills: $skills');
+      // }
+
+      // Handle other fields similarly
+      dataMap.forEach((key, value) {
+        print('$key: $value');
+      });
+    }
+  }
+
+  void showExitAppDialog() {
+    Get.defaultDialog(
+      title: 'Close App?',
+      titleStyle: TextStyle(
+        fontSize: 20,
+        fontFamily: FontFamily.metropolis,
+        fontWeight: FontWeight.w600,
+        color: appColors.appRedColour,
+      ),
+      titlePadding: EdgeInsets.only(top: 20, bottom: 5),
+      middleText:
+          'You\'re just a few steps away from getting started with divinetalk.',
+      middleTextStyle: TextStyle(
+        fontSize: 14,
+        fontFamily: FontFamily.poppins,
+        fontWeight: FontWeight.w400,
+        color: appColors.black.withOpacity(0.8),
+      ),
+      backgroundColor: appColors.white,
+      radius: 10,
+      barrierDismissible: true, // Can tap outside to close the dialog
+      actions: [
+        TextButton(
+          onPressed: () {
+            // Handle exit action
+            exit(0);
+          },
+          child: Text(
+            'Exit App',
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: FontFamily.metropolis,
+              fontWeight: FontWeight.w600,
+              color: appColors.darkBlue,
+            ),
+          ),
+          style: TextButton.styleFrom(
+            side: BorderSide(color: appColors.darkBlue),
+            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+        TextButton(
+          onPressed: () {
+            // Handle continue action
+            Get.back(); // Close dialog
+            // Add any other functionality you need
+          },
+          child: Text(
+            'Continue',
+            style: TextStyle(
+              fontSize: 16,
+              fontFamily: FontFamily.metropolis,
+              fontWeight: FontWeight.w600,
+              color: appColors.white,
+            ),
+          ),
+          style: TextButton.styleFrom(
+            backgroundColor: appColors.appRedColour,
+            padding: EdgeInsets.symmetric(horizontal: 25, vertical: 12),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(8),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
 
 class EditStttate {
   late CategoriesList categoriesList;
   void init() {
-    String specialityString = preferenceService.getSpecialAbility()!;
+    final preferenceService = Get.find<SharedPreferenceService>();
 
+    String specialityString = preferenceService.getSpecialAbility()!;
     categoriesList = categoriesDataFromJson(specialityString);
   }
 }

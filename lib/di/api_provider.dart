@@ -20,9 +20,10 @@ class ApiProvider {
   static const String socketUrl = "https://list.divinetalk.live";
 
   static String debugingUrl = "http://13.235.46.27/api/astro/$version/";
-  static String baseUrl = kDebugMode
-      ? debugingUrl
-      : "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+  // static String baseUrl =
+  //     "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+
+  static String baseUrl = "http://4.188.246.208/api/astro/$version/";
   static const String getOnlineOfflineStatus =
       "https://list.divinetalk.live/api/v3/getAstroStatus?uniqueNo=";
   static String imageBaseUrl =
