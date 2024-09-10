@@ -242,6 +242,7 @@ class OnBoardingController extends GetxController {
   List<dynamic> uploadedAstroImages = [];
   var selectedUploadedAstroImage;
   void checkSelectedImages() async {
+    print("111111");
     int selectedCount = userImages.where((element) => element is File).length;
     bool containsFile = userImages.any((element) => element is File);
     // Count the number of File objects in the userImages list
@@ -252,13 +253,21 @@ class OnBoardingController extends GetxController {
         List.filled(fileCount, null); // You can customize the default value
 
     if (containsFile == false) {
+      print("111111");
       Fluttertoast.showToast(msg: "Astrologer must select 2 or more images.");
     } else {
+      print("22222");
       if (uploadedImages.isEmpty) {
+        print("22222");
+
         if (selectedCount >= 2) {
+          print("22222");
+
           List<Future<void>> uploadTasks = [];
           for (int i = 0; i < userImages.length; i++) {
             if (userImages[i] is File) {
+              print("333333");
+
               uploadTasks.add(uploadImage(userImages[i], "astroimages"));
             }
           }
@@ -266,7 +275,7 @@ class OnBoardingController extends GetxController {
           Future.delayed(Duration(seconds: 2)).then((c) {
             if (newList.length == uploadedImages.length &&
                 uploadedImages.contains(selectedUploadedAstroImage)) {
-              print("222");
+              print("333333");
               submitStage3();
             }
           });
@@ -276,6 +285,8 @@ class OnBoardingController extends GetxController {
               msg: "Astrologer must select 2 or more images.");
         }
       } else {
+        print("5555555");
+
         // submitStage3();
       }
     }
@@ -307,9 +318,11 @@ class OnBoardingController extends GetxController {
   List uploadedImages = [];
 
   fetchAutofiledData() {
-    print("printing list ------ ${onBoardingList.toString()}");
-    print("printing list ------ ${onBoardingList.first.toString()}");
-    getAutofill(onBoardingList.first);
+    // print("printing list ------ ${onBoardingList.toString()}");
+    // print("printing list ------ ${onBoardingList.first.toString()}");
+    if (onBoardingList.isNotEmpty) {
+      getAutofill(onBoardingList.first);
+    }
   }
 
   GetAstroOnboarding? getAstroOnboarding;
@@ -796,7 +809,7 @@ class OnBoardingController extends GetxController {
         if (onBoardingList.contains(4)) {
           onBoardingList.remove(4);
         } else {}
-
+        print(onBoardingList.toString());
         navigateToStage();
       }
     } catch (error) {
@@ -1025,14 +1038,23 @@ class OnBoardingController extends GetxController {
   // }
   void navigateToStage() {
     // Helper function to handle navigation
-    void navigateTo(int page, String routeName) {
+
+    void navigateTo(int page, String routeName, argument) {
       isOnPage.value = page;
-      Get.offNamed(routeName);
+      if (argument == null) {
+        Get.offNamed(
+          routeName,
+        );
+      } else {
+        Get.offNamed(routeName, arguments: argument);
+      }
       print("Navigating to $routeName");
     }
 
     // Check if onBoardingList is empty
     if (onBoardingList.isEmpty) {
+      print("Navigating to onBoardingScreen5 - ${isNextPage.value}");
+
       if (isNextPage.value == 0) {
         print("Navigating to onBoardingScreen5");
         Get.toNamed(RouteName.onBoardingScreen5);
@@ -1040,28 +1062,28 @@ class OnBoardingController extends GetxController {
         // Navigate based on isNextPage value
         switch (isNextPage.value) {
           case 0:
-            navigateTo(1, RouteName.onBoardingScreen);
+            navigateTo(1, RouteName.onBoardingScreen, null);
             break;
           case 1:
-            navigateTo(2, RouteName.onBoardingScreen2);
+            navigateTo(2, RouteName.onBoardingScreen2, null);
             break;
           case 2:
-            navigateTo(3, RouteName.onBoardingScreen3);
+            navigateTo(3, RouteName.onBoardingScreen3, null);
             break;
           case 3:
-            navigateTo(4, RouteName.onBoardingScreen4);
+            navigateTo(4, RouteName.onBoardingScreen4, null);
             break;
           case 4:
-            navigateTo(5, RouteName.addBankAutoMation);
+            navigateTo(5, RouteName.addBankAutoMation, null);
             break;
           case 5:
-            navigateTo(6, RouteName.addEcomAutomation);
+            navigateTo(6, RouteName.addEcomAutomation, null);
             break;
           case 6:
-            navigateTo(7, RouteName.scheduleTraining1);
+            navigateTo(7, RouteName.scheduleTraining1, null);
             break;
           case 7:
-            navigateTo(8, RouteName.scheduleTraining2);
+            navigateTo(8, RouteName.scheduleTraining2, "sheduled");
             break;
           default:
             print("Navigating to onBoardingScreen5 (default case)");
@@ -1074,19 +1096,19 @@ class OnBoardingController extends GetxController {
       int firstStage = onBoardingList.first;
       switch (firstStage) {
         case 1:
-          navigateTo(1, RouteName.onBoardingScreen);
+          navigateTo(1, RouteName.onBoardingScreen, null);
           break;
         case 2:
-          navigateTo(2, RouteName.onBoardingScreen2);
+          navigateTo(2, RouteName.onBoardingScreen2, null);
           break;
         case 3:
-          navigateTo(3, RouteName.onBoardingScreen3);
+          navigateTo(3, RouteName.onBoardingScreen3, null);
           break;
         case 4:
-          navigateTo(4, RouteName.onBoardingScreen4);
+          navigateTo(4, RouteName.onBoardingScreen4, null);
           break;
         case 5:
-          navigateTo(5, RouteName.onBoardingScreen5);
+          navigateTo(5, RouteName.onBoardingScreen5, null);
           break;
         default:
           // Fallback for unexpected values

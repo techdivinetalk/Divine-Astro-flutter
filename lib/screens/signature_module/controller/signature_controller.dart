@@ -220,11 +220,6 @@ class SignatureController extends GetxController {
           );
           log("dashboarddddd");
         } else {
-          // Accessing the controller
-// Don't call Get.put(OnBoardingController()) repeatedly
-//           final OnBoardingController onBoardingController =
-//               Get.find<OnBoardingController>();
-//
           updateAgreementStatus();
           Get.until(
             (route) {
@@ -420,34 +415,56 @@ class SignatureController extends GetxController {
       ),
     );
 
-    Directory appDocDirFolder =
-        Directory('/storage/emulated/0/Download/divinetalkAstrology');
-    // final filePath = '${appDocDirFolder.path}/astrologer_sign_and_photo.pdf';
-    // final file = File(filePath);
-    // // bool isExists = await file.exists();
-    // // log("isExists----${isExists}");
-    // // if (isExists) {
-    // //
-    // //  await file.delete();
-    // // }
-    // await file.writeAsBytes(await pdf.save());
-    // Get the app's documents directory
-    Directory? directory = await getExternalStorageDirectory();
+    // Directory appDocDirFolder =
+    //     Directory('/storage/emulated/0/Download/divinetalkAstrology');
+    // // final filePath = '${appDocDirFolder.path}/astrologer_sign_and_photo.pdf';
+    // // final file = File(filePath);
+    // // // bool isExists = await file.exists();
+    // // // log("isExists----${isExists}");
+    // // // if (isExists) {
+    // // //
+    // // //  await file.delete();
+    // // // }
+    // // await file.writeAsBytes(await pdf.save());
+    // // Get the app's documents directory
+    // Directory? directory = await getExternalStorageDirectory();
+    //
+    // if (directory != null) {
+    //   // Generate a timestamp to create a unique file name
+    //   String timestamp = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
+    //
+    //   // Define the PDF file name with a timestamp
+    //   String fileName = 'document_$timestamp.pdf';
+    //   String filePath = '${directory.path}/$fileName';
+    //
+    //   // Create the file and write the PDF data to it
+    //   File pdfFile = File(filePath);
+    //   await pdfFile.writeAsBytes(await pdf.save());
+    //
+    //   print('PDF saved successfully at: $filePath');
+    //
+    //   Future.delayed(
+    //     const Duration(milliseconds: 200),
+    //     () async {
+    //       log("uploadSignaturePdf----${filePath}");
+    //       await uploadSignaturePdf(File(filePath));
+    //     },
+    //   );
+    // }
 
-    if (directory != null) {
-      // Generate a timestamp to create a unique file name
-      String timestamp = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
-
-      // Define the PDF file name with a timestamp
-      String fileName = 'document_$timestamp.pdf';
-      String filePath = '${directory.path}/$fileName';
-
-      // Create the file and write the PDF data to it
-      File pdfFile = File(filePath);
-      await pdfFile.writeAsBytes(await pdf.save());
-
-      print('PDF saved successfully at: $filePath');
-
+    if (from == "") {
+      print("-------");
+      Directory appDocDirFolder =
+          Directory('/storage/emulated/0/Download/divinetalkAstrology');
+      final filePath = '${appDocDirFolder.path}/astrologer_sign_and_photo.pdf';
+      final file = File(filePath);
+      // bool isExists = await file.exists();
+      // log("isExists----${isExists}");
+      // if (isExists) {
+      //
+      //  await file.delete();
+      // }
+      await file.writeAsBytes(await pdf.save());
       Future.delayed(
         const Duration(milliseconds: 200),
         () async {
@@ -455,6 +472,32 @@ class SignatureController extends GetxController {
           await uploadSignaturePdf(File(filePath));
         },
       );
+    } else {
+      print("1111111111");
+      // Get the app's documents directory
+      Directory? directory = await getExternalStorageDirectory();
+
+      if (directory != null) {
+        // Generate a timestamp to create a unique file name
+        String timestamp = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
+
+        // Define the PDF file name with a timestamp
+        String fileName = 'document_$timestamp.pdf';
+        String filePath = '${directory.path}/$fileName';
+
+        // Create the file and write the PDF data to it
+        File pdfFile = File(filePath);
+        await pdfFile.writeAsBytes(await pdf.save());
+
+        print('PDF saved successfully at: $filePath');
+        Future.delayed(
+          const Duration(milliseconds: 200),
+          () async {
+            log("uploadSignaturePdf----${filePath}");
+            await uploadSignaturePdf(File(filePath));
+          },
+        );
+      }
     }
   }
 }

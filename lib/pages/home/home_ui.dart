@@ -5782,18 +5782,19 @@ class ChatAssistanceDataTileHome extends StatelessWidget {
                         children: [
                           ConstrainedBox(
                             constraints: BoxConstraints(
-                                maxWidth: MediaQuery.of(context).size.width*0.35
-                            ),
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.35),
                             child: CustomText(
                               data.customerName ?? '',
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          if(data.level != null && data.level != "") Padding(
-                            padding: const EdgeInsets.only(left: 5.0),
-                            child: LevelWidget(level: data.level ?? "0"),
-                          ),
+                          if (data.level != null && data.level != "")
+                            Padding(
+                              padding: const EdgeInsets.only(left: 5.0),
+                              child: LevelWidget(level: data.level ?? "0"),
+                            ),
                           const Spacer(),
                           Container(
                             decoration: BoxDecoration(

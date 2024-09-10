@@ -13,7 +13,7 @@ class PoojaRemedyTextFiled extends StatelessWidget {
   final Function(String)? onChanged;
   final focusNode;
   final List<TextInputFormatter>? textInputFormatter;
-
+  final from;
   final String? Function(String?)? validator;
   final keyboardType;
   final Function(String?)? onFieldSubmitted;
@@ -30,6 +30,7 @@ class PoojaRemedyTextFiled extends StatelessWidget {
       this.focusNode,
       this.onChanged,
       this.textInputFormatter,
+      this.from,
       this.isSuffix = true});
 
   @override
@@ -55,18 +56,34 @@ class PoojaRemedyTextFiled extends StatelessWidget {
           onFieldSubmitted: onFieldSubmitted,
           keyboardType: keyboardType ?? TextInputType.text,
           decoration: InputDecoration(
-              suffixIcon: isSuffix!
-                  ? Center(
-                      child: Text(
-                        "${controller!.text.length}/${maxLength}",
-                        style: AppTextStyle.textStyle14(
-                          fontColor: appColors.textColor.withOpacity(0.5),
-                        ),
-                      ),
-                    )
-                  : const SizedBox(),
-              suffixIconConstraints:
-                  const BoxConstraints(maxHeight: 50, maxWidth: 60),
+              suffixIcon: from == "onBoarding"
+                  ? isSuffix!
+                      ? Padding(
+                          padding: const EdgeInsets.only(top: 60, right: 4),
+                          child: Align(
+                            alignment: Alignment.bottomRight,
+                            child: Text(
+                              "${controller!.text.length}/${maxLength}",
+                              textAlign: TextAlign.end,
+                              style: AppTextStyle.textStyle12(
+                                fontColor: appColors.textColor.withOpacity(0.5),
+                              ),
+                            ),
+                          ),
+                        )
+                      : const SizedBox()
+                  : isSuffix!
+                      ? Center(
+                          child: Text(
+                            "${controller!.text.length}/${maxLength}",
+                            style: AppTextStyle.textStyle12(
+                              fontColor: appColors.textColor.withOpacity(0.5),
+                            ),
+                          ),
+                        )
+                      : const SizedBox(),
+              suffixIconConstraints: BoxConstraints(
+                  maxHeight: from == "onBoarding" ? 120 : 50, maxWidth: 60),
               contentPadding:
                   EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.h),
               counterText: "",

@@ -428,7 +428,13 @@ class DashboardController extends GetxController
     getConstantDetailsData();
     print("currentTime");
     cacheGift();
-    navigateForOnBoardingGlobal(commonConstants);
+    if (verifyOnboarding.toString() == "0") {
+      if (commonConstants?.data != null) {
+        imageUploadBaseUrl.value = commonConstants?.data?.imageUploadBaseUrl ?? "";
+      }
+
+      navigateForOnBoardingGlobal(commonConstants);
+    } else {}
     // if (commonConstants.data.is_onboarding_in_process.toString() == "0" ||
     //     commonConstants.data.is_onboarding_in_process.toString() == "1") {
     //   print("--------on------");
@@ -1462,16 +1468,18 @@ class DashboardController extends GetxController
 
 navigateForOnBoardingGlobal(commonConstants) async {
   print("onboarding stated------");
-  isNextPage.value = commonConstants.data.stage_no;
 
   if (commonConstants.data.is_onboarding_in_process.toString() == "0" ||
       commonConstants.data.is_onboarding_in_process.toString() == "1") {
     print("--------on------");
+    isNextPage.value = commonConstants.data.stage_no;
 
     Get.put(DashboardController(PreDefineRepository()));
     Get.put(HomeController()).showPopup = false;
     onBoardingList = [1, 2, 3, 4, 5];
     isOnPage.value = 1;
+    disableButton.value = false;
+
     // showORHide.value = 1;
     Get.toNamed(
       RouteName.onBoardingScreen,
@@ -1484,6 +1492,7 @@ navigateForOnBoardingGlobal(commonConstants) async {
         // commonConstants.data.onboarding_reject_stage_no != null ||
         //     commonConstants.data.onboarding_reject_stage_no != [] ||
         commonConstants.data.onboarding_reject_stage_no.isNotEmpty) {
+      disableButton.value = false;
       // for (int stage in commonConstants.data.onboarding_reject_stage_no) {
       //   // Navigate to the screen based on the stage number
       //   switch (stage) {
@@ -1583,6 +1592,8 @@ navigateForOnBoardingGlobal(commonConstants) async {
         );
       }
     } else {
+      disableButton.value = false;
+
       if (commonConstants.data.stage_no.toString() == "0") {
         onBoardingList = [1, 2, 3, 4, 5];
         isOnPage.value = 1;
@@ -1636,19 +1647,51 @@ navigateForOnBoardingGlobal(commonConstants) async {
         // onBoardingList = [5];
         // isOnPage.value = 5;
 
-        Get.toNamed(
-          RouteName.scheduleTraining2,
-        );
+        Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
       } else if (commonConstants.data.stage_no.toString() == "8") {
         // onBoardingList = [5];
         // isOnPage.value = 5;
 
-        Get.toNamed(
-          RouteName.scheduleTraining2,
-        );
+        Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
       }
     }
   } else if (commonConstants.data.is_onboarding_in_process.toString() == "3") {
+    disableButton.value = true;
+    if (commonConstants.data.stage_no.toString() == "4") {
+      onBoardingList = [5];
+      isOnPage.value = 5;
+
+      Get.toNamed(
+        RouteName.onBoardingScreen5,
+      );
+    } else if (commonConstants.data.stage_no.toString() == "5") {
+      // onBoardingList = [6];
+      // isOnPage.value = 5;
+
+      Get.toNamed(
+        RouteName.addEcomAutomation,
+      );
+    } else if (commonConstants.data.stage_no.toString() == "6") {
+      // onBoardingList = [6];
+      // isOnPage.value = 5;
+
+      Get.toNamed(
+        RouteName.scheduleTraining1,
+      );
+    } else if (commonConstants.data.stage_no.toString() == "7") {
+      // onBoardingList = [5];
+      // isOnPage.value = 5;
+
+      Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
+    } else if (commonConstants.data.stage_no.toString() == "8") {
+      // onBoardingList = [5];
+      // isOnPage.value = 5;
+
+      Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
+    }
+  } else if (commonConstants.data.is_onboarding_in_process.toString() == "4") {
+    print('homeeeee1');
+
     Get.offNamed(
       RouteName.dashboard,
     );

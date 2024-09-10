@@ -333,7 +333,19 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addObserver(_lifecycleObserver);
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      checkOnBoarding();
+      if (verifyOnboarding.toString() == "0") {
+        print("from 0");
+        checkOnBoarding();
+      } else {
+        print("from 1");
+        if (preferenceService.getUserDetail()?.id == null) {
+          Get.offAllNamed(RouteName.login);
+        } else {
+          print("Gone to here");
+
+          Get.offAllNamed(RouteName.dashboard);
+        }
+      }
     });
   }
 
@@ -356,6 +368,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
         commonConstants = await userRepository.constantDetailsData2api();
         print('--------------response--------${commonConstants.toJson()}');
         if (commonConstants.success == true) {
+          if (commonConstants?.data != null) {
+            imageUploadBaseUrl.value =
+                commonConstants?.data?.imageUploadBaseUrl ?? "";
+          }
+          preferenceService
+              .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
+          Get.find<SharedPreferenceService>()
+              .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
+
           navigateForOnBoardingGlobal(commonConstants);
         } else if (commonConstants.success == false &&
             commonConstants.statusCode == 401) {
@@ -364,6 +385,8 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           // Handle any failure case here
         } else {}
       } else {
+        print('homeeeee1');
+
         Get.offAllNamed(RouteName.dashboard);
       }
     }

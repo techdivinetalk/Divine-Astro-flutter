@@ -8,6 +8,7 @@ import '../../common/common_image_view.dart';
 import '../../common/routes.dart';
 import '../../gen/assets.gen.dart';
 import '../../gen/fonts.gen.dart';
+import '../../screens/live_page/constant.dart';
 import 'on_boarding_controller.dart';
 
 class OnBoarding5Binding extends Bindings {
@@ -232,18 +233,23 @@ class OnBoarding5 extends GetView<OnBoardingController> {
                         children: [
                           InkWell(
                             onTap: () {
-                              controller.updatePage(5);
-                              controller.updateDonePage(4);
-                              controller.currentPage = 5;
-                              Get.offNamed(
-                                RouteName.addBankAutoMation,
-                              );
+                              if (disableButton.value == false) {
+                              } else {
+                                controller.updatePage(5);
+                                controller.updateDonePage(4);
+                                controller.currentPage = 5;
+                                Get.offNamed(
+                                  RouteName.addBankAutoMation,
+                                );
+                              }
                             },
                             child: Container(
                               height: 50,
                               width: MediaQuery.of(context).size.width * 0.9,
                               decoration: BoxDecoration(
-                                color: appColors.red,
+                                color: disableButton.value == false
+                                    ? appColors.grey.withOpacity(0.3)
+                                    : appColors.red,
                                 borderRadius: BorderRadius.circular(14),
                               ),
                               child: Align(

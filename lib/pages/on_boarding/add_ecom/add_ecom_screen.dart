@@ -57,6 +57,8 @@ class AddEcomScreen extends GetView<AddEcomController> {
                       fontSize: 16.sp,
                       color: appColors.grey,
                       decoration: TextDecoration.underline,
+                      decorationStyle: TextDecorationStyle.solid,
+                      decorationColor: Colors.black45,
                     ),
                   ),
                 ),
@@ -295,7 +297,9 @@ class AddEcomScreen extends GetView<AddEcomController> {
                     maxLines: 5,
                     textInputFormatter: [CustomSpaceInputFormatter()],
                     controller: controller.detailC,
-                    maxLength: 500, keyboardType: TextInputType.text,
+                    maxLength: 500, isSuffix: true,
+                    keyboardType: TextInputType.text,
+                    from: "onBoarding",
                     onChanged: (value) {
                       controller.update();
                     },
@@ -324,7 +328,21 @@ class AddEcomScreen extends GetView<AddEcomController> {
                       return null;
                     },
                   ),
-                  SizedBox(height: 100.h),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Text(
+                      '*Mandatory Field',
+                      textAlign: TextAlign.left,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12.sp,
+                        color: appColors.red,
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -502,7 +520,7 @@ class AddEcomScreen extends GetView<AddEcomController> {
                       borderRadius: const BorderRadius.all(Radius.circular(10)),
                       border: Border.all(
                         color: Colors.black.withOpacity(0.2),
-                        width: 1.0, // Adjust the border width as needed
+                        width: 1.0, // Adjust the bor// der width as needed
                       ),
                     ),
                     child: PujaNameDropdown(),

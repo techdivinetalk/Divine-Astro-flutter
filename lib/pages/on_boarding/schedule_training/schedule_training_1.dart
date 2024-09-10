@@ -101,8 +101,8 @@ class ScheduleTraining1 extends GetView<ScheduleTrainingController> {
                                 return Column(
                                   children: [
                                     Padding(
-                                      padding:
-                                          EdgeInsets.only(left: 20, bottom: 6),
+                                      padding: EdgeInsets.only(
+                                          left: 20, bottom: 6, top: 10),
                                       child: Align(
                                         alignment: Alignment.centerLeft,
                                         child: Text(
@@ -110,7 +110,7 @@ class ScheduleTraining1 extends GetView<ScheduleTrainingController> {
                                           style: TextStyle(
                                             fontWeight: FontWeight.w400,
                                             fontSize: 16.sp,
-                                            color: appColors.black,
+                                            color: appColors.darkBlue,
                                           ),
                                         ),
                                       ),
@@ -360,9 +360,6 @@ class ScheduleTraining1 extends GetView<ScheduleTrainingController> {
                         InkWell(
                           onTap: () {
                             if (controller.selectedTime == null) {
-                              // Get.offNamed(
-                              //   RouteName.scheduleTraining2,
-                              // );
                               Fluttertoast.showToast(msg: "Please Select Time");
                             } else {
                               controller.submittingTraings();

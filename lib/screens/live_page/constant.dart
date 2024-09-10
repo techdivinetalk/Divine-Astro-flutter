@@ -39,6 +39,7 @@ RxList<MessageTemplates> messageTemplateList = <MessageTemplates>[].obs;
 List onBoardingList = [];
 RxBool isRejected = false.obs;
 RxInt isOnPage = 1.obs;
+RxBool disableButton = false.obs;
 RxInt isNextPage = 0.obs;
 RxInt pendingStage = 0.obs;
 var onBoardingAgrrementSigned = false.obs;

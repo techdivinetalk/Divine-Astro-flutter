@@ -205,7 +205,10 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                                     BorderRadius.circular(10.h),
                                               ),
                                         SizedBox(height: 5.h),
-                                        Text("passBook".tr),
+                                        Text(
+                                          "passBook".tr,
+                                          textAlign: TextAlign.center,
+                                        ),
                                       ],
                                     ),
                                   ),
@@ -266,7 +269,10 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                                     });
                                                   }),
                                               SizedBox(height: 5.h),
-                                              Text("cancelledCheque".tr),
+                                              Text(
+                                                "cancelledCheque".tr,
+                                                textAlign: TextAlign.center,
+                                              ),
                                             ],
                                           ),
                                   ),

@@ -579,8 +579,9 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                           onTap: () {
                             Get.bottomSheet(Padding(
                               padding: EdgeInsets.only(
-                                  bottom:
-                                      MediaQuery.of(context).viewInsets.bottom),
+                                  //  bottom:
+                                  //        MediaQuery.of(context).viewInsets.bottom
+                                  ),
                               child: AllCityListSheet(
                                 onSelect: (value) {
                                   controller.locationController.text =
@@ -594,9 +595,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                             ));
                           },
                           onFieldSubmitted: (value) {
-                            controller.locationNode.unfocus();
-                            FocusScope.of(context)
-                                .requestFocus(controller.alterNoNode);
+                            controller.alterNoNode.unfocus();
                           },
                           keyboardType: TextInputType.text,
                           prefix: Icon(

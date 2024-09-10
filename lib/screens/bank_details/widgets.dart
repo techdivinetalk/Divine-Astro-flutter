@@ -216,7 +216,7 @@ class BankDetailsField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: from == "onBoarding" ? null : 55.h,
+      height: 55.h,
       decoration: BoxDecoration(
         borderRadius: from == "onBoarding" ? null : BorderRadius.circular(10),
         boxShadow: from == "onBoarding"

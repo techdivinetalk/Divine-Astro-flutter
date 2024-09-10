@@ -1,3 +1,4 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -6,11 +7,12 @@ import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
 import '../../../common/common_image_view.dart';
 import '../../../gen/assets.gen.dart';
+import '../../../gen/fonts.gen.dart';
 import '../../../screens/bank_details/widgets.dart';
 import 'bank_controller.dart';
 
 class AddBankDetails extends GetView<BankController> {
-  Widget get sizedBox25 => SizedBox(height: 20.w);
+  Widget get sizedBox25 => SizedBox(height: 10.w);
 
   Widget get sizedBox5 => SizedBox(height: 8.w);
 
@@ -64,23 +66,110 @@ class AddBankDetails extends GetView<BankController> {
                           fontSize: 16.sp,
                           color: appColors.grey,
                           decoration: TextDecoration.underline,
+                          decorationStyle: TextDecorationStyle.solid,
+                          decorationColor: Colors.black45,
                         ),
                       ),
                     ),
                   ),
                 ],
               ),
-              bottomNavigationBar:
-                  controller.status == "" || controller.status == "Approved"
-                      ? Container(
-                          margin: EdgeInsets.symmetric(horizontal: 12.w),
-                          child: CustomMaterialButton(
-                            height: 50.h,
-                            buttonName: "submit".tr,
-                            onPressed: () => controller.submit(),
+              bottomNavigationBar: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: SizedBox(
+                  height: 110,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            left: 14, right: 14, top: 10, bottom: 10),
+                        child: RichText(
+                          text: TextSpan(
+                            text:
+                                '* Confused? Don’t worry, We are here to help you! ',
+                            style: TextStyle(
+                              fontFamily: FontFamily.poppins,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400,
+                              color: appColors.grey,
+                            ),
+                            children: [
+                              TextSpan(
+                                text: 'Click here for a tutorial video.',
+                                style: TextStyle(
+                                  fontSize: 12,
+                                  fontFamily: FontFamily.poppins,
+                                  fontWeight: FontWeight.w400,
+                                  color: appColors.red,
+                                  decoration: TextDecoration.underline,
+                                ),
+                                recognizer: TapGestureRecognizer()
+                                  ..onTap = () {
+                                    // Handle tap
+                                    print('Link tapped');
+                                  },
+                              ),
+                            ],
                           ),
-                        )
-                      : const SizedBox(),
+                        ),
+                      ),
+
+                      controller.status == "" || controller.status == "Approved"
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                GetBuilder<BankController>(
+                                    builder: (controller) {
+                                  return InkWell(
+                                    onTap: () {
+                                      controller.submit();
+                                    },
+                                    child: Container(
+                                      height: 50,
+                                      width: MediaQuery.of(context).size.width *
+                                          0.9,
+                                      decoration: BoxDecoration(
+                                        color: appColors.red,
+                                        borderRadius: BorderRadius.circular(14),
+                                      ),
+                                      child: Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Submit",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 20.sp,
+                                            color: AppColors().white,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                }),
+                              ],
+                            )
+                          : SizedBox(),
+
+                      // controller.status == "" || controller.status == "Approved"
+                      //     ? Container(
+                      //         height: 50,
+                      //         width: MediaQuery.of(context).size.width * 0.9,
+                      //         // decoration: BoxDecoration(
+                      //         //   color: appColors.red,
+                      //         //   borderRadius: BorderRadius.circular(14),
+                      //         // ),
+                      //         child: CustomMaterialButton(
+                      //           height: 50,
+                      //           buttonName: "submit".tr,
+                      //           onPressed: () => controller.submit(),
+                      //         ),
+                      //       )
+                      //     : const SizedBox(),
+                    ],
+                  ),
+                ),
+              ),
               body: SafeArea(
                 child: Column(
                   children: [
@@ -196,9 +285,9 @@ class AddBankDetails extends GetView<BankController> {
                                     Expanded(
                                       child: Column(
                                         mainAxisAlignment:
-                                            MainAxisAlignment.start,
+                                            MainAxisAlignment.center,
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                            CrossAxisAlignment.center,
                                         children: [
                                           controller.passBook == null &&
                                                   controller.passBookUrl.isEmpty
@@ -272,7 +361,15 @@ class AddBankDetails extends GetView<BankController> {
                                                       10.h),
                                                 ),
                                           SizedBox(height: 5.h),
-                                          Text("passBook".tr),
+                                          Text(
+                                            "Upload Passbook".tr,
+                                            style: TextStyle(
+                                              fontFamily: FontFamily.poppins,
+                                              fontSize: 12.sp,
+                                              fontWeight: FontWeight.w400,
+                                              color: appColors.grey,
+                                            ),
+                                          ),
                                         ],
                                       ),
                                     ),
@@ -284,9 +381,9 @@ class AddBankDetails extends GetView<BankController> {
                                                   .cancelledChequeUrl.isEmpty
                                           ? Column(
                                               mainAxisAlignment:
-                                                  MainAxisAlignment.start,
+                                                  MainAxisAlignment.center,
                                               crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
+                                                  CrossAxisAlignment.center,
                                               children: [
                                                 GestureDetector(
                                                   onTap: () {
@@ -320,7 +417,16 @@ class AddBankDetails extends GetView<BankController> {
                                                   ),
                                                 ),
                                                 SizedBox(height: 5.h),
-                                                Text("cancelledCheque".tr),
+                                                Text(
+                                                  "Upload Cancelled Cheque".tr,
+                                                  style: TextStyle(
+                                                    fontFamily:
+                                                        FontFamily.poppins,
+                                                    fontSize: 12.sp,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: appColors.grey,
+                                                  ),
+                                                ),
                                               ],
                                             )
                                           : Column(
@@ -360,7 +466,16 @@ class AddBankDetails extends GetView<BankController> {
                                                       });
                                                     }),
                                                 SizedBox(height: 5.h),
-                                                Text("cancelledCheque".tr),
+                                                Text(
+                                                  "Upload Cancelled Cheque".tr,
+                                                  style: TextStyle(
+                                                    fontFamily:
+                                                        FontFamily.poppins,
+                                                    fontSize: 12.sp,
+                                                    fontWeight: FontWeight.w400,
+                                                    color: appColors.grey,
+                                                  ),
+                                                ),
                                               ],
                                             ),
                                     ),

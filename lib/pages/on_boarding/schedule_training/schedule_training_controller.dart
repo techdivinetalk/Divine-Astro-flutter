@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../common/app_exception.dart';
 import '../../../common/colors.dart';
@@ -26,14 +27,12 @@ class ScheduleTrainingController extends GetxController {
   @override
   Future<void> onInit() async {
     super.onInit();
-    getTrainings();
-    getAstroTra();
+    if (Get.arguments == null) {
+      getTrainings();
+    } else {
+      getAstroTra();
+    }
 
-    // final List<String?> specialityNames = preference
-    //     .getUserDetail()!
-    //     .astrologerSpeciality!
-    //     .map((e) => e.specialityDetails!.name ?? "Astrology")
-    //     .toList();
     specialityNames = preference
         .getUserDetail()!
         .astrologerSpeciality!
@@ -42,6 +41,36 @@ class ScheduleTrainingController extends GetxController {
         .toString();
     print(
         "astrologer specialty -- ${preference.getUserDetail()!.astrologerSpeciality!.map((e) => e.toJson().toString()).join(', ')}");
+  }
+
+  String formatDate(String dateString) {
+    // Parse the input date string (assuming it's in the format yyyy-MM-dd)
+    DateTime date = DateTime.parse(dateString);
+
+    // Format the day with the ordinal suffix
+    String daySuffix(int day) {
+      if (day >= 11 && day <= 13) {
+        return 'th';
+      }
+      switch (day % 10) {
+        case 1:
+          return 'st';
+        case 2:
+          return 'nd';
+        case 3:
+          return 'rd';
+        default:
+          return 'th';
+      }
+    }
+
+    // Get the formatted day with the suffix
+    String day = '${date.day}${daySuffix(date.day)}';
+
+    // Format the full date string
+    String formattedDate = '$day, ${DateFormat('MMMM yyyy').format(date)}';
+
+    return formattedDate;
   }
 
   AstroTrainingSessionModel? astroTrainingSessionModel;
@@ -170,9 +199,7 @@ class ScheduleTrainingController extends GetxController {
     try {
       final response = await userRepository.onBoardingApiFun(body);
       if (response.success == true) {
-        Get.offNamed(
-          RouteName.scheduleTraining2,
-        );
+        Get.offNamed(RouteName.scheduleTraining2, arguments: "sheduled");
         update();
       }
     } catch (error) {

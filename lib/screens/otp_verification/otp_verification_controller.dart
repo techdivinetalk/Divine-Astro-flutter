@@ -252,8 +252,14 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
     firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
     firebaseDatabase.ref().child("$firebaseNodeUrl/realTime").update(realTime);
 
+    // if (verifyOnboarding.toString() == "0") {
+    // } else {
+    //   Get.offAllNamed(RouteName.dashboard);
+    // }
     await navigateToOnboarding(commonConstants);
+
     await navigateToDashboard(data, commonConstants);
+
     // } else {
     //   final FirebaseUserData userData = FirebaseUserData(
     //     data.data?.name ?? "",
@@ -329,10 +335,20 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
 
     print("------${response.toPrettyJson()}");
     print("------${preferenceService.getSpecialAbility()}");
+    if (commonConstants?.data != null) {
+      imageUploadBaseUrl.value =
+          commonConstants?.data?.imageUploadBaseUrl ?? "";
+    }
+    preferenceService
+        .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
+    Get.find<SharedPreferenceService>()
+        .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
+
     await Future.delayed(
       const Duration(seconds: 1),
       () => navigateForOnBoardingGlobal(commonConstants),
     );
+    enableSubmit.value = true;
   }
 
   navigateToDashboard(ResLogin data, commonConstants) async {
@@ -343,14 +359,14 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
     }
     if (commonConstants.data.is_onboarding_in_process.toString() == "0" ||
         commonConstants.data.is_onboarding_in_process.toString() == "1" ||
-        commonConstants.data.is_onboarding_in_process.toString() == "2") {
+        commonConstants.data.is_onboarding_in_process.toString() == "2" ||
+        commonConstants.data.is_onboarding_in_process.toString() == "3") {
     } else {
       await Future.delayed(
         const Duration(seconds: 1),
         () => Get.offAllNamed(RouteName.dashboard),
       );
     }
-    enableSubmit.value = true;
   }
 
   removeAttempts() {

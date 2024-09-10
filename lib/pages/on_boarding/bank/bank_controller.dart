@@ -243,11 +243,28 @@ class BankController extends GetxController {
   Future<void> uploadPassBook(imageFile) async {
     var token = await preferenceService.getToken();
     isLoading(true);
+    //
+    // print("image length - ${imageFile.path}");
+    //
+    // var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+    //
+    // var request = http.MultipartRequest('POST', uri);
+    // request.headers.addAll({
+    //   'Authorization': 'Bearer $token',
+    //   'Content-type': 'application/json',
+    //   'Accept': 'application/json',
+    // });
+    //
+    // // Attach the image file to the request
+    // request.files.add(await http.MultipartFile.fromPath(
+    //   'image',
+    //   imageFile.path,
+    // ));
+    // request.fields.addAll({"module_name": "user_bank_passbook"});
 
-    print("image length - ${imageFile.path}");
-
+    print("Uploading image: ${imageFile.path}");
     var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
-
+    print("------------${uri}");
     var request = http.MultipartRequest('POST', uri);
     request.headers.addAll({
       'Authorization': 'Bearer $token',
@@ -293,11 +310,28 @@ class BankController extends GetxController {
   Future<void> uploadCheque(imageFile) async {
     var token = await preferenceService.getToken();
     isLoading(true);
+    //
+    // print("image length - ${imageFile.path}");
+    //
+    // var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+    //
+    // var request = http.MultipartRequest('POST', uri);
+    // request.headers.addAll({
+    //   'Authorization': 'Bearer $token',
+    //   'Content-type': 'application/json',
+    //   'Accept': 'application/json',
+    // });
+    //
+    // // Attach the image file to the request
+    // request.files.add(await http.MultipartFile.fromPath(
+    //   'image',
+    //   imageFile.path,
+    // ));
+    // request.fields.addAll({"module_name": "user_bank_cheque"});
 
-    print("image length - ${imageFile.path}");
-
+    print("Uploading image: ${imageFile.path}");
     var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
-
+    print("------------${uri}");
     var request = http.MultipartRequest('POST', uri);
     request.headers.addAll({
       'Authorization': 'Bearer $token',
