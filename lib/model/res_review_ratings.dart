@@ -94,7 +94,9 @@ class AllReviews {
   String? comment;
   num? rating;
   int? id;
+  dynamic level;
   ReplyData? replyData;
+  bool? isLevelMultipleUser;
 
   AllReviews(
       {this.isAnonymous,
@@ -105,6 +107,8 @@ class AllReviews {
       this.comment,
       this.rating,
       this.id,
+      this.level,
+      this.isLevelMultipleUser = true,
       this.replyData});
 
   AllReviews.fromJson(Map<String, dynamic> json) {
@@ -115,6 +119,7 @@ class AllReviews {
     reviewDate = json['review_date'];
     comment = json['comment'];
     rating = json['rating'];
+    level = json['level'];
     id = json['id'];
     replyData = json['reply_data'] != null
         ? ReplyData.fromJson(json['reply_data'])
@@ -130,6 +135,7 @@ class AllReviews {
     data['review_date'] = reviewDate;
     data['comment'] = comment;
     data['rating'] = rating;
+    data['level'] = level;
     data['id'] = id;
     if (replyData != null) {
       data['reply_data'] = replyData!.toJson();

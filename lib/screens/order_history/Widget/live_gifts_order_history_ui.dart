@@ -155,16 +155,24 @@ class LiveGiftsHistory extends StatelessWidget {
                             style: AppTextStyle.textStyle9(
                                 fontWeight: FontWeight.w400,
                                 fontColor: appColors.darkBlue)),
-                        SizedBox(
-                          width: 140,
-                          child: CustomText(
-                            "${data[index].getCustomers != null ? data[index].getCustomers?.name : "UserName"}",
-                            fontWeight: FontWeight.w600,
-                            fontColor: appColors.darkBlue,
-                            fontSize: 16.sp,
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                          ),
+                        Row(
+                          children: [
+                            ConstrainedBox(
+                              constraints: const BoxConstraints(maxWidth: 140.0),
+                              child: CustomText(
+                                "${data[index].getCustomers != null ? data[index].getCustomers?.name : "UserName"}",
+                                fontWeight: FontWeight.w600,
+                                fontColor: appColors.darkBlue,
+                                fontSize: 16.sp,
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            if(data[index].getCustomers?.level != null && data[index].getCustomers?.level != "")Padding(
+                              padding: const EdgeInsets.only(left: 5.0),
+                              child: LevelWidget(level: data[index].getCustomers?.level ?? ""),
+                            )
+                          ],
                         )
                       ],
                     )

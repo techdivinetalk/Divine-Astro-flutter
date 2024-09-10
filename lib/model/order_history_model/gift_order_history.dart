@@ -131,12 +131,14 @@ class GetCustomers {
   String? name;
   String? avatar;
   int? customerNo;
+  dynamic level;
 
   GetCustomers({
     this.id,
     this.name,
     this.avatar,
     this.customerNo,
+    this.level,
   });
 
   factory GetCustomers.fromJson(Map<String, dynamic> json) => GetCustomers(
@@ -144,6 +146,7 @@ class GetCustomers {
         name: json["name"],
         avatar: json["avatar"],
         customerNo: json["customer_no"],
+        level: json["level"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -151,6 +154,7 @@ class GetCustomers {
         "name": name,
         "avatar": avatar,
         "customer_no": customerNo,
+        "level": level,
       };
 }
 

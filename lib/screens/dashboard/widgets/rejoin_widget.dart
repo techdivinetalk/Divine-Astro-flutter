@@ -11,6 +11,7 @@ import '../../../common/cached_network_image.dart';
 import '../../../common/colors.dart';
 import '../../../common/common_functions.dart';
 import '../../../common/custom_widgets.dart';
+import '../../chat_message_with_socket/chat_message_with_socket_controller.dart';
 
 class RejoinWidget extends StatelessWidget {
   const RejoinWidget({super.key});
@@ -66,6 +67,7 @@ class RejoinWidget extends StatelessWidget {
               child: InkWell(
                 onTap: () async {
                   debugPrint('rejoinChatIcon');
+                  Get.delete<ChatMessageWithSocketController>();
                   Get.toNamed(RouteName.chatMessageWithSocketUI);
                 },
                 child: Padding(

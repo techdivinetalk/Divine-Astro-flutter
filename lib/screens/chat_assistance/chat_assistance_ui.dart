@@ -410,10 +410,18 @@ class ChatAssistanceTile extends StatelessWidget {
                 ),
               ),
             )),
-        title: CustomText(
-          data.name ?? '',
-          fontSize: 16.sp,
-          fontWeight: FontWeight.w600,
+        title: Row(
+          children: [
+            CustomText(
+              data.name ?? '',
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w600,
+            ),
+            if((data.level != null && data.level != "")) Padding(
+              padding: const EdgeInsets.only(left: 5.0),
+              child: LevelWidget(level: data.level ?? ""),
+            )
+          ],
         ),
         subtitle: lastMessage(data.msgType ?? MsgType.text),
         trailing: (unreadMessageCount) > 0
@@ -626,7 +634,10 @@ class ChatAssistanceDataTile extends StatelessWidget {
                     children: [
                       Row(
                         children: [
-                          Expanded(
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: MediaQuery.of(context).size.width*0.4
+                            ),
                             child: CustomText(
                               // data.customerName ?? '',
                               data.customerName ?? '',
@@ -634,6 +645,11 @@ class ChatAssistanceDataTile extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
+                          if(data.level != null && data.level != "") Padding(
+                            padding: const EdgeInsets.only(left: 5.0),
+                            child: LevelWidget(level: data.level ?? ""),
+                          ),
+                          const Spacer(),
                           Container(
                             decoration: BoxDecoration(
                                 border: Border.all(
