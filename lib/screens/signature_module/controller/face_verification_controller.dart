@@ -49,8 +49,10 @@ class FaceVerificationController extends GetxController
     }
   }
 
+  var uploadingImage = false.obs;
   Future<void> uploadFaceImage(File imageFile) async {
     log("uploadFaceImage-----uploadFaceImage");
+    uploadingImage.value = true;update();
     UserData? userData = await pref.getUserDetail();
     try {
       var uri = "${ApiProvider.astrologerFaceVerification}${userData!.id}";
@@ -63,6 +65,8 @@ class FaceVerificationController extends GetxController
           }));
       AgreementModel agreementModel = AgreementModel.fromJson(data.data);
       if (agreementModel.status!.code == 200) {
+        uploadingImage.value = false;
+update();
         if (argu == "") {
           Get.to(() => SignatureView(), arguments: {
             "astrologerProfilePhoto": agreementModel.data!.imageLink,

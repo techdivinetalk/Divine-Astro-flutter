@@ -349,6 +349,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     });
   }
 
+  var isOnboardings;
   checkOnBoarding() async {
     if (preferenceService.getUserDetail()?.id == null) {
       Get.offAllNamed(RouteName.login);
@@ -358,13 +359,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           .child(
               "astrologer/${preferenceService.getUserDetail()!.id}/realTime/isOnboarding")
           .get();
-
-      String isOnboarding = dataSnapshot.value.toString();
+      print("response of isOnboarding - ${isOnboardings.toString()}");
+      isOnboardings = dataSnapshot.value;
       ConstantDetailsModelClass? commonConstants;
-
+      print("response of isOnboarding - ${isOnboardings.toString()}");
       if (preferenceService.getUserDetail()?.id == null) {
         Get.offAllNamed(RouteName.login);
-      } else if (isOnboarding == "1") {
+      } else if (isOnboardings.toString() == "0" || isOnboardings == null) {
         commonConstants = await userRepository.constantDetailsData2api();
         print('--------------response--------${commonConstants.toJson()}');
         if (commonConstants.success == true) {

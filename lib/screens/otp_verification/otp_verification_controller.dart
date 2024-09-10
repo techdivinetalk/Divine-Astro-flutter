@@ -251,12 +251,28 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
         deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
     firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
     firebaseDatabase.ref().child("$firebaseNodeUrl/realTime").update(realTime);
+    var isOnboardings;
+
+    final dataSnapshot = await AppFirebaseService()
+        .database
+        .child(
+            "astrologer/${preferenceService.getUserDetail()!.id}/realTime/isOnboarding")
+        .get();
+    isOnboardings = dataSnapshot.value;
+
+    print("response of isOnboarding - ${isOnboardings.toString()}");
 
     // if (verifyOnboarding.toString() == "0") {
     // } else {
     //   Get.offAllNamed(RouteName.dashboard);
     // }
-    await navigateToOnboarding(commonConstants);
+    if (isOnboardings.toString() == "0" || isOnboardings == null) {
+      await navigateToOnboarding(commonConstants);
+    } else {
+      print('homeeeee1');
+
+      Get.offAllNamed(RouteName.dashboard);
+    }
 
     await navigateToDashboard(data, commonConstants);
 
@@ -344,10 +360,7 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
     Get.find<SharedPreferenceService>()
         .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
 
-    await Future.delayed(
-      const Duration(seconds: 1),
-      () => navigateForOnBoardingGlobal(commonConstants),
-    );
+    navigateForOnBoardingGlobal(commonConstants);
     enableSubmit.value = true;
   }
 

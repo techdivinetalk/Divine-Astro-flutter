@@ -1,3 +1,4 @@
+import 'package:divine_astrologer/pages/on_boarding/widgets/widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -61,310 +62,349 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                 ),
               ),
             ),
-            body: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.only(left: 14, right: 14),
-                  child: pageWidget('2'),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 14, right: 14),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Basic\nDetails",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.sp,
-                          color: appColors.black.withOpacity(0.7),
-                        ),
-                      ),
-                      buildSpace(),
-                      Text(
-                        "Upload\nDocuments",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.sp,
-                          color: appColors.black.withOpacity(0.7),
-                        ),
-                      ),
-                      buildSpace(),
-                      Text(
-                        "Upload\nPictures",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.sp,
-                          color: appColors.black.withOpacity(0.7),
-                        ),
-                      ),
-                      buildSpace(),
-                      Text(
-                        "Signing\nAgreement",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.sp,
-                          color: appColors.black.withOpacity(0.7),
-                        ),
-                      ),
-                      buildSpace(),
-                      Text(
-                        "Awaiting\nApproval",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontSize: 12.sp,
-                          color: appColors.black.withOpacity(0.7),
-                        ),
-                      ),
-                    ],
+            body: SingleChildScrollView(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(left: 14, right: 14),
+                    child: pageWidget('2'),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Upload Aadhar Card",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.sp,
-                        color: appColors.black,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 14, right: 14),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          "Basic\nDetails",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12.sp,
+                            color: appColors.black.withOpacity(0.7),
+                          ),
+                        ),
+                        buildSpace(),
+                        Text(
+                          "Upload\nDocuments",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12.sp,
+                            color: appColors.black.withOpacity(0.7),
+                          ),
+                        ),
+                        buildSpace(),
+                        Text(
+                          "Upload\nPictures",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12.sp,
+                            color: appColors.black.withOpacity(0.7),
+                          ),
+                        ),
+                        buildSpace(),
+                        Text(
+                          "Signing\nAgreement",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12.sp,
+                            color: appColors.black.withOpacity(0.7),
+                          ),
+                        ),
+                        buildSpace(),
+                        Text(
+                          "Awaiting\nApproval",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontWeight: FontWeight.w400,
+                            fontSize: 12.sp,
+                            color: appColors.black.withOpacity(0.7),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Upload Aadhar Card",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16.sp,
+                          color: appColors.black,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        children: [
-                          InkWell(
-                            borderRadius: BorderRadius.circular(20),
-                            onTap: () {
-                              controller.getImage("af");
-                            },
-                            child: Container(
-                              height: 150,
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              decoration: BoxDecoration(
-                                color: AppColors().grey.withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: controller.verifyAadharFront != null &&
-                                      controller.selectedAadharFront == null
-                                  ? CommonImageView(
-                                      imagePath: controller.verifyAadharFront,
-                                      fit: BoxFit.cover,
-                                      placeHolder:
-                                          Assets.images.defaultProfile.path,
-                                      radius: BorderRadius.circular(20.h),
-                                    )
-                                  : controller.photoUrlAadharFront != null
-                                      ? CommonImageView(
-                                          imagePath:
-                                              controller.photoUrlAadharFront,
-                                          fit: BoxFit.cover,
-                                          placeHolder:
-                                              Assets.images.defaultProfile.path,
-                                          radius: BorderRadius.circular(20.h),
-                                        )
-                                      : controller.selectedAadharFront != null
-                                          ? ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(20.h),
-                                              child: Image.file(
-                                                controller.selectedAadharFront,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            )
-                                          : Icon(
-                                              Icons.add,
-                                              color: AppColors().white,
-                                              size: 80,
-                                            ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 10, bottom: 10),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Front Side",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12.sp,
-                                  color: AppColors().grey,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                    child: CustomTextField(
+                      controller: controller.aadharController,
+                      focusNode: controller.aadharNode,
+                      onFieldSubmitted: (value) {
+                        controller.aadharNode.unfocus();
+                      },
+                      keyboardType: TextInputType.number,
+                      prefix: Icon(
+                        Icons.verified_user_outlined,
+                        color: appColors.black.withOpacity(0.5),
                       ),
-                      Column(
-                        children: [
-                          InkWell(
-                            borderRadius: BorderRadius.circular(20),
-                            onTap: () {
-                              controller.getImage("ab");
-                            },
-                            child: Container(
-                              height: 150,
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              decoration: BoxDecoration(
-                                color: AppColors().grey.withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: controller.verifyAadharBack != null &&
-                                      controller.selectedAadharBack == null
-                                  ? CommonImageView(
-                                      imagePath: controller.verifyAadharBack,
-                                      fit: BoxFit.cover,
-                                      placeHolder:
-                                          Assets.images.defaultProfile.path,
-                                      radius: BorderRadius.circular(20.h),
-                                    )
-                                  : controller.photoUrlAadharBack != null
-                                      ? CommonImageView(
-                                          imagePath:
-                                              controller.photoUrlAadharBack,
-                                          fit: BoxFit.cover,
-                                          placeHolder:
-                                              Assets.images.defaultProfile.path,
-                                          radius: BorderRadius.circular(20.h),
-                                        )
-                                      : controller.selectedAadharBack != null
-                                          ? ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(20.h),
-                                              child: Image.file(
-                                                controller.selectedAadharBack,
-                                                fit: BoxFit.cover,
-                                              ),
-                                            )
-                                          : Icon(
-                                              Icons.add,
-                                              color: AppColors().white,
-                                              size: 80,
-                                            ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 10, bottom: 10),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Back Side",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12.sp,
-                                  color: AppColors().grey,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
+                      readOnly: false,
+                      hint: "Aadhar Card Number",
+                    ),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 20, bottom: 10),
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "Upload Pan Card",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 16.sp,
-                        color: appColors.black,
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          children: [
+                            InkWell(
+                              borderRadius: BorderRadius.circular(20),
+                              onTap: () {
+                                controller.getImage("af");
+                              },
+                              child: Container(
+                                height: 150,
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                decoration: BoxDecoration(
+                                  color: AppColors().grey.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: controller.verifyAadharFront != null &&
+                                        controller.selectedAadharFront == null
+                                    ? CommonImageView(
+                                        imagePath: controller.verifyAadharFront,
+                                        fit: BoxFit.cover,
+                                        placeHolder:
+                                            Assets.images.defaultProfile.path,
+                                        radius: BorderRadius.circular(20.h),
+                                      )
+                                    : controller.photoUrlAadharFront != null
+                                        ? CommonImageView(
+                                            imagePath:
+                                                controller.photoUrlAadharFront,
+                                            fit: BoxFit.cover,
+                                            placeHolder: Assets
+                                                .images.defaultProfile.path,
+                                            radius: BorderRadius.circular(20.h),
+                                          )
+                                        : controller.selectedAadharFront != null
+                                            ? ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(20.h),
+                                                child: Image.file(
+                                                  controller
+                                                      .selectedAadharFront,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              )
+                                            : Icon(
+                                                Icons.add,
+                                                color: AppColors().white,
+                                                size: 80,
+                                              ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 10, bottom: 10),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Front Side",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 12.sp,
+                                    color: AppColors().grey,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Column(
+                          children: [
+                            InkWell(
+                              borderRadius: BorderRadius.circular(20),
+                              onTap: () {
+                                controller.getImage("ab");
+                              },
+                              child: Container(
+                                height: 150,
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                decoration: BoxDecoration(
+                                  color: AppColors().grey.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: controller.verifyAadharBack != null &&
+                                        controller.selectedAadharBack == null
+                                    ? CommonImageView(
+                                        imagePath: controller.verifyAadharBack,
+                                        fit: BoxFit.cover,
+                                        placeHolder:
+                                            Assets.images.defaultProfile.path,
+                                        radius: BorderRadius.circular(20.h),
+                                      )
+                                    : controller.photoUrlAadharBack != null
+                                        ? CommonImageView(
+                                            imagePath:
+                                                controller.photoUrlAadharBack,
+                                            fit: BoxFit.cover,
+                                            placeHolder: Assets
+                                                .images.defaultProfile.path,
+                                            radius: BorderRadius.circular(20.h),
+                                          )
+                                        : controller.selectedAadharBack != null
+                                            ? ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(20.h),
+                                                child: Image.file(
+                                                  controller.selectedAadharBack,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              )
+                                            : Icon(
+                                                Icons.add,
+                                                color: AppColors().white,
+                                                size: 80,
+                                              ),
+                              ),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(top: 10, bottom: 10),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Back Side",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 12.sp,
+                                    color: AppColors().grey,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 20, bottom: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Upload Pan Card",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 16.sp,
+                          color: appColors.black,
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 20, right: 20),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Column(
-                        children: [
-                          InkWell(
-                            borderRadius: BorderRadius.circular(20),
-                            onTap: () {
-                              controller.getImage('panFront');
-                            },
-                            child: Container(
-                              height: 150,
-                              width: MediaQuery.of(context).size.width * 0.4,
-                              decoration: BoxDecoration(
-                                color: AppColors().grey.withOpacity(0.3),
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: controller.verifyPanFront != null &&
-                                      controller.selectedPanFront == null
-                                  ? CommonImageView(
-                                      imagePath: controller.verifyPanFront,
-                                      fit: BoxFit.cover,
-                                      placeHolder:
-                                          Assets.images.defaultProfile.path,
-                                      radius: BorderRadius.circular(20.h),
-                                    )
-                                  : controller.photoUrlPanFront != null
-                                      ? CommonImageView(
-                                          imagePath:
-                                              controller.photoUrlPanFront,
-                                          fit: BoxFit.cover,
-                                          placeHolder:
-                                              Assets.images.defaultProfile.path,
-                                          radius: BorderRadius.circular(20.h),
-                                        )
-                                      : controller.selectedPanFront != null
-                                          ? ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(20.h),
-                                              child: Image.file(
-                                                controller.selectedPanFront,
-                                                fit: BoxFit.cover,
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                    child: CustomTextField(
+                      controller: controller.pancardController,
+                      focusNode: controller.pancardNode,
+                      onFieldSubmitted: (value) {
+                        controller.aadharNode.unfocus();
+                      },
+                      keyboardType: TextInputType.text,
+                      prefix: Icon(
+                        Icons.verified_user_outlined,
+                        color: appColors.black.withOpacity(0.5),
+                      ),
+                      readOnly: false,
+                      hint: "Pancard Number",
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 20, right: 20),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Column(
+                          children: [
+                            InkWell(
+                              borderRadius: BorderRadius.circular(20),
+                              onTap: () {
+                                controller.getImage('panFront');
+                              },
+                              child: Container(
+                                height: 150,
+                                width: MediaQuery.of(context).size.width * 0.4,
+                                decoration: BoxDecoration(
+                                  color: AppColors().grey.withOpacity(0.3),
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
+                                child: controller.verifyPanFront != null &&
+                                        controller.selectedPanFront == null
+                                    ? CommonImageView(
+                                        imagePath: controller.verifyPanFront,
+                                        fit: BoxFit.cover,
+                                        placeHolder:
+                                            Assets.images.defaultProfile.path,
+                                        radius: BorderRadius.circular(20.h),
+                                      )
+                                    : controller.photoUrlPanFront != null
+                                        ? CommonImageView(
+                                            imagePath:
+                                                controller.photoUrlPanFront,
+                                            fit: BoxFit.cover,
+                                            placeHolder: Assets
+                                                .images.defaultProfile.path,
+                                            radius: BorderRadius.circular(20.h),
+                                          )
+                                        : controller.selectedPanFront != null
+                                            ? ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(20.h),
+                                                child: Image.file(
+                                                  controller.selectedPanFront,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                              )
+                                            : Icon(
+                                                Icons.add,
+                                                color: AppColors().white,
+                                                size: 80,
                                               ),
-                                            )
-                                          : Icon(
-                                              Icons.add,
-                                              color: AppColors().white,
-                                              size: 80,
-                                            ),
+                              ),
                             ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(top: 10, bottom: 10),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                "Front Side",
-                                style: TextStyle(
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 12.sp,
-                                  color: AppColors().grey,
+                            Padding(
+                              padding: EdgeInsets.only(top: 10, bottom: 10),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  "Front Side",
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.w400,
+                                    fontSize: 12.sp,
+                                    color: AppColors().grey,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    ],
+                          ],
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
             bottomNavigationBar: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -441,7 +481,17 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                               //     }
                               //   }
                               // } else {
-                              controller.submitStage2();
+                              if (controller.aadharController.text.isEmpty) {
+                                Fluttertoast.showToast(
+                                    msg: "Aadhar card is not valid");
+                              } else if (controller
+                                  .pancardController.text.isEmpty) {
+                                Fluttertoast.showToast(
+                                    msg: "Pancard card is not valid");
+                              } else {
+                                controller.submitStage2();
+                              }
+
                               // if (isRejected.value == true) {
                               //   controller.submitStage2();
                               // } else {

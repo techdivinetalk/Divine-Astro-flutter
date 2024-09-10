@@ -68,7 +68,7 @@ class ScheduleTrainingController extends GetxController {
     String day = '${date.day}${daySuffix(date.day)}';
 
     // Format the full date string
-    String formattedDate = '$day, ${DateFormat('MMMM yyyy').format(date)}';
+    String formattedDate = '$day, ${DateFormat('MMM yyyy').format(date)}';
 
     return formattedDate;
   }

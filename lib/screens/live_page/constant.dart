@@ -42,6 +42,7 @@ RxInt isOnPage = 1.obs;
 RxBool disableButton = false.obs;
 RxInt isNextPage = 0.obs;
 RxInt pendingStage = 0.obs;
+RxBool showAllPopup = true.obs;
 var onBoardingAgrrementSigned = false.obs;
 var agreementSignData = {}.obs;
 const userChatData = "userChatData";

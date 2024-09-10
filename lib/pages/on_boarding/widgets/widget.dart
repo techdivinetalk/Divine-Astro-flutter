@@ -16,6 +16,7 @@ class CustomTextField extends StatelessWidget {
   final nextNode;
   final readOnly;
   final prefix;
+  final sufix;
   final List<TextInputFormatter>? textInputFormatter;
 
   final String? Function(String?)? validator;
@@ -37,7 +38,9 @@ class CustomTextField extends StatelessWidget {
       this.nextNode,
       this.onChanged,
       this.textInputFormatter,
-      this.prefix});
+      this.prefix,
+      this.sufix
+      });
 
   @override
   Widget build(BuildContext context) {
@@ -68,6 +71,7 @@ class CustomTextField extends StatelessWidget {
             color: appColors.grey,
           ),
           prefixIcon: prefix,
+          suffixIcon: sufix,
           contentPadding:
               EdgeInsets.symmetric(vertical: 10.h, horizontal: 15.h),
           counterText: "",

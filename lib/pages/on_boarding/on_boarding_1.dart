@@ -8,6 +8,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:pinput/pinput.dart';
 
 import '../../common/app_textstyle.dart';
 import '../../common/colors.dart';
@@ -607,28 +608,132 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                         SizedBox(
                           height: 20,
                         ),
-                        CustomTextField(
-                          controller: controller.alterNoController,
-                          focusNode: controller.alterNoNode,
-                          nextNode: controller.alterNoNode,
-                          onFieldSubmitted: (value) {
-                            controller.alterNoNode.unfocus();
-                          },
-                          keyboardType: TextInputType.number,
-                          prefix: Icon(
-                            Icons.phone_outlined,
-                            color: appColors.black.withOpacity(0.5),
-                          ),
-                          hint: "Alternative Number",
-                          textInputFormatter: [
-                            FilteringTextInputFormatter
-                                .digitsOnly, // Allow only numbers
-                            LengthLimitingTextInputFormatter(10),
-                          ],
-                        ),
+                        Obx(() {
+                          return CustomTextField(
+                            controller: controller.alterNoController,
+                            focusNode: controller.alterNoNode,
+                            nextNode: controller.alterNoNode,
+                            onFieldSubmitted: (value) {
+                              controller.alterNoNode.unfocus();
+                            },
+                            keyboardType: TextInputType.number,
+                            onChanged: (value) {
+                              controller.number = value;
+                              controller.show.value = false;
+                              controller.update();
+                            },
+                            // readOnly:
+                            //     controller.sentOtp.value == false ? false : true,
+                            prefix: Icon(
+                              Icons.phone_outlined,
+                              color: appColors.black.withOpacity(0.5),
+                            ),
+                            sufix: controller.sending.value == true
+                                ? Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: SizedBox(
+                                      height: 30,
+                                      width: 30,
+                                      child: Center(
+                                        child: CircularProgressIndicator(
+                                          strokeWidth: 1,
+                                        ),
+                                      ),
+                                    ),
+                                  )
+                                : IconButton(
+                                    onPressed: () {
+                                      controller.alterNoNode.unfocus();
+
+                                      if (controller.alterNoController.text ==
+                                              "" ||
+                                          controller
+                                              .alterNoController.text.isEmpty ||
+                                          controller.alterNoController.text
+                                                  .length !=
+                                              10) {
+                                        Fluttertoast.showToast(
+                                            msg: "Please Submit Valid number");
+                                      } else {
+                                        controller.sendOtpForNumberChange();
+                                      }
+                                    },
+                                    icon: Icon(
+                                      Icons.send,
+                                      color: controller.alterNoController.text
+                                                  .length !=
+                                              10
+                                          ? appColors.grey.withOpacity(0.5)
+                                          : appColors.appRedColour,
+                                    ),
+                                  ),
+                            hint: "Alternative Number",
+                            textInputFormatter: [
+                              FilteringTextInputFormatter
+                                  .digitsOnly, // Allow only numbers
+                              LengthLimitingTextInputFormatter(10),
+                            ],
+                          );
+                        }),
                         SizedBox(
                           height: 20,
                         ),
+                        controller.show.value == true
+                            ? Pinput(
+                                controller: controller.otpController,
+                                length: 6,
+                                androidSmsAutofillMethod:
+                                    AndroidSmsAutofillMethod.smsRetrieverApi,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                keyboardType: TextInputType.number,
+                                inputFormatters: <TextInputFormatter>[
+                                  FilteringTextInputFormatter.digitsOnly
+                                ],
+                                defaultPinTheme: PinTheme(
+                                  width: 50.w,
+                                  height: 50.w,
+                                  textStyle: TextStyle(
+                                      color: appColors.darkBlue,
+                                      fontSize: 20.sp,
+                                      fontWeight: FontWeight.w600),
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                        color: appColors.guideColor
+                                            .withOpacity(0.5),
+                                        width: 2),
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
+                                ),
+                                pinputAutovalidateMode:
+                                    PinputAutovalidateMode.onSubmit,
+                                showCursor: true,
+                                onSubmitted: (value) {
+                                  controller.verifyOtpForNumberChange();
+                                },
+                                onCompleted: (value) {
+                                  controller.verifyOtpForNumberChange();
+                                },
+                              )
+                            : SizedBox(),
+                        SizedBox(
+                          height: 20,
+                        ),
+                        controller.show.value == true
+                            ? controller.errorMessage == null
+                                ? SizedBox()
+                                : Align(
+                                    alignment: Alignment.center,
+                                    child: Text(
+                                      controller.errorMessage ?? "",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14.sp,
+                                        color: AppColors().black,
+                                      ),
+                                    ),
+                                  )
+                            : SizedBox(),
                       ],
                     ),
                   ),
@@ -702,7 +807,17 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                                     .alterNoController.text.length !=
                                 10) {
                               Fluttertoast.showToast(
-                                  msg: "Please enter valid mobile number");
+                                  msg: "Please enter valid alternate number");
+                            } else if (controller.alterNoController.text
+                                    .toString() !=
+                                controller.number.toString()) {
+                              Fluttertoast.showToast(
+                                  msg:
+                                      "Alternate number is not same as verified"
+                                      "${controller.number.toString()}");
+                            } else if (controller.OtpVerified.value == false) {
+                              Fluttertoast.showToast(
+                                  msg: "Please verified alternate number");
                             } else {
                               controller.submitStage1();
 

@@ -1,9 +1,11 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
 import 'package:dio/dio.dart';
 import 'package:divine_astrologer/gen/fonts.gen.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -23,6 +25,8 @@ import '../../di/shared_preference_service.dart';
 import '../../model/GetAstroOnboarding.dart';
 import '../../model/OnBoardingStageModel.dart';
 import '../../model/categories_list.dart';
+import '../../model/number_change_request_model/number_change_response_model.dart';
+import '../../model/number_change_request_model/verify_otp_response.dart';
 import '../../model/res_login.dart';
 import '../../repository/user_repository.dart';
 import '../../screens/live_page/constant.dart';
@@ -106,14 +110,20 @@ class OnBoardingController extends GetxController {
   late TextEditingController birthController;
   late TextEditingController locationController;
   late TextEditingController alterNoController;
+  late TextEditingController otpController;
+  late TextEditingController aadharController;
+  late TextEditingController pancardController;
 
   FocusNode nameNode = FocusNode();
   FocusNode skillsNode = FocusNode();
   FocusNode experiencesNode = FocusNode();
+  FocusNode aadharNode = FocusNode();
+  FocusNode pancardNode = FocusNode();
   FocusNode birthNode = FocusNode();
   FocusNode locationNode = FocusNode();
   FocusNode alterNoNode = FocusNode();
-
+  String number = "";
+  String number2 = "";
   var currentPage = 1;
   var donePage = 1;
   List astroImages = [];
@@ -131,16 +141,58 @@ class OnBoardingController extends GetxController {
   }
 
   late CategoriesList categoriesList;
+  var enableOrDisable = "0".obs;
+
+  final DatabaseReference database = FirebaseDatabase.instance.ref();
+  RxMap<String, dynamic> firebaseDDDD = <String, dynamic>{}.obs;
+
+  getStatusFromFir() async {
+    database
+        .child("astrologer/${userData!.id}/realTime")
+        .onValue
+        .listen((DatabaseEvent event) async {
+      final DataSnapshot dataSnapshot = event.snapshot;
+      if (dataSnapshot.exists) {
+        if (dataSnapshot.value is Map<dynamic, dynamic>) {
+          Map<dynamic, dynamic> map = (dataSnapshot.value ??
+              <dynamic, dynamic>{}) as Map<dynamic, dynamic>;
+
+          // Assuming firebaseDDDD is a reactive variable
+          firebaseDDDD.value = Map<String, dynamic>.from(map);
+
+          // Check for verifyingOnboarding status
+          if (firebaseDDDD.value["verifyingOnboarding"] != null) {
+            print(
+                "verifyingOnboarding--status -- ${firebaseDDDD.value["verifyingOnboarding"]}");
+
+            String onboardingStatus =
+                firebaseDDDD.value["verifyingOnboarding"].toString();
+
+            // Update enableOrDisable with .value
+            if (onboardingStatus == "0" || onboardingStatus == "1") {
+              enableOrDisable.value =
+                  onboardingStatus; // Correctly setting value for RxString
+            }
+          }
+        }
+      }
+    });
+  }
+
   @override
   void onInit() async {
     super.onInit();
     loadPreDefineData();
+    getStatusFromFir();
     nameController = TextEditingController();
     skillsController = TextEditingController();
     experiencesController = TextEditingController();
     birthController = TextEditingController();
     locationController = TextEditingController();
     alterNoController = TextEditingController();
+    otpController = TextEditingController();
+    aadharController = TextEditingController();
+    pancardController = TextEditingController();
     userData = preference.getUserDetail();
     print("-----user Data --- ${userData!.toJson()}");
     if (userData!.name != null) {
@@ -238,13 +290,69 @@ class OnBoardingController extends GetxController {
     return resultList;
   }
 
+  // List<dynamic> newList = [];
+  // List<dynamic> uploadedAstroImages = [];
+  // var selectedUploadedAstroImage;
+  // void checkSelectedImages() async {
+  //   print("111111");
+  //   int selectedCount = userImages.where((element) => element is File).length;
+  //   bool containsFile = userImages.any((element) => element is File);
+  //   // Count the number of File objects in the userImages list
+  //   int fileCount = userImages.where((element) => element is File).length;
+  //
+  //   // Create a new list with the same number of values
+  //   newList =
+  //       List.filled(fileCount, null); // You can customize the default value
+  //
+  //   if (containsFile == false) {
+  //     print("111111");
+  //     Fluttertoast.showToast(msg: "Astrologer must select 2 or more images.");
+  //   } else {
+  //     print("22222");
+  //     if (uploadedImages.isEmpty) {
+  //       print("22222");
+  //
+  //       if (selectedCount >= 2) {
+  //         print("22222");
+  //
+  //         List<Future<void>> uploadTasks = [];
+  //         for (int i = 0; i < userImages.length; i++) {
+  //           if (userImages[i] is File) {
+  //             print("333333");
+  //
+  //             uploadTasks.add(uploadImage(userImages[i], "astroimages"));
+  //           }
+  //         }
+  //
+  //         Future.delayed(Duration(seconds: 2)).then((c) {
+  //           if (newList.length == uploadedImages.length &&
+  //               uploadedImages.contains(selectedUploadedAstroImage)) {
+  //             print("333333");
+  //             update();
+  //             submitStage3();
+  //           }
+  //         });
+  //         print("User has selected and uploaded 2 or more images.");
+  //       } else {
+  //         Fluttertoast.showToast(
+  //             msg: "Astrologer must select 2 or more images.");
+  //       }
+  //     } else {
+  //       print("5555555");
+  //
+  //       submitStage3();
+  //     }
+  //   }
+  // }
   List<dynamic> newList = [];
   List<dynamic> uploadedAstroImages = [];
   var selectedUploadedAstroImage;
+
   void checkSelectedImages() async {
     print("111111");
     int selectedCount = userImages.where((element) => element is File).length;
     bool containsFile = userImages.any((element) => element is File);
+
     // Count the number of File objects in the userImages list
     int fileCount = userImages.where((element) => element is File).length;
 
@@ -252,42 +360,42 @@ class OnBoardingController extends GetxController {
     newList =
         List.filled(fileCount, null); // You can customize the default value
 
-    if (containsFile == false) {
+    if (!containsFile) {
       print("111111");
       Fluttertoast.showToast(msg: "Astrologer must select 2 or more images.");
     } else {
       print("22222");
+
       if (uploadedImages.isEmpty) {
         print("22222");
 
         if (selectedCount >= 2) {
           print("22222");
 
-          List<Future<void>> uploadTasks = [];
+          // Use a loop with await to ensure all uploads are finished
           for (int i = 0; i < userImages.length; i++) {
             if (userImages[i] is File) {
-              print("333333");
-
-              uploadTasks.add(uploadImage(userImages[i], "astroimages"));
+              print("Uploading image $i");
+              await uploadImage(
+                  userImages[i], "astroimages"); // Wait for each upload
             }
           }
 
-          Future.delayed(Duration(seconds: 2)).then((c) {
-            if (newList.length == uploadedImages.length &&
-                uploadedImages.contains(selectedUploadedAstroImage)) {
-              print("333333");
-              submitStage3();
-            }
-          });
-          print("User has selected and uploaded 2 or more images.");
+          // Check if all images are uploaded and the condition is met
+          if (newList.length == uploadedImages.length &&
+              uploadedImages.contains(selectedUploadedAstroImage)) {
+            print("All images uploaded, calling submitStage3");
+            submitStage3();
+          } else {
+            print("Error: Some images were not uploaded.");
+          }
         } else {
           Fluttertoast.showToast(
               msg: "Astrologer must select 2 or more images.");
         }
       } else {
         print("5555555");
-
-        // submitStage3();
+        submitStage3(); // Images are already uploaded, just call submitStage3
       }
     }
   }
@@ -652,6 +760,84 @@ class OnBoardingController extends GetxController {
     }
   }
 
+  late NumberChangeResponse numberChangeResponse;
+  var sentOtp = false.obs;
+  var sending = false.obs;
+  var show = false.obs;
+  void sendOtpForNumberChange() async {
+    sending.value = true;
+    update();
+
+    try {
+      Map<String, dynamic> param = {
+        "mobile_no": alterNoController.text.trim(),
+      };
+      final response = await userRepository.sendNumberChangeOtpAPI(param);
+      if (response.statusCode == 200 && response.success!) {
+        numberChangeResponse = response;
+        sentOtp.value = true;
+        sending.value = false;
+        show.value = true;
+        update();
+        print("request to change mobile number");
+        var alreadyInApproved =
+            numberChangeResponse.data?.alreadyInApproved == 1;
+        print("alreadyInApproved: $alreadyInApproved");
+        if (alreadyInApproved == true) {
+          divineSnackBar(
+              data: numberChangeResponse.message!, color: appColors.red);
+          show.value = false;
+        } else {}
+      }
+    } catch (err) {
+      sending.value = false;
+      update();
+
+      if (err is CustomException) {
+        //err.onException();
+        // showOtpSheet(
+        //   context: Get.context!,
+        //   message: err.message,
+        // );
+      }
+    }
+  }
+
+  String? errorMessage;
+  VerifyOtpResponse? verifyOtpResponse;
+  var OtpVerified = false.obs;
+  var verifying = false.obs;
+  void verifyOtpForNumberChange() async {
+    verifying.value = true;
+    update();
+    try {
+      if (otpController.text.isEmpty || otpController.text.length != 6) return;
+      Map<String, dynamic> param = {
+        "mobile_no": alterNoController.text.trim(),
+        "otp": otpController.text.trim(),
+        "onboarding": 1
+      };
+      final response = await userRepository.verifyOtpAPi(param);
+      verifyOtpResponse = response;
+      if (response.statusCode == 200 && response.success!) {
+        divineSnackBar(data: "Verified");
+        OtpVerified.value = true;
+        verifying.value = false;
+        errorMessage = null;
+        number = alterNoController.text.trim();
+        update();
+      }
+    } catch (err) {
+      verifying.value = false;
+      update();
+      if (err is CustomException) {
+        errorMessage = err.message;
+        update();
+        //err.onException();
+      }
+    }
+  }
+
   OnBoardingStageModel? onBoardingStageModel1;
   OnBoardingStageModel? onBoardingStageModel2;
   OnBoardingStageModel? onBoardingStageModel3;
@@ -721,6 +907,8 @@ class OnBoardingController extends GetxController {
       "aadhar_front": photoUrlAadharFront,
       "aadhar_back": photoUrlAadharBack,
       "pancard": photoUrlPanFront,
+      "aadhar_no": aadharController.text,
+      "pancard_no": pancardController.text,
       "page": 2,
     };
     try {

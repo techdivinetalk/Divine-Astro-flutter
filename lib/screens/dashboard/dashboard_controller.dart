@@ -399,7 +399,9 @@ class DashboardController extends GetxController
         commonConstants.data.notice == "null") {
     } else {
       log(commonConstants.data.notice.toString());
-      showRecommendedPopupAlert();
+      if (showAllPopup.value == true) {
+        showRecommendedPopupAlert();
+      }
     } //added by: dev-dharam
     Get.find<SharedPreferenceService>()
         .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
@@ -430,10 +432,11 @@ class DashboardController extends GetxController
     cacheGift();
     if (verifyOnboarding.toString() == "0") {
       if (commonConstants?.data != null) {
-        imageUploadBaseUrl.value = commonConstants?.data?.imageUploadBaseUrl ?? "";
+        imageUploadBaseUrl.value =
+            commonConstants?.data?.imageUploadBaseUrl ?? "";
       }
 
-      navigateForOnBoardingGlobal(commonConstants);
+      // navigateForOnBoardingGlobal(commonConstants);
     } else {}
     // if (commonConstants.data.is_onboarding_in_process.toString() == "0" ||
     //     commonConstants.data.is_onboarding_in_process.toString() == "1") {
@@ -774,10 +777,12 @@ class DashboardController extends GetxController
             int.parse(packageInfo.version.split(".").join(""))) {
           if (Platform.isAndroid) {
             /// need to change according ios
-            Get.bottomSheet(
-              const ForceUpdateSheet(),
-              isDismissible: false,
-            );
+            if (showAllPopup.value == true) {
+              Get.bottomSheet(
+                const ForceUpdateSheet(),
+                isDismissible: false,
+              );
+            }
           }
           // showTutorial(context);
         } else {
@@ -1479,6 +1484,7 @@ navigateForOnBoardingGlobal(commonConstants) async {
     onBoardingList = [1, 2, 3, 4, 5];
     isOnPage.value = 1;
     disableButton.value = false;
+    showAllPopup.value = false;
 
     // showORHide.value = 1;
     Get.toNamed(
@@ -1488,6 +1494,8 @@ navigateForOnBoardingGlobal(commonConstants) async {
     Get.put(DashboardController(PreDefineRepository()));
 
     Get.put(HomeController()).showPopup = false;
+    showAllPopup.value = false;
+
     if (
         // commonConstants.data.onboarding_reject_stage_no != null ||
         //     commonConstants.data.onboarding_reject_stage_no != [] ||
@@ -1657,6 +1665,9 @@ navigateForOnBoardingGlobal(commonConstants) async {
     }
   } else if (commonConstants.data.is_onboarding_in_process.toString() == "3") {
     disableButton.value = true;
+    Get.put(HomeController()).showPopup = false;
+    showAllPopup.value = false;
+
     if (commonConstants.data.stage_no.toString() == "4") {
       onBoardingList = [5];
       isOnPage.value = 5;
@@ -1691,6 +1702,7 @@ navigateForOnBoardingGlobal(commonConstants) async {
     }
   } else if (commonConstants.data.is_onboarding_in_process.toString() == "4") {
     print('homeeeee1');
+    showAllPopup.value = true;
 
     Get.offNamed(
       RouteName.dashboard,

@@ -225,11 +225,14 @@ class ScheduleTraining2 extends GetView<ScheduleTrainingController> {
                                                               width: 5,
                                                             ),
                                                             Text(
-                                                              DateFormat(
-                                                                      'yyyy-MM-dd')
-                                                                  .format(
-                                                                      parsedDateTime)
-                                                                  .toString(),
+                                                              controller.formatDate(
+                                                                  parsedDateTime
+                                                                      .toString()),
+                                                              // DateFormat(
+                                                              //         'yyyy-MM-dd')
+                                                              //     .format(
+                                                              //         parsedDateTime)
+                                                              //     .toString(),
                                                               style: TextStyle(
                                                                 fontFamily:
                                                                     FontFamily
@@ -361,6 +364,7 @@ class ScheduleTraining2 extends GetView<ScheduleTrainingController> {
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
                                         // Handle tap
+
                                         print('Link tapped');
                                       },
                                   ),
