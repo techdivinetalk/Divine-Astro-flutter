@@ -107,6 +107,7 @@ class DashboardController extends GetxController
       if (MiddleWare.instance.currentPage ==
           RouteName.chatMessageWithSocketUI) {
         getOrderFromApi();
+        print("getOrderFromApi ");
         if (preferenceService.getUserDetail() != null) {
           // Check for null user details
           appFirebaseService.readData(

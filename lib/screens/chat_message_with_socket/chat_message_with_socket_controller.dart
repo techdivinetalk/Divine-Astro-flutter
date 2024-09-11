@@ -219,7 +219,6 @@ class ChatMessageWithSocketController extends GetxController
     path = "${appDirectory!.path}/recording.m4a";
     update();
   }
-
   void refreshWave() {
     if (isRecording.value) {
       recorderController!.stop(true);
@@ -398,19 +397,7 @@ class ChatMessageWithSocketController extends GetxController
         svgController.stop();
       }
     });
-    AppFirebaseService()
-        .database
-        .child(
-            "chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
-        .orderByChild("msg_send_by")
-        .equalTo("0")
-        .onChildAdded
-        .listen((event) async {
-      var snapshot = event.snapshot;
-      if (snapshot.value != null) {
-        await receiveMessage(snapshot);
-      }
-    });
+
 
     if (showRetentionPopup.toString() == "1") {
       print("callling popup api from this side");
@@ -423,9 +410,11 @@ class ChatMessageWithSocketController extends GetxController
     noticeAPi();
     getSavedRemedies();
     AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
-      if (p0["status"] == null || p0["astroId"] == null) {
-        print("realTimeChange backFunction");
-        backFunction();
+      if (p0["astroId"] == null) {
+        if(AppFirebaseService().currentOrder == "") {
+          print("realTimeChange backFunction");
+          backFunction();
+        }
       } else {
         print("orderData Changed");
 
@@ -581,10 +570,49 @@ class ChatMessageWithSocketController extends GetxController
         makeRealTimeOrderChanges(snapshot);
       }
     });
+    // AppFirebaseService()
+    //     .database
+    //     .child(
+    //     "order/${AppFirebaseService().orderData.value["orderId"]}/isCustTyping")
+    //     .onValue
+    //     .listen((event) async {
+    //   print("endTimeChanged");
+    //   var snapshot = event.snapshot;
+    //   if (snapshot.value != null) {
+    //     isTyping.value = true;
+    //     startTimer();
+    //     scrollToBottomFunc();
+    //   }
+    // });
+    messageController.addListener(() {
+      String text = messageController.text;
+      if (text.length % 3 == 0 && text.isNotEmpty) {
+        FirebaseDatabase.instance.ref(
+            "order/${AppFirebaseService().orderData.value["orderId"]}/isAstroTyping").set(AppFirebaseService().currentTime().millisecondsSinceEpoch);
+      }
+    });
+    runTimer();
+    setRealTime();
+  }
+  setRealTime(){
     AppFirebaseService()
         .database
         .child(
-        "order/${AppFirebaseService().orderData.value["orderId"]}/isCustTyping")
+        "chatMessages/${AppFirebaseService().currentOrder}")
+        .orderByChild("msg_send_by")
+        .equalTo("0")
+        .onChildAdded
+        .listen((event) async {
+      var snapshot = event.snapshot;
+      if (snapshot.value != null) {
+        print("objectobjectobjectobjectobject");
+        await receiveMessage(snapshot);
+      }
+    });
+    AppFirebaseService()
+        .database
+        .child(
+        "order/${AppFirebaseService().currentOrder}/isCustTyping")
         .onValue
         .listen((event) async {
       print("endTimeChanged");
@@ -595,16 +623,7 @@ class ChatMessageWithSocketController extends GetxController
         scrollToBottomFunc();
       }
     });
-    messageController.addListener(() {
-      String text = messageController.text;
-      if (text.length % 3 == 0 && text.isNotEmpty) {
-        FirebaseDatabase.instance.ref(
-            "order/${AppFirebaseService().orderData.value["orderId"]}/isAstroTyping").set(AppFirebaseService().currentTime().millisecondsSinceEpoch);
-      }
-    });
-    runTimer();
   }
-
   runTimer() {
     Timer.periodic(const Duration(seconds: 1), (timer) async {
       if (AppFirebaseService().orderData.value["status"] == null) {
@@ -1911,7 +1930,7 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   void initTask(Map<String, dynamic> p0) {
-    if (p0["status"] == null || p0["status"] == "5") {
+    if (p0["status"] == "5") {
       WidgetsBinding.instance.endOfFrame.then(
         (_) async {
           socket.socket?.disconnect();
@@ -1920,6 +1939,7 @@ class ChatMessageWithSocketController extends GetxController
           // print("WentBack Status- ${p0["status"]}");
           // extraTimer?.cancel();
           // extraTimer = null;
+          print("GoingDashboard ${p0["orderId"]} ${AppFirebaseService().orderData.value["orderId"]}");
           Get.until(
             (route) {
               return Get.currentRoute == RouteName.dashboard;
