@@ -78,6 +78,7 @@ class GetCustomers {
   final String? avatar;
   final int? mobileNo;
   final int? gender;
+  final dynamic level;
 
   GetCustomers({
     this.id,
@@ -85,6 +86,7 @@ class GetCustomers {
     this.avatar,
     this.mobileNo,
     this.gender,
+    this.level,
   });
 
   GetCustomers.fromJson(Map<String, dynamic> json)
@@ -92,13 +94,15 @@ class GetCustomers {
         name = json['name'] as String?,
         avatar = json['avatar'] as String?,
         mobileNo = json['mobile_no'] as int?,
-        gender = json['gender'] as int?;
+        gender = json['gender'] as int?,
+        level = json['level'] as dynamic;
 
   Map<String, dynamic> toJson() => {
     'id' : id,
     'name' : name,
     'avatar' : avatar,
     'mobile_no' : mobileNo,
-    'gender' : gender
+    'gender' : gender,
+    'level' : level,
   };
 }

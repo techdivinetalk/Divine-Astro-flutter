@@ -2074,6 +2074,10 @@ class AstrologerChatAppBar extends StatelessWidget {
                                             fontSize: 14.sp,
                                             color: appColors.black),
                                       ),
+                                      if(AppFirebaseService().orderData.value["level"] != null && AppFirebaseService().orderData.value["level"] != "")...[
+                                        const SizedBox(width: 10),
+                                        LevelWidget(level: AppFirebaseService().orderData.value["level"] ?? ""),
+                                      ],
                                       const SizedBox(width: 10),
                                       Text(
                                         showTalkTime.value == "-1"

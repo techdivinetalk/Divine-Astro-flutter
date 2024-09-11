@@ -7,6 +7,7 @@ import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/auth/login/true_caller_fault_widget.dart';
 import 'package:divine_astrologer/screens/auth/login/widget/country_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -158,7 +159,7 @@ class LoginUI extends GetView<LoginController> {
                         SizedBox(height: 20.h),
                         Obx(() => Visibility(
                             visible: controller.enable.value &&
-                                isTruecaller.value.toString() == "1",
+                                isTruecaller.value.toString() == "1" || kDebugMode,
                             child: TextWithDivider(
                               text: 'Or',
                               textColor: appColors.greyColor,
@@ -169,7 +170,7 @@ class LoginUI extends GetView<LoginController> {
                           print(
                               "showTrueCaller ${controller.showTrueCaller.value}");
                           return Visibility(
-                            visible: (controller.showTrueCaller.value &&
+                            visible: kDebugMode || (controller.showTrueCaller.value &&
                                 controller.enable.value &&
                                 isTruecaller.value.toString() == "1"),
                             child: Padding(
@@ -193,10 +194,12 @@ class LoginUI extends GetView<LoginController> {
                                     oAuthFlowUsable = await TrueCallerService()
                                         .isOAuthFlowUsable();
 
-                                    oAuthFlowUsable
+                                    if(Get.currentRoute == RouteName.login){
+                                      oAuthFlowUsable
                                         ? await TrueCallerService()
-                                            .startTrueCaller()
+                                        .startTrueCaller()
                                         : trueCallerFaultPopup();
+                                    }
                                   },
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
@@ -270,7 +273,6 @@ class LoginUI extends GetView<LoginController> {
           controller: controller.mobileNumberController,
           keyboardType: TextInputType.number,
           // enabled: controller.enable.value,
-          enabled: true,
           maxLength: 10,
           showCursor: true,
           inputFormatters: <TextInputFormatter>[

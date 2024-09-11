@@ -135,6 +135,7 @@ class GetCustomers {
   DateTime? dateOfBirth;
   String? placeOfBirth;
   int? gender;
+  dynamic level;
 
   GetCustomers({
     this.id,
@@ -144,6 +145,7 @@ class GetCustomers {
     this.dateOfBirth,
     this.placeOfBirth,
     this.gender,
+    this.level,
   });
 
   factory GetCustomers.fromJson(Map<String, dynamic> json) {
@@ -157,6 +159,7 @@ class GetCustomers {
           : null,
       placeOfBirth: json["place_of_birth"],
       gender: json["gender"],
+      level: json["level"],
     );
   }
 
@@ -168,6 +171,7 @@ class GetCustomers {
         "date_of_birth": dateOfBirth?.toIso8601String(),
         "place_of_birth": placeOfBirth,
         "gender": gender,
+        "level": level,
       };
 }
 

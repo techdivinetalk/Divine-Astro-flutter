@@ -97,8 +97,6 @@ class DashboardController extends GetxController
     super.dispose();
   }
 
-
-
   var commonConstants;
 
   @override
@@ -314,10 +312,22 @@ class DashboardController extends GetxController
             dataList.id = int.parse(senderId);
             dataList.name = remoteMessage.data["title"];
             Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
-          } else if (remoteMessage.data["type"] == "2") {
-            acceptOrRejectChat(
-                orderId: int.parse(remoteMessage.data["order_id"]),
-                queueId: int.parse(remoteMessage.data["queue_id"]));
+          } else if (remoteMessage.data["orderId"] == "2") {
+
+            final ref = AppFirebaseService()
+                .database
+                .child("order/${AppFirebaseService().orderData.value["orderId"]}").path;
+
+            if(ref.split("/").last == remoteMessage.data["order_id"]){
+              Get.toNamed(RouteName.acceptChatRequestScreen);
+            } else{
+              Fluttertoast.showToast(msg: "Your order has been ended");
+            }
+
+            // Get.toNamed(RouteName.acceptChatRequestScreen);
+            // acceptOrRejectChat(
+            //     orderId: int.parse(remoteMessage.data["order_id"]),
+            //     queueId: int.parse(remoteMessage.data["queue_id"]));
           } else if(remoteMessage.data["type"] == "20"){
             if(MiddleWare.instance.currentPage == RouteName.dashboard){
               if(Get.isRegistered<DashboardController>()){
@@ -329,8 +339,8 @@ class DashboardController extends GetxController
       }
     });
 
-    FirebaseMessaging.onMessageOpenedApp.listen((message) {
-      print("noti type(onMessageOpenedApp) : ${message.data["type"]}");
+    FirebaseMessaging.onMessageOpenedApp.listen((message) async {
+      print("message.data ------> ${message.data}");
       if (message.data["type"] == "8") {
         final senderId = message.data["sender_id"];
         DataList dataList = DataList();
@@ -338,12 +348,22 @@ class DashboardController extends GetxController
         dataList.name = message.data["title"];
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
       } else if (message.data["type"] == "2") {
-        acceptOrRejectChat(
-            orderId: int.parse(message.data["order_id"]),
-            queueId: int.parse(message.data["queue_id"]));
-      } else if(message.data["type"] == "20"){
-        if(MiddleWare.instance.currentPage == RouteName.dashboard){
-          if(Get.isRegistered<DashboardController>()){
+
+        final ref = AppFirebaseService()
+            .database
+            .child("order/${AppFirebaseService().orderData.value["orderId"]}").path;
+
+        if(ref.split("/").last == message.data["order_id"]){
+          Get.toNamed(RouteName.acceptChatRequestScreen);
+        } else{
+          Fluttertoast.showToast(msg: "Your order has been ended");
+        }
+        // acceptOrRejectChat(
+        //     orderId: int.parse(message.data["order_id"]),
+        //     queueId: int.parse(message.data["queue_id"]));
+      } else if (message.data["type"] == "20") {
+        if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+          if (Get.isRegistered<DashboardController>()) {
             Get.find<DashboardController>().selectedIndex.value = 3;
           }
         }
@@ -561,8 +581,8 @@ class DashboardController extends GetxController
   }
 
   askPermissionCameraMicrophone() async {
-    if(isOverLayPermissionDashboard.value == 1){
-      if(!await Permission.systemAlertWindow.status.isGranted){
+    if (isOverLayPermissionDashboard.value == 1) {
+      if (!await Permission.systemAlertWindow.status.isGranted) {
         await AppPermissionService.instance.showAlertDialog(
           "Chat",
           ["Allow display over other apps"],
@@ -606,13 +626,11 @@ class DashboardController extends GetxController
 
         if (int.parse(data.data!.appVersion!.split(".").join("")) >
             int.parse(packageInfo.version.split(".").join(""))) {
-          if(Platform.isAndroid){
-            /// need to change according ios
-            Get.bottomSheet(
-              const ForceUpdateSheet(),
-              isDismissible: false,
-            );
-          }
+
+          Get.bottomSheet(
+            const ForceUpdateSheet(),
+            isDismissible: false,
+          );
           // showTutorial(context);
         } else {
           // showTutorial(context);
