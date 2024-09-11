@@ -13,6 +13,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -144,7 +145,21 @@ void initMessaging() async {
         Get.toNamed(RouteName.chatMessageWithSocketUI);
       } else if (payloadMap["type"] == "2") {
         print(" 1111111111111" + payloadMap.toString());
-        Get.toNamed(RouteName.acceptChatRequestScreen);
+            // final snapshot = AppFirebaseService()
+            // .database
+            // .child("order/${AppFirebaseService().orderData.value["orderId"]}");
+
+        final ref = AppFirebaseService()
+            .database
+            .child("order/${AppFirebaseService().orderData.value["orderId"]}").path;
+
+        if(ref.split("/").last == payloadMap["order_id"]){
+          Get.toNamed(RouteName.acceptChatRequestScreen);
+        } else{
+          Fluttertoast.showToast(msg: "Your order has been ended");
+        }
+
+        // Get.toNamed(RouteName.acceptChatRequestScreen);
         // acceptOrRejectChat(orderId: int.parse(payloadMap["order_id"]), queueId: int.parse(payloadMap["queue_id"]));
 
         /*Future<bool> acceptOrRejectChat(
