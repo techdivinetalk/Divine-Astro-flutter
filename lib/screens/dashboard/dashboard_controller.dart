@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
 // import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:contacts_service/contacts_service.dart';
@@ -312,14 +311,15 @@ class DashboardController extends GetxController
             dataList.name = remoteMessage.data["title"];
             Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
           } else if (remoteMessage.data["orderId"] == "2") {
-
             final ref = AppFirebaseService()
                 .database
-                .child("order/${AppFirebaseService().orderData.value["orderId"]}").path;
+                .child(
+                    "order/${AppFirebaseService().orderData.value["orderId"]}")
+                .path;
 
-            if(ref.split("/").last == remoteMessage.data["order_id"]){
+            if (ref.split("/").last == remoteMessage.data["order_id"]) {
               Get.toNamed(RouteName.acceptChatRequestScreen);
-            } else{
+            } else {
               Fluttertoast.showToast(msg: "Your order has been ended");
             }
 
@@ -347,14 +347,14 @@ class DashboardController extends GetxController
         dataList.name = message.data["title"];
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
       } else if (message.data["type"] == "2") {
-
         final ref = AppFirebaseService()
             .database
-            .child("order/${AppFirebaseService().orderData.value["orderId"]}").path;
+            .child("order/${AppFirebaseService().orderData.value["orderId"]}")
+            .path;
 
-        if(ref.split("/").last == message.data["order_id"]){
+        if (ref.split("/").last == message.data["order_id"]) {
           Get.toNamed(RouteName.acceptChatRequestScreen);
-        } else{
+        } else {
           Fluttertoast.showToast(msg: "Your order has been ended");
         }
         // acceptOrRejectChat(
@@ -793,17 +793,17 @@ class DashboardController extends GetxController
         update();
 
         PackageInfo packageInfo = await PackageInfo.fromPlatform();
-
-        if (int.parse(data.data!.appVersion!.split(".").join("")) >
-            int.parse(packageInfo.version.split(".").join(""))) {
-
-          Get.bottomSheet(
-            const ForceUpdateSheet(),
-            isDismissible: false,
-          );
-          // showTutorial(context);
-        } else {
-          // showTutorial(context);
+        if (showAllPopup.value == true) {
+          if (int.parse(data.data!.appVersion!.split(".").join("")) >
+              int.parse(packageInfo.version.split(".").join(""))) {
+            Get.bottomSheet(
+              const ForceUpdateSheet(),
+              isDismissible: false,
+            );
+            // showTutorial(context);
+          } else {
+            // showTutorial(context);
+          }
         }
       }
 
