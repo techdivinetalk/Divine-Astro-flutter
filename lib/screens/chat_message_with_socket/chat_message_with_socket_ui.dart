@@ -210,6 +210,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               ),
                             ),
                             Obx(() {
+                              print("AppFirebaseServiceCard");
                               return Visibility(
                                   visible: AppFirebaseService()
                                               .orderData
@@ -226,7 +227,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                         borderRadius: BorderRadius.circular(
                                             14), // First container border radius
                                       ), // First container color
-                                      child: !controller.isCardVisible.value
+                                      child: (AppFirebaseService().orderData.value["card"] != null
+                                          ? !(AppFirebaseService().orderData.value["card"]["isCardVisible"] ?? false)
+                                          : false)
                                           ? Text(
                                               "${AppFirebaseService().orderData.value["customerName"]} is picking tarot cards...",
                                               maxLines: 2,
@@ -246,8 +249,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                             .ref(
                                                                 "order/${AppFirebaseService().orderData.value["orderId"]}/card")
                                                             .remove();
-                                                        controller.isCardVisible
-                                                            .value = false;
                                                       },
                                                       child: Icon(Icons.cancel,
                                                           color:
