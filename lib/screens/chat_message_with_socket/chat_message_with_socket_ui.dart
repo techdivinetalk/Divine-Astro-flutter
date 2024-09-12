@@ -360,7 +360,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             SizedBox(height: 10.h),
                             Obx(
                               () => Visibility(
-                                visible: showTalkTime.value == "-1",
+                                visible: AppFirebaseService().orderData.value["status"].toString() ==
+                                    "4",
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Container(
@@ -2081,21 +2082,14 @@ class AstrologerChatAppBar extends StatelessWidget {
                                       ],
                                       const SizedBox(width: 10),
                                       Text(
-                                        showTalkTime.value == "-1"
+                                        AppFirebaseService().orderData.value["status"].toString() ==
+                                            "4"
                                             ? "Chat Ended"
                                             : showTalkTime.value,
                                         style: TextStyle(
                                             fontWeight: FontWeight.w500,
                                             fontSize: 10.sp,
                                             color: appColors.guideColor),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      Text(
-                                        "(ID11${AppFirebaseService().orderData["orderId"]})",
-                                        style: TextStyle(
-                                            fontWeight: FontWeight.w500,
-                                            fontSize: 10.sp,
-                                            color: appColors.black),
                                       ),
                                     ],
                                   ),
@@ -2104,7 +2098,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                                   duration: const Duration(milliseconds: 200),
                                   crossFadeState: CrossFadeState.showFirst,
                                   secondChild: const SizedBox(),
-                                  firstChild: Column(
+                                  firstChild: Row(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
@@ -2115,6 +2109,14 @@ class AstrologerChatAppBar extends StatelessWidget {
                                           fontSize: 10.sp,
                                           color: appColors.black,
                                         ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        "(ID-${AppFirebaseService().orderData["orderId"]})",
+                                        style: TextStyle(
+                                            fontWeight: FontWeight.w500,
+                                            fontSize: 10.sp,
+                                            color: appColors.black),
                                       ),
                                     ],
                                   ),
