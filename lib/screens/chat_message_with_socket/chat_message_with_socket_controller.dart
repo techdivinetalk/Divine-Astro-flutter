@@ -196,6 +196,9 @@ class ChatMessageWithSocketController extends GetxController
     svgController.dispose();
     messgeScrollController.removeListener(_scrollListener);
     messgeScrollController.dispose();
+    orderRemovedListener?.cancel();
+    chatAddedListener?.cancel();
+    typingListener?.cancel();
     super.dispose();
   }
 
@@ -549,26 +552,35 @@ class ChatMessageWithSocketController extends GetxController
     setRealTime();
   }
 
-  setRealTime() {
-    AppFirebaseService()
+  StreamSubscription? orderRemovedListener;
+  StreamSubscription? chatAddedListener;
+  StreamSubscription? typingListener;
+
+  void setRealTime() {
+    // Cancel existing listeners to prevent duplication
+    orderRemovedListener?.cancel();
+    chatAddedListener?.cancel();
+    typingListener?.cancel();
+
+    // Listen for order removal
+    orderRemovedListener = AppFirebaseService()
         .database
         .child("order/${AppFirebaseService().currentOrder}")
         .onChildRemoved
         .listen((event) async {
       print("nullDetected");
       if (AppFirebaseService().orderData.value["status"] == null) {
-        print("The order is null going back");
-        if (MiddleWare.instance.currentPage ==
-            RouteName.chatMessageWithSocketUI) {
-          Get.until(
-            (route) {
-              return Get.currentRoute == RouteName.dashboard;
-            },
-          );
+        print("The order is null, going back");
+        if (MiddleWare.instance.currentPage == RouteName.chatMessageWithSocketUI) {
+          Get.until((route) {
+            return Get.currentRoute == RouteName.dashboard;
+          });
         }
       }
     });
-    AppFirebaseService()
+
+    // Listen for new chat messages
+    chatAddedListener = AppFirebaseService()
         .database
         .child("chatMessages/${AppFirebaseService().currentOrder}")
         .orderByChild("msg_send_by")
@@ -577,16 +589,17 @@ class ChatMessageWithSocketController extends GetxController
         .listen((event) async {
       var snapshot = event.snapshot;
       if (snapshot.value != null) {
-        print("objectobjectobjectobjectobject");
+        print("Received new message");
         await receiveMessage(snapshot);
       }
     });
-    AppFirebaseService()
+
+    // Listen for typing status changes
+    typingListener = AppFirebaseService()
         .database
         .child("order/${AppFirebaseService().currentOrder}/isCustTyping")
         .onValue
         .listen((event) async {
-      print("endTimeChanged");
       var snapshot = event.snapshot;
       if (snapshot.value != null) {
         isTyping.value = true;
@@ -1893,50 +1906,7 @@ class ChatMessageWithSocketController extends GetxController
       return File('');
     }
   }
-
-  void initTask(Map<String, dynamic> p0) {
-    // if (p0["status"] == "5") {
-    //   WidgetsBinding.instance.endOfFrame.then(
-    //     (_) async {
-    //       socket.socket?.disconnect();
-    //       // chatTimer?.cancel();
-    //       // chatTimer = null;
-    //       // print("WentBack Status- ${p0["status"]}");
-    //       // extraTimer?.cancel();
-    //       // extraTimer = null;
-    //       print(
-    //           "GoingDashboard ${p0["orderId"]} ${AppFirebaseService().orderData.value["orderId"]}");
-    //       Get.until(
-    //         (route) {
-    //           return Get.currentRoute == RouteName.dashboard;
-    //         },
-    //       );
-    //     },
-    //   );
-    //   return;
-    // }
-    // if (p0["status"] == "4") {
-    //   // chatTimer?.cancel();
-    //   // chatTimer = null;
-    //  // showTalkTime.value = "-1";
-    // } else if (p0["status"] == "3" || p0["status"] == "2") {
-    //   // extraTimer?.cancel();
-    //   // extraTimer = null;
-    // //  print("extraTime closing");
-    //   //int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
-    //   //talkTimeStartTimer(remainingTime);
-    // }
-
-    // isCardVisible.value =
-    //     p0["card"] != null ? (p0["card"]["isCardVisible"] ?? false) : false;
-
-    if (isCardBotOpen == true &&
-        p0["card"] != null &&
-        !(p0["card"]["isCardVisible"])) {
-      // "Picking tarot card...";
-      update();
-    }
-  }
+  
 
   RitentionPopupModel? ritentionPopupModel;
 
