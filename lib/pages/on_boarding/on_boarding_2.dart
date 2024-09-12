@@ -1,6 +1,7 @@
 import 'package:divine_astrologer/pages/on_boarding/widgets/widget.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -129,14 +130,14 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                     ),
                   ),
                   Padding(
-                    padding: EdgeInsets.only(left: 20, top: 20, bottom: 10),
+                    padding: EdgeInsets.only(left: 20, top: 10, bottom: 10),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Upload Aadhar Card",
+                        "Aadhar Card",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          fontSize: 16.sp,
+                          fontSize: 20.sp,
                           color: appColors.black,
                         ),
                       ),
@@ -152,18 +153,36 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                         controller.aadharNode.unfocus();
                       },
                       keyboardType: TextInputType.number,
-                      prefix: Icon(
-                        Icons.verified_user_outlined,
-                        color: appColors.black.withOpacity(0.5),
-                      ),
+                      textInputFormatter: [
+                        FilteringTextInputFormatter
+                            .digitsOnly, // Allow only numbers
+                      ],
+                      // prefix: Icon(
+                      //   Icons.verified_user_outlined,
+                      //   color: appColors.black.withOpacity(0.5),
+                      // ),
                       readOnly: false,
-                      hint: "Aadhar Card Number",
+                      hint: "Enter Your Aadhar Card Number",
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 20, bottom: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Upload Aadhar Card Images",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14.sp,
+                          color: appColors.black,
+                        ),
+                      ),
                     ),
                   ),
                   Padding(
                     padding: const EdgeInsets.only(left: 20, right: 20),
                     child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Column(
@@ -174,8 +193,8 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                                 controller.getImage("af");
                               },
                               child: Container(
-                                height: 150,
-                                width: MediaQuery.of(context).size.width * 0.4,
+                                height: 120,
+                                width: 120,
                                 decoration: BoxDecoration(
                                   color: AppColors().grey.withOpacity(0.3),
                                   borderRadius: BorderRadius.circular(20),
@@ -231,6 +250,9 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                             ),
                           ],
                         ),
+                        SizedBox(
+                          width: 10,
+                        ),
                         Column(
                           children: [
                             InkWell(
@@ -239,8 +261,8 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                                 controller.getImage("ab");
                               },
                               child: Container(
-                                height: 150,
-                                width: MediaQuery.of(context).size.width * 0.4,
+                                height: 120,
+                                width: 120,
                                 decoration: BoxDecoration(
                                   color: AppColors().grey.withOpacity(0.3),
                                   borderRadius: BorderRadius.circular(20),
@@ -303,10 +325,10 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        "Upload Pan Card",
+                        "Pan Card",
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
-                          fontSize: 16.sp,
+                          fontSize: 20.sp,
                           color: appColors.black,
                         ),
                       ),
@@ -322,12 +344,26 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                         controller.aadharNode.unfocus();
                       },
                       keyboardType: TextInputType.text,
-                      prefix: Icon(
-                        Icons.verified_user_outlined,
-                        color: appColors.black.withOpacity(0.5),
-                      ),
+                      // prefix: Icon(
+                      //   Icons.verified_user_outlined,
+                      //   color: appColors.black.withOpacity(0.5),
+                      // ),
                       readOnly: false,
-                      hint: "Pancard Number",
+                      hint: "Enter Your Pan Card Number",
+                    ),
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(left: 20, bottom: 10),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "Upload Pan Card Images",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          fontSize: 14.sp,
+                          color: appColors.black,
+                        ),
+                      ),
                     ),
                   ),
                   Padding(
@@ -344,8 +380,8 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                                 controller.getImage('panFront');
                               },
                               child: Container(
-                                height: 150,
-                                width: MediaQuery.of(context).size.width * 0.4,
+                                height: 120,
+                                width: MediaQuery.of(context).size.width * 0.33,
                                 decoration: BoxDecoration(
                                   color: AppColors().grey.withOpacity(0.3),
                                   borderRadius: BorderRadius.circular(20),
@@ -457,30 +493,6 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                               Fluttertoast.showToast(
                                   msg: "Image is not selected");
                             } else {
-                              // if (controller.photoUrlPanFront == null ||
-                              //     controller.photoUrlAadharBack == null ||
-                              //
-                              //     controller.photoUrlAadharBack == null) {
-                              //   print("uploadinggggg");
-                              //   for (int i = 0; i < 3; i++) {
-                              //     // Your code here will run 3 times
-                              //     if (i == 1) {
-                              //       controller.uploadImage(
-                              //           controller.selectedAadharFront,
-                              //           "aadharFront");
-                              //       print("Iteration: ${i + 1}");
-                              //     } else if (i == 2) {
-                              //       controller.uploadImage(
-                              //           controller.selectedAadharBack,
-                              //           "aadharBack");
-                              //       print("Iteration: ${i + 1}");
-                              //     } else {
-                              //       controller.uploadImage(
-                              //           controller.selectedAadharFront,
-                              //           "aadharFront");
-                              //     }
-                              //   }
-                              // } else {
                               if (controller.aadharController.text.isEmpty) {
                                 Fluttertoast.showToast(
                                     msg: "Aadhar card is not valid");
@@ -491,17 +503,10 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                               } else {
                                 controller.submitStage2();
                               }
-
-                              // if (isRejected.value == true) {
-                              //   controller.submitStage2();
-                              // } else {
-                              //   controller.navigateToStage();
-                              // }
-                              // }
                             }
                           },
                           child: controller.stage2Submitting.value == true
-                              ? Center(
+                              ? const Center(
                                   child: CircularProgressIndicator(),
                                 )
                               : Container(

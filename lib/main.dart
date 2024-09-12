@@ -332,21 +332,42 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addObserver(_lifecycleObserver);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (verifyOnboarding.toString() == "0") {
-        print("from 0");
-        checkOnBoarding();
-      } else {
-        print("from 1");
-        if (preferenceService.getUserDetail()?.id == null) {
-          Get.offAllNamed(RouteName.login);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final dataSnapshot = await AppFirebaseService()
+          .database
+          .child("masters/disableOnboarding")
+          .get();
+      print(
+          "dataSnapshot.value.toString() -- ${dataSnapshot.value.toString()}");
+      if (dataSnapshot.value.toString() == "0") {
+        if (verifyOnboarding.toString() == "0") {
+          print("from 0");
+          checkOnBoarding();
         } else {
-          print("Gone to here");
+          print("from 1");
+          if (preferenceService.getUserDetail()?.id == null) {
+            Get.offAllNamed(RouteName.login);
+          } else {
+            print("Gone to here");
 
-          Get.offAllNamed(RouteName.dashboard);
+            Get.offAllNamed(RouteName.dashboard);
+          }
         }
+      } else {
+        normalBoaring();
       }
     });
+  }
+
+  normalBoaring() {
+    print("normal onboaringin process");
+    if (preferenceService.getUserDetail()?.id == null) {
+      Get.offAllNamed(RouteName.login);
+    } else {
+      print("Gone to here");
+
+      Get.offAllNamed(RouteName.dashboard);
+    }
   }
 
   var isOnboardings;
@@ -365,7 +386,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       print("response of isOnboarding - ${isOnboardings.toString()}");
       if (preferenceService.getUserDetail()?.id == null) {
         Get.offAllNamed(RouteName.login);
-      } else if (isOnboardings.toString() == "0" || isOnboardings == null) {
+      } else if (isOnboardings.toString() == "4" // || isOnboardings == null
+          ) {
+        print('homeeeee1');
+
+        Get.offAllNamed(RouteName.dashboard);
+      } else {
         commonConstants = await userRepository.constantDetailsData2api();
         print('--------------response--------${commonConstants.toJson()}');
         if (commonConstants.success == true) {
@@ -381,14 +407,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           navigateForOnBoardingGlobal(commonConstants);
         } else if (commonConstants.success == false &&
             commonConstants.statusCode == 401) {
+          await preferenceService.erase();
+
           Get.offAllNamed(RouteName.login);
 
           // Handle any failure case here
         } else {}
-      } else {
-        print('homeeeee1');
-
-        Get.offAllNamed(RouteName.dashboard);
       }
     }
 

@@ -433,12 +433,6 @@ class OnBoarding3 extends GetView<OnBoardingController> {
                         InkWell(
                           onTap: () {
                             controller.checkSelectedImages();
-
-                            // if (isRejected.value == true) {
-                            //   controller.checkSelectedImages();
-                            // } else {
-                            //   controller.navigateToStage();
-                            // }
                           },
                           child: Obx(() {
                             return controller.stage3Submitting.value == true

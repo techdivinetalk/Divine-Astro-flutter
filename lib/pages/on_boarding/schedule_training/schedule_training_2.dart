@@ -171,6 +171,9 @@ class ScheduleTraining2 extends GetView<ScheduleTrainingController> {
                                                 ),
                                                 subtitle: Text(
                                                   controller.specialityNames,
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
                                                   style: TextStyle(
                                                     fontFamily:
                                                         FontFamily.poppins,
@@ -276,7 +279,7 @@ class ScheduleTraining2 extends GetView<ScheduleTrainingController> {
                                                             ),
                                                             Text(
                                                               DateFormat(
-                                                                      'HH:mm a')
+                                                                      'hh:mm a')
                                                                   .format(
                                                                       parsedDateTime)
                                                                   .toString(),
@@ -364,7 +367,6 @@ class ScheduleTraining2 extends GetView<ScheduleTrainingController> {
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
                                         // Handle tap
-
                                         print('Link tapped');
                                       },
                                   ),
@@ -378,14 +380,17 @@ class ScheduleTraining2 extends GetView<ScheduleTrainingController> {
                             children: [
                               InkWell(
                                 onTap: () async {
-                                  if (controller
+                                  if (controller.remaing2.isNegative) {
+                                    Fluttertoast.showToast(
+                                        msg: "Meeting has been ended");
+                                  } else if (controller
                                               .astrologerTrainingSessionResponse!
                                               .data!
                                               .first
                                               .status
                                               .toString() ==
                                           "1" &&
-                                      controller.remainingTime.isNegative) {
+                                      controller.remaing.isNegative) {
                                     String meetingLink = controller
                                         .astrologerTrainingSessionResponse!
                                         .data!
@@ -402,22 +407,19 @@ class ScheduleTraining2 extends GetView<ScheduleTrainingController> {
                                     Fluttertoast.showToast(
                                         msg: "Meeting is not started");
                                   }
-                                  // Get.offNamed(
-                                  //   RouteName.dashboard,
-                                  // );
                                 },
                                 child: Container(
                                   height: 50,
                                   width:
                                       MediaQuery.of(context).size.width * 0.9,
                                   decoration: BoxDecoration(
-                                    color:
-                                        controller.astrologerTrainingSessionResponse!
+                                    color: controller.remaing2.isNegative
+                                        ? appColors.grey.withOpacity(0.4)
+                                        : controller.astrologerTrainingSessionResponse!
                                                         .data!.first.status
                                                         .toString() ==
                                                     "1" &&
-                                                controller
-                                                    .remainingTime.isNegative
+                                                controller.remaing.isNegative
                                             ? appColors.red
                                             : appColors.grey.withOpacity(0.4),
                                     borderRadius: BorderRadius.circular(14),
@@ -432,10 +434,12 @@ class ScheduleTraining2 extends GetView<ScheduleTrainingController> {
                                                   .meeting_date_epoch ==
                                               null
                                           ? "Join Training Session"
-                                          : controller.remainingTime.isNegative
-                                              ? "Join Training Session"
-                                              : controller.formatDuration(controller
-                                                  .remainingTime), //     "Join Training Session",
+                                          : controller.remaing.isNegative
+                                              ? controller.remaing2.isNegative
+                                                  ? "Meeting Ended"
+                                                  : "Join Training Session"
+                                              : controller.formatDuration(
+                                                  controller.remaing),
                                       style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 20.sp,

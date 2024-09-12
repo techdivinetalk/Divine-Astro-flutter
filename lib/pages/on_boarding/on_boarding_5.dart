@@ -20,11 +20,13 @@ class OnBoarding5Binding extends Bindings {
 class OnBoarding5 extends GetView<OnBoardingController> {
   @override
   Widget build(BuildContext context) {
+    controller.getStatusFromFir();
+    controller.update();
+
     return GetBuilder<OnBoardingController>(
       assignId: true,
       init: OnBoardingController(),
       builder: (OnBoardingController controller) {
-        controller.getStatusFromFir();
         return PopScope(
           canPop: false,
           onPopInvoked: (bool) async {
@@ -230,9 +232,6 @@ class OnBoarding5 extends GetView<OnBoardingController> {
                               if (controller.enableOrDisable.value.toString() ==
                                       "0" ||
                                   controller.enableOrDisable.value == null) {
-                                // Get.offNamed(
-                                //   RouteName.onBoardingScreen5,
-                                // );
                               } else {
                                 controller.updatePage(5);
                                 controller.updateDonePage(4);

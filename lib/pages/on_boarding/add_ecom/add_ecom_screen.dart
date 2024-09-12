@@ -6,6 +6,7 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../../common/SvgIconButton.dart';
@@ -126,9 +127,21 @@ class AddEcomScreen extends GetView<AddEcomController> {
                                     if (controller.validation()) {
                                       if (controller.selectedValue.value ==
                                           "Puja") {
-                                        controller.addEditPoojaApi();
+                                        if (controller.nameC.text.isEmpty ||
+                                            controller.detailC.text.isEmpty) {
+                                          Fluttertoast.showToast(
+                                              msg: "Field is empty");
+                                        } else {
+                                          controller.addEditPoojaApi();
+                                        }
                                       } else {
-                                        controller.addEditProduct();
+                                        if (controller.nameC.text.isEmpty ||
+                                            controller.detailC.text.isEmpty) {
+                                          Fluttertoast.showToast(
+                                              msg: "Field is empty");
+                                        } else {
+                                          controller.addEditProduct();
+                                        }
                                       }
                                     }
                                   }
@@ -297,18 +310,13 @@ class AddEcomScreen extends GetView<AddEcomController> {
                     maxLines: 5,
                     textInputFormatter: [CustomSpaceInputFormatter()],
                     controller: controller.detailC,
-                    maxLength: 500, isSuffix: true,
+                    maxLength: 500,
+                    isSuffix: true,
                     keyboardType: TextInputType.text,
                     from: "onBoarding",
                     onChanged: (value) {
                       controller.update();
                     },
-                    // validator: (value) {
-                    //   if (value == null || value.isEmpty) {
-                    //     return '${controller.selectedValue} Description is required';
-                    //   }
-                    //   return null;
-                    // },
                   ),
                   SizedBox(height: 20.h),
                   PoojaRemedyTextFiled(

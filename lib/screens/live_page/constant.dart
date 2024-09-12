@@ -39,12 +39,17 @@ RxList<MessageTemplates> messageTemplateList = <MessageTemplates>[].obs;
 List onBoardingList = [];
 RxBool isRejected = false.obs;
 RxInt isOnPage = 1.obs;
+
 RxBool disableButton = false.obs;
 RxInt isNextPage = 0.obs;
 RxInt pendingStage = 0.obs;
 RxBool showAllPopup = true.obs;
 var onBoardingAgrrementSigned = false.obs;
-var agreementSignData = {}.obs;
+var alternateMobile = "".obs;
+var onBoardingData1 = {}.obs;
+// var agreementSignData = "".obs;
+String agreementSignData = ''; // Initialize as an empty reactive string
+
 const userChatData = "userChatData";
 RxInt currentChatUserId = 8693.obs;
 int roleId = 7;

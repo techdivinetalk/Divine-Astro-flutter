@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -30,7 +31,9 @@ import '../../model/number_change_request_model/verify_otp_response.dart';
 import '../../model/res_login.dart';
 import '../../repository/user_repository.dart';
 import '../../screens/live_page/constant.dart';
+import '../../screens/otp_verification/timer_controller.dart';
 import '../../screens/signature_module/model/agreement_model.dart';
+import 'on_boarding_1.dart';
 
 class FileUtils {
   static String getfilesizestring({required int bytes, int decimals = 0}) {
@@ -72,7 +75,7 @@ class OnBoardingController extends GetxController {
   // Observables
   RxInt tag = (-0).obs;
   RxList<int> tagIndexes = <int>[].obs;
-  RxList<String> skills = <String>[].obs;
+  RxList<int> skills = <int>[].obs;
   RxList<CategoriesData> tags = <CategoriesData>[].obs;
   List<CategoriesData> options = <CategoriesData>[].obs;
 
@@ -81,21 +84,25 @@ class OnBoardingController extends GetxController {
     userData = preference.getUserDetail();
     // Fetch the categories list
     String specialityString = preference.getSpecialAbility()!;
+    print("categories data printing ---- ${specialityString.toString()}");
     categoriesList = categoriesDataFromJson(specialityString);
   }
 
   // Initialize the tag-related data
   void _initializeTags() {
     if (userData != null) {
+      tagIndexes.clear();
+      tags.clear();
+      skills.clear();
+      options.clear();
       userData?.astroCatPivot?.asMap().entries.forEach((element) {
-        tagIndexes.add(element.key);
-        tags.add(CategoriesData.fromAstrologerSpeciality(element.value));
-        skills
-            .add(CategoriesData.fromAstrologerSpeciality(element.value).name!);
-
-        // Join the 'name' fields of the Skill objects into a single string separated by commas
-        String s = tags.map((skill) => skill.name).join(', ');
-        skillsController.text = s;
+        // tagIndexes.add(element.key);
+        // tags.add(CategoriesData.fromAstrologerSpeciality(element.value));
+        // skills.add(CategoriesData.fromAstrologerSpeciality(element.value).id!);
+        //
+        // // Join the 'name' fields of the Skill objects into a single string separated by commas
+        // String s = tags.map((skill) => skill.name).join(', ');
+        // skillsController.text = s;
       });
     }
 
@@ -147,11 +154,14 @@ class OnBoardingController extends GetxController {
   RxMap<String, dynamic> firebaseDDDD = <String, dynamic>{}.obs;
 
   getStatusFromFir() async {
+    print("astrologer////////////////////////");
+
     database
         .child("astrologer/${userData!.id}/realTime")
         .onValue
         .listen((DatabaseEvent event) async {
       final DataSnapshot dataSnapshot = event.snapshot;
+
       if (dataSnapshot.exists) {
         if (dataSnapshot.value is Map<dynamic, dynamic>) {
           Map<dynamic, dynamic> map = (dataSnapshot.value ??
@@ -172,6 +182,7 @@ class OnBoardingController extends GetxController {
             if (onboardingStatus == "0" || onboardingStatus == "1") {
               enableOrDisable.value =
                   onboardingStatus; // Correctly setting value for RxString
+              update();
             }
           }
         }
@@ -179,6 +190,11 @@ class OnBoardingController extends GetxController {
     });
   }
 
+  BroadcastReceiver receiver = BroadcastReceiver(
+    names: <String>["updateAgreement"],
+  );
+
+  var fetchAgaing = 0.obs;
   @override
   void onInit() async {
     super.onInit();
@@ -199,6 +215,15 @@ class OnBoardingController extends GetxController {
       nameController.text = userData!.name ?? "";
     }
     getAstrologerStatus();
+
+    receiver.start().then((val) {
+      receiver.messages.listen((event) {
+        print("fetching Agreementttttttttt");
+        if (event.name == "updateAgreement") {
+          getAstrologerStatus();
+        }
+      });
+    });
 
     fetchAutofiledData();
     if (userData!.experiance != null) {
@@ -229,6 +254,8 @@ class OnBoardingController extends GetxController {
   void loadPreDefineData() async {
     String specialityString = preference.getSpecialAbility()!;
     categoriesList = categoriesDataFromJson(specialityString);
+
+    print("categories data printing ---- ${categoriesList.toJson()}");
   }
 
   // late CategoriesList categoriesList;
@@ -760,6 +787,20 @@ class OnBoardingController extends GetxController {
     }
   }
 
+  late Timer timer;
+  var start = 120.obs; // 2 minutes = 120 seconds
+
+  void startTimer() {
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (start.value == 0) {
+        timer.cancel(); // Stop the timer
+      } else {
+        start.value--;
+      }
+      update();
+    });
+  }
+
   late NumberChangeResponse numberChangeResponse;
   var sentOtp = false.obs;
   var sending = false.obs;
@@ -773,21 +814,32 @@ class OnBoardingController extends GetxController {
         "mobile_no": alterNoController.text.trim(),
       };
       final response = await userRepository.sendNumberChangeOtpAPI(param);
-      if (response.statusCode == 200 && response.success!) {
+      if (response.success == true) {
         numberChangeResponse = response;
         sentOtp.value = true;
         sending.value = false;
         show.value = true;
+
+        Fluttertoast.showToast(msg: numberChangeResponse.message ?? "");
+        Get.bottomSheet(Padding(
+          padding: EdgeInsets.only(),
+          child: VerifyOtpSheet(
+            onBoardingData: {
+              "name": nameController.text,
+              "skills": skills,
+              "skills_name": skillsController.text,
+              "experience": experiencesController.text,
+              "dob": birthController.text,
+              "location": locationController.text,
+              "alternate_no": alternateMobile.value,
+              "page": 1,
+            },
+          ),
+        ));
         update();
         print("request to change mobile number");
-        var alreadyInApproved =
-            numberChangeResponse.data?.alreadyInApproved == 1;
-        print("alreadyInApproved: $alreadyInApproved");
-        if (alreadyInApproved == true) {
-          divineSnackBar(
-              data: numberChangeResponse.message!, color: appColors.red);
-          show.value = false;
-        } else {}
+      } else {
+        Fluttertoast.showToast(msg: numberChangeResponse.message ?? "");
       }
     } catch (err) {
       sending.value = false;
@@ -799,7 +851,51 @@ class OnBoardingController extends GetxController {
         //   context: Get.context!,
         //   message: err.message,
         // );
+        Fluttertoast.showToast(msg: err.message ?? "");
       }
+    }
+  }
+
+  final timerController = Get.put(TimerController());
+
+  var isResendOtp = false.obs;
+  var sessionId = "";
+
+  resendOtp() async {
+    Map<String, dynamic> params = {
+      "mobile_no": alterNoController.text.toString()
+    };
+    try {
+      isResendOtp.value = true;
+      NumberChangeResponse data =
+          await userRepository.sendNumberChangeOtpAPI(params);
+      sessionId = data.data!.sessionId!;
+      start = 120.obs;
+      startTimer();
+
+      isResendOtp.value = false;
+      divineSnackBar(data: "OTP Re-send successfully.");
+      update();
+    } catch (error) {
+      isResendOtp.value = false;
+      update();
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else if (error is OtpInvalidTimerException) {
+        timerController.extractTimerValue(error.message);
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.red);
+      }
+    }
+  }
+
+  var isWrongOtp = false.obs;
+  var attempts = 3.obs;
+
+  removeAttempts() {
+    if (attempts.value > 0) {
+      attempts.value = attempts.value - 1;
     }
   }
 
@@ -807,13 +903,15 @@ class OnBoardingController extends GetxController {
   VerifyOtpResponse? verifyOtpResponse;
   var OtpVerified = false.obs;
   var verifying = false.obs;
-  void verifyOtpForNumberChange() async {
+  void verifyOtpForNumberChange(data) async {
     verifying.value = true;
+    stage1Submitting.value = true;
+
     update();
     try {
       if (otpController.text.isEmpty || otpController.text.length != 6) return;
       Map<String, dynamic> param = {
-        "mobile_no": alterNoController.text.trim(),
+        "mobile_no": alternateMobile.value.trim(),
         "otp": otpController.text.trim(),
         "onboarding": 1
       };
@@ -823,15 +921,27 @@ class OnBoardingController extends GetxController {
         divineSnackBar(data: "Verified");
         OtpVerified.value = true;
         verifying.value = false;
+        isWrongOtp.value = false;
+        stage1Submitting.value = false;
+        update();
+        submitStage1(data);
         errorMessage = null;
         number = alterNoController.text.trim();
         update();
       }
     } catch (err) {
       verifying.value = false;
+      isWrongOtp.value = true;
+      OtpVerified.value = false;
+      stage1Submitting.value = false;
+
+      removeAttempts();
+
       update();
       if (err is CustomException) {
         errorMessage = err.message;
+        print(err.toString());
+        Fluttertoast.showToast(msg: errorMessage!);
         update();
         //err.onException();
       }
@@ -844,27 +954,31 @@ class OnBoardingController extends GetxController {
   OnBoardingStageModel? onBoardingStageModel4;
 
   var stage1Submitting = false.obs;
-  submitStage1() async {
+  submitStage1(data) async {
     stage1Submitting.value = true;
     update();
-    var body = {
-      "name": nameController.text,
-      "skills": skills,
-      "experience": experiencesController.text,
-      "dob": birthController.text,
-      "location": locationController.text,
-      "alternate_no": alterNoController.text,
-      "profile_picture": ".com",
-      "page": 1,
-    };
+    //page 1 name ,skills ,skills_name ,experience,dob,location,alternate_no
+    var body = data ??
+        {
+          "name": nameController.text,
+          "skills": skills,
+          "skills_name": skillsController.text,
+          "experience": experiencesController.text,
+          "dob": birthController.text,
+          "location": locationController.text,
+          "alternate_no": alterNoController.text,
+          "page": 1,
+        };
     try {
       final response = await userRepository.onBoardingApiFun(body);
       if (response.success == true) {
         stage1Submitting.value = false;
         onBoardingStageModel1 = response;
+        timer.cancel();
         divineSnackBar(
             data: onBoardingStageModel1!.message.toString(),
-            color: appColors.green);
+            color: appColors.green,
+            duration: Duration(seconds: 5));
         // onBoardingList.remove(1);
         if (onBoardingList.contains(1)) {
           print("1 delete");
@@ -883,7 +997,8 @@ class OnBoardingController extends GetxController {
       } else {
         divineSnackBar(
             data: onBoardingStageModel1!.message.toString(),
-            color: appColors.redColor);
+            color: appColors.redColor,
+            duration: Duration(seconds: 5));
       }
     } catch (error) {
       stage1Submitting.value = false;
@@ -906,9 +1021,9 @@ class OnBoardingController extends GetxController {
     var body = {
       "aadhar_front": photoUrlAadharFront,
       "aadhar_back": photoUrlAadharBack,
+      "aadhar_no": int.parse(aadharController.text.toString()),
       "pancard": photoUrlPanFront,
-      "aadhar_no": aadharController.text,
-      "pancard_no": pancardController.text,
+      "pancard_no": pancardController.text.toString(),
       "page": 2,
     };
     try {
@@ -918,7 +1033,8 @@ class OnBoardingController extends GetxController {
         onBoardingStageModel2 = response;
         divineSnackBar(
             data: onBoardingStageModel2!.message.toString(),
-            color: appColors.green);
+            color: appColors.green,
+            duration: Duration(seconds: 5));
         if (onBoardingList.contains(2)) {
           onBoardingList.remove(2);
         } else {}
@@ -931,12 +1047,16 @@ class OnBoardingController extends GetxController {
       }
     } catch (error) {
       stage2Submitting.value = false;
+      update();
 
       debugPrint("error $error");
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        divineSnackBar(
+            data: error.toString(),
+            color: appColors.redColor,
+            duration: Duration(seconds: 5));
       }
     }
   }
@@ -974,7 +1094,10 @@ class OnBoardingController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        divineSnackBar(
+            data: error.toString(),
+            color: appColors.redColor,
+            duration: Duration(seconds: 5));
       }
     }
   }
@@ -985,7 +1108,7 @@ class OnBoardingController extends GetxController {
     stage4Submitting.value = true;
     update();
     var body = {
-      "agreementData": agreementSignData.value,
+      "agreementData": agreementSignData,
       "page": 4,
     };
     print("body ----- ${body}");
@@ -1007,7 +1130,10 @@ class OnBoardingController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: appColors.redColor);
+        divineSnackBar(
+            data: error.toString(),
+            color: appColors.redColor,
+            duration: Duration(seconds: 5));
       }
     }
   }
@@ -1395,6 +1521,8 @@ class OnBoardingController extends GetxController {
   //   }
   // }
   getAutoFillDataAssign(dataMap) {
+    print('datadatadatadatadatadata: ${dataMap.toString()}');
+
     if (dataMap == null) {
     } else {
       // Example to handle different keys
@@ -1405,16 +1533,26 @@ class OnBoardingController extends GetxController {
       if (dataMap.containsKey('name')) {
         nameController.text = dataMap['name'].toString();
       }
-      if (dataMap.containsKey('skills')) {
-        // Assuming dataMap['skills'] is a List<dynamic>, convert it to List<String>
-        List<String> skillsList = List<String>.from(dataMap['skills']);
-
-        // Update the text field
-        skillsController.text = skillsList.join(', ').toString();
-
-        // Assign the list to skills
-        skills.assignAll(skillsList);
-      }
+      // if (dataMap.containsKey('skills')) {
+      //   // Assuming dataMap['skills'] is a List<dynamic>, convert it to List<String>
+      //   List<int> skillsList = List<int>.from(dataMap['skills']);
+      //
+      //   // // Update the text field
+      //   // skillsController.text = skillsList.join(', ').toString();
+      //
+      //   // Assign the list to skills
+      //   skills.assignAll(skillsList);
+      // }
+      // if (dataMap.containsKey('skills_name')) {
+      //   // // Assuming dataMap['skills'] is a List<dynamic>, convert it to List<String>
+      //   // List<int> skillsList = List<int>.from(dataMap['skills_name']);
+      //   //
+      //   // Update the text field
+      //   skillsController.text = skillsList.join(', ').toString();
+      //
+      //   // // Assign the list to skills
+      //   // skills.assignAll(skillsList);
+      // }
       if (dataMap.containsKey('experience')) {
         experiencesController.text = dataMap['experience'].toString();
       }
@@ -1439,6 +1577,14 @@ class OnBoardingController extends GetxController {
       if (dataMap.containsKey('aadhar_front')) {
         verifyAadharFront = dataMap['aadhar_front'];
         print('Pancard Image URL: $verifyAadharFront');
+      }
+      if (dataMap.containsKey('aadhar_no')) {
+        aadharController.text = dataMap['aadhar_no'].toString();
+        print('Pancard Image URL: ${aadharController.text}');
+      }
+      if (dataMap.containsKey('pancard_no')) {
+        pancardController.text = dataMap['pancard_no'].toString();
+        print('Pancard Image URL: ${pancardController.text}');
       }
       // For Page 3
       if (dataMap.containsKey('astro_images')) {

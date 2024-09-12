@@ -14,6 +14,8 @@ import '../../common/app_textstyle.dart';
 import '../../common/colors.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../common/select_your_birth_place_sheet.dart';
+import '../../screens/live_page/constant.dart';
+import '../../screens/number_change/sub_screen/otp_screen_for_update_mobile_number.dart';
 import '../../utils/utils.dart';
 import 'on_boarding_controller.dart';
 
@@ -22,8 +24,44 @@ class OnBoarding1 extends GetView<OnBoardingController> {
   Widget build(BuildContext context) {
     return GetBuilder<OnBoardingController>(
       assignId: true,
+      autoRemove: false,
       init: OnBoardingController(),
       builder: (controller) {
+        final defaultPinTheme = PinTheme(
+          width: 50.w,
+          height: 52.w,
+          textStyle: TextStyle(
+            color: controller.isWrongOtp.isTrue
+                ? appColors.red
+                : appColors.darkBlue,
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w600,
+          ),
+          decoration: BoxDecoration(
+            border: Border.all(
+                color: controller.isWrongOtp.isTrue
+                    ? appColors.red.withOpacity(0.5)
+                    : appColors.guideColor.withOpacity(0.3),
+                width: 2),
+            borderRadius: BorderRadius.circular(10),
+          ),
+        );
+
+        final focusedPinTheme = defaultPinTheme.copyDecorationWith(
+            border: Border.all(
+                color: controller.isWrongOtp.isTrue
+                    ? appColors.red
+                    : appColors.guideColor,
+                width: 2),
+            borderRadius: BorderRadius.circular(10));
+
+        final submittedPinTheme = defaultPinTheme.copyDecorationWith(
+            border: Border.all(
+                color: controller.isWrongOtp.isTrue
+                    ? appColors.red
+                    : appColors.guideColor,
+                width: 2),
+            borderRadius: BorderRadius.circular(10));
         return PopScope(
           canPop: false,
           onPopInvoked: (bool) async {
@@ -210,7 +248,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                           hint: "Profile Name",
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 15,
                         ),
                         // Obx(
                         //   () => Container(
@@ -447,15 +485,15 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                                                 controller.tags.add(controller
                                                     .options[element]);
                                                 controller.skills.add(controller
-                                                    .options[element].name!);
+                                                    .options[element].id!);
                                                 // Join the 'name' fields of the Skill objects into a single string separated by commas
                                                 String skills = controller.tags
                                                     .map((skill) => skill.name)
                                                     .join(', ');
-
                                                 // Set the text in the skillsController
                                                 controller.skillsController
                                                     .text = skills;
+                                                controller.update();
                                               }
                                             });
                                           },
@@ -508,7 +546,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                           },
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 15,
                         ),
                         CustomTextField(
                           controller: controller.experiencesController,
@@ -529,7 +567,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                           hint: "Experience",
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 15,
                         ),
                         CustomTextField(
                           controller: controller.birthController,
@@ -570,7 +608,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                           hint: "Birth Date",
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 15,
                         ),
                         CustomTextField(
                           controller: controller.locationController,
@@ -606,134 +644,131 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                           hint: "Location",
                         ),
                         SizedBox(
-                          height: 20,
+                          height: 15,
                         ),
-                        Obx(() {
-                          return CustomTextField(
-                            controller: controller.alterNoController,
-                            focusNode: controller.alterNoNode,
-                            nextNode: controller.alterNoNode,
-                            onFieldSubmitted: (value) {
-                              controller.alterNoNode.unfocus();
-                            },
-                            keyboardType: TextInputType.number,
-                            onChanged: (value) {
-                              controller.number = value;
-                              controller.show.value = false;
-                              controller.update();
-                            },
-                            // readOnly:
-                            //     controller.sentOtp.value == false ? false : true,
-                            prefix: Icon(
-                              Icons.phone_outlined,
-                              color: appColors.black.withOpacity(0.5),
-                            ),
-                            sufix: controller.sending.value == true
-                                ? Padding(
-                                    padding: const EdgeInsets.all(8.0),
-                                    child: SizedBox(
-                                      height: 30,
-                                      width: 30,
-                                      child: Center(
-                                        child: CircularProgressIndicator(
-                                          strokeWidth: 1,
-                                        ),
-                                      ),
-                                    ),
-                                  )
-                                : IconButton(
-                                    onPressed: () {
-                                      controller.alterNoNode.unfocus();
-
-                                      if (controller.alterNoController.text ==
-                                              "" ||
-                                          controller
-                                              .alterNoController.text.isEmpty ||
-                                          controller.alterNoController.text
-                                                  .length !=
-                                              10) {
-                                        Fluttertoast.showToast(
-                                            msg: "Please Submit Valid number");
-                                      } else {
-                                        controller.sendOtpForNumberChange();
-                                      }
-                                    },
-                                    icon: Icon(
-                                      Icons.send,
-                                      color: controller.alterNoController.text
-                                                  .length !=
-                                              10
-                                          ? appColors.grey.withOpacity(0.5)
-                                          : appColors.appRedColour,
-                                    ),
-                                  ),
-                            hint: "Alternative Number",
-                            textInputFormatter: [
-                              FilteringTextInputFormatter
-                                  .digitsOnly, // Allow only numbers
-                              LengthLimitingTextInputFormatter(10),
-                            ],
-                          );
-                        }),
-                        SizedBox(
-                          height: 20,
+                        CustomTextField(
+                          controller: controller.alterNoController,
+                          focusNode: controller.alterNoNode,
+                          nextNode: controller.alterNoNode,
+                          onFieldSubmitted: (value) {
+                            controller.alterNoNode.unfocus();
+                          },
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) {},
+                          // readOnly:
+                          // controller.sentOtp.value == false
+                          //     ? false
+                          //     : true,
+                          prefix: Icon(
+                            Icons.phone_outlined,
+                            color: appColors.black.withOpacity(0.5),
+                          ),
+                          // sufix: controller.sending.value == true
+                          //     ? Padding(
+                          //         padding: const EdgeInsets.all(8.0),
+                          //         child: SizedBox(
+                          //           height: 30,
+                          //           width: 30,
+                          //           child: Center(
+                          //             child: CircularProgressIndicator(
+                          //               strokeWidth: 1,
+                          //             ),
+                          //           ),
+                          //         ),
+                          //       )
+                          //     : IconButton(
+                          //         onPressed: () {
+                          //           controller.alterNoNode.unfocus();
+                          //           if (controller.OtpVerified.value ==
+                          //               true) {
+                          //             Fluttertoast.showToast(msg: "Verified");
+                          //           } else {
+                          //             if (controller
+                          //                         .alterNoController.text ==
+                          //                     "" ||
+                          //                 controller.alterNoController.text
+                          //                     .isEmpty ||
+                          //                 controller.alterNoController.text
+                          //                         .length !=
+                          //                     10) {
+                          //               Fluttertoast.showToast(
+                          //                   msg:
+                          //                       "Please Submit Valid number");
+                          //             } else {
+                          //               controller.sendOtpForNumberChange();
+                          //             }
+                          //           }
+                          //         },
+                          //         icon: Icon(
+                          //           Icons.send,
+                          //           color: controller.alterNoController.text
+                          //                       .length !=
+                          //                   10
+                          //               ? appColors.grey.withOpacity(0.5)
+                          //               : appColors.appRedColour,
+                          //         ),
+                          //       ),
+                          hint: "Alternative Number",
+                          textInputFormatter: [
+                            FilteringTextInputFormatter
+                                .digitsOnly, // Allow only numbers
+                            LengthLimitingTextInputFormatter(10),
+                          ],
                         ),
-                        controller.show.value == true
-                            ? Pinput(
-                                controller: controller.otpController,
-                                length: 6,
-                                androidSmsAutofillMethod:
-                                    AndroidSmsAutofillMethod.smsRetrieverApi,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                keyboardType: TextInputType.number,
-                                inputFormatters: <TextInputFormatter>[
-                                  FilteringTextInputFormatter.digitsOnly
-                                ],
-                                defaultPinTheme: PinTheme(
-                                  width: 50.w,
-                                  height: 50.w,
-                                  textStyle: TextStyle(
-                                      color: appColors.darkBlue,
-                                      fontSize: 20.sp,
-                                      fontWeight: FontWeight.w600),
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: appColors.guideColor
-                                            .withOpacity(0.5),
-                                        width: 2),
-                                    borderRadius: BorderRadius.circular(10),
-                                  ),
-                                ),
-                                pinputAutovalidateMode:
-                                    PinputAutovalidateMode.onSubmit,
-                                showCursor: true,
-                                onSubmitted: (value) {
-                                  controller.verifyOtpForNumberChange();
-                                },
-                                onCompleted: (value) {
-                                  controller.verifyOtpForNumberChange();
-                                },
-                              )
-                            : SizedBox(),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        controller.show.value == true
-                            ? controller.errorMessage == null
-                                ? SizedBox()
-                                : Align(
-                                    alignment: Alignment.center,
-                                    child: Text(
-                                      controller.errorMessage ?? "",
-                                      style: TextStyle(
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 14.sp,
-                                        color: AppColors().black,
-                                      ),
-                                    ),
-                                  )
-                            : SizedBox(),
+                        // SizedBox(
+                        //   height: 15,
+                        // ),
+                        // controller.show.value == true
+                        //     ? Padding(
+                        //         padding:
+                        //             const EdgeInsets.only(left: 0, right: 0),
+                        //         child: Pinput(
+                        //           controller: controller.otpController,
+                        //           length: 6,
+                        //           androidSmsAutofillMethod:
+                        //               AndroidSmsAutofillMethod.smsRetrieverApi,
+                        //           readOnly: controller.OtpVerified.value == true
+                        //               ? true
+                        //               : false,
+                        //           mainAxisAlignment:
+                        //               MainAxisAlignment.spaceAround,
+                        //           keyboardType: TextInputType.number,
+                        //           inputFormatters: <TextInputFormatter>[
+                        //             FilteringTextInputFormatter.digitsOnly
+                        //           ],
+                        //           defaultPinTheme: defaultPinTheme,
+                        //           focusedPinTheme: focusedPinTheme,
+                        //           submittedPinTheme: submittedPinTheme,
+                        //           pinputAutovalidateMode:
+                        //               PinputAutovalidateMode.onSubmit,
+                        //           showCursor: true,
+                        //           onSubmitted: (value) {
+                        //             controller.verifyOtpForNumberChange();
+                        //           },
+                        //           onCompleted: (value) {
+                        //             controller.verifyOtpForNumberChange();
+                        //           },
+                        //         ),
+                        //       )
+                        //     : SizedBox(),
+                        // SizedBox(
+                        //   height: 20,
+                        // ),
+                        // controller.show.value == true
+                        //     ? controller.errorMessage == null
+                        //         ? SizedBox()
+                        //         : Align(
+                        //             alignment: Alignment.topLeft,
+                        //             child: Text(
+                        //               controller.errorMessage ?? "",
+                        //               style: TextStyle(
+                        //                 fontWeight: FontWeight.w600,
+                        //                 fontSize: 12.sp,
+                        //                 color: AppColors().red,
+                        //               ),
+                        //             ),
+                        //           )
+                        //     : SizedBox(),
                       ],
                     ),
                   ),
@@ -785,12 +820,8 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                       children: [
                         InkWell(
                           onTap: () {
-                            // if (controller.photoUrlprofile == null) {
-                            //   Fluttertoast.showToast(
-                            //       msg: "Profile picture is empty");
-                            // } else
-                            if ( //controller.selectedProfile == null ||
-                                controller.nameController.text.isEmpty ||
+                            if (controller.skills.isEmpty ||
+                                    controller.nameController.text.isEmpty ||
                                     controller.skillsController.text.isEmpty ||
                                     controller
                                         .experiencesController.text.isEmpty ||
@@ -799,7 +830,6 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                                     controller.birthController.text.isEmpty ||
                                     controller
                                         .alterNoController.text.isEmpty //||
-                                //controller.photoUrlprofile == null
                                 ) {
                               Fluttertoast.showToast(
                                   msg: "Some fields are empty");
@@ -808,87 +838,86 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                                 10) {
                               Fluttertoast.showToast(
                                   msg: "Please enter valid alternate number");
-                            } else if (controller.alterNoController.text
-                                    .toString() !=
-                                controller.number.toString()) {
-                              Fluttertoast.showToast(
-                                  msg:
-                                      "Alternate number is not same as verified"
-                                      "${controller.number.toString()}");
-                            } else if (controller.OtpVerified.value == false) {
-                              Fluttertoast.showToast(
-                                  msg: "Please verified alternate number");
                             } else {
-                              controller.submitStage1();
+                              alternateMobile.value =
+                                  controller.alterNoController.text;
 
-                              // if (isRejected.value == true) {
-                              //   controller.submitStage1();
-                              // } else {
-                              //   controller.navigateToStage();
-                              // }
+                              onBoardingData1.value = {
+                                "name": controller.nameController.text,
+                                "skills": controller.skills,
+                                "skills_name": controller.skillsController.text,
+                                "experience":
+                                    controller.experiencesController.text,
+                                "dob": controller.birthController.text,
+                                "location": controller.locationController.text,
+                                "alternate_no": alternateMobile.value,
+                                "page": 1,
+                              };
 
-                              // if (controller.photoUrlprofile == null) {
-                              //   controller
-                              //       .uploadImage(
-                              //           controller.selectedProfile, "Profile")
-                              //       .then((val) {
-                              //     Get.toNamed(
-                              //       RouteName.onBoardingScreen2,
-                              //     );
-                              //   });
-                              // } else {
-                              //   print(
-                              //       "-------------------------------${controller.photoUrlprofile}");
-                              //   // Get.toNamed(
-                              //   //   RouteName.onBoardingScreen2,
-                              //   // );
-                              // }
+                              controller.update();
+
+                              Get.put(OnBoardingController());
+
+                              controller.sendOtpForNumberChange();
                             }
                           },
-                          child: controller.stage1Submitting.value == true
-                              ? Center(
-                                  child: CircularProgressIndicator(),
-                                )
-                              : Container(
-                                  height: 50,
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.9,
-                                  decoration: BoxDecoration(
-                                    color: //controller.selectedProfile == null ||
-                                        controller.nameController.text.isEmpty ||
-                                                controller.skillsController.text
-                                                    .isEmpty ||
-                                                controller.experiencesController
-                                                    .text.isEmpty ||
-                                                controller.locationController
-                                                    .text.isEmpty ||
-                                                controller.birthController.text
-                                                    .isEmpty ||
-                                                controller.alterNoController
-                                                    .text.isEmpty
-                                            ? appColors.grey.withOpacity(0.4)
-                                            : appColors.red,
-                                    borderRadius: BorderRadius.circular(14),
-                                  ),
-                                  child: controller.loadingProfile == true
-                                      ? Center(
-                                          child: CircularProgressIndicator(
-                                            color: appColors.white,
-                                            strokeWidth: 1,
-                                          ),
-                                        )
-                                      : Align(
-                                          alignment: Alignment.center,
-                                          child: Text(
-                                            "Next",
-                                            style: TextStyle(
-                                              fontWeight: FontWeight.w600,
-                                              fontSize: 20.sp,
-                                              color: AppColors().white,
-                                            ),
-                                          ),
-                                        ),
+                          child:
+                              // controller.stage1Submitting.value == true
+                              //     ? Center(
+                              //         child: CircularProgressIndicator(),
+                              //       )
+                              //     :
+                              Container(
+                            height: 50,
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            decoration: BoxDecoration(
+                              color: controller.skills.isEmpty ||
+                                      controller.nameController.text.isEmpty ||
+                                      controller
+                                          .skillsController.text.isEmpty ||
+                                      controller
+                                          .experiencesController.text.isEmpty ||
+                                      controller
+                                          .locationController.text.isEmpty ||
+                                      controller.birthController.text.isEmpty ||
+                                      controller.alterNoController.text.isEmpty
+                                  ? appColors.grey.withOpacity(0.4)
+                                  : appColors.red,
+                              borderRadius: BorderRadius.circular(14),
+                            ),
+                            child:
+                                // controller.loadingProfile == true
+                                //     ? Center(
+                                //         child: CircularProgressIndicator(
+                                //           color: appColors.white,
+                                //           strokeWidth: 1,
+                                //         ),
+                                //       )
+                                //     :
+                                Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                controller.nameController.text.isEmpty ||
+                                        controller
+                                            .skillsController.text.isEmpty ||
+                                        controller.experiencesController.text
+                                            .isEmpty ||
+                                        controller
+                                            .locationController.text.isEmpty ||
+                                        controller
+                                            .birthController.text.isEmpty ||
+                                        controller
+                                            .alterNoController.text.isEmpty
+                                    ? "Next"
+                                    : "Verify",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  fontSize: 20.sp,
+                                  color: AppColors().white,
                                 ),
+                              ),
+                            ),
+                          ),
                         ),
                       ],
                     ),
@@ -1021,4 +1050,284 @@ Widget buildSpace() {
       height: 2,
     ),
   );
+}
+
+class VerifyOtpSheet extends StatefulWidget {
+  VerifyOtpSheet({
+    this.onBoardingData,
+  });
+  final onBoardingData;
+  @override
+  State<VerifyOtpSheet> createState() => _VerifyOtpSheetState();
+}
+
+class _VerifyOtpSheetState extends State<VerifyOtpSheet> {
+  // final controller = Get.find<OnBoardingController>();
+  // // final controller = Get.put(OnBoardingController());
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+        canPop: true,
+        onPopInvoked: (bool) async {
+          Get.find<OnBoardingController>().timer.cancel();
+          Get.back();
+        },
+        child: GetBuilder<OnBoardingController>(
+            // assignId: true,
+            // init: OnBoardingController(),
+            initState: (cont) {
+          Get.find<OnBoardingController>().attempts.value = 3;
+          Get.find<OnBoardingController>().otpController.clear();
+          Get.find<OnBoardingController>().start = 120.obs;
+          Get.find<OnBoardingController>().startTimer();
+
+          // consto.startTimer();
+        }, builder: (controller) {
+          String minutes =
+              (controller.start.value ~/ 60).toString().padLeft(2, '0');
+          String seconds =
+              (controller.start.value % 60).toString().padLeft(2, '0');
+
+          final defaultPinTheme = PinTheme(
+            width: 50.w,
+            height: 52.w,
+            textStyle: TextStyle(
+              color: controller.isWrongOtp.isTrue
+                  ? appColors.red
+                  : appColors.darkBlue,
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w600,
+            ),
+            decoration: BoxDecoration(
+              border: Border.all(
+                  color: controller.isWrongOtp.isTrue
+                      ? appColors.red.withOpacity(0.5)
+                      : appColors.guideColor.withOpacity(0.3),
+                  width: 2),
+              borderRadius: BorderRadius.circular(10),
+            ),
+          );
+
+          final focusedPinTheme = defaultPinTheme.copyDecorationWith(
+              border: Border.all(
+                  color: controller.isWrongOtp.isTrue
+                      ? appColors.red
+                      : appColors.guideColor,
+                  width: 2),
+              borderRadius: BorderRadius.circular(10));
+
+          final submittedPinTheme = defaultPinTheme.copyDecorationWith(
+              border: Border.all(
+                  color: controller.isWrongOtp.isTrue
+                      ? appColors.red
+                      : appColors.guideColor,
+                  width: 2),
+              borderRadius: BorderRadius.circular(10));
+
+          return SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    Get.find<OnBoardingController>().timer.cancel();
+                    Get.back();
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(15.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: appColors.white),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(50.0),
+                      ),
+                      color: appColors.white.withOpacity(0.2),
+                    ),
+                    child: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10),
+                Container(
+                  width: context.width,
+                  height: context.height / 2.6,
+                  decoration: BoxDecoration(
+                    borderRadius:
+                        const BorderRadius.vertical(top: Radius.circular(50.0)),
+                    color: appColors.white,
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(height: 32.h),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(width: 16.w),
+                          Text(
+                            "Verify Alternative number",
+                            style: TextStyle(
+                              fontWeight: FontWeight.w700,
+                              color: appColors.appRedColour,
+                              fontSize: 20.0.sp,
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 20.sp),
+                      Text(
+                        "OTP will be sent to your alternate number",
+                        style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: appColors.darkBlue,
+                          fontSize: 16.0.sp,
+                        ),
+                      ),
+                      SizedBox(height: 20.sp),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 14, right: 14),
+                        child: Pinput(
+                          controller: controller.otpController,
+                          length: 6,
+                          androidSmsAutofillMethod:
+                              AndroidSmsAutofillMethod.smsRetrieverApi,
+                          // readOnly: controller.OtpVerified.value == true
+                          //     ? true
+                          //     : false,
+                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          keyboardType: TextInputType.number,
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
+                          defaultPinTheme: defaultPinTheme,
+                          focusedPinTheme: focusedPinTheme,
+                          submittedPinTheme: submittedPinTheme,
+                          pinputAutovalidateMode:
+                              PinputAutovalidateMode.onSubmit,
+                          showCursor: true,
+                          // onSubmitted: (value) {
+                          //   controller.verifyOtpForNumberChange();
+                          // },
+                          // onCompleted: (value) {
+                          //   controller.verifyOtpForNumberChange();
+                          // },
+                        ),
+                      ),
+                      SizedBox(height: 20.sp),
+                      Obx(
+                        () => Column(
+                          children: [
+                            controller.start.value != 0
+                                ? Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        "Resend OTP in - ",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w400,
+                                          color: appColors.black,
+                                          fontSize: 16.0.sp,
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                      ),
+                                      Text(
+                                        "$minutes:$seconds",
+                                        style: TextStyle(
+                                          fontWeight: FontWeight.w600,
+                                          color: appColors.black,
+                                          fontSize: 16.0.sp,
+                                          decoration: TextDecoration.underline,
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : controller.isResendOtp.value
+                                    ? SizedBox(
+                                        height: 30.h,
+                                        width: 30.h,
+                                        child: CircularProgressIndicator(
+                                            strokeWidth: 3,
+                                            color: appColors.brown),
+                                      )
+                                    : NotReceiveOtpText(
+                                        onResend: () => controller.resendOtp(),
+                                      ),
+                          ],
+                        ),
+                      ),
+                      SizedBox(height: 20.sp),
+                      InkWell(
+                        onTap: () {
+                          if (controller.attempts.value == 0) {
+                            Fluttertoast.showToast(msg: "noAttemptsLeft".tr);
+                          } else {
+                            print("${widget.onBoardingData}");
+                            Get.put(OnBoardingController());
+                            controller.verifyOtpForNumberChange(
+                                widget.onBoardingData);
+                            // controller.enableSubmit.value = false;
+                          }
+                        },
+                        child: controller.stage1Submitting.value == true
+                            ? Center(
+                                child: CircularProgressIndicator(),
+                              )
+                            : Container(
+                                height: 50,
+                                width: MediaQuery.of(context).size.width * 0.9,
+                                decoration: BoxDecoration(
+                                  color: appColors.red,
+                                  borderRadius: BorderRadius.circular(14),
+                                ),
+                                child: controller.stage2Submitting == true
+                                    ? Center(
+                                        child: CircularProgressIndicator(
+                                          color: appColors.white,
+                                          strokeWidth: 1,
+                                        ),
+                                      )
+                                    : Align(
+                                        alignment: Alignment.center,
+                                        child: Text(
+                                          "Submit",
+                                          style: TextStyle(
+                                            fontWeight: FontWeight.w600,
+                                            fontSize: 20.sp,
+                                            color: AppColors().white,
+                                          ),
+                                        ),
+                                      ),
+                              ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          );
+        }));
+  }
+
+/* Future<void> getState() async {
+    stateList.clear();
+    cityList.clear();
+    List<CityStateModel> subStateList = [];
+    var jsonString = await rootBundle
+        .loadString('assets/jsons/state.json');
+    List<dynamic> body = json.decode(jsonString);
+
+    subStateList =
+        body.map((dynamic item) => CityStateModel.fromJson(item)).toList();
+    for (var element in subStateList) {
+      if (element.countryId == "101") {
+
+          stateList.add(element);
+        update();
+      }
+    }
+    stateSubList = stateList;
+  }*/
 }

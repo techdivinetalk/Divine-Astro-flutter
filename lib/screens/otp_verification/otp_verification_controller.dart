@@ -262,19 +262,24 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
 
     print("response of isOnboarding - ${isOnboardings.toString()}");
 
-    // if (verifyOnboarding.toString() == "0") {
-    // } else {
-    //   Get.offAllNamed(RouteName.dashboard);
-    // }
-    if (isOnboardings.toString() == "0" || isOnboardings == null) {
-      await navigateToOnboarding(commonConstants);
+    final dasnap = await AppFirebaseService()
+        .database
+        .child("masters/disableOnboarding")
+        .get();
+
+    if (dasnap.value.toString() == "0") {
+      if (isOnboardings.toString() == "4" //|| isOnboardings == null
+          ) {
+        print('homeeeee1');
+
+        Get.offAllNamed(RouteName.dashboard);
+      } else {
+        await navigateToOnboarding(commonConstants);
+      }
     } else {
-      print('homeeeee1');
-
-      Get.offAllNamed(RouteName.dashboard);
+      await navigateToDashboard(data, commonConstants);
     }
-
-    await navigateToDashboard(data, commonConstants);
+    // await navigateToDashboard(data, commonConstants);
 
     // } else {
     //   final FirebaseUserData userData = FirebaseUserData(
@@ -370,16 +375,10 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
     if (Constants.isUploadMode) {
       await initServices();
     }
-    if (commonConstants.data.is_onboarding_in_process.toString() == "0" ||
-        commonConstants.data.is_onboarding_in_process.toString() == "1" ||
-        commonConstants.data.is_onboarding_in_process.toString() == "2" ||
-        commonConstants.data.is_onboarding_in_process.toString() == "3") {
-    } else {
-      await Future.delayed(
-        const Duration(seconds: 1),
-        () => Get.offAllNamed(RouteName.dashboard),
-      );
-    }
+    await Future.delayed(
+      const Duration(seconds: 1),
+      () => Get.offAllNamed(RouteName.dashboard),
+    );
   }
 
   removeAttempts() {

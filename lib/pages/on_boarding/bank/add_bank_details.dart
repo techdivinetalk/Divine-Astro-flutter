@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
+import '../../../common/common_functions.dart';
 import '../../../common/common_image_view.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../gen/fonts.gen.dart';
@@ -123,7 +124,14 @@ class AddBankDetails extends GetView<BankController> {
                                     builder: (controller) {
                                   return InkWell(
                                     onTap: () {
-                                      controller.submit();
+                                      if (controller.cancelledCheque == null ||
+                                          controller.passBook == null) {
+                                        divineSnackBar(
+                                            data: "Please Fill All Data",
+                                            color: appColors.redColor);
+                                      } else {
+                                        controller.submit();
+                                      }
                                     },
                                     child: Container(
                                       height: 50,

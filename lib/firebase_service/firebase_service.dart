@@ -51,6 +51,7 @@ RxInt showRetentionPopup = 1.obs;
 RxInt showDailyLive = 0.obs;
 RxInt verifyOnboarding = 0.obs;
 RxInt isAstrologerPhotoChatCall = 0.obs;
+RxInt disableOnboarding = 0.obs;
 //RxInt showHelp = 0.obs;
 RxInt maximumStorySize = 2048.obs;
 RxInt astroHome = 0.obs;
@@ -477,6 +478,9 @@ class AppFirebaseService {
       //   break;
       case "isAgreement":
         isAgreement(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "disableOnboarding":
+        disableOnboarding(int.parse(dataSnapshot.value.toString()));
         break;
       case "isAstrologerPhotoChatCall":
         isAstrologerPhotoChatCall(int.parse(dataSnapshot.value.toString()));

@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:image_picker/image_picker.dart';
 
 import '../../../common/app_exception.dart';
 import '../../../common/colors.dart';
@@ -43,16 +43,31 @@ class BankController extends GetxController {
     super.onInit();
   }
 
+  //
+  // Future<File?> pickFile() async {
+  //   FilePickerResult? result = await FilePicker.platform.pickFiles(
+  //     type: FileType.image,
+  //     allowMultiple: false,
+  //   );
+  //   if (result == null) {
+  //     divineSnackBar(data: "Please Pick File");
+  //     return null;
+  //   }
+  //
+  //   return File(result.files.first.path.toString());
+  // }
   Future<File?> pickFile() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      allowMultiple: false,
+    XFile? result = await ImagePicker().pickImage(
+      source: ImageSource.gallery,
+      // type: FileType.image,
+      // allowMultiple: false,
     );
     if (result == null) {
       divineSnackBar(data: "Please Pick File");
       return null;
     }
 
-    return File(result.files.first.path.toString());
+    return File(result.path.toString());
   }
 
   void addPassBook(File file) {

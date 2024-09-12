@@ -18,7 +18,7 @@ class OtpVerificationForNumberChange
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value:  SystemUiOverlayStyle(
+      value: SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.dark,
         statusBarColor: appColors.transparent,
       ),

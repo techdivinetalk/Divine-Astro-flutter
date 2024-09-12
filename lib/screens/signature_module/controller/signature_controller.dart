@@ -11,6 +11,7 @@ import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/p
 import 'package:divine_astrologer/screens/signature_module/model/agreement_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:get/get.dart' hide FormData, MultipartFile;
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
@@ -211,7 +212,7 @@ class SignatureController extends GetxController {
       log("data.status${agreementModel.status!.code}");
 
       if (agreementModel.status!.code == 200) {
-        log("agreementModel.data!.signLink-->>${agreementModel.data!.signLink}");
+        log("agreementModel.data!.signLink-->>${agreementModel.toJson()}");
         if (from == "") {
           Get.until(
             (route) {
@@ -220,7 +221,23 @@ class SignatureController extends GetxController {
           );
           log("dashboarddddd");
         } else {
-          updateAgreementStatus();
+          // log(data.data['data']['AgreementLink']);
+
+          // Store the specific string value from the map into RxString
+          if (data.data.containsKey('data') && data.data['data'] != null) {
+            log("printinggggggg meands containes");
+            log("printinggggggg meands containes ${data.data['data']}");
+            // log("Contains 'data': ${data['data']}");
+
+            updateAgreementStatus(data.data['data']['AgreementLink']);
+          } else {
+            log("printinggggggg meands not containes");
+          }
+          sendBroadcast(
+            BroadcastMessage(name: "updateAgreement"),
+          );
+
+          // Get.find<OnBoardingController>().getAstrologerStatus();
           Get.until(
             (route) {
               return Get.currentRoute == RouteName.onBoardingScreen4;
@@ -238,9 +255,16 @@ class SignatureController extends GetxController {
     }
   }
 
-  updateAgreementStatus() {
-    onBoardingAgrrementSigned.value = true;
-    update();
+  updateAgreementStatus(String? agreementLink) {
+    if (agreementLink != null && agreementLink.isNotEmpty) {
+      onBoardingAgrrementSigned.value = true;
+      agreementSignData = agreementLink;
+      update();
+    } else {
+      onBoardingAgrrementSigned.value = true;
+      agreementSignData = "";
+      update();
+    }
   }
 
   savePdf({String? astrologerProfilePhoto, astrologerSignaturePhoto}) async {

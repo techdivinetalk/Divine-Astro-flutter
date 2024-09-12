@@ -33,14 +33,14 @@ class ScheduleTrainingController extends GetxController {
       getAstroTra();
     }
 
-    specialityNames = preference
-        .getUserDetail()!
-        .astrologerSpeciality!
-        .map((e) => e.specialityDetails!.name ?? "Astrology")
-        .join(', ')
-        .toString();
-    print(
-        "astrologer specialty -- ${preference.getUserDetail()!.astrologerSpeciality!.map((e) => e.toJson().toString()).join(', ')}");
+    // specialityNames = preference
+    //     .getUserDetail()!
+    //     .astroCatPivot!
+    //     .map((e) => e.categoryDetails!.name ?? "Astrology")
+    //     .join(', ')
+    //     .toString();
+    // print(
+    //     "astrologer specialty -- ${preference.getUserDetail()!.astrologerSpeciality!.map((e) => e.toJson().toString()).join(', ')}");
   }
 
   String formatDate(String dateString) {
@@ -100,17 +100,20 @@ class ScheduleTrainingController extends GetxController {
 
   String formattedDate = "";
   String formattedTime = "";
-  void _startTimer(targetEpochTime) {
+  Timer? timers;
+  Duration remaing = Duration();
+
+  void startTimer(int targetEpochTime) {
     DateTime targetDateTime =
         DateTime.fromMillisecondsSinceEpoch(targetEpochTime * 1000);
 
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    timers = Timer.periodic(Duration(seconds: 1), (timer) {
       DateTime currentTime = DateTime.now();
-      remainingTime = targetDateTime.difference(currentTime);
+      remaing = targetDateTime.difference(currentTime);
       update();
 
-      if (remainingTime.isNegative) {
-        timer.cancel(); // Stop the timer when the countdown is over
+      if (remaing.isNegative) {
+        timers!.cancel(); // Stop the timer when the countdown is over
       }
       update();
     });
@@ -118,10 +121,49 @@ class ScheduleTrainingController extends GetxController {
 
   String formatDuration(Duration duration) {
     String twoDigits(int n) => n.toString().padLeft(2, "0");
+
+    // Calculate days, hours, minutes, and seconds
+    int days = duration.inDays;
+    String twoDigitHours = twoDigits(duration.inHours.remainder(24));
     String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
     String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
 
-    return "${twoDigits(duration.inHours)}:$twoDigitMinutes:$twoDigitSeconds";
+    // Display in the format of "X days, HH:MM:SS"
+    return "$days days, $twoDigitHours:$twoDigitMinutes:$twoDigitSeconds";
+  }
+
+  String formattedDate2 = "";
+  String formattedTime2 = "";
+  Timer? timers2;
+  Duration remaing2 = Duration();
+
+  void startTimer2(int targetEpochTime) {
+    DateTime targetDateTime =
+        DateTime.fromMillisecondsSinceEpoch(targetEpochTime * 1000);
+
+    timers2 = Timer.periodic(Duration(seconds: 1), (timer) {
+      DateTime currentTime = DateTime.now();
+      remaing2 = targetDateTime.difference(currentTime);
+      update();
+
+      if (remaing2.isNegative) {
+        timers2!.cancel(); // Stop the timer when the countdown is over
+      }
+      update();
+    });
+  }
+
+  String formatDuration2(Duration duration) {
+    String twoDigits(int n) => n.toString().padLeft(2, "0");
+
+    // Calculate days, hours, minutes, and seconds
+    int days = duration.inDays;
+    String twoDigitHours = twoDigits(duration.inHours.remainder(24));
+    String twoDigitMinutes = twoDigits(duration.inMinutes.remainder(60));
+    String twoDigitSeconds = twoDigits(duration.inSeconds.remainder(60));
+
+    // Display in the format of "X days, HH:MM:SS"
+    return "$days days, $twoDigitHours:$twoDigitMinutes:$twoDigitSeconds";
   }
 
   AstrologerTrainingSessionResponse? astrologerTrainingSessionResponse;
@@ -136,11 +178,24 @@ class ScheduleTrainingController extends GetxController {
         if (astrologerTrainingSessionResponse!.data!.first.meeting_date_epoch ==
             null) {
         } else {
-          _startTimer(astrologerTrainingSessionResponse!
-              .data!.first.meeting_date_epoch);
+          startTimer(astrologerTrainingSessionResponse!
+              .data!.first.meeting_date_epoch!);
+        }
+        if (astrologerTrainingSessionResponse!
+                .data!.first.meeting_date_end_epoch ==
+            null) {
+        } else {
+          startTimer2(astrologerTrainingSessionResponse!
+              .data!.first.meeting_date_end_epoch!);
         }
         print(
             "---------------------------------------------------------${astrologerTrainingSessionResponse!.toJson().toString()}");
+        specialityNames = astrologerTrainingSessionResponse!.speciality == null
+            ? ""
+            : astrologerTrainingSessionResponse!.speciality!
+                .map((e) => e!['name'] ?? "Astrology")
+                .join(', ')
+                .toString();
         update();
       } else {
         getCurrentTraining.value = false;
