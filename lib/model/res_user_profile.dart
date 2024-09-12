@@ -91,7 +91,7 @@ class GetAstrolopgerDetails {
   int? audioDiscountedAmount;
   int? anonymousDiscountedAmount;
   int? chatDiscountedAmount;
-  String? speciality;
+  dynamic speciality;
   int? roleId;
   int? uniqueNo;
   int? isBusy;

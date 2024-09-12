@@ -1,11 +1,9 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:camera/camera.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/common_button.dart';
 import 'package:divine_astrologer/screens/signature_module/controller/face_verification_controller.dart';
-import 'package:divine_astrologer/screens/signature_module/view/signature_view.dart';
 import 'package:divine_astrologer/screens/signature_module/widget/front_camera_view.dart';
 import 'package:divine_astrologer/screens/signature_module/widget/upload_widget.dart';
 import 'package:flutter/material.dart';
@@ -33,17 +31,23 @@ class FaceVerificationScreen extends GetView<FaceVerificationController> {
                   color: appColors.darkBlue,
                 )),
           ),
-          bottomNavigationBar: Padding(
-            padding: const EdgeInsets.all(15),
-            child: CommonButton(
-              buttonText: "Upload",
-              buttonCallback: () {
-                if (controller.kycImage.isNotEmpty) {
-                  controller.uploadFaceImage(File(controller.kycImage));
-                }
-              },
-            ),
-          ),
+          bottomNavigationBar: Obx(() {
+            return controller.uploadingImage.value == true
+                ? SizedBox(
+                    height: 80,
+                    child: Center(child: CircularProgressIndicator()))
+                : Padding(
+                    padding: const EdgeInsets.all(15),
+                    child: CommonButton(
+                      buttonText: "Upload",
+                      buttonCallback: () {
+                        if (controller.kycImage.isNotEmpty) {
+                          controller.uploadFaceImage(File(controller.kycImage));
+                        }
+                      },
+                    ),
+                  );
+          }),
           body: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             children: [

@@ -1,6 +1,5 @@
 import 'dart:math' as math;
 
-import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
 
 import '../../di/timer_duration_service.dart';
@@ -32,10 +31,25 @@ RxString userImage = ''.obs;
 RxString imageUploadBaseUrl = ''.obs;
 RxInt fireChat = 1.obs;
 RxInt isEngagedStatus = 0.obs;
+RxInt isOnboarding = 0.obs;
 RxInt dasboardCurrentIndex = 0.obs;
 RxInt isCountDownTimer = 0.obs;
 RxString razorPay = "https://rzp.io/l/nf14i1U".obs;
 RxList<MessageTemplates> messageTemplateList = <MessageTemplates>[].obs;
+List onBoardingList = [];
+RxBool isRejected = false.obs;
+RxInt isOnPage = 1.obs;
+
+RxBool disableButton = false.obs;
+RxInt isNextPage = 0.obs;
+RxInt pendingStage = 0.obs;
+RxBool showAllPopup = true.obs;
+var onBoardingAgrrementSigned = false.obs;
+var alternateMobile = "".obs;
+var onBoardingData1 = {}.obs;
+// var agreementSignData = "".obs;
+String agreementSignData = ''; // Initialize as an empty reactive string
+
 const userChatData = "userChatData";
 RxInt currentChatUserId = 8693.obs;
 int roleId = 7;

@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -104,7 +103,8 @@ class HomeUI extends GetView<HomeController> {
               leading: IconButton(
                 onPressed: () {
                   controller.showPopup = false;
-                    controller.homeScreenKey.currentState?.openDrawer();},
+                  controller.homeScreenKey.currentState?.openDrawer();
+                },
                 highlightColor: appColors.transparent,
                 splashColor: appColors.transparent,
                 icon: const Icon(Icons.menu),
@@ -5782,18 +5782,19 @@ class ChatAssistanceDataTileHome extends StatelessWidget {
                         children: [
                           ConstrainedBox(
                             constraints: BoxConstraints(
-                                maxWidth: MediaQuery.of(context).size.width*0.35
-                            ),
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.35),
                             child: CustomText(
                               data.customerName ?? '',
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          if(data.level != null && data.level != "") Padding(
-                            padding: const EdgeInsets.only(left: 5.0),
-                            child: LevelWidget(level: data.level ?? "0"),
-                          ),
+                          if (data.level != null && data.level != "")
+                            Padding(
+                              padding: const EdgeInsets.only(left: 5.0),
+                              child: LevelWidget(level: data.level ?? "0"),
+                            ),
                           const Spacer(),
                           Container(
                             decoration: BoxDecoration(

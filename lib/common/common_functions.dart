@@ -49,12 +49,14 @@ Future<String> uploadImageToS3Bucket(
     return "";
   }
 }
+
 Future<String> getUserData(String key) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
- return prefs.getString(key) ?? "";
+  return prefs.getString(key) ?? "";
 }
+
 Future<String?> uploadImageFileToAws(
-    {required File file, required String moduleName,String? pathType}) async {
+    {required File file, required String moduleName, String? pathType}) async {
   var token = preferenceService.getToken();
 
   var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
@@ -81,14 +83,12 @@ Future<String?> uploadImageFileToAws(
   String? url;
 
   if (response.statusCode == 200) {
-
     var urlResponse = await http.Response.fromStream(response);
-if(pathType == "path"){
-  url = json.decode(urlResponse.body)["data"]['path'];
-}else{
-  url = json.decode(urlResponse.body)["data"]['full_path'];
-}
-
+    if (pathType == "path") {
+      url = json.decode(urlResponse.body)["data"]['path'];
+    } else {
+      url = json.decode(urlResponse.body)["data"]['full_path'];
+    }
   } else {
     url = null;
   }
@@ -123,8 +123,6 @@ void checkNotification(
   // }
   //  removeNotificationNode();
 }
-
-
 
 void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   // type 1= New chat message, 2 = Delievered, 3= Msg read, 4= Other messages

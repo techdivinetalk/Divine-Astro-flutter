@@ -20,8 +20,15 @@ class ApiProvider {
   static const String socketUrl = "https://list.divinetalk.live";
 
   static String debugingUrl = "http://13.235.46.27/api/astro/$version/";
-  static String baseUrl =
-      "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+  // static String baseUrl =
+  //     "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+
+  static String baseUrl = kDebugMode
+      ? "http://4.188.246.208/api/astro/$version/"
+      : "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+  // static String baseUrl =
+  //     "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+
   static const String getOnlineOfflineStatus =
       "https://list.divinetalk.live/api/v3/getAstroStatus?uniqueNo=";
   static String imageBaseUrl =
@@ -254,6 +261,14 @@ class ApiProvider {
 
   final String astroScheduleOnline = "astroScheduleOnline";
   final String getChatAssistCustomerData = "getChatAssistCustomerData";
+
+  // OnBoarding Apis
+  final String addAstroOnboarding = "addAstroOnboarding";
+  final String getAstroOnboarding = "getAstroOnboarding";
+
+  // Schedule Trainings Apis
+  final String getScheduleMeetings = "getScheduleMeetings";
+  final String addAstroScheduleMeetings = "addAstroScheduleMeetings";
 
   //Basic Auth
   final String username = "625170";

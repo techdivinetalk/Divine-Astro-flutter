@@ -12,6 +12,7 @@ import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/remote_config/remote_config_helper.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/auth/login/login_controller.dart';
+import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -36,6 +37,7 @@ import 'common/MiddleWare.dart';
 import 'common/app_theme.dart';
 import 'common/colors.dart';
 import 'common/common_functions.dart';
+import 'common/generic_loading_widget.dart';
 import 'common/routes.dart';
 import 'di/fcm_notification.dart';
 import 'di/firebase_network_service.dart';
@@ -45,7 +47,9 @@ import 'di/shared_preference_service.dart';
 import 'firebase_service/firebase_service.dart';
 import 'gen/fonts.gen.dart';
 import 'localization/translations.dart';
+import 'model/constant_details_model_class.dart';
 import 'screens/live_page/constant.dart';
+
 /// sahil pushed
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 late List<CameraDescription>? cameras;
@@ -58,12 +62,15 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   }
 }
 
+//// Onboarding Code Done
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   // initMessaging();
   AppFirebaseService().masterData("masters");
+
   cameras = await availableCameras();
   Get.put(AppColors());
   final remoteConfig = FirebaseRemoteConfig.instance;
@@ -94,7 +101,6 @@ Future<void> main() async {
   }
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-
     print("check on message notification : ${message.data}");
     print("pushNotification1 ${message.notification?.title ?? ""}");
     if (message.data["type"] == "2" || message.data["type"] == "20") {
@@ -319,11 +325,101 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final GlobalLifecycleObserver _lifecycleObserver = GlobalLifecycleObserver();
+  bool _isLoading = true; // Add loading state
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addObserver(_lifecycleObserver);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final dataSnapshot = await AppFirebaseService()
+          .database
+          .child("masters/disableOnboarding")
+          .get();
+      print(
+          "dataSnapshot.value.toString() -- ${dataSnapshot.value.toString()}");
+      if (dataSnapshot.value.toString() == "0") {
+        if (verifyOnboarding.toString() == "0") {
+          print("from 0");
+          checkOnBoarding();
+        } else {
+          print("from 1");
+          if (preferenceService.getUserDetail()?.id == null) {
+            Get.offAllNamed(RouteName.login);
+          } else {
+            print("Gone to here");
+
+            Get.offAllNamed(RouteName.dashboard);
+          }
+        }
+      } else {
+        normalBoaring();
+      }
+    });
+  }
+
+  normalBoaring() {
+    print("normal onboaringin process");
+    if (preferenceService.getUserDetail()?.id == null) {
+      Get.offAllNamed(RouteName.login);
+    } else {
+      print("Gone to here");
+
+      Get.offAllNamed(RouteName.dashboard);
+    }
+  }
+
+  var isOnboardings;
+  checkOnBoarding() async {
+    if (preferenceService.getUserDetail()?.id == null) {
+      Get.offAllNamed(RouteName.login);
+    } else {
+      final dataSnapshot = await AppFirebaseService()
+          .database
+          .child(
+              "astrologer/${preferenceService.getUserDetail()!.id}/realTime/isOnboarding")
+          .get();
+      print("response of isOnboarding - ${isOnboardings.toString()}");
+      isOnboardings = dataSnapshot.value;
+      ConstantDetailsModelClass? commonConstants;
+      print("response of isOnboarding - ${isOnboardings.toString()}");
+      if (preferenceService.getUserDetail()?.id == null) {
+        Get.offAllNamed(RouteName.login);
+      } else if (isOnboardings.toString() == "4" // || isOnboardings == null
+          ) {
+        print('homeeeee1');
+
+        Get.offAllNamed(RouteName.dashboard);
+      } else {
+        commonConstants = await userRepository.constantDetailsData2api();
+        print('--------------response--------${commonConstants.toJson()}');
+        if (commonConstants.success == true) {
+          if (commonConstants?.data != null) {
+            imageUploadBaseUrl.value =
+                commonConstants?.data?.imageUploadBaseUrl ?? "";
+          }
+          preferenceService
+              .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
+          Get.find<SharedPreferenceService>()
+              .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
+
+          navigateForOnBoardingGlobal(commonConstants);
+        } else if (commonConstants.success == false &&
+            commonConstants.statusCode == 401) {
+          await preferenceService.erase();
+
+          Get.offAllNamed(RouteName.login);
+
+          // Handle any failure case here
+        } else {}
+      }
+    }
+
+    // Once data is fetched, stop loading
+    setState(() {
+      _isLoading = false;
+    });
   }
 
   @override
@@ -354,9 +450,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   navigatorKey: navigatorKey,
                   color: appColors.white,
                   debugShowCheckedModeBanner: false,
-                  initialRoute: preferenceService.getUserDetail()?.id == null
-                      ? RouteName.login
-                      : RouteName.dashboard,
+                  // initialRoute: preferenceService.getUserDetail()?.id == null
+                  //     ? RouteName.login
+                  //     : onBoard == "1"
+                  //         ? RouteName.root
+                  //         : RouteName.dashboard,
+                  // initialRoute: initialRoute,
                   getPages: Routes.routes,
                   // home: ZegoLoginScreen(),
                   locale: getLanStrToLocale(
@@ -381,6 +480,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                     DefaultMaterialLocalizations.delegate,
                     DefaultWidgetsLocalizations.delegate,
                   ],
+                  // Show a loading screen while data is being fetched
+                  home: _isLoading
+                      ? Scaffold(
+                          body: const Center(
+                            child: GenericLoadingWidget(),
+                          ),
+                        )
+                      : Scaffold(), // Optionally return an empty container since navigation is handled elsewhere
+
                   // builder: (context, widget) {
                   //   return widget ?? const SizedBox();
                   //   // Container();

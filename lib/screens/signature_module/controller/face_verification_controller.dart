@@ -14,9 +14,13 @@ import 'package:image_picker/image_picker.dart';
 class FaceVerificationController extends GetxController
     with WidgetsBindingObserver {
   String kycImage = "";
-
+  String argu = "";
   @override
   void onInit() {
+    if (Get.arguments != null) {
+      argu = Get.arguments;
+      print(argu);
+    }
     WidgetsBinding.instance.addObserver(this);
 
     super.onInit();
@@ -45,8 +49,10 @@ class FaceVerificationController extends GetxController
     }
   }
 
+  var uploadingImage = false.obs;
   Future<void> uploadFaceImage(File imageFile) async {
     log("uploadFaceImage-----uploadFaceImage");
+    uploadingImage.value = true;update();
     UserData? userData = await pref.getUserDetail();
     try {
       var uri = "${ApiProvider.astrologerFaceVerification}${userData!.id}";
@@ -59,11 +65,22 @@ class FaceVerificationController extends GetxController
           }));
       AgreementModel agreementModel = AgreementModel.fromJson(data.data);
       if (agreementModel.status!.code == 200) {
-        Get.to(() => SignatureView(), arguments: {
-          "astrologerProfilePhoto": agreementModel.data!.imageLink,
-        });
-        log(
-            "agreementModel.data!.imageLink----->>>${agreementModel.data!.imageLink}");
+        uploadingImage.value = false;
+update();
+        if (argu == "") {
+          Get.to(() => SignatureView(), arguments: {
+            "astrologerProfilePhoto": agreementModel.data!.imageLink,
+          });
+        } else {
+          Get.to(() => SignatureView(), arguments: {
+            "astrologerProfilePhoto": agreementModel.data!.imageLink,
+            "from": argu
+          });
+        }
+        // Get.to(() => SignatureView(), arguments: {
+        //   "astrologerProfilePhoto": agreementModel.data!.imageLink,
+        // });
+        log("agreementModel.data!.imageLink----->>>${agreementModel.data!.imageLink}");
       }
     } on DioException catch (e) {
       log("objectobjectobjectobject----${e}");

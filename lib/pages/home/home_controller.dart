@@ -787,16 +787,18 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       String lastShownDate = await SharedPreferenceService().getLastShowDate();
       if (homeData?.retention < 10 && lastShownDate != currentDate) {
         await SharedPreferenceService().setLastShowDate(currentDate);
-        Get.bottomSheet(CommonInfoSheet(
-          isBackButton: false,
-          title: "⚠ Warning Astrologer ⚠".tr,
-          subTitle:
-              "Your user retention is below industry standard. Your retention is less than 10% Your are not eligible for Bonus wallet. Please review and improve strategies promptly to increase User retention rate. Thank you. 🌟"
-                  .tr,
-          onTap: () {
-            Get.back();
-          },
-        ));
+        if (showAllPopup.value == true) {
+          Get.bottomSheet(CommonInfoSheet(
+            isBackButton: false,
+            title: "⚠ Warning Astrologer ⚠".tr,
+            subTitle:
+                "Your user retention is below industry standard. Your retention is less than 10% Your are not eligible for Bonus wallet. Please review and improve strategies promptly to increase User retention rate. Thank you. 🌟"
+                    .tr,
+            onTap: () {
+              Get.back();
+            },
+          ));
+        }
       }
 
       if (homeData?.technical_support == null ||

@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
-import 'package:android_intent_plus/android_intent.dart';
-import 'package:android_intent_plus/flag.dart';
 // import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -44,6 +41,7 @@ import '../../model/chat/req_common_chat_model.dart';
 import '../../model/chat/res_common_chat_success.dart';
 import '../../model/chat_assistant/chat_assistant_astrologer_response.dart';
 import '../../model/res_login.dart';
+import '../../pages/home/home_controller.dart';
 import '../../repository/astrologer_profile_repository.dart';
 import '../../repository/chat_repository.dart';
 
@@ -313,14 +311,15 @@ class DashboardController extends GetxController
             dataList.name = remoteMessage.data["title"];
             Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
           } else if (remoteMessage.data["orderId"] == "2") {
-
             final ref = AppFirebaseService()
                 .database
-                .child("order/${AppFirebaseService().orderData.value["orderId"]}").path;
+                .child(
+                    "order/${AppFirebaseService().orderData.value["orderId"]}")
+                .path;
 
-            if(ref.split("/").last == remoteMessage.data["order_id"]){
+            if (ref.split("/").last == remoteMessage.data["order_id"]) {
               Get.toNamed(RouteName.acceptChatRequestScreen);
-            } else{
+            } else {
               Fluttertoast.showToast(msg: "Your order has been ended");
             }
 
@@ -328,9 +327,9 @@ class DashboardController extends GetxController
             // acceptOrRejectChat(
             //     orderId: int.parse(remoteMessage.data["order_id"]),
             //     queueId: int.parse(remoteMessage.data["queue_id"]));
-          } else if(remoteMessage.data["type"] == "20"){
-            if(MiddleWare.instance.currentPage == RouteName.dashboard){
-              if(Get.isRegistered<DashboardController>()){
+          } else if (remoteMessage.data["type"] == "20") {
+            if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+              if (Get.isRegistered<DashboardController>()) {
                 Get.find<DashboardController>().selectedIndex.value = 3;
               }
             }
@@ -348,14 +347,14 @@ class DashboardController extends GetxController
         dataList.name = message.data["title"];
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
       } else if (message.data["type"] == "2") {
-
         final ref = AppFirebaseService()
             .database
-            .child("order/${AppFirebaseService().orderData.value["orderId"]}").path;
+            .child("order/${AppFirebaseService().orderData.value["orderId"]}")
+            .path;
 
-        if(ref.split("/").last == message.data["order_id"]){
+        if (ref.split("/").last == message.data["order_id"]) {
           Get.toNamed(RouteName.acceptChatRequestScreen);
-        } else{
+        } else {
           Fluttertoast.showToast(msg: "Your order has been ended");
         }
         // acceptOrRejectChat(
@@ -416,11 +415,14 @@ class DashboardController extends GetxController
     preferenceService.setConstantDetails(commonConstants);
     preferenceService
         .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
+
     if (commonConstants.data.notice == null ||
         commonConstants.data.notice == "null") {
     } else {
       log(commonConstants.data.notice.toString());
-      showRecommendedPopupAlert();
+      if (showAllPopup.value == true) {
+        showRecommendedPopupAlert();
+      }
     } //added by: dev-dharam
     Get.find<SharedPreferenceService>()
         .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
@@ -449,6 +451,174 @@ class DashboardController extends GetxController
     getConstantDetailsData();
     print("currentTime");
     cacheGift();
+    if (verifyOnboarding.toString() == "0") {
+      if (commonConstants?.data != null) {
+        imageUploadBaseUrl.value =
+            commonConstants?.data?.imageUploadBaseUrl ?? "";
+      }
+
+      // navigateForOnBoardingGlobal(commonConstants);
+    } else {}
+    // if (commonConstants.data.is_onboarding_in_process.toString() == "0" ||
+    //     commonConstants.data.is_onboarding_in_process.toString() == "1") {
+    //   print("--------on------");
+    //
+    //   Get.put(DashboardController(PreDefineRepository()));
+    //   Get.put(HomeController()).showPopup = false;
+    //   onBoardingList = [1, 2, 3, 4, 5];
+    //   isOnPage.value = 1;
+    //
+    //   Get.toNamed(
+    //     RouteName.onBoardingScreen,
+    //   );
+    // } else if (commonConstants.data.is_onboarding_in_process.toString() ==
+    //     "2") {
+    //   print("--------2------");
+    //
+    //   Get.put(DashboardController(PreDefineRepository()));
+    //
+    //   Get.put(HomeController()).showPopup = false;
+    //   if (
+    //       //commonConstants.data.onboarding_reject_stage_no != null ||
+    //       //    commonConstants.data.onboarding_reject_stage_no != [] ||
+    //       commonConstants.data.onboarding_reject_stage_no.isNotEmpty) {
+    //     print(
+    //         "--------2------${commonConstants.data.onboarding_reject_stage_no}");
+    //
+    //     // for (int stage in commonConstants.data.onboarding_reject_stage_no) {
+    //     //   // Navigate to the screen based on the stage number
+    //     //   switch (stage) {
+    //     //     case 0:
+    //     //       // Navigate to the screen for stage 1
+    //     //       isOnPage.value = 1;
+    //     //       onBoardingList = [2, 3, 4, 5];
+    //     //
+    //     //       Get.toNamed(
+    //     //         RouteName.onBoardingScreen,
+    //     //       );
+    //     //       break;
+    //     //     case 1:
+    //     //       // Navigate to the screen for stage 1
+    //     //       isOnPage.value = 2;
+    //     //       onBoardingList = [3, 4, 5];
+    //     //
+    //     //       Get.toNamed(
+    //     //         RouteName.onBoardingScreen2,
+    //     //       );
+    //     //       break;
+    //     //     case 2:
+    //     //       // Navigate to the screen for stage 2
+    //     //       isOnPage.value = 3;
+    //     //       onBoardingList = [4, 5];
+    //     //
+    //     //       Get.toNamed(
+    //     //         RouteName.onBoardingScreen3,
+    //     //       );
+    //     //       break;
+    //     //     case 3:
+    //     //       // Navigate to the screen for stage 3
+    //     //       isOnPage.value = 4;
+    //     //       onBoardingList = [5];
+    //     //
+    //     //       Get.toNamed(
+    //     //         RouteName.onBoardingScreen4,
+    //     //       );
+    //     //       break;
+    //     //     case 5:
+    //     //       // Navigate to the screen for stage 3
+    //     //       isOnPage.value = 5;
+    //     //       onBoardingList = [];
+    //     //
+    //     //       Get.toNamed(
+    //     //         RouteName.onBoardingScreen5,
+    //     //       );
+    //     //       break;
+    //     //     default:
+    //     //       // Handle unexpected stage numbers
+    //     //       print('Unknown stage number: $stage');
+    //     //       break;
+    //     //   }
+    //     // }
+    //     isRejected.value = true;
+    //     onBoardingList = commonConstants.data.onboarding_reject_stage_no;
+    //     if (commonConstants.data.onboarding_reject_stage_no.first == 1) {
+    //       onBoardingList
+    //           .remove(commonConstants.data.onboarding_reject_stage_no.first);
+    //       isOnPage.value = 1;
+    //       Get.toNamed(
+    //         RouteName.onBoardingScreen,
+    //       );
+    //     } else if (commonConstants.data.onboarding_reject_stage_no.first == 2) {
+    //       onBoardingList
+    //           .remove(commonConstants.data.onboarding_reject_stage_no.first);
+    //       isOnPage.value = 2;
+    //       Get.toNamed(
+    //         RouteName.onBoardingScreen2,
+    //       );
+    //     } else if (commonConstants.data.onboarding_reject_stage_no.first == 3) {
+    //       onBoardingList
+    //           .remove(commonConstants.data.onboarding_reject_stage_no.first);
+    //       onBoardingList.remove(onBoardingList2.first);
+    //       isOnPage.value = 3;
+    //
+    //       Get.toNamed(
+    //         RouteName.onBoardingScreen3,
+    //       );
+    //     } else if (onBoardingList2.first == 4) {
+    //       onBoardingList
+    //           .remove(commonConstants.data.onboarding_reject_stage_no.first);
+    //       isOnPage.value = 4;
+    //
+    //       Get.toNamed(
+    //         RouteName.onBoardingScreen4,
+    //       );
+    //     } else if (onBoardingList2.first == 5) {
+    //       onBoardingList
+    //           .remove(commonConstants.data.onboarding_reject_stage_no.first);
+    //       isOnPage.value = 5;
+    //
+    //       Get.toNamed(
+    //         RouteName.onBoardingScreen5,
+    //       );
+    //     }
+    //   } else {
+    //     if (commonConstants.data.stage_no.toString() == "0") {
+    //       onBoardingList = [1, 2, 3, 4, 5];
+    //       isOnPage.value = 1;
+    //       Get.toNamed(
+    //         RouteName.onBoardingScreen,
+    //       );
+    //     } else if (commonConstants.data.stage_no.toString() == "1") {
+    //       onBoardingList = [2, 3, 4, 5];
+    //       isOnPage.value = 2;
+    //
+    //       Get.toNamed(
+    //         RouteName.onBoardingScreen2,
+    //       );
+    //     } else if (commonConstants.data.stage_no.toString() == "2") {
+    //       onBoardingList = [3, 4, 5];
+    //       isOnPage.value = 3;
+    //
+    //       Get.toNamed(
+    //         RouteName.onBoardingScreen3,
+    //       );
+    //     } else if (commonConstants.data.stage_no.toString() == "3") {
+    //       onBoardingList = [4, 5];
+    //       isOnPage.value = 4;
+    //       Get.toNamed(
+    //         RouteName.onBoardingScreen4,
+    //       );
+    //     } else if (commonConstants.data.stage_no.toString() == "4") {
+    //       onBoardingList = [5];
+    //       isOnPage.value = 5;
+    //
+    //       Get.toNamed(
+    //         RouteName.onBoardingScreen5,
+    //       );
+    //     }
+    //   }
+    // } else if (commonConstants.data.is_onboarding_in_process.toString() ==
+    //     "3") {}
   }
 
   Future<void> checkForUpdate() async {
@@ -623,17 +793,17 @@ class DashboardController extends GetxController
         update();
 
         PackageInfo packageInfo = await PackageInfo.fromPlatform();
-
-        if (int.parse(data.data!.appVersion!.split(".").join("")) >
-            int.parse(packageInfo.version.split(".").join(""))) {
-
-          Get.bottomSheet(
-            const ForceUpdateSheet(),
-            isDismissible: false,
-          );
-          // showTutorial(context);
-        } else {
-          // showTutorial(context);
+        if (showAllPopup.value == true) {
+          if (int.parse(data.data!.appVersion!.split(".").join("")) >
+              int.parse(packageInfo.version.split(".").join(""))) {
+            Get.bottomSheet(
+              const ForceUpdateSheet(),
+              isDismissible: false,
+            );
+            // showTutorial(context);
+          } else {
+            // showTutorial(context);
+          }
         }
       }
 
@@ -1316,4 +1486,243 @@ class DashboardController extends GetxController
 //     );
 //   }
 // }
+}
+
+navigateForOnBoardingGlobal(commonConstants) async {
+  print("onboarding stated------");
+
+  if (commonConstants.data.is_onboarding_in_process.toString() == "0" ||
+      commonConstants.data.is_onboarding_in_process.toString() == "1") {
+    print("--------on------");
+    isNextPage.value = commonConstants.data.stage_no;
+
+    Get.put(DashboardController(PreDefineRepository()));
+    Get.put(HomeController()).showPopup = false;
+    onBoardingList = [1, 2, 3, 4, 5];
+    isOnPage.value = 1;
+    disableButton.value = false;
+    showAllPopup.value = false;
+
+    // showORHide.value = 1;
+    Get.toNamed(
+      RouteName.onBoardingScreen,
+    );
+  } else if (commonConstants.data.is_onboarding_in_process.toString() == "2") {
+    Get.put(DashboardController(PreDefineRepository()));
+
+    Get.put(HomeController()).showPopup = false;
+    showAllPopup.value = false;
+
+    if (
+        // commonConstants.data.onboarding_reject_stage_no != null ||
+        //     commonConstants.data.onboarding_reject_stage_no != [] ||
+        commonConstants.data.onboarding_reject_stage_no.isNotEmpty) {
+      disableButton.value = false;
+      // for (int stage in commonConstants.data.onboarding_reject_stage_no) {
+      //   // Navigate to the screen based on the stage number
+      //   switch (stage) {
+      //     case 0:
+      //       // Navigate to the screen for stage 1
+      //       isOnPage.value = 1;
+      //       onBoardingList = [2, 3, 4, 5];
+      //
+      //       Get.toNamed(
+      //         RouteName.onBoardingScreen,
+      //       );
+      //       break;
+      //     case 1:
+      //       // Navigate to the screen for stage 1
+      //       isOnPage.value = 2;
+      //       onBoardingList = [3, 4, 5];
+      //
+      //       Get.toNamed(
+      //         RouteName.onBoardingScreen2,
+      //       );
+      //       break;
+      //     case 2:
+      //       // Navigate to the screen for stage 2
+      //       isOnPage.value = 3;
+      //       onBoardingList = [4, 5];
+      //
+      //       Get.toNamed(
+      //         RouteName.onBoardingScreen3,
+      //       );
+      //       break;
+      //     case 3:
+      //       // Navigate to the screen for stage 3
+      //       isOnPage.value = 4;
+      //       onBoardingList = [5];
+      //
+      //       Get.toNamed(
+      //         RouteName.onBoardingScreen4,
+      //       );
+      //       break;
+      //     case 5:
+      //       // Navigate to the screen for stage 3
+      //       isOnPage.value = 5;
+      //       onBoardingList = [];
+      //
+      //       Get.toNamed(
+      //         RouteName.onBoardingScreen5,
+      //       );
+      //       break;
+      //     default:
+      //       // Handle unexpected stage numbers
+      //       print('Unknown stage number: $stage');
+      //       break;
+      //   }
+      // }
+      isRejected.value = true;
+
+      onBoardingList = commonConstants.data.onboarding_reject_stage_no;
+      if (onBoardingList.first == 1) {
+        // onBoardingList
+        //     .remove(commonConstants.data.onboarding_reject_stage_no.first);
+        isOnPage.value = 1;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen,
+        );
+      } else if (onBoardingList.first == 2) {
+        // onBoardingList
+        //     .remove(commonConstants.data.onboarding_reject_stage_no.first);
+        isOnPage.value = 2;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen2,
+        );
+      } else if (onBoardingList.first == 3) {
+        // onBoardingList
+        //     .remove(commonConstants.data.onboarding_reject_stage_no.first);
+        isOnPage.value = 3;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen3,
+        );
+      } else if (onBoardingList.first == 4) {
+        // onBoardingList
+        //     .remove(commonConstants.data.onboarding_reject_stage_no.first);
+        isOnPage.value = 4;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen4,
+        );
+      } else if (onBoardingList.first == 5) {
+        // onBoardingList
+        //     .remove(commonConstants.data.onboarding_reject_stage_no.first);
+        isOnPage.value = 5;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen5,
+        );
+      }
+    } else {
+      disableButton.value = false;
+
+      if (commonConstants.data.stage_no.toString() == "0") {
+        onBoardingList = [1, 2, 3, 4, 5];
+        isOnPage.value = 1;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "1") {
+        onBoardingList = [2, 3, 4, 5];
+        isOnPage.value = 2;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen2,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "2") {
+        onBoardingList = [3, 4, 5];
+        isOnPage.value = 3;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen3,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "3") {
+        onBoardingList = [4, 5];
+        isOnPage.value = 4;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen4,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "4") {
+        onBoardingList = [5];
+        isOnPage.value = 5;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen5,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "5") {
+        // onBoardingList = [6];
+        // isOnPage.value = 5;
+
+        Get.toNamed(
+          RouteName.addEcomAutomation,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "6") {
+        // onBoardingList = [6];
+        // isOnPage.value = 5;
+
+        Get.toNamed(
+          RouteName.scheduleTraining1,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "7") {
+        // onBoardingList = [5];
+        // isOnPage.value = 5;
+
+        Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
+      } else if (commonConstants.data.stage_no.toString() == "8") {
+        // onBoardingList = [5];
+        // isOnPage.value = 5;
+
+        Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
+      }
+    }
+  } else if (commonConstants.data.is_onboarding_in_process.toString() == "3") {
+    disableButton.value = true;
+    Get.put(HomeController()).showPopup = false;
+    showAllPopup.value = false;
+
+    if (commonConstants.data.stage_no.toString() == "4") {
+      onBoardingList = [5];
+      isOnPage.value = 5;
+
+      Get.toNamed(
+        RouteName.onBoardingScreen5,
+      );
+    } else if (commonConstants.data.stage_no.toString() == "5") {
+      // onBoardingList = [6];
+      // isOnPage.value = 5;
+
+      Get.toNamed(
+        RouteName.addEcomAutomation,
+      );
+    } else if (commonConstants.data.stage_no.toString() == "6") {
+      // onBoardingList = [6];
+      // isOnPage.value = 5;
+
+      Get.toNamed(
+        RouteName.scheduleTraining1,
+      );
+    } else if (commonConstants.data.stage_no.toString() == "7") {
+      // onBoardingList = [5];
+      // isOnPage.value = 5;
+
+      Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
+    } else if (commonConstants.data.stage_no.toString() == "8") {
+      // onBoardingList = [5];
+      // isOnPage.value = 5;
+
+      Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
+    }
+  } else if (commonConstants.data.is_onboarding_in_process.toString() == "4") {
+    print('homeeeee1');
+    showAllPopup.value = true;
+
+    Get.offNamed(
+      RouteName.dashboard,
+    );
+  }
 }

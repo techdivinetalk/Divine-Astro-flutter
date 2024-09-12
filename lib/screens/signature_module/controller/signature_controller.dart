@@ -9,20 +9,21 @@ import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/res_login.dart';
 import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/product/pooja/widgets/custom_widget/pooja_common_list.dart';
 import 'package:divine_astrologer/screens/signature_module/model/agreement_model.dart';
-import 'package:divine_astrologer/utils/show_loader.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:get/get.dart' hide FormData, MultipartFile;
 import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:screenshot/screenshot.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
+import 'package:permission_handler/permission_handler.dart';
 import 'package:printing/printing.dart';
+import 'package:screenshot/screenshot.dart';
 import 'package:syncfusion_flutter_signaturepad/signaturepad.dart';
 
 import '../../../common/routes.dart';
+import '../../live_page/constant.dart';
 
 class SignatureController extends GetxController {
   GlobalKey<SfSignaturePadState> signaturePadKey = GlobalKey();
@@ -36,11 +37,16 @@ class SignatureController extends GetxController {
   Color selectedStrokeColor = appColors.guideColor;
   Color containerColor = Color(0xffFFFFFF);
   String selectedBackgroundImage = "";
+  String from = "";
 
   @override
   void onInit() {
     if (Get.arguments != null) {
       astrologerProfilePhoto = Get.arguments["astrologerProfilePhoto"];
+      if (Get.arguments["from"] != null) {
+        from = Get.arguments["from"];
+        print(from);
+      }
     }
     getDeviceDetails();
     super.onInit();
@@ -200,16 +206,45 @@ class SignatureController extends GetxController {
                 : null,
           }));
 
+      log("data.uploadSignaturePdf-->>${data}");
       log("data.uploadSignaturePdf-->>${data.data}");
       AgreementModel agreementModel = AgreementModel.fromJson(data.data);
+      log("data.status${agreementModel.status!.code}");
+
       if (agreementModel.status!.code == 200) {
-        log("agreementModel.data!.signLink-->>${agreementModel.data!.signLink}");
-        Get.until(
-          (route) {
-            return Get.currentRoute == RouteName.dashboard;
-          },
-        );
-        divineSnackBar(data: "upload successfully");
+        log("agreementModel.data!.signLink-->>${agreementModel.toJson()}");
+        if (from == "") {
+          Get.until(
+            (route) {
+              return Get.currentRoute == RouteName.dashboard;
+            },
+          );
+          log("dashboarddddd");
+        } else {
+          // log(data.data['data']['AgreementLink']);
+
+          // Store the specific string value from the map into RxString
+          if (data.data.containsKey('data') && data.data['data'] != null) {
+            log("printinggggggg meands containes");
+            log("printinggggggg meands containes ${data.data['data']}");
+            // log("Contains 'data': ${data['data']}");
+
+            updateAgreementStatus(data.data['data']['AgreementLink']);
+          } else {
+            log("printinggggggg meands not containes");
+          }
+          sendBroadcast(
+            BroadcastMessage(name: "updateAgreement"),
+          );
+
+          // Get.find<OnBoardingController>().getAstrologerStatus();
+          Get.until(
+            (route) {
+              return Get.currentRoute == RouteName.onBoardingScreen4;
+            },
+          );
+        }
+        divineSnackBar(data: "upload successfully", color: Colors.white);
         isLoading = false;
         update();
       }
@@ -217,6 +252,18 @@ class SignatureController extends GetxController {
       isLoading = false;
       update();
       log("uploadSignaturePdf----DioException----${e}");
+    }
+  }
+
+  updateAgreementStatus(String? agreementLink) {
+    if (agreementLink != null && agreementLink.isNotEmpty) {
+      onBoardingAgrrementSigned.value = true;
+      agreementSignData = agreementLink;
+      update();
+    } else {
+      onBoardingAgrrementSigned.value = true;
+      agreementSignData = "";
+      update();
     }
   }
 
@@ -392,24 +439,89 @@ class SignatureController extends GetxController {
       ),
     );
 
-    Directory appDocDirFolder =
-        Directory('/storage/emulated/0/Download/divinetalkAstrology');
-    final filePath = '${appDocDirFolder.path}/astrologer_sign_and_photo.pdf';
-    final file = File(filePath);
-    // bool isExists = await file.exists();
-    // log("isExists----${isExists}");
-    // if (isExists) {
+    // Directory appDocDirFolder =
+    //     Directory('/storage/emulated/0/Download/divinetalkAstrology');
+    // // final filePath = '${appDocDirFolder.path}/astrologer_sign_and_photo.pdf';
+    // // final file = File(filePath);
+    // // // bool isExists = await file.exists();
+    // // // log("isExists----${isExists}");
+    // // // if (isExists) {
+    // // //
+    // // //  await file.delete();
+    // // // }
+    // // await file.writeAsBytes(await pdf.save());
+    // // Get the app's documents directory
+    // Directory? directory = await getExternalStorageDirectory();
     //
-    //  await file.delete();
+    // if (directory != null) {
+    //   // Generate a timestamp to create a unique file name
+    //   String timestamp = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
+    //
+    //   // Define the PDF file name with a timestamp
+    //   String fileName = 'document_$timestamp.pdf';
+    //   String filePath = '${directory.path}/$fileName';
+    //
+    //   // Create the file and write the PDF data to it
+    //   File pdfFile = File(filePath);
+    //   await pdfFile.writeAsBytes(await pdf.save());
+    //
+    //   print('PDF saved successfully at: $filePath');
+    //
+    //   Future.delayed(
+    //     const Duration(milliseconds: 200),
+    //     () async {
+    //       log("uploadSignaturePdf----${filePath}");
+    //       await uploadSignaturePdf(File(filePath));
+    //     },
+    //   );
     // }
-    await file.writeAsBytes(await pdf.save());
 
-    Future.delayed(
-      const Duration(milliseconds: 200),
-      () async {
-        log("uploadSignaturePdf----${filePath}");
-        await uploadSignaturePdf(File(filePath));
-      },
-    );
+    if (from == "") {
+      print("-------");
+      Directory appDocDirFolder =
+          Directory('/storage/emulated/0/Download/divinetalkAstrology');
+      final filePath = '${appDocDirFolder.path}/astrologer_sign_and_photo.pdf';
+      final file = File(filePath);
+      // bool isExists = await file.exists();
+      // log("isExists----${isExists}");
+      // if (isExists) {
+      //
+      //  await file.delete();
+      // }
+      await file.writeAsBytes(await pdf.save());
+      Future.delayed(
+        const Duration(milliseconds: 200),
+        () async {
+          log("uploadSignaturePdf----${filePath}");
+          await uploadSignaturePdf(File(filePath));
+        },
+      );
+    } else {
+      print("1111111111");
+      // Get the app's documents directory
+      Directory? directory = await getExternalStorageDirectory();
+
+      if (directory != null) {
+        // Generate a timestamp to create a unique file name
+        String timestamp = DateFormat('yyyyMMdd_HHmmss').format(DateTime.now());
+
+        // Define the PDF file name with a timestamp
+        String fileName = 'document_$timestamp.pdf';
+        String filePath = '${directory.path}/$fileName';
+
+        // Create the file and write the PDF data to it
+        File pdfFile = File(filePath);
+        await pdfFile.writeAsBytes(await pdf.save());
+
+        print('PDF saved successfully at: $filePath');
+        Future.delayed(
+          const Duration(milliseconds: 200),
+          () async {
+            log("uploadSignaturePdf----${filePath}");
+            await uploadSignaturePdf(File(filePath));
+          },
+        );
+      }
+    }
   }
 }
