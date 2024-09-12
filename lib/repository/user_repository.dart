@@ -652,16 +652,27 @@ class UserRepository extends ApiProvider {
         iosDeviceInfo = await deviceInfo.iosInfo;
       }
 
-      Map<String, dynamic> param = new Map();
+      Map<String, dynamic> param = Map();
       if (Platform.isAndroid) {
         param["device_brand"] = androidInfo!.brand;
         param["device_model"] = androidInfo.model;
         param["device_manufacture"] = androidInfo.manufacturer;
         param["device_sdk_code"] = buildNumber;
         param["appCurrentVersion"] = version;
+        param["device_os"] = 1;
         print('🥹🥹🥹🥹🥹🥹🥹🥹');
         print(jsonEncode(param).toString());
         print('🥹🥹🥹🥹🥹🥹🥹🥹');
+      } else {
+        IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
+        String release = iosDeviceInfo.systemVersion;
+        param["device_brand"] = iosDeviceInfo.name;
+        param["device_model"] = iosDeviceInfo.data["machine"];
+        param["device_manufacture"] = iosDeviceInfo.model;
+        param["device_sdk_code"] = release;
+        param["appCurrentVersion"] = version;
+        param["device_os"] = 2;
+        print('ios data ---- >>>> ${version}');
       }
 
       final response = await post(

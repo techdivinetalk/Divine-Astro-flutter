@@ -19,6 +19,7 @@ import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 
 import "../common/MiddleWare.dart";
+import "../screens/chat_message_with_socket/chat_message_with_socket_controller.dart";
 import "../screens/live_page/constant.dart";
 
 bool isLogOut = false;
@@ -102,13 +103,23 @@ class AppFirebaseService {
   }
 
   String tableName = "";
+  String currentOrder = "";
 
   Future<void> userRealTime(String key, dynamic value, String path,
       [bool isRemoved = false]) async {
-    debugPrint("test_userRealTime: value removed: $value");
     switch (key) {
       case "order_id":
         if (value != null && !isRemoved) {
+          if (!isRemoved) {
+            currentOrder = value.toString();
+            if(value != null && MiddleWare.instance.currentPage == RouteName.chatMessageWithSocketUI){
+              Get.find<ChatMessageWithSocketController>().setRealTime();
+              // Get.find<SocketChatWithAstrologerController>().runTimer();
+            }
+          } else {
+            debugPrint("currentOrder: $value");
+            currentOrder = "";
+          }
           database.child("order/$value").onValue.listen(
             (DatabaseEvent event) async {
               final DataSnapshot dataSnapshot = event.snapshot;
@@ -117,7 +128,11 @@ class AppFirebaseService {
                   Map<dynamic, dynamic> map = <dynamic, dynamic>{};
                   map = (dataSnapshot.value ?? <dynamic, dynamic>{})
                       as Map<dynamic, dynamic>;
-                  orderData(Map<String, dynamic>.from(map));
+                  debugPrint("-userRealTime: ${dataSnapshot.key.toString()}");
+                  debugPrint("-userRealTime: ${currentOrder}");
+                  if (dataSnapshot.key.toString() == currentOrder) {
+                    orderData.value = Map<String, dynamic>.from(map);
+                  }
                   if (orderData.value["status"] != null) {
                     if (orderData.value["orderType"] == "chat") {
                       switch ((orderData.value["status"])) {
@@ -150,7 +165,9 @@ class AppFirebaseService {
                           break;
                       }
                     } else {
-                      orderData({});
+                      if (dataSnapshot.key.toString() == currentOrder) {
+                        orderData({});
+                      }
                       sendBroadcast(BroadcastMessage(name: "orderEnd"));
                       if (MiddleWare.instance.currentPage ==
                           RouteName.acceptChatRequestScreen) {
@@ -164,7 +181,9 @@ class AppFirebaseService {
                   } else {}
                 } else {}
               } else {
-                orderData({});
+                if (dataSnapshot.key.toString() == currentOrder) {
+                  orderData({});
+                }
                 sendBroadcast(BroadcastMessage(name: "orderEnd"));
                 if (MiddleWare.instance.currentPage ==
                     RouteName.acceptChatRequestScreen) {
@@ -186,7 +205,7 @@ class AppFirebaseService {
               },
             );
           }
-          orderData({});
+            orderData({});
           sendBroadcast(BroadcastMessage(name: "orderEnd"));
         }
         break;

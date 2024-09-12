@@ -745,7 +745,7 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget foregroundWidget() {
     return Padding(
-      padding: const EdgeInsets.only(top: kToolbarHeight - 16.0),
+      padding:  EdgeInsets.only(top: kToolbarHeight - 16.0,bottom: MediaQuery.of(context).padding.bottom),
       child: Column(
         children: <Widget>[
           appBarWidget(),
@@ -781,11 +781,11 @@ class _LivePage extends State<LiveDharamScreen>
               ],
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           // horizontalGiftBar(ctx: context),
           // const SizedBox(height: 8),
           newUI(),
-          const SizedBox(height: 8),
+          // const SizedBox(height: 8),
         ],
       ),
     );

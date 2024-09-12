@@ -273,7 +273,6 @@ class LoginUI extends GetView<LoginController> {
           controller: controller.mobileNumberController,
           keyboardType: TextInputType.number,
           // enabled: controller.enable.value,
-          enabled: true,
           maxLength: 10,
           showCursor: true,
           inputFormatters: <TextInputFormatter>[
