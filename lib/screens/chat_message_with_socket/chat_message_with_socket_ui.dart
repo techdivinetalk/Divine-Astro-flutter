@@ -1271,7 +1271,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             },
                             child: Center(
                                 child: SvgPicture.asset(
-                                    "assets/svg/new_chat_kundli.svg"))),
+                                    "assets/svg/razorpayicon.svg"))),
                         const SizedBox(
                           height: 5.0,
                         ),
