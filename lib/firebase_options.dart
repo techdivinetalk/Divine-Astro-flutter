@@ -65,7 +65,6 @@ class DefaultFirebaseOptions {
         'https://divine-live-f7f79-default-rtdb.asia-southeast1.firebasedatabase.app',
     storageBucket: 'divine-live-f7f79.appspot.com',
   );
-
   static const FirebaseOptions ios = FirebaseOptions(
     apiKey: 'AIzaSyB8qPgVe6EJ2hdsp-FTVBVbP3oOQOK47xs',
     appId: '1:507681862980:ios:1b767dddc6c35736e51311',

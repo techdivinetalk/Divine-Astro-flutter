@@ -227,19 +227,23 @@ class OnBoarding5 extends GetView<OnBoardingController> {
                         children: [
                           InkWell(
                             onTap: () {
-                              controller.getStatusFromFir();
-                              controller.update();
-                              if (controller.enableOrDisable.value.toString() ==
-                                      "0" ||
-                                  controller.enableOrDisable.value == null) {
-                              } else {
-                                controller.updatePage(5);
-                                controller.updateDonePage(4);
-                                controller.currentPage = 5;
-                                Get.offNamed(
-                                  RouteName.addBankAutoMation,
-                                );
-                              }
+                              // controller.getStatusFromFir();
+                              // controller.update();
+                              // if (controller.enableOrDisable.value.toString() ==
+                              //         "0" ||
+                              //     controller.enableOrDisable.value == null) {
+                              // } else {
+                              //   controller.updatePage(5);
+                              //   controller.updateDonePage(4);
+                              //   controller.currentPage = 5;
+                              //   Get.offNamed(
+                              //     RouteName.addBankAutoMation,
+                              //   );
+                              // }
+
+                              Get.offNamed(
+                                RouteName.onBoardingScreen2,
+                              );
                             },
                             child: Container(
                               height: 50,
