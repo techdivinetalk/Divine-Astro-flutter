@@ -635,7 +635,7 @@ class ZegoService {
               isVideoCall: isVideoCall,
               resourceID: "zego_call",
               customData: json.encode(customData),
-              timeoutSeconds: 60,
+              timeoutSeconds: 30,
             )
           : checkOppositeSidePermGranted();
     } else {
