@@ -811,7 +811,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
             return index == 0
                 ? GestureDetector(
                     onTap: () async {
-                      await Get.toNamed(RouteName.messageTemplate);
+                      await Get.toNamed(RouteName.messageTemplate)!.then((value) async {
+                        await controller.checkIfChatIsEnded();
+                      },);
                       controller.messageTemplatesList.value.clear();
                       controller.messageTemplatesList.refresh();
                       controller.getMessageTemplates();
@@ -1304,7 +1306,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 children: [
                                   GestureDetector(
                                       onTap: () {
-                                        Get.toNamed(RouteName.checkKundli);
+                                        Get.toNamed(RouteName.checkKundli)!.then((value) async {
+                                          await controller.checkIfChatIsEnded();
+                                        },);;
                                       },
                                       child: Center(
                                           child: SvgPicture.asset(
