@@ -608,6 +608,11 @@ class ChatMessageWithSocketController extends GetxController
     Timer.periodic(const Duration(seconds: 1), (timer) async {
       print("object");
       if (AppFirebaseService().orderData.value["status"] == null) {
+        if (MiddleWare.instance.currentPage == RouteName.chatMessageWithSocketUI) {
+          Get.until((route) {
+            return Get.currentRoute == RouteName.dashboard;
+          });
+        }
         timer.cancel();
       }
       if (MiddleWare.instance.currentPage == RouteName.dashboard) {
