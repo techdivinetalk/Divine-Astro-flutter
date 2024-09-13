@@ -1401,7 +1401,7 @@ PODS:
   - zego_effects_plugin (0.0.1):
     - Flutter
     - ZegoEffects
-  - zego_express_engine (3.16.0):
+  - zego_express_engine (3.16.2):
     - Flutter
   - zego_uikit (0.0.1):
     - Flutter
@@ -1755,7 +1755,7 @@ SPEC CHECKSUMS:
   webview_flutter_wkwebview: 2a23822e9039b7b1bc52e5add778e5d89ad488d1
   zego_callkit: 72593f46ed01779c4cee6bc65d2e0e1cde86b42c
   zego_effects_plugin: 65e7890846ef6fdde981ffb795f1ac7515a4ced2
-  zego_express_engine: 670f55f30a6817812f37990ed5bc3227c03adc48
+  zego_express_engine: 7eb1535adaccea21ec5a887f0a447c0310c26637
   zego_uikit: 596cd6edd0e5162a9a1d1f7fec5a79fa8899fb7b
   zego_uikit_beauty_plugin: e84bfb8302bb2134b674fd3b753e659eca59c9a8
   zego_uikit_prebuilt_call: 13173d7a3c6dcc1695cbdff15d19463acd1ca39c

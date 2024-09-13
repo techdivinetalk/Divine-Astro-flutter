@@ -745,7 +745,9 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget foregroundWidget() {
     return Padding(
-      padding:  EdgeInsets.only(top: kToolbarHeight - 16.0,bottom: MediaQuery.of(context).padding.bottom),
+      padding: EdgeInsets.only(
+          top: kToolbarHeight - 16.0,
+          bottom: MediaQuery.of(context).padding.bottom),
       child: Column(
         children: <Widget>[
           appBarWidget(),
@@ -984,13 +986,12 @@ class _LivePage extends State<LiveDharamScreen>
                                 children: [
                                   Container(
                                     constraints: BoxConstraints(
-                                      maxWidth: Get.width /
-                                          2.5, // Define the maximum width here
+                                      maxWidth: Get.width / 2.3,
                                     ),
                                     child: Text(
-                                      msg.userName ?? "",
+                                      "${msg.userName} ${isBlocked || msg.userName == "Quality Team" || msg.userName == "Live Monitoring Team" ? "" : "(${msg.userId})"}",
                                       // nameWithWithoutIDs(msg, isModerator),
-                                      maxLines: 100000,
+                                      // maxLines: 100000,
                                       style: TextStyle(
                                         fontSize: 14,
                                         color: isBlocked ||
@@ -3366,12 +3367,10 @@ class _LivePage extends State<LiveDharamScreen>
       onClose: () {},
       needAcceptButton: true,
       needDeclinetButton: false,
-      onAcceptButton: () async {
-        print("${user.id}");
-        print("user name ---- ${user.name}");
-        print("calling accept button");
+       onAcceptButton: () async {
+        print("------->>>>${zegoController.coHost}----user---->>>>${user}");
         final connectInvite = zegoController.coHost;
-        print("calling accept button");
+
         await connectInvite.hostSendCoHostInvitationToAudience(user);
         Get.back();
       },
