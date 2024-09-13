@@ -178,7 +178,7 @@ class SupportIssueScreen extends GetView<SupportIssueController> {
                     maxLines: 5,
                     textInputFormatter: [CustomSpaceInputFormatter()],
                     controller: controller.descriptionController,
-                    maxLength: 50,
+                    maxLength: 100,
                     keyboardType: TextInputType.text,
                     onChanged: (value) {
                       controller.update();
@@ -302,9 +302,10 @@ class SupportIssueScreen extends GetView<SupportIssueController> {
                           // }
                           if (controller.selected == null) {
                             Fluttertoast.showToast(msg: "Select Issue type");
-                          } else if (controller
-                                  .descriptionController.text.length <
-                              50) {
+                          } else if (controller.descriptionController.text
+                                  .trim()
+                                  .length <
+                              100) {
                             Fluttertoast.showToast(msg: "Detail is to short");
                           } else if (controller.selectedFiles.isEmpty) {
                             Fluttertoast.showToast(msg: "Select Images");

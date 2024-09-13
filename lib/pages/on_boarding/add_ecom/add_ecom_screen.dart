@@ -20,6 +20,7 @@ import '../../../gen/fonts.gen.dart';
 import '../../../screens/add_puja/add_puja_controller.dart';
 import '../../../screens/add_puja/model/puja_product_categories_model.dart';
 import '../../../screens/add_puja/widget/category_bottom_sheet.dart';
+import '../../../screens/live_page/constant.dart';
 import '../../../screens/puja/widget/remedy_text_filed.dart';
 
 class AddEcomScreen extends GetView<AddEcomController> {
@@ -68,104 +69,116 @@ class AddEcomScreen extends GetView<AddEcomController> {
                 ),
               ],
             ),
-            bottomNavigationBar: Container(
-              height: 120,
+            bottomNavigationBar: Padding(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
-              child: Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(
-                        left: 14, right: 14, top: 10, bottom: 10),
-                    child: RichText(
-                      text: TextSpan(
-                        text:
-                            '* Confused? Don’t worry, We are here to help you! ',
-                        style: TextStyle(
-                          fontFamily: FontFamily.poppins,
-                          fontSize: 12,
-                          fontWeight: FontWeight.w400,
-                          color: appColors.grey,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'Click here for a tutorial video.',
-                            style: TextStyle(
-                              fontSize: 12,
-                              fontFamily: FontFamily.poppins,
-                              fontWeight: FontWeight.w400,
-                              color: appColors.red,
-                              decoration: TextDecoration.underline,
-                            ),
-                            recognizer: TapGestureRecognizer()
-                              ..onTap = () {
-                                // Handle tap
-                                print('Link tapped');
-                              },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: [
-                      Expanded(
-                        child: FilledButton(
-                          style: FilledButton.styleFrom(
-                            backgroundColor: appColors.guideColor,
-                            padding: EdgeInsets.symmetric(vertical: 5.h),
-                            shape: const RoundedRectangleBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(10)),
+              child: Container(
+                height: onboarding_training_videoData == "" ||
+                        onboarding_training_videoData == null ||
+                        onboarding_training_videoData.contains("null")
+                    ? 60
+                    : 110,
+                child: Column(
+                  children: [
+                    onboarding_training_videoData == "" ||
+                            onboarding_training_videoData == null ||
+                            onboarding_training_videoData.contains("null")
+                        ? SizedBox()
+                        : Padding(
+                            padding: const EdgeInsets.only(
+                                left: 14, right: 14, top: 10, bottom: 10),
+                            child: RichText(
+                              text: TextSpan(
+                                text:
+                                    '* Confused? Don’t worry, We are here to help you! ',
+                                style: TextStyle(
+                                  fontFamily: FontFamily.poppins,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  color: appColors.grey,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: 'Click here for a tutorial video.',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontFamily: FontFamily.poppins,
+                                      fontWeight: FontWeight.w400,
+                                      color: appColors.red,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        // Handle tap
+                                        print('Link tapped');
+                                      },
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                          onPressed: !controller.isPujaLoading
-                              ? () {
-                                  if (controller.formKey.currentState
-                                          ?.validate() ??
-                                      false) {
-                                    print("going in inside");
-                                    if (controller.validation()) {
-                                      if (controller.selectedValue.value ==
-                                          "Puja") {
-                                        if (controller.nameC.text.isEmpty ||
-                                            controller.detailC.text.isEmpty) {
-                                          Fluttertoast.showToast(
-                                              msg: "Field is empty");
+                    Row(
+                      children: [
+                        Expanded(
+                          child: FilledButton(
+                            style: FilledButton.styleFrom(
+                              backgroundColor: appColors.guideColor,
+                              padding: EdgeInsets.symmetric(vertical: 5.h),
+                              shape: const RoundedRectangleBorder(
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(10)),
+                              ),
+                            ),
+                            onPressed: !controller.isPujaLoading
+                                ? () {
+                                    if (controller.formKey.currentState
+                                            ?.validate() ??
+                                        false) {
+                                      print("going in inside");
+                                      if (controller.validation()) {
+                                        if (controller.selectedValue.value ==
+                                            "Puja") {
+                                          if (controller.pricC.text.isEmpty ||
+                                              controller.detailC.text.isEmpty) {
+                                            Fluttertoast.showToast(
+                                                msg: "Field is empty");
+                                          } else {
+                                            controller.addEditPoojaApi();
+                                          }
                                         } else {
-                                          controller.addEditPoojaApi();
-                                        }
-                                      } else {
-                                        if (controller.nameC.text.isEmpty ||
-                                            controller.detailC.text.isEmpty) {
-                                          Fluttertoast.showToast(
-                                              msg: "Field is empty");
-                                        } else {
-                                          controller.addEditProduct();
+                                          if (controller.nameC.text.isEmpty ||
+                                              controller.detailC.text.isEmpty ||
+                                              controller.pricC.text.isEmpty) {
+                                            Fluttertoast.showToast(
+                                                msg: "Field is empty");
+                                          } else {
+                                            controller.addEditProduct();
+                                          }
                                         }
                                       }
                                     }
                                   }
-                                }
-                              : () {},
-                          child: !controller.isPujaLoading
-                              ? Text(
-                                  'Add ${controller.selectedValue}',
-                                  style: AppTextStyle.textStyle16(
-                                    fontWeight: FontWeight.w600,
-                                    fontColor: appColors.white,
+                                : () {},
+                            child: !controller.isPujaLoading
+                                ? Text(
+                                    'Add ${controller.selectedValue}',
+                                    style: AppTextStyle.textStyle16(
+                                      fontWeight: FontWeight.w600,
+                                      fontColor: appColors.white,
+                                    ),
+                                  )
+                                : SizedBox(
+                                    height: 35,
+                                    child: CircularProgressIndicator(
+                                      backgroundColor:
+                                          appColors.whiteGuidedColor,
+                                    ),
                                   ),
-                                )
-                              : SizedBox(
-                                  height: 35,
-                                  child: CircularProgressIndicator(
-                                    backgroundColor: appColors.whiteGuidedColor,
-                                  ),
-                                ),
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
             body: Form(

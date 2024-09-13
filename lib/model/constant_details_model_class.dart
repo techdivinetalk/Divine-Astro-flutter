@@ -80,6 +80,7 @@ class Data {
   List? onboarding_reject_stage_no;
   dynamic stage_no;
   dynamic onBoardingrejected;
+  dynamic onboarding_training_video;
   Data({
     required this.leaderboardRankImage,
     required this.lottiFile,
@@ -108,6 +109,7 @@ class Data {
     this.is_onboarding_in_process,
     this.stage_no,
     this.onboarding_reject_stage_no,
+    this.onboarding_training_video,
   });
 
   Data copyWith({
@@ -137,6 +139,7 @@ class Data {
     dynamic is_onboarding_in_process,
     dynamic stage_no,
     List? onboarding_reject_stage_no,
+    dynamic onboarding_training_video,
   }) =>
       Data(
         leaderboardRankImage: leaderboardRankImage ?? this.leaderboardRankImage,
@@ -169,6 +172,8 @@ class Data {
             is_screenshot_require ?? this.is_screenshot_require,
         onboarding_reject_stage_no:
             onboarding_reject_stage_no ?? this.onboarding_reject_stage_no,
+        onboarding_training_video:
+            onboarding_training_video ?? this.onboarding_training_video,
       );
 
   factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
@@ -207,6 +212,7 @@ class Data {
         is_onboarding_in_process: json['is_onboarding_in_process'],
         stage_no: json['stage_no'],
         onboarding_reject_stage_no: json['onboarding_reject_stage_no'],
+        onboarding_training_video: json['onboarding_training_video'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -240,6 +246,7 @@ class Data {
         'is_onboarding_in_process': is_onboarding_in_process,
         'stage_no': stage_no,
         'onboarding_reject_stage_no': onboarding_reject_stage_no,
+        'onboarding_training_video': onboarding_training_video,
       };
 }
 

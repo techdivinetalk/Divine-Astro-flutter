@@ -190,42 +190,50 @@ class OnBoarding4 extends GetView<OnBoardingController> {
             bottomNavigationBar: Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
-                height: 110,
+                height: onboarding_training_videoData == "" ||
+                        onboarding_training_videoData == null ||
+                        onboarding_training_videoData.contains("null")
+                    ? 60
+                    : 110,
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 14, right: 14, top: 10, bottom: 10),
-                      child: RichText(
-                        text: TextSpan(
-                          text:
-                              '* Confused? Don’t worry, We are here to help you! ',
-                          style: TextStyle(
-                            fontFamily: FontFamily.poppins,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: appColors.grey,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: 'Click here for a tutorial video.',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: FontFamily.poppins,
-                                fontWeight: FontWeight.w400,
-                                color: appColors.red,
-                                decoration: TextDecoration.underline,
+                    onboarding_training_videoData == "" ||
+                            onboarding_training_videoData == null ||
+                            onboarding_training_videoData.contains("null")
+                        ? SizedBox()
+                        : Padding(
+                            padding: const EdgeInsets.only(
+                                left: 14, right: 14, top: 10, bottom: 10),
+                            child: RichText(
+                              text: TextSpan(
+                                text:
+                                    '* Confused? Don’t worry, We are here to help you! ',
+                                style: TextStyle(
+                                  fontFamily: FontFamily.poppins,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  color: appColors.grey,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: 'Click here for a tutorial video.',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontFamily: FontFamily.poppins,
+                                      fontWeight: FontWeight.w400,
+                                      color: appColors.red,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        // Handle tap
+                                        print('Link tapped');
+                                      },
+                                  ),
+                                ],
                               ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  // Handle tap
-                                  print('Link tapped');
-                                },
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
+                          ),
                     Obx(() {
                       return Row(
                         mainAxisAlignment: MainAxisAlignment.center,

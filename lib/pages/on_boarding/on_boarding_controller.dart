@@ -111,6 +111,7 @@ class OnBoardingController extends GetxController {
     print('Options loaded: ${options.map((e) => e.name)}');
   }
 
+  late TextEditingController realController;
   late TextEditingController nameController;
   late TextEditingController skillsController;
   late TextEditingController experiencesController;
@@ -121,6 +122,7 @@ class OnBoardingController extends GetxController {
   late TextEditingController aadharController;
   late TextEditingController pancardController;
 
+  FocusNode realNode = FocusNode();
   FocusNode nameNode = FocusNode();
   FocusNode skillsNode = FocusNode();
   FocusNode experiencesNode = FocusNode();
@@ -179,11 +181,11 @@ class OnBoardingController extends GetxController {
                 firebaseDDDD.value["verifyingOnboarding"].toString();
 
             // Update enableOrDisable with .value
-            if (onboardingStatus == "0" || onboardingStatus == "1") {
-              enableOrDisable.value =
-                  onboardingStatus; // Correctly setting value for RxString
-              update();
-            }
+            // if (onboardingStatus == "0" || onboardingStatus == "1") {
+            enableOrDisable.value =
+                onboardingStatus; // Correctly setting value for RxString
+            update();
+            // }
           }
         }
       }
@@ -200,6 +202,7 @@ class OnBoardingController extends GetxController {
     super.onInit();
     loadPreDefineData();
     getStatusFromFir();
+    realController = TextEditingController();
     nameController = TextEditingController();
     skillsController = TextEditingController();
     experiencesController = TextEditingController();
@@ -213,6 +216,9 @@ class OnBoardingController extends GetxController {
     print("-----user Data --- ${userData!.toJson()}");
     if (userData!.name != null) {
       nameController.text = userData!.name ?? "";
+    }
+    if (userData!.real_name != null) {
+      realController.text = userData!.real_name ?? "";
     }
     getAstrologerStatus();
 
@@ -825,6 +831,7 @@ class OnBoardingController extends GetxController {
           padding: EdgeInsets.only(),
           child: VerifyOtpSheet(
             onBoardingData: {
+              "real_name": realController.text,
               "name": nameController.text,
               "skills": skills,
               "skills_name": skillsController.text,
@@ -960,6 +967,7 @@ class OnBoardingController extends GetxController {
     //page 1 name ,skills ,skills_name ,experience,dob,location,alternate_no
     var body = data ??
         {
+          "real_name": realController.text,
           "name": nameController.text,
           "skills": skills,
           "skills_name": skillsController.text,

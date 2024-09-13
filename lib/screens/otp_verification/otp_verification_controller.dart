@@ -364,6 +364,8 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
         .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
     Get.find<SharedPreferenceService>()
         .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
+    onboarding_training_videoData =
+        commonConstants.data!.onboarding_training_video.toString();
 
     navigateForOnBoardingGlobal(commonConstants);
     enableSubmit.value = true;
