@@ -23,9 +23,10 @@ class ApiProvider {
   // static String baseUrl =
   //     "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
 
-  static String baseUrl = kDebugMode
-      ? "http://4.188.246.208/api/astro/$version/"
-      : "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+  static String baseUrl = //kDebugMode
+      //    ?
+      "http://4.188.246.208/api/astro/$version/";
+  //  : "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
   // static String baseUrl =
   //     "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
 
@@ -36,14 +37,14 @@ class ApiProvider {
   static const String astOnlineOffline =
       "https://list.divinetalk.live/api/v3/updateAstroStatusV2?unique_no=";
   static const String astrologerAgreement =
-      "http://20.193.154.99:8080/api/v1/getAstroAgreement?astrologer_id=";
+      "http://20.193.154.99:8081/api/v1/getAstroAgreement?astrologer_id=";
   static const String astrologerFaceVerification =
-      "http://20.193.154.99:8080/api/v1/uploadAstroImage?astrologer_id=";
+      "http://20.193.154.99:8081/api/v1/uploadAstroImage?astrologer_id=";
   static const String astrologerAstroSign =
-      "http://20.193.154.99:8080/api/v1/uploadAstroSign?astrologer_id=";
+      "http://20.193.154.99:8081/api/v1/uploadAstroSign?astrologer_id=";
 
   static const String astrologerSignPdf =
-      "http://20.193.154.99:8080/api/v1/uploadAstroSignedPdf?astrologer_id=";
+      "http://20.193.154.99:8081/api/v1/uploadAstroSignedPdf?astrologer_id=";
   static const String onlineOfflineStatus =
       "https://list.divinetalk.live/api/v3/getAstrologersData";
 
