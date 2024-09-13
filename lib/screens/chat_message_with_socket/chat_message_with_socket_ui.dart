@@ -227,9 +227,16 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                         borderRadius: BorderRadius.circular(
                                             14), // First container border radius
                                       ), // First container color
-                                      child: (AppFirebaseService().orderData.value["card"] != null
-                                          ? !(AppFirebaseService().orderData.value["card"]["isCardVisible"] ?? false)
-                                          : false)
+                                      child: (AppFirebaseService()
+                                                      .orderData
+                                                      .value["card"] !=
+                                                  null
+                                              ? !(AppFirebaseService()
+                                                          .orderData
+                                                          .value["card"]
+                                                      ["isCardVisible"] ??
+                                                  false)
+                                              : false)
                                           ? Text(
                                               "${AppFirebaseService().orderData.value["customerName"]} is picking tarot cards...",
                                               maxLines: 2,
@@ -360,7 +367,10 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                             SizedBox(height: 10.h),
                             Obx(
                               () => Visibility(
-                                visible: AppFirebaseService().orderData.value["status"].toString() ==
+                                visible: AppFirebaseService()
+                                        .orderData
+                                        .value["status"]
+                                        .toString() ==
                                     "4",
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
@@ -1259,49 +1269,27 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    razorPayLink.value.toString() == "1" ?
-                    Column(
-                      children: [
-                        GestureDetector(
-                            onTap: () {
-                              String message =
-                              razorPay.value.toString();
-                              controller.messageController.text =
-                                  message;
-                              controller.sendMsg();
-                            },
-                            child: Center(
-                                child: SvgPicture.asset(
-                                    "assets/svg/razorpayicon.svg"))),
-                        const SizedBox(
-                          height: 5.0,
-                        ),
-                        Text(
-                          "RazorPay",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 10.sp,
-                            color: appColors.black,
-                          ),
-                        )
-                      ],
-                    ) :
-                    isKundli.value == 1
+                    razorPayLink.value.toString() == "1"
                         ? Column(
                             children: [
                               GestureDetector(
                                   onTap: () {
-                                    Get.toNamed(RouteName.checkKundli);
+                                    String message = razorPay.value.toString();
+                                    controller.messageController.text = message;
+                                    controller.sendMsg();
                                   },
-                                  child: Center(
-                                      child: SvgPicture.asset(
-                                          "assets/svg/new_chat_kundli.svg"))),
+                                  child: SizedBox(
+                                    width: 25,
+                                    height: 25,
+                                    child: Center(
+                                        child: SvgPicture.asset(
+                                            "assets/svg/rupee.svg")),
+                                  )),
                               const SizedBox(
                                 height: 5.0,
                               ),
                               Text(
-                                "Kundli",
+                                "RazorPay",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontWeight: FontWeight.w400,
@@ -1311,7 +1299,31 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                               )
                             ],
                           )
-                        : const SizedBox(),
+                        : isKundli.value == 1
+                            ? Column(
+                                children: [
+                                  GestureDetector(
+                                      onTap: () {
+                                        Get.toNamed(RouteName.checkKundli);
+                                      },
+                                      child: Center(
+                                          child: SvgPicture.asset(
+                                              "assets/svg/new_chat_kundli.svg"))),
+                                  const SizedBox(
+                                    height: 5.0,
+                                  ),
+                                  Text(
+                                    "Kundli",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 10.sp,
+                                      color: appColors.black,
+                                    ),
+                                  )
+                                ],
+                              )
+                            : const SizedBox(),
                     Column(
                       children: [
                         GestureDetector(
@@ -2076,14 +2088,28 @@ class AstrologerChatAppBar extends StatelessWidget {
                                             fontSize: 14.sp,
                                             color: appColors.black),
                                       ),
-                                      if(AppFirebaseService().orderData.value["level"] != null && AppFirebaseService().orderData.value["level"] != "")...[
+                                      if (AppFirebaseService()
+                                                  .orderData
+                                                  .value["level"] !=
+                                              null &&
+                                          AppFirebaseService()
+                                                  .orderData
+                                                  .value["level"] !=
+                                              "") ...[
                                         const SizedBox(width: 10),
-                                        LevelWidget(level: AppFirebaseService().orderData.value["level"] ?? ""),
+                                        LevelWidget(
+                                            level: AppFirebaseService()
+                                                    .orderData
+                                                    .value["level"] ??
+                                                ""),
                                       ],
                                       const SizedBox(width: 10),
                                       Text(
-                                        AppFirebaseService().orderData.value["status"].toString() ==
-                                            "4"
+                                        AppFirebaseService()
+                                                    .orderData
+                                                    .value["status"]
+                                                    .toString() ==
+                                                "4"
                                             ? "Chat Ended"
                                             : showTalkTime.value,
                                         style: TextStyle(

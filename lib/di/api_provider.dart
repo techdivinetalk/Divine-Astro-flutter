@@ -24,7 +24,7 @@ class ApiProvider {
   //     "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
 
   static String baseUrl = kDebugMode
-      ? "http://4.188.246.208/api/astro/$version/"
+      ? "https://uat-divine-partner.divinetalk.live/api/astro/$version/"
       : "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
   // static String baseUrl =
   //     "https://uat-divine-partner.divinetalk.live/api/astro/$version/";

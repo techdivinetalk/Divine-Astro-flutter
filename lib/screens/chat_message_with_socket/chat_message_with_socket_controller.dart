@@ -150,13 +150,10 @@ class ChatMessageWithSocketController extends GetxController
   _onMessageChanged() {
     hasMessage.value = messageController.text.isNotEmpty;
   }
-  var appLifecycleState = Rx<AppLifecycleState>(AppLifecycleState.resumed);
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    appLifecycleState.value = state;
-
+    print("AppResume ${AppFirebaseService().orderData.value["status"]}");
     if (state == AppLifecycleState.resumed) {
-      print("AppResume ${AppFirebaseService().orderData.value["status"]}");
       if (AppFirebaseService().orderData.value["status"] == null) {
         print("The order is null going back From Resume");
         if (MiddleWare.instance.currentPage ==
@@ -461,10 +458,6 @@ class ChatMessageWithSocketController extends GetxController
           print("realTimeChange backFunction");
           backFunction();
         }
-      } else {
-        print("orderData Changed");
-
-        initTask(p0);
       }
     });
     messgeScrollController.addListener(_scrollListener);
@@ -514,7 +507,6 @@ class ChatMessageWithSocketController extends GetxController
           (AppFirebaseService().currentTime().millisecondsSinceEpoch ~/ 1000);
       print("timeCountDown $timeCountDown");
     }
-    initTask(AppFirebaseService().orderData.value);
     Future.delayed(const Duration(milliseconds: 3000)).then((value) {
       getMessageTemplates();
     });
@@ -575,6 +567,9 @@ class ChatMessageWithSocketController extends GetxController
           Get.until((route) {
             return Get.currentRoute == RouteName.dashboard;
           });
+        }else{
+          Get.offNamed(RouteName.chatMessageWithSocketUI);
+          Get.offNamed(RouteName.acceptChatRequestScreen);
         }
       }
     });
@@ -1906,7 +1901,7 @@ class ChatMessageWithSocketController extends GetxController
       return File('');
     }
   }
-  
+
 
   RitentionPopupModel? ritentionPopupModel;
 
