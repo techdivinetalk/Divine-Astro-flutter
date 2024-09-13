@@ -912,6 +912,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       selectedChatDate.value = formattedDate;
       selectedChatTime.value = formattedTime;
     }
+
     if (homeData?.sessionType?.callSchedualAt != null &&
         homeData?.sessionType?.callSchedualAt != '') {
       DateTime formattedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
@@ -1468,9 +1469,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   void scheduleCall(String value, bool fromSwitch) async {
-    if (fromSwitch) {
-      showLoader();
-    }
+    // if (fromSwitch) {
+    //   showLoader();
+    // }
+    showLoader();
     var selectedTime = value == "CHAT"
         ? selectedChatTime.value
         : value == "CALL"
@@ -1536,6 +1538,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               // }
             },
           );
+        } else{
+          sessionTypeLoading.value = Loading.loaded;
         }
         if (fromSwitch && value == "CALL") {
           await callSwitchFN(
@@ -1546,6 +1550,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               // }
             },
           );
+        } else{
+          sessionTypeLoading.value = Loading.loaded;
         }
       } catch (err) {
         if (err is AppException) {
