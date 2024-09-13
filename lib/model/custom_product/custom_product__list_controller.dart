@@ -35,12 +35,12 @@ class CustomProductListController extends GetxController {
           noData = "No data available!";
           customProductData = [];
         }
-        update();
       } else {
         noData = "No data available!";
         customProductData = [];
       }
       isLoading = false;
+      update();
     } catch (e, s) {
       noData = "No data available!";
       isLoading = false;

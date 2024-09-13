@@ -3943,10 +3943,8 @@ class HomeUI extends GetView<HomeController> {
                                   log("here is it is comming - ${chatSwitch.value}");
 
                                   if (chatSwitch.value) {
-                                    print("true ------->");
                                     controller.selectDateTimePopupForChat(true);
                                   } else {
-                                    print("false ------->");
                                     await controller.chatSwitchFN(
                                       onComplete: () {
                                         // if (controller.chatSwitch.value) {
@@ -3971,7 +3969,7 @@ class HomeUI extends GetView<HomeController> {
                                         chatSwitch.value
                                     ? InkWell(
                                         onTap: () => controller
-                                            .selectDateTimePopupForChat(true),
+                                            .selectDateTimePopupForChat(chatSwitch.value),
                                         child: Container(
                                           height: 31.h,
                                           decoration: BoxDecoration(
@@ -4086,7 +4084,7 @@ class HomeUI extends GetView<HomeController> {
                                         callSwitch.value
                                     ? InkWell(
                                         onTap: () => controller
-                                            .selectDateTimePopupForCall(true),
+                                            .selectDateTimePopupForCall(callSwitch.value),
                                         child: Container(
                                           // width: 128.w,
                                           height: 31.h,
