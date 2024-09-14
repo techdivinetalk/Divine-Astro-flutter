@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:io';
 
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -24,9 +25,49 @@ class ScheduleTrainingController extends GetxController {
   var selectedTime;
   var preference = Get.find<SharedPreferenceService>();
   String specialityNames = "";
+
+  var scheduleOn = "1".obs;
+
+  final DatabaseReference database = FirebaseDatabase.instance.ref();
+  RxMap<String, dynamic> firebaseDDDD = <String, dynamic>{}.obs;
+
+  getStatusFromFir() async {
+    print("astrologer////////////////////////");
+
+    database
+        .child("astrologer/${preference.getUserDetail()!.id}/realTime")
+        .onValue
+        .listen((DatabaseEvent event) async {
+      final DataSnapshot dataSnapshot = event.snapshot;
+
+      if (dataSnapshot.exists) {
+        if (dataSnapshot.value is Map<dynamic, dynamic>) {
+          Map<dynamic, dynamic> map = (dataSnapshot.value ??
+              <dynamic, dynamic>{}) as Map<dynamic, dynamic>;
+
+          // Assuming firebaseDDDD is a reactive variable
+          firebaseDDDD.value = Map<String, dynamic>.from(map);
+
+          // Check for verifyingOnboarding status
+          if (firebaseDDDD.value["is_attended"] != null) {
+            print("scheduleOn--status -- ${firebaseDDDD.value["is_attended"]}");
+
+            var onboardingStatus = firebaseDDDD.value["is_attended"];
+
+            // Update enableOrDisable with .value
+            scheduleOn.value = onboardingStatus
+                .toString(); // Correctly setting value for RxString
+            update();
+          }
+        }
+      }
+    });
+  }
+
   @override
   Future<void> onInit() async {
     super.onInit();
+    getStatusFromFir();
     if (Get.arguments == null) {
       getTrainings();
     } else {

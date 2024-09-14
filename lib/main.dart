@@ -398,12 +398,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           if (commonConstants?.data != null) {
             imageUploadBaseUrl.value =
                 commonConstants?.data?.imageUploadBaseUrl ?? "";
+            onboarding_training_videoData =
+                commonConstants.data!.onboarding_training_video.toString();
           }
           preferenceService
               .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
           Get.find<SharedPreferenceService>()
               .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
-
           navigateForOnBoardingGlobal(commonConstants);
         } else if (commonConstants.success == false &&
             commonConstants.statusCode == 401) {

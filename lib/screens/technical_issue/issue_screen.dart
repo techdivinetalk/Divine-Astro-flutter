@@ -294,8 +294,9 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
                         onTap: () {
                           if (controller.selected == null) {
                             Fluttertoast.showToast(msg: "Select Issue type");
-                          } else if (controller
-                                  .descriptionController.text.length <
+                          } else if (controller.descriptionController.text
+                                  .trim()
+                                  .length <
                               50) {
                             Fluttertoast.showToast(msg: "Detail is to short");
                           } else if (controller.selectedFiles.isEmpty) {

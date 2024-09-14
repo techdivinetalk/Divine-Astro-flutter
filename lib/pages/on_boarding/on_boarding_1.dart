@@ -231,6 +231,26 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                     child: Column(
                       children: [
                         CustomTextField(
+                          controller: controller.realController,
+                          focusNode: controller.realNode,
+                          onFieldSubmitted: (value) {
+                            controller.realNode.unfocus();
+                            FocusScope.of(context)
+                                .requestFocus(controller.nameNode);
+                          },
+                          keyboardType: TextInputType.text,
+                          prefix: Icon(
+                            Icons.perm_identity_outlined,
+                            color: appColors.black.withOpacity(0.5),
+                          ),
+                          label: "Real Name",
+                          readOnly: false,
+                          hint: "Real Name",
+                        ),
+                        SizedBox(
+                          height: 15,
+                        ),
+                        CustomTextField(
                           controller: controller.nameController,
                           focusNode: controller.nameNode,
                           onFieldSubmitted: (value) {
@@ -243,8 +263,8 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                             Icons.perm_identity_outlined,
                             color: appColors.black.withOpacity(0.5),
                           ),
-                          readOnly:
-                              controller.userData!.name == null ? false : true,
+                          label: "Profile Name",
+                          readOnly: false,
                           hint: "Profile Name",
                         ),
                         SizedBox(
@@ -458,6 +478,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                             color: appColors.black.withOpacity(0.5),
                           ),
                           readOnly: true,
+                          label: "Select Skills",
                           hint: "Select Skills",
                           onTap: () {
                             openBottomSheet(
@@ -564,6 +585,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                           readOnly: controller.userData!.experiance == null
                               ? false
                               : true,
+                          label: "Experience",
                           hint: "Experience",
                         ),
                         SizedBox(
@@ -605,6 +627,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                             Icons.calendar_month_outlined,
                             color: appColors.black.withOpacity(0.5),
                           ),
+                          label: "Birth Date",
                           hint: "Birth Date",
                         ),
                         SizedBox(
@@ -641,6 +664,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                             Icons.location_on_outlined,
                             color: appColors.black.withOpacity(0.5),
                           ),
+                          label: "Location",
                           hint: "Location",
                         ),
                         SizedBox(
@@ -708,6 +732,8 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                           //               : appColors.appRedColour,
                           //         ),
                           //       ),
+                          label: "Alternative Number",
+
                           hint: "Alternative Number",
                           textInputFormatter: [
                             FilteringTextInputFormatter
@@ -778,42 +804,50 @@ class OnBoarding1 extends GetView<OnBoardingController> {
             bottomNavigationBar: Padding(
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
-                height: 110,
+                height: onboarding_training_videoData == "" ||
+                        onboarding_training_videoData == null ||
+                        onboarding_training_videoData.contains("null")
+                    ? 60
+                    : 110,
                 child: Column(
                   children: [
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          left: 14, right: 14, top: 10, bottom: 10),
-                      child: RichText(
-                        text: TextSpan(
-                          text:
-                              '* Confused? Don’t worry, We are here to help you! ',
-                          style: TextStyle(
-                            fontFamily: FontFamily.poppins,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                            color: appColors.grey,
-                          ),
-                          children: [
-                            TextSpan(
-                              text: 'Click here for a tutorial video.',
-                              style: TextStyle(
-                                fontSize: 12,
-                                fontFamily: FontFamily.poppins,
-                                fontWeight: FontWeight.w400,
-                                color: appColors.red,
-                                decoration: TextDecoration.underline,
+                    onboarding_training_videoData == "" ||
+                            onboarding_training_videoData == null ||
+                            onboarding_training_videoData.contains("null")
+                        ? SizedBox()
+                        : Padding(
+                            padding: const EdgeInsets.only(
+                                left: 14, right: 14, top: 10, bottom: 10),
+                            child: RichText(
+                              text: TextSpan(
+                                text:
+                                    '* Confused? Don’t worry, We are here to help you! ',
+                                style: TextStyle(
+                                  fontFamily: FontFamily.poppins,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w400,
+                                  color: appColors.grey,
+                                ),
+                                children: [
+                                  TextSpan(
+                                    text: 'Click here for a tutorial video.',
+                                    style: TextStyle(
+                                      fontSize: 12,
+                                      fontFamily: FontFamily.poppins,
+                                      fontWeight: FontWeight.w400,
+                                      color: appColors.red,
+                                      decoration: TextDecoration.underline,
+                                    ),
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        // Handle tap
+                                        print('Link tapped');
+                                      },
+                                  ),
+                                ],
                               ),
-                              recognizer: TapGestureRecognizer()
-                                ..onTap = () {
-                                  // Handle tap
-                                  print('Link tapped');
-                                },
                             ),
-                          ],
-                        ),
-                      ),
-                    ),
+                          ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -843,6 +877,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                                   controller.alterNoController.text;
 
                               onBoardingData1.value = {
+                                "real_name": controller.realController.text,
                                 "name": controller.nameController.text,
                                 "skills": controller.skills,
                                 "skills_name": controller.skillsController.text,

@@ -75,10 +75,11 @@ class WaitListUI extends GetView<WaitListUIController> {
             waitingCustomer.name ?? "",
             style: AppTextStyle.textStyle16(fontColor: appColors.darkBlue),
           ),
-          if(waitingCustomer.level != null && waitingCustomer.level != "") Padding(
-            padding: const EdgeInsets.only(left: 5.0),
-            child: LevelWidget(level: waitingCustomer.level ?? ""),
-          ),
+          if (waitingCustomer.level != null && waitingCustomer.level != "")
+            Padding(
+              padding: const EdgeInsets.only(left: 5.0),
+              child: LevelWidget(level: waitingCustomer.level ?? ""),
+            ),
           const Spacer(),
           InkWell(
             onTap: () async {

@@ -10,7 +10,9 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/colors.dart';
 import '../../../common/common_image_view.dart';
+import '../../../common/routes.dart';
 import '../../../gen/assets.gen.dart';
+import '../../../screens/live_page/constant.dart';
 
 class ScheduleTraining2Binding extends Bindings {
   @override
@@ -26,6 +28,8 @@ class ScheduleTraining2 extends GetView<ScheduleTrainingController> {
       init: ScheduleTrainingController(),
       assignId: true,
       builder: (controller) {
+        // controller.getStatusFromFir();
+
         return PopScope(
           canPop: false,
           onPopInvoked: (bool) async {
@@ -338,74 +342,91 @@ class ScheduleTraining2 extends GetView<ScheduleTrainingController> {
                 : Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
-                      height: 110,
+                      height: onboarding_training_videoData == "" ||
+                              onboarding_training_videoData == null ||
+                              onboarding_training_videoData.contains("null")
+                          ? 60
+                          : 110,
                       child: Column(
                         children: [
-                          Padding(
-                            padding: const EdgeInsets.only(
-                                left: 14, right: 14, top: 10, bottom: 10),
-                            child: RichText(
-                              text: TextSpan(
-                                text:
-                                    '* Confused? Don’t worry, We are here to help you! ',
-                                style: TextStyle(
-                                  fontFamily: FontFamily.poppins,
-                                  fontSize: 12,
-                                  fontWeight: FontWeight.w400,
-                                  color: appColors.grey,
-                                ),
-                                children: [
-                                  TextSpan(
-                                    text: 'Click here for a tutorial video.',
-                                    style: TextStyle(
-                                      fontSize: 12,
-                                      fontFamily: FontFamily.poppins,
-                                      fontWeight: FontWeight.w400,
-                                      color: appColors.red,
-                                      decoration: TextDecoration.underline,
+                          onboarding_training_videoData == "" ||
+                                  onboarding_training_videoData == null ||
+                                  onboarding_training_videoData.contains("null")
+                              ? SizedBox()
+                              : Padding(
+                                  padding: const EdgeInsets.only(
+                                      left: 14, right: 14, top: 10, bottom: 10),
+                                  child: RichText(
+                                    text: TextSpan(
+                                      text:
+                                          '* Confused? Don’t worry, We are here to help you! ',
+                                      style: TextStyle(
+                                        fontFamily: FontFamily.poppins,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        color: appColors.grey,
+                                      ),
+                                      children: [
+                                        TextSpan(
+                                          text:
+                                              'Click here for a tutorial video.',
+                                          style: TextStyle(
+                                            fontSize: 12,
+                                            fontFamily: FontFamily.poppins,
+                                            fontWeight: FontWeight.w400,
+                                            color: appColors.red,
+                                            decoration:
+                                                TextDecoration.underline,
+                                          ),
+                                          recognizer: TapGestureRecognizer()
+                                            ..onTap = () {
+                                              // Handle tap
+                                              print('Link tapped');
+                                            },
+                                        ),
+                                      ],
                                     ),
-                                    recognizer: TapGestureRecognizer()
-                                      ..onTap = () {
-                                        // Handle tap
-                                        print('Link tapped');
-                                      },
                                   ),
-                                ],
-                              ),
-                            ),
-                          ),
+                                ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               InkWell(
                                 onTap: () async {
-                                  if (controller.remaing2.isNegative) {
-                                    Fluttertoast.showToast(
-                                        msg: "Meeting has been ended");
-                                  } else if (controller
-                                              .astrologerTrainingSessionResponse!
-                                              .data!
-                                              .first
-                                              .status
-                                              .toString() ==
-                                          "1" &&
-                                      controller.remaing.isNegative) {
-                                    String meetingLink = controller
-                                        .astrologerTrainingSessionResponse!
-                                        .data!
-                                        .first
-                                        .link;
-                                    debugPrint("test_url: $meetingLink");
-
-                                    if (await canLaunch(meetingLink)) {
-                                      await launch(meetingLink);
-                                    } else {
-                                      throw 'Could not launch $meetingLink';
-                                    }
+                                  if (controller.scheduleOn.value.toString() ==
+                                      "0") {
+                                    Get.offNamed(
+                                      RouteName.scheduleTraining1,
+                                    );
                                   } else {
-                                    Fluttertoast.showToast(
-                                        msg: "Meeting is not started");
+                                    if (controller.remaing2.isNegative) {
+                                      Fluttertoast.showToast(
+                                          msg: "Meeting has been ended");
+                                    } else if (controller
+                                                .astrologerTrainingSessionResponse!
+                                                .data!
+                                                .first
+                                                .status
+                                                .toString() ==
+                                            "1" &&
+                                        controller.remaing.isNegative) {
+                                      String meetingLink = controller
+                                          .astrologerTrainingSessionResponse!
+                                          .data!
+                                          .first
+                                          .link;
+                                      debugPrint("test_url: $meetingLink");
+
+                                      if (await canLaunch(meetingLink)) {
+                                        await launch(meetingLink);
+                                      } else {
+                                        throw 'Could not launch $meetingLink';
+                                      }
+                                    } else {
+                                      Fluttertoast.showToast(
+                                          msg: "Meeting is not started");
+                                    }
                                   }
                                 },
                                 child: Container(
@@ -413,33 +434,43 @@ class ScheduleTraining2 extends GetView<ScheduleTrainingController> {
                                   width:
                                       MediaQuery.of(context).size.width * 0.9,
                                   decoration: BoxDecoration(
-                                    color: controller.remaing2.isNegative
-                                        ? appColors.grey.withOpacity(0.4)
-                                        : controller.astrologerTrainingSessionResponse!
-                                                        .data!.first.status
-                                                        .toString() ==
-                                                    "1" &&
-                                                controller.remaing.isNegative
-                                            ? appColors.red
-                                            : appColors.grey.withOpacity(0.4),
+                                    color: controller.scheduleOn.value
+                                                .toString() ==
+                                            "0"
+                                        ? appColors.red
+                                        : controller.remaing2.isNegative
+                                            ? appColors.grey.withOpacity(0.4)
+                                            : controller.astrologerTrainingSessionResponse!
+                                                            .data!.first.status
+                                                            .toString() ==
+                                                        "1" &&
+                                                    controller
+                                                        .remaing.isNegative
+                                                ? appColors.red
+                                                : appColors.grey
+                                                    .withOpacity(0.4),
                                     borderRadius: BorderRadius.circular(14),
                                   ),
                                   child: Align(
                                     alignment: Alignment.center,
                                     child: Text(
-                                      controller
-                                                  .astrologerTrainingSessionResponse!
-                                                  .data!
-                                                  .first
-                                                  .meeting_date_epoch ==
-                                              null
-                                          ? "Join Training Session"
-                                          : controller.remaing.isNegative
-                                              ? controller.remaing2.isNegative
-                                                  ? "Meeting Ended"
-                                                  : "Join Training Session"
-                                              : controller.formatDuration(
-                                                  controller.remaing),
+                                      controller.scheduleOn.value.toString() ==
+                                              "0"
+                                          ? "Re-Schedule"
+                                          : controller
+                                                      .astrologerTrainingSessionResponse!
+                                                      .data!
+                                                      .first
+                                                      .meeting_date_epoch ==
+                                                  null
+                                              ? "Join Training Session"
+                                              : controller.remaing.isNegative
+                                                  ? controller
+                                                          .remaing2.isNegative
+                                                      ? "Meeting Ended"
+                                                      : "Join Training Session"
+                                                  : controller.formatDuration(
+                                                      controller.remaing),
                                       style: TextStyle(
                                         fontWeight: FontWeight.w600,
                                         fontSize: 20.sp,

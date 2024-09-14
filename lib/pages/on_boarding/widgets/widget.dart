@@ -10,6 +10,7 @@ class CustomTextField extends StatelessWidget {
   final int? maxLines;
   final int? maxLength;
   final String? hint;
+  final String? label;
   final Function(String)? onChanged;
   final onTap;
   final focusNode;
@@ -39,8 +40,8 @@ class CustomTextField extends StatelessWidget {
       this.onChanged,
       this.textInputFormatter,
       this.prefix,
-      this.sufix
-      });
+      this.label,
+      this.sufix});
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +65,13 @@ class CustomTextField extends StatelessWidget {
       ),
       decoration: InputDecoration(
           hintText: hint,
+          label: label == null ? null : Text(label!),
+          labelStyle: TextStyle(
+            fontFamily: FontFamily.poppins,
+            fontSize: 14,
+            fontWeight: FontWeight.w400,
+            color: appColors.grey,
+          ),
           hintStyle: TextStyle(
             fontFamily: FontFamily.poppins,
             fontSize: 14,

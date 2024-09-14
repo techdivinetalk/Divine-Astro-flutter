@@ -29,7 +29,6 @@ import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:flutter/scheduler.dart";
 import "package:flutter_html/flutter_html.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -71,7 +70,10 @@ import "../chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/get_s
 import "../live_dharam/gifts_singleton.dart";
 
 class ChatMessageWithSocketController extends GetxController
-    with WidgetsBindingObserver, GetTickerProviderStateMixin,WidgetsBindingObserver  {
+    with
+        WidgetsBindingObserver,
+        GetTickerProviderStateMixin,
+        WidgetsBindingObserver {
   late SVGAAnimationController svgController;
 
   var pref = Get.find<SharedPreferenceService>();
@@ -150,6 +152,7 @@ class ChatMessageWithSocketController extends GetxController
   _onMessageChanged() {
     hasMessage.value = messageController.text.isNotEmpty;
   }
+
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     print("AppResume ${AppFirebaseService().orderData.value["status"]}");
@@ -159,7 +162,7 @@ class ChatMessageWithSocketController extends GetxController
         if (MiddleWare.instance.currentPage ==
             RouteName.chatMessageWithSocketUI) {
           Get.until(
-                (route) {
+            (route) {
               return Get.currentRoute == RouteName.dashboard;
             },
           );
@@ -167,6 +170,7 @@ class ChatMessageWithSocketController extends GetxController
       }
     }
   }
+
   StreamSubscription? _appLinkingStreamSubscription;
 
 //end
@@ -312,6 +316,7 @@ class ChatMessageWithSocketController extends GetxController
       ..iosEncoder = IosEncoder.kAudioFormatMPEG4AAC
       ..sampleRate = 44100;
   }
+
   List<String> chatIdList = []; // Initial list
 
   void openShowDeck(
@@ -321,7 +326,11 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   Future<void> openRemedies() async {
-    var result = await Get.toNamed(RouteName.chatSuggestRemedy);
+    var result = await Get.toNamed(RouteName.chatSuggestRemedy)!.then(
+      (value) async {
+        await checkIfChatIsEnded();
+      },
+    );
     if (result != null) {
       final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       addNewMessage(
@@ -336,7 +345,12 @@ class ChatMessageWithSocketController extends GetxController
     var result = await Get.toNamed(RouteName.chatAssistProductPage, arguments: {
       'customerId':
           int.parse(AppFirebaseService().orderData.value["userId"].toString())
-    });
+    })!
+        .then(
+      (value) async {
+        await controller.checkIfChatIsEnded();
+      },
+    );
     if (result != null) {
       final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
       controller.addNewMessage(
@@ -563,13 +577,11 @@ class ChatMessageWithSocketController extends GetxController
       print("nullDetected");
       if (AppFirebaseService().orderData.value["status"] == null) {
         print("The order is null, going back");
-        if (MiddleWare.instance.currentPage == RouteName.chatMessageWithSocketUI) {
+        if (MiddleWare.instance.currentPage ==
+            RouteName.chatMessageWithSocketUI) {
           Get.until((route) {
             return Get.currentRoute == RouteName.dashboard;
           });
-        }else{
-          Get.offNamed(RouteName.chatMessageWithSocketUI);
-          Get.offNamed(RouteName.acceptChatRequestScreen);
         }
       }
     });
@@ -604,15 +616,21 @@ class ChatMessageWithSocketController extends GetxController
     });
   }
 
+  checkIfChatIsEnded() {
+    if (AppFirebaseService().orderData.value["status"] == null) {
+      if (MiddleWare.instance.currentPage ==
+          RouteName.chatMessageWithSocketUI) {
+        Get.until((route) {
+          return Get.currentRoute == RouteName.dashboard;
+        });
+      }
+    }
+  }
+
   runTimer() {
     Timer.periodic(const Duration(seconds: 1), (timer) async {
       print("object");
       if (AppFirebaseService().orderData.value["status"] == null) {
-        if (MiddleWare.instance.currentPage == RouteName.chatMessageWithSocketUI) {
-          Get.until((route) {
-            return Get.currentRoute == RouteName.dashboard;
-          });
-        }
         timer.cancel();
       }
       if (MiddleWare.instance.currentPage == RouteName.dashboard) {
@@ -666,6 +684,8 @@ class ChatMessageWithSocketController extends GetxController
       } else {
         timer.cancel();
       }
+      print("extraTalkTime.value");
+      print(extraTalkTime.value);
     });
   }
 
@@ -954,12 +974,6 @@ class ChatMessageWithSocketController extends GetxController
         print("userLeavePrivateChatListenerSocket");
         socket.leavePrivateChatEmit(userData?.id.toString(),
             AppFirebaseService().orderData.value["userId"], "0");
-        // chatTimer?.cancel();
-        // chatTimer = null;
-        // print("WentBack backFunc ${MiddleWare.instance.currentPage}");
-        // extraTimer?.cancel();
-        // extraTimer = null;
-        // Get.delete<ChatMessageWithSocketController>();
         if (MiddleWare.instance.currentPage ==
             RouteName.chatMessageWithSocketUI) {
           Get.until(
@@ -1906,7 +1920,6 @@ class ChatMessageWithSocketController extends GetxController
       return File('');
     }
   }
-
 
   RitentionPopupModel? ritentionPopupModel;
 
