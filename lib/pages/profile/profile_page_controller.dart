@@ -25,6 +25,7 @@ import '../../common/app_exception.dart';
 import '../../common/colors.dart';
 import '../../common/custom_widgets.dart';
 import '../../di/shared_preference_service.dart';
+import '../../firebase_service/firebase_service.dart';
 import '../../gen/assets.gen.dart';
 import '../../model/res_login.dart';
 import '../../model/res_review_ratings.dart';
@@ -103,21 +104,19 @@ class ProfilePageController extends GetxController {
       ProfileOptionModelClass(
           "bankDetails".tr,
           Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h),
-          '/bankDetailsUI'),
+          '/bankDetailsUI', true),
       ProfileOptionModelClass("uploadStory".tr,
-          Assets.images.icUploadStory.svg(width: 30.h, height: 30.h), ''),
+          Assets.images.icUploadStory.svg(width: 30.h, height: 30.h), '', true),
       ProfileOptionModelClass(
           "uploadYourPhoto".tr,
           Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h),
-          '/uploadYourPhotosUi'),
-      ProfileOptionModelClass("customerSupport".tr,
-          Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), ''),
+          '/uploadYourPhotosUi', true),
       ProfileOptionModelClass(
           "chooseLanguage".tr,
           Assets.images.icLanguages.svg(width: 30.h, height: 30.h),
-          '/languagePopup'),
+          '/languagePopup', true),
       ProfileOptionModelClass(
-          "faq".tr, Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
+          "faq".tr, Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), '', true),
       /*      ProfileOptionModelClass(
           "priceChange".tr,
           Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
@@ -125,17 +124,17 @@ class ProfilePageController extends GetxController {
       ProfileOptionModelClass(
           "numberChange".tr,
           Assets.images.icNumChanges.svg(width: 30.h, height: 30.h),
-          '/numberChangeReqUI'),
+          '/numberChangeReqUI', true),
       ProfileOptionModelClass(
           "blockedUsers".tr,
           Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
-          '/blockedUser'),
+          '/blockedUser', true),
       ProfileOptionModelClass("eCommerce".tr,
-          Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja'),
+          Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja', true),
       ProfileOptionModelClass(
           "resignation".tr,
           Assets.svg.resignation.svg(width: 30.h, height: 30.h),
-          '/resignation'),
+          '/resignation', true),
     ].obs;
   }
 
@@ -146,23 +145,25 @@ class ProfilePageController extends GetxController {
     ProfileOptionModelClass(
         "bankDetails".tr,
         Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h),
-        '/bankDetailsUI'),
+        '/bankDetailsUI',
+      true,
+    ),
     ProfileOptionModelClass(
         "uploadStory".tr,
         Assets.images.icUploadStory.svg(width: 30.h, height: 30.h),
-        '/uploadStoryUi'),
+        '/uploadStoryUi',
+      true,),
     ProfileOptionModelClass(
         "uploadYourPhoto".tr,
         Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h),
-        '/uploadYourPhotosUi'),
-    ProfileOptionModelClass("customerSupport".tr,
-        Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), ''),
+        '/uploadYourPhotosUi',
+      true,),
     ProfileOptionModelClass(
         "chooseLanguage".tr,
         Assets.images.icLanguages.svg(width: 30.h, height: 30.h),
-        '/languagePopup'),
+        '/languagePopup0', true),
     ProfileOptionModelClass(
-        "faq".tr, Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
+        "faq".tr, Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), '', true),
     /* ProfileOptionModelClass(
         "priceChange".tr,
         Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
@@ -170,17 +171,17 @@ class ProfilePageController extends GetxController {
     ProfileOptionModelClass(
         "numberChange".tr,
         Assets.images.icNumChanges.svg(width: 30.h, height: 30.h),
-        '/numberChangeReqUI'),
+        '/numberChangeReqUI', true),
     ProfileOptionModelClass(
         "blockedUsers".tr,
         Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
-        '/blockedUser'),
+        '/blockedUser', true),
     ProfileOptionModelClass("eCommerce".tr,
-        Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja'),
+        Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja', true),
     ProfileOptionModelClass(
         "Custom product".tr,
         SvgPicture.asset("assets/svg/store.svg", width: 30.h, height: 30.h),
-        '/customProduct'),
+        '/customProduct', true),
     // ProfileOptionModelClass(
     //     "Passbook".tr,
     //     SvgPicture.asset("assets/svg/store.svg", width: 30.h, height: 30.h),
@@ -245,7 +246,14 @@ class ProfilePageController extends GetxController {
     debugPrint("test_onInit: call");
     isInit = true;
     // scrollController.l
-
+    if(isProfileAstroSupport.value == 1){
+      profileList.insert(3, ProfileOptionModelClass("customerSupport".tr,
+          Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), '',true));
+    } else{
+      if(profileList[3].name == "customerSupport".tr){
+        profileList.removeAt(3);
+      }
+    }
     userData = preference.getUserDetail();
     getReviewRating();
 
@@ -700,8 +708,9 @@ class ProfileOptionModelClass {
   String? name;
   Widget? widget;
   String? nav;
+  bool? isCheck;
 
-  ProfileOptionModelClass(this.name, this.widget, this.nav);
+  ProfileOptionModelClass(this.name, this.widget, this.nav, this.isCheck);
 }
 
 class ChangeLanguageModelClass {

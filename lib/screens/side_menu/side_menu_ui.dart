@@ -163,7 +163,7 @@ class SideMenuDrawer extends GetView<HomeController> {
                 Get.toNamed(RouteName.financialSupport);
               },
             ),
-            ListTile(
+            if (isDrawerSupport.value == 1)ListTile(
               leading: const Icon(Icons.contact_support_outlined),
               title: Text('Support'.tr),
               onTap: () {

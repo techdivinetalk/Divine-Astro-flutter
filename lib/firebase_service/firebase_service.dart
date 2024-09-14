@@ -27,6 +27,8 @@ RxInt giftCountUpdate = 0.obs;
 RxString giftImageUpdate = "".obs;
 
 RxInt isCall = 1.obs;
+RxInt isDrawerSupport = 1.obs;
+RxInt isProfileAstroSupport = 1.obs;
 RxInt isRemidies = 1.obs;
 RxInt isEcom = 1.obs;
 RxInt isVOIP = 1.obs;
@@ -476,6 +478,12 @@ class AppFirebaseService {
     switch (dataSnapshot.key) {
       case "call":
         isCall(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isDrawerSupport":
+        isDrawerSupport(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isProfileAstroSupport":
+        isProfileAstroSupport(int.parse(dataSnapshot.value.toString()));
         break;
       case "camera":
         isCamera(int.parse(dataSnapshot.value.toString()));
