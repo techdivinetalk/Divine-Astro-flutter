@@ -48,7 +48,7 @@ class SideMenuDrawer extends GetView<HomeController> {
               ],
             ),
             const SizedBox(height: 10),
-            ListTile(
+            if (isWaitlist.value == 1)ListTile(
               leading: Assets.images.icWaiting.svg(),
               title: Text("waitlist".tr),
               onTap: () {
@@ -60,7 +60,7 @@ class SideMenuDrawer extends GetView<HomeController> {
                 Get.toNamed(RouteName.waitList);
               },
             ),
-            ListTile(
+            if (isOrderHistory.value == 1)ListTile(
               leading: Assets.images.icOrderHistory.svg(),
               title: Text("orderHistory".tr),
               onTap: () {
@@ -72,7 +72,7 @@ class SideMenuDrawer extends GetView<HomeController> {
                 Get.toNamed(RouteName.orderHistory);
               },
             ),
-            ListTile(
+            if (isMessageTemplate.value == 1)ListTile(
               leading: Assets.images.icMessageTemplate.svg(),
               title: Text("messageTemplate".tr),
               onTap: () {
@@ -108,7 +108,7 @@ class SideMenuDrawer extends GetView<HomeController> {
                   controller.whatsapp();
                 },
               ),
-            ListTile(
+            if (isImportantNumber.value == 1)ListTile(
               leading: Assets.images.icImportContact.svg(),
               title: Text('importantNumbers'.tr),
               onTap: () async {
@@ -125,7 +125,7 @@ class SideMenuDrawer extends GetView<HomeController> {
                 }
               },
             ),
-            ListTile(
+            if (isNotice.value == 1)ListTile(
               leading: const Icon(Icons.notifications_active_outlined),
               title: Text("Notice".tr),
               onTap: () {
@@ -139,7 +139,7 @@ class SideMenuDrawer extends GetView<HomeController> {
                 Get.toNamed(RouteName.noticeBoard);
               },
             ),
-            ListTile(
+            if (isTechnicalSupport.value == 1)ListTile(
               leading: const Icon(Icons.bug_report_outlined),
               title: Text('Technical Support'.tr),
               onTap: () {
@@ -151,7 +151,7 @@ class SideMenuDrawer extends GetView<HomeController> {
                 Get.toNamed(RouteName.technicalIssues);
               },
             ),
-            ListTile(
+            if (isFinancialSupport.value == 1)ListTile(
               leading: const Icon(Icons.request_quote_outlined),
               title: Text('Financial Support'.tr),
               onTap: () {
@@ -189,7 +189,7 @@ class SideMenuDrawer extends GetView<HomeController> {
                     },
                   )
                 : const SizedBox(),
-            ListTile(
+            if (isSetting.value == 1)ListTile(
               leading: Assets.images.icSetting.svg(),
               title: Text('settings'.tr),
               onTap: () {
