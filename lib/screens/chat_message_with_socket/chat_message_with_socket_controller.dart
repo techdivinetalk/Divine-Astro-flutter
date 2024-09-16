@@ -326,43 +326,65 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   Future<void> openRemedies() async {
-    var result = await Get.toNamed(RouteName.chatSuggestRemedy)!.then(
-      (value) async {
-        await checkIfChatIsEnded();
-      },
-    );
-    if (result != null) {
-      final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-      addNewMessage(
-        time,
-        MsgType.remedies,
-        messageText: result.toString(),
-      );
+    var result = await Get.toNamed(RouteName.chatSuggestRemedy);
+    if(await checkIfChatIsEnded()) {
+      if (result != null) {
+        final String time = "${DateTime
+            .now()
+            .millisecondsSinceEpoch ~/ 1000}";
+        addNewMessage(
+          time,
+          MsgType.remedies,
+          messageText: result.toString(),
+        );
+      }
     }
   }
-
   Future<void> openProduct(ChatMessageWithSocketController controller) async {
     var result = await Get.toNamed(RouteName.chatAssistProductPage, arguments: {
       'customerId':
-          int.parse(AppFirebaseService().orderData.value["userId"].toString())
-    })!
-        .then(
-      (value) async {
-        await controller.checkIfChatIsEnded();
-      },
-    );
-    if (result != null) {
-      final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-      controller.addNewMessage(
-        time,
-        MsgType.product,
-        data: {
-          'data': result,
-        },
-        messageText: 'Product',
-      );
+      int.parse(AppFirebaseService().orderData.value["userId"].toString())
+    });
+    if(await checkIfChatIsEnded()) {
+      if (result != null) {
+        final String time = "${DateTime
+            .now()
+            .millisecondsSinceEpoch ~/ 1000}";
+        controller.addNewMessage(
+          time,
+          MsgType.product,
+          data: {
+            'data': result,
+          },
+          messageText: 'Product',
+        );
+      }
     }
   }
+  // Future<void> openProduct(ChatMessageWithSocketController controller) async {
+  //   var result = await Get.toNamed(RouteName.chatAssistProductPage, arguments: {
+  //     'customerId':
+  //         int.parse(AppFirebaseService().orderData.value["userId"].toString())
+  //   })
+  //   !
+  //       .then(
+  //     (value) async {
+  //       await controller.checkIfChatIsEnded();
+  //       if (result != null) {
+  //         final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+  //         controller.addNewMessage(
+  //           time,
+  //           MsgType.product,
+  //           data: {
+  //             'data': result,
+  //           },
+  //           messageText: 'Product',
+  //         );
+  //       }
+  //     },
+  //   );
+  //
+  // }
 
   void openCustomShop(ChatMessageWithSocketController controller) {
     print(customProductData);
@@ -617,6 +639,7 @@ class ChatMessageWithSocketController extends GetxController
   }
 
   checkIfChatIsEnded() {
+    print("checkIfChatIsEnded");
     if (AppFirebaseService().orderData.value["status"] == null) {
       if (MiddleWare.instance.currentPage ==
           RouteName.chatMessageWithSocketUI) {
@@ -625,6 +648,7 @@ class ChatMessageWithSocketController extends GetxController
         });
       }
     }
+    return AppFirebaseService().orderData.value["status"] != null;
   }
 
   runTimer() {
