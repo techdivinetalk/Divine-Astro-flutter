@@ -27,6 +27,18 @@ RxInt giftCountUpdate = 0.obs;
 RxString giftImageUpdate = "".obs;
 
 RxInt isCall = 1.obs;
+RxInt isDrawerSupport = 1.obs;
+RxInt isProfileAstroSupport = 1.obs;
+
+RxInt isWaitlist = 1.obs;
+RxInt isOrderHistory = 1.obs;
+RxInt isImportantNumber = 1.obs;
+RxInt isNotice = 1.obs;
+RxInt isTechnicalSupport = 1.obs;
+RxInt isFinancialSupport = 1.obs;
+RxInt isSetting = 1.obs;
+RxInt isMessageTemplate = 1.obs;
+
 RxInt isRemidies = 1.obs;
 RxInt isEcom = 1.obs;
 RxInt isVOIP = 1.obs;
@@ -476,6 +488,36 @@ class AppFirebaseService {
     switch (dataSnapshot.key) {
       case "call":
         isCall(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isDrawerSupport":
+        isDrawerSupport(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isWaitlist":
+        isWaitlist(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isOrderHistory":
+        isOrderHistory(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isProfileAstroSupport":
+        isProfileAstroSupport(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isImportantNumber":
+        isImportantNumber(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isNotice":
+        isNotice(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isTechnicalSupport":
+        isTechnicalSupport(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isFinancialSupport":
+        isFinancialSupport(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isSetting":
+        isSetting(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isMessageTemplate":
+        isMessageTemplate(int.parse(dataSnapshot.value.toString()));
         break;
       case "camera":
         isCamera(int.parse(dataSnapshot.value.toString()));

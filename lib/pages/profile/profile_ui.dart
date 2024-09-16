@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 import 'package:divine_astrologer/pages/profile/widget/report_post_reason_widget.dart';
 import 'package:file_picker/file_picker.dart';
@@ -283,7 +284,7 @@ class ProfileUI extends GetView<ProfilePageController> {
             crossAxisCount: 3, crossAxisSpacing: 20.h, mainAxisSpacing: 15.h),
         itemBuilder: (BuildContext context, int index) {
           ProfileOptionModelClass item = controller.profileList[index];
-          return SizedBox(
+          return item.isCheck == true ? SizedBox(
             height: 107.h,
             width: 116.w,
             child: Container(
@@ -593,7 +594,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                 ),
               ),
             ),
-          );
+          ) : null;
         },
       ),
     );
