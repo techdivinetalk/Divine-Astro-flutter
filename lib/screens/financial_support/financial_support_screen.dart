@@ -181,7 +181,7 @@ class FinancialSupportScreen extends GetView<FinancialSupportController> {
                     // maxLength: 50,
                     keyboardType: TextInputType.text,
                     onChanged: (value) {
-                      if (value.trim().length > 50) {
+                      if (value.trim().length > 100) {
                         controller.showMimimum.value = false;
                         controller.update();
                       }
@@ -316,18 +316,12 @@ class FinancialSupportScreen extends GetView<FinancialSupportController> {
                         splashColor: Colors.red.withOpacity(0.5),
                         highlightColor: Colors.transparent,
                         onTap: () {
-                          // if (controller.descriptionController.text.length >
-                          //     100) {
-                          //   controller.uploadImagesListsFun();
-                          // } else {
-                          //   Fluttertoast.showToast(msg: "Detail is to short");
-                          // }
                           if (controller.selected == null) {
                             Fluttertoast.showToast(msg: "Select Issue type");
                           } else if (controller.descriptionController.text
                                   .trim()
                                   .length <
-                              50) {
+                              100) {
                             controller.showMimimum.value = true;
                             controller.update();
                             Fluttertoast.showToast(msg: "Detail is to short");
