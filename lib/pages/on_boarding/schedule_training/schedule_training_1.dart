@@ -7,7 +7,9 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../../common/colors.dart';
+import '../../../model/home_model/training_video_model.dart';
 import '../../../screens/live_page/constant.dart';
+import '../../home/widgets/training_video.dart';
 
 class ScheduleTraining1 extends GetView<ScheduleTrainingController> {
   @override
@@ -318,15 +320,13 @@ class ScheduleTraining1 extends GetView<ScheduleTrainingController> {
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
                 height: onboarding_training_videoData == "" ||
-                        onboarding_training_videoData == null ||
-                        onboarding_training_videoData.contains("null")
+                        onboarding_training_videoData == null
                     ? 60
                     : 120,
                 child: Column(
                   children: [
                     onboarding_training_videoData == "" ||
-                            onboarding_training_videoData == null ||
-                            onboarding_training_videoData.contains("null")
+                            onboarding_training_videoData == null
                         ? SizedBox()
                         : Padding(
                             padding: const EdgeInsets.only(
@@ -354,7 +354,26 @@ class ScheduleTraining1 extends GetView<ScheduleTrainingController> {
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
                                         // Handle
-
+                                        Get.to(() {
+                                          return TrainingVideoUI(
+                                              video: TrainingVideoData(
+                                                id: onboarding_training_videoData[
+                                                'id'],
+                                                title:
+                                                onboarding_training_videoData[
+                                                'title'],
+                                                description:
+                                                onboarding_training_videoData[
+                                                'description'],
+                                                url: onboarding_training_videoData[
+                                                'url'],
+                                                days: onboarding_training_videoData[
+                                                'days'],
+                                                isViwe:
+                                                onboarding_training_videoData[
+                                                'is_viwe'],
+                                              ));
+                                        });
                                         print('Link tapped');
                                       },
                                   ),
