@@ -399,6 +399,7 @@ class ScheduleTraining2 extends GetView<ScheduleTrainingController> {
                                     Get.offNamed(
                                       RouteName.scheduleTraining1,
                                     );
+
                                   } else {
                                     if (controller.remaing2.isNegative) {
                                       Fluttertoast.showToast(

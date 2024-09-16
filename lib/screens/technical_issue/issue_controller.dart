@@ -47,6 +47,7 @@ class TechnicalIssueController extends GetxController {
   List<String> dropDownItems = ["Issue", "Suggestion"];
   var isLoading = false.obs;
   var isTechnicalLoading = false.obs;
+  var showMimimum = false.obs;
   TechnicalSupport? technicalSupport;
   TechnicalIssuesData? technicalIssuesList;
 

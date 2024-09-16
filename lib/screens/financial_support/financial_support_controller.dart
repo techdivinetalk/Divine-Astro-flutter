@@ -46,7 +46,8 @@ class FinancialSupportController extends GetxController {
   List<String> dropDownItems = ["Issue", "Suggestion"];
   var isLoading = false.obs;
   var isTechnicalLoading = false.obs;
-  var selectingImages = false.obs;
+  var selectingImages = false.obs;  var showMimimum = false.obs;
+
   FinancialCreateIssueModel? technicalSupport;
   FinancialCreateIssueModelData? technicalIssuesList;
 

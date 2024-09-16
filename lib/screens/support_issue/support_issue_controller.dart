@@ -45,7 +45,8 @@ class SupportIssueController extends GetxController {
   TextEditingController descriptionController = TextEditingController();
   List<String> dropDownItems = ["Issue", "Suggestion"];
   var isLoading = false.obs;
-  var isTechnicalLoading = false.obs;
+  var isTechnicalLoading = false.obs;  var showMimimum = false.obs;
+
   AddSupportIssueDataModel? technicalSupport;
   AddSupportIssueDataModelData? technicalIssuesList;
 

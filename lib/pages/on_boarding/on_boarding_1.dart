@@ -244,7 +244,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                             color: appColors.black.withOpacity(0.5),
                           ),
                           label: "Real Name",
-                          readOnly: false,
+                          readOnly: true,
                           hint: "Real Name",
                         ),
                         SizedBox(
@@ -264,7 +264,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                             color: appColors.black.withOpacity(0.5),
                           ),
                           label: "Profile Name",
-                          readOnly: false,
+                          readOnly: true,
                           hint: "Profile Name",
                         ),
                         SizedBox(
