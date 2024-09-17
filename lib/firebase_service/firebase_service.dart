@@ -183,6 +183,9 @@ class AppFirebaseService {
                       sendBroadcast(BroadcastMessage(name: "orderEnd"));
                       if (MiddleWare.instance.currentPage ==
                           RouteName.acceptChatRequestScreen) {
+                        if (kDebugMode) {
+                          divineSnackBar(data: "firebase chatType call", color: Colors.white);
+                        }
                         Get.until(
                           (route) {
                             return Get.currentRoute == RouteName.dashboard;
@@ -199,6 +202,9 @@ class AppFirebaseService {
                 sendBroadcast(BroadcastMessage(name: "orderEnd"));
                 if (MiddleWare.instance.currentPage ==
                     RouteName.acceptChatRequestScreen) {
+                  if (kDebugMode) {
+                    divineSnackBar(data: "firebase acceptScreen", color: Colors.white);
+                  }
                   Get.until(
                     (route) {
                       return Get.currentRoute == RouteName.dashboard;
@@ -211,6 +217,9 @@ class AppFirebaseService {
         } else {
           if (MiddleWare.instance.currentPage ==
               RouteName.acceptChatRequestScreen) {
+            if (kDebugMode) {
+              divineSnackBar(data: "firebase acceptScreen", color: Colors.white);
+            }
             Get.until(
               (route) {
                 return Get.currentRoute == RouteName.dashboard;

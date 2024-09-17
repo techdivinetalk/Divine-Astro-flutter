@@ -340,19 +340,20 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       print(
           "dataSnapshot.value.toString() -- ${dataSnapshot.value.toString()}");
       if (dataSnapshot.value.toString() == "0") {
-        if (verifyOnboarding.toString() == "0") {
-          print("from 0");
-          checkOnBoarding();
-        } else {
-          print("from 1");
-          if (preferenceService.getUserDetail()?.id == null) {
-            Get.offAllNamed(RouteName.login);
-          } else {
-            print("Gone to here");
+        checkOnBoarding();
 
-            Get.offAllNamed(RouteName.dashboard);
-          }
-        }
+        // if (verifyOnboarding.toString() == "0") {
+        //   print("from 0");
+        // } else {
+        //   print("from 1");
+        //   if (preferenceService.getUserDetail()?.id == null) {
+        //     Get.offAllNamed(RouteName.login);
+        //   } else {
+        //     print("Gone to here");
+        //
+        //     Get.offAllNamed(RouteName.dashboard);
+        //   }
+        // }
       } else {
         normalBoaring();
       }
@@ -399,7 +400,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
             imageUploadBaseUrl.value =
                 commonConstants?.data?.imageUploadBaseUrl ?? "";
             onboarding_training_videoData =
-                commonConstants.data!.onboarding_training_video.toString();
+                commonConstants.data!.onboarding_training_video;
           }
           preferenceService
               .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);

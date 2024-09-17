@@ -10,7 +10,9 @@ import '../../common/colors.dart';
 import '../../common/common_image_view.dart';
 import '../../gen/assets.gen.dart';
 import '../../gen/fonts.gen.dart';
+import '../../model/home_model/training_video_model.dart';
 import '../../screens/live_page/constant.dart';
+import '../home/widgets/training_video.dart';
 import 'on_boarding_controller.dart';
 
 class OnBoarding2Binding extends Bindings {
@@ -455,15 +457,13 @@ class OnBoarding2 extends GetView<OnBoardingController> {
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
                 height: onboarding_training_videoData == "" ||
-                        onboarding_training_videoData == null ||
-                        onboarding_training_videoData.contains("null")
+                        onboarding_training_videoData == null
                     ? 60
                     : 110,
                 child: Column(
                   children: [
                     onboarding_training_videoData == "" ||
-                            onboarding_training_videoData == null ||
-                            onboarding_training_videoData.contains("null")
+                            onboarding_training_videoData == null
                         ? SizedBox()
                         : Padding(
                             padding: const EdgeInsets.only(
@@ -490,7 +490,26 @@ class OnBoarding2 extends GetView<OnBoardingController> {
                                     ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
-                                        // Handle tap
+                                        Get.to(() {
+                                          return TrainingVideoUI(
+                                              video: TrainingVideoData(
+                                            id: onboarding_training_videoData[
+                                                'id'],
+                                            title:
+                                                onboarding_training_videoData[
+                                                    'title'],
+                                            description:
+                                                onboarding_training_videoData[
+                                                    'description'],
+                                            url: onboarding_training_videoData[
+                                                'url'],
+                                            days: onboarding_training_videoData[
+                                                'days'],
+                                            isViwe:
+                                                onboarding_training_videoData[
+                                                    'is_viwe'],
+                                          ));
+                                        });
                                         print('Link tapped');
                                       },
                                   ),

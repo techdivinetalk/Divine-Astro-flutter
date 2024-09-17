@@ -178,13 +178,37 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
                     maxLines: 5,
                     textInputFormatter: [CustomSpaceInputFormatter()],
                     controller: controller.descriptionController,
-                    maxLength: 50,
+                    // maxLength: 50,
                     keyboardType: TextInputType.text,
                     onChanged: (value) {
+                      if (value.trim().length > 50) {
+                        controller.showMimimum.value = false;
+                        controller.update();
+                      }
                       controller.update();
                     },
-                    isSuffix: true,
+                    isSuffix: false,
                   ),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  controller.showMimimum.value == true
+                      ? Padding(
+                          padding: const EdgeInsets.only(left: 5),
+                          child: Align(
+                            alignment: Alignment.topLeft,
+                            child: Text(
+                              "Please provide a more detailed description.",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(
+                                color: appColors.appRedColour,
+                                fontSize: 8,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        )
+                      : SizedBox(),
                   const SizedBox(
                     height: 20,
                   ),
@@ -298,10 +322,18 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
                                   .trim()
                                   .length <
                               50) {
+                            controller.showMimimum.value = true;
+                            controller.update();
                             Fluttertoast.showToast(msg: "Detail is to short");
                           } else if (controller.selectedFiles.isEmpty) {
+                            controller.showMimimum.value = false;
+                            controller.update();
+
                             Fluttertoast.showToast(msg: "Select Images");
                           } else {
+                            controller.showMimimum.value = false;
+                            controller.update();
+
                             controller.uploadImagesListsFun();
                           }
                         },

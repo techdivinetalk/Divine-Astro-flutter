@@ -14,9 +14,11 @@ import '../../common/app_textstyle.dart';
 import '../../common/colors.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../common/select_your_birth_place_sheet.dart';
+import '../../model/home_model/training_video_model.dart';
 import '../../screens/live_page/constant.dart';
 import '../../screens/number_change/sub_screen/otp_screen_for_update_mobile_number.dart';
 import '../../utils/utils.dart';
+import '../home/widgets/training_video.dart';
 import 'on_boarding_controller.dart';
 
 class OnBoarding1 extends GetView<OnBoardingController> {
@@ -244,7 +246,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                             color: appColors.black.withOpacity(0.5),
                           ),
                           label: "Real Name",
-                          readOnly: false,
+                          readOnly: true,
                           hint: "Real Name",
                         ),
                         SizedBox(
@@ -264,7 +266,7 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                             color: appColors.black.withOpacity(0.5),
                           ),
                           label: "Profile Name",
-                          readOnly: false,
+                          readOnly: true,
                           hint: "Profile Name",
                         ),
                         SizedBox(
@@ -805,15 +807,13 @@ class OnBoarding1 extends GetView<OnBoardingController> {
               padding: const EdgeInsets.all(8.0),
               child: SizedBox(
                 height: onboarding_training_videoData == "" ||
-                        onboarding_training_videoData == null ||
-                        onboarding_training_videoData.contains("null")
+                        onboarding_training_videoData == null
                     ? 60
                     : 110,
                 child: Column(
                   children: [
                     onboarding_training_videoData == "" ||
-                            onboarding_training_videoData == null ||
-                            onboarding_training_videoData.contains("null")
+                            onboarding_training_videoData == null
                         ? SizedBox()
                         : Padding(
                             padding: const EdgeInsets.only(
@@ -840,6 +840,35 @@ class OnBoarding1 extends GetView<OnBoardingController> {
                                     ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
+                                        //   {
+                                        //     'id' : id,
+                                        //   'title' : title,
+                                        //   'description' : description,
+                                        //   'url' : url,
+                                        //   'days' : days,
+                                        //   'is_viwe' : isViwe
+                                        // }
+                                        Get.to(() {
+                                          return TrainingVideoUI(
+                                              video: TrainingVideoData(
+                                            id: onboarding_training_videoData[
+                                                'id'],
+                                            title:
+                                                onboarding_training_videoData[
+                                                    'title'],
+                                            description:
+                                                onboarding_training_videoData[
+                                                    'description'],
+                                            url: onboarding_training_videoData[
+                                                'url'],
+                                            days: onboarding_training_videoData[
+                                                'days'],
+                                            isViwe:
+                                                onboarding_training_videoData[
+                                                    'is_viwe'],
+                                          ));
+                                        });
+
                                         // Handle tap
                                         print('Link tapped');
                                       },

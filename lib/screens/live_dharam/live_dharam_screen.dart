@@ -1018,7 +1018,7 @@ class _LivePage extends State<LiveDharamScreen>
                                           2.5, // Define the maximum width here
                                     ),
                                     child: Text(
-                                      msg.message ?? "",
+                                      isBlocked ? "********":     msg.message ?? "",
                                       maxLines: 100000,
                                       style: TextStyle(
                                         fontSize: 13,
