@@ -17,11 +17,13 @@ import '../../../common/custom_widgets.dart';
 import '../../../common/permission_handler.dart';
 import '../../../gen/assets.gen.dart';
 import '../../../gen/fonts.gen.dart';
+import '../../../model/home_model/training_video_model.dart';
 import '../../../screens/add_puja/add_puja_controller.dart';
 import '../../../screens/add_puja/model/puja_product_categories_model.dart';
 import '../../../screens/add_puja/widget/category_bottom_sheet.dart';
 import '../../../screens/live_page/constant.dart';
 import '../../../screens/puja/widget/remedy_text_filed.dart';
+import '../../home/widgets/training_video.dart';
 
 class AddEcomScreen extends GetView<AddEcomController> {
   @override
@@ -73,15 +75,13 @@ class AddEcomScreen extends GetView<AddEcomController> {
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 5.h),
               child: Container(
                 height: onboarding_training_videoData == "" ||
-                        onboarding_training_videoData == null ||
-                        onboarding_training_videoData.contains("null")
+                        onboarding_training_videoData == null
                     ? 60
                     : 110,
                 child: Column(
                   children: [
                     onboarding_training_videoData == "" ||
-                            onboarding_training_videoData == null ||
-                            onboarding_training_videoData.contains("null")
+                            onboarding_training_videoData == null
                         ? SizedBox()
                         : Padding(
                             padding: const EdgeInsets.only(
@@ -108,7 +108,26 @@ class AddEcomScreen extends GetView<AddEcomController> {
                                     ),
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
-                                        // Handle tap
+                                        Get.to(() {
+                                          return TrainingVideoUI(
+                                              video: TrainingVideoData(
+                                            id: onboarding_training_videoData[
+                                                'id'],
+                                            title:
+                                                onboarding_training_videoData[
+                                                    'title'],
+                                            description:
+                                                onboarding_training_videoData[
+                                                    'description'],
+                                            url: onboarding_training_videoData[
+                                                'url'],
+                                            days: onboarding_training_videoData[
+                                                'days'],
+                                            isViwe:
+                                                onboarding_training_videoData[
+                                                    'is_viwe'],
+                                          ));
+                                        });
                                         print('Link tapped');
                                       },
                                   ),
