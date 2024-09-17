@@ -641,6 +641,9 @@ class ChatMessageWithSocketController extends GetxController
   checkIfChatIsEnded() {
     print("checkIfChatIsEnded");
     if (AppFirebaseService().orderData.value["status"] == null) {
+      if (kDebugMode) {
+        divineSnackBar(data: "CheckIfChatEnded", color: appColors.redColor);
+      }
       if (MiddleWare.instance.currentPage ==
           RouteName.chatMessageWithSocketUI) {
         Get.until((route) {
