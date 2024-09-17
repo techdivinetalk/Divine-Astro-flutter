@@ -327,11 +327,9 @@ class ChatMessageWithSocketController extends GetxController
 
   Future<void> openRemedies() async {
     var result = await Get.toNamed(RouteName.chatSuggestRemedy);
-    if(await checkIfChatIsEnded()) {
+    if (await checkIfChatIsEnded()) {
       if (result != null) {
-        final String time = "${DateTime
-            .now()
-            .millisecondsSinceEpoch ~/ 1000}";
+        final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
         addNewMessage(
           time,
           MsgType.remedies,
@@ -340,16 +338,15 @@ class ChatMessageWithSocketController extends GetxController
       }
     }
   }
+
   Future<void> openProduct(ChatMessageWithSocketController controller) async {
     var result = await Get.toNamed(RouteName.chatAssistProductPage, arguments: {
       'customerId':
-      int.parse(AppFirebaseService().orderData.value["userId"].toString())
+          int.parse(AppFirebaseService().orderData.value["userId"].toString())
     });
-    if(await checkIfChatIsEnded()) {
+    if (await checkIfChatIsEnded()) {
       if (result != null) {
-        final String time = "${DateTime
-            .now()
-            .millisecondsSinceEpoch ~/ 1000}";
+        final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
         controller.addNewMessage(
           time,
           MsgType.product,
@@ -361,6 +358,7 @@ class ChatMessageWithSocketController extends GetxController
       }
     }
   }
+
   // Future<void> openProduct(ChatMessageWithSocketController controller) async {
   //   var result = await Get.toNamed(RouteName.chatAssistProductPage, arguments: {
   //     'customerId':
@@ -596,7 +594,9 @@ class ChatMessageWithSocketController extends GetxController
         .child("order/${AppFirebaseService().currentOrder}")
         .onChildRemoved
         .listen((event) async {
-      print("nullDetected");
+      if (kDebugMode) {
+        divineSnackBar(data: "Order is null", color: appColors.redColor);
+      }
       if (AppFirebaseService().orderData.value["status"] == null) {
         print("The order is null, going back");
         if (MiddleWare.instance.currentPage ==
@@ -708,8 +708,6 @@ class ChatMessageWithSocketController extends GetxController
       } else {
         timer.cancel();
       }
-      print("extraTalkTime.value");
-      print(extraTalkTime.value);
     });
   }
 
