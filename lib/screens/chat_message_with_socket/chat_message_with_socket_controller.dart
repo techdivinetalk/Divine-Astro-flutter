@@ -327,11 +327,9 @@ class ChatMessageWithSocketController extends GetxController
 
   Future<void> openRemedies() async {
     var result = await Get.toNamed(RouteName.chatSuggestRemedy);
-    if(await checkIfChatIsEnded()) {
+    if (await checkIfChatIsEnded()) {
       if (result != null) {
-        final String time = "${DateTime
-            .now()
-            .millisecondsSinceEpoch ~/ 1000}";
+        final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
         addNewMessage(
           time,
           MsgType.remedies,
@@ -340,16 +338,15 @@ class ChatMessageWithSocketController extends GetxController
       }
     }
   }
+
   Future<void> openProduct(ChatMessageWithSocketController controller) async {
     var result = await Get.toNamed(RouteName.chatAssistProductPage, arguments: {
       'customerId':
-      int.parse(AppFirebaseService().orderData.value["userId"].toString())
+          int.parse(AppFirebaseService().orderData.value["userId"].toString())
     });
-    if(await checkIfChatIsEnded()) {
+    if (await checkIfChatIsEnded()) {
       if (result != null) {
-        final String time = "${DateTime
-            .now()
-            .millisecondsSinceEpoch ~/ 1000}";
+        final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
         controller.addNewMessage(
           time,
           MsgType.product,
@@ -361,6 +358,7 @@ class ChatMessageWithSocketController extends GetxController
       }
     }
   }
+
   // Future<void> openProduct(ChatMessageWithSocketController controller) async {
   //   var result = await Get.toNamed(RouteName.chatAssistProductPage, arguments: {
   //     'customerId':
@@ -596,7 +594,6 @@ class ChatMessageWithSocketController extends GetxController
         .child("order/${AppFirebaseService().currentOrder}")
         .onChildRemoved
         .listen((event) async {
-      print("nullDetected");
       if (AppFirebaseService().orderData.value["status"] == null) {
         print("The order is null, going back");
         if (MiddleWare.instance.currentPage ==
@@ -653,7 +650,6 @@ class ChatMessageWithSocketController extends GetxController
 
   runTimer() {
     Timer.periodic(const Duration(seconds: 1), (timer) async {
-      print("object");
       if (AppFirebaseService().orderData.value["status"] == null) {
         timer.cancel();
       }
@@ -708,8 +704,6 @@ class ChatMessageWithSocketController extends GetxController
       } else {
         timer.cancel();
       }
-      print("extraTalkTime.value");
-      print(extraTalkTime.value);
     });
   }
 
@@ -725,47 +719,6 @@ class ChatMessageWithSocketController extends GetxController
         break;
     }
   }
-
-  // void startExtraTimer2() {
-  //   Duration timeLeft = const Duration(minutes: 1);
-  //   extraTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-  //     if (AppFirebaseService().orderData.value["status"] == null ||
-  //         AppFirebaseService().orderData.value["status"].toString() != "4") {
-  //       timer.cancel();
-  //     } else {
-  //       DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
-  //           AppFirebaseService().orderData.value["order_end_time"]);
-  //       final difference = dateTime.difference(DateTime.now());
-  //       if (difference.isNegative ||
-  //           (difference.inSeconds == 0 &&
-  //               difference.inMinutes == 0 &&
-  //               difference.inHours == 0)) {
-  //         if (AppFirebaseService().orderData.value["orderId"] != null ||
-  //             AppFirebaseService().orderData.value["status"] == "4") {
-  //           extraTimer?.cancel();
-  //           extraTalkTime.value = "0";
-  //           timer.cancel();
-  //           print("WentBack timeUp");
-  //           timeLeft = Duration.zero;
-  //           backFunction();
-  //         }
-  //       } else {
-  //         timeLeft = difference;
-  //         extraTalkTime.value =
-  //             "${timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
-  //             "${timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
-  //         print("time Left ${extraTalkTime.value}");
-  //         if (MiddleWare.instance.currentPage == RouteName.dashboard ||
-  //             AppFirebaseService().orderData.value["status"] == "3") {
-  //           print("ExtraTalktime is closing");
-  //           extraTimer?.cancel();
-  //           //AppFirebaseService().orderData.value={};
-  //           //  endChatApi();
-  //         }
-  //       }
-  //     }
-  //   });
-  // }
 
   getMessageTemplates() async {
     try {
@@ -789,95 +742,7 @@ class ChatMessageWithSocketController extends GetxController
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool("${key}template") ?? false;
   }
-
-  // void startExtraTimer(int futureTimeInEpochMillis) {
-  //   if (AppFirebaseService().orderData.value["status"] == "4") {
-  //     chatTimer?.cancel();
-  //     chatTimer = null;
-  //     showTalkTime.value = "-1";
-  //   }
-  //   DateTime dateTime =
-  //   DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis);
-  //   Duration extraTimeLeft = const Duration(minutes: 1);
-  //   if(extraTimer != null){
-  //     extraTimer?.cancel();
-  //     extraTimer = null;
-  //   }
-  //   extraTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-  //     final difference =
-  //     dateTime.difference(AppFirebaseService().currentTime());
-  //     if (difference.isNegative ||
-  //         (difference.inSeconds == 0 &&
-  //             difference.inMinutes == 0 &&
-  //             difference.inHours == 0)) {
-  //       if (AppFirebaseService().orderData.value["orderId"] != null ||
-  //           AppFirebaseService().orderData.value["status"] == "4") {
-  //         extraTimer?.cancel();
-  //         extraTimer = null;
-  //         extraTalkTime.value = "0";
-  //         timer.cancel();
-  //         print("ExtraTimeUp backFunction");
-  //         extraTimeLeft = Duration.zero;
-  //         backFunction();
-  //       }
-  //     } else {
-  //       timeCountDown = timeCountDown - 1;
-  //       extraTimeLeft = difference;
-  //       extraTalkTime.value =
-  //       "${extraTimeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
-  //           "${extraTimeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
-  //       print("time Left ${extraTalkTime.value}");
-  //       if (MiddleWare.instance.currentPage == RouteName.dashboard ||
-  //           AppFirebaseService().orderData.value["status"] == "3") {
-  //         print("ExtraTalktime is closing");
-  //         extraTimer?.cancel();
-  //         //AppFirebaseService().orderData.value={};
-  //         //  endChatApi();
-  //       }
-  //       print("time Left ${MiddleWare.instance.currentPage}");
-  //     }
-  //   });
-  // }
-
   Duration? timeDifference;
-
-  // void talkTimeStartTimer(int futureTimeInEpochMillis) {
-  //   print("futureTime.minute $futureTimeInEpochMillis");
-  //   DateTime dateTime =
-  //       DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
-  //   if (chatTimer != null) {
-  //     chatTimer?.cancel();
-  //     chatTimer = null;
-  //   }
-  //   chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
-  //     if (AppFirebaseService().orderData.value["status"] == null) {
-  //       timer.cancel();
-  //     } else {
-  //       timeDifference =
-  //           dateTime.difference(AppFirebaseService().currentTime());
-  //       // print("current time difference:  ${timeDifference.toString()}");
-  //       print(
-  //           "timeCountDown:X - $isCountDownTimer ${DateTime.now().millisecondsSinceEpoch}");
-  //       if (isCountDownTimer.toString() == "1") {
-  //         if (timeCountDown == 0 || timeCountDown < 0) {
-  //           await closedChat();
-  //         } else {
-  //           workingChat2(timer);
-  //         }
-  //       } else {
-  //         if (timeDifference!.isNegative ||
-  //             (timeDifference!.inSeconds == 0 &&
-  //                 timeDifference!.inMinutes == 0 &&
-  //                 timeDifference!.inHours == 0)) {
-  //           await closedChat();
-  //         } else {
-  //           workingChat(timer);
-  //         }
-  //       }
-  //     }
-  //   });
-  // }
-
   String formatTime(int seconds) {
     // Calculate hours, minutes, and seconds
     int hours = seconds ~/ 3600;
