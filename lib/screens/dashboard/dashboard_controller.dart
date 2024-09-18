@@ -13,6 +13,7 @@ import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/ChatOrderResponse.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
+import 'package:divine_astrologer/screens/chat_message_with_socket/full_screen_notification/full_screen_notification_service.dart';
 import 'package:divine_astrologer/screens/dashboard/widgets/terms_and_condition_popup.dart';
 import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
@@ -44,6 +45,7 @@ import '../../model/res_login.dart';
 import '../../pages/home/home_controller.dart';
 import '../../repository/astrologer_profile_repository.dart';
 import '../../repository/chat_repository.dart';
+import '../../zego_call/zego_service.dart';
 
 class DashboardController extends GetxController
     with GetSingleTickerProviderStateMixin, WidgetsBindingObserver {
@@ -385,6 +387,15 @@ class DashboardController extends GetxController
         furtherProcedure();
       }
     }
+
+    Future.delayed(
+      const Duration(milliseconds: 500),
+      () async {
+        print("ZegoService().canInit---->>>>>>>1");
+        await FullScreenNotificationService().zegoLogin();
+        print("ZegoService().canInit---->>>>>>>2");
+      },
+    );
     //   print("microphone ${await FlutterOverlayWindow.isPermissionGranted()}");
     print("beforeGoing 2 - ${preferenceService.getUserDetail()?.id}");
     broadcastReceiver.start();
