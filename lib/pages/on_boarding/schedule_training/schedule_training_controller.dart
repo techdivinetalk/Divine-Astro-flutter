@@ -16,6 +16,7 @@ import '../../../model/AstroTrainingSessionModel.dart';
 import '../../../model/SubmitScheduleTrainingModel.dart';
 import '../../../model/astrologer_training_session_response.dart';
 import '../../../repository/user_repository.dart';
+import '../../../screens/live_page/constant.dart';
 
 class ScheduleTrainingController extends GetxController {
   UserRepository userRepository = UserRepository();
@@ -68,6 +69,14 @@ class ScheduleTrainingController extends GetxController {
   Future<void> onInit() async {
     super.onInit();
     getStatusFromFir();
+    // onboarding_training_videoData = {
+    //   'id': 1,
+    //   'title': "Tutorial",
+    //   'description': "Tutorial",
+    //   'url': "https://www.youtube.com/watch?v=ElNwja32g1M",
+    //   'days': 2,
+    //   'is_viwe': 1
+    // };
     if (Get.arguments == null) {
       getTrainings();
     } else {

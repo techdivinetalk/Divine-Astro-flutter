@@ -39,7 +39,7 @@ RxList<MessageTemplates> messageTemplateList = <MessageTemplates>[].obs;
 List onBoardingList = [];
 RxBool isRejected = false.obs;
 RxInt isOnPage = 1.obs;
-var onboarding_training_videoData = "";
+var onboarding_training_videoData;
 RxBool disableButton = false.obs;
 RxInt isNextPage = 0.obs;
 RxInt pendingStage = 0.obs;
