@@ -181,7 +181,7 @@ class SupportIssueScreen extends GetView<SupportIssueController> {
                     // maxLength: 50,
                     keyboardType: TextInputType.text,
                     onChanged: (value) {
-                      if (value.trim().length > 50) {
+                      if (value.trim().length > 100) {
                         controller.showMimimum.value = false;
                         controller.update();
                       }
@@ -329,7 +329,7 @@ class SupportIssueScreen extends GetView<SupportIssueController> {
                           } else if (controller.descriptionController.text
                                   .trim()
                                   .length <
-                              50) {
+                              100) {
                             controller.showMimimum.value = true;
                             controller.update();
                             Fluttertoast.showToast(msg: "Detail is to short");

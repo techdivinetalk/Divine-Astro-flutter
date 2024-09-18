@@ -1,18 +1,19 @@
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
-import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/repository/waiting_list_queue_repository.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../di/shared_preference_service.dart';
 import '../../../model/waiting_list_queue.dart';
 import '../../../utils/enum.dart';
 
-class WaitListUIController extends GetxController {
+class WaitListUIController extends GetxController
+    with GetSingleTickerProviderStateMixin {
   var preference = Get.find<SharedPreferenceService>();
   final WaitingListQueueRepo repository;
-
+  TabController? tabbarController;
+  ScrollController scrollController = ScrollController();
   WaitListUIController(this.repository);
 
   Loading loading = Loading.initial;
@@ -29,6 +30,7 @@ class WaitListUIController extends GetxController {
   void onInit() {
     super.onInit();
     debugPrint("test_onInit: call");
+    tabbarController = TabController(length: 2, vsync: this, initialIndex: 0);
     isInit = true;
     getWaitingList();
   }

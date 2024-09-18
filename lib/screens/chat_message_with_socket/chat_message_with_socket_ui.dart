@@ -1420,8 +1420,6 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                         String appendedCustImage =
                             "${controller.preference.getAmazonUrl()}/$custImage";
 
-                        print("test_appendedCustImage: $appendedAstrImage");
-
                         return isVOIP.toString() == "0"
                             ? const SizedBox()
                             : Column(
