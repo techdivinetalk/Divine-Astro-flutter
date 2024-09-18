@@ -23,7 +23,6 @@ import "package:fluttertoast/fluttertoast.dart";
 import "package:get/get.dart";
 import "package:intl/intl.dart";
 import "package:lottie/lottie.dart";
-import "package:permission_handler/permission_handler.dart";
 import "package:simple_html_css/simple_html_css.dart";
 import "package:svgaplayer_flutter/svgaplayer_flutter.dart";
 
@@ -31,7 +30,6 @@ import "../../common/common_bottomsheet.dart";
 import "../../model/message_template_response.dart";
 import "../home_screen_options/check_kundli/kundli_controller.dart";
 import "../live_dharam/widgets/custom_image_widget.dart";
-import "../live_page/constant.dart";
 import "../live_page/constant.dart";
 import "chat_message_with_socket_controller.dart";
 
@@ -812,7 +810,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                 ? GestureDetector(
                     onTap: () async {
                       await Get.toNamed(RouteName.messageTemplate);
-                      if(await controller.checkIfChatIsEnded()) {
+                      if (await controller.checkIfChatIsEnded()) {
                         controller.messageTemplatesList.value.clear();
                         controller.messageTemplatesList.refresh();
                         controller.getMessageTemplates();

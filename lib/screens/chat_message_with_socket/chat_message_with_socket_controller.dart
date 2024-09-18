@@ -775,7 +775,7 @@ class ChatMessageWithSocketController extends GetxController
       }
       messageTemplatesList.value.clear();
       for (int i = 0; i < messageTemplateList.length; i++) {
-        if (await getBoolFromPrefs(messageTemplateList[i].id.toString())) {
+        if (await getBoolFromPrefs(messageTemplateList[i].id.toString()) || messageTemplateList[i].type.toString() =="0") {
           messageTemplatesList.value.add(messageTemplateList[i]);
         }
       }

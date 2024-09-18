@@ -373,56 +373,124 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   var isOnboardings;
   checkOnBoarding() async {
-    if (preferenceService.getUserDetail()?.id == null) {
-      Get.offAllNamed(RouteName.login);
-    } else {
+    try {
+      final userId = preferenceService.getUserDetail()?.id;
+
+      // Check if user details are null, navigate to login if true
+      if (userId == null) {
+        Get.offAllNamed(RouteName.login);
+        return; // Exit the function as user needs to log in
+      }
+
+      // Fetch isOnboarding data from Firebase
       final dataSnapshot = await AppFirebaseService()
           .database
-          .child(
-              "astrologer/${preferenceService.getUserDetail()!.id}/realTime/isOnboarding")
+          .child("astrologer/$userId/realTime/isOnboarding")
           .get();
-      print("response of isOnboarding - ${isOnboardings.toString()}");
+
       isOnboardings = dataSnapshot.value;
-      ConstantDetailsModelClass? commonConstants;
-      print("response of isOnboarding - ${isOnboardings.toString()}");
-      if (preferenceService.getUserDetail()?.id == null) {
-        Get.offAllNamed(RouteName.login);
-      } else if (isOnboardings.toString() == "4" // || isOnboardings == null
-          ) {
-        print('homeeeee1');
+      print("Response of isOnboarding: ${isOnboardings.toString()}");
 
+      // If onboarding value is "4", navigate to the dashboard
+      if (isOnboardings.toString() == "4") {
+        print('Navigating to dashboard...');
         Get.offAllNamed(RouteName.dashboard);
-      } else {
-        commonConstants = await userRepository.constantDetailsData2api();
-        print('--------------response--------${commonConstants.toJson()}');
-        if (commonConstants.success == true) {
-          if (commonConstants?.data != null) {
-            imageUploadBaseUrl.value =
-                commonConstants?.data?.imageUploadBaseUrl ?? "";
-            onboarding_training_videoData =
-                commonConstants.data!.onboarding_training_video;
-          }
-          preferenceService
-              .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
-          Get.find<SharedPreferenceService>()
-              .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
-          navigateForOnBoardingGlobal(commonConstants);
-        } else if (commonConstants.success == false &&
-            commonConstants.statusCode == 401) {
-          await preferenceService.erase();
-
-          Get.offAllNamed(RouteName.login);
-
-          // Handle any failure case here
-        } else {}
+        return; // Exit after navigation
       }
-    }
 
-    // Once data is fetched, stop loading
-    setState(() {
-      _isLoading = false;
-    });
+      // If onboarding is not complete, fetch constant details data
+      ConstantDetailsModelClass? commonConstants =
+          await userRepository.constantDetailsData2api();
+      print('Constant details response: ${commonConstants?.toJson()}');
+
+      // If API call is successful
+      if (commonConstants != null && commonConstants.success == true) {
+        final data = commonConstants.data;
+
+        if (data != null) {
+          // Update URLs and video data
+          imageUploadBaseUrl.value = data.imageUploadBaseUrl ?? "";
+          onboarding_training_videoData = data.onboarding_training_video;
+
+          // Set Amazon URLs in preferences
+          preferenceService.setBaseImageURL(data.awsCredentails.baseurl!);
+          Get.find<SharedPreferenceService>()
+              .setAmazonUrl(data.awsCredentails.baseurl!);
+
+          // Navigate based on onboarding state
+          navigateForOnBoardingGlobal(commonConstants);
+        }
+      }
+      // If API call fails with status 401, log out user
+      else if (commonConstants?.success == false &&
+          commonConstants?.statusCode == 401) {
+        await preferenceService.erase();
+        Get.offAllNamed(RouteName.login);
+      } else {
+        // Handle other failure cases here if needed
+        print('API call failed with unknown error');
+      }
+    } catch (error) {
+      // Handle any potential errors
+      print("Error in checkOnBoarding: $error");
+      Get.offAllNamed(RouteName.login); // Optionally navigate to login on error
+    } finally {
+      // Stop loading indicator once everything is done
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
+  // checkOnBoarding() async {
+  //   if (preferenceService.getUserDetail()?.id == null) {
+  //     Get.offAllNamed(RouteName.login);
+  //   } else {
+  //     final dataSnapshot = await AppFirebaseService()
+  //         .database
+  //         .child(
+  //             "astrologer/${preferenceService.getUserDetail()!.id}/realTime/isOnboarding")
+  //         .get();
+  //     print("response of isOnboarding - ${isOnboardings.toString()}");
+  //     isOnboardings = dataSnapshot.value;
+  //     ConstantDetailsModelClass? commonConstants;
+  //     print("response of isOnboarding - ${isOnboardings.toString()}");
+  //     if (preferenceService.getUserDetail()?.id == null) {
+  //       Get.offAllNamed(RouteName.login);
+  //     } else if (dataSnapshot.value.toString() == "4") {
+  //       print('homeeeee1');
+  //
+  //       Get.offAllNamed(RouteName.dashboard);
+  //     } else {
+  //       commonConstants = await userRepository.constantDetailsData2api();
+  //       print('--------------response--------${commonConstants.toJson()}');
+  //       if (commonConstants.success == true) {
+  //         if (commonConstants?.data != null) {
+  //           imageUploadBaseUrl.value =
+  //               commonConstants?.data?.imageUploadBaseUrl ?? "";
+  //           onboarding_training_videoData =
+  //               commonConstants.data!.onboarding_training_video;
+  //         }
+  //         preferenceService
+  //             .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
+  //         Get.find<SharedPreferenceService>()
+  //             .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
+  //         navigateForOnBoardingGlobal(commonConstants);
+  //       } else if (commonConstants.success == false &&
+  //           commonConstants.statusCode == 401) {
+  //         await preferenceService.erase();
+  //
+  //         Get.offAllNamed(RouteName.login);
+  //
+  //         // Handle any failure case here
+  //       } else {}
+  //     }
+  //   }
+  //
+  //   // Once data is fetched, stop loading
+  //   setState(() {
+  //     _isLoading = false;
+  //   });
+  // }
 
   @override
   void dispose() {
