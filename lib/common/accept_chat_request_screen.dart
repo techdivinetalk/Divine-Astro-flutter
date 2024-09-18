@@ -643,7 +643,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
                                       fontWeight: FontWeight.w600,
                                       fontFamily: FontFamily.metropolis,
                                       fontSize: 17.sp,
-                                      color: appColors.brownColour)),
+                                      color: cameraController != null ? appColors.white : appColors.brownColour)),
                               SizedBox(height: 15.w),
                               Row(
                                 children: [
@@ -651,7 +651,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
                                     child: Row(
                                       children: [
                                         Assets.svg.orderTypeIcon
-                                            .svg(height: 30.w, width: 30.w),
+                                            .svg(height: 30.w, width: 30.w, color: cameraController != null ? appColors.white : null),
                                         SizedBox(width: 8.w),
                                         Column(
                                             crossAxisAlignment:
@@ -691,7 +691,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
                                     child: Row(
                                       children: [
                                         Assets.svg.walletBalanceIcon
-                                            .svg(height: 30.w, width: 30.w),
+                                            .svg(height: 30.w, width: 30.w, color: cameraController != null ? appColors.white : null),
                                         SizedBox(width: 8.w),
                                         Expanded(
                                           child: Column(
@@ -719,7 +719,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
                                                       fontFamily:
                                                           FontFamily.metropolis,
                                                       fontSize: 16.sp,
-                                                      color: appColors
+                                                      color: cameraController != null ? appColors.white : appColors
                                                           .brownColour)),
                                             ],
                                           ),
@@ -733,7 +733,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
                               Row(
                                 children: [
                                   Assets.svg.maximumOrderTimeIcon
-                                      .svg(height: 30.w, width: 30.w),
+                                      .svg(height: 30.w, width: 30.w, color: cameraController != null ? appColors.white : null),
                                   SizedBox(width: 8.w),
                                   Expanded(
                                     child: Column(
@@ -760,7 +760,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
                                                 fontFamily:
                                                     FontFamily.metropolis,
                                                 fontSize: 16.sp,
-                                                color: appColors.brownColour)),
+                                                color: cameraController != null ? appColors.white : appColors.brownColour)),
                                       ],
                                     ),
                                   ),
