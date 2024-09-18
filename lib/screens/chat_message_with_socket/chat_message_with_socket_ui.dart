@@ -26,6 +26,7 @@ import "package:lottie/lottie.dart";
 import "package:permission_handler/permission_handler.dart";
 import "package:simple_html_css/simple_html_css.dart";
 import "package:svgaplayer_flutter/svgaplayer_flutter.dart";
+import "package:swipe_to/swipe_to.dart";
 
 import "../../common/common_bottomsheet.dart";
 import "../../model/message_template_response.dart";
@@ -135,39 +136,47 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                           print("${chatMessage.msgType}");
                                           print("${chatMessage.msgType}");
                                         }
-                                        return Column(
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 4.h,
-                                                  horizontal: 10.w),
-                                              child: MessageView(
-                                                index: index,
-                                                nextChatMessage: index ==
-                                                        controller.chatMessages
-                                                                .length -
-                                                            1
-                                                    ? controller
-                                                        .chatMessages[index]
-                                                    : controller.chatMessages[
-                                                        index + 1],
-                                                chatMessage: chatMessage,
-                                                yourMessage:
-                                                    chatMessage.msgSendBy ==
-                                                        "1",
-                                                userName: controller
-                                                    .customerName.value,
-                                                unreadMessage: controller
-                                                    .unreadMessageIndex.value,
-                                                myList: myList,
+                                        return SwipeTo(
+                                          key: UniqueKey(),
+                                          iconOnLeftSwipe: Icons.arrow_forward,
+                                          iconOnRightSwipe: Icons.replay,
+                                          onRightSwipe: (details) {
+                                            Fluttertoast.showToast(msg: "Swipe message");
+                                          },
+                                          child: Column(
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 4.h,
+                                                    horizontal: 10.w),
+                                                child: MessageView(
+                                                  index: index,
+                                                  nextChatMessage: index ==
+                                                          controller.chatMessages
+                                                                  .length -
+                                                              1
+                                                      ? controller
+                                                          .chatMessages[index]
+                                                      : controller.chatMessages[
+                                                          index + 1],
+                                                  chatMessage: chatMessage,
+                                                  yourMessage:
+                                                      chatMessage.msgSendBy ==
+                                                          "1",
+                                                  userName: controller
+                                                      .customerName.value,
+                                                  unreadMessage: controller
+                                                      .unreadMessageIndex.value,
+                                                  myList: myList,
+                                                ),
                                               ),
-                                            ),
-                                            if (index ==
-                                                (controller
-                                                        .chatMessages.length -
-                                                    1))
-                                              typingWidget()
-                                          ],
+                                              if (index ==
+                                                  (controller
+                                                          .chatMessages.length -
+                                                      1))
+                                                typingWidget()
+                                            ],
+                                          ),
                                         );
                                       },
                                     ),
