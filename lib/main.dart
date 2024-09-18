@@ -54,13 +54,38 @@ import 'screens/live_page/constant.dart';
 /// sahil pushed
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 late List<CameraDescription>? cameras;
+
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  log('Handling a background message: ${message.data}');
-  if (message.data["type"] == "2") {
-    // showSecondNotification(message.notification?.title ?? '',
-    // message.notification?.body ?? '', message.data);
-  }
+  log('channel_id: ${message.data}');
+  showNotification(
+    message.data["title"],
+    message.data["message"],
+    message.data['type'],
+    message.data,
+  );
+  // if (message.data["type"].toString() == "2") {
+  // log('Handling a background message when type is 2: ${message.data}');
+  //   flutterLocalNotificationsPlugin.show(
+  //     message.data.hashCode,
+  //     message.data['title'],
+  //     message.data['message'],
+  //     payload: jsonEncode(message.data),
+  //      NotificationDetails(
+  //       android: AndroidNotificationDetails(
+  //         "${channel.id}_${Random().nextInt(100)}",
+  //         "divine_accept_notification_${Random().nextInt(100)}",
+  //         channelDescription: channel.description,
+  //         importance: Importance.max,
+  //         priority: Priority.high,
+  //         icon: '@mipmap/ic_launcher',
+  //         playSound: true,
+  //         enableVibration: true,
+  //         sound:  const RawResourceAndroidNotificationSound('accept'),
+  //       ),
+  //     ),
+  //   );
+  // }
 }
 
 //// Onboarding Code Done
@@ -80,11 +105,13 @@ Future<void> main() async {
   await remoteConfigHelper.initialize();
   remoteConfigHelper.updateGlobalConstantWithFirebaseData();
   await GetStorage.init();
-  Future<void> showFlutterNotification(RemoteMessage message,{String? type}) async {
+  /*Future<void> showFlutterNotification(RemoteMessage message,
+      {String? type}) async {
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     log("message.notification?.android---${type}");
     if (notification != null && android != null && Platform.isAndroid) {
+
       flutterLocalNotificationsPlugin.show(
         notification.hashCode,
         notification.title,
@@ -96,29 +123,22 @@ Future<void> main() async {
             channel.name,
             channelDescription: channel.description,
             icon: '@mipmap/ic_launcher',
-            sound:type == "2"  ? RawResourceAndroidNotificationSound('accept'):null,
-            actions: type == "2"
-                ? [
-              const AndroidNotificationAction(
-                'accept',
-                'ACCEPT',
-              ),
-            ]
-                : [],
+            sound:const RawResourceAndroidNotificationSound('accept'),
           ),
         ),
       );
+
     }
-  }
+  }*/
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     log("check on message notification : ${message.data}------${message.data["type"]}");
     log("pushNotification1 ${message.notification?.title ?? ""}");
-    if (message.data["type"] == "2" /*|| message.data["type"] == "20"*/) {
-      log("showFlutterNotification---showFlutterNotification");
-      showFlutterNotification(message,type:message.data["type"].toString() );
-      return;
-    }
+    // if (message.data["type"] == "2" /*|| message.data["type"] == "20"*/) {
+    //   log("showFlutterNotification---showFlutterNotification");
+    //   showFlutterNotification(message, type: message.data["type"].toString());
+    //   return;
+    // }
     if (message.data["type"].toString() == "1") {
       if (MiddleWare.instance.currentPage !=
           RouteName.chatMessageWithSocketUI) {
@@ -133,8 +153,7 @@ Future<void> main() async {
       sendBroadcast(
           BroadcastMessage(name: "messageReceive", data: message.data));
     } else if (message.data["type"] == "8") {
-      log(
-          "inside page for realtime notification ${message.data} ${MiddleWare.instance.currentPage}");
+      log("inside page for realtime notification ${message.data} ${MiddleWare.instance.currentPage}");
       if (MiddleWare.instance.currentPage == RouteName.chatMessageUI &&
           chatAssistantCurrentUserId.value.toString() ==
               message.data['sender_id'].toString()) {
@@ -183,7 +202,6 @@ Future<void> main() async {
                 message.data['type'], message.data);
             break;
           case "2":
-
             showNotification(message.data["title"], 'sendNotificationRemedy'.tr,
                 message.data['type'], message.data);
             break;
@@ -205,8 +223,7 @@ Future<void> main() async {
           message.data['type'], message.data);
     }
     if (message.notification != null) {
-      log(
-          'Message also contained a notification: ${message.notification?.title}');
+      log('Message also contained a notification: ${message.notification?.title}');
     }
   });
   if (await Permission.notification.status.isPermanentlyDenied ||
@@ -276,29 +293,51 @@ Future<void> initServices() async {
 
 Future<void> showNotification(String title, String message, String type,
     Map<String, dynamic> data) async {
-  AndroidNotificationDetails? androidNotificationDetails;
+  // androidNotificationDetails;
   log("typetypetypetypetypetype----->>>>>${type}");
-  androidNotificationDetails =  AndroidNotificationDetails (
-    "DivineCustomer", "CustomerNotification",
-    importance: Importance.max,
-    priority: Priority.high,
-    icon: "divine_logo_tran",
-    autoCancel: true,
-    playSound: true,
-    setAsGroupSummary: true,
-    sound: type == "2"  ?const RawResourceAndroidNotificationSound('accept'):null,
-    styleInformation:const BigTextStyleInformation(''),
-  );
+  AndroidNotificationDetails? androidNotificationDetails;
+  if (type == "2") {
+    // Type 2: Custom sound
+    androidNotificationDetails = AndroidNotificationDetails(
+      "DivineCustomer_${Random().nextInt(100)}",
+      "CustomerNotification_${Random().nextInt(100)}",
+      importance: Importance.max,
+      priority: Priority.high,
+      icon: "divine_logo_tran",
+      autoCancel: true,
+      playSound: true,
+      // sound: const RawResourceAndroidNotificationSound('accept'),
+      // Use custom sound
+      setAsGroupSummary: true,
+      styleInformation:const BigTextStyleInformation(''),
+    );
+  } else {
+    // Default notification (no custom sound)
+    androidNotificationDetails = const AndroidNotificationDetails(
+      "DivineCustomer",
+      "CustomerNotification",
+      importance: Importance.max,
+      priority: Priority.high,
+      icon: "divine_logo_tran",
+      autoCancel: true,
+      playSound: true,
+      setAsGroupSummary: true,
+      styleInformation: BigTextStyleInformation(''),
+    );
+  }
+
+  NotificationDetails notificationDetails =
+      NotificationDetails(android: androidNotificationDetails);
+
+  // Show notification
+  await flutterLocalNotificationsPlugin.show(
+      Random().nextInt(90000), title, message, notificationDetails,
+      payload: json.encode(data));
   // if (type == "1") {
   //
   // }  else {
   //
   // }
-  NotificationDetails notificationDetails =
-      NotificationDetails(android: androidNotificationDetails);
-  await flutterLocalNotificationsPlugin.show(
-      Random().nextInt(90000), title, message, notificationDetails,
-      payload: json.encode(data));
 }
 
 // void initMessaging() async {
@@ -337,8 +376,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           .database
           .child("masters/disableOnboarding")
           .get();
-      log(
-          "dataSnapshot.value.toString() -- ${dataSnapshot.value.toString()}");
+      log("dataSnapshot.value.toString() -- ${dataSnapshot.value.toString()}");
       if (dataSnapshot.value.toString() == "0") {
         checkOnBoarding();
 
@@ -372,6 +410,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   var isOnboardings;
+
   checkOnBoarding() async {
     if (preferenceService.getUserDetail()?.id == null) {
       Get.offAllNamed(RouteName.login);

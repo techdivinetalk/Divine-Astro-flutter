@@ -17,11 +17,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../common/common_functions.dart';
-import '../model/chat/req_common_chat_model.dart';
-import '../model/chat/res_common_chat_success.dart';
 import '../model/chat_assistant/chat_assistant_astrologer_response.dart';
-import '../repository/chat_repository.dart';
 
 const channel = AndroidNotificationChannel(
   "DivineAstrologer",
@@ -35,8 +31,6 @@ Map<String, dynamic>? notificationDetails;
 BuildContext? contextDetail;
 String? previousTransId;
 String? previosConversationId;
-
-
 
 void initMessaging() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
@@ -53,20 +47,20 @@ void initMessaging() async {
       onDidReceiveNotificationResponse:
           (NotificationResponse notificationResponse) async {
     final String? payload = notificationResponse.payload;
-    print(payload);
+    log(payload.toString());
     if (payload != null) {
       final Map<String, dynamic> payloadMap =
           jsonDecode(notificationResponse.payload!);
-      debugPrint('notification payload: -- ${payloadMap}');
-      //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
+      log('notification payload: -- ${payloadMap}');
+      //  debuglog('notification payload: ${payloadMap["type"] == "2"}');
       // if(payloadMap["type"] == "2") {
 
       log("payloadMap type ------>${payloadMap["type"]}");
       if (payloadMap["type"] == "1") {
-        print("22222" + payloadMap.toString());
+        log("22222" + payloadMap.toString());
         Get.toNamed(RouteName.chatMessageWithSocketUI);
       } else if (payloadMap["type"] == "2") {
-        print(" 1111111111111" + payloadMap.toString());
+        log(" 1111111111111" + payloadMap.toString());
         // final snapshot = AppFirebaseService()
         // .database
         // .child("order/${AppFirebaseService().orderData.value["orderId"]}");
@@ -89,7 +83,7 @@ void initMessaging() async {
             {required int? orderId, required int? queueId}) async {
 // *accept_or_reject: 1 = accept, 3 = chat reject by timeout
 // * is_timeout: should be 1 when reject by timeout"
-          print("chat_reject 1");
+          log("chat_reject 1");
           ResCommonChatStatus response = await ChatRepository().chatAccept(
               ReqCommonChatParams(
                       queueId: queueId,
@@ -97,24 +91,24 @@ void initMessaging() async {
                       isTimeout: 0,
                       acceptOrReject: 1)
                   .toJson());
-          print("chat_reject 2");
+          log("chat_reject 2");
           if (response.statusCode == 200) {
-            print("chat_reject 3");
+            log("chat_reject 3");
             return true;
           } else {
-            print("chat_reject 4");
+            log("chat_reject 4");
             return false;
           }
         }*/
 
         // Get.toNamed(RouteName.liveDharamScreen);
       } else if (payloadMap["type"] == "8") {
-        print("payloadMap -----> ${payloadMap}");
+        log("payloadMap -----> ${payloadMap}");
         final senderId = payloadMap["sender_id"];
         DataList dataList = DataList();
         dataList.id = int.parse(senderId);
         dataList.name = payloadMap["title"];
-        print("333333" + payloadMap.toString());
+        log("333333" + payloadMap.toString());
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
       } else if (payloadMap["type"] == "13") {
         dasboardCurrentIndex(3);
@@ -150,7 +144,7 @@ void initMessaging() async {
       //   // await Get.toNamed(RouteName.chatMessageWithSocketUI);
       // }, orderId: orderId);
     } else {
-      print("Raj bhai");
+      log("Raj bhai");
     }
   });
 }
@@ -185,16 +179,16 @@ void onDidReceiveLocalNotification(
 void onDidReceiveNotificationResponse(
     NotificationResponse notificationResponse) async {
   final String? payload = notificationResponse.payload;
-  print(payload);
-  print("payloadpayloadpayloadpayloadpayloadpayload");
+  log(payload.toString());
+  log("payloadpayloadpayloadpayloadpayloadpayload");
   if (notificationResponse.payload != null) {
     ///// redirect to bottom sheet of accept the request
-    print(notificationResponse.payload);
-    print("notificationResponse.payload");
+    log(notificationResponse.payload.toString());
+    log("notificationResponse.payload");
     final Map<String, dynamic> payloadMap =
         jsonDecode(notificationResponse.payload!);
-    debugPrint('notification payload: -- ${payloadMap}');
-    //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
+    log('notification payload: -- ${payloadMap}');
+    //  debuglog('notification payload: ${payloadMap["type"] == "2"}');
     // // if(payloadMap["type"] == "2") {
 
     if (payloadMap["type"] == "1") {
@@ -237,7 +231,6 @@ void onDidReceiveNotificationResponse(
   // }
 }
 
-
 Future<void> showNotificationWithActions(
     {required String title, required String message, dynamic payload}) async {
   log("enter in showNotificationWithActions --> $message");
@@ -251,24 +244,19 @@ Future<void> showNotificationWithActions(
 
       final databaseMessage = ChatMessagesOffline().obs;
 
-
-
-
-
       log('data message ${databaseMessage.value.toOfflineJson()}');
       log("this is my tableName $tableName");
-
     }
   }
 
-   AndroidNotificationDetails androidNotificationDetails =
-       AndroidNotificationDetails(
+  AndroidNotificationDetails androidNotificationDetails =
+      AndroidNotificationDetails(
     "DivineAstrologer",
     "AstrologerNotification",
     importance: Importance.high,
     icon: "divine_logo_tran",
   );
-   NotificationDetails notificationDetails = NotificationDetails(
+  NotificationDetails notificationDetails = NotificationDetails(
     android: androidNotificationDetails,
   );
   await flutterLocalNotificationsPlugin.show(
