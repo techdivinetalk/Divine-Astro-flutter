@@ -89,7 +89,10 @@ class ReferAstrologerState {
   late final TextEditingController astrologySkills;
   late final TextEditingController astrologerExperience;
   late final TextEditingController cityController;
+  late final TextEditingController fatherNameController;
+  late final TextEditingController dobController;
   late final TextEditingController otherPlatform;
+  String selectDOB = "";
   UserData? user;
   List<CityStateData> cityList = [];
 
@@ -101,6 +104,8 @@ class ReferAstrologerState {
     astrologerExperience = TextEditingController();
     otherPlatform = TextEditingController();
     cityController = TextEditingController();
+    fatherNameController = TextEditingController();
+    dobController = TextEditingController();
     user = pref.getUserDetail();
   }
 
@@ -110,6 +115,8 @@ class ReferAstrologerState {
     astrologySkills.dispose();
     astrologerExperience.dispose();
     otherPlatform.dispose();
+    fatherNameController.dispose();
+    dobController.dispose();
   }
 
   ReferAstrologerRequest referAstrologerRequest() {
@@ -122,6 +129,8 @@ class ReferAstrologerState {
       experience: astrologerExperience.text.trim(),
       referBy: user?.id,
       state: cityController.text.trim(),
+      fatherName: fatherNameController.text.trim(),
+      dob: selectDOB,
     );
   }
 
