@@ -177,6 +177,8 @@ class AddPujaScreen extends GetView<AddPujaController> {
                   onChanged: (value) {
                     controller.update();
                   },
+                  from: "onBoarding",
+
                   // validator: (value) {
                   //   if (value == null || value.isEmpty) {
                   //     return '${controller.selectedValue} Description is required';
