@@ -19,10 +19,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../model/chat_assistant/chat_assistant_astrologer_response.dart';
 
-const channel = AndroidNotificationChannel(
-  "DivineAstrologer",
-  "AstrologerNotification",
-  importance: Importance.high,
+  AndroidNotificationChannel channel =  AndroidNotificationChannel(
+'high_importance_channel',
+'High Importance Notifications',
+description: 'This channel is used for important notifications.',
+showBadge: true,
+importance: Importance.high,
 );
 final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -52,8 +54,8 @@ void initMessaging() async {
       final Map<String, dynamic> payloadMap =
           jsonDecode(notificationResponse.payload!);
       log('notification payload: -- ${payloadMap}');
+
       //  debuglog('notification payload: ${payloadMap["type"] == "2"}');
-      // if(payloadMap["type"] == "2") {
 
       log("payloadMap type ------>${payloadMap["type"]}");
       if (payloadMap["type"] == "1") {

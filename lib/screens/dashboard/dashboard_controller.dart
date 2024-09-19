@@ -12,6 +12,7 @@ import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/ChatOrderResponse.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
+import 'package:divine_astrologer/notification_helper/notification_helpe.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/screens/dashboard/widgets/terms_and_condition_popup.dart';
 import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
@@ -446,7 +447,13 @@ class DashboardController extends GetxController
     }
 
     loadPreDefineData();
-    initMessaging();
+    // initMessaging();
+    Future.delayed(
+      const Duration(milliseconds: 200),
+          () {
+        NotificationHelper().firebaseNotificationInit();
+      },
+    );
     // firebaseMessagingConfig(Get.context!);
     getConstantDetailsData();
     print("currentTime");
