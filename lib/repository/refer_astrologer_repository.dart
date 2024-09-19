@@ -11,7 +11,10 @@ class ReferAstrologerRepository extends ApiProvider {
     //progressService.showProgressDialog(true);
     try {
       final response = await post(referAnAstrologer,
-          endPoint: "https://list.divinetalk.live/api/v3/", body: json);
+          // endPoint: "https://list.divinetalk.live/api/v3/",
+          endPoint: "http://4.240.97.131:8081/api/v3/",
+          body: json,
+      );
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
       } else if (response.statusCode == HttpStatus.badRequest) {
