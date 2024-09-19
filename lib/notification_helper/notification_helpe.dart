@@ -6,14 +6,25 @@ import 'dart:math' hide log;
 import 'package:divine_astrologer/common/MiddleWare.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/fcm_notification.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
+import 'package:divine_astrologer/model/chat_assistant/chat_assistant_astrologer_response.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
+import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-
+import 'package:url_launcher/url_launcher.dart';
+AndroidNotificationChannel channel = const AndroidNotificationChannel(
+'high_importance_channel',
+'High Importance Notifications',
+description: 'This channel is used for important notifications.',
+showBadge: true,
+importance: Importance.high,
+);
 class NotificationHelper {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   final notifications = FlutterLocalNotificationsPlugin();
@@ -38,17 +49,61 @@ class NotificationHelper {
 
     flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      onDidReceiveNotificationResponse: (details) async {
-        // todo: receive payload data of foreground notification || click event of notification when application is on foreground
+      onDidReceiveNotificationResponse: (NotificationResponse notificationResponse) async {
+        print("notificationResponse.actionId-->>${notificationResponse.actionId}");
+        final String? payload = notificationResponse.payload;
+        log(payload.toString());
+        if (payload != null) {
+          final Map<String, dynamic> payloadMap =
+          jsonDecode(notificationResponse.payload!);
+          log('notification payload: -- ${payloadMap}');
+
+          if (payloadMap["type"] == "1") {
+
+            Get.toNamed(RouteName.chatMessageWithSocketUI);
+          } else if (payloadMap["type"] == "2") {
+
+            final ref = AppFirebaseService()
+                .database
+                .child("order/${AppFirebaseService().orderData.value["orderId"]}")
+                .path;
+
+            if (ref.split("/").last == payloadMap["order_id"]) {
+              Get.toNamed(RouteName.acceptChatRequestScreen);
+            } else {
+              Fluttertoast.showToast(msg: "Your order has been ended");
+            }
+          } else if (payloadMap["type"] == "8") {
+
+            final senderId = payloadMap["sender_id"];
+            DataList dataList = DataList();
+            dataList.id = int.parse(senderId);
+            dataList.name = payloadMap["title"];
+            Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
+          } else if (payloadMap["type"] == "13") {
+            dasboardCurrentIndex(3);
+          } else if (payloadMap["type"] == "20") {
+            if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+              if (Get.isRegistered<DashboardController>()) {
+                Get.find<DashboardController>().selectedIndex.value = 3;
+              }
+            }
+          } else {
+            if (!await launchUrl(Uri.parse(payloadMap["url"].toString()))) {
+              throw Exception('Could not launch ${payloadMap["url"]}');
+            }
+          }
+          AppFirebaseService().openChatUserId = payloadMap["userid"] ?? "";
+        } else {
+
+        }
       },
     );
 
-    // todo: click event of notification when application is on background
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
       // if(m){}
     });
 
-    // todo: click event of notification when application is on kill(terminated)
     firebaseMessaging.getInitialMessage().then((value) {});
 
     FirebaseMessaging.onMessage.listen(showFlutterNotification);
@@ -60,7 +115,12 @@ class NotificationHelper {
     AndroidNotification? android = message.notification?.android;
     log("check on message notification : ${message.data}------${message.data["type"]}");
     log("pushNotification1 ${message.notification?.title ?? ""}");
+    // if (message.notification?.title != null) {
 
+    // if (message.data["title"] != null && message.data["title"].isNotEmpty) {
+    //
+    // }
+    // }
     if (message.data["type"].toString() == "1") {
       if (MiddleWare.instance.currentPage !=
           RouteName.chatMessageWithSocketUI) {
@@ -123,18 +183,12 @@ class NotificationHelper {
                 message.data['type'], message.data);
             break;
           case "1":
-            showNotification(
-                message.data["title"],
-                'sendNotificationImage'.tr,
-                message.data['type'],
-                message.data);
+            showNotification(message.data["title"], 'sendNotificationImage'.tr,
+                message.data['type'], message.data);
             break;
           case "2":
-            showNotification(
-                message.data["title"],
-                'sendNotificationRemedy'.tr,
-                message.data['type'],
-                message.data);
+            showNotification(message.data["title"], 'sendNotificationRemedy'.tr,
+                message.data['type'], message.data);
             break;
           case "3":
             showNotification(
@@ -150,22 +204,17 @@ class NotificationHelper {
         }
       }
     } else {
-      if (message.data["type"] != "2") {
+      if (message.data['type'] != "2") {
         showNotification(message.data["title"], message.data["message"],
             message.data['type'], message.data);
       }
     }
-    // if (message.data["title"] != null && message.data["title"].isNotEmpty) {
-    //
-    // }
 
     if (message.notification != null) {
       log('Message also contained a notification: ${message.notification?.title}');
     }
 
-    if (notification != null && android != null && Platform.isAndroid) {
-
-    }
+    if (notification != null && android != null && Platform.isAndroid) {}
   }
 
   Future<void> showNotification(String title, String message, String type,
@@ -183,7 +232,7 @@ class NotificationHelper {
         icon: "divine_logo_tran",
         autoCancel: true,
         playSound: true,
-        // sound: const RawResourceAndroidNotificationSound('accept'),
+        sound: const RawResourceAndroidNotificationSound('accept'),
         setAsGroupSummary: true,
         styleInformation: const BigTextStyleInformation(''),
         actions: [
@@ -215,11 +264,7 @@ class NotificationHelper {
     await flutterLocalNotificationsPlugin.show(
         Random().nextInt(90000), title, message, notificationDetails,
         payload: json.encode(data));
-    // if (type == "1") {
-    //
-    // }  else {
-    //
-    // }
+
   }
 
   void notificationPermission() async {

@@ -1,3 +1,4 @@
+/*
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:math' as math;
@@ -81,7 +82,8 @@ void initMessaging() async {
         // Get.toNamed(RouteName.acceptChatRequestScreen);
         // acceptOrRejectChat(orderId: int.parse(payloadMap["order_id"]), queueId: int.parse(payloadMap["queue_id"]));
 
-        /*Future<bool> acceptOrRejectChat(
+        */
+/*Future<bool> acceptOrRejectChat(
             {required int? orderId, required int? queueId}) async {
 // *accept_or_reject: 1 = accept, 3 = chat reject by timeout
 // * is_timeout: should be 1 when reject by timeout"
@@ -101,7 +103,8 @@ void initMessaging() async {
             log("chat_reject 4");
             return false;
           }
-        }*/
+        }*//*
+
 
         // Get.toNamed(RouteName.liveDharamScreen);
       } else if (payloadMap["type"] == "8") {
@@ -269,3 +272,4 @@ Future<void> showNotificationWithActions(
     payload: jsonEncodePayload,
   );
 }
+*/

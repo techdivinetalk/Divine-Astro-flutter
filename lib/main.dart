@@ -57,13 +57,18 @@ late List<CameraDescription>? cameras;
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  log('channel_id: ${message.notification!.toMap()}');
-  // NotificationHelper().showNotification(
-  //   message.data["title"],
-  //   message.data["message"],
-  //   message.data['type'],
-  //   message.data,
-  // );
+  if(message.notification != null){
+    print("message.notification---not null");
+  }else{
+    print("message.notification---null");
+  }
+
+  NotificationHelper().showNotification(
+    message.data["title"] ?? "",
+    message.data["message"] ?? "",
+    message.data['type'] ?? "",
+    message.data,
+  );
 }
 
 //// Onboarding Code Done
