@@ -2594,77 +2594,77 @@ class HomeUI extends GetView<HomeController> {
                         ],
                       ),
                     ),
-                    // showHelp.value.toString() == "0"
-                    //     ? const SizedBox()
-                    //     : Positioned(
-                    //         top: controller.yPosition,
-                    //         left: controller.xPosition + 10,
-                    //         child: Container(
-                    //           margin: EdgeInsets.symmetric(horizontal: 20.w),
-                    //           child: GestureDetector(
-                    //               onPanUpdate: (tapInfo) {
-                    //                 double newXPosition =
-                    //                     controller.xPosition + tapInfo.delta.dx;
-                    //                 double newYPosition =
-                    //                     controller.yPosition + tapInfo.delta.dy;
-                    //
-                    //                 // Ensure newXPosition is within screen bounds
-                    //                 newXPosition = newXPosition.clamp(
-                    //                     0.0,
-                    //                     maxWidth -
-                    //                         50); // Assuming widget width is 50
-                    //                 newYPosition = newYPosition.clamp(
-                    //                     0,
-                    //                     maxHeight -
-                    //                         50); // Assuming widget height is 50
-                    //
-                    //                 controller.xPosition = newXPosition;
-                    //                 controller.yPosition = newYPosition;
-                    //                 controller.update();
-                    //               },
-                    //               onPanEnd: (details) {
-                    //                 if (controller.xPosition + 25 <
-                    //                     Get.width / 2) {
-                    //                   controller.xPosition = 0;
-                    //                 } else {
-                    //                   controller.xPosition = Get.width - 70;
-                    //                 }
-                    //
-                    //                 controller.update();
-                    //               },
-                    //               onTap: () {
-                    //                 // Get.toNamed(
-                    //                 //   RouteName.technicalIssues,
-                    //                 // );
-                    //                 controller.whatsapp();
-                    //               },
-                    //               child: Container(
-                    //                   key: DashboardController(
-                    //                           PreDefineRepository())
-                    //                       .keyHelp,
-                    //                   height: 50,
-                    //                   width: 50,
-                    //                   decoration: BoxDecoration(
-                    //                     color: appColors.guideColor,
-                    //                     borderRadius: BorderRadius.circular(25.0),
-                    //                   ),
-                    //                   child: Center(
-                    //                     child: Column(
-                    //                       mainAxisAlignment:
-                    //                           MainAxisAlignment.center,
-                    //                       children: [
-                    //                         Assets.images.icHelp
-                    //                             .svg(color: appColors.white),
-                    //                         Text(
-                    //                           "help".tr,
-                    //                           style: AppTextStyle.textStyle10(
-                    //                               fontColor: appColors.white,
-                    //                               fontWeight: FontWeight.w700),
-                    //                         )
-                    //                       ],
-                    //                     ),
-                    //                   ))),
-                    //         ))
+                    isAstroCare.value == 0
+                      ? const SizedBox()
+                      : Positioned(
+                            top: controller.yPosition,
+                            left: controller.xPosition + 10,
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 20.w),
+                              child: GestureDetector(
+                                  onPanUpdate: (tapInfo) {
+                                    double newXPosition =
+                                        controller.xPosition + tapInfo.delta.dx;
+                                    double newYPosition =
+                                        controller.yPosition + tapInfo.delta.dy;
+
+                                    // Ensure newXPosition is within screen bounds
+                                    newXPosition = newXPosition.clamp(
+                                        0.0,
+                                        maxWidth -
+                                            50); // Assuming widget width is 50
+                                    newYPosition = newYPosition.clamp(
+                                        0,
+                                        maxHeight -
+                                            50); // Assuming widget height is 50
+
+                                    controller.xPosition = newXPosition;
+                                    controller.yPosition = newYPosition;
+                                    controller.update();
+                                  },
+                                  onPanEnd: (details) {
+                                    if (controller.xPosition + 25 <
+                                        Get.width / 2) {
+                                      controller.xPosition = 0;
+                                    } else {
+                                      controller.xPosition = Get.width - 70;
+                                    }
+
+                                    controller.update();
+                                  },
+                                  onTap: () {
+                                    // Get.toNamed(
+                                    //   RouteName.technicalIssues,
+                                    // );
+                                    controller.whatsapp();
+                                  },
+                                  child: Container(
+                                      key: DashboardController(
+                                              PreDefineRepository())
+                                          .keyHelp,
+                                      height: 50,
+                                      width: 50,
+                                      decoration: BoxDecoration(
+                                        color: appColors.guideColor,
+                                        borderRadius: BorderRadius.circular(25.0),
+                                      ),
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Assets.images.icHelp
+                                                .svg(color: appColors.white),
+                                            Text(
+                                              "help".tr,
+                                              style: AppTextStyle.textStyle10(
+                                                  fontColor: appColors.white,
+                                                  fontWeight: FontWeight.w700),
+                                            )
+                                          ],
+                                        ),
+                                      ))),
+                            ))
                   ]),
                 );
               } else {
