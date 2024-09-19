@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../common/routes.dart';
 import '../../pages/home/home_controller.dart';
+import '../../pages/performance/performance_controller.dart';
 
 class SideMenuDrawer extends GetView<HomeController> {
   const SideMenuDrawer({super.key});
@@ -34,10 +35,9 @@ class SideMenuDrawer extends GetView<HomeController> {
                 ),*/
                 InkWell(
                   onTap: () {
-                    Get.put(HomeController())
-                        .homeScreenKey
-                        .currentState
-                        ?.closeDrawer();
+                    Get.put(HomeController()).homeScreenKey
+                      ..currentState?.closeDrawer();
+                    Get.back();
                     Get.put(HomeController()).showPopup = true;
                   },
                   child: const Icon(Icons.close),
@@ -53,8 +53,7 @@ class SideMenuDrawer extends GetView<HomeController> {
                 onTap: () {
                   Get.put(HomeController()).homeScreenKey
                     ..currentState?.closeDrawer();
-                  Get.put(HomeController()).showPopup = false;
-                  Get.toNamed(RouteName.waitList);
+                  Get.back();
                 },
               ),
             if (isOrderHistory.value == 1)
@@ -64,6 +63,8 @@ class SideMenuDrawer extends GetView<HomeController> {
                 onTap: () {
                   Get.put(HomeController()).homeScreenKey
                     ..currentState?.closeDrawer();
+                  Get.back();
+
                   Get.put(HomeController()).showPopup = false;
                   Get.toNamed(RouteName.orderHistory);
                 },
@@ -75,6 +76,8 @@ class SideMenuDrawer extends GetView<HomeController> {
                 onTap: () {
                   Get.put(HomeController()).homeScreenKey
                     ..currentState?.closeDrawer();
+                  Get.back();
+
                   Get.put(HomeController()).showPopup = false;
 
                   Get.back();
@@ -99,6 +102,8 @@ class SideMenuDrawer extends GetView<HomeController> {
                 onTap: () {
                   Get.put(HomeController()).homeScreenKey
                     ..currentState?.closeDrawer();
+                  Get.back();
+
                   Get.put(HomeController()).showPopup = false;
                   controller.whatsapp();
                 },
@@ -110,6 +115,8 @@ class SideMenuDrawer extends GetView<HomeController> {
                 onTap: () async {
                   Get.put(HomeController()).homeScreenKey
                     ..currentState?.closeDrawer();
+                  Get.back();
+
                   Get.put(HomeController()).showPopup = false;
                   bool isPermission = await requestPermissions();
                   if (isPermission) {
@@ -128,6 +135,8 @@ class SideMenuDrawer extends GetView<HomeController> {
                       .homeScreenKey
                       .currentState
                       ?.closeDrawer();
+                  Get.back();
+
                   Get.put(HomeController()).showPopup = false;
                   Get.toNamed(RouteName.noticeBoard);
                 },
@@ -139,6 +148,8 @@ class SideMenuDrawer extends GetView<HomeController> {
                 onTap: () {
                   Get.put(HomeController()).homeScreenKey
                     ..currentState?.closeDrawer();
+                  Get.back();
+
                   Get.put(HomeController()).showPopup = false;
                   Get.toNamed(RouteName.technicalIssues);
                 },
@@ -150,6 +161,8 @@ class SideMenuDrawer extends GetView<HomeController> {
                 onTap: () {
                   Get.put(HomeController()).homeScreenKey
                     ..currentState?.closeDrawer();
+                  Get.back();
+
                   Get.put(HomeController()).showPopup = false;
                   Get.toNamed(RouteName.financialSupport);
                 },
@@ -161,6 +174,8 @@ class SideMenuDrawer extends GetView<HomeController> {
                 onTap: () {
                   Get.put(HomeController()).homeScreenKey
                     ..currentState?.closeDrawer();
+                  Get.back();
+
                   Get.put(HomeController()).showPopup = false;
                   Get.toNamed(RouteName.newSupportScreen);
                 },
@@ -172,6 +187,8 @@ class SideMenuDrawer extends GetView<HomeController> {
                     onTap: () {
                       Get.put(HomeController()).homeScreenKey
                         ..currentState?.closeDrawer();
+                      Get.back();
+
                       Get.put(HomeController()).showPopup = false;
                       Get.toNamed(RouteName.testingScreen);
                     },
@@ -186,6 +203,8 @@ class SideMenuDrawer extends GetView<HomeController> {
                       .homeScreenKey
                       .currentState
                       ?.closeDrawer();
+                  Get.back();
+
                   Get.put(HomeController()).showPopup = false;
 
                   Get.toNamed(RouteName.settingsUI);

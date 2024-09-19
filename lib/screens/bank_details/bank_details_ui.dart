@@ -73,7 +73,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                       child: BankDetailsField(
                                         validator: bankDetailValidator,
                                         controller: controller.bankName,
-                                        hintText: "holderNameHintText".tr,
+                                        hintText: "Please Enter Bank Name".tr,
                                         inputAction: TextInputAction.next,
                                         inputType: TextInputType.text,
                                       ),
