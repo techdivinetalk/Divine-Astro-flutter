@@ -2115,11 +2115,15 @@ class AstrologerChatAppBar extends StatelessWidget {
                                       ],
                                       const SizedBox(width: 10),
                                       Text(
-                                        AppFirebaseService()
+                                        (AppFirebaseService()
                                                     .orderData
                                                     .value["status"]
                                                     .toString() ==
-                                                "4"
+                                                "4" ||   AppFirebaseService()
+                                            .orderData
+                                            .value["status"]
+                                            .toString() ==
+                                            "5")
                                             ? "Chat Ended"
                                             : showTalkTime.value,
                                         style: TextStyle(
