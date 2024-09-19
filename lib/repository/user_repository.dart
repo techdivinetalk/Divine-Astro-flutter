@@ -28,6 +28,7 @@ import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart' hide FormData;
 import 'package:get/get_connect/http/src/status/http_status.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../common/app_exception.dart';
@@ -637,6 +638,15 @@ class UserRepository extends ApiProvider {
   }
 
   Future<ConstantDetailsModelClass> constantDetailsData() async {
+    String? _ipAddress = "Fetching...";
+    final info = NetworkInfo();
+
+    // Get the Wi-Fi IP address
+    final wifiIP = await info.getWifiIP(); // 192.168.1.43
+    // var dat = info.get
+    print('ip_address: $_ipAddress');
+    print('ip_address: $wifiIP');
+
     try {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       String version = packageInfo.version;
@@ -660,6 +670,8 @@ class UserRepository extends ApiProvider {
         param["device_sdk_code"] = buildNumber;
         param["appCurrentVersion"] = version;
         param["device_os"] = 1;
+        param['ip_address'] = wifiIP ?? 'Unable to get IP address';
+
         print('🥹🥹🥹🥹🥹🥹🥹🥹');
         print(jsonEncode(param).toString());
         print('🥹🥹🥹🥹🥹🥹🥹🥹');
@@ -710,6 +722,16 @@ class UserRepository extends ApiProvider {
   }
 
   Future<ConstantDetailsModelClass> constantDetailsData2api() async {
+    String? _ipAddress = "Fetching...";
+    final info = NetworkInfo();
+
+    // Get the Wi-Fi IP address
+    final wifiIP = await info.getWifiIP(); // 192.168.1.43
+    // var dat = info.get
+
+    print('ip_address: $_ipAddress');
+    print('ip_address: $wifiIP');
+
     try {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       String version = packageInfo.version;
@@ -732,6 +754,7 @@ class UserRepository extends ApiProvider {
         param["device_manufacture"] = androidInfo.manufacturer;
         param["device_sdk_code"] = buildNumber;
         param["appCurrentVersion"] = version;
+        param['ip_address'] = wifiIP ?? 'Unable to get IP address';
         print('🥹🥹🥹🥹🥹🥹🥹🥹');
         print(jsonEncode(param).toString());
         print('🥹🥹🥹🥹🥹🥹🥹🥹');

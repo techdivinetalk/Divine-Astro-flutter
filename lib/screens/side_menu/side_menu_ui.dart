@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../common/routes.dart';
 import '../../pages/home/home_controller.dart';
+import '../../pages/performance/performance_controller.dart';
 
 class SideMenuDrawer extends GetView<HomeController> {
   const SideMenuDrawer({super.key});
@@ -34,13 +35,10 @@ class SideMenuDrawer extends GetView<HomeController> {
                 ),*/
                 InkWell(
                   onTap: () {
-                    Get.put(HomeController())
-                        .homeScreenKey
-                        .currentState
-                        ?.closeDrawer();
-                    Get.put(HomeController()).showPopup = true;
-
+                    Get.put(HomeController()).homeScreenKey
+                      ..currentState?.closeDrawer();
                     Get.back();
+                    Get.put(HomeController()).showPopup = true;
                   },
                   child: const Icon(Icons.close),
                 ),
@@ -48,42 +46,44 @@ class SideMenuDrawer extends GetView<HomeController> {
               ],
             ),
             const SizedBox(height: 10),
-            if (isWaitlist.value == 1)ListTile(
-              leading: Assets.images.icWaiting.svg(),
-              title: Text("waitlist".tr),
-              onTap: () {
-                Get.put(HomeController()).homeScreenKey
-                  ..currentState?.closeDrawer();
-                Get.put(HomeController()).showPopup = false;
+            if (isWaitlist.value == 1)
+              ListTile(
+                leading: Assets.images.icWaiting.svg(),
+                title: Text("waitlist".tr),
+                onTap: () {
+                  Get.put(HomeController()).homeScreenKey
+                    ..currentState?.closeDrawer();
+                  Get.back();
+                },
+              ),
+            if (isOrderHistory.value == 1)
+              ListTile(
+                leading: Assets.images.icOrderHistory.svg(),
+                title: Text("orderHistory".tr),
+                onTap: () {
+                  Get.put(HomeController()).homeScreenKey
+                    ..currentState?.closeDrawer();
+                  Get.back();
 
-                Get.back();
-                Get.toNamed(RouteName.waitList);
-              },
-            ),
-            if (isOrderHistory.value == 1)ListTile(
-              leading: Assets.images.icOrderHistory.svg(),
-              title: Text("orderHistory".tr),
-              onTap: () {
-                Get.put(HomeController()).homeScreenKey
-                  ..currentState?.closeDrawer();
-                Get.put(HomeController()).showPopup = false;
+                  Get.put(HomeController()).showPopup = false;
+                  Get.toNamed(RouteName.orderHistory);
+                },
+              ),
+            if (isMessageTemplate.value == 1)
+              ListTile(
+                leading: Assets.images.icMessageTemplate.svg(),
+                title: Text("messageTemplate".tr),
+                onTap: () {
+                  Get.put(HomeController()).homeScreenKey
+                    ..currentState?.closeDrawer();
+                  Get.back();
 
-                Get.back();
-                Get.toNamed(RouteName.orderHistory);
-              },
-            ),
-            if (isMessageTemplate.value == 1)ListTile(
-              leading: Assets.images.icMessageTemplate.svg(),
-              title: Text("messageTemplate".tr),
-              onTap: () {
-                Get.put(HomeController()).homeScreenKey
-                  ..currentState?.closeDrawer();
-                Get.put(HomeController()).showPopup = false;
+                  Get.put(HomeController()).showPopup = false;
 
-                Get.back();
-                Get.toNamed(RouteName.messageTemplate);
-              },
-            ),
+                  Get.back();
+                  Get.toNamed(RouteName.messageTemplate);
+                },
+              ),
             /*ListTile(
               leading: Assets.images.icSetting.svg(),
               title: Text('settings'.tr),
@@ -102,79 +102,84 @@ class SideMenuDrawer extends GetView<HomeController> {
                 onTap: () {
                   Get.put(HomeController()).homeScreenKey
                     ..currentState?.closeDrawer();
-                  Get.put(HomeController()).showPopup = false;
-
                   Get.back();
+
+                  Get.put(HomeController()).showPopup = false;
                   controller.whatsapp();
                 },
               ),
-            if (isImportantNumber.value == 1)ListTile(
-              leading: Assets.images.icImportContact.svg(),
-              title: Text('importantNumbers'.tr),
-              onTap: () async {
-                Get.put(HomeController()).homeScreenKey
-                  ..currentState?.closeDrawer();
-                Get.put(HomeController()).showPopup = false;
+            if (isImportantNumber.value == 1)
+              ListTile(
+                leading: Assets.images.icImportContact.svg(),
+                title: Text('importantNumbers'.tr),
+                onTap: () async {
+                  Get.put(HomeController()).homeScreenKey
+                    ..currentState?.closeDrawer();
+                  Get.back();
 
-                Get.back();
-                bool isPermission = await requestPermissions();
-                if (isPermission) {
-                  Get.toNamed(RouteName.importantNumbers);
-                } else {
-                  divineSnackBar(data: "Please give permission for contacts");
-                }
-              },
-            ),
-            if (isNotice.value == 1)ListTile(
-              leading: const Icon(Icons.notifications_active_outlined),
-              title: Text("Notice".tr),
-              onTap: () {
-                Get.put(HomeController())
-                    .homeScreenKey
-                    .currentState
-                    ?.closeDrawer();
-                Get.put(HomeController()).showPopup = false;
+                  Get.put(HomeController()).showPopup = false;
+                  bool isPermission = await requestPermissions();
+                  if (isPermission) {
+                    Get.toNamed(RouteName.importantNumbers);
+                  } else {
+                    divineSnackBar(data: "Please give permission for contacts");
+                  }
+                },
+              ),
+            if (isNotice.value == 1)
+              ListTile(
+                leading: const Icon(Icons.notifications_active_outlined),
+                title: Text("Notice".tr),
+                onTap: () {
+                  Get.put(HomeController())
+                      .homeScreenKey
+                      .currentState
+                      ?.closeDrawer();
+                  Get.back();
 
-                Get.back();
-                Get.toNamed(RouteName.noticeBoard);
-              },
-            ),
-            if (isTechnicalSupport.value == 1)ListTile(
-              leading: const Icon(Icons.bug_report_outlined),
-              title: Text('Technical Support'.tr),
-              onTap: () {
-                Get.put(HomeController()).homeScreenKey
-                  ..currentState?.closeDrawer();
-                Get.put(HomeController()).showPopup = false;
+                  Get.put(HomeController()).showPopup = false;
+                  Get.toNamed(RouteName.noticeBoard);
+                },
+              ),
+            if (isTechnicalSupport.value == 1)
+              ListTile(
+                leading: const Icon(Icons.bug_report_outlined),
+                title: Text('Technical Support'.tr),
+                onTap: () {
+                  Get.put(HomeController()).homeScreenKey
+                    ..currentState?.closeDrawer();
+                  Get.back();
 
-                Get.back();
-                Get.toNamed(RouteName.technicalIssues);
-              },
-            ),
-            if (isFinancialSupport.value == 1)ListTile(
-              leading: const Icon(Icons.request_quote_outlined),
-              title: Text('Financial Support'.tr),
-              onTap: () {
-                Get.put(HomeController()).homeScreenKey
-                  ..currentState?.closeDrawer();
-                Get.put(HomeController()).showPopup = false;
+                  Get.put(HomeController()).showPopup = false;
+                  Get.toNamed(RouteName.technicalIssues);
+                },
+              ),
+            if (isFinancialSupport.value == 1)
+              ListTile(
+                leading: const Icon(Icons.request_quote_outlined),
+                title: Text('Financial Support'.tr),
+                onTap: () {
+                  Get.put(HomeController()).homeScreenKey
+                    ..currentState?.closeDrawer();
+                  Get.back();
 
-                Get.back();
-                Get.toNamed(RouteName.financialSupport);
-              },
-            ),
-            if (isDrawerSupport.value == 1)ListTile(
-              leading: const Icon(Icons.contact_support_outlined),
-              title: Text('Support'.tr),
-              onTap: () {
-                Get.put(HomeController()).homeScreenKey
-                  ..currentState?.closeDrawer();
-                Get.put(HomeController()).showPopup = false;
+                  Get.put(HomeController()).showPopup = false;
+                  Get.toNamed(RouteName.financialSupport);
+                },
+              ),
+            if (isDrawerSupport.value == 1)
+              ListTile(
+                leading: const Icon(Icons.contact_support_outlined),
+                title: Text('Support'.tr),
+                onTap: () {
+                  Get.put(HomeController()).homeScreenKey
+                    ..currentState?.closeDrawer();
+                  Get.back();
 
-                Get.back();
-                Get.toNamed(RouteName.newSupportScreen);
-              },
-            ),
+                  Get.put(HomeController()).showPopup = false;
+                  Get.toNamed(RouteName.newSupportScreen);
+                },
+              ),
             kDebugMode
                 ? ListTile(
                     leading: const Icon(Icons.check_box_outline_blank),
@@ -182,27 +187,29 @@ class SideMenuDrawer extends GetView<HomeController> {
                     onTap: () {
                       Get.put(HomeController()).homeScreenKey
                         ..currentState?.closeDrawer();
-                      Get.put(HomeController()).showPopup = false;
-
                       Get.back();
+
+                      Get.put(HomeController()).showPopup = false;
                       Get.toNamed(RouteName.testingScreen);
                     },
                   )
                 : const SizedBox(),
-            if (isSetting.value == 1)ListTile(
-              leading: Assets.images.icSetting.svg(),
-              title: Text('settings'.tr),
-              onTap: () {
-                Get.find<HomeController>()
-                    .homeScreenKey
-                    .currentState
-                    ?.closeDrawer();
-                Get.put(HomeController()).showPopup = false;
+            if (isSetting.value == 1)
+              ListTile(
+                leading: Assets.images.icSetting.svg(),
+                title: Text('settings'.tr),
+                onTap: () {
+                  Get.find<HomeController>()
+                      .homeScreenKey
+                      .currentState
+                      ?.closeDrawer();
+                  Get.back();
 
-                // Navigator.of(context).pop(),
-                Get.toNamed(RouteName.settingsUI);
-              },
-            ),
+                  Get.put(HomeController()).showPopup = false;
+
+                  Get.toNamed(RouteName.settingsUI);
+                },
+              ),
             // ListTile(
             //   leading: Assets.images.icImportContact.svg(),
             //   title: Text("leaveresignation".tr),

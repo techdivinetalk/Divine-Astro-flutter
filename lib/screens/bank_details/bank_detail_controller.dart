@@ -153,14 +153,151 @@ class BankDetailController extends GetxController {
   var pasbok;
   var cheque;
   var isLoading = false.obs;
+  // Future<void> uploadPassBook(imageFile) async {
+  //   var token = await preferenceService.getToken();
+  //   isLoading(true);
+  //
+  //   print("Uploading image: ${imageFile.path}");
+  //   var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+  //   print("------------${uri}");
+  //   var request = http.MultipartRequest('POST', uri);
+  //   request.headers.addAll({
+  //     'Authorization': 'Bearer $token',
+  //     'Content-type': 'application/json',
+  //     'Accept': 'application/json',
+  //   });
+  //
+  //   // Attach the image file to the request
+  //   request.files.add(await http.MultipartFile.fromPath(
+  //     'image',
+  //     imageFile.path,
+  //   ));
+  //   request.fields.addAll({"module_name": "user_bank_passbook"});
+  //
+  //   var response = await request.send();
+  //   // print("image length - ${imageFile.path}");
+  //   //
+  //   // var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+  //   //
+  //   // var request = http.MultipartRequest('POST', uri);
+  //   // request.headers.addAll({
+  //   //   'Authorization': 'Bearer $token',
+  //   //   'Content-type': 'application/json',
+  //   //   'Accept': 'application/json',
+  //   // });
+  //   //
+  //   // // Attach the image file to the request
+  //   // request.files.add(await http.MultipartFile.fromPath(
+  //   //   'image',
+  //   //   imageFile.path,
+  //   // ));
+  //   // request.fields.addAll({"module_name": "user_bank_passbook"});
+  //   //
+  //   // var response = await request.send();
+  //
+  //   // Listen for the response
+  //
+  //   print("responseresponseresponse");
+  //   response.stream.transform(utf8.decoder).listen((value) {
+  //     print("image data printing --- ${jsonDecode(value)["data"]}");
+  //     print(jsonDecode(value)["data"]);
+  //     update();
+  //     // pasbok = jsonDecode(value)["data"]["full_path"];
+  //       passBookUrl = jsonDecode(value)["data"]["full_path"];
+  //
+  //     print("img-- ${passBookUrl.toString()}");
+  //     print("valuevaluevaluevaluevaluevaluevalue");
+  //   });
+  //   print("uploadedImages -- ${passBookUrl.toString()}");
+  //
+  //   if (response.statusCode == 200) {
+  //     print("Image uploaded successfully.");
+  //
+  //     // if (image.isNotEmpty) {
+  //     //   poojaImageUrl = image;
+  //     // }
+  //   } else {
+  //     isLoading(false);
+  //
+  //     print("Failed to upload image.");
+  //   }
+  // }
+  //
+
+  // Future<void> uploadCheque(imageFile) async {
+  //   var token = await preferenceService.getToken();
+  //   isLoading(true);
+  //
+  //   print("image length - ${imageFile.path}");
+  //
+  //   print("Uploading image: ${imageFile.path}");
+  //   var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+  //   print("------------${uri}");
+  //   var request = http.MultipartRequest('POST', uri);
+  //   request.headers.addAll({
+  //     'Authorization': 'Bearer $token',
+  //     'Content-type': 'application/json',
+  //     'Accept': 'application/json',
+  //   });
+  //
+  //   // Attach the image file to the request
+  //   request.files.add(await http.MultipartFile.fromPath(
+  //     'image',
+  //     imageFile.path,
+  //   ));
+  //   request.fields.addAll({"module_name": "user_bank_cheque"});
+  //
+  //   var response = await request.send();
+  //   // var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+  //   //
+  //   // var request = http.MultipartRequest('POST', uri);
+  //   // request.headers.addAll({
+  //   //   'Authorization': 'Bearer $token',
+  //   //   'Content-type': 'application/json',
+  //   //   'Accept': 'application/json',
+  //   // });
+  //   //
+  //   // // Attach the image file to the request
+  //   // request.files.add(await http.MultipartFile.fromPath(
+  //   //   'image',
+  //   //   imageFile.path,
+  //   // ));
+  //   // request.fields.addAll({"module_name": "user_bank_cheque"});
+  //   //
+  //   // var response = await request.send();
+  //
+  //   // Listen for the response
+  //
+  //   print("responseresponseresponse");
+  //   response.stream.transform(utf8.decoder).listen((value) {
+  //     print(jsonDecode(value)["data"]);
+  //     update();
+  //     cheque = jsonDecode(value)["data"]["full_path"];
+  //     cancelledChequeUrl = jsonDecode(value)["data"]["full_path"];
+  //     print("img-- ${cancelledChequeUrl.toString()}");
+  //     print("valuevaluevaluevaluevaluevaluevalue");
+  //   });
+  //   print("uploadedImages -- ${cancelledChequeUrl.toString()}");
+  //
+  //   if (response.statusCode == 200) {
+  //     print("Image uploaded successfully.");
+  //
+  //     // if (image.isNotEmpty) {
+  //     //   poojaImageUrl = image;
+  //     // }
+  //   } else {
+  //     isLoading(false);
+  //
+  //     print("Failed to upload image.");
+  //   }
+  // }
   Future<void> uploadPassBook(imageFile) async {
     var token = await preferenceService.getToken();
     isLoading(true);
 
-    print("image length - ${imageFile.path}");
-
+    print("Uploading image: ${imageFile.path}");
     var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
-
+    print("------------${uri}");
     var request = http.MultipartRequest('POST', uri);
     request.headers.addAll({
       'Authorization': 'Bearer $token',
@@ -177,8 +314,6 @@ class BankDetailController extends GetxController {
 
     var response = await request.send();
 
-    // Listen for the response
-
     print("responseresponseresponse");
     response.stream.transform(utf8.decoder).listen((value) {
       print(jsonDecode(value)["data"]);
@@ -192,10 +327,6 @@ class BankDetailController extends GetxController {
 
     if (response.statusCode == 200) {
       print("Image uploaded successfully.");
-
-      // if (image.isNotEmpty) {
-      //   poojaImageUrl = image;
-      // }
     } else {
       isLoading(false);
 
@@ -207,10 +338,9 @@ class BankDetailController extends GetxController {
     var token = await preferenceService.getToken();
     isLoading(true);
 
-    print("image length - ${imageFile.path}");
-
+    print("Uploading image: ${imageFile.path}");
     var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
-
+    print("------------${uri}");
     var request = http.MultipartRequest('POST', uri);
     request.headers.addAll({
       'Authorization': 'Bearer $token',
@@ -218,7 +348,6 @@ class BankDetailController extends GetxController {
       'Accept': 'application/json',
     });
 
-    // Attach the image file to the request
     request.files.add(await http.MultipartFile.fromPath(
       'image',
       imageFile.path,
@@ -226,8 +355,6 @@ class BankDetailController extends GetxController {
     request.fields.addAll({"module_name": "user_bank_cheque"});
 
     var response = await request.send();
-
-    // Listen for the response
 
     print("responseresponseresponse");
     response.stream.transform(utf8.decoder).listen((value) {
@@ -242,10 +369,6 @@ class BankDetailController extends GetxController {
 
     if (response.statusCode == 200) {
       print("Image uploaded successfully.");
-
-      // if (image.isNotEmpty) {
-      //   poojaImageUrl = image;
-      // }
     } else {
       isLoading(false);
 
