@@ -246,7 +246,7 @@ class ProfilePageController extends GetxController {
     debugPrint("test_onInit: call");
     isInit = true;
     // scrollController.l
-    if(isProfileAstroSupport.value == 1){
+    if(isAstroCare.value == 1){
       profileList.insert(3, ProfileOptionModelClass("customerSupport".tr,
           Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), '',true));
     } else{

@@ -16,7 +16,7 @@ class ReferAstrologerRequest {
   String? skills;
   String? userId;
   String? isCustApp;
-  String? state;
+  String? place;
   String? fatherName;
   String? dob;
   int? referBy;
@@ -32,7 +32,7 @@ class ReferAstrologerRequest {
     this.userId,
     this.isCustApp,
     this.referBy,
-    this.state,
+    this.place,
     this.fatherName,
     this.dob,
   });
@@ -47,9 +47,8 @@ class ReferAstrologerRequest {
     String? skills,
     String? userId,
     String? isCustApp,
-    String? state,
+    String? place,
     String? fatherName,
-    String? address,
     String? dob,
   }) =>
       ReferAstrologerRequest(
@@ -63,9 +62,9 @@ class ReferAstrologerRequest {
         userId: userId ?? this.userId,
         isCustApp: isCustApp ?? this.isCustApp,
         referBy: referBy ?? this.referBy,
-        state: state ?? this.state,
-        fatherName: state ?? this.fatherName,
-        dob: state ?? this.dob,
+        place: place ?? this.place,
+        fatherName: fatherName ?? this.fatherName,
+        dob: dob ?? this.dob,
       );
 
   factory ReferAstrologerRequest.fromJson(Map<String, dynamic> json) =>
@@ -80,7 +79,7 @@ class ReferAstrologerRequest {
         userId: json["userId"],
         isCustApp: json["isCustApp"],
         referBy: json["referBy"],
-        state: json["state"],
+        place: json["place"],
         fatherName: json["fatherName"],
         dob: json["dob"],
       );
@@ -96,7 +95,7 @@ class ReferAstrologerRequest {
         "userId": userId,
         "isCustApp": isCustApp,
         "referBy": referBy,
-        "state": state,
+        "place": place,
         "fatherName": fatherName,
         "dob": dob,
       };

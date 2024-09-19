@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:custom_rating_bar/custom_rating_bar.dart';
 import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/common_image_view.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 import 'package:divine_astrologer/pages/profile/widget/report_post_reason_widget.dart';
 import 'package:file_picker/file_picker.dart';
@@ -307,7 +308,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                         child: InkWell(
                           onTap: () async {
                             print("objectobjectobjectobjectobject----${index}");
-                            if (index == 3) {
+                            if ((index == 3 && isAstroCare.value == 0) || (index == 4 && isAstroCare.value == 1)) {
                               openBottomSheet(
                                 context,
                                 functionalityWidget: Column(
@@ -489,6 +490,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                                   ],
                                 ),
                               );
+                            } else if((index == 3 && isAstroCare.value == 1)){
+                              controller.whatsapp();
                             } else if (index == 1) {
                               // if (await PermissionHelper()
                               //     .askStoragePermission(Permission.videos)) {
