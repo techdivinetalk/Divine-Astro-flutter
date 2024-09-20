@@ -1033,7 +1033,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                     mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      !controller.hasMessage.value
+                                      !controller.hasMessage.value && asForGifts.toString() == "1"
                                           ? GestureDetector(
                                               onTap: () {
                                                 controller.askForGift();
@@ -1334,6 +1334,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 ],
                               )
                             : const SizedBox(),
+                    productChat.toString() == "1" ?
                     Column(
                       children: [
                         GestureDetector(
@@ -1357,7 +1358,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           ),
                         )
                       ],
-                    ),
+                    )
+                        : const SizedBox(),
+                    customProduct.toString() == "1" ?
                     Column(
                       children: [
                         GestureDetector(
@@ -1381,7 +1384,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           ),
                         )
                       ],
-                    ),
+                    ) : const SizedBox(),
+                    tarotCard.toString() == "1" ?
                     Column(
                       children: [
                         GestureDetector(
@@ -1414,7 +1418,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           ),
                         )
                       ],
-                    ),
+                    ) : const SizedBox(),
                     Obx(
                       () {
                         Map orderData = AppFirebaseService().orderData.value;

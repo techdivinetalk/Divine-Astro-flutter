@@ -74,6 +74,10 @@ RxInt isAstroCare = 1.obs;
 RxInt isLiveCall = 1.obs;
 RxInt homePage = 1.obs;
 RxInt razorPayLink = 0.obs;
+RxInt productChat = 1.obs;
+RxInt asForGifts = 1.obs;
+RxInt customProduct = 1.obs;
+RxInt tarotCard = 1.obs;
 RxMap<dynamic, dynamic> callKunadliUpdated = {}.obs;
 StreamSubscription<DatabaseEvent>? subscription;
 
@@ -524,6 +528,18 @@ class AppFirebaseService {
         break;
       case "razorPayLink":
         razorPayLink(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "productChat":
+        productChat(int.parse(dataSnapshot.value.toString()));
+        break;
+     case "asForGifts":
+       asForGifts(int.parse(dataSnapshot.value.toString()));
+        break;
+    case "customProduct":
+      customProduct(int.parse(dataSnapshot.value.toString()));
+        break;
+   case "tarotCard":
+     tarotCard(int.parse(dataSnapshot.value.toString()));
         break;
       default:
         // preferenceService.setStringPref(
