@@ -118,7 +118,6 @@ class NotificationHelper {
     // if (message.notification?.title != null) {
 
     // if (message.data["title"] != null && message.data["title"].isNotEmpty) {
-    //
     // }
     // }
     if (message.data["type"].toString() == "1") {

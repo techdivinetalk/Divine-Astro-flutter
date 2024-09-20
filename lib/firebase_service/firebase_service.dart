@@ -286,20 +286,33 @@ class AppFirebaseService {
 
         break;
       case "giftCount":
-        giftCountUpdate(value["giftCount"]);
-        giftImageUpdate(value["giftImage"]);
         print(
-            "gift broadcase called ${value["giftCount"]} ${value["giftImage"]}");
+            "gift broadcase giftCount ${value}");
+        giftCountUpdate(value);
+
         sendBroadcast(
           BroadcastMessage(
             name: "giftCount",
             data: {
-              'giftCount': value["giftCount"],
-              "giftImage": value["giftImage"],
+              'giftCount': value,
             },
           ),
         );
         FirebaseDatabase.instance.ref("$path/giftCount").remove();
+        break;
+        case "giftImage":
+        print(
+            "gift broadcase giftImage ${value}");
+        giftImageUpdate(value);
+        sendBroadcast(
+          BroadcastMessage(
+            name: "giftCount",
+            data: {
+              'giftImage': value,
+            },
+          ),
+        );
+        print("------giftImage---$path/giftImage");
         FirebaseDatabase.instance.ref("$path/giftImage").remove();
         break;
       case "voiceCallStatus":
