@@ -39,6 +39,8 @@ class AppColors extends GetxController {
   Color greyColor2 = const Color(0xFFC7C6C6);
   Color greyColor3 = const Color(0xFFEEEEEE);
   Color marqueeBgColor = const Color(0xFFFEB3B8);
+  Color darkBlue1 = const Color(0xFF0E2339);
+  Color yellow1 = const Color(0xFFFCB742);
 
   /// Order Status Color
   Color initiateColor = const Color(0xFF000000);

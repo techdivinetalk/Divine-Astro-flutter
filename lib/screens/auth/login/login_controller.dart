@@ -44,6 +44,7 @@ class LoginController extends GetxController {
   TextEditingController countryCodeController =
       TextEditingController(text: "+91");
   TextEditingController mobileNumberController = TextEditingController();
+  String mobile = "";
   final appFirebaseService = AppFirebaseService();
 
   // RxString get countryCode => countryCodeController.text.obs;
@@ -66,7 +67,8 @@ class LoginController extends GetxController {
     //deviceToken = await FirebaseMessaging.instance.getToken();
     print("mobileNumberController.text ------> ${mobileNumberController.text}");
     Map<String, dynamic> params = {
-      "mobile_no": mobileNumberController.text,
+      // "mobile_no": mobileNumberController.text,
+      "mobile_no": mobile,
       "country_code": countryCodeController.text,
       //"device_token": await FirebaseMessaging.instance.getToken()
     };
@@ -106,6 +108,7 @@ class LoginController extends GetxController {
       countryCodeController.text
     ]);
     mobileNumberController.clear();
+    mobile = "";
     enable.value = true;
   }
 
@@ -243,6 +246,7 @@ class LoginController extends GetxController {
 
                     countryCodeController.text = countryCode;
                     mobileNumberController.text = phoneNumber;
+                    mobile = phoneNumber;
                     update();
                     Get.back();
                   },

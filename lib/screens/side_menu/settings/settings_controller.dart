@@ -60,6 +60,7 @@ class SettingsController extends GetxController {
   }
 
   void logOut() {
+    print("logOutlogOutlogOut start");
     userRepository.logOut().then(
       (value) async {
         if (value.statusCode == 200 && value.success == true) {

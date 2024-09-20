@@ -324,6 +324,9 @@ class LoginUI extends GetView<LoginController> {
                   width: 1.0,
                 )),
           ),
+          onChanged: (value) {
+            controller.mobile = value;
+          },
         ),
       ),
     );
