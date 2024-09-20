@@ -1079,6 +1079,7 @@ class ZegoCustomMessage {
   String userName = "";
   String avatar = "";
   String message = "";
+  dynamic level;
   String timeStamp = "";
   String fullGiftImage = "";
   bool isBlockedCustomer = false;
@@ -1095,6 +1096,7 @@ class ZegoCustomMessage {
     required this.fullGiftImage,
     required this.isBlockedCustomer,
     required this.isMod,
+    this.level,
   });
 
   ZegoCustomMessage.fromJson(Map<String, dynamic> json) {
@@ -1108,6 +1110,7 @@ class ZegoCustomMessage {
     fullGiftImage = json['fullGiftImage'];
     isBlockedCustomer = json['isBlockedCustomer'];
     isMod = json['isMod'];
+    level = json['level'];
   }
 
   Map<String, dynamic> toJson() {
@@ -1122,6 +1125,7 @@ class ZegoCustomMessage {
     data['fullGiftImage'] = fullGiftImage;
     data['isBlockedCustomer'] = isBlockedCustomer;
     data['isMod'] = isMod;
+    data['level'] = level;
     return data;
   }
 }

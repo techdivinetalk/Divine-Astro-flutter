@@ -1,3 +1,4 @@
+
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -7,6 +8,7 @@ import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_astrologer_response.dart';
 import 'package:divine_astrologer/model/order_history_model/remedy_suggested_order_history.dart';
+import 'package:divine_astrologer/screens/live_dharam/widgets/common_button.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggested_remedies/suggested_remedies_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -105,9 +107,15 @@ class SuggestedRemediesScreen extends StatelessWidget {
     );
   }
 
+  String formatDateTime(String isoString) {
+    DateTime dateTime = DateTime.parse(isoString);
+    DateFormat formatter = DateFormat('dd MMM yy, hh:mm a');
+    return formatter.format(dateTime);
+  }
+
   Widget remediesDetail(int index, List<RemedySuggestedDataList> data) {
     print(
-        "images ${"${preferenceService.getBaseImageURL()}/${data[index].getCustomers?.avatar}"}");
+        "create at  ${data[index].createdAt}");
     return InkWell(
       onTap: () {
         DataList dataList = DataList();
@@ -328,3 +336,142 @@ class SuggestedRemediesScreen extends StatelessWidget {
     }
   }
 }
+
+/// new design
+/*
+Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      CustomText(
+                        data[index].poojaDetails != null ? data[index].poojaDetails?.poojaName ?? ""
+                        : data[index].productDetails?.prodName ?? "",
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.w600,
+                        fontColor: appColors.guideColor,
+                        maxLines: 2,
+                      ),
+                      4.verticalSpace,
+                      CustomText(
+                        "Category - ",
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.textColor,
+                      ),
+                      4.verticalSpace,
+                      CustomText(
+                        "Name - ${data[index].getCustomers?.name} (Id : ${data[index].getCustomers?.id})",
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.textColor,
+                      ),
+                      4.verticalSpace,
+                      CustomText(
+                        "Date & Time - ${formatDateTime(data[index].createdAt.toString())}",
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.textColor,
+                      ),
+                      4.verticalSpace,
+                      CustomText(
+                        "Price - ${data[index].poojaDetails != null ? data[index].poojaDetails?.pooja_starting_price_inr
+                        : data[index].productDetails?.prod_starting_price_inr}",
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.textColor,
+                      ),
+                      4.verticalSpace,
+                      CustomText(
+                        "Type - ",
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.w400,
+                        fontColor: appColors.textColor,
+                      ),
+                      4.verticalSpace,
+                      Row(
+                        children: [
+                          CustomText(
+                            "Status - ",
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w400,
+                            fontColor: appColors.textColor,
+                          ),
+                          CustomText(
+                            data[index].status ?? "",
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w400,
+                            fontColor: data[index].status?.toLowerCase() == "booked" ? appColors.green
+                            : appColors.textColor,
+                          ),
+                        ],
+                      ),
+                      4.verticalSpace,
+                      Row(
+                        children: [
+                          CustomText(
+                            "Description - ",
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w400,
+                            fontColor: appColors.textColor,
+                          ),
+                          CustomText(
+                            "123",
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.w400,
+                            fontColor: appColors.darkBlue1.withOpacity(0.5),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+                5.horizontalSpace,
+                Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 96.0,
+                      width: 96.0,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(8.0),
+                        child: Image.network(
+                          "${preferenceService.getAmazonUrl()}/${data[index].poojaDetails != null ? data[index].poojaDetails?.pooja_img ?? "" : data[index].productDetails?.prodImage ?? ""}",
+                          errorBuilder: (context, error, stackTrace) {
+                            return Icon(
+                              Icons.error,
+                              color: Colors.red.withOpacity(0.5),
+                              size: 50.0,
+                            );
+                          },
+                        ),
+                      ),
+                    ),
+                    45.verticalSpace,
+                    GestureDetector(
+                      onTap: () => Get.toNamed(RouteName.remediesView),
+                      child: Container(
+                        padding: const EdgeInsets.all(8.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          color: appColors.guideColor,
+                        ),
+                        child: const CustomText(
+                            "Suggest Next Remedy",
+                          fontWeight: FontWeight.w400,
+                          fontSize: 12.0,
+                          fontColor: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        )
+ */

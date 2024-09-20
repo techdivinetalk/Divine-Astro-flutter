@@ -475,6 +475,8 @@ class ChatMessageWithSocketController extends GetxController
         svgController.stop();
       }
     });
+    print("level ------> ${AppFirebaseService().orderData.value["level"]}");
+    print("customerName ------> ${AppFirebaseService().orderData.value["customerName"]}");
     WidgetsBinding.instance.addObserver(this);
     if (showRetentionPopup.toString() == "1") {
       print("callling popup api from this side");

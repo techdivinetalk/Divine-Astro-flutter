@@ -12,6 +12,7 @@ import "package:divine_astrologer/common/app_textstyle.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/common_bottomsheet.dart";
 import "package:divine_astrologer/common/common_functions.dart";
+import "package:divine_astrologer/common/custom_widgets.dart";
 import "package:divine_astrologer/common/generic_loading_widget.dart";
 import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
@@ -394,6 +395,7 @@ class _LivePage extends State<LiveDharamScreen>
                   fullGiftImage: "",
                   isBlockedCustomer: false,
                   isMod: true,
+                  // level: ""
                 );
                 await sendMessageToZego(model);
               } else {}
@@ -411,6 +413,7 @@ class _LivePage extends State<LiveDharamScreen>
                   fullGiftImage: "",
                   isBlockedCustomer: false,
                   isMod: true,
+                  // level: "",
                 );
                 await sendMessageToZego(model);
               } else {}
@@ -944,6 +947,7 @@ class _LivePage extends State<LiveDharamScreen>
               // final isLiveMonitoringTeam =
               //     msg.userName == "Live Monitoring Team";
               final isModerator = msg.isMod;
+              print("-------=====> ${msg.userName} ------> ${msg.level}");
               return msg.type == 0
                   ? const SizedBox()
                   : Row(
@@ -984,33 +988,51 @@ class _LivePage extends State<LiveDharamScreen>
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    constraints: BoxConstraints(
-                                      maxWidth: Get.width / 2.3,
-                                    ),
-                                    child: Text(
-                                      "${msg.userName} ${isBlocked || msg.userName == "Quality Team" || msg.userName == "Live Monitoring Team" ? "" : "(${msg.userId})"}",
-                                      // nameWithWithoutIDs(msg, isModerator),
-                                      // maxLines: 100000,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: isBlocked ||
-                                                msg.userName ==
-                                                    "Quality Team" ||
-                                                msg.userName ==
-                                                    "Live Monitoring Team"
-                                            ? Colors.red
-                                            : isModerator
-                                                ? appColors.white
-                                                : msg.fullGiftImage.isNotEmpty
-                                                    ? appColors.black
-                                                    : msg.message.contains(
-                                                            "Started following")
+                                  Row(
+                                    children: [
+                                      Container(
+                                        constraints: BoxConstraints(
+                                          maxWidth: Get.width / 2.3,
+                                        ),
+                                        child: Text(
+                                          "${msg.userName} ${isBlocked || msg.userName == "Quality Team" || msg.userName == "Live Monitoring Team" ? "" : "(${msg.userId})"}",
+                                          // nameWithWithoutIDs(msg, isModerator),
+                                          // maxLines: 100000,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: isBlocked ||
+                                                    msg.userName ==
+                                                        "Quality Team" ||
+                                                    msg.userName ==
+                                                        "Live Monitoring Team"
+                                                ? Colors.red
+                                                : isModerator
+                                                    ? appColors.white
+                                                    : msg.fullGiftImage.isNotEmpty
                                                         ? appColors.black
-                                                        : Colors.white,
+                                                        : msg.message.contains(
+                                                                "Started following")
+                                                            ? appColors.black
+                                                            : Colors.white,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                      msg.level != null &&
+                                          msg.level !=
+                                              ""
+                                          ? Padding(
+                                        padding: const EdgeInsets
+                                            .symmetric(
+                                            horizontal:
+                                            2.0),
+                                        child: LevelWidget(
+                                            level: msg
+                                                .level ??
+                                                ""),
+                                      )
+                                          : const SizedBox(),
+                                    ],
                                   ),
                                   Container(
                                     constraints: BoxConstraints(
@@ -3171,6 +3193,7 @@ class _LivePage extends State<LiveDharamScreen>
         fullGiftImage: "",
         isBlockedCustomer: _controller.isCustomerBlockedBool(),
         isMod: _controller.isMod,
+        // level: "",
       );
       await sendMessageToZego(model);
     }

@@ -71,7 +71,7 @@ class RemedySuggestedDataList {
       this.shopId,
       this.productId,
       this.isConfirm,
-      this.status,
+      this.status,/// project run ho raha hai
       this.createdAt,
       this.updatedAt,
       this.getCustomers,

@@ -908,9 +908,9 @@ class ProfileUI extends GetView<ProfilePageController> {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        if (reviewData.level != null &&
-                            reviewData.level != "" &&
-                            isFirstOccurrence)
+                        if (reviewData.level != null && reviewData.level != ""
+                            // && isFirstOccurrence
+                        )
                           Padding(
                             padding: const EdgeInsets.only(left: 5.0),
                             child: LevelWidget(level: reviewData.level ?? ""),
