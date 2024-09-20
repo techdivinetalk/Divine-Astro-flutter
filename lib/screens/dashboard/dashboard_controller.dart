@@ -1510,7 +1510,6 @@ navigateForOnBoardingGlobal(commonConstants) async {
     disableButton.value = false;
     showAllPopup.value = false;
 
-    // showORHide.value = 1;
     Get.toNamed(
       RouteName.onBoardingScreen,
     );
@@ -1520,103 +1519,37 @@ navigateForOnBoardingGlobal(commonConstants) async {
     Get.put(HomeController()).showPopup = false;
     showAllPopup.value = false;
 
-    if (
-        // commonConstants.data.onboarding_reject_stage_no != null ||
-        //     commonConstants.data.onboarding_reject_stage_no != [] ||
-        commonConstants.data.onboarding_reject_stage_no.isNotEmpty) {
+    if (commonConstants.data.onboarding_reject_stage_no.isNotEmpty) {
       disableButton.value = false;
-      // for (int stage in commonConstants.data.onboarding_reject_stage_no) {
-      //   // Navigate to the screen based on the stage number
-      //   switch (stage) {
-      //     case 0:
-      //       // Navigate to the screen for stage 1
-      //       isOnPage.value = 1;
-      //       onBoardingList = [2, 3, 4, 5];
-      //
-      //       Get.toNamed(
-      //         RouteName.onBoardingScreen,
-      //       );
-      //       break;
-      //     case 1:
-      //       // Navigate to the screen for stage 1
-      //       isOnPage.value = 2;
-      //       onBoardingList = [3, 4, 5];
-      //
-      //       Get.toNamed(
-      //         RouteName.onBoardingScreen2,
-      //       );
-      //       break;
-      //     case 2:
-      //       // Navigate to the screen for stage 2
-      //       isOnPage.value = 3;
-      //       onBoardingList = [4, 5];
-      //
-      //       Get.toNamed(
-      //         RouteName.onBoardingScreen3,
-      //       );
-      //       break;
-      //     case 3:
-      //       // Navigate to the screen for stage 3
-      //       isOnPage.value = 4;
-      //       onBoardingList = [5];
-      //
-      //       Get.toNamed(
-      //         RouteName.onBoardingScreen4,
-      //       );
-      //       break;
-      //     case 5:
-      //       // Navigate to the screen for stage 3
-      //       isOnPage.value = 5;
-      //       onBoardingList = [];
-      //
-      //       Get.toNamed(
-      //         RouteName.onBoardingScreen5,
-      //       );
-      //       break;
-      //     default:
-      //       // Handle unexpected stage numbers
-      //       print('Unknown stage number: $stage');
-      //       break;
-      //   }
-      // }
+
       isRejected.value = true;
 
       onBoardingList = commonConstants.data.onboarding_reject_stage_no;
       if (onBoardingList.first == 1) {
-        // onBoardingList
-        //     .remove(commonConstants.data.onboarding_reject_stage_no.first);
         isOnPage.value = 1;
 
         Get.toNamed(
           RouteName.onBoardingScreen,
         );
       } else if (onBoardingList.first == 2) {
-        // onBoardingList
-        //     .remove(commonConstants.data.onboarding_reject_stage_no.first);
         isOnPage.value = 2;
 
         Get.toNamed(
           RouteName.onBoardingScreen2,
         );
       } else if (onBoardingList.first == 3) {
-        // onBoardingList
-        //     .remove(commonConstants.data.onboarding_reject_stage_no.first);
         isOnPage.value = 3;
 
         Get.toNamed(
           RouteName.onBoardingScreen3,
         );
       } else if (onBoardingList.first == 4) {
-        // onBoardingList
-        //     .remove(commonConstants.data.onboarding_reject_stage_no.first);
         isOnPage.value = 4;
 
         Get.toNamed(
           RouteName.onBoardingScreen4,
         );
       } else if (onBoardingList.first == 5) {
-        // onBoardingList
-        //     .remove(commonConstants.data.onboarding_reject_stage_no.first);
         isOnPage.value = 5;
 
         Get.toNamed(
@@ -1662,28 +1595,16 @@ navigateForOnBoardingGlobal(commonConstants) async {
           RouteName.onBoardingScreen5,
         );
       } else if (commonConstants.data.stage_no.toString() == "5") {
-        // onBoardingList = [6];
-        // isOnPage.value = 5;
-
         Get.toNamed(
           RouteName.addEcomAutomation,
         );
       } else if (commonConstants.data.stage_no.toString() == "6") {
-        // onBoardingList = [6];
-        // isOnPage.value = 5;
-
         Get.toNamed(
           RouteName.scheduleTraining1,
         );
       } else if (commonConstants.data.stage_no.toString() == "7") {
-        // onBoardingList = [5];
-        // isOnPage.value = 5;
-
         Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
       } else if (commonConstants.data.stage_no.toString() == "8") {
-        // onBoardingList = [5];
-        // isOnPage.value = 5;
-
         Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
       }
     }
@@ -1700,28 +1621,16 @@ navigateForOnBoardingGlobal(commonConstants) async {
         RouteName.onBoardingScreen5,
       );
     } else if (commonConstants.data.stage_no.toString() == "5") {
-      // onBoardingList = [6];
-      // isOnPage.value = 5;
-
       Get.toNamed(
         RouteName.addEcomAutomation,
       );
     } else if (commonConstants.data.stage_no.toString() == "6") {
-      // onBoardingList = [6];
-      // isOnPage.value = 5;
-
       Get.toNamed(
         RouteName.scheduleTraining1,
       );
     } else if (commonConstants.data.stage_no.toString() == "7") {
-      // onBoardingList = [5];
-      // isOnPage.value = 5;
-
       Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
     } else if (commonConstants.data.stage_no.toString() == "8") {
-      // onBoardingList = [5];
-      // isOnPage.value = 5;
-
       Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
     }
   } else if (commonConstants.data.is_onboarding_in_process.toString() == "4") {

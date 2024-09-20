@@ -23,15 +23,14 @@ import "package:fluttertoast/fluttertoast.dart";
 import "package:get/get.dart";
 import "package:intl/intl.dart";
 import "package:lottie/lottie.dart";
-import "package:permission_handler/permission_handler.dart";
 import "package:simple_html_css/simple_html_css.dart";
 import "package:svgaplayer_flutter/svgaplayer_flutter.dart";
+import "package:swipe_to/swipe_to.dart";
 
 import "../../common/common_bottomsheet.dart";
 import "../../model/message_template_response.dart";
 import "../home_screen_options/check_kundli/kundli_controller.dart";
 import "../live_dharam/widgets/custom_image_widget.dart";
-import "../live_page/constant.dart";
 import "../live_page/constant.dart";
 import "chat_message_with_socket_controller.dart";
 
@@ -135,39 +134,47 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                           print("${chatMessage.msgType}");
                                           print("${chatMessage.msgType}");
                                         }
-                                        return Column(
-                                          children: [
-                                            Padding(
-                                              padding: EdgeInsets.symmetric(
-                                                  vertical: 4.h,
-                                                  horizontal: 10.w),
-                                              child: MessageView(
-                                                index: index,
-                                                nextChatMessage: index ==
-                                                        controller.chatMessages
-                                                                .length -
-                                                            1
-                                                    ? controller
-                                                        .chatMessages[index]
-                                                    : controller.chatMessages[
-                                                        index + 1],
-                                                chatMessage: chatMessage,
-                                                yourMessage:
-                                                    chatMessage.msgSendBy ==
-                                                        "1",
-                                                userName: controller
-                                                    .customerName.value,
-                                                unreadMessage: controller
-                                                    .unreadMessageIndex.value,
-                                                myList: myList,
+                                        return SwipeTo(
+                                          key: UniqueKey(),
+                                          iconOnLeftSwipe: Icons.arrow_forward,
+                                          iconOnRightSwipe: Icons.replay,
+                                          onRightSwipe: (details) {
+                                            Fluttertoast.showToast(msg: "Swipe message");
+                                          },
+                                          child: Column(
+                                            children: [
+                                              Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    vertical: 4.h,
+                                                    horizontal: 10.w),
+                                                child: MessageView(
+                                                  index: index,
+                                                  nextChatMessage: index ==
+                                                          controller.chatMessages
+                                                                  .length -
+                                                              1
+                                                      ? controller
+                                                          .chatMessages[index]
+                                                      : controller.chatMessages[
+                                                          index + 1],
+                                                  chatMessage: chatMessage,
+                                                  yourMessage:
+                                                      chatMessage.msgSendBy ==
+                                                          "1",
+                                                  userName: controller
+                                                      .customerName.value,
+                                                  unreadMessage: controller
+                                                      .unreadMessageIndex.value,
+                                                  myList: myList,
+                                                ),
                                               ),
-                                            ),
-                                            if (index ==
-                                                (controller
-                                                        .chatMessages.length -
-                                                    1))
-                                              typingWidget()
-                                          ],
+                                              if (index ==
+                                                  (controller
+                                                          .chatMessages.length -
+                                                      1))
+                                                typingWidget()
+                                            ],
+                                          ),
                                         );
                                       },
                                     ),
@@ -812,7 +819,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                 ? GestureDetector(
                     onTap: () async {
                       await Get.toNamed(RouteName.messageTemplate);
-                      if(await controller.checkIfChatIsEnded()) {
+                      if (await controller.checkIfChatIsEnded()) {
                         controller.messageTemplatesList.value.clear();
                         controller.messageTemplatesList.refresh();
                         controller.getMessageTemplates();
@@ -1026,7 +1033,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                     mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      !controller.hasMessage.value
+                                      !controller.hasMessage.value && asForGifts.toString() == "1"
                                           ? GestureDetector(
                                               onTap: () {
                                                 controller.askForGift();
@@ -1327,6 +1334,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 ],
                               )
                             : const SizedBox(),
+                    productChat.toString() == "1" ?
                     Column(
                       children: [
                         GestureDetector(
@@ -1350,7 +1358,9 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           ),
                         )
                       ],
-                    ),
+                    )
+                        : const SizedBox(),
+                    customProduct.toString() == "1" ?
                     Column(
                       children: [
                         GestureDetector(
@@ -1374,7 +1384,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           ),
                         )
                       ],
-                    ),
+                    ) : const SizedBox(),
+                    tarotCard.toString() == "1" ?
                     Column(
                       children: [
                         GestureDetector(
@@ -1407,7 +1418,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                           ),
                         )
                       ],
-                    ),
+                    ) : const SizedBox(),
                     Obx(
                       () {
                         Map orderData = AppFirebaseService().orderData.value;
@@ -2106,11 +2117,15 @@ class AstrologerChatAppBar extends StatelessWidget {
                                       ],
                                       const SizedBox(width: 10),
                                       Text(
-                                        AppFirebaseService()
+                                        (AppFirebaseService()
                                                     .orderData
                                                     .value["status"]
                                                     .toString() ==
-                                                "4"
+                                                "4" ||   AppFirebaseService()
+                                            .orderData
+                                            .value["status"]
+                                            .toString() ==
+                                            "5")
                                             ? "Chat Ended"
                                             : showTalkTime.value,
                                         style: TextStyle(
