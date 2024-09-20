@@ -167,16 +167,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                     1))
                                               typingWidget()
                                           ],
-                                        )
-                                        //   SwipeTo(
-                                        //   key: UniqueKey(),
-                                        //   iconOnLeftSwipe: Icons.arrow_forward,
-                                        //   iconOnRightSwipe: Icons.replay,
-                                        //   onRightSwipe: (details) {
-                                        //     Fluttertoast.showToast(msg: "Swipe message");
-                                        //   },
-                                        //   child: ,
-                                        // );
+                                        );
                                       },
                                     ),
                                   ),
