@@ -67,8 +67,8 @@ class LoginController extends GetxController {
     //deviceToken = await FirebaseMessaging.instance.getToken();
     print("mobileNumberController.text ------> ${mobileNumberController.text}");
     Map<String, dynamic> params = {
-      // "mobile_no": mobileNumberController.text,
-      "mobile_no": mobile,
+      "mobile_no": mobileNumberController.text,
+      // "mobile_no": mobile,
       "country_code": countryCodeController.text,
       //"device_token": await FirebaseMessaging.instance.getToken()
     };
