@@ -8,8 +8,6 @@ import 'package:camera/camera.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
-import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
-import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/notification_helper/notification_helpe.dart';
 import 'package:divine_astrologer/remote_config/remote_config_helper.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
@@ -19,6 +17,7 @@ import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
@@ -55,13 +54,9 @@ import 'screens/live_page/constant.dart';
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 late List<CameraDescription>? cameras;
 
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  if(message.notification != null){
-    print("message.notification---not null");
-  }else{
-    print("message.notification---null");
-  }
+@pragma('vm:entry-point')
+Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+await Firebase.initializeApp();
 
   NotificationHelper().showNotification(
     message.data["title"] ?? "",
@@ -82,6 +77,8 @@ Future<void> main() async {
   if (!kIsWeb) {
     await setupFlutterNotifications();
   }
+
+
   cameras = await availableCameras();
   Get.put(AppColors());
   final remoteConfig = FirebaseRemoteConfig.instance;
@@ -91,105 +88,6 @@ Future<void> main() async {
   remoteConfigHelper.updateGlobalConstantWithFirebaseData();
   await GetStorage.init();
 
-  /*FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    log("check on message notification : ${message.data}------${message.data["type"]}");
-    log("pushNotification1 ${message.notification?.title ?? ""}");
-    // if (message.data["type"].toString() == "2") {
-    //   return;
-    // }
-    if (message.data["title"] != null && message.data["title"].isNotEmpty) {
-      if (message.data["type"].toString() == "1") {
-        if (MiddleWare.instance.currentPage !=
-            RouteName.chatMessageWithSocketUI) {
-          log("messageReceive21 ${MiddleWare.instance.currentPage}");
-          showNotification(message.data["title"] ?? "", message.data["message"] ?? "",
-              message.data['type'] ?? "", message.data);
-        }
-        HashMap<String, dynamic> updateData = HashMap();
-        updateData[message.data["chatId"] ?? "0"] = 1;
-        log('Message data-:-users ${message.data}');
-        log("test_notification: Enable fullscreen incoming call notification");
-        sendBroadcast(
-            BroadcastMessage(name: "messageReceive", data: message.data));
-      } else if (message.data["type"] == "8") {
-        log("inside page for realtime notification ${message.data} ${MiddleWare.instance.currentPage}");
-        if (MiddleWare.instance.currentPage == RouteName.chatMessageUI &&
-            chatAssistantCurrentUserId.value.toString() ==
-                message.data['sender_id'].toString()) {
-          assistChatNewMsg([...assistChatNewMsg, message.data]);
-          assistChatNewMsg.refresh();
-          // sendBroadcast(
-          //     BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
-        } else {
-          // assistChatUnreadMessages([...assistChatUnreadMessages, message.data]);
-          if (dasboardCurrentIndex.value == 2) {
-            final responseMsg = message.data;
-            assistChatUnreadMessages([
-              ...assistChatUnreadMessages,
-              AssistChatData(
-                  message: responseMsg["message"],
-                  id: int.parse(responseMsg["chatId"].toString() ?? ''),
-                  customerId:
-                  int.parse(responseMsg["sender_id"].toString() ?? ''),
-                  createdAt: DateTime.parse(responseMsg["created_at"])
-                      .millisecondsSinceEpoch
-                      .toString(),
-                  isSuspicious: 0,
-                  suggestedRemediesId:
-                  int.parse(responseMsg["suggestedRemediesId"] ?? "0"),
-                  isPoojaProduct:
-                  responseMsg['is_pooja_product'].toString() == '1'
-                      ? true
-                      : false,
-                  productId: responseMsg["product_id"].toString(),
-                  shopId: responseMsg["shop_id"].toString(),
-                  sendBy: SendBy.astrologer,
-                  msgType: responseMsg['msg_type'] != null
-                      ? msgTypeValues.map[responseMsg["msg_type"]]
-                      : MsgType.text,
-                  seenStatus: SeenStatus.received,
-                  astrologerId: int.parse(responseMsg["userid"] ?? 0))
-            ]);
-          }
-          switch (message.data['msg_type']) {
-            case "0":
-              showNotification(message.data["title"], message.data["message"],
-                  message.data['type'], message.data);
-              break;
-            case "1":
-              showNotification(message.data["title"], 'sendNotificationImage'.tr,
-                  message.data['type'], message.data);
-              break;
-            case "2":
-              showNotification(message.data["title"], 'sendNotificationRemedy'.tr,
-                  message.data['type'], message.data);
-              break;
-            case "3":
-              showNotification(
-                  message.data["title"],
-                  'sendNotificationProduct'.tr,
-                  message.data['type'],
-                  message.data);
-              break;
-            case "8":
-              showNotification(message.data["title"], 'sendNotificationGift'.tr,
-                  message.data['type'], message.data);
-              break;
-          }
-        }
-      } else {
-        if (message.data["type"] != "2") {
-          showNotification(message.data["title"], message.data["message"],
-              message.data['type'], message.data);
-        }
-      }
-    }
-
-
-    if (message.notification != null) {
-      log('Message also contained a notification: ${message.notification?.title}');
-    }
-  });*/
   if (await Permission.notification.status.isPermanentlyDenied ||
       await Permission.notification.status.isRestricted ||
       await Permission.notification.status.isDenied) {

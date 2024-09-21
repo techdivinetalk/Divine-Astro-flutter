@@ -34,7 +34,7 @@ dependencies:
   file_picker: ^8.0.6
   firebase_database: ^11.0.3
   firebase_core: ^3.2.0
-  firebase_messaging: ^15.0.4
+  firebase_messaging: ^15.1.2
   android_intent_plus: ^2.0.2
   flutter:
     sdk: flutter
@@ -139,6 +139,7 @@ dependencies:
 
 dependency_overrides:
 #  zego_uikit: ^2.23.0
+  firebase_messaging_platform_interface: ^4.5.45
   fading_edge_scrollview: ^4.1.1
   intl: ^0.18.1
 

@@ -12,6 +12,7 @@ import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_resp
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
@@ -35,7 +36,7 @@ class NotificationHelper {
     defaultPresentSound: true,
   );
   final AndroidInitializationSettings initializationSettingsAndroid =
-      const AndroidInitializationSettings('@mipmap/ic_launcher');
+      const AndroidInitializationSettings('@mipmap/divine_logo_tran');
   final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
 
@@ -222,7 +223,7 @@ class NotificationHelper {
 
     AndroidNotificationDetails? androidNotificationDetails;
     if (type == "2") {
-      // Type 2: Custom sound
+
       androidNotificationDetails = const AndroidNotificationDetails(
         "DivineAstrologer",
         "AstrologerNotification",
@@ -242,6 +243,7 @@ class NotificationHelper {
         ],
       );
     } else {
+
       // Default notification (no custom sound)
       androidNotificationDetails = const AndroidNotificationDetails(
         "DivineAstrologer_Other_type",
