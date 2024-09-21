@@ -159,7 +159,8 @@ class LoginUI extends GetView<LoginController> {
                         SizedBox(height: 20.h),
                         Obx(() => Visibility(
                             visible: controller.enable.value &&
-                                isTruecaller.value.toString() == "1" || kDebugMode,
+                                    isTruecaller.value.toString() == "1" ||
+                                kDebugMode,
                             child: TextWithDivider(
                               text: 'Or',
                               textColor: appColors.greyColor,
@@ -170,9 +171,10 @@ class LoginUI extends GetView<LoginController> {
                           print(
                               "showTrueCaller ${controller.showTrueCaller.value}");
                           return Visibility(
-                            visible: kDebugMode || (controller.showTrueCaller.value &&
-                                controller.enable.value &&
-                                isTruecaller.value.toString() == "1"),
+                            visible: kDebugMode ||
+                                (controller.showTrueCaller.value &&
+                                    controller.enable.value &&
+                                    isTruecaller.value.toString() == "1"),
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 10.0),
@@ -194,11 +196,11 @@ class LoginUI extends GetView<LoginController> {
                                     oAuthFlowUsable = await TrueCallerService()
                                         .isOAuthFlowUsable();
 
-                                    if(Get.currentRoute == RouteName.login){
+                                    if (Get.currentRoute == RouteName.login) {
                                       oAuthFlowUsable
-                                        ? await TrueCallerService()
-                                        .startTrueCaller()
-                                        : trueCallerFaultPopup();
+                                          ? await TrueCallerService()
+                                              .startTrueCaller()
+                                          : trueCallerFaultPopup();
                                     }
                                   },
                                   child: Row(
@@ -220,7 +222,39 @@ class LoginUI extends GetView<LoginController> {
                               ),
                             ),
                           );
-                        })
+                        }),
+                        Obx(() {
+                          return kDebugMode == true
+                              ? GestureDetector(
+                                  onTap: () {
+                                    if (isLiveServer.value == 1) {
+                                      isLiveServer.value = 0;
+                                    } else {
+                                      isLiveServer.value = 1;
+                                    }
+                                    print(
+                                        "checking server -- ${isLiveServer.value.toString()} ${isLiveServer.value == 0 ? "Development" : "Live"}");
+                                    controller.update();
+                                  },
+                                  child: Container(
+                                    width: MediaQuery.of(context).size.width,
+                                    height: 50.h,
+                                    alignment: Alignment.center,
+                                    decoration: BoxDecoration(
+                                      color: appColors.grey,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Text(
+                                      "Change Server to ${isLiveServer.value == 1 ? "Development" : "Live"}",
+                                      style: AppTextStyle.textStyle16(
+                                        fontWeight: FontWeight.w600,
+                                        fontColor: appColors.white,
+                                      ),
+                                    ),
+                                  ),
+                                )
+                              : SizedBox();
+                        }),
                       ],
                     ),
                   ),

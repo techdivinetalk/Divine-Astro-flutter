@@ -9,7 +9,6 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../common/routes.dart';
 import '../../pages/home/home_controller.dart';
-import '../../pages/performance/performance_controller.dart';
 
 class SideMenuDrawer extends GetView<HomeController> {
   const SideMenuDrawer({super.key});
@@ -54,6 +53,9 @@ class SideMenuDrawer extends GetView<HomeController> {
                   Get.put(HomeController()).homeScreenKey
                     ..currentState?.closeDrawer();
                   Get.back();
+
+                  Get.put(HomeController()).showPopup = false;
+                  Get.toNamed(RouteName.waitList);
                 },
               ),
             if (isOrderHistory.value == 1)

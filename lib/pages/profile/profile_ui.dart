@@ -308,7 +308,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                         child: InkWell(
                           onTap: () async {
                             print("objectobjectobjectobjectobject----${index}");
-                            if ((index == 3 && isAstroCare.value == 0) || (index == 4 && isAstroCare.value == 1)) {
+                            if ((index == 3 && isAstroCare.value == 0) ||
+                                (index == 4 && isAstroCare.value == 1)) {
                               openBottomSheet(
                                 context,
                                 functionalityWidget: Column(
@@ -490,7 +491,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                   ],
                                 ),
                               );
-                            } else if((index == 3 && isAstroCare.value == 1)){
+                            } else if ((index == 3 && isAstroCare.value == 1)) {
                               controller.whatsapp();
                             } else if (index == 1) {
                               // if (await PermissionHelper()

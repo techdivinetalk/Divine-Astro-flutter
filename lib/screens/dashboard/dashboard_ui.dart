@@ -263,7 +263,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                               const SizedBox(height: 5),
                                             ],
                                           ),
-                                          label: "queue".tr,
+                                          label: "Orders".tr,
                                         ),
 
                                         // Profile Tab comment

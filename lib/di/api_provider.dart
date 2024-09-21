@@ -24,10 +24,8 @@ class ApiProvider {
   //     "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
 
   static String baseUrl =
-      // kDebugMode
-      //     ? "http://4.188.246.208/api/astro/$version/"
-      //     :
       "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+  static String debugUrl = "http://4.188.246.208/api/astro/$version/";
   // static String baseUrl =
   //     "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
 
@@ -118,6 +116,8 @@ class ApiProvider {
   final String saveRemediesChatAssistUrl = "saveRemediesForChatAssist";
   final String getMessageTemplateForChatAssist =
       "getMessageTemplateForChatAssist";
+  final String exotelCallInitiateCustomer = "exotelCallInitiateCustomer";
+  final String exotelCallInitiateMes = "exotelCallInitiateMes";
   final String constantDetails = "constantDetails";
   final String currentChatOrder = "getCurrentChatOrder";
   final String getOrderHistoryUrl = "getOrderHistory";
@@ -447,7 +447,7 @@ class ApiProvider {
     if (await networkManager.isConnected() ?? false) {
       log('url: $baseUrl$url');
       var response = await http
-          .get(Uri.parse(baseUrl + url), headers: headers)
+          .get(Uri.parse(debugUrl + url), headers: headers)
           .timeout(const Duration(minutes: 2), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
@@ -470,7 +470,8 @@ class ApiProvider {
     if (await networkManager.isConnected() ?? false) {
       log('url: $baseUrl$url');
       var response = await http
-          .delete(Uri.parse(baseUrl + url), headers: headers)
+          .delete(Uri.parse(isLiveServer.value == 0 ? debugUrl : baseUrl + url),
+              headers: headers)
           .timeout(const Duration(minutes: 1), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
@@ -516,7 +517,7 @@ class ApiProvider {
       Encoding? encoding,
       bool closeDialogOnTimeout = true}) async {
     endPoint ??= //kDebugMode == true ? debugingUrl :
-        baseUrl;
+        isLiveServer.value == 0 ? debugUrl : baseUrl;
     headers ??= await getAuthorisedHeader();
     log("Api url: ${endPoint + url}");
     log('body: $body');
@@ -564,7 +565,7 @@ class ApiProvider {
       log('url: $baseUrl$url');
       log('body: $body');
       var response = await http
-          .put(Uri.parse(baseUrl + url),
+          .put(Uri.parse(isLiveServer.value == 0 ? debugUrl : baseUrl + url),
               headers: headers, body: body, encoding: encoding)
           .timeout(const Duration(minutes: 1), onTimeout: () {
         if (closeDialogOnTimeout) {
@@ -584,7 +585,7 @@ class ApiProvider {
       Map<String, File> images, Map<String, dynamic> body, String url,
       {String type = "POST", Map<String, String>? headers}) async {
     if (await networkManager.isConnected() ?? false) {
-      var uri = Uri.parse(baseUrl + url);
+      var uri = Uri.parse(isLiveServer.value == 0 ? debugUrl : baseUrl + url);
       debugPrint("url: $baseUrl$url");
       http.MultipartRequest request = http.MultipartRequest(type, uri);
       request.headers.addAll(headers ?? await getAuthorisedHeader());

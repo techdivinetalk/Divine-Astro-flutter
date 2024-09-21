@@ -966,7 +966,7 @@ class DashboardController extends GetxController
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "Queue Tab",
+                    "Orders",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,

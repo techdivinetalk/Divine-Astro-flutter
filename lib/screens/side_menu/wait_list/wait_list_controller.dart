@@ -1,11 +1,17 @@
+import 'dart:developer';
+
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/model/order_history_model/chat_order_history.dart';
 import 'package:divine_astrologer/repository/waiting_list_queue_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../../../common/app_exception.dart';
 import '../../../di/shared_preference_service.dart';
+import '../../../model/order_history_model/call_order_history.dart';
 import '../../../model/waiting_list_queue.dart';
+import '../../../repository/order_history_repository.dart';
 import '../../../utils/enum.dart';
 
 class WaitListUIController extends GetxController
@@ -14,8 +20,10 @@ class WaitListUIController extends GetxController
   final WaitingListQueueRepo repository;
   TabController? tabbarController;
   ScrollController scrollController = ScrollController();
+  ScrollController chatScrollView = ScrollController();
+  ScrollController callScrollView = ScrollController();
   WaitListUIController(this.repository);
-
+  var tabOpened = 0.obs;
   Loading loading = Loading.initial;
   List<WaitingListQueueData> waitingPersons = <WaitingListQueueData>[];
 
@@ -30,7 +38,7 @@ class WaitListUIController extends GetxController
   void onInit() {
     super.onInit();
     debugPrint("test_onInit: call");
-    tabbarController = TabController(length: 2, vsync: this, initialIndex: 0);
+    tabbarController = TabController(length: 4, vsync: this, initialIndex: 0);
     isInit = true;
     getWaitingList();
   }
@@ -38,15 +46,115 @@ class WaitListUIController extends GetxController
   onAccept() {}
 
   getWaitingList() async {
+    loading = Loading.loading;
+    update();
     try {
       final response = await repository.fetchData();
       if (response.data != null) {
         waitingPersons = response.data!;
+        update();
       }
       loading = Loading.loaded;
       update();
     } catch (err) {
       divineSnackBar(data: err.toString(), color: appColors.redColor);
+    }
+  }
+
+  RxList<CallHistoryData> callHistoryList = <CallHistoryData>[].obs;
+
+  var callApiCalling = false.obs;
+  var emptyMsg = "".obs;
+  var allApiCalling = false.obs;
+  var callPageCount = 1;
+
+  Future<dynamic> getCallOrderHistory(
+      {int? page, String? startDate, endDate}) async {
+    Map<String, dynamic> params = {
+      "role_id": 7,
+      "type": 1,
+      "page": page!,
+      "device_token": preferenceService.getDeviceToken(),
+    };
+    log("paramparam ${params.toString()}");
+
+    try {
+      callApiCalling.value = true;
+
+      update();
+      CallOrderHistoryModelClass data =
+          await OrderHistoryRepository().getCallOrderHistory(params);
+      callApiCalling.value = false;
+
+      var history = data.data;
+
+      if (history!.isNotEmpty && data.data != null) {
+        emptyMsg.value = "";
+        if (page == 1) callHistoryList.clear();
+        callHistoryList.addAll(history);
+        callPageCount++;
+      } else {
+        emptyMsg.value = data.message ?? "No data found!";
+      }
+
+      update();
+    } catch (error) {
+      callApiCalling.value = false;
+
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  RxList<ChatDataList> chatHistoryList = <ChatDataList>[].obs;
+
+  var chatApiCalling = false.obs;
+  var emptyMsg2 = "".obs;
+  var allApiCalling2 = false.obs;
+  var chatPageCount = 1;
+
+  Future<dynamic> getChatOrderHistory(
+      {int? page, String? startDate, endDate}) async {
+    Map<String, dynamic> params = {
+      "role_id": 7,
+      "type": 2,
+      "page": page!,
+      "device_token": preferenceService.getDeviceToken(),
+    };
+    log("paramparam ${params.toString()}");
+
+    try {
+      chatApiCalling.value = true;
+
+      update();
+      ChatOrderHistoryModelClass data =
+          await OrderHistoryRepository().getChatOrderHistory(params);
+      chatApiCalling.value = false;
+
+      var history = data.data;
+
+      if (history!.isNotEmpty && data.data != null) {
+        emptyMsg.value = "";
+        if (page == 1) chatHistoryList.clear();
+        chatHistoryList.addAll(history);
+        chatPageCount++;
+      } else {
+        emptyMsg.value = data.message ?? "No data found!";
+      }
+      update();
+    } catch (error) {
+      chatApiCalling.value = false;
+
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
     }
   }
 

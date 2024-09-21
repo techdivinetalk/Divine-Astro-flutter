@@ -417,10 +417,11 @@ class ChatAssistanceTile extends StatelessWidget {
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
             ),
-            if((data.level != null && data.level != "")) Padding(
-              padding: const EdgeInsets.only(left: 5.0),
-              child: LevelWidget(level: data.level ?? ""),
-            )
+            if ((data.level != null && data.level != ""))
+              Padding(
+                padding: const EdgeInsets.only(left: 5.0),
+                child: LevelWidget(level: data.level ?? ""),
+              )
           ],
         ),
         subtitle: lastMessage(data.msgType ?? MsgType.text),
@@ -636,8 +637,8 @@ class ChatAssistanceDataTile extends StatelessWidget {
                         children: [
                           ConstrainedBox(
                             constraints: BoxConstraints(
-                              maxWidth: MediaQuery.of(context).size.width*0.4
-                            ),
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.4),
                             child: CustomText(
                               // data.customerName ?? '',
                               data.customerName ?? '',
@@ -645,10 +646,11 @@ class ChatAssistanceDataTile extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          if(data.level != null && data.level != "") Padding(
-                            padding: const EdgeInsets.only(left: 5.0),
-                            child: LevelWidget(level: data.level ?? ""),
-                          ),
+                          if (data.level != null && data.level != "")
+                            Padding(
+                              padding: const EdgeInsets.only(left: 5.0),
+                              child: LevelWidget(level: data.level ?? ""),
+                            ),
                           const Spacer(),
                           Container(
                             decoration: BoxDecoration(
