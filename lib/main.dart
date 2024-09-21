@@ -435,6 +435,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       // If API call fails with status 401, log out user
       else if (commonConstants?.success == false &&
           commonConstants?.statusCode == 401) {
+        print("status code 401 error log out -------->");
         await preferenceService.erase();
         Get.offAllNamed(RouteName.login);
       } else {
