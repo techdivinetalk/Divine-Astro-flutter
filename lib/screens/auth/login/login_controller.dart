@@ -12,10 +12,12 @@ import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/model/res_login.dart';
+import 'package:divine_astrologer/screens/auth/login/true_caller_fault_widget.dart';
 import 'package:divine_astrologer/true_caller_divine/true_caller_divine_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -65,7 +67,6 @@ class LoginController extends GetxController {
 
   login() async {
     //deviceToken = await FirebaseMessaging.instance.getToken();
-    print("mobileNumberController.text ------> ${mobileNumberController.text}");
     Map<String, dynamic> params = {
       "mobile_no": mobileNumberController.text,
       // "mobile_no": mobile,
@@ -171,6 +172,7 @@ class LoginController extends GetxController {
           "test_simNumbers: simNoLst.isNotEmpty: ${simNoLst.isNotEmpty}");
 
       if (simNoLst.isNotEmpty) {
+        simNumbers.clear();
         for (int i = 0; i < simNoLst.length; i++) {
           String no = simNoLst[i];
 
@@ -235,7 +237,7 @@ class LoginController extends GetxController {
                     ),
                   ),
                   onTap: () {
-                    Get.put(LoginController(UserRepository()));
+                    // Get.put(LoginController(UserRepository()));
 
                     final splitResult = splitNumber(number);
                     String countryCode = splitResult['countryCode'] ?? '+91';
@@ -290,13 +292,24 @@ class LoginController extends GetxController {
     mobileNumberController = TextEditingController();*/
 
     if (kDebugMode || isTruecaller.value == 1) {
-      TrueCallerService().isTrueCallerInstalled().then((value) {
+      TrueCallerService().isTrueCallerInstalled().then((value) async {
         showTrueCaller.value = value;
 
         debugPrint("test_showTrueCaller.value_3: ${showTrueCaller.value}");
         // if (!showTrueCaller.value) {
         //   requestPermissions();
         // }
+
+        bool oAuthFlowUsable = false;
+        oAuthFlowUsable = await TrueCallerService().isOAuthFlowUsable();
+        Future.delayed(const Duration(seconds: 1)).then((value) async {
+          if(Get.currentRoute == RouteName.login){
+            oAuthFlowUsable
+                ? await TrueCallerService().startTrueCaller()
+                : trueCallerFaultPopup();
+          }
+        });
+
       });
       TcSdk.streamCallbackData.listen(
         (TcSdkCallback event) async {
@@ -674,4 +687,14 @@ class LoginController extends GetxController {
   void onResumed() {
     numberFocus.requestFocus();
   }*/
+
+  Future<void> trueCallerFaultPopup() async {
+    await showCupertinoModalPopup(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return TrueCallerFaultWidget(onClose: Get.back);
+      },
+    );
+    return Future<void>.value();
+  }
 }

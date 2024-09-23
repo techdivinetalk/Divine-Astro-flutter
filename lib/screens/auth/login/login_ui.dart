@@ -27,7 +27,6 @@ class LoginUI extends GetView<LoginController> {
   @override
   Widget build(BuildContext context) {
     Get.put(LoginController(UserRepository()));
-
     return GetBuilder<LoginController>(
         init: LoginController(UserRepository()),
         assignId: true,
@@ -198,7 +197,7 @@ class LoginUI extends GetView<LoginController> {
                                       oAuthFlowUsable
                                         ? await TrueCallerService()
                                         .startTrueCaller()
-                                        : trueCallerFaultPopup();
+                                        : controller.trueCallerFaultPopup();
                                     }
                                   },
                                   child: Row(
@@ -229,16 +228,6 @@ class LoginUI extends GetView<LoginController> {
             ),
           );
         });
-  }
-
-  Future<void> trueCallerFaultPopup() async {
-    await showCupertinoModalPopup(
-      context: Get.context!,
-      builder: (BuildContext context) {
-        return TrueCallerFaultWidget(onClose: Get.back);
-      },
-    );
-    return Future<void>.value();
   }
 
   Widget mobileField() {
