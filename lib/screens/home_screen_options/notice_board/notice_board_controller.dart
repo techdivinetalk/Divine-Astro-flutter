@@ -29,7 +29,6 @@ class NoticeBoardController extends GetxController {
     try {
       final response = await repository.noticeAPi();
       noticeList = response.data;
-      log(noticeList.toString());
       loading = Loading.loaded;
       update();
     } catch (err) {

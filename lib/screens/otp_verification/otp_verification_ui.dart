@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:divine_astrologer/screens/auth/login/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -338,25 +339,29 @@ class OtpSheet extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20.sp), topRight: Radius.circular(20.sp)),
-      child: SizedBox(
-        width: context.width,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-                margin: EdgeInsets.symmetric(vertical: 30.h),
-                child: Assets.svg.caution.svg(height: 70.h, width: 160.w)),
-            Text("noAttemptsLeft".tr, style: textStyle),
-            Container(
-                margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-                child: CustomMaterialButton(
-                    radius: 10,
-                    buttonName: "okay".tr,
-                    onPressed: () {
-                      Get.offAllNamed(RouteName.login);
-                    })),
-            SizedBox(height: 12.h)
-          ],
+      child: ColoredBox(
+        color: appColors.white,
+        child: SizedBox(
+          width: context.width,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                  margin: EdgeInsets.symmetric(vertical: 30.h),
+                  child: Assets.svg.caution.svg(height: 70.h, width: 160.w)),
+              Text("noAttemptsLeft".tr, style: textStyle),
+              Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                  child: CustomMaterialButton(
+                      radius: 10,
+                      buttonName: "okay".tr,
+                      onPressed: () {
+                        Get.delete<LoginController>(force: true);
+                        Get.offAllNamed(RouteName.login);
+                      })),
+              SizedBox(height: 12.h)
+            ],
+          ),
         ),
       ),
     );
