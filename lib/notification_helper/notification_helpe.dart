@@ -111,16 +111,10 @@ class NotificationHelper {
   }
 
   Future<void> showFlutterNotification(RemoteMessage message) async {
-    AndroidNotificationDetails? androidNotificationDetails;
     RemoteNotification? notification = message.notification;
     AndroidNotification? android = message.notification?.android;
     log("check on message notification : ${message.data}------${message.data["type"]}");
     log("pushNotification1 ${message.notification?.title ?? ""}");
-    // if (message.notification?.title != null) {
-
-    // if (message.data["title"] != null && message.data["title"].isNotEmpty) {
-    // }
-    // }
     if (message.data["type"].toString() == "1") {
       if (MiddleWare.instance.currentPage !=
           RouteName.chatMessageWithSocketUI) {
@@ -128,7 +122,7 @@ class NotificationHelper {
         showNotification(
             message.data["title"] ?? "",
             message.data["message"] ?? "",
-            message.data['type'] ?? "",
+            message.data['type'] ?? "0",
             message.data);
       }
       HashMap<String, dynamic> updateData = HashMap();
@@ -180,33 +174,33 @@ class NotificationHelper {
         switch (message.data['msg_type']) {
           case "0":
             showNotification(message.data["title"], message.data["message"],
-                message.data['type'], message.data);
+                message.data['type'] ?? "0", message.data);
             break;
           case "1":
             showNotification(message.data["title"], 'sendNotificationImage'.tr,
-                message.data['type'], message.data);
+                message.data['type'] ?? "0", message.data);
             break;
           case "2":
             showNotification(message.data["title"], 'sendNotificationRemedy'.tr,
-                message.data['type'], message.data);
+                message.data['type'] ?? "0", message.data);
             break;
           case "3":
             showNotification(
                 message.data["title"],
                 'sendNotificationProduct'.tr,
-                message.data['type'],
+                message.data['type'] ?? "0",
                 message.data);
             break;
           case "8":
             showNotification(message.data["title"], 'sendNotificationGift'.tr,
-                message.data['type'], message.data);
+                message.data['type'] ?? "0", message.data);
             break;
         }
       }
     } else {
       if (message.data['type'] != "2") {
-        showNotification(message.data["title"], message.data["message"],
-            message.data['type'], message.data);
+        showNotification(message.data["title"] ?? message.notification!.title, message.data["message"] ?? message.notification!.body,
+            message.data['type'] ?? "0", message.data);
       }
     }
 
@@ -258,7 +252,7 @@ class NotificationHelper {
       );
     }
 
-    NotificationDetails notificationDetails =
+    NotificationDetails? notificationDetails =
         NotificationDetails(android: androidNotificationDetails);
 
     // Show notification
@@ -266,6 +260,7 @@ class NotificationHelper {
         Random().nextInt(90000), title, message, notificationDetails,
         payload: json.encode(data));
 
+    androidNotificationDetails = null;
   }
 
   void notificationPermission() async {

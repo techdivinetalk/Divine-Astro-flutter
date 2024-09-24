@@ -56,14 +56,20 @@ late List<CameraDescription>? cameras;
 
 @pragma('vm:entry-point')
 Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-await Firebase.initializeApp();
-
+  await Firebase.initializeApp();
+  print("message.data--->>>>${message.data}");
+   if (message.notification == null ) {
   NotificationHelper().showNotification(
-    message.data["title"] ?? "",
-    message.data["message"] ?? "",
-    message.data['type'] ?? "",
+    message.data["title"] ?? message.notification!.title,
+    message.data["message"] ?? message.notification!.body,
+    message.data['type'] ?? "0",
     message.data,
   );
+}
+  // if (message.notification == null) {
+  //   print("message.notification---not null---->>>>NotificationHelper().showNotification(");
+  //
+  // }
 }
 
 //// Onboarding Code Done
@@ -77,7 +83,6 @@ Future<void> main() async {
   if (!kIsWeb) {
     await setupFlutterNotifications();
   }
-
 
   cameras = await availableCameras();
   Get.put(AppColors());
@@ -108,7 +113,7 @@ Future<void> main() async {
     );
 
     try {
-      runApp(MyApp());
+      runApp(const MyApp());
     } catch (error, stacktrace) {
       // If you want to record a "fatal" exception
       FirebaseCrashlytics.instance.recordError(error, stacktrace, fatal: true);
@@ -131,6 +136,7 @@ Future<void> main() async {
     AppFirebaseService().masterData("masters");
   }
 }
+
 bool isFlutterLocalNotificationsInitialized = false;
 
 Future<void> setupFlutterNotifications() async {
@@ -151,7 +157,7 @@ Future<void> setupFlutterNotifications() async {
 
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
@@ -162,6 +168,7 @@ Future<void> setupFlutterNotifications() async {
 
   isFlutterLocalNotificationsInitialized = true;
 }
+
 Future<bool> saveLanguage(String? lang) async {
   final box = GetStorage();
   await box.write('lang', lang);
@@ -236,7 +243,6 @@ Future<void> initServices() async {
   //
   // }
 }*/
-
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -351,6 +357,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       });
     }
   }
+
   // checkOnBoarding() async {
   //   if (preferenceService.getUserDetail()?.id == null) {
   //     Get.offAllNamed(RouteName.login);

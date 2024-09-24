@@ -29,6 +29,7 @@ import 'package:get/get.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../cache/custom_cache_manager.dart';
@@ -301,6 +302,7 @@ class DashboardController extends GetxController
     if (!kDebugMode) {
       checkForUpdate();
     }
+
     FirebaseMessaging.instance.getInitialMessage().then((v) {
       RemoteMessage? remoteMessage = v;
       if (remoteMessage != null) {
