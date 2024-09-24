@@ -7,6 +7,7 @@ import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../common/colors.dart';
 import '../../common/routes.dart';
@@ -125,6 +126,14 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                               if (messageTemplate.type == 0) {
                                 switchBool = true; // Force the switch to be ON
                               }
+                              // Parse the DateTime from the backend string
+                              DateTime dateTime = DateTime.parse(
+                                  messageTemplate.createdAt ??
+                                      DateTime.now().toString());
+
+                              // Format the DateTime to "22 May 2024"
+                              String formattedDate =
+                                  DateFormat('dd MMMM yyyy').format(dateTime);
 
                               return GestureDetector(
                                 onTap: () {
@@ -303,11 +312,11 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                                 style: AppTextStyle.textStyle14(
                                                     fontWeight:
                                                         FontWeight.w600)),
-                                            // TextSpan(
-                                            //     text:
-                                            //         '${formatDateTime(messageTemplate.createdAt ?? DateTime.now())} ',
-                                            //     //'${messageTemplate.createdAt}',
-                                            //     style: AppTextStyle.textStyle14()),
+                                            TextSpan(
+                                                text:
+                                                    "${formattedDate.toString()}",
+                                                style:
+                                                    AppTextStyle.textStyle14()),
                                           ])),
                                     ],
                                   ),

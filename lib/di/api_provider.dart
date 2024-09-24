@@ -447,7 +447,8 @@ class ApiProvider {
     if (await networkManager.isConnected() ?? false) {
       log('url: $baseUrl$url');
       var response = await http
-          .get(Uri.parse(debugUrl + url), headers: headers)
+          .get(Uri.parse(isLiveServer.value == 0 ? debugUrl : baseUrl + url),
+              headers: headers)
           .timeout(const Duration(minutes: 2), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);

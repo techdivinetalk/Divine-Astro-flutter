@@ -34,7 +34,8 @@ class SpecialityList {
       );
 
   factory SpecialityList.fromJson(Map<String, dynamic> json) => SpecialityList(
-        data: List<SpecialityData>.from(json["data"].map((x) => SpecialityData.fromJson(x))),
+        data: List<SpecialityData>.from(
+            json["data"].map((x) => SpecialityData.fromJson(x))),
         success: json["success"],
         statusCode: json["status_code"],
         message: json["message"],
@@ -98,15 +99,16 @@ class SpecialityData {
         status: json["status"],
       );
 
-  factory SpecialityData.fromAstrologerSpeciality(AstrologerSpeciality json) => SpecialityData(
-    id: json.specialityDetails?.id,
-    name: json.specialityDetails?.name,
-    image: json.specialityDetails?.image,
-    type: json.specialityDetails?.type,
-    createdAt: json.specialityDetails?.createdAt,
-    updatedAt: json.specialityDetails?.updatedAt,
-    status: json.specialityDetails?.status,
-  );
+  factory SpecialityData.fromAstrologerSpeciality(AstrologerSpeciality json) =>
+      SpecialityData(
+        id: json.specialityDetails?.id,
+        name: json.specialityDetails?.name,
+        image: json.specialityDetails?.image,
+        type: json.specialityDetails?.type,
+        createdAt: json.specialityDetails?.createdAt,
+        updatedAt: json.specialityDetails?.updatedAt,
+        status: json.specialityDetails?.status,
+      );
 
   Map<String, dynamic> toJson() => {
         "id": id,

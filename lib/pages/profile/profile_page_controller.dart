@@ -104,19 +104,22 @@ class ProfilePageController extends GetxController {
       ProfileOptionModelClass(
           "bankDetails".tr,
           Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h),
-          '/bankDetailsUI', true),
+          '/bankDetailsUI',
+          true),
       ProfileOptionModelClass("uploadStory".tr,
           Assets.images.icUploadStory.svg(width: 30.h, height: 30.h), '', true),
       ProfileOptionModelClass(
           "uploadYourPhoto".tr,
           Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h),
-          '/uploadYourPhotosUi', true),
+          '/uploadYourPhotosUi',
+          true),
       ProfileOptionModelClass(
           "chooseLanguage".tr,
           Assets.images.icLanguages.svg(width: 30.h, height: 30.h),
-          '/languagePopup', true),
-      ProfileOptionModelClass(
-          "faq".tr, Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), '', true),
+          '/languagePopup',
+          true),
+      ProfileOptionModelClass("faq".tr,
+          Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), '', true),
       /*      ProfileOptionModelClass(
           "priceChange".tr,
           Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
@@ -124,46 +127,53 @@ class ProfilePageController extends GetxController {
       ProfileOptionModelClass(
           "numberChange".tr,
           Assets.images.icNumChanges.svg(width: 30.h, height: 30.h),
-          '/numberChangeReqUI', true),
+          '/numberChangeReqUI',
+          true),
       ProfileOptionModelClass(
           "blockedUsers".tr,
           Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
-          '/blockedUser', true),
+          '/blockedUser',
+          true),
       ProfileOptionModelClass("eCommerce".tr,
           Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja', true),
       ProfileOptionModelClass(
           "resignation".tr,
           Assets.svg.resignation.svg(width: 30.h, height: 30.h),
-          '/resignation', true),
+          '/resignation',
+          true),
     ].obs;
   }
 
   bool isFilePickerActive = false;
   bool pickingFileLoading = false;
   ChangeLanguageModelClass? selectedLanguage;
+  var selectedLang = "".obs;
   var profileList = <ProfileOptionModelClass>[
     ProfileOptionModelClass(
-        "bankDetails".tr,
-        Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h),
-        '/bankDetailsUI',
+      "bankDetails".tr,
+      Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h),
+      '/bankDetailsUI',
       true,
     ),
     ProfileOptionModelClass(
-        "uploadStory".tr,
-        Assets.images.icUploadStory.svg(width: 30.h, height: 30.h),
-        '/uploadStoryUi',
-      true,),
+      "uploadStory".tr,
+      Assets.images.icUploadStory.svg(width: 30.h, height: 30.h),
+      '/uploadStoryUi',
+      true,
+    ),
     ProfileOptionModelClass(
-        "uploadYourPhoto".tr,
-        Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h),
-        '/uploadYourPhotosUi',
-      true,),
+      "uploadYourPhoto".tr,
+      Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h),
+      '/uploadYourPhotosUi',
+      true,
+    ),
     ProfileOptionModelClass(
         "chooseLanguage".tr,
         Assets.images.icLanguages.svg(width: 30.h, height: 30.h),
-        '/languagePopup0', true),
-    ProfileOptionModelClass(
-        "faq".tr, Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), '', true),
+        '/languagePopup0',
+        true),
+    ProfileOptionModelClass("faq".tr,
+        Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), '', true),
     /* ProfileOptionModelClass(
         "priceChange".tr,
         Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
@@ -171,17 +181,20 @@ class ProfilePageController extends GetxController {
     ProfileOptionModelClass(
         "numberChange".tr,
         Assets.images.icNumChanges.svg(width: 30.h, height: 30.h),
-        '/numberChangeReqUI', true),
+        '/numberChangeReqUI',
+        true),
     ProfileOptionModelClass(
         "blockedUsers".tr,
         Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
-        '/blockedUser', true),
+        '/blockedUser',
+        true),
     ProfileOptionModelClass("eCommerce".tr,
         Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja', true),
     ProfileOptionModelClass(
         "Custom product".tr,
         SvgPicture.asset("assets/svg/store.svg", width: 30.h, height: 30.h),
-        '/customProduct', true),
+        '/customProduct',
+        true),
     // ProfileOptionModelClass(
     //     "Passbook".tr,
     //     SvgPicture.asset("assets/svg/store.svg", width: 30.h, height: 30.h),
@@ -200,8 +213,26 @@ class ProfilePageController extends GetxController {
 
     item.isSelected = true;
     selectedLanguage = item;
-
+    selectedLang.value = item.languages!;
+    update();
     update(['set_language']);
+  }
+
+  RxString currLanguage = "".obs;
+
+  setLocalLanguage() {
+    Locale locale = Get.locale!;
+
+    if (locale.languageCode == "en") {
+      currLanguage.value = "english".tr;
+    } else if (locale.languageCode == "hi") {
+      currLanguage.value = "hindi".tr;
+    } else if (locale.languageCode == "mr") {
+      currLanguage.value = "marathi".tr;
+    } else if (locale.languageCode == "gu") {
+      currLanguage.value = "gujarati".tr;
+    }
+    update();
   }
 
   getSelectedLanguage() {
@@ -246,9 +277,12 @@ class ProfilePageController extends GetxController {
     debugPrint("test_onInit: call");
     isInit = true;
     // scrollController.l
-    if(isAstroCare.value == 1){
-      profileList.add(ProfileOptionModelClass("customerSupport".tr,
-          Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), '',true));
+    if (isAstroCare.value == 1) {
+      profileList.add(ProfileOptionModelClass(
+          "customerSupport".tr,
+          Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h),
+          '',
+          true));
     }
     userData = preference.getUserDetail();
     getReviewRating();

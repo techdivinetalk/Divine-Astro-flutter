@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../../common/cached_network_image.dart';
@@ -314,11 +315,15 @@ class WaitListUI extends GetView<WaitListUIController> {
                     onTap: (value) {
                       controller.update();
                       if (value == 1) {
-                        controller.getChatOrderHistory(
-                            page: controller.chatPageCount); //call
+                        if (controller.chatHistoryList.isEmpty) {
+                          controller.getChatOrderHistory(
+                              page: controller.chatPageCount);
+                        }
                       } else if (value == 2) {
-                        controller.getCallOrderHistory(
-                            page: controller.callPageCount); //call
+                        if (controller.callHistoryList.isEmpty) {
+                          controller.getCallOrderHistory(
+                              page: controller.callPageCount);
+                        }
                       }
                     },
                     indicatorColor: appColors.textColor,
@@ -376,44 +381,53 @@ class WaitListUI extends GetView<WaitListUIController> {
 
   Widget _buildTabContent(type, context, {WaitListUIController? controller}) {
     return type == "Waitlist"
-        ? controller!.loading == Loading.loading
-            ? SizedBox(
-                height: MediaQuery.of(context).size.height * 0.7,
-                child: Center(
-                  child: CircularProgressIndicator(
-                    color: appColors.redColor,
-                  ),
-                ),
-              )
-            : controller.waitingPersons.isEmpty
+        ? RefreshIndicator(
+            onRefresh: () async {
+              controller.waitingPersons.clear();
+              controller.update();
+              controller.getWaitingList();
+            },
+            color: appColors.red,
+            child: controller!.loading == Loading.loading
                 ? SizedBox(
                     height: MediaQuery.of(context).size.height * 0.7,
                     child: Center(
-                      child: Text("jobTitle".tr),
+                      child: CircularProgressIndicator(
+                        color: appColors.redColor,
+                      ),
                     ),
                   )
-                : ListView.builder(
-                    itemCount: controller.waitingPersons.length,
-                    primary: false,
-                    shrinkWrap: true,
-                    controller: controller.scrollController,
-                    padding: EdgeInsets.only(left: 5, right: 5),
-                    itemBuilder: (context, index) {
-                      WaitingListQueueData person =
-                          controller.waitingPersons[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: waitList(
-                          context,
-                          person.getCustomers!,
-                          person.waitTime ?? 0,
-                          person,
-                          index: index + 1,
-                          controller: controller,
+                : controller.waitingPersons.isEmpty
+                    ? SizedBox(
+                        height: MediaQuery.of(context).size.height * 0.7,
+                        child: Center(
+                          child: Text("jobTitle".tr),
                         ),
-                      );
-                    },
-                  )
+                      )
+                    : ListView.builder(
+                        itemCount: controller.waitingPersons.length,
+                        primary: false,
+                        shrinkWrap: true,
+                        controller: controller.scrollController,
+                        padding: EdgeInsets.only(left: 5, right: 5),
+                        itemBuilder: (context, index) {
+                          WaitingListQueueData person =
+                              controller.waitingPersons[index];
+                          return Padding(
+                            padding: const EdgeInsets.only(
+                                left: 8, right: 8, top: 6, bottom: 6),
+                            child: waitList(
+                              context,
+                              person.getCustomers ?? GetCustomers(),
+                              person.waitTime ?? 0,
+                              person,
+                              index: index + 1,
+                              controller: controller,
+                            ),
+                          );
+                        },
+                      ),
+          )
         : type == "Chat"
             ?
             // controller!.chatApiCalling.value == true
@@ -426,31 +440,46 @@ class WaitListUI extends GetView<WaitListUIController> {
             //                 ),
             //               )
             //             :
-            controller!.chatHistoryList.isEmpty
-                ? SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.7,
-                    child: Center(
-                      child: Text("jobTitle".tr),
-                    ),
-                  )
-                : ListView.builder(
-                    itemCount: controller.chatHistoryList.length,
-                    // primary: false,
-                    shrinkWrap: true,
-                    controller: controller.chatScrollView,
-                    padding: EdgeInsets.only(left: 5, right: 5),
-                    itemBuilder: (context, index) {
-                      var data = controller.chatHistoryList[index];
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: chatList(
-                          context,
-                          data,
-                          controller: controller,
+            RefreshIndicator(
+                onRefresh: () async {
+                  controller.chatHistoryList.clear();
+                  controller.getChatOrderHistory(page: 1);
+                  controller.update();
+                },
+                color: appColors.red,
+                child: controller!.chatLoading.value == true
+                    ? Center(
+                        child: CircularProgressIndicator(
+                          color: appColors.redColor,
                         ),
-                      );
-                    },
-                  )
+                      )
+                    : controller.chatHistoryList.isEmpty
+                        ? SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.7,
+                            child: Center(
+                              child: Text("jobTitle".tr),
+                            ),
+                          )
+                        : ListView.builder(
+                            itemCount: controller.chatHistoryList.length,
+                            // primary: false,
+                            shrinkWrap: true,
+                            controller: controller.chatScrollView,
+                            padding: EdgeInsets.only(left: 5, right: 5),
+                            itemBuilder: (context, index) {
+                              var data = controller.chatHistoryList[index];
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                    left: 8, right: 8, top: 6, bottom: 6),
+                                child: chatList(
+                                  context,
+                                  data,
+                                  controller: controller,
+                                ),
+                              );
+                            },
+                          ),
+              )
             : type == "Call"
                 ?
                 // controller!.callApiCalling.value == true
@@ -463,69 +492,91 @@ class WaitListUI extends GetView<WaitListUIController> {
                 //                     ),
                 //                   )
                 //                 :
-                controller!.callHistoryList.isEmpty
-                    ? SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.7,
-                        child: Center(
-                          child: Text("jobTitle".tr),
-                        ),
-                      )
-                    : ListView.builder(
-                        itemCount: controller.callHistoryList.length,
-                        // primary: false,
-                        shrinkWrap: true,
-                        controller: controller.callScrollView,
-                        padding: EdgeInsets.only(left: 5, right: 5),
-                        itemBuilder: (context, index) {
-                          var data = controller.callHistoryList[index];
-                          return Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: callList(
-                              context,
-                              data,
-                              controller: controller,
+                RefreshIndicator(
+                    onRefresh: () async {
+                      controller.callHistoryList.clear();
+                      controller.getCallOrderHistory(page: 1);
+                      controller.update();
+                    },
+                    color: appColors.red,
+                    child: controller!.callLoading.value == true
+                        ? Center(
+                            child: CircularProgressIndicator(
+                              color: appColors.redColor,
                             ),
-                          );
-                        },
-                      )
-                : controller!.loading == Loading.loading
-                    ? SizedBox(
-                        height: MediaQuery.of(context).size.height * 0.7,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            color: appColors.redColor,
-                          ),
-                        ),
-                      )
-                    : controller.waitingPersons.isEmpty
+                          )
+                        : controller.callHistoryList.isEmpty
+                            ? SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.7,
+                                child: Center(
+                                  child: Text("jobTitle".tr),
+                                ),
+                              )
+                            : ListView.builder(
+                                itemCount: controller.callHistoryList.length,
+                                // primary: false,
+                                shrinkWrap: true,
+                                controller: controller.callScrollView,
+                                padding: EdgeInsets.only(left: 5, right: 5),
+                                itemBuilder: (context, index) {
+                                  var data = controller.callHistoryList[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 8, right: 8, top: 6, bottom: 6),
+                                    child: callList(
+                                      context,
+                                      data,
+                                      controller: controller,
+                                    ),
+                                  );
+                                },
+                              ),
+                  )
+                : RefreshIndicator(
+                    onRefresh: () async {},
+                    color: appColors.red,
+                    child: controller!.loading == Loading.loading
                         ? SizedBox(
                             height: MediaQuery.of(context).size.height * 0.7,
                             child: Center(
-                              child: Text("jobTitle".tr),
+                              child: CircularProgressIndicator(
+                                color: appColors.redColor,
+                              ),
                             ),
                           )
-                        : ListView.builder(
-                            itemCount: controller.waitingPersons.length,
-                            primary: false,
-                            shrinkWrap: true,
-                            controller: controller.scrollController,
-                            padding: EdgeInsets.only(left: 5, right: 5),
-                            itemBuilder: (context, index) {
-                              WaitingListQueueData person =
-                                  controller.waitingPersons[index];
-                              return Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: remediesList(
-                                  context,
-                                  person.getCustomers!,
-                                  person.waitTime ?? 0,
-                                  person,
-                                  index: index + 1,
-                                  controller: controller,
+                        : controller.waitingPersons.isEmpty
+                            ? SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.7,
+                                child: Center(
+                                  child: Text("jobTitle".tr),
                                 ),
-                              );
-                            },
-                          );
+                              )
+                            : ListView.builder(
+                                itemCount: controller.waitingPersons.length,
+                                primary: false,
+                                shrinkWrap: true,
+                                controller: controller.scrollController,
+                                padding: EdgeInsets.only(left: 5, right: 5),
+                                itemBuilder: (context, index) {
+                                  WaitingListQueueData person =
+                                      controller.waitingPersons[index];
+                                  return Padding(
+                                    padding: const EdgeInsets.only(
+                                        left: 8, right: 8, top: 6, bottom: 6),
+                                    child: remediesList(
+                                      context,
+                                      person.getCustomers ?? GetCustomers(),
+                                      person.waitTime ?? 0,
+                                      person,
+                                      index: index + 1,
+                                      controller: controller,
+                                    ),
+                                  );
+                                },
+                              ),
+                  );
   }
 
   Widget waitList(
@@ -542,9 +593,9 @@ class WaitListUI extends GetView<WaitListUIController> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: appColors.grey.withOpacity(0.2),
+            color: appColors.grey.withOpacity(0.3),
             spreadRadius: 2,
-            blurRadius: 2,
+            blurRadius: 6,
           ),
         ],
       ),
@@ -572,7 +623,7 @@ class WaitListUI extends GetView<WaitListUIController> {
                 SizedBox(
                   height: 20,
                   child: VerticalDivider(
-                    color: appColors.grey.withOpacity(0.3),
+                    color: appColors.grey.withOpacity(0.4),
                   ),
                 ),
                 SizedBox(
@@ -593,11 +644,8 @@ class WaitListUI extends GetView<WaitListUIController> {
           Padding(
             padding: const EdgeInsets.only(left: 8, right: 8),
             child: Divider(
-              color: appColors.grey.withOpacity(0.3),
+              color: appColors.grey.withOpacity(0.4),
             ),
-          ),
-          SizedBox(
-            height: 2,
           ),
           Row(
             children: [
@@ -606,6 +654,7 @@ class WaitListUI extends GetView<WaitListUIController> {
               ),
               CircleAvatar(
                 radius: 25,
+                backgroundColor: appColors.grey,
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(80),
                   child: CachedNetworkPhoto(
@@ -919,15 +968,21 @@ class WaitListUI extends GetView<WaitListUIController> {
     ChatDataList data, {
     WaitListUIController? controller,
   }) {
+    // Parse the DateTime from the backend string
+    DateTime dateTime = DateTime.parse(data.createdAt.toString());
+
+    // Format the DateTime to "01 Aug 24, 05:01 PM"
+    String formattedDate = DateFormat('dd MMM yy, hh:mm a').format(dateTime);
+
     return Container(
       decoration: BoxDecoration(
         color: appColors.white,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: appColors.grey.withOpacity(0.2),
+            color: appColors.grey.withOpacity(0.3),
             spreadRadius: 2,
-            blurRadius: 2,
+            blurRadius: 6,
           ),
         ],
       ),
@@ -955,14 +1010,14 @@ class WaitListUI extends GetView<WaitListUIController> {
                 SizedBox(
                   height: 20,
                   child: VerticalDivider(
-                    color: appColors.grey.withOpacity(0.3),
+                    color: appColors.grey.withOpacity(0.4),
                   ),
                 ),
                 SizedBox(
                   width: 5,
                 ),
                 Text(
-                  "Completed",
+                  data.status ?? "",
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontFamily: FontFamily.poppins,
@@ -976,12 +1031,12 @@ class WaitListUI extends GetView<WaitListUIController> {
           Padding(
             padding: const EdgeInsets.only(left: 8, right: 8),
             child: Divider(
-              color: appColors.grey.withOpacity(0.3),
+              color: appColors.grey.withOpacity(0.4),
             ),
           ),
-          SizedBox(
-            height: 2,
-          ),
+          // SizedBox(
+          //   height: 2,
+          // ),
           Row(
             children: [
               SizedBox(
@@ -1024,7 +1079,7 @@ class WaitListUI extends GetView<WaitListUIController> {
                     ],
                   ),
                   Text(
-                    data.createdAt.toString() ?? "",
+                    formattedDate ?? "",
                     style: TextStyle(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w400,
@@ -1270,8 +1325,8 @@ class WaitListUI extends GetView<WaitListUIController> {
                     // }
                   },
                   child: Container(
-                      height: 38,
-                      width: MediaQuery.of(context).size.width * 0.4,
+                      height: 38.sp,
+                      width: MediaQuery.of(context).size.width * 0.4.sp,
                       decoration: BoxDecoration(
                         color: appColors.green,
                         borderRadius: BorderRadius.circular(10),
@@ -1304,15 +1359,21 @@ class WaitListUI extends GetView<WaitListUIController> {
     CallHistoryData data, {
     WaitListUIController? controller,
   }) {
+    // Parse the DateTime from the backend string
+    DateTime dateTime = DateTime.parse(data.createdAt.toString());
+
+    // Format the DateTime to "01 Aug 24, 05:01 PM"
+    String formattedDate = DateFormat('dd MMM yy, hh:mm a').format(dateTime);
+
     return Container(
       decoration: BoxDecoration(
         color: appColors.white,
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: appColors.grey.withOpacity(0.2),
+            color: appColors.grey.withOpacity(0.3),
             spreadRadius: 2,
-            blurRadius: 2,
+            blurRadius: 6,
           ),
         ],
       ),
@@ -1340,14 +1401,14 @@ class WaitListUI extends GetView<WaitListUIController> {
                 SizedBox(
                   height: 20,
                   child: VerticalDivider(
-                    color: appColors.grey.withOpacity(0.3),
+                    color: appColors.grey.withOpacity(0.4),
                   ),
                 ),
                 SizedBox(
                   width: 5,
                 ),
                 Text(
-                  "Completed",
+                  data.status ?? "",
                   style: TextStyle(
                     fontSize: 16.sp,
                     fontFamily: FontFamily.poppins,
@@ -1361,7 +1422,7 @@ class WaitListUI extends GetView<WaitListUIController> {
           Padding(
             padding: const EdgeInsets.only(left: 8, right: 8),
             child: Divider(
-              color: appColors.grey.withOpacity(0.3),
+              color: appColors.grey.withOpacity(0.4),
             ),
           ),
           SizedBox(
@@ -1409,7 +1470,7 @@ class WaitListUI extends GetView<WaitListUIController> {
                     ],
                   ),
                   Text(
-                    data.createdAt.toString() ?? "",
+                    formattedDate ?? "",
                     style: TextStyle(
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w400,
@@ -1641,8 +1702,8 @@ class WaitListUI extends GetView<WaitListUIController> {
                     Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
                   },
                   child: Container(
-                      height: 38,
-                      width: MediaQuery.of(context).size.width * 0.4,
+                      height: 38.sp,
+                      width: MediaQuery.of(context).size.width * 0.4.sp,
                       decoration: BoxDecoration(
                         color: appColors.green,
                         borderRadius: BorderRadius.circular(10),
@@ -1684,9 +1745,9 @@ class WaitListUI extends GetView<WaitListUIController> {
         borderRadius: BorderRadius.circular(10),
         boxShadow: [
           BoxShadow(
-            color: appColors.grey.withOpacity(0.2),
+            color: appColors.grey.withOpacity(0.3),
             spreadRadius: 2,
-            blurRadius: 2,
+            blurRadius: 6,
           ),
         ],
       ),
@@ -1714,7 +1775,7 @@ class WaitListUI extends GetView<WaitListUIController> {
                 SizedBox(
                   height: 20,
                   child: VerticalDivider(
-                    color: appColors.grey.withOpacity(0.3),
+                    color: appColors.grey.withOpacity(0.4),
                   ),
                 ),
                 SizedBox(
@@ -1735,7 +1796,7 @@ class WaitListUI extends GetView<WaitListUIController> {
           Padding(
             padding: const EdgeInsets.only(left: 8, right: 8),
             child: Divider(
-              color: appColors.grey.withOpacity(0.3),
+              color: appColors.grey.withOpacity(0.4),
             ),
           ),
           SizedBox(
@@ -1962,8 +2023,8 @@ class WaitListUI extends GetView<WaitListUIController> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(5, 0, 10, 10),
                     child: Container(
-                        height: 38,
-                        width: MediaQuery.of(context).size.width * 0.4,
+                        height: 38.sp,
+                        width: MediaQuery.of(context).size.width * 0.4.sp,
                         decoration: BoxDecoration(
                             color: appColors.white,
                             borderRadius: BorderRadius.circular(10),
@@ -1987,8 +2048,8 @@ class WaitListUI extends GetView<WaitListUIController> {
                     child: InkWell(
                       onTap: () {},
                       child: Container(
-                          height: 38,
-                          width: MediaQuery.of(context).size.width * 0.4,
+                          height: 38.sp,
+                          width: MediaQuery.of(context).size.width * 0.4.sp,
                           decoration: BoxDecoration(
                             color: appColors.red,
                             borderRadius: BorderRadius.circular(10),

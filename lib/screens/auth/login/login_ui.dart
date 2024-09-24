@@ -4,9 +4,7 @@ import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
-import 'package:divine_astrologer/screens/auth/login/true_caller_fault_widget.dart';
 import 'package:divine_astrologer/screens/auth/login/widget/country_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -197,9 +195,9 @@ class LoginUI extends GetView<LoginController> {
 
                                     if (Get.currentRoute == RouteName.login) {
                                       oAuthFlowUsable
-                                        ? await TrueCallerService()
-                                        .startTrueCaller()
-                                        : controller.trueCallerFaultPopup();
+                                          ? await TrueCallerService()
+                                              .startTrueCaller()
+                                          : controller.trueCallerFaultPopup();
                                     }
                                   },
                                   child: Row(

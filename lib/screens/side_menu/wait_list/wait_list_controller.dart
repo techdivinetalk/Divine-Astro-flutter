@@ -67,7 +67,7 @@ class WaitListUIController extends GetxController
   var emptyMsg = "".obs;
   var allApiCalling = false.obs;
   var callPageCount = 1;
-
+  var callLoading = false.obs;
   Future<dynamic> getCallOrderHistory(
       {int? page, String? startDate, endDate}) async {
     Map<String, dynamic> params = {
@@ -80,7 +80,9 @@ class WaitListUIController extends GetxController
 
     try {
       callApiCalling.value = true;
-
+      if (callHistoryList.isEmpty) {
+        callLoading.value = true;
+      }
       update();
       CallOrderHistoryModelClass data =
           await OrderHistoryRepository().getCallOrderHistory(params);
@@ -91,6 +93,9 @@ class WaitListUIController extends GetxController
       if (history!.isNotEmpty && data.data != null) {
         emptyMsg.value = "";
         if (page == 1) callHistoryList.clear();
+        if (callHistoryList.isEmpty && page == 1) {
+          callLoading.value = false;
+        }
         callHistoryList.addAll(history);
         callPageCount++;
       } else {
@@ -100,7 +105,7 @@ class WaitListUIController extends GetxController
       update();
     } catch (error) {
       callApiCalling.value = false;
-
+      callLoading.value = false;
       debugPrint("error $error");
       if (error is AppException) {
         error.onException();
@@ -116,7 +121,7 @@ class WaitListUIController extends GetxController
   var emptyMsg2 = "".obs;
   var allApiCalling2 = false.obs;
   var chatPageCount = 1;
-
+  var chatLoading = false.obs;
   Future<dynamic> getChatOrderHistory(
       {int? page, String? startDate, endDate}) async {
     Map<String, dynamic> params = {
@@ -129,7 +134,9 @@ class WaitListUIController extends GetxController
 
     try {
       chatApiCalling.value = true;
-
+      if (chatHistoryList.isEmpty) {
+        chatLoading.value = true;
+      }
       update();
       ChatOrderHistoryModelClass data =
           await OrderHistoryRepository().getChatOrderHistory(params);
@@ -140,6 +147,9 @@ class WaitListUIController extends GetxController
       if (history!.isNotEmpty && data.data != null) {
         emptyMsg.value = "";
         if (page == 1) chatHistoryList.clear();
+        if (chatHistoryList.isEmpty && page == 1) {
+          chatLoading.value = false;
+        }
         chatHistoryList.addAll(history);
         chatPageCount++;
       } else {
@@ -148,6 +158,7 @@ class WaitListUIController extends GetxController
       update();
     } catch (error) {
       chatApiCalling.value = false;
+      chatLoading.value = false;
 
       debugPrint("error $error");
       if (error is AppException) {
