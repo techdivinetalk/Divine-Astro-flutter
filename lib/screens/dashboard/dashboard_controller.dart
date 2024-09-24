@@ -458,7 +458,7 @@ class DashboardController extends GetxController
       },
     );
     // firebaseMessagingConfig(Get.context!);
-    // getConstantDetailsData();
+    getConstantDetailsData();
     print("currentTime");
     cacheGift();
     if (verifyOnboarding.toString() == "0") {
