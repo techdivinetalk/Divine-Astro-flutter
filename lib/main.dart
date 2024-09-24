@@ -1,14 +1,14 @@
 import 'dart:collection';
 import 'dart:convert';
 import 'dart:io';
-import 'dart:math';
+import 'dart:developer';
+import 'dart:math' hide log;
 
 import 'package:camera/camera.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
-import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
-import 'package:divine_astrologer/model/chat_offline_model.dart';
+import 'package:divine_astrologer/notification_helper/notification_helpe.dart';
 import 'package:divine_astrologer/remote_config/remote_config_helper.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/auth/login/login_controller.dart';
@@ -17,6 +17,7 @@ import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
@@ -50,16 +51,19 @@ import 'localization/translations.dart';
 import 'model/constant_details_model_class.dart';
 import 'screens/live_page/constant.dart';
 
-/// sahil pushed
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 late List<CameraDescription>? cameras;
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-  await Firebase.initializeApp();
-  print('Handling a background message: ${message.messageId}');
-  if (message.data["type"] == "2") {
-    // showSecondNotification(message.notification?.title ?? '',
-    // message.notification?.body ?? '', message.data);
-  }
+
+@pragma('vm:entry-point')
+Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+await Firebase.initializeApp();
+
+  NotificationHelper().showNotification(
+    message.data["title"] ?? "",
+    message.data["message"] ?? "",
+    message.data['type'] ?? "",
+    message.data,
+  );
 }
 
 //// Onboarding Code Done
@@ -70,6 +74,10 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   // initMessaging();
   AppFirebaseService().masterData("masters");
+  if (!kIsWeb) {
+    await setupFlutterNotifications();
+  }
+
 
   cameras = await availableCameras();
   Get.put(AppColors());
@@ -79,123 +87,7 @@ Future<void> main() async {
   await remoteConfigHelper.initialize();
   remoteConfigHelper.updateGlobalConstantWithFirebaseData();
   await GetStorage.init();
-  Future<void> showFlutterNotification(RemoteMessage message) async {
-    RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
-    if (notification != null && android != null && Platform.isAndroid) {
-      flutterLocalNotificationsPlugin.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
-        payload: jsonEncode(message.data),
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            channel.id,
-            channel.name,
-            channelDescription: channel.description,
-            icon: '@mipmap/ic_launcher',
-          ),
-        ),
-      );
-    }
-  }
 
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print("check on message notification : ${message.data}");
-    print("pushNotification1 ${message.notification?.title ?? ""}");
-    if (message.data["type"] == "2" || message.data["type"] == "20") {
-      showFlutterNotification(message);
-      return;
-    }
-    if (message.data["type"].toString() == "1") {
-      if (MiddleWare.instance.currentPage !=
-          RouteName.chatMessageWithSocketUI) {
-        print("messageReceive21 ${MiddleWare.instance.currentPage}");
-        showNotification(message.data["title"], message.data["message"],
-            message.data['type'], message.data);
-      }
-      HashMap<String, dynamic> updateData = HashMap();
-      updateData[message.data["chatId"] ?? "0"] = 1;
-      print('Message data-:-users ${message.data}');
-      print("test_notification: Enable fullscreen incoming call notification");
-      sendBroadcast(
-          BroadcastMessage(name: "messageReceive", data: message.data));
-    } else if (message.data["type"] == "8") {
-      print(
-          "inside page for realtime notification ${message.data} ${MiddleWare.instance.currentPage}");
-      if (MiddleWare.instance.currentPage == RouteName.chatMessageUI &&
-          chatAssistantCurrentUserId.value.toString() ==
-              message.data['sender_id'].toString()) {
-        assistChatNewMsg([...assistChatNewMsg, message.data]);
-        assistChatNewMsg.refresh();
-        // sendBroadcast(
-        //     BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
-      } else {
-        // assistChatUnreadMessages([...assistChatUnreadMessages, message.data]);
-        if (dasboardCurrentIndex.value == 2) {
-          final responseMsg = message.data;
-          assistChatUnreadMessages([
-            ...assistChatUnreadMessages,
-            AssistChatData(
-                message: responseMsg["message"],
-                id: int.parse(responseMsg["chatId"].toString() ?? ''),
-                customerId:
-                    int.parse(responseMsg["sender_id"].toString() ?? ''),
-                createdAt: DateTime.parse(responseMsg["created_at"])
-                    .millisecondsSinceEpoch
-                    .toString(),
-                isSuspicious: 0,
-                suggestedRemediesId:
-                    int.parse(responseMsg["suggestedRemediesId"] ?? "0"),
-                isPoojaProduct:
-                    responseMsg['is_pooja_product'].toString() == '1'
-                        ? true
-                        : false,
-                productId: responseMsg["product_id"].toString(),
-                shopId: responseMsg["shop_id"].toString(),
-                sendBy: SendBy.astrologer,
-                msgType: responseMsg['msg_type'] != null
-                    ? msgTypeValues.map[responseMsg["msg_type"]]
-                    : MsgType.text,
-                seenStatus: SeenStatus.received,
-                astrologerId: int.parse(responseMsg["userid"] ?? 0))
-          ]);
-        }
-        switch (message.data['msg_type']) {
-          case "0":
-            showNotification(message.data["title"], message.data["message"],
-                message.data['type'], message.data);
-            break;
-          case "1":
-            showNotification(message.data["title"], 'sendNotificationImage'.tr,
-                message.data['type'], message.data);
-            break;
-          case "2":
-            showNotification(message.data["title"], 'sendNotificationRemedy'.tr,
-                message.data['type'], message.data);
-            break;
-          case "3":
-            showNotification(
-                message.data["title"],
-                'sendNotificationProduct'.tr,
-                message.data['type'],
-                message.data);
-            break;
-          case "8":
-            showNotification(message.data["title"], 'sendNotificationGift'.tr,
-                message.data['type'], message.data);
-            break;
-        }
-      }
-    } else {
-      showNotification(message.data["title"], message.data["message"],
-          message.data['type'], message.data);
-    }
-    if (message.notification != null) {
-      print(
-          'Message also contained a notification: ${message.notification?.title}');
-    }
-  });
   if (await Permission.notification.status.isPermanentlyDenied ||
       await Permission.notification.status.isRestricted ||
       await Permission.notification.status.isDenied) {
@@ -239,7 +131,37 @@ Future<void> main() async {
     AppFirebaseService().masterData("masters");
   }
 }
+bool isFlutterLocalNotificationsInitialized = false;
 
+Future<void> setupFlutterNotifications() async {
+  if (isFlutterLocalNotificationsInitialized) {
+    return;
+  }
+  channel = const AndroidNotificationChannel(
+    'high_importance_channel',
+    'High Importance Notifications',
+    description: 'This channel is used for important notifications.',
+    showBadge: true,
+    importance: Importance.high,
+  );
+
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+      AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  isFlutterLocalNotificationsInitialized = true;
+}
 Future<bool> saveLanguage(String? lang) async {
   final box = GetStorage();
   await box.write('lang', lang);
@@ -249,7 +171,7 @@ Future<bool> saveLanguage(String? lang) async {
 saveLanguageId(int userLanguageId) async {
   SharedPreferences pref = await SharedPreferences.getInstance();
   if (kDebugMode) {
-    print("userLanguageId ++${userLanguageId.toString()}");
+    log("userLanguageId ++${userLanguageId.toString()}");
   }
   await pref.setInt('languageIds', userLanguageId);
 }
@@ -260,14 +182,37 @@ Future<void> initServices() async {
   await Get.putAsync(() => NetworkService().init());
   await Get.putAsync(() => FirebaseNetworkService().init());
 }
-
-Future<void> showNotification(String title, String message, String type,
+// old notification code
+/*Future<void> showNotification(String title, String message, String type,
     Map<String, dynamic> data) async {
+  // androidNotificationDetails;
+
   AndroidNotificationDetails? androidNotificationDetails;
-  if (type == "1") {
+  if (type == "2") {
+    // Type 2: Custom sound
     androidNotificationDetails = const AndroidNotificationDetails(
-      "DivineCustomer", "CustomerNotification",
-      // sound: RawResourceAndroidNotificationSound('accept_ring'),
+      "DivineAstrologer",
+      "AstrologerNotification",
+      importance: Importance.max,
+      priority: Priority.high,
+      icon: "divine_logo_tran",
+      autoCancel: true,
+      playSound: true,
+      sound: const RawResourceAndroidNotificationSound('accept'),
+      setAsGroupSummary: true,
+      styleInformation: const BigTextStyleInformation(''),
+      actions: [
+        AndroidNotificationAction(
+          'accept',
+          'CHAT NOW',
+        )
+      ],
+    );
+  } else {
+    // Default notification (no custom sound)
+    androidNotificationDetails = const AndroidNotificationDetails(
+      "DivineAstrologer_Other_type",
+      "AstrologerNotification_other_type",
       importance: Importance.max,
       priority: Priority.high,
       icon: "divine_logo_tran",
@@ -276,45 +221,22 @@ Future<void> showNotification(String title, String message, String type,
       setAsGroupSummary: true,
       styleInformation: BigTextStyleInformation(''),
     );
-  } else {
-    androidNotificationDetails = AndroidNotificationDetails(
-      "DivineCustomer",
-      "CustomerNotification",
-      importance: Importance.max,
-      priority: Priority.high,
-      icon: "divine_logo_tran",
-      autoCancel: true,
-      actions: type == "2"
-          ? [
-              const AndroidNotificationAction(
-                'accept',
-                'ACCEPT',
-              ),
-            ]
-          : [],
-    );
   }
+
   NotificationDetails notificationDetails =
       NotificationDetails(android: androidNotificationDetails);
+
+  // Show notification
   await flutterLocalNotificationsPlugin.show(
       Random().nextInt(90000), title, message, notificationDetails,
       payload: json.encode(data));
-}
+  // if (type == "1") {
+  //
+  // }  else {
+  //
+  // }
+}*/
 
-// void initMessaging() async {
-//   const AndroidInitializationSettings initializationSettingsAndroid =
-//       AndroidInitializationSettings("@mipmap/ic_launcher");
-//   const DarwinInitializationSettings initializationSettingsDarwin =
-//       DarwinInitializationSettings(
-//           onDidReceiveLocalNotification: onDidReceiveLocalNotification,
-//           );
-//
-//   const InitializationSettings initializationSettings = InitializationSettings(
-//       android: initializationSettingsAndroid,
-//       iOS: initializationSettingsDarwin);
-//   flutterLocalNotificationsPlugin.initialize(initializationSettings,
-//       onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
-// }
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
@@ -337,23 +259,9 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           .database
           .child("masters/disableOnboarding")
           .get();
-      print(
-          "dataSnapshot.value.toString() -- ${dataSnapshot.value.toString()}");
+      log("dataSnapshot.value.toString() -- ${dataSnapshot.value.toString()}");
       if (dataSnapshot.value.toString() == "0") {
         checkOnBoarding();
-
-        // if (verifyOnboarding.toString() == "0") {
-        //   print("from 0");
-        // } else {
-        //   print("from 1");
-        //   if (preferenceService.getUserDetail()?.id == null) {
-        //     Get.offAllNamed(RouteName.login);
-        //   } else {
-        //     print("Gone to here");
-        //
-        //     Get.offAllNamed(RouteName.dashboard);
-        //   }
-        // }
       } else {
         normalBoaring();
       }
@@ -361,17 +269,18 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   normalBoaring() {
-    print("normal onboaringin process");
+    log("normal onboaringin process");
     if (preferenceService.getUserDetail()?.id == null) {
       Get.offAllNamed(RouteName.login);
     } else {
-      print("Gone to here");
+      log("Gone to here");
 
       Get.offAllNamed(RouteName.dashboard);
     }
   }
 
   var isOnboardings;
+
   checkOnBoarding() async {
     try {
       final userId = preferenceService.getUserDetail()?.id;
@@ -424,6 +333,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
       // If API call fails with status 401, log out user
       else if (commonConstants?.success == false &&
           commonConstants?.statusCode == 401) {
+        print("status code 401 error log out -------->");
         await preferenceService.erase();
         Get.offAllNamed(RouteName.login);
       } else {

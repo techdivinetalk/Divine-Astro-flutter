@@ -247,12 +247,8 @@ class ProfilePageController extends GetxController {
     isInit = true;
     // scrollController.l
     if(isAstroCare.value == 1){
-      profileList.insert(3, ProfileOptionModelClass("customerSupport".tr,
+      profileList.add(ProfileOptionModelClass("customerSupport".tr,
           Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), '',true));
-    } else{
-      if(profileList[3].name == "customerSupport".tr){
-        profileList.removeAt(3);
-      }
     }
     userData = preference.getUserDetail();
     getReviewRating();

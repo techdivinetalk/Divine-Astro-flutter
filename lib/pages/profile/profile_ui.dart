@@ -308,8 +308,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                         child: InkWell(
                           onTap: () async {
                             print("objectobjectobjectobjectobject----${index}");
-                            if ((index == 3 && isAstroCare.value == 0) ||
-                                (index == 4 && isAstroCare.value == 1)) {
+                            if (index == 3) {
                               openBottomSheet(
                                 context,
                                 functionalityWidget: Column(
@@ -491,8 +490,6 @@ class ProfileUI extends GetView<ProfilePageController> {
                                   ],
                                 ),
                               );
-                            } else if ((index == 3 && isAstroCare.value == 1)) {
-                              controller.whatsapp();
                             } else if (index == 1) {
                               // if (await PermissionHelper()
                               //     .askStoragePermission(Permission.videos)) {
@@ -569,6 +566,8 @@ class ProfileUI extends GetView<ProfilePageController> {
                               Get.toNamed(RouteName.numberChangeReqUI);
                             } else if (index == 6) {
                               Get.toNamed(RouteName.blockedUser);
+                            } else if(index == 9){
+                              controller.whatsapp();
                             }
                             /*else if (index == 10) {
                         log("index ----");
@@ -909,9 +908,9 @@ class ProfileUI extends GetView<ProfilePageController> {
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
-                        if (reviewData.level != null &&
-                            reviewData.level != "" &&
-                            isFirstOccurrence)
+                        if (reviewData.level != null && reviewData.level != ""
+                            // && isFirstOccurrence
+                        )
                           Padding(
                             padding: const EdgeInsets.only(left: 5.0),
                             child: LevelWidget(level: reviewData.level ?? ""),

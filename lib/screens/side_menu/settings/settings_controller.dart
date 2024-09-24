@@ -5,6 +5,7 @@ import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/pivacy_policy_model.dart';
 import 'package:divine_astrologer/model/terms_and_condition_model.dart';
+import 'package:divine_astrologer/screens/auth/login/login_controller.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -60,6 +61,7 @@ class SettingsController extends GetxController {
   }
 
   void logOut() {
+    print("logOutlogOutlogOut start");
     userRepository.logOut().then(
       (value) async {
         if (value.statusCode == 200 && value.success == true) {

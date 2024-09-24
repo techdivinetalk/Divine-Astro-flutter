@@ -4,6 +4,8 @@ import 'dart:io';
 
 import 'package:device_apps/device_apps.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/screens/auth/login/login_controller.dart';
+import 'package:get/instance_manager.dart';
 import 'package:http/http.dart';
 import 'package:truecaller_sdk/truecaller_sdk.dart';
 import 'package:uuid/uuid.dart';
@@ -21,6 +23,7 @@ class TrueCallerService {
   String oAuthState = "";
 
   Future<void> startTrueCaller() async {
+    bool isEventCall = false;
     const int sdkOption = TcSdkOptions.OPTION_VERIFY_ONLY_TC_USERS;
     log("TrueCallerService: start(): sdkOption: $sdkOption");
 
@@ -34,6 +37,15 @@ class TrueCallerService {
       buttonTextColor: appColors.white  .value,
     );
     log("TrueCallerService: start(): init: $init");
+
+    TcSdk.streamCallbackData.forEach((element) {
+      print("element -----> ${element.result}");
+      if(element.result == TcSdkCallbackResult.failure && !isEventCall){
+        isEventCall = true;
+        print("call thiso ne call ----->");
+        Get.find<LoginController>().requestPermissions();
+      }
+    });
 
     final bool isOAuthFlowUsable = await TcSdk.isOAuthFlowUsable;
     log("TrueCallerService: start(): isOAuthFlowUsable: $isOAuthFlowUsable");

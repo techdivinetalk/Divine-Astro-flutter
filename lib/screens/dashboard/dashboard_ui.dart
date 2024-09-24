@@ -93,7 +93,6 @@ class DashboardScreen extends GetView<DashboardController> {
                       Scaffold(
                           backgroundColor: appColors.white,
                           key: controller.scaffoldkey,
-                          floatingActionButton: rejoinVisibility(),
                           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
                           body: Obx(
                             () {
@@ -337,7 +336,7 @@ class DashboardScreen extends GetView<DashboardController> {
                           ? acceptBottomBar(
                               chatOrderData: controller.chatOrderData)
                           : const SizedBox(),
-
+                      rejoinVisibility()
                     ],
                   );
                 }),

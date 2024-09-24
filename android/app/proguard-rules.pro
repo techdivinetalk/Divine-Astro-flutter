@@ -1,2 +1,10 @@
 -keep class **.zego.**  { *; }
 -keep class **.**.zego_zpns.** { *; }
+-keep class com.google.firebase.** { *; }
+-keep class com.google.android.gms.** { *; }
+-keepattributes *Annotation*
+-keepattributes Exceptions
+-keepattributes InnerClasses
+-keep class com.google.firebase.** { *; }
+-dontwarn com.google.firebase.**
+-dontwarn com.google.android.gms.**

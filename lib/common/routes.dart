@@ -2,6 +2,8 @@ import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
 import 'package:divine_astrologer/model/add_custom_product/add_custom_product_binding.dart';
 import 'package:divine_astrologer/model/add_custom_product/add_custom_product_view.dart';
 import 'package:divine_astrologer/model/custom_product/custom_product__list_binding.dart';
+import 'package:divine_astrologer/model/custom_product/my_remedies_listing/my_remedies_listing_binding.dart';
+import 'package:divine_astrologer/model/custom_product/my_remedies_listing/my_remedies_listing_view.dart';
 import 'package:divine_astrologer/pages/profile/profile_binding.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_binding.dart';
@@ -68,6 +70,7 @@ import 'package:divine_astrologer/screens/suggest_remedies_flow/category_detail/
 import 'package:divine_astrologer/screens/suggest_remedies_flow/category_detail/category_detail_ui.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy/final_remedies_sub_binding.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy/final_remedies_sub_ui.dart';
+import 'package:divine_astrologer/screens/suggest_remedies_flow/remedies/remedies_view.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggest_remedies_sub/suggest_remedies_sub_binding.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggest_remedies_sub/suggest_remedies_sub_ui.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggested_remedies/suggested_ramedies_screen.dart';
@@ -197,6 +200,7 @@ class RouteName {
   static const String donationDetailPage = "/donationDetailPage";
   static const String chatMessageUI = "/chatMessageUI";
   static const String chatMessageWithSocketUI = "/chatMessageWithSocketUI";
+  static const String remedies = "/remedies";
   static const String suggestRemediesSubUI = "/suggestRemediesSubUI";
   static const String finalRemediesSubUI = "/finalRemediesSubUI";
   static const String categoryDetail = "/categoryDetail";
@@ -214,7 +218,7 @@ class RouteName {
   static const String imagePreviewUi = "/imagePreviewUi";
   static const String walletScreenUI = "/walletScreenUI";
   static const String privacyPolicy = "/privacyPolicy";
-  static const String remedies = "/remedies";
+  static const String remediesView = "/remediesView";
   static const String addRemedies = "/addRemedies";
   static const String termsCondition = "/termsCondition";
   static const String videoCallPage = "/videoCallPage";
@@ -250,6 +254,7 @@ class RouteName {
   static const String termsAndConditionScreen = "/TermsAndConditionScreen";
   static const String addCustomProduct = "/addCustomProduct";
   static const String customProduct = "/customProduct";
+  static const String myRemediesListingView = "/myRemediesListingView";
   static const String passbook = "/passbook";
   static const String passbookUI = "/passbookUI";
   static const String onBoardingScreen = "/OnBoarding1";
@@ -305,6 +310,10 @@ class Routes {
         page: () => const CustomProductListView(),
         name: RouteName.customProduct,
         binding: CustomProductListBinding()),
+    GetPage(
+        page: () => const MyRemediesListingView(),
+        name: RouteName.myRemediesListingView,
+        binding: MyRemediesListingBinding()),
     GetPage(
         page: () => const PassbookScreen(),
         name: RouteName.passbook,
@@ -523,6 +532,10 @@ class Routes {
         page: () => ChatMessageWithSocketUI(),
         name: RouteName.chatMessageWithSocketUI,
         binding: ChatMessageWithSocketBinding()),
+    GetPage(
+        page: () => RemediesView(),
+        name: RouteName.remediesView,
+        binding: RemediesBindings()),
     GetPage(
         page: () => SuggestedRemediesScreen(),
         name: RouteName.suggestRemediesView),

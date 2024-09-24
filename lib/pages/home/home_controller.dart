@@ -472,7 +472,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       if (event.name == "giftCount") {
         if (int.parse(event.data!["giftCount"].toString()) > 0) {
           if (MiddleWare.instance.currentPage != RouteName.chatMessageUI) {
-            showGiftBottomSheet(event.data?["giftCount"], contextDetail,
+            showGiftBottomSheet(event.data?["giftCount"], Get.context!,
                 baseUrl: preferenceService.getBaseImageURL());
           }
         }

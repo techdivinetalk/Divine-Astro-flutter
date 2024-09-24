@@ -53,7 +53,6 @@ class SideMenuDrawer extends GetView<HomeController> {
                   Get.put(HomeController()).homeScreenKey
                     ..currentState?.closeDrawer();
                   Get.back();
-
                   Get.put(HomeController()).showPopup = false;
                   Get.toNamed(RouteName.waitList);
                 },

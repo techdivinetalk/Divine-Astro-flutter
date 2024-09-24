@@ -1348,6 +1348,8 @@ PODS:
   - nanopb/encode (2.30910.0)
   - native_device_orientation (0.0.1):
     - Flutter
+  - network_info_plus (0.0.1):
+    - Flutter
   - OrderedSet (5.0.0)
   - package_info_plus (0.4.5):
     - Flutter
@@ -1459,6 +1461,7 @@ DEPENDENCIES:
   - image_picker_ios (from `.symlinks/plugins/image_picker_ios/ios`)
   - just_audio (from `.symlinks/plugins/just_audio/ios`)
   - native_device_orientation (from `.symlinks/plugins/native_device_orientation/ios`)
+  - network_info_plus (from `.symlinks/plugins/network_info_plus/ios`)
   - package_info_plus (from `.symlinks/plugins/package_info_plus/ios`)
   - path_provider_foundation (from `.symlinks/plugins/path_provider_foundation/darwin`)
   - permission_handler_apple (from `.symlinks/plugins/permission_handler_apple/ios`)
@@ -1608,6 +1611,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/just_audio/ios"
   native_device_orientation:
     :path: ".symlinks/plugins/native_device_orientation/ios"
+  network_info_plus:
+    :path: ".symlinks/plugins/network_info_plus/ios"
   package_info_plus:
     :path: ".symlinks/plugins/package_info_plus/ios"
   path_provider_foundation:
@@ -1705,7 +1710,7 @@ SPEC CHECKSUMS:
   flutter_image_compress_common: ec1d45c362c9d30a3f6a0426c297f47c52007e3e
   flutter_inappwebview: 3d32228f1304635e7c028b0d4252937730bbc6cf
   flutter_keyboard_visibility: 0339d06371254c3eb25eeb90ba8d17dca8f9c069
-  flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
+  flutter_local_notifications: 4cde75091f6327eb8517fa068a0a5950212d2086
   flutter_logs: 5d0dca26963e0f30b11a995a764744ef77d5d428
   flutter_pdfview: 25f53dd6097661e6395b17de506e6060585946bd
   fluttertoast: e9a18c7be5413da53898f660530c56f35edfba9c
@@ -1729,6 +1734,7 @@ SPEC CHECKSUMS:
   MLKitVision: e858c5f125ecc288e4a31127928301eaba9ae0c1
   nanopb: 438bc412db1928dac798aa6fd75726007be04262
   native_device_orientation: 348b10c346a60ebbc62fb235a4fdb5d1b61a8f55
+  network_info_plus: 9d930145451916919786087c4173226363616071
   OrderedSet: aaeb196f7fef5a9edf55d89760da9176ad40b93c
   package_info_plus: 58f0028419748fad15bf008b270aaa8e54380b1c
   path_provider_foundation: 2b6b4c569c0fb62ec74538f866245ac84301af46
