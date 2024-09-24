@@ -66,6 +66,7 @@ class LoginController extends GetxController {
   var isLoading = false.obs;
 
   login() async {
+    isUnauthorizedUserCalled = false;
     //deviceToken = await FirebaseMessaging.instance.getToken();
     Map<String, dynamic> params = {
       "mobile_no": mobileNumberController.text,
@@ -207,8 +208,10 @@ class LoginController extends GetxController {
     return {'countryCode': '+91', 'phoneNumber': number};
   }
 
+  bool isSimPopupAppear = false;
   void showSimNumbersPopup() {
-    if (simNumbers.isNotEmpty) {
+    if (simNumbers.isNotEmpty && !isSimPopupAppear) {
+      isSimPopupAppear = true;
       showDialog(
         context: Get.context!,
         builder: (BuildContext context) {
@@ -273,7 +276,9 @@ class LoginController extends GetxController {
             ],
           );
         },
-      );
+      ).then((value) {
+        isSimPopupAppear = false;
+      });
     }
   }
 
@@ -460,6 +465,7 @@ class LoginController extends GetxController {
   bool isTrueCallerLogin = false;
 
   Future<void> customerLoginWithTrueCaller(Map<String, dynamic> profile) async {
+    isUnauthorizedUserCalled = false;
     isTrueCallerLogin = true;
     showLoader();
     final Map<String, dynamic> params = {

@@ -462,7 +462,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         AppFirebaseService().readData(
             'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
       } else {
-        divineSnackBar(data: "User Not Found");
+        log("user not found home controller");
+        // divineSnackBar(data: "User Not Found");
       }
       //appFirebaseService.masterData('masters');
     });

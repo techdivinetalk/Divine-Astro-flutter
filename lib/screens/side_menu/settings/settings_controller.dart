@@ -49,6 +49,7 @@ class SettingsController extends GetxController {
           await userRepository.deleteUserAccount(params);
       var userData = data;
       log("DeleteUser==>${userData.message}");
+      Get.delete<LoginController>(force: true);
       Get.offAllNamed(RouteName.login);
     } catch (error) {
       debugPrint("error $error");
@@ -67,6 +68,7 @@ class SettingsController extends GetxController {
         if (value.statusCode == 200 && value.success == true) {
           preferenceService.erase().whenComplete(() async {
             await Auth().handleSignOut();
+            Get.delete<LoginController>(force: true);
             Get.offAllNamed(RouteName.login);
             update();
           });

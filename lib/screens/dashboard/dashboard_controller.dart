@@ -111,6 +111,7 @@ class DashboardController extends GetxController
           appFirebaseService.readData(
               'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
         } else {
+          print("user not found dashboard controller");
           divineSnackBar(data: "User Not Found");
         }
       }

@@ -277,6 +277,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   normalBoaring() {
     log("normal onboaringin process");
     if (preferenceService.getUserDetail()?.id == null) {
+      Get.delete<LoginController>(force: true);
       Get.offAllNamed(RouteName.login);
     } else {
       log("Gone to here");
@@ -293,6 +294,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
       // Check if user details are null, navigate to login if true
       if (userId == null) {
+        Get.delete<LoginController>(force: true);
         Get.offAllNamed(RouteName.login);
         return; // Exit the function as user needs to log in
       }
@@ -341,6 +343,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
           commonConstants?.statusCode == 401) {
         print("status code 401 error log out -------->");
         await preferenceService.erase();
+        Get.delete<LoginController>(force: true);
         Get.offAllNamed(RouteName.login);
       } else {
         // Handle other failure cases here if needed
@@ -349,6 +352,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     } catch (error) {
       // Handle any potential errors
       print("Error in checkOnBoarding: $error");
+      Get.delete<LoginController>(force: true);
       Get.offAllNamed(RouteName.login); // Optionally navigate to login on error
     } finally {
       // Stop loading indicator once everything is done
