@@ -5,10 +5,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../../../common/custom_light_yellow_btn.dart';
+
 import '../../../common/app_textstyle.dart';
 import '../../../common/colors.dart';
-import '../../../gen/assets.gen.dart';
+import '../../../common/custom_light_yellow_btn.dart';
 import '../../common/common_bottomsheet.dart';
 import 'edit_profile_controller.dart';
 
@@ -28,7 +28,6 @@ class EditProfileUI extends GetView<EditProfileController> {
             children: [
               CustomLightYellowButton(
                 name: "saveChanges".tr,
-
                 onTaped: () => controller.editProfile(),
               ),
             ],
@@ -64,26 +63,27 @@ class EditProfileUI extends GetView<EditProfileController> {
                           "name".tr,
                           style: AppTextStyle.textStyle14(),
                         ),
-                       // Assets.images.icEdit.svg(),
+                        // Assets.images.icEdit.svg(),
                       ],
                     ),
                     SizedBox(
                       height: 5.h,
                     ),
                     ReferAstrologerField(
-                     /*   validator: (value) {
+                        /*   validator: (value) {
                           if (value! == "") {
                             return "";
                           }
                           return null;
                         },*/
+                        from: "profile",
                         notEditText: true,
                         hintText: "hintTextName".tr,
                         controller: controller.state.nameController,
                         inputAction: TextInputAction.next,
                         inputType: TextInputType.text),
                     SizedBox(
-                      height: 20.h,
+                      height: 10.h,
                     ),
                     /*  Text(
                   "Select Category".tr,
@@ -272,58 +272,60 @@ class EditProfileUI extends GetView<EditProfileController> {
                     ),
                     SizedBox(height: 5.h),
                     Obx(
-                          () =>
-                          Container(
-                            width: MediaQuery
-                                .of(context)
-                                .size
-                                .width,
-                            padding: const EdgeInsets.all(10),
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.circular(10),
-                                boxShadow: [
-                                  BoxShadow(
-                                      color: Colors.black.withOpacity(0.3),
-                                      blurRadius: 3.0,
-                                      offset: const Offset(0.3, 3.0)),
-                                ]),
-                            child: Wrap(
-                              direction: Axis.horizontal,
-
-                              children: controller.tags
-                                  .map<Widget>((element) =>
-                                  Padding(
+                      () => Container(
+                        width: MediaQuery.of(context).size.width,
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: appColors.grey.withOpacity(0.6),
+                            ),
+                            boxShadow: [
+                              // BoxShadow(
+                              //     color: Colors.black.withOpacity(0.3),
+                              //     blurRadius: 3.0,
+                              //     offset: const Offset(0.3, 3.0)),
+                            ]),
+                        child: Wrap(
+                          direction: Axis.horizontal,
+                          children: controller.tags
+                              .map<Widget>((element) => Padding(
                                     padding: EdgeInsets.symmetric(
                                         horizontal: 0, vertical: 6.h),
                                     child: Wrap(
-                                      crossAxisAlignment: WrapCrossAlignment
-                                          .center,
+                                      crossAxisAlignment:
+                                          WrapCrossAlignment.center,
                                       children: [
                                         Container(
                                           padding: EdgeInsets.symmetric(
-                                              horizontal: 15.w,
-                                              vertical: 8.h),
+                                              horizontal: 15.w, vertical: 8.h),
                                           decoration: BoxDecoration(
                                             color: appColors.guideColor,
                                             boxShadow: [
-                                              BoxShadow(
-                                                  color:
-                                                  Colors.black.withOpacity(0.2),
-                                                  blurRadius: 1.0,
-                                                  offset: const Offset(
-                                                      0.0, 3.0)),
+                                              // BoxShadow(
+                                              //     color:
+                                              //     Colors.black.withOpacity(0.2),
+                                              //     blurRadius: 1.0,
+                                              //     offset: const Offset(
+                                              //         0.0, 3.0),
+                                              // ),
+                                              // BoxShadow(
+                                              //     color:
+                                              //     Colors.black.withOpacity(0.2),
+                                              //     blurRadius: 1.0,
+                                              //     offset: const Offset(
+                                              //         0.0, 3.0),
+                                              // ),
                                             ],
-
-                                            borderRadius: const BorderRadius
-                                                .all(
-                                                Radius.circular(20)),
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                                    Radius.circular(20)),
                                           ),
                                           child: Text(
                                             element.name.toString(),
                                             style: AppTextStyle.textStyle14(
-                                                fontColor: appColors
-                                                    .white),
+                                                fontColor: appColors.white),
                                           ),
                                         ),
                                         SizedBox(width: 8.w),
@@ -333,8 +335,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                                             //     controller.tags.indexWhere(
                                             //         (val) => val.id == element.id));
                                             controller.tags.removeWhere(
-                                                    (val) =>
-                                                val.id == element.id);
+                                                (val) => val.id == element.id);
                                           },
                                           child: Container(
                                             decoration: BoxDecoration(
@@ -349,126 +350,118 @@ class EditProfileUI extends GetView<EditProfileController> {
                                       ],
                                     ),
                                   ))
-                                  .toList()
-                                ..add(InkWell(
-                                  onTap: () {
-                                    openBottomSheet(
-                                        context, functionalityWidget:
+                              .toList()
+                            ..add(InkWell(
+                              onTap: () {
+                                openBottomSheet(context, functionalityWidget:
                                     StatefulBuilder(builder: (context, state) {
-                                      return Padding(
-                                        padding: const EdgeInsets.all(8),
-                                        child: Column(
-                                          crossAxisAlignment: CrossAxisAlignment
-                                              .start,
-                                          children: [
-                                            ChipsChoice<int>.multiple(
-                                              spacing: 10,
-                                              value: controller.tagIndexes,
-                                              onChanged: (val) {
-                                                controller.tagIndexes.clear();
-                                                controller.tags.clear();
-                                                for (int element in val) {
-                                                  controller.tagIndexes.add(
-                                                      element);
-                                                  controller.tags
-                                                      .add(controller
-                                                      .options[element]);
-                                                }
-                                                state(() {});
-                                              },
-                                              choiceItems:
+                                  return Padding(
+                                    padding: const EdgeInsets.all(8),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        ChipsChoice<int>.multiple(
+                                          spacing: 10,
+                                          value: controller.tagIndexes,
+                                          onChanged: (val) {
+                                            controller.tagIndexes.clear();
+                                            controller.tags.clear();
+                                            for (int element in val) {
+                                              controller.tagIndexes
+                                                  .add(element);
+                                              controller.tags.add(
+                                                  controller.options[element]);
+                                            }
+                                            state(() {});
+                                          },
+                                          choiceItems:
                                               C2Choice.listFrom<int, String>(
-                                                source: controller.options
-                                                    .map((e) =>
-                                                    e.name.toString())
-                                                    .toList(),
-                                                value: (i, v) => i,
-                                                label: (i, v) => v,
-                                                tooltip: (i, v) => v,
-                                                delete: (i, v) =>
-                                                    () {
-                                                  controller.options.removeAt(
-                                                      i);
-                                                },
-                                              ),
-                                              choiceStyle: C2ChipStyle.toned(
-                                                iconSize: 0,
-                                                backgroundColor: Colors.white,
-                                                selectedStyle: C2ChipStyle
-                                                    .filled(
-                                                  selectedStyle: C2ChipStyle(
-                                                    foregroundStyle:
+                                            source: controller.options
+                                                .map((e) => e.name.toString())
+                                                .toList(),
+                                            value: (i, v) => i,
+                                            label: (i, v) => v,
+                                            tooltip: (i, v) => v,
+                                            delete: (i, v) => () {
+                                              controller.options.removeAt(i);
+                                            },
+                                          ),
+                                          choiceStyle: C2ChipStyle.toned(
+                                            iconSize: 0,
+                                            backgroundColor: Colors.white,
+                                            selectedStyle: C2ChipStyle.filled(
+                                              selectedStyle: C2ChipStyle(
+                                                foregroundStyle:
                                                     AppTextStyle.textStyle16(
-                                                        fontColor: appColors
-                                                            .white),
-                                                    borderWidth: 1,
-                                                    backgroundColor: appColors
-                                                        .darkBlue,
-                                                    borderStyle: BorderStyle
-                                                        .solid,
-                                                    borderRadius:
+                                                        fontColor:
+                                                            appColors.white),
+                                                borderWidth: 1,
+                                                backgroundColor:
+                                                    appColors.darkBlue,
+                                                borderStyle: BorderStyle.solid,
+                                                borderRadius:
                                                     const BorderRadius.all(
                                                         Radius.circular(25)),
-                                                  ),
-                                                ),
-                                                borderWidth: 1,
-                                                borderStyle: BorderStyle.solid,
-                                                borderColor: appColors.darkBlue,
-                                                borderRadius: const BorderRadius
-                                                    .all(
-                                                  Radius.circular(20),
-                                                ),
                                               ),
-                                              wrapped: true,
                                             ),
-                                          ],
+                                            borderWidth: 1,
+                                            borderStyle: BorderStyle.solid,
+                                            borderColor: appColors.darkBlue,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(20),
+                                            ),
+                                          ),
+                                          wrapped: true,
                                         ),
-                                      );
-                                    }));
-                                  },
+                                      ],
+                                    ),
+                                  );
+                                }));
+                              },
+                              child: Padding(
+                                padding: EdgeInsets.only(left: 8.h, top: 4.h),
+                                child: Container(
+                                  width: ScreenUtil().screenWidth / 3.2,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(20),
+                                      border: Border.all(
+                                          width: 1, color: appColors.darkBlue)),
                                   child: Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 8.h, top: 4.h),
-                                    child: Container(
-                                      width: ScreenUtil().screenWidth / 3.2,
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              20),
-                                          border: Border.all(
-                                              width: 1,
-                                              color: appColors.darkBlue)),
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                            top: 9.h, bottom: 9.h),
-                                        child: Row(
-                                          mainAxisSize: MainAxisSize.min,
-                                          crossAxisAlignment: CrossAxisAlignment
-                                              .center,
-                                          mainAxisAlignment: MainAxisAlignment
-                                              .center,
-                                          children: [
-                                            Icon(
-                                              Icons.add,
-                                              color: appColors.darkBlue,
-                                              size: 19.sp,
-                                            ),
-                                            SizedBox(width: 5.w),
-                                            Text(
-                                              "Add Skills".tr,
-                                              style: AppTextStyle.textStyle12(
-                                                  fontColor: appColors.darkBlue,
-                                                  fontWeight: FontWeight.w400),
-                                            ),
-                                          ],
+                                    padding:
+                                        EdgeInsets.only(top: 9.h, bottom: 9.h),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.add,
+                                          color: appColors.darkBlue,
+                                          size: 19.sp,
                                         ),
-                                      ),
+                                        SizedBox(width: 5.w),
+                                        Text(
+                                          "Add Skills".tr,
+                                          style: AppTextStyle.textStyle12(
+                                              fontColor: appColors.darkBlue,
+                                              fontWeight: FontWeight.w400),
+                                        ),
+                                      ],
                                     ),
                                   ),
-                                )),
-                            ),
-                          ),
+                                ),
+                              ),
+                            )),
+                        ),
+                      ),
                     ),
-                    SizedBox(height: 20.h),
+                    SizedBox(
+                      height: 10.h,
+                    ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -476,7 +469,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                           "experience".tr,
                           style: AppTextStyle.textStyle14(),
                         ),
-                        Assets.images.icEdit.svg(),
+                        // Assets.images.icEdit.svg(),
                       ],
                     ),
                     SizedBox(height: 5.h),
@@ -490,6 +483,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                         }
                         return null;
                       },
+                      from: "profile",
                       hintText: "hintExperience".tr,
                       controller: controller.state.experienceController,
                       inputAction: TextInputAction.next,
@@ -497,7 +491,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                       maxLine: 1,
                     ),
                     SizedBox(
-                      height: 20.h,
+                      height: 10.h,
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -506,7 +500,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                           "descriptions".tr,
                           style: AppTextStyle.textStyle14(),
                         ),
-                        Assets.images.icEdit.svg(),
+                        // Assets.images.icEdit.svg(),
                       ],
                     ),
                     SizedBox(height: 5.h),
@@ -518,6 +512,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                         }
                         return null;
                       },
+                      from: "profile",
                       hintText: "descriptions".tr,
                       controller: controller.state.descriptionController,
                       inputAction: TextInputAction.next,

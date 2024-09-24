@@ -371,6 +371,7 @@ class ReferAstrologerField extends StatelessWidget {
   final Icon? icon;
   final Widget? suffixIcon;
   final Color? errorBorder;
+  final from;
   final TextEditingController? controller;
   final String? Function(String? value)? validator;
   final int? maxLine;
@@ -385,6 +386,7 @@ class ReferAstrologerField extends StatelessWidget {
     required this.inputAction,
     this.errorBorder,
     this.icon,
+    this.from,
     this.suffixIcon,
     this.controller,
     this.validator,
@@ -400,7 +402,15 @@ class ReferAstrologerField extends StatelessWidget {
       height: height ?? 55.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        boxShadow: [
+        boxShadow: from == "profile"
+            ? [
+          // BoxShadow(
+          //   color: Colors.grey.withOpacity(0.1),
+          //   blurRadius: 1,
+          //   offset: const Offset(1, 1),
+          // ),
+        ]
+            : [
           BoxShadow(
             color: Colors.black.withOpacity(0.3),
             blurRadius: 1.0,
@@ -430,14 +440,18 @@ class ReferAstrologerField extends StatelessWidget {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: errorBorder ?? appColors.white,
+              color: from == "profile"
+                  ? appColors.grey.withOpacity(0.6)
+                  : errorBorder ?? appColors.white,
               width: 1.0,
             ),
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: errorBorder ?? appColors.white,
+              color: from == "profile"
+                  ? appColors.grey.withOpacity(0.6)
+                  : errorBorder ?? appColors.white,
               width: 1.0,
             ),
           ),
@@ -445,6 +459,8 @@ class ReferAstrologerField extends StatelessWidget {
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
               color: appColors.redColor,
+              // color:from == "profile"? appColors.grey : errorBorder ?? appColors.white,
+
               width: 1.0,
             ),
           ),

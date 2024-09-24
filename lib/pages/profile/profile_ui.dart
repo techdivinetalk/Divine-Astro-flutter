@@ -6,6 +6,7 @@ import 'package:divine_astrologer/common/common_image_view.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/pages/profile/profile_page_controller.dart';
 import 'package:divine_astrologer/pages/profile/widget/report_post_reason_widget.dart';
+import 'package:divine_astrologer/screens/side_menu/settings/widget/change_lang_bottom_sheet.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -309,7 +310,13 @@ class ProfileUI extends GetView<ProfilePageController> {
                           onTap: () async {
                             print("objectobjectobjectobjectobject----${index}");
                             if (index == 3) {
-                              openBottomSheet(
+                              openBottomSheet(context,
+                                  functionalityWidget:
+                                  LanguageBottomSheetWidget(
+                                    onChangedLanguage: () =>
+                                        controller.setLocalLanguage(),
+                                  ));
+                              /*openBottomSheet(
                                 context,
                                 functionalityWidget: Column(
                                   mainAxisSize: MainAxisSize.min,
@@ -489,7 +496,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                     ),
                                   ],
                                 ),
-                              );
+                              );*/
                             } else if (index == 1) {
                               // if (await PermissionHelper()
                               //     .askStoragePermission(Permission.videos)) {
