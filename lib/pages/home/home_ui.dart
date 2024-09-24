@@ -962,7 +962,7 @@ class HomeUI extends GetView<HomeController> {
                                                     .keyCheckKundli,
                                                 onTap: () {
                                                   Get.toNamed(
-                                                      RouteName.checkKundli);
+                                                      RouteName.addBankAutoMation);
                                                 },
                                                 child: Ink(
                                                   height: 52,

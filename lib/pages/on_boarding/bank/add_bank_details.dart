@@ -82,7 +82,7 @@ class AddBankDetails extends GetView<BankController> {
                 padding: const EdgeInsets.all(8.0),
                 child: SizedBox(
                   height: onboarding_training_videoData == "" ||
-                          onboarding_training_videoData == null 
+                          onboarding_training_videoData == null
                       ? 60
                       : 110,
                   child: Column(
@@ -118,22 +118,24 @@ class AddBankDetails extends GetView<BankController> {
                                           Get.to(() {
                                             return TrainingVideoUI(
                                                 video: TrainingVideoData(
-                                                  id: onboarding_training_videoData[
+                                              id: onboarding_training_videoData[
                                                   'id'],
-                                                  title:
+                                              title:
                                                   onboarding_training_videoData[
-                                                  'title'],
-                                                  description:
+                                                      'title'],
+                                              description:
                                                   onboarding_training_videoData[
-                                                  'description'],
-                                                  url: onboarding_training_videoData[
-                                                  'url'],
-                                                  days: onboarding_training_videoData[
-                                                  'days'],
-                                                  isViwe:
+                                                      'description'],
+                                              url:
                                                   onboarding_training_videoData[
-                                                  'is_viwe'],
-                                                ));
+                                                      'url'],
+                                              days:
+                                                  onboarding_training_videoData[
+                                                      'days'],
+                                              isViwe:
+                                                  onboarding_training_videoData[
+                                                      'is_viwe'],
+                                            ));
                                           });
                                           print('Link tapped');
                                         },
@@ -246,7 +248,7 @@ class AddBankDetails extends GetView<BankController> {
                                         CrossAxisAlignment.start,
                                     children: [
                                       // title("bankName".tr),
-                                      // sizedBox5,
+                                      sizedBox5,
                                       WrapperContainer(
                                         child: BankDetailsField(
                                             validator: bankDetailValidator,
@@ -254,6 +256,7 @@ class AddBankDetails extends GetView<BankController> {
                                             hintText: "Enter Bank Name".tr,
                                             inputAction: TextInputAction.next,
                                             inputType: TextInputType.text,
+                                            label: "Bank Name",
                                             from: "onBoarding"),
                                       ),
                                       sizedBox25,
@@ -266,6 +269,7 @@ class AddBankDetails extends GetView<BankController> {
                                             hintText: "Account Holder Name".tr,
                                             inputAction: TextInputAction.next,
                                             inputType: TextInputType.text,
+                                            label: "Holder Name",
                                             from: "onBoarding"),
                                       ),
                                       sizedBox25,
@@ -279,6 +283,7 @@ class AddBankDetails extends GetView<BankController> {
                                             hintText: "Bank Account Number".tr,
                                             inputAction: TextInputAction.next,
                                             inputType: TextInputType.number,
+                                            label: "Account Number",
                                             from: "onBoarding"),
                                       ),
                                       sizedBox25,
@@ -291,6 +296,7 @@ class AddBankDetails extends GetView<BankController> {
                                             hintText: "IFSC Code".tr,
                                             inputAction: TextInputAction.next,
                                             inputType: TextInputType.text,
+                                            label: "IFSC Code",
                                             from: "onBoarding"),
                                       ),
                                       sizedBox25,

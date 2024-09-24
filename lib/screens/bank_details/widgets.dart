@@ -200,6 +200,7 @@ class BankDetailsField extends StatelessWidget {
   final TextEditingController? controller;
   final String? Function(String? value)? validator;
   final from;
+  final label;
   const BankDetailsField({
     super.key,
     required this.hintText,
@@ -207,6 +208,7 @@ class BankDetailsField extends StatelessWidget {
     required this.inputAction,
     this.errorBorder,
     this.icon,
+    this.label,
     this.suffixIcon,
     this.controller,
     this.validator,
@@ -254,6 +256,12 @@ class BankDetailsField extends StatelessWidget {
           prefixIcon: icon,
           suffixIcon: suffixIcon,
           filled: true,
+          labelText: from == "onBoarding" ? label : null,
+          labelStyle: AppTextStyle.textStyle16(
+            fontColor: appColors.grey,
+            fontSize: 13,
+            fontWeight: FontWeight.w400,
+          ),
           enabledBorder: from == "onBoarding"
               ? OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
