@@ -25,11 +25,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
@@ -48,6 +50,7 @@ import 'di/shared_preference_service.dart';
 import 'firebase_service/firebase_service.dart';
 import 'gen/fonts.gen.dart';
 import 'localization/translations.dart';
+import 'model/chat_assistant/chat_assistant_astrologer_response.dart';
 import 'model/constant_details_model_class.dart';
 import 'screens/live_page/constant.dart';
 
@@ -58,14 +61,14 @@ late List<CameraDescription>? cameras;
 Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
   print("message.data--->>>>${message.data}");
-   if (message.notification == null ) {
-  NotificationHelper().showNotification(
-    message.data["title"] ?? message.notification!.title,
-    message.data["message"] ?? message.notification!.body,
-    message.data['type'] ?? "0",
-    message.data,
-  );
-}
+  if (message.notification == null) {
+    NotificationHelper().showNotification(
+      message.data["title"] ?? message.notification!.title,
+      message.data["message"] ?? message.notification!.body,
+      message.data['type'] ?? "0",
+      message.data,
+    );
+  }
   // if (message.notification == null) {
   //   print("message.notification---not null---->>>>NotificationHelper().showNotification(");
   //
@@ -122,15 +125,47 @@ Future<void> main() async {
     }
   });
 
-  // Permission.notification.isDenied.then((value) async {
-  //   if (value) {
-  //     await Permission.notification.request();
-  //
-  //     if (Get.isRegistered<LoginController>()) {
-  //       Get.find<LoginController>().onReady();
-  //     }
-  //   }
-  // });
+  FirebaseMessaging.onMessageOpenedApp.listen((message) async {
+    var payload = message.data!;
+    log(payload.toString());
+    if (payload.isNotEmpty) {
+      log('notification payload: -- ${payload}');
+
+      if (payload["type"] == "1") {
+        Get.toNamed(RouteName.chatMessageWithSocketUI);
+      } else if (payload["type"] == "2") {
+        final ref = AppFirebaseService()
+            .database
+            .child("order/${AppFirebaseService().orderData.value["orderId"]}")
+            .path;
+
+        if (ref.split("/").last == payload["order_id"]) {
+          Get.toNamed(RouteName.acceptChatRequestScreen);
+        } else {
+          Fluttertoast.showToast(msg: "Your order has been ended");
+        }
+      } else if (payload["type"] == "8") {
+        final senderId = payload["sender_id"];
+        DataList dataList = DataList();
+        dataList.id = int.parse(senderId);
+        dataList.name = payload["title"];
+        Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
+      } else if (payload["type"] == "13") {
+        dasboardCurrentIndex(3);
+      } else if (payload["type"] == "20") {
+        if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+          if (Get.isRegistered<DashboardController>()) {
+            Get.find<DashboardController>().selectedIndex.value = 3;
+          }
+        }
+      } else {
+        if (!await launchUrl(Uri.parse(payload["url"].toString()))) {
+          throw Exception('Could not launch ${payload["url"]}');
+        }
+      }
+      AppFirebaseService().openChatUserId = payload["userid"] ?? "";
+    } else {}
+  });
   AppFirebaseService().masterData("masters");
   if (!kDebugMode) {
     AppFirebaseService().masterData("masters");
@@ -189,60 +224,6 @@ Future<void> initServices() async {
   await Get.putAsync(() => NetworkService().init());
   await Get.putAsync(() => FirebaseNetworkService().init());
 }
-// old notification code
-/*Future<void> showNotification(String title, String message, String type,
-    Map<String, dynamic> data) async {
-  // androidNotificationDetails;
-
-  AndroidNotificationDetails? androidNotificationDetails;
-  if (type == "2") {
-    // Type 2: Custom sound
-    androidNotificationDetails = const AndroidNotificationDetails(
-      "DivineAstrologer",
-      "AstrologerNotification",
-      importance: Importance.max,
-      priority: Priority.high,
-      icon: "divine_logo_tran",
-      autoCancel: true,
-      playSound: true,
-      sound: const RawResourceAndroidNotificationSound('accept'),
-      setAsGroupSummary: true,
-      styleInformation: const BigTextStyleInformation(''),
-      actions: [
-        AndroidNotificationAction(
-          'accept',
-          'CHAT NOW',
-        )
-      ],
-    );
-  } else {
-    // Default notification (no custom sound)
-    androidNotificationDetails = const AndroidNotificationDetails(
-      "DivineAstrologer_Other_type",
-      "AstrologerNotification_other_type",
-      importance: Importance.max,
-      priority: Priority.high,
-      icon: "divine_logo_tran",
-      autoCancel: true,
-      playSound: true,
-      setAsGroupSummary: true,
-      styleInformation: BigTextStyleInformation(''),
-    );
-  }
-
-  NotificationDetails notificationDetails =
-      NotificationDetails(android: androidNotificationDetails);
-
-  // Show notification
-  await flutterLocalNotificationsPlugin.show(
-      Random().nextInt(90000), title, message, notificationDetails,
-      payload: json.encode(data));
-  // if (type == "1") {
-  //
-  // }  else {
-  //
-  // }
-}*/
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});

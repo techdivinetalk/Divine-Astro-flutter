@@ -101,8 +101,8 @@ class NotificationHelper {
       },
     );
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) {
-      // if(m){}
+    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
+
     });
 
     firebaseMessaging.getInitialMessage().then((value) {});
