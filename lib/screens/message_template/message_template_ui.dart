@@ -128,13 +128,13 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                               }
 
                               // Parse the DateTime from the backend string
-                              DateTime dateTime = DateTime.parse(
-                                  messageTemplate.createdAt ??
-                                      DateTime.now().toString());
-
-                              // Format the DateTime to "22 May 2024"
-                              String formattedDate =
-                              DateFormat('dd MMMM yyyy').format(dateTime);
+                              // DateTime dateTime = DateTime.parse(
+                              //     messageTemplate.createdAt ??
+                              //         DateTime.now().toString());
+                              //
+                              // // Format the DateTime to "22 May 2024"
+                              // String formattedDate =
+                              // DateFormat('dd MMMM yyyy').format(dateTime);
 
                               return GestureDetector(
                                 onTap: () {
@@ -305,20 +305,20 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                                     AppTextStyle.textStyle14()),
                                           ])),
                                       SizedBox(height: 10.h),
-                                      RichText(
-                                          maxLines: 4,
-                                          text: TextSpan(children: [
-                                            TextSpan(
-                                                text: 'Created On: ',
-                                                style: AppTextStyle.textStyle14(
-                                                    fontWeight:
-                                                    FontWeight.w600)),
-                                            TextSpan(
-                                                text:
-                                                "${formattedDate.toString()}",
-                                                style:
-                                                AppTextStyle.textStyle14()),
-                                          ])),
+                                      // RichText(
+                                      //     maxLines: 4,
+                                      //     text: TextSpan(children: [
+                                      //       TextSpan(
+                                      //           text: 'Created On: ',
+                                      //           style: AppTextStyle.textStyle14(
+                                      //               fontWeight:
+                                      //               FontWeight.w600)),
+                                      //       TextSpan(
+                                      //           text:
+                                      //           "${formattedDate.toString()}",
+                                      //           style:
+                                      //           AppTextStyle.textStyle14()),
+                                      //     ])),
                                     ],
                                   ),
                                 ),

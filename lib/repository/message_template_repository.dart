@@ -19,6 +19,7 @@ class MessageTemplateRepo extends ApiProvider {
     try {
       final response = await get(getMessageTemplate,
           headers: await getJsonHeaderURL(version: 7));
+      print("response code----======-->${response.statusCode}");
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
           Utils().handleStatusCodeUnauthorizedBackend();

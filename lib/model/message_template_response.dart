@@ -1,10 +1,10 @@
 import 'dart:convert';
 
-MessageTemplateResponse messageTemplateResponseFromJson(String str) =>
+/*MessageTemplateResponse messageTemplateResponseFromJson(String str) =>
     MessageTemplateResponse.fromJson(json.decode(str));
 
 String messageTemplateResponseToJson(MessageTemplateResponse data) =>
-    json.encode(data.toJson());
+    json.encode(data.toJson());*/
 
 class MessageTemplateResponse {
   List<MessageTemplates>? data;
@@ -46,7 +46,7 @@ class MessageTemplates {
   String? message;
   String? title;
   String? description;
-  dynamic createdAt;
+  // dynamic createdAt;
   int? astrologerId;
   int? type;
   bool? isOn;
@@ -56,7 +56,7 @@ class MessageTemplates {
       this.message,
       this.title,
       this.description,
-      this.createdAt,
+      // this.createdAt,
       this.astrologerId,
       this.type,
        });
@@ -66,7 +66,7 @@ class MessageTemplates {
     message = json['message'];
     title = json['title'];
     description = json['description'];
-    createdAt = DateTime.parse(json["created_at"]);
+    // createdAt = DateTime.parse(json["created_at"]);
     astrologerId = json['astrologer_id'];
     type = json['type'];
      isOn = json['isOn'] ?? false;
@@ -79,7 +79,7 @@ class MessageTemplates {
     data['title'] = this.title;
     data['description'] = this.description;
     data['isOn'] = this.isOn;
-    data['created_at'] = this.createdAt;
+    // data['created_at'] = this.createdAt;
     //data['astrologer_id'] = this.astrologerId;
     data['type'] = this.type;
      return data;
