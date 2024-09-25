@@ -68,39 +68,47 @@ class LoginController extends GetxController {
   login() async {
     isUnauthorizedUserCalled = false;
     //deviceToken = await FirebaseMessaging.instance.getToken();
-    Map<String, dynamic> params = {
-      "mobile_no": mobileNumberController.text,
-      // "mobile_no": mobile,
-      "country_code": countryCodeController.text,
-      //"device_token": await FirebaseMessaging.instance.getToken()
-    };
+    /*divineSnackBar(
+      color: appColors.guideColor,
+      data: "mobileNumberController.text : ${mobileNumberController.text}\nmobile : $mobile",
+    );
+    if(mobileNumberController.text.isEmpty){
+      mobileNumberController.text = mobile;
+    } else{*/
+      Map<String, dynamic> params = {
+        "mobile_no": mobileNumberController.text,
+        // "mobile_no": mobile,
+        "country_code": countryCodeController.text,
+        //"device_token": await FirebaseMessaging.instance.getToken()
+      };
 
-    print("params ----->$params");
-    try {
-      isLoading.value = true;
-      final data = await userRepository.sentOtp(params);
-      if (data != null) {
+      print("params ----->$params");
+      try {
+        isLoading.value = true;
+        final data = await userRepository.sentOtp(params);
+        if (data != null) {
+          isLoading.value = false;
+          navigateToOtpPage(data);
+        } else {
+          isLoading.value = false;
+        }
+        update();
+        //updateLoginDatainFirebase(data);
+        //navigateToDashboard(data);
+      } catch (error) {
         isLoading.value = false;
-        navigateToOtpPage(data);
-      } else {
-        isLoading.value = false;
+        enable.value = true;
+        debugPrint("error $error");
+        if (error is AppException) {
+          error.onException();
+        } else {
+          divineSnackBar(
+              data: error.toString(),
+              color: appColors.redColor,
+              duration: const Duration(milliseconds: 200));
+        }
       }
-      update();
-      //updateLoginDatainFirebase(data);
-      //navigateToDashboard(data);
-    } catch (error) {
-      isLoading.value = false;
-      enable.value = true;
-      debugPrint("error $error");
-      if (error is AppException) {
-        error.onException();
-      } else {
-        divineSnackBar(
-            data: error.toString(),
-            color: appColors.redColor,
-            duration: const Duration(milliseconds: 200));
-      }
-    }
+    // }
   }
 
   void navigateToOtpPage(SendOtpModel data) {
@@ -305,10 +313,10 @@ class LoginController extends GetxController {
         //   requestPermissions();
         // }
 
-        bool oAuthFlowUsable = false;
-        oAuthFlowUsable = await TrueCallerService().isOAuthFlowUsable();
+
+        bool oAuthFlowUsable = await TrueCallerService().isOAuthFlowUsable();
         Future.delayed(const Duration(seconds: 1)).then((value) async {
-          if(Get.currentRoute == RouteName.login){
+          if(Get.currentRoute == RouteName.login && showTrueCaller.value){
             oAuthFlowUsable
                 ? await TrueCallerService().startTrueCaller()
                 : trueCallerFaultPopup();
