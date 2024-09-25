@@ -125,46 +125,48 @@ Future<void> main() async {
     }
   });
 
-  FirebaseMessaging.onMessageOpenedApp.listen((message) async {
-    var payload = message.data!;
-    log(payload.toString());
-    if (payload.isNotEmpty) {
-      log('notification payload: -- ${payload}');
+  await FirebaseMessaging.instance
+      .getInitialMessage().then((message) async {
+    if(message!.data.isNotEmpty){
+      var payload = message!.data;
+      if (payload.isNotEmpty) {
+        log('notification payload: -- ${payload}');
 
-      if (payload["type"] == "1") {
-        Get.toNamed(RouteName.chatMessageWithSocketUI);
-      } else if (payload["type"] == "2") {
-        final ref = AppFirebaseService()
-            .database
-            .child("order/${AppFirebaseService().orderData.value["orderId"]}")
-            .path;
+        if (payload["type"] == "1") {
+          Get.toNamed(RouteName.chatMessageWithSocketUI);
+        } else if (payload["type"] == "2") {
+          final ref = AppFirebaseService()
+              .database
+              .child("order/${AppFirebaseService().orderData.value["orderId"]}")
+              .path;
 
-        if (ref.split("/").last == payload["order_id"]) {
-          Get.toNamed(RouteName.acceptChatRequestScreen);
+          if (ref.split("/").last == payload["order_id"]) {
+            Get.toNamed(RouteName.acceptChatRequestScreen);
+          } else {
+            Fluttertoast.showToast(msg: "Your order has been ended");
+          }
+        } else if (payload["type"] == "8") {
+          final senderId = payload["sender_id"];
+          DataList dataList = DataList();
+          dataList.id = int.parse(senderId);
+          dataList.name = payload["title"];
+          Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
+        } else if (payload["type"] == "13") {
+          dasboardCurrentIndex(3);
+        } else if (payload["type"] == "20") {
+          if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+            if (Get.isRegistered<DashboardController>()) {
+              Get.find<DashboardController>().selectedIndex.value = 3;
+            }
+          }
         } else {
-          Fluttertoast.showToast(msg: "Your order has been ended");
-        }
-      } else if (payload["type"] == "8") {
-        final senderId = payload["sender_id"];
-        DataList dataList = DataList();
-        dataList.id = int.parse(senderId);
-        dataList.name = payload["title"];
-        Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
-      } else if (payload["type"] == "13") {
-        dasboardCurrentIndex(3);
-      } else if (payload["type"] == "20") {
-        if (MiddleWare.instance.currentPage == RouteName.dashboard) {
-          if (Get.isRegistered<DashboardController>()) {
-            Get.find<DashboardController>().selectedIndex.value = 3;
+          if (!await launchUrl(Uri.parse(payload["url"].toString()))) {
+            throw Exception('Could not launch ${payload["url"]}');
           }
         }
-      } else {
-        if (!await launchUrl(Uri.parse(payload["url"].toString()))) {
-          throw Exception('Could not launch ${payload["url"]}');
-        }
-      }
-      AppFirebaseService().openChatUserId = payload["userid"] ?? "";
-    } else {}
+        AppFirebaseService().openChatUserId = payload["userid"] ?? "";
+      } else {}
+    }
   });
   AppFirebaseService().masterData("masters");
   if (!kDebugMode) {
