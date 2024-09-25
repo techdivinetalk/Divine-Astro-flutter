@@ -224,43 +224,43 @@ class LoginUI extends GetView<LoginController> {
                             ),
                           );
                         }),
-                        Obx(() {
-                          return kDebugMode == true
-                              ? GestureDetector(
-                                  onTap: () {
-                                    if (!Get.isRegistered<LoginController>()) {
-                                      Get.put(LoginController(UserRepository()),
-                                          permanent: true);
-                                    }
-
-                                    if (isLiveServer.value == 1) {
-                                      isLiveServer.value = 0;
-                                    } else {
-                                      isLiveServer.value = 1;
-                                    }
-                                    print(
-                                        "checking server -- ${isLiveServer.value.toString()} ${isLiveServer.value == 0 ? "Development" : "Live"}");
-                                    controller.update();
-                                  },
-                                  child: Container(
-                                    width: MediaQuery.of(context).size.width,
-                                    height: 50.h,
-                                    alignment: Alignment.center,
-                                    decoration: BoxDecoration(
-                                      color: appColors.grey,
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    child: Text(
-                                      "Change Server to ${isLiveServer.value == 1 ? "Development" : "Live"}",
-                                      style: AppTextStyle.textStyle16(
-                                        fontWeight: FontWeight.w600,
-                                        fontColor: appColors.white,
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              : SizedBox();
-                        }),
+                        // Obx(() {
+                        //   return kDebugMode == true
+                        //       ? GestureDetector(
+                        //           onTap: () {
+                        //             if (!Get.isRegistered<LoginController>()) {
+                        //               Get.put(LoginController(UserRepository()),
+                        //                   permanent: true);
+                        //             }
+                        //
+                        //             if (isLiveServer.value == 1) {
+                        //               isLiveServer.value = 0;
+                        //             } else {
+                        //               isLiveServer.value = 1;
+                        //             }
+                        //             print(
+                        //                 "checking server -- ${isLiveServer.value.toString()} ${isLiveServer.value == 0 ? "Development" : "Live"}");
+                        //             controller.update();
+                        //           },
+                        //           child: Container(
+                        //             width: MediaQuery.of(context).size.width,
+                        //             height: 50.h,
+                        //             alignment: Alignment.center,
+                        //             decoration: BoxDecoration(
+                        //               color: appColors.grey,
+                        //               borderRadius: BorderRadius.circular(10),
+                        //             ),
+                        //             child: Text(
+                        //               "Change Server to ${isLiveServer.value == 1 ? "Development" : "Live"}",
+                        //               style: AppTextStyle.textStyle16(
+                        //                 fontWeight: FontWeight.w600,
+                        //                 fontColor: appColors.white,
+                        //               ),
+                        //             ),
+                        //           ),
+                        //         )
+                        //       : SizedBox();
+                        // }),
                       ],
                     ),
                   ),
