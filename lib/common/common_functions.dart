@@ -7,6 +7,7 @@ import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/chat/req_common_chat_model.dart';
 import 'package:divine_astrologer/repository/chat_repository.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -192,7 +193,7 @@ Future<bool> acceptOrRejectChat(
               orderId: orderId,
               isTimeout: 0,
               acceptOrReject: 1,
-        astrologerImage: astrologerImageLink
+        astrologerImage: kDebugMode ? null : astrologerImageLink
       )
           .toJson());
   print("chat_reject 2");
