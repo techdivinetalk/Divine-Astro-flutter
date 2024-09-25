@@ -46,30 +46,30 @@ class MessageTemplates {
   String? message;
   String? title;
   String? description;
-  dynamic createdAt;
+  // dynamic createdAt;
   int? astrologerId;
   int? type;
   bool? isOn;
 
-  MessageTemplates({
-    this.id,
-    this.message,
-    this.title,
-    this.description,
-    this.createdAt,
-    this.astrologerId,
-    this.type,
-  });
+  MessageTemplates(
+      {this.id,
+      this.message,
+      this.title,
+      this.description,
+      // this.createdAt,
+      this.astrologerId,
+      this.type,
+       });
 
   MessageTemplates.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     message = json['message'];
     title = json['title'];
     description = json['description'];
-    createdAt = json["created_at"];
-    // astrologerId = json['astrologer_id'];
+    // createdAt = DateTime.parse(json["created_at"]);
+    astrologerId = json['astrologer_id'];
     type = json['type'];
-    isOn = json['isOn'] ?? false;
+     isOn = json['isOn'] ?? false;
   }
 
   Map<String, dynamic> toJson() {
@@ -79,9 +79,9 @@ class MessageTemplates {
     data['title'] = this.title;
     data['description'] = this.description;
     data['isOn'] = this.isOn;
-    data['created_at'] = this.createdAt;
+    // data['created_at'] = this.createdAt;
     //data['astrologer_id'] = this.astrologerId;
     data['type'] = this.type;
-    return data;
+     return data;
   }
 }
