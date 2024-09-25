@@ -24,7 +24,7 @@ class LoginUI extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(LoginController(UserRepository()));
+    Get.put(LoginController(UserRepository()), permanent: true);
     return GetBuilder<LoginController>(
         init: LoginController(UserRepository()),
         assignId: true,
@@ -224,6 +224,11 @@ class LoginUI extends GetView<LoginController> {
                           return kDebugMode == true
                               ? GestureDetector(
                                   onTap: () {
+                                    if (!Get.isRegistered<LoginController>()) {
+                                      Get.put(LoginController(UserRepository()),
+                                          permanent: true);
+                                    }
+
                                     if (isLiveServer.value == 1) {
                                       isLiveServer.value = 0;
                                     } else {

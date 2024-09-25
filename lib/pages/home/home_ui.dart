@@ -208,13 +208,8 @@ class HomeUI extends GetView<HomeController> {
                       // padding: EdgeInsets.symmetric(horizontal: 20.w),
                       child: Column(
                         children: [
-                          //   controller.imageSS == null
-                          //       ? SizedBox()
-                          //       : Image.file(
-                          //           height: 50.h,
-                          //           width: 24.w,
-                          //           File(controller.imageSS.toString()),
-                          //         ),
+                          // RechargeScreen(),
+
                           // const SizedBox(height: 15),
                           controller.showAgreement == 1 &&
                                   isAgreement.value == 1
@@ -2595,8 +2590,8 @@ class HomeUI extends GetView<HomeController> {
                       ),
                     ),
                     isAstroCare.value == 0
-                      ? const SizedBox()
-                      : Positioned(
+                        ? const SizedBox()
+                        : Positioned(
                             top: controller.yPosition,
                             left: controller.xPosition + 10,
                             child: Container(
@@ -2646,7 +2641,8 @@ class HomeUI extends GetView<HomeController> {
                                       width: 50,
                                       decoration: BoxDecoration(
                                         color: appColors.guideColor,
-                                        borderRadius: BorderRadius.circular(25.0),
+                                        borderRadius:
+                                            BorderRadius.circular(25.0),
                                       ),
                                       child: Center(
                                         child: Column(
@@ -3969,7 +3965,8 @@ class HomeUI extends GetView<HomeController> {
                                         chatSwitch.value
                                     ? InkWell(
                                         onTap: () => controller
-                                            .selectDateTimePopupForChat(chatSwitch.value),
+                                            .selectDateTimePopupForChat(
+                                                chatSwitch.value),
                                         child: Container(
                                           height: 31.h,
                                           decoration: BoxDecoration(
@@ -4084,7 +4081,8 @@ class HomeUI extends GetView<HomeController> {
                                         callSwitch.value
                                     ? InkWell(
                                         onTap: () => controller
-                                            .selectDateTimePopupForCall(callSwitch.value),
+                                            .selectDateTimePopupForCall(
+                                                callSwitch.value),
                                         child: Container(
                                           // width: 128.w,
                                           height: 31.h,
@@ -5857,6 +5855,175 @@ class ChatAssistanceDataTileHome extends StatelessWidget {
                 : const SizedBox())
           ],
         ),
+      ),
+    );
+  }
+}
+
+class RechargeScreen extends StatelessWidget {
+  List data = ["₹ 200", "₹ 300", "₹ 400"];
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    var selected;
+    return Padding(
+      padding: EdgeInsets.only(top: 6, bottom: 6, left: 10, right: 10),
+      child: Container(
+        width: screenWidth * 0.8, // 80% of the screen width
+        padding: const EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: appColors.white,
+          boxShadow: [
+            BoxShadow(
+              color: appColors.grey.withOpacity(0.2),
+              blurRadius: 2,
+              spreadRadius: 2,
+            ),
+          ],
+          // border: Border.all(color: Colors.grey.shade300),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RichText(
+              text: TextSpan(
+                // text: 'Hello ', // Default text style
+                // style: DefaultTextStyle.of(context).style,
+
+                children: <TextSpan>[
+                  TextSpan(
+                      text: 'Low balance!',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xffFFDF00))),
+                  TextSpan(
+                      text: ' Recharge to continue this chat',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400, color: appColors.black)),
+                ],
+              ),
+            ),
+            SizedBox(height: 10),
+            GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3, // 3 buttons in a row
+                crossAxisSpacing: 20,
+                mainAxisSpacing: 5,
+                childAspectRatio: 2.2, // To control the size of each button
+              ),
+              itemCount: data.length,
+
+              shrinkWrap: true,
+              physics:
+                  NeverScrollableScrollPhysics(), // Prevent scrolling inside GridView
+              itemBuilder: (context, index) {
+                return Container(
+                  height: 30,
+                  width: 70,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.greenAccent.withOpacity(0.1),
+                      border: Border.all(
+                        color: appColors.green.withOpacity(0.9),
+                      )),
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        // top: 0, bottom: 6, left: 10, right: 10
+                        ),
+                    child: Center(
+                      child: Text(
+                        data[index],
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: appColors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ); // return _buildAmountButton(context, "200");
+              },
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'PAY USING',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        color: appColors.grey,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: 'GPay',
+                      underline: SizedBox(),
+                      // itemHeight:40,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        color: appColors.black,
+                        fontSize: 12,
+                      ),
+                      items: <String>['GPay', 'Paytm', 'PhonePe']
+                          .map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (_) {},
+                    ),
+                  ],
+                ),
+                Container(
+                  height: 40,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: appColors.green,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        // top: 0, bottom: 6, left: 10, right: 10
+                        ),
+                    child: Center(
+                      child: Text(
+                        "Recharge Now",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: appColors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAmountButton(BuildContext context, String amount) {
+    return ElevatedButton(
+      onPressed: () {},
+      style: ElevatedButton.styleFrom(
+        side: BorderSide(color: Colors.green), // Border color
+        padding: EdgeInsets.symmetric(vertical: 16),
+      ),
+      child: Text(
+        amount,
+        style: TextStyle(color: Colors.black),
       ),
     );
   }

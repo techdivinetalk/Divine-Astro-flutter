@@ -22,17 +22,25 @@ class ChatAssistantRepository extends ApiProvider {
         'page': page.toString(),
       });
       debugPrint('test_response --- ${response.body}');
+      // if (response.statusCode == 200) {
+      //   if (json.decode(response.body)["status_code"] ==
+      //       HttpStatus.unauthorized) {
+      //     Utils().handleStatusCodeUnauthorizedBackend();
+      //     throw CustomException(json.decode(response.body)["error"]);
+      //   } else {
+      //     final getCategoriesData =
+      //         ChatAssistantAstrologerListResponse.fromJson(
+      //             jsonDecode(response.body));
+      //     return getCategoriesData;
+      //   }
+      // } else {
+      //   throw CustomException(json.decode(response.body)["error"]);
+      // }
       if (response.statusCode == 200) {
         if (json.decode(response.body)["status_code"] ==
             HttpStatus.unauthorized) {
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
-        } else if (json.decode(response.body)["status_code"] ==
-            HttpStatus.notFound) {
-          final assistantAstrologerList =
-              ChatAssistantAstrologerListResponse.fromJson(
-                  json.decode(response.body));
-          return assistantAstrologerList;
         } else {
           final assistantAstrologerList =
               ChatAssistantAstrologerListResponse.fromJson(
@@ -47,6 +55,36 @@ class ChatAssistantRepository extends ApiProvider {
       } else {
         throw CustomException(json.decode(response.body)["message"]);
       }
+
+      // if (response.statusCode == 200) {
+      //   if (json.decode(response.body)["status_code"] ==
+      //       HttpStatus.unauthorized) {
+      //     debugPrint('test_response --- ${response.statusCode}');
+      //
+      //     Utils().handleStatusCodeUnauthorizedBackend();
+      //     throw CustomException(json.decode(response.body)["error"]);
+      //   } else if (json.decode(response.body)["status_code"] ==
+      //       HttpStatus.notFound) {
+      //     debugPrint('test_response --- ${response.statusCode}');
+      //
+      //     final assistantAstrologerList =
+      //         ChatAssistantAstrologerListResponse.fromJson(
+      //             json.decode(response.body));
+      //     return assistantAstrologerList;
+      //   } else {
+      //     final assistantAstrologerList =
+      //         ChatAssistantAstrologerListResponse.fromJson(
+      //             json.decode(response.body));
+      //     if (assistantAstrologerList.statusCode == successResponse &&
+      //         assistantAstrologerList.success!) {
+      //       return assistantAstrologerList;
+      //     } else {
+      //       throw CustomException(assistantAstrologerList.message!);
+      //     }
+      //   }
+      // } else {
+      //   throw CustomException(json.decode(response.body)["message"]);
+      // }
     } catch (e, s) {
       debugPrint("we got $e $s");
       rethrow;
@@ -154,7 +192,8 @@ class ChatAssistantRepository extends ApiProvider {
   Future<CheckingAssistantCallModel?> checkingCallStatus(
       Map<String, dynamic> params) async {
     try {
-      final response = await post(exotelCallInitiateMes);
+      final response =
+          await post(exotelCallInitiateMes, body: jsonEncode(params));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
       } else if (response.statusCode == HttpStatus.badRequest) {
@@ -185,7 +224,8 @@ class ChatAssistantRepository extends ApiProvider {
   Future<ChatAssCallModel?> callToAstrologerRepo(
       Map<String, dynamic> params) async {
     try {
-      final response = await post(exotelCallInitiateCustomer);
+      final response =
+          await post(exotelCallInitiateCustomer, body: jsonEncode(params));
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
       } else if (response.statusCode == HttpStatus.badRequest) {

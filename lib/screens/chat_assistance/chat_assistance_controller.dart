@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 import '../../app_socket/app_socket.dart';
@@ -175,11 +174,12 @@ class ChatAssistanceController extends GetxController {
   RxBool userDataLoading = false.obs;
   ScrollController scrollCon = ScrollController();
   Future<void> getConsulation() async {
-    if(pageUsersData ==1){
+    if (pageUsersData == 1) {
       userDataLoading.value = true;
     }
     CustomerDetailsResponse response =
         await chatAssistantRepository.getConsulation(pageUsersData);
+
     if (emptyRes.value == false) {
       if (response.data.isNotEmpty) {
         if (pageUsersData != 1 &&
@@ -188,9 +188,8 @@ class ChatAssistanceController extends GetxController {
           customerDetailsResponse!.data.addAll(response.data);
           checkin(false);
         } else {
-          
           customerDetailsResponse = response;
-          if(pageUsersData ==1){
+          if (pageUsersData == 1) {
             userDataLoading.value = false;
           }
         }

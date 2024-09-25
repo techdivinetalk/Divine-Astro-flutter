@@ -54,10 +54,28 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
 
   final timerController = Get.put(TimerController());
   var isLoading = false.obs;
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    listenForCode();
+    // print("otp filling auto -- ${SmsAutoFill().code.toString()}");
+    // print("otp filling auto -- ${SmsAutoFill().hint.toString()}");
+    // // SmsAutoFill().hint.then((val) {
+    //   print("otp filling auto -- ${val.toString()}");
+    // });
+    // SmsAutoFill().listenForCode(smsCodeRegexPattern: '\\d{4,6}');
+    // SmsAutoFill()
+    // SmsAutoFill().code.listen((val) {
+    //   print("otp filling auto -- ${val.toString()}");
+    //   print("otp filling auto -- ${val.toString()}");
+    // });
+
+    super.onInit();
+  }
 
   @override
   void onReady() async {
-    listenForCode();
+    // listenForCode();
     var arguments = Get.arguments;
     if (arguments != null) {
       var args = arguments as List;

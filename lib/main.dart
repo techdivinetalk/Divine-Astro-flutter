@@ -1,8 +1,4 @@
-import 'dart:collection';
-import 'dart:convert';
-import 'dart:io';
 import 'dart:developer';
-import 'dart:math' hide log;
 
 import 'package:camera/camera.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
@@ -17,12 +13,10 @@ import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -30,6 +24,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
@@ -40,7 +35,6 @@ import 'common/colors.dart';
 import 'common/common_functions.dart';
 import 'common/generic_loading_widget.dart';
 import 'common/routes.dart';
-import 'di/fcm_notification.dart';
 import 'di/firebase_network_service.dart';
 import 'di/network_service.dart';
 import 'di/progress_service.dart';
@@ -56,7 +50,7 @@ late List<CameraDescription>? cameras;
 
 @pragma('vm:entry-point')
 Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-await Firebase.initializeApp();
+  await Firebase.initializeApp();
 
   NotificationHelper().showNotification(
     message.data["title"] ?? "",
@@ -77,7 +71,7 @@ Future<void> main() async {
   if (!kIsWeb) {
     await setupFlutterNotifications();
   }
-
+  SmsAutoFill().listenForCode;
 
   cameras = await availableCameras();
   Get.put(AppColors());
@@ -131,6 +125,7 @@ Future<void> main() async {
     AppFirebaseService().masterData("masters");
   }
 }
+
 bool isFlutterLocalNotificationsInitialized = false;
 
 Future<void> setupFlutterNotifications() async {
@@ -151,7 +146,7 @@ Future<void> setupFlutterNotifications() async {
 
   await flutterLocalNotificationsPlugin
       .resolvePlatformSpecificImplementation<
-      AndroidFlutterLocalNotificationsPlugin>()
+          AndroidFlutterLocalNotificationsPlugin>()
       ?.createNotificationChannel(channel);
 
   await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
@@ -162,6 +157,7 @@ Future<void> setupFlutterNotifications() async {
 
   isFlutterLocalNotificationsInitialized = true;
 }
+
 Future<bool> saveLanguage(String? lang) async {
   final box = GetStorage();
   await box.write('lang', lang);
@@ -236,7 +232,6 @@ Future<void> initServices() async {
   //
   // }
 }*/
-
 
 class MyApp extends StatefulWidget {
   const MyApp({super.key});

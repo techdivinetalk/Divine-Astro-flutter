@@ -760,6 +760,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
       update();
 
       final map = {"user_id": args!.id}; // Ensure `args` is not null.
+      print("map ---${map}");
       final response = await chatAssistantRepository.callToAstrologerRepo(map);
 
       if (response != null && response.success == true) {
