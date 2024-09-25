@@ -86,7 +86,7 @@ class AppFirebaseService {
   AppFirebaseService._privateConstructor();
 
   static final AppFirebaseService _instance =
-  AppFirebaseService._privateConstructor();
+      AppFirebaseService._privateConstructor();
 
   factory AppFirebaseService() {
     return _instance;
@@ -116,9 +116,7 @@ class AppFirebaseService {
     return isAstroTime.value.toString() == "0"
         ? DateTime.now()
         : DateTime.fromMillisecondsSinceEpoch(
-        DateTime
-            .now()
-            .millisecondsSinceEpoch + serverTimeDiff);
+            DateTime.now().millisecondsSinceEpoch + serverTimeDiff);
   }
 
   String tableName = "";
@@ -131,8 +129,9 @@ class AppFirebaseService {
         if (value != null && !isRemoved) {
           if (!isRemoved) {
             currentOrder = value.toString();
-            if (value != null && MiddleWare.instance.currentPage ==
-                RouteName.chatMessageWithSocketUI) {
+            if (value != null &&
+                MiddleWare.instance.currentPage ==
+                    RouteName.chatMessageWithSocketUI) {
               Get.find<ChatMessageWithSocketController>().setRealTime();
               // Get.find<SocketChatWithAstrologerController>().runTimer();
             }
@@ -140,17 +139,14 @@ class AppFirebaseService {
             debugPrint("currentOrder: $value");
             currentOrder = "";
           }
-          database
-              .child("order/$value")
-              .onValue
-              .listen(
-                (DatabaseEvent event) async {
+          database.child("order/$value").onValue.listen(
+            (DatabaseEvent event) async {
               final DataSnapshot dataSnapshot = event.snapshot;
               if (dataSnapshot.exists) {
                 if (dataSnapshot.value is Map<dynamic, dynamic>) {
                   Map<dynamic, dynamic> map = <dynamic, dynamic>{};
                   map = (dataSnapshot.value ?? <dynamic, dynamic>{})
-                  as Map<dynamic, dynamic>;
+                      as Map<dynamic, dynamic>;
                   debugPrint("-userRealTime: ${dataSnapshot.key.toString()}");
                   debugPrint("-userRealTime: ${currentOrder}");
                   if (dataSnapshot.key.toString() == currentOrder) {
@@ -204,11 +200,12 @@ class AppFirebaseService {
                       if (MiddleWare.instance.currentPage ==
                           RouteName.acceptChatRequestScreen) {
                         if (kDebugMode) {
-                          divineSnackBar(data: "firebase chatType call",
+                          divineSnackBar(
+                              data: "firebase chatType call",
                               color: Colors.white);
                         }
                         Get.until(
-                              (route) {
+                          (route) {
                             return Get.currentRoute == RouteName.dashboard;
                           },
                         );
@@ -227,7 +224,7 @@ class AppFirebaseService {
                         data: "firebase acceptScreen", color: Colors.white);
                   }
                   Get.until(
-                        (route) {
+                    (route) {
                       return Get.currentRoute == RouteName.dashboard;
                     },
                   );
@@ -243,7 +240,7 @@ class AppFirebaseService {
                   data: "firebase acceptScreen", color: Colors.white);
             }
             Get.until(
-                  (route) {
+              (route) {
                 return Get.currentRoute == RouteName.dashboard;
               },
             );
@@ -253,9 +250,7 @@ class AppFirebaseService {
         break;
       case "TimeManage":
         serverTimeDiff =
-            int.parse(value.toString()) - DateTime
-                .now()
-                .millisecondsSinceEpoch;
+            int.parse(value.toString()) - DateTime.now().millisecondsSinceEpoch;
         print("TimeDiff $serverTimeDiff");
         break;
       case "isEngagedStatus":
@@ -277,7 +272,7 @@ class AppFirebaseService {
           sendBroadcast(BroadcastMessage(name: "callKundli", data: {}));
         } else {
           Map<String, dynamic>? callKundli =
-          Map<String, dynamic>.from(value as Map<Object?, Object?>);
+              Map<String, dynamic>.from(value as Map<Object?, Object?>);
           print(callKundli);
           print("realTimeData['callKundli'] ");
           callKunadliUpdated(callKundli);
@@ -286,8 +281,7 @@ class AppFirebaseService {
 
         break;
       case "giftCount":
-        print(
-            "gift broadcase giftCount ${value}");
+        print("gift broadcase giftCount ${value}");
         giftCountUpdate(value);
 
         sendBroadcast(
@@ -300,9 +294,8 @@ class AppFirebaseService {
         );
         FirebaseDatabase.instance.ref("$path/giftCount").remove();
         break;
-        case "giftImage":
-        print(
-            "gift broadcase giftImage ${value}");
+      case "giftImage":
+        print("gift broadcase giftImage ${value}");
         giftImageUpdate(value);
         sendBroadcast(
           BroadcastMessage(
@@ -336,8 +329,7 @@ class AppFirebaseService {
       case "uniqueId":
         String uniqueId = await getDeviceId() ?? "";
         debugPrint(
-          'check uniqueId ${value.toString()}\ngetDeviceId ${uniqueId
-              .toString()}',
+          'check uniqueId ${value.toString()}\ngetDeviceId ${uniqueId.toString()}',
         );
         if (value.toString() != uniqueId) {
           print("logout --- start");
@@ -348,17 +340,16 @@ class AppFirebaseService {
         break;
       case "profilePhoto":
         UserData? userData =
-        Get.find<SharedPreferenceService>().getUserDetail();
+            Get.find<SharedPreferenceService>().getUserDetail();
         userData!.image = value.toString();
         String? baseAmazonUrl =
-        Get.find<SharedPreferenceService>().getBaseImageURL();
+            Get.find<SharedPreferenceService>().getBaseImageURL();
         Get.find<SharedPreferenceService>().setUserDetail(userData);
-        Get
-            .put(DashboardController(Get.put(PreDefineRepository())))
+        Get.put(DashboardController(Get.put(PreDefineRepository())))
             .userProfileImage
             .value = "$baseAmazonUrl/${userData.image!}";
         Get.put(ProfilePageController().userProfileImage.value =
-        "$baseAmazonUrl/${userData.image!}");
+            "$baseAmazonUrl/${userData.image!}");
         Get.put(DashboardController(Get.put(PreDefineRepository()))).update();
         Get.put(ProfilePageController()).update();
         break;
@@ -378,10 +369,7 @@ class AppFirebaseService {
     try {
       database.child("$path/TimeManage").set(ServerValue.timestamp);
       database.child("$path/deliveredMsg").remove();
-      database
-          .child(path)
-          .onChildChanged
-          .listen((event) {
+      database.child(path).onChildChanged.listen((event) {
         final key = event.snapshot.key; // Get the key of the changed child
 
         final value =
@@ -392,10 +380,7 @@ class AppFirebaseService {
           userRealTime(key!, value, path);
         }
       });
-      database
-          .child(path)
-          .onChildAdded
-          .listen((event) {
+      database.child(path).onChildAdded.listen((event) {
         final key = event.snapshot.key; // Get the key of the changed child
         final value =
             event.snapshot.value; // Get the new value of the changed child
@@ -406,10 +391,7 @@ class AppFirebaseService {
           userRealTime(key!, value, path);
         }
       });
-      database
-          .child(path)
-          .onChildRemoved
-          .listen((event) {
+      database.child(path).onChildRemoved.listen((event) {
         final key = event.snapshot.key;
         final value = event.snapshot.value;
         if (event.snapshot.value != null) {
@@ -475,9 +457,9 @@ class AppFirebaseService {
       case "gifts":
         isGifts(int.parse(dataSnapshot.value.toString()));
         break;
-    // case "isTime":
-    //   isTime(int.parse(dataSnapshot.value.toString()));
-    //   break;
+      // case "isTime":
+      //   isTime(int.parse(dataSnapshot.value.toString()));
+      //   break;
       case "isAgreement":
         isAgreement(int.parse(dataSnapshot.value.toString()));
         break;
@@ -537,9 +519,9 @@ class AppFirebaseService {
       case "showLatLng":
         showLatLng(int.parse(dataSnapshot.value.toString()));
         break;
-    // case "tarrotCard":
-    //   isRemidies(int.parse(dataSnapshot.value.toString()));
-    //   break;
+      // case "tarrotCard":
+      //   isRemidies(int.parse(dataSnapshot.value.toString()));
+      //   break;
       case "templates":
         isTemplates(int.parse(dataSnapshot.value.toString()));
         break;
@@ -560,8 +542,7 @@ class AppFirebaseService {
         break;
       case "verifyOnboarding":
         print(
-            "----------verifyOnboarding---------${dataSnapshot.value
-                .toString()}");
+            "----------verifyOnboarding---------${dataSnapshot.value.toString()}");
         verifyOnboarding(int.parse(dataSnapshot.value.toString()));
         break;
       case "astroHome":
@@ -592,8 +573,8 @@ class AppFirebaseService {
         acceptChatRequestScreen(int.parse(dataSnapshot.value.toString()));
         break;
       default:
-      // preferenceService.setStringPref(
-      //     dataSnapshot.key.toString(), dataSnapshot.value.toString());
+        // preferenceService.setStringPref(
+        //     dataSnapshot.key.toString(), dataSnapshot.value.toString());
         break;
     }
   }
@@ -601,17 +582,11 @@ class AppFirebaseService {
   Future<DatabaseEvent?> masterData(String path) async {
     print("dataSnapshot-1");
     try {
-      database
-          .child(path)
-          .onChildAdded
-          .listen((event) {
+      database.child(path).onChildAdded.listen((event) {
         print("dataSnapshot-Key ${event.snapshot.key}");
         saveMasterData(event.snapshot);
       });
-      database
-          .child(path)
-          .onChildChanged
-          .listen((event) {
+      database.child(path).onChildChanged.listen((event) {
         print("dataSnapshot-Key ${event.snapshot.key}");
         saveMasterData(event.snapshot);
       });
