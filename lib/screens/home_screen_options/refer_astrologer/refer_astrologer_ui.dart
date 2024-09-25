@@ -405,19 +405,19 @@ class ReferAstrologerField extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         boxShadow: from == "profile"
             ? [
-          // BoxShadow(
-          //   color: Colors.grey.withOpacity(0.1),
-          //   blurRadius: 1,
-          //   offset: const Offset(1, 1),
-          // ),
-        ]
+                // BoxShadow(
+                //   color: Colors.grey.withOpacity(0.1),
+                //   blurRadius: 1,
+                //   offset: const Offset(1, 1),
+                // ),
+              ]
             : [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 1.0,
-            offset: const Offset(0.1, 1.0),
-          ),
-        ],
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 1.0,
+                  offset: const Offset(0.1, 1.0),
+                ),
+              ],
       ),
       child: TextFormField(
         controller: controller,

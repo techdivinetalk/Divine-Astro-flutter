@@ -24,7 +24,6 @@ import '../../common/custom_widgets.dart';
 import '../../common/permission_handler.dart';
 import '../../di/shared_preference_service.dart';
 import '../../model/res_review_ratings.dart';
-import '../../screens/side_menu/settings/widget/change_lang_bottom_sheet.dart';
 
 class ProfileUI extends GetView<ProfilePageController> {
   final preference = Get.find<SharedPreferenceService>();
@@ -312,7 +311,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                             if (index == 3) {
                               openBottomSheet(context,
                                   functionalityWidget:
-                                  LanguageBottomSheetWidget(
+                                      LanguageBottomSheetWidget(
                                     onChangedLanguage: () =>
                                         controller.setLocalLanguage(),
                                   ));
@@ -573,7 +572,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                               Get.toNamed(RouteName.numberChangeReqUI);
                             } else if (index == 6) {
                               Get.toNamed(RouteName.blockedUser);
-                            } else if(index == 9){
+                            } else if (index == 9) {
                               controller.whatsapp();
                             }
                             /*else if (index == 10) {

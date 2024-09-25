@@ -134,7 +134,7 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
 
                               // Format the DateTime to "22 May 2024"
                               String formattedDate =
-                              DateFormat('dd MMMM yyyy').format(dateTime);
+                                  DateFormat('dd MMMM yyyy').format(dateTime);
 
                               return GestureDetector(
                                 onTap: () {
@@ -312,12 +312,12 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                                 text: 'Created On: ',
                                                 style: AppTextStyle.textStyle14(
                                                     fontWeight:
-                                                    FontWeight.w600)),
+                                                        FontWeight.w600)),
                                             TextSpan(
                                                 text:
-                                                "${formattedDate.toString()}",
+                                                    "${formattedDate.toString()}",
                                                 style:
-                                                AppTextStyle.textStyle14()),
+                                                    AppTextStyle.textStyle14()),
                                           ])),
                                     ],
                                   ),

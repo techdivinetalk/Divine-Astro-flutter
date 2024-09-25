@@ -25,10 +25,11 @@ import 'package:get_storage/get_storage.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
-import 'package:sms_autofill/sms_autofill.dart';
+
 import 'common/GlobalLifecycleObserver.dart';
 import 'common/MiddleWare.dart';
 import 'common/app_theme.dart';
@@ -119,9 +120,8 @@ Future<void> main() async {
     }
   });
 
-  await FirebaseMessaging.instance
-      .getInitialMessage().then((message) async {
-    if(message!.data.isNotEmpty){
+  await FirebaseMessaging.instance.getInitialMessage().then((message) async {
+    if (message!.data.isNotEmpty) {
       var payload = message!.data;
       if (payload.isNotEmpty) {
         log('notification payload: -- ${payload}');
