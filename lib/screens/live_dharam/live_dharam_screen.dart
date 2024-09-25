@@ -996,6 +996,7 @@ class _LivePage extends State<LiveDharamScreen>
                                         ),
                                         child: Text(
                                           "${msg.userName} ${isBlocked || msg.userName == "Quality Team" || msg.userName == "Live Monitoring Team" ? "" : "(${msg.userId})"}",
+                                          maxLines: 2,
                                           style: TextStyle(
                                             fontSize: 14,
                                             color: isBlocked ||
