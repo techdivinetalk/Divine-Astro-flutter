@@ -302,7 +302,7 @@ class ApiProvider {
   final sendOtp = "sendOtp";
   final verifyOtpUrl = "verifyOtp";
 
-  //added by dev-dharam
+  //added by development-dharam
   final String getAllGifts = "getAllGifts";
   final String blockCustomerlist = "blockCustomerlist";
   final String blockCustomer = "blockCustomer";
@@ -315,7 +315,7 @@ class ApiProvider {
   final String customeEcommerce = "customeEcommerce";
   final String getTarotCard = "getTarotCard";
 
-  //added by dev-chetan
+  //added by development-chetan
   final String getCustomOffer = "getCustomOffer";
   final String sendOtpNumberChange = "sendOtpForNumberChange";
   final String verifyOtpNumberChange = "verifyOtpForNumberChange";
@@ -431,6 +431,7 @@ class ApiProvider {
 */
   Future<http.Response> get(
     String url, {
+    String? endPoint,
     Map<String, String>? headers,
     Map<String, dynamic>? queryParameters,
     bool closeDialogOnTimeout = true,
@@ -439,16 +440,17 @@ class ApiProvider {
       headers = await getAuthorisedHeader();
       log("headers: $headers");
     }
+    endPoint ??= //kDebugMode == true ? debugingUrl :
+        isLiveServer.value == 0 ? debugUrl : baseUrl;
 
     if (queryParameters != null) {
       url += '?${Uri(queryParameters: queryParameters).query}';
     }
 
     if (await networkManager.isConnected() ?? false) {
-      log('url: $baseUrl$url');
+      log('url: ${endPoint + url}');
       var response = await http
-          .get(Uri.parse(isLiveServer.value == 0 ? debugUrl : baseUrl + url),
-              headers: headers)
+          .get(Uri.parse(endPoint + url), headers: headers)
           .timeout(const Duration(minutes: 2), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
@@ -469,7 +471,7 @@ class ApiProvider {
       log("headers: $headers");
     }
     if (await networkManager.isConnected() ?? false) {
-      log('url: $baseUrl$url');
+      log('url: ${isLiveServer.value == 0 ? debugUrl : baseUrl}$url');
       var response = await http
           .delete(Uri.parse(isLiveServer.value == 0 ? debugUrl : baseUrl + url),
               headers: headers)
@@ -494,7 +496,7 @@ class ApiProvider {
       log("headers: $headers");
     }
     if (await networkManager.isConnected() ?? false) {
-      log('url:$baseUrl$url');
+      log('url: ${isLiveServer.value == 0 ? debugUrl : baseUrl}$url');
       var response = await http
           .get(url, headers: headers)
           .timeout(const Duration(minutes: 2), onTimeout: () {
@@ -563,7 +565,7 @@ class ApiProvider {
       bool closeDialogOnTimeout = true}) async {
     headers ??= await getAuthorisedHeader();
     if (await networkManager.isConnected() ?? false) {
-      log('url: $baseUrl$url');
+      log('url: ${isLiveServer.value == 0 ? debugUrl : baseUrl}$url');
       log('body: $body');
       var response = await http
           .put(Uri.parse(isLiveServer.value == 0 ? debugUrl : baseUrl + url),
@@ -587,7 +589,7 @@ class ApiProvider {
       {String type = "POST", Map<String, String>? headers}) async {
     if (await networkManager.isConnected() ?? false) {
       var uri = Uri.parse(isLiveServer.value == 0 ? debugUrl : baseUrl + url);
-      debugPrint("url: $baseUrl$url");
+      log('url: ${isLiveServer.value == 0 ? debugUrl : baseUrl}$url');
       http.MultipartRequest request = http.MultipartRequest(type, uri);
       request.headers.addAll(headers ?? await getAuthorisedHeader());
       debugPrint("header : ${request.headers}");
