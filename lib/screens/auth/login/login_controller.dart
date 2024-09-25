@@ -68,13 +68,9 @@ class LoginController extends GetxController {
   login() async {
     isUnauthorizedUserCalled = false;
     //deviceToken = await FirebaseMessaging.instance.getToken();
-    /*divineSnackBar(
-      color: appColors.guideColor,
-      data: "mobileNumberController.text : ${mobileNumberController.text}\nmobile : $mobile",
-    );
     if(mobileNumberController.text.isEmpty){
       mobileNumberController.text = mobile;
-    } else{*/
+    } else{
       Map<String, dynamic> params = {
         "mobile_no": mobileNumberController.text,
         // "mobile_no": mobile,
@@ -108,7 +104,7 @@ class LoginController extends GetxController {
               duration: const Duration(milliseconds: 200));
         }
       }
-    // }
+    }
   }
 
   void navigateToOtpPage(SendOtpModel data) {
