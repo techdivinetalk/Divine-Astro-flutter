@@ -12,7 +12,7 @@ import 'bank_detail_controller.dart';
 class BankDetailsUI extends GetView<BankDetailController> {
   const BankDetailsUI({super.key});
 
-  Widget get sizedBox25 => SizedBox(height: 20.w);
+  Widget get sizedBox25 => SizedBox(height: 15.w);
 
   Widget get sizedBox5 => SizedBox(height: 8.w);
 
@@ -73,6 +73,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                       child: BankDetailsField(
                                         validator: bankDetailValidator,
                                         controller: controller.bankName,
+                                        from: "onBoarding",
                                         hintText: "Please Enter Bank Name".tr,
                                         inputAction: TextInputAction.next,
                                         inputType: TextInputType.text,
@@ -83,6 +84,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                     sizedBox5,
                                     WrapperContainer(
                                       child: BankDetailsField(
+                                        from: "onBoarding",
                                         validator: bankDetailValidator,
                                         controller: controller.holderName,
                                         hintText: "holderNameHintText".tr,
@@ -95,6 +97,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                     sizedBox5,
                                     WrapperContainer(
                                       child: BankDetailsField(
+                                        from: "onBoarding",
                                         validator: bankDetailValidator,
                                         controller: controller.accountNumber,
                                         hintText: "accountNumHintText".tr,
@@ -107,6 +110,7 @@ class BankDetailsUI extends GetView<BankDetailController> {
                                     sizedBox5,
                                     WrapperContainer(
                                       child: BankDetailsField(
+                                        from: "onBoarding",
                                         validator: bankDetailValidator,
                                         controller: controller.ifscCode,
                                         hintText: "ifscCodeHintText".tr,

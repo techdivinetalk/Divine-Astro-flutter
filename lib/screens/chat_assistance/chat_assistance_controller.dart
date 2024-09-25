@@ -12,7 +12,7 @@ class ChatAssistanceController extends GetxController {
   ChatAssistantAstrologerListResponse? chatAssistantAstrologerListResponse;
   CustomerDetailsResponse? customerDetailsResponse;
 
-  //ScrollController scrollController = ScrollController();
+  ScrollController scrollController = ScrollController();
   // RxList<DataList> chatDataList = <DataList>[].obs;
   Loading loading = Loading.initial;
   int page = 1;
@@ -85,29 +85,86 @@ class ChatAssistanceController extends GetxController {
   //   unreadMessageList.value = localDataList;
   //   update();
   // }
+  var checkin2 = false.obs;
+  var emptyRes2 = false.obs;
+  RxBool isLoadMoreData2 = false.obs;
+  RxBool userDataLoading2 = false.obs;
 
   Future<void> getAssistantAstrologerList() async {
-    try {
+    if (page == 1) {
       if (loading == Loading.loading) return;
-
+      userDataLoading2.value = true;
       loading = Loading.loading;
-      ChatAssistantAstrologerListResponse? response =
-          await chatAssistantRepository.getChatAssistantAstrologerList(page);
-      if (response.data != null && response.data!.data!.isNotEmpty) {
+    }
+    var response =
+        await chatAssistantRepository.getChatAssistantAstrologerList(page);
+
+    if (emptyRes2.value == false) {
+      if (response.data!.data!.isNotEmpty || response.data!.data != null) {
         if (page != 1 &&
-            chatAssistantAstrologerListResponse != null &&
+            response != null &&
             chatAssistantAstrologerListResponse!.data!.data!.isNotEmpty) {
           chatAssistantAstrologerListResponse!.data!.data!
               .addAll(response.data!.data!);
+          checkin2(false);
         } else {
           chatAssistantAstrologerListResponse = response;
+          if (page == 1) {
+            loading = Loading.loaded;
+            userDataLoading2.value = false;
+          }
         }
         page++;
+      } else {
+        // Fluttertoast.showToast(msg: "No more data");
+        print("data ---- ${response.data.toString()}");
+        emptyRes2(true);
       }
-      loading = Loading.loaded;
-    } catch (err) {
-      loading = Loading.error;
+      isLoadMoreData2.value = false;
+    } else {
+      isLoadMoreData2.value = false;
+      print("There is no more data in user data");
     }
+    update();
+
+    // print(1);
+    // try {
+    //   print(11);
+    //   if (loading == Loading.loading) return;
+    //   print(111);
+    //   loading = Loading.loading;
+    //   print(1111);
+    //   ChatAssistantAstrologerListResponse? response =
+    //       await chatAssistantRepository.getChatAssistantAstrologerList(page);
+    //   print(11111);
+    //   if (response.success == true) {
+    //     print(111111);
+    //     if (page != 1 &&
+    //         chatAssistantAstrologerListResponse != null &&
+    //         chatAssistantAstrologerListResponse!.data!.data!.isNotEmpty) {
+    //       print(1111111);
+    //       if (response.success == true) {
+    //         print(11111111);
+    //         chatAssistantAstrologerListResponse!.data!.data!
+    //             .addAll(response.data!.data!);
+    //       } else {
+    //         print(22);
+    //       }
+    //     } else {
+    //       print(222);
+    //
+    //       chatAssistantAstrologerListResponse = response;
+    //     }
+    //     page++;
+    //   } else {
+    //     print(2222);
+    //   }
+    //   loading = Loading.loaded;
+    // } catch (err) {
+    //   print(22222);
+    //
+    //   loading = Loading.error;
+    // }
     update();
   }
 

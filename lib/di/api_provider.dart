@@ -440,8 +440,9 @@ class ApiProvider {
       headers = await getAuthorisedHeader();
       log("headers: $headers");
     }
-    endPoint ??= //kDebugMode == true ? debugingUrl :
-        isLiveServer.value == 0 ? debugUrl : baseUrl;
+    endPoint ??=
+        //isLiveServer.value == 0 ? debugUrl :
+        baseUrl;
 
     if (queryParameters != null) {
       url += '?${Uri(queryParameters: queryParameters).query}';
@@ -471,10 +472,11 @@ class ApiProvider {
       log("headers: $headers");
     }
     if (await networkManager.isConnected() ?? false) {
-      log('url: ${isLiveServer.value == 0 ? debugUrl : baseUrl}$url');
+      log('url: ${ //isLiveServer.value == 0 ? debugUrl :
+          baseUrl}$url');
       var response = await http
-          .delete(Uri.parse(isLiveServer.value == 0 ? debugUrl : baseUrl + url),
-              headers: headers)
+          .delete(Uri.parse(//isLiveServer.value == 0 ? debugUrl :
+              baseUrl + url), headers: headers)
           .timeout(const Duration(minutes: 1), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
@@ -496,7 +498,8 @@ class ApiProvider {
       log("headers: $headers");
     }
     if (await networkManager.isConnected() ?? false) {
-      log('url: ${isLiveServer.value == 0 ? debugUrl : baseUrl}$url');
+      log('url: ${ //isLiveServer.value == 0 ? debugUrl :
+          baseUrl}$url');
       var response = await http
           .get(url, headers: headers)
           .timeout(const Duration(minutes: 2), onTimeout: () {
@@ -519,8 +522,9 @@ class ApiProvider {
       dynamic body,
       Encoding? encoding,
       bool closeDialogOnTimeout = true}) async {
-    endPoint ??= //kDebugMode == true ? debugingUrl :
-        isLiveServer.value == 0 ? debugUrl : baseUrl;
+    endPoint ??=
+        // isLiveServer.value == 0 ? debugUrl :
+        baseUrl;
     headers ??= await getAuthorisedHeader();
     log("Api url: ${endPoint + url}");
     log('body: $body');
@@ -565,11 +569,12 @@ class ApiProvider {
       bool closeDialogOnTimeout = true}) async {
     headers ??= await getAuthorisedHeader();
     if (await networkManager.isConnected() ?? false) {
-      log('url: ${isLiveServer.value == 0 ? debugUrl : baseUrl}$url');
+      log('url: ${ //isLiveServer.value == 0 ? debugUrl :
+          baseUrl}$url');
       log('body: $body');
       var response = await http
-          .put(Uri.parse(isLiveServer.value == 0 ? debugUrl : baseUrl + url),
-              headers: headers, body: body, encoding: encoding)
+          .put(Uri.parse(//isLiveServer.value == 0 ? debugUrl :
+              baseUrl + url), headers: headers, body: body, encoding: encoding)
           .timeout(const Duration(minutes: 1), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
@@ -588,8 +593,10 @@ class ApiProvider {
       Map<String, File> images, Map<String, dynamic> body, String url,
       {String type = "POST", Map<String, String>? headers}) async {
     if (await networkManager.isConnected() ?? false) {
-      var uri = Uri.parse(isLiveServer.value == 0 ? debugUrl : baseUrl + url);
-      log('url: ${isLiveServer.value == 0 ? debugUrl : baseUrl}$url');
+      var uri = Uri.parse(//isLiveServer.value == 0 ? debugUrl :
+          baseUrl + url);
+      log('url: ${ //isLiveServer.value == 0 ? debugUrl :
+          baseUrl}$url');
       http.MultipartRequest request = http.MultipartRequest(type, uri);
       request.headers.addAll(headers ?? await getAuthorisedHeader());
       debugPrint("header : ${request.headers}");
