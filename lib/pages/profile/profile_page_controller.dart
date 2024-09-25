@@ -99,6 +99,23 @@ class ProfilePageController extends GetxController {
             : false),
   ].obs;
 
+  RxString currLanguage = "".obs;
+
+  setLocalLanguage() {
+    Locale locale = Get.locale!;
+
+    if (locale.languageCode == "en") {
+      currLanguage.value = "english".tr;
+    } else if (locale.languageCode == "hi") {
+      currLanguage.value = "hindi".tr;
+    } else if (locale.languageCode == "mr") {
+      currLanguage.value = "marathi".tr;
+    } else if (locale.languageCode == "gu") {
+      currLanguage.value = "gujarati".tr;
+    }
+    update();
+  }
+
   init() {
     profileList = <ProfileOptionModelClass>[
       ProfileOptionModelClass(

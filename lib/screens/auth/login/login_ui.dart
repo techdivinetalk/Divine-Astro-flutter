@@ -9,6 +9,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -24,7 +25,7 @@ class LoginUI extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(LoginController(UserRepository()), permanent: true);
+    // Get.put(LoginController(UserRepository()));
     return GetBuilder<LoginController>(
         init: LoginController(UserRepository()),
         assignId: true,
@@ -155,9 +156,7 @@ class LoginUI extends GetView<LoginController> {
                         }),
                         SizedBox(height: 20.h),
                         Obx(() => Visibility(
-                            visible: controller.enable.value &&
-                                    isTruecaller.value.toString() == "1" ||
-                                kDebugMode,
+                            visible: (controller.showTrueCaller.value && isTruecaller.value.toString() == "1") || kDebugMode,
                             child: TextWithDivider(
                               text: 'Or',
                               textColor: appColors.greyColor,
@@ -168,10 +167,8 @@ class LoginUI extends GetView<LoginController> {
                           print(
                               "showTrueCaller ${controller.showTrueCaller.value}");
                           return Visibility(
-                            visible: kDebugMode ||
-                                (controller.showTrueCaller.value &&
-                                    controller.enable.value &&
-                                    isTruecaller.value.toString() == "1"),
+                            visible: kDebugMode || (controller.showTrueCaller.value && controller.enable.value &&
+                                isTruecaller.value.toString() == "1"),
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 10.0),
@@ -193,11 +190,14 @@ class LoginUI extends GetView<LoginController> {
                                     oAuthFlowUsable = await TrueCallerService()
                                         .isOAuthFlowUsable();
 
-                                    if (Get.currentRoute == RouteName.login) {
-                                      oAuthFlowUsable
-                                          ? await TrueCallerService()
-                                              .startTrueCaller()
-                                          : controller.trueCallerFaultPopup();
+                                    if(Get.currentRoute == RouteName.login && oAuthFlowUsable){
+
+                                      await TrueCallerService().startTrueCaller();
+
+                                      /*oAuthFlowUsable
+                                        ? await TrueCallerService()
+                                        .startTrueCaller()
+                                        : controller.trueCallerFaultPopup();*/
                                     }
                                   },
                                   child: Row(
@@ -282,7 +282,7 @@ class LoginUI extends GetView<LoginController> {
               offset: const Offset(0.3, 3.0)),
         ]),
         child: TextFormField(
-          focusNode: controller.numberFocus,
+          // focusNode: controller.numberFocus,
           validator: (value) {
             String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
             RegExp regExp = RegExp(pattern);

@@ -996,8 +996,6 @@ class _LivePage extends State<LiveDharamScreen>
                                         ),
                                         child: Text(
                                           "${msg.userName} ${isBlocked || msg.userName == "Quality Team" || msg.userName == "Live Monitoring Team" ? "" : "(${msg.userId})"}",
-                                          // nameWithWithoutIDs(msg, isModerator),
-                                          // maxLines: 100000,
                                           style: TextStyle(
                                             fontSize: 14,
                                             color: isBlocked ||
@@ -1006,31 +1004,32 @@ class _LivePage extends State<LiveDharamScreen>
                                                     msg.userName ==
                                                         "Live Monitoring Team"
                                                 ? Colors.red
-                                                : isModerator
-                                                    ? appColors.white
-                                                    : msg.fullGiftImage.isNotEmpty
-                                                        ? appColors.black
-                                                        : msg.message.contains(
-                                                                "Started following")
+                                                : isModerator &&
+                                                        msg.fullGiftImage
+                                                            .isNotEmpty
+                                                    ? appColors.black
+                                                    : isModerator
+                                                        ? appColors.white
+                                                        : msg.fullGiftImage
+                                                                .isNotEmpty
                                                             ? appColors.black
-                                                            : Colors.white,
+                                                            : msg.message.contains(
+                                                                    "Started following")
+                                                                ? appColors
+                                                                    .black
+                                                                : Colors.white,
                                           ),
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                       ),
-                                      msg.level != null &&
-                                          msg.level !=
-                                              ""
+                                      msg.level != null && msg.level != ""
                                           ? Padding(
-                                        padding: const EdgeInsets
-                                            .symmetric(
-                                            horizontal:
-                                            2.0),
-                                        child: LevelWidget(
-                                            level: msg
-                                                .level ??
-                                                ""),
-                                      )
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 2.0),
+                                              child: LevelWidget(
+                                                  level: msg.level ?? ""),
+                                            )
                                           : const SizedBox(),
                                     ],
                                   ),
@@ -1040,7 +1039,9 @@ class _LivePage extends State<LiveDharamScreen>
                                           2.5, // Define the maximum width here
                                     ),
                                     child: Text(
-                                      isBlocked ? "********":     msg.message ?? "",
+                                      isBlocked
+                                          ? "********"
+                                          : msg.message ?? "",
                                       maxLines: 100000,
                                       style: TextStyle(
                                         fontSize: 13,
@@ -1050,6 +1051,10 @@ class _LivePage extends State<LiveDharamScreen>
                                                 msg.userName ==
                                                     "Live Monitoring Team"
                                             ? Colors.red
+                                            : isModerator &&
+                                            msg.fullGiftImage
+                                                .isNotEmpty
+                                            ? appColors.black
                                             : isModerator
                                                 ? appColors.white
                                                 : msg.fullGiftImage.isNotEmpty
@@ -3390,7 +3395,7 @@ class _LivePage extends State<LiveDharamScreen>
       onClose: () {},
       needAcceptButton: true,
       needDeclinetButton: false,
-       onAcceptButton: () async {
+      onAcceptButton: () async {
         print("------->>>>${zegoController.coHost}----user---->>>>${user}");
         final connectInvite = zegoController.coHost;
 

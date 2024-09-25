@@ -38,7 +38,7 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
             }
 
             if (controller.loading == Loading.loaded) {
-              return ListView.separated(
+              return controller.noticeList.isNotEmpty ? ListView.separated(
                 controller: controller.earningScrollController,
                 scrollDirection: Axis.vertical,
                 shrinkWrap: true,
@@ -56,7 +56,8 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
                   );
                 },
                 separatorBuilder: (context, index) => SizedBox(height: 15.sp),
-              );
+              )
+              : const Center(child: CustomText("No data found"));
             }
 
             return const SizedBox.shrink();

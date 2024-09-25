@@ -60,3 +60,5 @@ var astroChatWatcher = ResAstroChatListener().obs;
 TimeDurationService timer = TimeDurationService();
 var chatSession = ResChatSocketInit().obs;
 Rx<String> showTalkTime = "".obs;
+
+bool isUnauthorizedUserCalled = false;

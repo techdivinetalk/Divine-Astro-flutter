@@ -1,5 +1,7 @@
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/routes.dart';
+import 'package:divine_astrologer/screens/auth/login/login_controller.dart';
+import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -92,8 +94,12 @@ class Utils {
     /// responseBody["status_code"] == HttpStatus.unauthorized
     // status code 401
 
-    await preferenceService.erase();
-    await Get.offAllNamed(RouteName.login);
+    if(!isUnauthorizedUserCalled){
+      isUnauthorizedUserCalled = true;
+      await preferenceService.erase();
+      Get.delete<LoginController>(force: true);
+      await Get.offAllNamed(RouteName.login);
+    }
   }
 
   Future<void> handleStatusCodeUnauthorizedServer() async {

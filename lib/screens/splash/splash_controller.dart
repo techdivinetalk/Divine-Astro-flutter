@@ -3,6 +3,7 @@ import 'dart:developer';
 
 import 'package:contacts_service/contacts_service.dart';
 import 'package:divine_astrologer/common/important_number_bottomsheet.dart';
+import 'package:divine_astrologer/screens/auth/login/login_controller.dart';
 import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -152,6 +153,7 @@ class SplashController extends GetxController with WidgetsBindingObserver {
     log(jsonEncode(preferenceService.getUserDetail()));
     log("jsonEncode(preferenceService.getUserDetail())");
     if (preferenceService.getUserDetail() == null) {
+      Get.delete<LoginController>(force: true);
       Get.offAllNamed(RouteName.login);
     } else {
       print("goining in else part");

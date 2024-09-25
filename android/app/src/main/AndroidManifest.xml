@@ -98,7 +98,7 @@
 <!--            android:value="SDK_MODE" />-->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_channel_id"
-            android:value="DivineAstrologer" />
+            android:value="DivineAstrologer_Other_type" />
 <!--        <meta-data-->
 <!--            android:name="com.google.firebase.messaging.default_notification_sound"-->
 <!--            android:value="@raw/accept" />-->

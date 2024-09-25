@@ -6,6 +6,6 @@ import '../../../repository/user_repository.dart';
 class LoginBinding extends Bindings {
   @override
   void dependencies() {
-    Get.put(LoginController(Get.put(UserRepository())));
+    Get.put(LoginController(Get.put(UserRepository())), permanent: true);
   }
 }

@@ -47,19 +47,19 @@ class MessageTemplates {
   String? title;
   String? description;
   dynamic createdAt;
-  // int? astrologerId;
+  int? astrologerId;
   int? type;
   bool? isOn;
 
-  MessageTemplates({
-    this.id,
-    this.message,
-    this.title,
-    this.description,
-    this.createdAt,
-    // this.astrologerId,
-    this.type,
-  });
+  MessageTemplates(
+      {this.id,
+      this.message,
+      this.title,
+      this.description,
+      this.createdAt,
+      this.astrologerId,
+      this.type,
+       });
 
   MessageTemplates.fromJson(Map<String, dynamic> json) {
     id = json['id'];
