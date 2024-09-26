@@ -334,7 +334,7 @@ class CustomProductListView extends GetView<CustomProductListController> {
                         ),
                       ),
                     ),
-          bottomNavigationBar: Padding (
+          /*bottomNavigationBar: Padding (
             padding: const EdgeInsets.symmetric(horizontal: 20.0),
             child: Column(
               mainAxisSize: MainAxisSize.min,
@@ -360,7 +360,7 @@ class CustomProductListView extends GetView<CustomProductListController> {
                 SizedBox(height: MediaQuery.of(context).padding.bottom + 10.0),
               ],
             ),
-          ),
+          ),*/
         );
       },
     );
