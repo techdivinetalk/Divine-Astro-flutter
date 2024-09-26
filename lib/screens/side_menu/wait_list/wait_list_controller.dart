@@ -9,6 +9,7 @@ import 'package:get/get.dart';
 
 import '../../../common/app_exception.dart';
 import '../../../di/shared_preference_service.dart';
+import '../../../model/AcceptQueueChatModel.dart';
 import '../../../model/order_history_model/call_order_history.dart';
 import '../../../model/waiting_list_queue.dart';
 import '../../../repository/order_history_repository.dart';
@@ -169,32 +170,52 @@ class WaitListUIController extends GetxController
     }
   }
 
-  acceptChatButtonApi({String? queueId, orderId, int? index}) async {
+  // Index of the item currently showing the loader (-1 means no item is loading)
+  var loader = false.obs;
+  var loadingIndex;
+  acceptChatButtonApi({String? queueId, orderId, index}) async {
+    loader.value = true;
+    loadingIndex = index;
+    update();
     try {
       Map<String, dynamic> data = {
         "queue_id": queueId,
         "order_id": orderId,
       };
-      final response = await repository.acceptChatApi(body: data);
+      AcceptQueueChatModel response =
+          await repository.acceptChatApi(body: data);
       debugPrint("test_response: ${response.toString()}");
-
-      if (response.isNotEmpty &&
-          response == "success" &&
-          waitingPersons.isNotEmpty &&
-          waitingPersons.length > index!) {
-        waitingPersons.removeAt(index);
+      if (response.success == true) {
+        if ( //response.isNotEmpty &&
+            //response == "success" &&
+            //waitingPersons.isNotEmpty &&
+            waitingPersons.length > index!) {
+          update();
+          waitingPersons.removeAt(index);
+          loader.value = false;
+          loadingIndex = null;
+          update();
+        }
+      } else {
+        loader.value = false;
+        loadingIndex = null;
         update();
+        print(
+            "----------------------- issues is not getting stasuccess -- > ${response.message.toString()}");
 
-        // for (int i = 0; i < waitingPersons.length; i++) {
-        //   if (waitingPersons[i].id.toString() == queueId.toString()) {
-        //     waitingPersons.removeAt(i);
-        //     break;
-        //   }
+        divineSnackBar(
+            data: response.message.toString(), color: appColors.redColor);
       }
 
-      // update();
+      update();
     } catch (err) {
-      divineSnackBar(data: err.toString(), color: appColors.redColor);
+      loadingIndex = null;
+
+      loader.value = false;
+      print("----------------------- issues is  -- > ${err.toString()}");
+
+      update();
+      // divineSnackBar(data: err.toString(), color: appColors.redColor);
     }
   }
 }

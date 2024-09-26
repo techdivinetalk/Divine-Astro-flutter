@@ -80,7 +80,7 @@ Future<void> main() async {
   if (!kIsWeb) {
     await setupFlutterNotifications();
   }
-  SmsAutoFill().listenForCode;
+  // SmsAutoFill().listenForCode;
 
   cameras = await availableCameras();
   Get.put(AppColors());

@@ -1157,7 +1157,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     try {
       AstrologerTrainingSessionResponse? response =
           await homePageRepository.doGetAstrologerTrainingSession();
-
+print("training videsooooooooo-- ${response.toString()}");
       if (response != null && response.statusCode == 200) {
         if (response.data != null && response.data!.isNotEmpty) {
           astrologerTrainingSessionLst.addAll(response.data!);

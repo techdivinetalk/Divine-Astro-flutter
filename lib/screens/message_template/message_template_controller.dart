@@ -45,14 +45,17 @@ class MessageTemplateController extends GetxController {
         .saveMessageTemplates(json.encode(messageLocalTemplates));
     await getMessageTemplatesLocally();
   }
+
   Future<void> saveBoolToPrefs(String key, bool value) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool("${key}template", value);
   }
+
   Future<bool> getBoolFromPrefs(String key) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool("${key}template") ?? false;
   }
+
   addedMessageTemplates() async {
     try {
       await getMessageTemplates();
@@ -70,7 +73,7 @@ class MessageTemplateController extends GetxController {
       if (response.data != null) {
         messageTemplates = response.data!;
         messageTemplateList.value.clear();
-        for(int i = 0; i < messageTemplateList.value.length;i++){
+        for (int i = 0; i < messageTemplateList.value.length; i++) {
           messageTemplateList.value.add(messageTemplateList.value[i]);
         }
         messageTemplateList.refresh();

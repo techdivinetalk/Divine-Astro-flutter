@@ -129,7 +129,7 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
 
                               // Parse the DateTime from the backend string
                               DateTime dateTime = DateTime.parse(
-                                  messageTemplate.createdAt ??
+                                  messageTemplate.createdAt.toString() ??
                                       DateTime.now().toString());
 
                               // Format the DateTime to "22 May 2024"

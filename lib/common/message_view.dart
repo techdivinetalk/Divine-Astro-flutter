@@ -439,33 +439,36 @@ class MessageView extends StatelessWidget {
                           children: [
                             chatMessage.message == razorPay.value
                                 ? RichText(
-                              text: TextSpan(
-                                text: chatMessage.message ?? "",
-                                style: AppTextStyle.textStyle14(
-                                  fontColor: Colors.blue, // Set the color for the link
-                                  decoration: TextDecoration.underline, // Add underline to signify a link
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () async {
-                                    final url = chatMessage.message;
-                                    if (url != null && await canLaunch(url)) {
-                                      await launch(url);
-                                    } else {
-                                      // Handle error, e.g., show a message that the URL can't be opened
-                                    }
-                                  },
-                              ),
-                            )
+                                    text: TextSpan(
+                                      text: chatMessage.message ?? "",
+                                      style: AppTextStyle.textStyle14(
+                                        fontColor: Colors
+                                            .blue, // Set the color for the link
+                                        decoration: TextDecoration
+                                            .underline, // Add underline to signify a link
+                                      ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () async {
+                                          final url = chatMessage.message;
+                                          if (url != null &&
+                                              await canLaunch(url)) {
+                                            await launch(url);
+                                          } else {
+                                            // Handle error, e.g., show a message that the URL can't be opened
+                                          }
+                                        },
+                                    ),
+                                  )
                                 : Text(
-                              chatMessage.message ?? "",
-                              style: AppTextStyle.textStyle14(
-                                fontColor: yourMessage
-                                    ? chatMessage.msgType == "warningMsg"
-                                    ? appColors.red
-                                    : appColors.textColor
-                                    : appColors.textColor,
-                              ),
-                            ),
+                                    chatMessage.message ?? "",
+                                    style: AppTextStyle.textStyle14(
+                                      fontColor: yourMessage
+                                          ? chatMessage.msgType == "warningMsg"
+                                              ? appColors.red
+                                              : appColors.textColor
+                                          : appColors.textColor,
+                                    ),
+                                  ),
                           ],
                         ),
                         SizedBox(

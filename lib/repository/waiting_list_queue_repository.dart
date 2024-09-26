@@ -1,14 +1,14 @@
 import 'dart:convert';
 
-import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/model/waiting_list_queue.dart';
 import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
 
 import '../common/app_exception.dart';
-import '../common/common_functions.dart';
 import '../di/api_provider.dart';
+import '../model/AcceptQueueChatModel.dart';
 
 class WaitingListQueueRepo extends ApiProvider {
   Future<WaitingListQueueModel> fetchData() async {
@@ -45,31 +45,62 @@ class WaitingListQueueRepo extends ApiProvider {
     }
   }
 
-  Future<String> acceptChatApi({dynamic body}) async {
+  Future acceptChatApi({dynamic body}) async {
     try {
       final response = await post(
         partnerOfflineChoiceOrder,
         body: jsonEncode(body),
         headers: await getJsonHeaderURL(version: 7),
       );
-      if (response.statusCode == HttpStatus.unauthorized) {
-        Utils().handleStatusCodeUnauthorizedServer();
-      } else if (response.statusCode == HttpStatus.badRequest) {
-        Utils().handleStatusCode400(response.body);
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final accppt =
+              AcceptQueueChatModel.fromJson(json.decode(response.body));
+          if (accppt.statusCode == successResponse && accppt.success!) {
+            return accppt;
+          } else {
+            print(
+                "----------------------- issues is not getting statuscode and success -- > ${json.decode(response.body)["error"]}");
+            divineSnackBar(
+                data: json.decode(response.body)["message"].toString(),
+                color: Colors.red);
+            // throw CustomException(
+            //     json.decode(response.body)["message"].toString());
+          }
+        }
+      } else {
+        print(
+            "----------------------- issues is not getting 200 status -- > ${json.decode(response.body)["error"]}");
+        throw CustomException(json.decode(response.body)["error"]);
       }
 
-      if (response.statusCode == 200 &&
-          json.decode(response.body)["status_code"] == 200) {
-        if (!json.decode(response.body)["success"]) {
-          divineSnackBar(
-              data: json.decode(response.body)["message"],
-              color: AppColors().redColor);
-          return "fail";
-        }
-        return "success";
-      } else {
-        throw CustomException(json.decode(response.body)["message"]);
-      }
+      // if (response.statusCode == HttpStatus.unauthorized) {
+      //   Utils().handleStatusCodeUnauthorizedServer();
+      // } else if (response.statusCode == HttpStatus.badRequest) {
+      //   Utils().handleStatusCode400(response.body);
+      // }
+      //
+      // if (response.statusCode == 200 &&
+      //     json.decode(response.body)["status_code"] == 200) {
+      //   print("responseeeeeeeeeeeee --- ${response.toString()}");
+      //   // if (!json.decode(response.body)["success"]) {
+      //   //   divineSnackBar(
+      //   //       data: json.decode(response.body)["message"],
+      //   //       color: AppColors().redColor);
+      //   //   return json.decode(response.body);
+      //   // }
+      //   final acceptModel =
+      //   AcceptQueueChatModel.fromJson(json.decode(response.body));
+      //
+      //   return acceptModel;
+      // } else {
+      //   throw CustomException(json.decode(response.body)["message"]);
+      // }
     } catch (e, s) {
       debugPrint("we got $e $s");
       rethrow;
