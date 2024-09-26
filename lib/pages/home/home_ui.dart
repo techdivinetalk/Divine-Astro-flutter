@@ -4609,7 +4609,7 @@ class HomeUI extends GetView<HomeController> {
     //     (controller.homeData?.trainingVideo ?? []).isEmpty) {
     //   return const SizedBox.shrink();
     // }
-    return controller!.astrologerTrainingSessionLst.isNotEmpty
+    return controller!.homeData != null && controller!.homeData!.trainingVideo!.isNotEmpty
         ? Container(
             width: double.infinity,
             margin: EdgeInsets.only(

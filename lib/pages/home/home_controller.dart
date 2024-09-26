@@ -777,6 +777,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       var response = await HomePageRepository().getDashboardData(params);
       isFeedbackAvailable.value = response.success ?? false;
       homeData = response.data;
+      print("homeData!.trainingVideo!-->>${homeData!.trainingVideo!.length}");
       loading = Loading.loaded;
       updateCurrentData();
       shopDataSync.value = true;
@@ -1161,6 +1162,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       if (response != null && response.statusCode == 200) {
         if (response.data != null && response.data!.isNotEmpty) {
           astrologerTrainingSessionLst.addAll(response.data!);
+          print("astrologerTrainingSessionLst.length-->>${astrologerTrainingSessionLst.length}");
         }
       }
     } catch (error) {
