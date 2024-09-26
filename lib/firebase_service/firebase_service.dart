@@ -165,7 +165,7 @@ class AppFirebaseService {
                         case "2":
                           if (Get.currentRoute !=
                               RouteName.chatMessageWithSocketUI) {
-                            await Get.toNamed(
+                            await Get.offNamed(
                               RouteName.chatMessageWithSocketUI,
                               arguments: {"orderData": orderData},
                             );
@@ -175,7 +175,7 @@ class AppFirebaseService {
                           if (acceptChatRequestScreen.toString() == "1") {
                             if (Get.currentRoute ==
                                 RouteName.acceptChatRequestScreen) {
-                              await Get.toNamed(
+                              await Get.offNamed(
                                 RouteName.chatMessageWithSocketUI,
                                 arguments: {"orderData": orderData},
                               );
@@ -183,7 +183,7 @@ class AppFirebaseService {
                           } else {
                             if (Get.currentRoute !=
                                 RouteName.chatMessageWithSocketUI) {
-                              await Get.toNamed(
+                              await Get.offNamed(
                                 RouteName.chatMessageWithSocketUI,
                                 arguments: {"orderData": orderData},
                               );
