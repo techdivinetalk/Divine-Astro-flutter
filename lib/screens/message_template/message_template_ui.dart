@@ -7,7 +7,6 @@ import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 
 import '../../common/colors.dart';
 import '../../common/routes.dart';
@@ -72,12 +71,15 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
             Expanded(
               child: GetBuilder<MessageTemplateController>(
                 builder: (controller) {
-                  if (controller.loading == Loading.loading ||
-                      controller.messageTemplates.isEmpty) {
+                  if (controller.loading == Loading.loading) {
                     return const Center(
                       child: CircularProgressIndicator.adaptive(
                         valueColor: AlwaysStoppedAnimation(Colors.yellow),
                       ),
+                    );
+                  } else if (controller.messageTemplates.isEmpty) {
+                    return const Center(
+                      child: Text("No Template Found"),
                     );
                   } else {
                     return ListView.separated(

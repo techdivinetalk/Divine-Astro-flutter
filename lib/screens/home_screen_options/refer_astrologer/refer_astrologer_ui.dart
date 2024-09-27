@@ -208,7 +208,8 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   readOnly: true,
                   hintText: "Enter Astrologer's City",
                   onTap: () {
-                    Get.bottomSheet(Padding(
+                    Get.bottomSheet(                              isScrollControlled: true,
+                        Padding(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
                       child: AllCityListSheet(
