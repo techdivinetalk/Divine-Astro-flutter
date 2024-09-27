@@ -121,6 +121,15 @@ class LoginUI extends GetView<LoginController> {
                                                       decoration: TextDecoration
                                                           .underline))))
                                     ])))),
+                        Text(
+                          "I hereby authorize to receive RCS, Whatsapp messages, and informational emails.",
+                          style: TextStyle(
+                            color: appColors.textColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                         SizedBox(height: 20.h),
                         Obx(() {
                           return GestureDetector(
