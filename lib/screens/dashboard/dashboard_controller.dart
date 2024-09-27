@@ -29,7 +29,6 @@ import 'package:get/get.dart';
 import 'package:in_app_update/in_app_update.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../cache/custom_cache_manager.dart';
@@ -37,7 +36,6 @@ import '../../common/MiddleWare.dart';
 import '../../common/app_exception.dart';
 import '../../common/app_textstyle.dart';
 import '../../common/common_functions.dart';
-import '../../di/fcm_notification.dart';
 import '../../model/astrologer_gift_response.dart';
 import '../../model/chat/req_common_chat_model.dart';
 import '../../model/chat/res_common_chat_success.dart';
@@ -453,7 +451,7 @@ class DashboardController extends GetxController
     // initMessaging();
     Future.delayed(
       const Duration(milliseconds: 200),
-          () {
+      () {
         NotificationHelper().firebaseNotificationInit();
       },
     );
@@ -649,6 +647,7 @@ class DashboardController extends GetxController
             Get.bottomSheet(
               const ForceUpdateSheet(),
               isDismissible: false,
+              enableDrag: false,
             );
             // showTutorial(context);
           } else {

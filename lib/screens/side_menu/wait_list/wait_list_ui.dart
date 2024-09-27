@@ -81,33 +81,41 @@ class WaitListUI extends GetView<WaitListUIController> {
               child: LevelWidget(level: waitingCustomer.level ?? ""),
             ),
           const Spacer(),
-          InkWell(
-            onTap: () async {
-              if (chatSwitch.value == false &&
-                  callSwitch.value == false &&
-                  videoSwitch.value == false) {
-                controller!.acceptChatButtonApi(
-                  queueId: person.id.toString(),
-                  orderId: person.orderId,
-                  index: index,
-                );
-              } else {
-                Fluttertoast.showToast(
-                  msg: "Please turn off all session types.",
-                );
-              }
-            },
-            child: Container(
-                padding: EdgeInsets.all(7),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  color: appColors.guideColor,
+          controller!.loadingIndex == index && controller.loader.value == true
+              ? SizedBox(
+                  height: 30,
+                  width: 30,
+                  child: CircularProgressIndicator(
+                    color: appColors.red,
+                  ),
+                )
+              : InkWell(
+                  onTap: () async {
+                    if (chatSwitch.value == false &&
+                        callSwitch.value == false &&
+                        videoSwitch.value == false) {
+                      controller.acceptChatButtonApi(
+                        queueId: person.id.toString(),
+                        orderId: person.orderId,
+                        index: index,
+                      );
+                    } else {
+                      Fluttertoast.showToast(
+                        msg: "Please turn off all session types.",
+                      );
+                    }
+                  },
+                  child: Container(
+                      padding: EdgeInsets.all(7),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: appColors.guideColor,
+                      ),
+                      child: Text(
+                        "Accept",
+                        style: TextStyle(fontSize: 13, color: appColors.black),
+                      )),
                 ),
-                child: Text(
-                  "Accept",
-                  style: TextStyle(fontSize: 13, color: appColors.black),
-                )),
-          ),
           const SizedBox(width: 10),
           Row(
             children: [

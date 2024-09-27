@@ -490,7 +490,7 @@ class HomeUI extends GetView<HomeController> {
                                                                     .start,
                                                             children: [
                                                               Text(
-                                                                "₹${abbreviateNumber(controller.homeData?.retention?.toStringAsFixed(2))}%",
+                                                                "${abbreviateNumber(controller.homeData?.retention?.toStringAsFixed(2))}%",
                                                                 // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
                                                                 maxLines: 1,
                                                                 style: AppTextStyle.textStyle14(
@@ -741,7 +741,7 @@ class HomeUI extends GetView<HomeController> {
                                                                     .start,
                                                             children: [
                                                               Text(
-                                                                "₹${abbreviateNumber(controller.homeData?.repurchaseRate?.toStringAsFixed(2))}%",
+                                                                "${abbreviateNumber(controller.homeData?.repurchaseRate?.toStringAsFixed(2))}%",
                                                                 // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
                                                                 maxLines: 1,
 

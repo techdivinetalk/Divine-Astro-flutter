@@ -1,31 +1,32 @@
 import 'dart:collection';
 import 'dart:convert';
-import 'dart:io';
 import 'dart:developer';
+import 'dart:io';
 import 'dart:math' hide log;
+
 import 'package:divine_astrologer/common/MiddleWare.dart';
 import 'package:divine_astrologer/common/routes.dart';
-import 'package:divine_astrologer/di/fcm_notification.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_astrologer_response.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
 import 'package:divine_astrologer/model/chat_offline_model.dart';
 import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
+
 AndroidNotificationChannel channel = const AndroidNotificationChannel(
-'high_importance_channel',
-'High Importance Notifications',
-description: 'This channel is used for important notifications.',
-showBadge: true,
-importance: Importance.high,
+  'high_importance_channel',
+  'High Importance Notifications',
+  description: 'This channel is used for important notifications.',
+  showBadge: true,
+  importance: Importance.high,
 );
+
 class NotificationHelper {
   final FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
   final notifications = FlutterLocalNotificationsPlugin();
@@ -50,23 +51,24 @@ class NotificationHelper {
 
     flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      onDidReceiveNotificationResponse: (NotificationResponse notificationResponse) async {
-        print("notificationResponse.actionId-->>${notificationResponse.actionId}");
+      onDidReceiveNotificationResponse:
+          (NotificationResponse notificationResponse) async {
+        print(
+            "notificationResponse.actionId-->>${notificationResponse.actionId}");
         final String? payload = notificationResponse.payload;
         log(payload.toString());
         if (payload != null) {
           final Map<String, dynamic> payloadMap =
-          jsonDecode(notificationResponse.payload!);
+              jsonDecode(notificationResponse.payload!);
           log('notification payload: -- ${payloadMap}');
 
           if (payloadMap["type"] == "1") {
-
             Get.toNamed(RouteName.chatMessageWithSocketUI);
           } else if (payloadMap["type"] == "2") {
-
             final ref = AppFirebaseService()
                 .database
-                .child("order/${AppFirebaseService().orderData.value["orderId"]}")
+                .child(
+                    "order/${AppFirebaseService().orderData.value["orderId"]}")
                 .path;
 
             if (ref.split("/").last == payloadMap["order_id"]) {
@@ -75,7 +77,6 @@ class NotificationHelper {
               Fluttertoast.showToast(msg: "Your order has been ended");
             }
           } else if (payloadMap["type"] == "8") {
-
             final senderId = payloadMap["sender_id"];
             DataList dataList = DataList();
             dataList.id = int.parse(senderId);
@@ -95,15 +96,12 @@ class NotificationHelper {
             }
           }
           AppFirebaseService().openChatUserId = payloadMap["userid"] ?? "";
-        } else {
-
-        }
+        } else {}
       },
     );
 
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage message) async {
-
-    });
+    FirebaseMessaging.onMessageOpenedApp
+        .listen((RemoteMessage message) async {});
 
     firebaseMessaging.getInitialMessage().then((value) {});
 
@@ -150,17 +148,17 @@ class NotificationHelper {
                 message: responseMsg["message"],
                 id: int.parse(responseMsg["chatId"].toString() ?? ''),
                 customerId:
-                int.parse(responseMsg["sender_id"].toString() ?? ''),
+                    int.parse(responseMsg["sender_id"].toString() ?? ''),
                 createdAt: DateTime.parse(responseMsg["created_at"])
                     .millisecondsSinceEpoch
                     .toString(),
                 isSuspicious: 0,
                 suggestedRemediesId:
-                int.parse(responseMsg["suggestedRemediesId"] ?? "0"),
+                    int.parse(responseMsg["suggestedRemediesId"] ?? "0"),
                 isPoojaProduct:
-                responseMsg['is_pooja_product'].toString() == '1'
-                    ? true
-                    : false,
+                    responseMsg['is_pooja_product'].toString() == '1'
+                        ? true
+                        : false,
                 productId: responseMsg["product_id"].toString(),
                 shopId: responseMsg["shop_id"].toString(),
                 sendBy: SendBy.astrologer,
@@ -199,8 +197,11 @@ class NotificationHelper {
       }
     } else {
       if (message.data['type'] != "2") {
-        showNotification(message.data["title"] ?? message.notification!.title, message.data["message"] ?? message.notification!.body,
-            message.data['type'] ?? "0", message.data);
+        showNotification(
+            message.data["title"] ?? message.notification!.title,
+            message.data["message"] ?? message.notification!.body,
+            message.data['type'] ?? "0",
+            message.data);
       }
     }
 
@@ -217,7 +218,6 @@ class NotificationHelper {
 
     AndroidNotificationDetails? androidNotificationDetails;
     if (type == "2") {
-
       androidNotificationDetails = const AndroidNotificationDetails(
         "DivineAstrologer",
         "AstrologerNotification",
@@ -237,7 +237,6 @@ class NotificationHelper {
         ],
       );
     } else {
-
       // Default notification (no custom sound)
       androidNotificationDetails = const AndroidNotificationDetails(
         "DivineAstrologer_Other_type",

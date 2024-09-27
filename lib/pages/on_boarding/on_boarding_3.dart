@@ -430,22 +430,22 @@ class OnBoarding3 extends GetView<OnBoardingController> {
                                         Get.to(() {
                                           return TrainingVideoUI(
                                               video: TrainingVideoData(
-                                                id: onboarding_training_videoData[
+                                            id: onboarding_training_videoData[
                                                 'id'],
-                                                title:
+                                            title:
                                                 onboarding_training_videoData[
-                                                'title'],
-                                                description:
+                                                    'title'],
+                                            description:
                                                 onboarding_training_videoData[
-                                                'description'],
-                                                url: onboarding_training_videoData[
+                                                    'description'],
+                                            url: onboarding_training_videoData[
                                                 'url'],
-                                                days: onboarding_training_videoData[
+                                            days: onboarding_training_videoData[
                                                 'days'],
-                                                isViwe:
+                                            isViwe:
                                                 onboarding_training_videoData[
-                                                'is_viwe'],
-                                              ));
+                                                    'is_viwe'],
+                                          ));
                                         });
                                         print('Link tapped');
                                       },
