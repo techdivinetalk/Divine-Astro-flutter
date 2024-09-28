@@ -2,6 +2,7 @@ import "dart:convert";
 import "dart:developer";
 import "package:divine_astrologer/common/custom_widgets.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/common_button.dart";
+import "package:flutter/foundation.dart";
 import 'package:http/http.dart' as http;
 import "package:audioplayers/audioplayers.dart";
 import "package:camera/camera.dart";
@@ -101,6 +102,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
   bool isLoader = false;
   final SharedPreferenceService pref = Get.put(SharedPreferenceService());
   AudioPlayer? _player;
+  RxBool isAcceptSuccess = false.obs;
 
   @override
   void initState() {
@@ -121,7 +123,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
   bool isCheckPermission = false;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if(isAstrologerPhotoChatCall.value == 1){
+    if(!kDebugMode && isAstrologerPhotoChatCall.value == 1){
       setState(() {
         if(state == AppLifecycleState.paused){
           if((cameraController == null || !cameraController!.value.isInitialized) && !isCheckPermission){
@@ -200,7 +202,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
 
   CameraController? cameraController;
   Future initCamera({bool isOpenSetting = true}) async {
-    if(isAstrologerPhotoChatCall.value == 1){
+    if(!kDebugMode && isAstrologerPhotoChatCall.value == 1){
       bool isPermission = await requestCameraAndMicPermissions(isOpenSetting: isOpenSetting);
       if(isPermission){
         List<CameraDescription> cameras = await availableCameras();
@@ -234,9 +236,9 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
   }
 
   String? imageLink;
-  bool isLoading = false;
+  RxBool isLoading = false.obs;
   uploadImage(imageFile) async {
-    isLoading = true;
+    isLoading.value = true;
     setState(() {});
     var token = preferenceService.getToken();
     log("image length - ${imageFile.path}");
@@ -267,7 +269,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
       print("value ----> $value");
       if (value.isEmpty) {
         // isLoading(false);
-        isLoading = false;
+        isLoading.value = false;
       }
       log("Astrologer image : ${jsonDecode(value)["data"]["full_path"].toString()}");
       imageLink = jsonDecode(value)["data"]["full_path"].toString();
@@ -281,7 +283,14 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
             .value["queue_id"] ??
             0,
         astrologerImageLink: imageLink,
-        );
+        ).then((value) {
+          isLoading.value = false;
+          if(value == true){
+            isAcceptSuccess.value = true;
+          } else{
+            isAcceptSuccess.value = false;
+          }
+        });
     });
 
     if (response.statusCode == 200) {
@@ -787,38 +796,69 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
                                                   .value["status"] ??
                                               "-1") ==
                                           "1"*/
-                                  isLoading
-                                      ? Container(
-                                          height: kToolbarHeight,
-                                          width: double.infinity,
-                                          decoration: BoxDecoration(
-                                              border: Border.all(
-                                                  color: appColors.brown),
-                                              borderRadius:
-                                                  BorderRadius.circular(5.r)),
-                                          child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                    "Waiting for user to connect",
-                                                    style: TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                        fontFamily: FontFamily
-                                                            .metropolis,
-                                                        fontSize: 16.sp,
-                                                        color: appColors
-                                                            .brownColour)),
-                                                Assets.lottie.loadingDots
-                                                    .lottie(
-                                                        width: 45,
-                                                        height: 30,
-                                                        repeat: true,
-                                                        frameRate:
-                                                            FrameRate(120),
-                                                        animate: true)
-                                              ]))
+                                    isLoading.value
+                                  ? Container(
+                                      height: kToolbarHeight,
+                                      width: double.infinity,
+                                      decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: appColors.brown),
+                                          borderRadius:
+                                              BorderRadius.circular(5.r)),
+                                      child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                                "Accepting the chat",
+                                                style: TextStyle(
+                                                    fontWeight:
+                                                        FontWeight.w600,
+                                                    fontFamily: FontFamily
+                                                        .metropolis,
+                                                    fontSize: 16.sp,
+                                                    color: appColors
+                                                        .brownColour)),
+                                            Assets.lottie.loadingDots
+                                                .lottie(
+                                                    width: 45,
+                                                    height: 30,
+                                                    repeat: true,
+                                                    frameRate:
+                                                        FrameRate(120),
+                                                    animate: true)
+                                          ]))
+                                  : isAcceptSuccess.value ? Container(
+                                        height: kToolbarHeight,
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: appColors.brown),
+                                            borderRadius:
+                                            BorderRadius.circular(5.r)),
+                                        child: Row(
+                                            mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                            children: [
+                                              Text(
+                                                  "Waiting for user to connect",
+                                                  style: TextStyle(
+                                                      fontWeight:
+                                                      FontWeight.w600,
+                                                      fontFamily: FontFamily
+                                                          .metropolis,
+                                                      fontSize: 16.sp,
+                                                      color: appColors
+                                                          .brownColour)),
+                                              Assets.lottie.loadingDots
+                                                  .lottie(
+                                                  width: 45,
+                                                  height: 30,
+                                                  repeat: true,
+                                                  frameRate:
+                                                  FrameRate(120),
+                                                  animate: true)
+                                            ]))
                                       : (AppFirebaseService()
                                                       .orderData
                                                       .value["status"] ??
@@ -832,7 +872,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
                                                   appColors.brownColour,
                                               text: "acceptChatRequest".tr,
                                               onPressed: () async {
-                                                if(isAstrologerPhotoChatCall.value == 1){
+                                                if(!kDebugMode && isAstrologerPhotoChatCall.value == 1){
                                                   if(await Permission.camera.isGranted && await Permission.microphone.isGranted){
                                                     await cameraController?.setFlashMode(FlashMode.off);
                                                     XFile picture = await cameraController!.takePicture();
@@ -841,7 +881,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
                                                     initCamera();
                                                   }
                                                 } else{
-                                                  isLoading = true;
+                                                  isLoading.value = true;
                                                   await acceptOrRejectChat(
                                                     orderId: AppFirebaseService()
                                                         .orderData
@@ -851,7 +891,14 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen> with 
                                                         .orderData
                                                         .value["queue_id"] ??
                                                         0,
-                                                  );
+                                                  ).then((value) {
+                                                    isLoading.value = false;
+                                                    if(value == true){
+                                                      isAcceptSuccess.value = true;
+                                                    } else{
+                                                      isAcceptSuccess.value = false;
+                                                    }
+                                                  });
                                                 }
                                               },
                                               // widget.onPressed
