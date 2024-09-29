@@ -19,6 +19,7 @@ import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import "package:get/get.dart";
 
 import "../common/MiddleWare.dart";
+import "../screens/chat_message_with_socket/chat_message_with_socket_controller.dart";
 import "../screens/live_page/constant.dart";
 
 bool isLogOut = false;
@@ -26,6 +27,18 @@ RxInt giftCountUpdate = 0.obs;
 RxString giftImageUpdate = "".obs;
 
 RxInt isCall = 1.obs;
+RxInt isDrawerSupport = 1.obs;
+RxInt isProfileAstroSupport = 1.obs;
+
+RxInt isWaitlist = 1.obs;
+RxInt isOrderHistory = 1.obs;
+RxInt isImportantNumber = 1.obs;
+RxInt isNotice = 1.obs;
+RxInt isTechnicalSupport = 1.obs;
+RxInt isFinancialSupport = 1.obs;
+RxInt isSetting = 1.obs;
+RxInt isMessageTemplate = 1.obs;
+
 RxInt isRemidies = 1.obs;
 RxInt isEcom = 1.obs;
 RxInt isVOIP = 1.obs;
@@ -49,7 +62,9 @@ RxInt isPrivacyPolicy = 0.obs;
 RxInt isServerMaintenance = 0.obs;
 RxInt showRetentionPopup = 1.obs;
 RxInt showDailyLive = 0.obs;
+RxInt verifyOnboarding = 0.obs;
 RxInt isAstrologerPhotoChatCall = 0.obs;
+RxInt disableOnboarding = 0.obs;
 //RxInt showHelp = 0.obs;
 RxInt maximumStorySize = 2048.obs;
 RxInt astroHome = 0.obs;
@@ -59,6 +74,12 @@ RxInt isAstroCare = 1.obs;
 RxInt isLiveCall = 1.obs;
 RxInt homePage = 1.obs;
 RxInt razorPayLink = 0.obs;
+RxInt productChat = 1.obs;
+RxInt asForGifts = 1.obs;
+RxInt otp_autoFill = 0.obs;
+RxInt customProduct = 1.obs;
+RxInt tarotCard = 1.obs;
+RxInt acceptChatRequestScreen = 1.obs;
 RxMap<dynamic, dynamic> callKunadliUpdated = {}.obs;
 StreamSubscription<DatabaseEvent>? subscription;
 
@@ -100,13 +121,25 @@ class AppFirebaseService {
   }
 
   String tableName = "";
+  String currentOrder = "";
 
   Future<void> userRealTime(String key, dynamic value, String path,
       [bool isRemoved = false]) async {
-    debugPrint("test_userRealTime: value removed: $value");
     switch (key) {
       case "order_id":
         if (value != null && !isRemoved) {
+          if (!isRemoved) {
+            currentOrder = value.toString();
+            if (value != null &&
+                MiddleWare.instance.currentPage ==
+                    RouteName.chatMessageWithSocketUI) {
+              Get.find<ChatMessageWithSocketController>().setRealTime();
+              // Get.find<SocketChatWithAstrologerController>().runTimer();
+            }
+          } else {
+            debugPrint("currentOrder: $value");
+            currentOrder = "";
+          }
           database.child("order/$value").onValue.listen(
             (DatabaseEvent event) async {
               final DataSnapshot dataSnapshot = event.snapshot;
@@ -115,7 +148,11 @@ class AppFirebaseService {
                   Map<dynamic, dynamic> map = <dynamic, dynamic>{};
                   map = (dataSnapshot.value ?? <dynamic, dynamic>{})
                       as Map<dynamic, dynamic>;
-                  orderData(Map<String, dynamic>.from(map));
+                  debugPrint("-userRealTime: ${dataSnapshot.key.toString()}");
+                  debugPrint("-userRealTime: ${currentOrder}");
+                  if (dataSnapshot.key.toString() == currentOrder) {
+                    orderData.value = Map<String, dynamic>.from(map);
+                  }
                   if (orderData.value["status"] != null) {
                     if (orderData.value["orderType"] == "chat") {
                       switch ((orderData.value["status"])) {
@@ -128,19 +165,29 @@ class AppFirebaseService {
                         case "2":
                           if (Get.currentRoute !=
                               RouteName.chatMessageWithSocketUI) {
-                            await Get.toNamed(
+                            await Get.offNamed(
                               RouteName.chatMessageWithSocketUI,
                               arguments: {"orderData": orderData},
                             );
                           }
                           break;
                         case "3":
-                          if (Get.currentRoute !=
-                              RouteName.chatMessageWithSocketUI) {
-                            await Get.toNamed(
-                              RouteName.chatMessageWithSocketUI,
-                              arguments: {"orderData": orderData},
-                            );
+                          if (acceptChatRequestScreen.toString() == "1") {
+                            if (Get.currentRoute ==
+                                RouteName.acceptChatRequestScreen) {
+                              await Get.offNamed(
+                                RouteName.chatMessageWithSocketUI,
+                                arguments: {"orderData": orderData},
+                              );
+                            }
+                          } else {
+                            if (Get.currentRoute !=
+                                RouteName.chatMessageWithSocketUI) {
+                              await Get.offNamed(
+                                RouteName.chatMessageWithSocketUI,
+                                arguments: {"orderData": orderData},
+                              );
+                            }
                           }
                           break;
 
@@ -148,10 +195,16 @@ class AppFirebaseService {
                           break;
                       }
                     } else {
-                      orderData({});
-                      sendBroadcast(BroadcastMessage(name: "orderEnd"));
+                      if (dataSnapshot.key.toString() == currentOrder) {
+                        orderData({});
+                      }
                       if (MiddleWare.instance.currentPage ==
                           RouteName.acceptChatRequestScreen) {
+                        if (kDebugMode) {
+                          divineSnackBar(
+                              data: "firebase chatType call",
+                              color: Colors.white);
+                        }
                         Get.until(
                           (route) {
                             return Get.currentRoute == RouteName.dashboard;
@@ -162,10 +215,15 @@ class AppFirebaseService {
                   } else {}
                 } else {}
               } else {
-                orderData({});
-                sendBroadcast(BroadcastMessage(name: "orderEnd"));
+                if (dataSnapshot.key.toString() == currentOrder) {
+                  orderData({});
+                }
                 if (MiddleWare.instance.currentPage ==
                     RouteName.acceptChatRequestScreen) {
+                  if (kDebugMode) {
+                    divineSnackBar(
+                        data: "firebase acceptScreen", color: Colors.white);
+                  }
                   Get.until(
                     (route) {
                       return Get.currentRoute == RouteName.dashboard;
@@ -178,6 +236,10 @@ class AppFirebaseService {
         } else {
           if (MiddleWare.instance.currentPage ==
               RouteName.acceptChatRequestScreen) {
+            if (kDebugMode) {
+              divineSnackBar(
+                  data: "firebase acceptScreen", color: Colors.white);
+            }
             Get.until(
               (route) {
                 return Get.currentRoute == RouteName.dashboard;
@@ -185,7 +247,6 @@ class AppFirebaseService {
             );
           }
           orderData({});
-          sendBroadcast(BroadcastMessage(name: "orderEnd"));
         }
         break;
       case "TimeManage":
@@ -195,6 +256,15 @@ class AppFirebaseService {
         break;
       case "isEngagedStatus":
         isEngagedStatus(value);
+        break;
+      case "isOnboarding":
+        print("isOnboarding $isOnboarding");
+        print("isOnboarding $isOnboarding");
+        print("isOnboarding $isOnboarding");
+        isOnboarding(value);
+        print("isOnboarding $isOnboarding");
+        print("isOnboarding $isOnboarding");
+
         break;
       case "callKundli":
         callKunadliUpdated({});
@@ -212,20 +282,31 @@ class AppFirebaseService {
 
         break;
       case "giftCount":
-        giftCountUpdate(value["giftCount"]);
-        giftImageUpdate(value["giftImage"]);
-        print(
-            "gift broadcase called ${value["giftCount"]} ${value["giftImage"]}");
+        print("gift broadcase giftCount ${value}");
+        giftCountUpdate(value);
+
         sendBroadcast(
           BroadcastMessage(
             name: "giftCount",
             data: {
-              'giftCount': value["giftCount"],
-              "giftImage": value["giftImage"],
+              'giftCount': value,
             },
           ),
         );
         FirebaseDatabase.instance.ref("$path/giftCount").remove();
+        break;
+      case "giftImage":
+        print("gift broadcase giftImage ${value}");
+        giftImageUpdate(value);
+        sendBroadcast(
+          BroadcastMessage(
+            name: "giftCount",
+            data: {
+              'giftImage': value,
+            },
+          ),
+        );
+        print("------giftImage---$path/giftImage");
         FirebaseDatabase.instance.ref("$path/giftImage").remove();
         break;
       case "voiceCallStatus":
@@ -245,10 +326,6 @@ class AppFirebaseService {
         break;
       case "showStaticText":
         showStaticText(value);
-        break;
-      case "deliveredMsg":
-        sendBroadcast(BroadcastMessage(
-            name: "deliveredMsg", data: {'deliveredMsgList': value}));
         break;
       case "uniqueId":
         String uniqueId = await getDeviceId() ?? "";
@@ -325,117 +402,6 @@ class AppFirebaseService {
           userRealTime(key!, value, path, true);
         }
       });
-
-      // subscription = database.child(path).onValue.listen((event) async {
-      //   debugPrint("real time $path ---> ${event.snapshot.value}");
-      //   if (preferenceService.getToken() == null ||
-      //       preferenceService.getToken() == "") {
-      //     return;
-      //   }
-      //
-      //   if (event.snapshot.value is Map<Object?, Object?>) {
-      //     Map<String, dynamic>? realTimeData = Map<String, dynamic>.from(
-      //         event.snapshot.value! as Map<Object?, Object?>);
-      //     if (realTimeData["order_id"] != null) {
-      //       watcher.strValue = realTimeData["order_id"].toString();
-      //       var value = realTimeData["order_id"].toString();
-      //
-      //       final isCallSwitchRes = realTimeData["voiceCallStatus"] ?? 0;
-      //       callSwitch(isCallSwitchRes > 0);
-      //
-      //       final isChatSwitchRes = realTimeData["chatStatus"] ?? 0;
-      //       chatSwitch(isChatSwitchRes > 0);
-      //
-      //       final isVideoCallSwitchRes = realTimeData["videoCallStatus"] ?? 0;
-      //       videoSwitch(isVideoCallSwitchRes > 0);
-      //
-      //       if (realTimeData["uniqueId"] != null) {
-      //         print("uniqueId ---- uniqueId ${realTimeData["uniqueId"]}");
-      //
-      //         String uniqueId = await getDeviceId() ?? "";
-      //         debugPrint(
-      //           'check uniqueId ${realTimeData['uniqueId']}\ngetDeviceId ${uniqueId.toString()}',
-      //         );
-      //         if (realTimeData["uniqueId"] != uniqueId) {
-      //           print("logout --- start");
-      //           await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
-      //           print("logout --- end");
-      //           Get.put(SettingsController()).logOut();
-      //         }
-      //       }
-      //
-      //       if (realTimeData["profilePhoto"] != null) {
-      //         print("beforeGoing 0 - first");
-      //         UserData? userData =
-      //             Get.find<SharedPreferenceService>().getUserDetail();
-      //         userData!.image = realTimeData["profilePhoto"];
-      //         String? baseAmazonUrl =
-      //             Get.find<SharedPreferenceService>().getBaseImageURL();
-      //         Get.find<SharedPreferenceService>().setUserDetail(userData);
-      //         Get.put(DashboardController(Get.put(PreDefineRepository())))
-      //             .userProfileImage
-      //             .value = "$baseAmazonUrl/${userData.image!}";
-      //         Get.put(ProfilePageController(Get.put(UserRepository())))
-      //             .userProfileImage
-      //             .value = "$baseAmazonUrl/${userData.image!}";
-      //         Get.put(DashboardController(Get.put(PreDefineRepository())))
-      //             .update();
-      //         Get.put(ProfilePageController(Get.put(UserRepository())))
-      //             .update();
-      //       }
-      //       if (realTimeData["isEngagedStatus"] != null) {
-      //         print(realTimeData["isEngagedStatus"]);
-      //         print('realTimeData["isEngagedStatus"]');
-      //         isEngagedStatus(realTimeData['isEngagedStatus']);
-      //       } else {
-      //         isEngagedStatus(0);
-      //       }
-      //       if (realTimeData['giftCount'] != null) {
-      //         giftCountUpdate(realTimeData["giftCount"]);
-      //         giftImageUpdate(realTimeData["giftImage"]);
-      //         print(
-      //             "gift broadcase called ${realTimeData["giftCount"]} ${realTimeData["giftImage"]}");
-      //         sendBroadcast(
-      //           BroadcastMessage(
-      //             name: "giftCount",
-      //             data: {
-      //               'giftCount': realTimeData["giftCount"],
-      //               "giftImage": realTimeData["giftImage"],
-      //             },
-      //           ),
-      //         );
-      //         FirebaseDatabase.instance.ref("$path/giftCount").remove();
-      //         FirebaseDatabase.instance.ref("$path/giftImage").remove();
-      //       }
-      //       if (realTimeData['callKundli'] != null) {
-      //         Map<String, dynamic>? callKundli = Map<String, dynamic>.from(
-      //             realTimeData['callKundli'] as Map<Object?, Object?>);
-      //         print(realTimeData['callKundli']);
-      //         print("realTimeData['callKundli']");
-      //         callKunadliUpdated(realTimeData['callKundli']);
-      //         sendBroadcast(
-      //             BroadcastMessage(name: "callKundli", data: callKundli));
-      //         // FirebaseDatabase.instance.ref("$path/callKundli").remove();
-      //       } else {
-      //         callKunadliUpdated({});
-      //       }
-      //       if (realTimeData["deliveredMsg"] != null) {
-      //         print("deliveredMsg rec");
-      //         sendBroadcast(BroadcastMessage(
-      //             name: "deliveredMsg",
-      //             data: {'deliveredMsgList': realTimeData["deliveredMsg"]}));
-      //       }
-      //       if (realTimeData["totalGift"] != null) {
-      //         sendBroadcast(
-      //           BroadcastMessage(
-      //             name: "totalGift",
-      //             data: {'totalGift': realTimeData["totalGift"]},
-      //           ),
-      //         );
-      //       }
-      //     }
-      //   }
-      // });
     } catch (e) {
       debugPrint("Error reading data from the database: $e");
     }
@@ -446,6 +412,36 @@ class AppFirebaseService {
     switch (dataSnapshot.key) {
       case "call":
         isCall(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isDrawerSupport":
+        isDrawerSupport(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isWaitlist":
+        isWaitlist(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isOrderHistory":
+        isOrderHistory(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isProfileAstroSupport":
+        isProfileAstroSupport(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isImportantNumber":
+        isImportantNumber(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isNotice":
+        isNotice(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isTechnicalSupport":
+        isTechnicalSupport(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isFinancialSupport":
+        isFinancialSupport(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isSetting":
+        isSetting(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "isMessageTemplate":
+        isMessageTemplate(int.parse(dataSnapshot.value.toString()));
         break;
       case "camera":
         isCamera(int.parse(dataSnapshot.value.toString()));
@@ -467,6 +463,9 @@ class AppFirebaseService {
       //   break;
       case "isAgreement":
         isAgreement(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "disableOnboarding":
+        disableOnboarding(int.parse(dataSnapshot.value.toString()));
         break;
       case "isAstrologerPhotoChatCall":
         isAstrologerPhotoChatCall(int.parse(dataSnapshot.value.toString()));
@@ -542,9 +541,11 @@ class AppFirebaseService {
       case "showDailyLive":
         showDailyLive(int.parse(dataSnapshot.value.toString()));
         break;
-      // case "showHelp":
-      //   showHelp(int.parse(dataSnapshot.value.toString()));
-      //   break;
+      case "verifyOnboarding":
+        print(
+            "----------verifyOnboarding---------${dataSnapshot.value.toString()}");
+        verifyOnboarding(int.parse(dataSnapshot.value.toString()));
+        break;
       case "astroHome":
         astroHome(int.parse(dataSnapshot.value.toString()));
         break;
@@ -556,6 +557,24 @@ class AppFirebaseService {
         break;
       case "razorPayLink":
         razorPayLink(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "productChat":
+        productChat(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "asForGifts":
+        asForGifts(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "otp_autoFill":
+        otp_autoFill(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "customProduct":
+        customProduct(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "tarotCard":
+        tarotCard(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "acceptChatRequestScreen":
+        acceptChatRequestScreen(int.parse(dataSnapshot.value.toString()));
         break;
       default:
         // preferenceService.setStringPref(

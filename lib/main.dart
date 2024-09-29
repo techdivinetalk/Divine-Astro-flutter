@@ -1,17 +1,14 @@
-import 'dart:collection';
-import 'dart:convert';
-import 'dart:io';
-import 'dart:math';
+import 'dart:developer';
 
 import 'package:camera/camera.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
-import 'package:divine_astrologer/model/chat_assistant/chat_assistant_chats_response.dart';
-import 'package:divine_astrologer/model/chat_offline_model.dart';
+import 'package:divine_astrologer/notification_helper/notification_helpe.dart';
 import 'package:divine_astrologer/remote_config/remote_config_helper.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/auth/login/login_controller.dart';
+import 'package:divine_astrologer/screens/dashboard/dashboard_controller.dart';
 import 'package:divine_astrologer/screens/live_dharam/gifts_singleton.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_shared_preferences_singleton.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,14 +17,16 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sms_autofill/sms_autofill.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
 
@@ -36,8 +35,8 @@ import 'common/MiddleWare.dart';
 import 'common/app_theme.dart';
 import 'common/colors.dart';
 import 'common/common_functions.dart';
+import 'common/generic_loading_widget.dart';
 import 'common/routes.dart';
-import 'di/fcm_notification.dart';
 import 'di/firebase_network_service.dart';
 import 'di/network_service.dart';
 import 'di/progress_service.dart';
@@ -45,18 +44,32 @@ import 'di/shared_preference_service.dart';
 import 'firebase_service/firebase_service.dart';
 import 'gen/fonts.gen.dart';
 import 'localization/translations.dart';
+import 'model/chat_assistant/chat_assistant_astrologer_response.dart';
+import 'model/constant_details_model_class.dart';
 import 'screens/live_page/constant.dart';
-/// sahil pushed
+
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 late List<CameraDescription>? cameras;
-Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+
+@pragma('vm:entry-point')
+Future _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print('Handling a background message: ${message.messageId}');
-  if (message.data["type"] == "2") {
-    // showSecondNotification(message.notification?.title ?? '',
-    // message.notification?.body ?? '', message.data);
+  print("message.data--->>>>${message.data}");
+  if (message.notification == null) {
+    NotificationHelper().showNotification(
+      message.data["title"] ?? message.notification!.title,
+      message.data["message"] ?? message.notification!.body,
+      message.data['type'] ?? "0",
+      message.data,
+    );
   }
+  // if (message.notification == null) {
+  //   print("message.notification---not null---->>>>NotificationHelper().showNotification(");
+  //
+  // }
 }
+
+//// Onboarding Code Done
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -64,6 +77,11 @@ Future<void> main() async {
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   // initMessaging();
   AppFirebaseService().masterData("masters");
+  if (!kIsWeb) {
+    await setupFlutterNotifications();
+  }
+  // SmsAutoFill().listenForCode;
+
   cameras = await availableCameras();
   Get.put(AppColors());
   final remoteConfig = FirebaseRemoteConfig.instance;
@@ -72,124 +90,7 @@ Future<void> main() async {
   await remoteConfigHelper.initialize();
   remoteConfigHelper.updateGlobalConstantWithFirebaseData();
   await GetStorage.init();
-  Future<void> showFlutterNotification(RemoteMessage message) async {
-    RemoteNotification? notification = message.notification;
-    AndroidNotification? android = message.notification?.android;
-    if (notification != null && android != null && Platform.isAndroid) {
-      flutterLocalNotificationsPlugin.show(
-        notification.hashCode,
-        notification.title,
-        notification.body,
-        payload: jsonEncode(message.data),
-        NotificationDetails(
-          android: AndroidNotificationDetails(
-            channel.id,
-            channel.name,
-            channelDescription: channel.description,
-            icon: '@mipmap/ic_launcher',
-          ),
-        ),
-      );
-    }
-  }
 
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-
-    print("check on message notification : ${message.data}");
-    print("pushNotification1 ${message.notification?.title ?? ""}");
-    if (message.data["type"] == "2" || message.data["type"] == "20") {
-      showFlutterNotification(message);
-      return;
-    }
-    if (message.data["type"].toString() == "1") {
-      if (MiddleWare.instance.currentPage !=
-          RouteName.chatMessageWithSocketUI) {
-        print("messageReceive21 ${MiddleWare.instance.currentPage}");
-        showNotification(message.data["title"], message.data["message"],
-            message.data['type'], message.data);
-      }
-      HashMap<String, dynamic> updateData = HashMap();
-      updateData[message.data["chatId"] ?? "0"] = 1;
-      print('Message data-:-users ${message.data}');
-      print("test_notification: Enable fullscreen incoming call notification");
-      sendBroadcast(
-          BroadcastMessage(name: "messageReceive", data: message.data));
-    } else if (message.data["type"] == "8") {
-      print(
-          "inside page for realtime notification ${message.data} ${MiddleWare.instance.currentPage}");
-      if (MiddleWare.instance.currentPage == RouteName.chatMessageUI &&
-          chatAssistantCurrentUserId.value.toString() ==
-              message.data['sender_id'].toString()) {
-        assistChatNewMsg([...assistChatNewMsg, message.data]);
-        assistChatNewMsg.refresh();
-        // sendBroadcast(
-        //     BroadcastMessage(name: "chatAssist", data: {'msg': message.data}));
-      } else {
-        // assistChatUnreadMessages([...assistChatUnreadMessages, message.data]);
-        if (dasboardCurrentIndex.value == 2) {
-          final responseMsg = message.data;
-          assistChatUnreadMessages([
-            ...assistChatUnreadMessages,
-            AssistChatData(
-                message: responseMsg["message"],
-                id: int.parse(responseMsg["chatId"].toString() ?? ''),
-                customerId:
-                    int.parse(responseMsg["sender_id"].toString() ?? ''),
-                createdAt: DateTime.parse(responseMsg["created_at"])
-                    .millisecondsSinceEpoch
-                    .toString(),
-                isSuspicious: 0,
-                suggestedRemediesId:
-                    int.parse(responseMsg["suggestedRemediesId"] ?? "0"),
-                isPoojaProduct:
-                    responseMsg['is_pooja_product'].toString() == '1'
-                        ? true
-                        : false,
-                productId: responseMsg["product_id"].toString(),
-                shopId: responseMsg["shop_id"].toString(),
-                sendBy: SendBy.astrologer,
-                msgType: responseMsg['msg_type'] != null
-                    ? msgTypeValues.map[responseMsg["msg_type"]]
-                    : MsgType.text,
-                seenStatus: SeenStatus.received,
-                astrologerId: int.parse(responseMsg["userid"] ?? 0))
-          ]);
-        }
-        switch (message.data['msg_type']) {
-          case "0":
-            showNotification(message.data["title"], message.data["message"],
-                message.data['type'], message.data);
-            break;
-          case "1":
-            showNotification(message.data["title"], 'sendNotificationImage'.tr,
-                message.data['type'], message.data);
-            break;
-          case "2":
-            showNotification(message.data["title"], 'sendNotificationRemedy'.tr,
-                message.data['type'], message.data);
-            break;
-          case "3":
-            showNotification(
-                message.data["title"],
-                'sendNotificationProduct'.tr,
-                message.data['type'],
-                message.data);
-            break;
-          case "8":
-            showNotification(message.data["title"], 'sendNotificationGift'.tr,
-                message.data['type'], message.data);
-            break;
-        }
-      }
-    } else {
-      showNotification(message.data["title"], message.data["message"],
-          message.data['type'], message.data);
-    }
-    if (message.notification != null) {
-      print(
-          'Message also contained a notification: ${message.notification?.title}');
-    }
-  });
   if (await Permission.notification.status.isPermanentlyDenied ||
       await Permission.notification.status.isRestricted ||
       await Permission.notification.status.isDenied) {
@@ -210,7 +111,7 @@ Future<void> main() async {
     );
 
     try {
-      runApp(MyApp());
+      runApp(const MyApp());
     } catch (error, stacktrace) {
       // If you want to record a "fatal" exception
       FirebaseCrashlytics.instance.recordError(error, stacktrace, fatal: true);
@@ -219,19 +120,84 @@ Future<void> main() async {
     }
   });
 
-  // Permission.notification.isDenied.then((value) async {
-  //   if (value) {
-  //     await Permission.notification.request();
-  //
-  //     if (Get.isRegistered<LoginController>()) {
-  //       Get.find<LoginController>().onReady();
-  //     }
-  //   }
-  // });
+  await FirebaseMessaging.instance.getInitialMessage().then((message) async {
+    if (message!.data.isNotEmpty) {
+      var payload = message!.data;
+      if (payload.isNotEmpty) {
+        log('notification payload: -- ${payload}');
+
+        if (payload["type"] == "1") {
+          Get.toNamed(RouteName.chatMessageWithSocketUI);
+        } else if (payload["type"] == "2") {
+          final ref = AppFirebaseService()
+              .database
+              .child("order/${AppFirebaseService().orderData.value["orderId"]}")
+              .path;
+
+          if (ref.split("/").last == payload["order_id"]) {
+            Get.toNamed(RouteName.acceptChatRequestScreen);
+          } else {
+            Fluttertoast.showToast(msg: "Your order has been ended");
+          }
+        } else if (payload["type"] == "8") {
+          final senderId = payload["sender_id"];
+          DataList dataList = DataList();
+          dataList.id = int.parse(senderId);
+          dataList.name = payload["title"];
+          Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
+        } else if (payload["type"] == "13") {
+          dasboardCurrentIndex(3);
+        } else if (payload["type"] == "20") {
+          if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+            if (Get.isRegistered<DashboardController>()) {
+              Get.find<DashboardController>().selectedIndex.value = 3;
+            }
+          }
+        } else {
+          if (!await launchUrl(Uri.parse(payload["url"].toString()))) {
+            throw Exception('Could not launch ${payload["url"]}');
+          }
+        }
+        AppFirebaseService().openChatUserId = payload["userid"] ?? "";
+      } else {}
+    }
+  });
   AppFirebaseService().masterData("masters");
   if (!kDebugMode) {
     AppFirebaseService().masterData("masters");
   }
+}
+
+bool isFlutterLocalNotificationsInitialized = false;
+
+Future<void> setupFlutterNotifications() async {
+  if (isFlutterLocalNotificationsInitialized) {
+    return;
+  }
+  channel = const AndroidNotificationChannel(
+    'high_importance_channel',
+    'High Importance Notifications',
+    description: 'This channel is used for important notifications.',
+    showBadge: true,
+    importance: Importance.high,
+  );
+
+  late FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+
+  flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(channel);
+
+  await FirebaseMessaging.instance.setForegroundNotificationPresentationOptions(
+    alert: true,
+    badge: true,
+    sound: true,
+  );
+
+  isFlutterLocalNotificationsInitialized = true;
 }
 
 Future<bool> saveLanguage(String? lang) async {
@@ -243,7 +209,7 @@ Future<bool> saveLanguage(String? lang) async {
 saveLanguageId(int userLanguageId) async {
   SharedPreferences pref = await SharedPreferences.getInstance();
   if (kDebugMode) {
-    print("userLanguageId ++${userLanguageId.toString()}");
+    log("userLanguageId ++${userLanguageId.toString()}");
   }
   await pref.setInt('languageIds', userLanguageId);
 }
@@ -255,61 +221,6 @@ Future<void> initServices() async {
   await Get.putAsync(() => FirebaseNetworkService().init());
 }
 
-Future<void> showNotification(String title, String message, String type,
-    Map<String, dynamic> data) async {
-  AndroidNotificationDetails? androidNotificationDetails;
-  if (type == "1") {
-    androidNotificationDetails = const AndroidNotificationDetails(
-      "DivineCustomer", "CustomerNotification",
-      // sound: RawResourceAndroidNotificationSound('accept_ring'),
-      importance: Importance.max,
-      priority: Priority.high,
-      icon: "divine_logo_tran",
-      autoCancel: true,
-      playSound: true,
-      setAsGroupSummary: true,
-      styleInformation: BigTextStyleInformation(''),
-    );
-  } else {
-    androidNotificationDetails = AndroidNotificationDetails(
-      "DivineCustomer",
-      "CustomerNotification",
-      importance: Importance.max,
-      priority: Priority.high,
-      icon: "divine_logo_tran",
-      autoCancel: true,
-      actions: type == "2"
-          ? [
-              const AndroidNotificationAction(
-                'accept',
-                'ACCEPT',
-              ),
-            ]
-          : [],
-    );
-  }
-  NotificationDetails notificationDetails =
-      NotificationDetails(android: androidNotificationDetails);
-  await flutterLocalNotificationsPlugin.show(
-      Random().nextInt(90000), title, message, notificationDetails,
-      payload: json.encode(data));
-}
-
-// void initMessaging() async {
-//   const AndroidInitializationSettings initializationSettingsAndroid =
-//       AndroidInitializationSettings("@mipmap/ic_launcher");
-//   const DarwinInitializationSettings initializationSettingsDarwin =
-//       DarwinInitializationSettings(
-//           onDidReceiveLocalNotification: onDidReceiveLocalNotification,
-//           );
-//
-//   const InitializationSettings initializationSettings = InitializationSettings(
-//       android: initializationSettingsAndroid,
-//       iOS: initializationSettingsDarwin);
-//   flutterLocalNotificationsPlugin.initialize(initializationSettings,
-//       onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
-// }
-
 class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
@@ -319,12 +230,165 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   final GlobalLifecycleObserver _lifecycleObserver = GlobalLifecycleObserver();
+  bool _isLoading = true; // Add loading state
+
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addObserver(_lifecycleObserver);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final dataSnapshot = await AppFirebaseService()
+          .database
+          .child("masters/disableOnboarding")
+          .get();
+      log("dataSnapshot.value.toString() -- ${dataSnapshot.value.toString()}");
+      if (dataSnapshot.value.toString() == "0") {
+        checkOnBoarding();
+      } else {
+        normalBoaring();
+      }
+    });
   }
+
+  normalBoaring() {
+    log("normal onboaringin process");
+    if (preferenceService.getUserDetail()?.id == null) {
+      Get.delete<LoginController>(force: true);
+      Get.offAllNamed(RouteName.login);
+    } else {
+      log("Gone to here");
+
+      Get.offAllNamed(RouteName.dashboard);
+    }
+  }
+
+  var isOnboardings;
+
+  checkOnBoarding() async {
+    try {
+      final userId = preferenceService.getUserDetail()?.id;
+
+      // Check if user details are null, navigate to login if true
+      if (userId == null) {
+        Get.delete<LoginController>(force: true);
+        Get.offAllNamed(RouteName.login);
+        return; // Exit the function as user needs to log in
+      }
+
+      // Fetch isOnboarding data from Firebase
+      final dataSnapshot = await AppFirebaseService()
+          .database
+          .child("astrologer/$userId/realTime/isOnboarding")
+          .get();
+
+      isOnboardings = dataSnapshot.value;
+      print("Response of isOnboarding: ${isOnboardings.toString()}");
+
+      // If onboarding value is "4", navigate to the dashboard
+      if (isOnboardings.toString() == "4") {
+        print('Navigating to dashboard...');
+        Get.offAllNamed(RouteName.dashboard);
+        return; // Exit after navigation
+      }
+
+      // If onboarding is not complete, fetch constant details data
+      ConstantDetailsModelClass? commonConstants =
+          await userRepository.constantDetailsData2api();
+      print('Constant details response: ${commonConstants?.toJson()}');
+
+      // If API call is successful
+      if (commonConstants != null && commonConstants.success == true) {
+        final data = commonConstants.data;
+
+        if (data != null) {
+          // Update URLs and video data
+          imageUploadBaseUrl.value = data.imageUploadBaseUrl ?? "";
+          onboarding_training_videoData = data.onboarding_training_video;
+
+          // Set Amazon URLs in preferences
+          preferenceService.setBaseImageURL(data.awsCredentails.baseurl!);
+          Get.find<SharedPreferenceService>()
+              .setAmazonUrl(data.awsCredentails.baseurl!);
+
+          // Navigate based on onboarding state
+          navigateForOnBoardingGlobal(commonConstants);
+        }
+      }
+      // If API call fails with status 401, log out user
+      else if (commonConstants?.success == false &&
+          commonConstants?.statusCode == 401) {
+        print("status code 401 error log out -------->");
+        await preferenceService.erase();
+        Get.delete<LoginController>(force: true);
+        Get.offAllNamed(RouteName.login);
+      } else {
+        // Handle other failure cases here if needed
+        print('API call failed with unknown error');
+      }
+    } catch (error) {
+      // Handle any potential errors
+      print("Error in checkOnBoarding: $error");
+      Get.delete<LoginController>(force: true);
+      Get.offAllNamed(RouteName.login); // Optionally navigate to login on error
+    } finally {
+      // Stop loading indicator once everything is done
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
+  // checkOnBoarding() async {
+  //   if (preferenceService.getUserDetail()?.id == null) {
+  //     Get.offAllNamed(RouteName.login);
+  //   } else {
+  //     final dataSnapshot = await AppFirebaseService()
+  //         .database
+  //         .child(
+  //             "astrologer/${preferenceService.getUserDetail()!.id}/realTime/isOnboarding")
+  //         .get();
+  //     print("response of isOnboarding - ${isOnboardings.toString()}");
+  //     isOnboardings = dataSnapshot.value;
+  //     ConstantDetailsModelClass? commonConstants;
+  //     print("response of isOnboarding - ${isOnboardings.toString()}");
+  //     if (preferenceService.getUserDetail()?.id == null) {
+  //       Get.offAllNamed(RouteName.login);
+  //     } else if (dataSnapshot.value.toString() == "4") {
+  //       print('homeeeee1');
+  //
+  //       Get.offAllNamed(RouteName.dashboard);
+  //     } else {
+  //       commonConstants = await userRepository.constantDetailsData2api();
+  //       print('--------------response--------${commonConstants.toJson()}');
+  //       if (commonConstants.success == true) {
+  //         if (commonConstants?.data != null) {
+  //           imageUploadBaseUrl.value =
+  //               commonConstants?.data?.imageUploadBaseUrl ?? "";
+  //           onboarding_training_videoData =
+  //               commonConstants.data!.onboarding_training_video;
+  //         }
+  //         preferenceService
+  //             .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
+  //         Get.find<SharedPreferenceService>()
+  //             .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
+  //         navigateForOnBoardingGlobal(commonConstants);
+  //       } else if (commonConstants.success == false &&
+  //           commonConstants.statusCode == 401) {
+  //         await preferenceService.erase();
+  //
+  //         Get.offAllNamed(RouteName.login);
+  //
+  //         // Handle any failure case here
+  //       } else {}
+  //     }
+  //   }
+  //
+  //   // Once data is fetched, stop loading
+  //   setState(() {
+  //     _isLoading = false;
+  //   });
+  // }
 
   @override
   void dispose() {
@@ -354,9 +418,12 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                   navigatorKey: navigatorKey,
                   color: appColors.white,
                   debugShowCheckedModeBanner: false,
-                  initialRoute: preferenceService.getUserDetail()?.id == null
-                      ? RouteName.login
-                      : RouteName.dashboard,
+                  // initialRoute: preferenceService.getUserDetail()?.id == null
+                  //     ? RouteName.login
+                  //     : onBoard == "1"
+                  //         ? RouteName.root
+                  //         : RouteName.dashboard,
+                  // initialRoute: initialRoute,
                   getPages: Routes.routes,
                   // home: ZegoLoginScreen(),
                   locale: getLanStrToLocale(
@@ -381,6 +448,15 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
                     DefaultMaterialLocalizations.delegate,
                     DefaultWidgetsLocalizations.delegate,
                   ],
+                  // Show a loading screen while data is being fetched
+                  home: _isLoading
+                      ? Scaffold(
+                          body: const Center(
+                            child: GenericLoadingWidget(),
+                          ),
+                        )
+                      : Scaffold(), // Optionally return an empty container since navigation is handled elsewhere
+
                   // builder: (context, widget) {
                   //   return widget ?? const SizedBox();
                   //   // Container();

@@ -3,15 +3,19 @@ import 'dart:developer';
 
 import 'package:contacts_service/contacts_service.dart';
 import 'package:divine_astrologer/common/important_number_bottomsheet.dart';
+import 'package:divine_astrologer/screens/auth/login/login_controller.dart';
 import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
 
+import '../../common/common_functions.dart';
 import '../../common/routes.dart';
 import '../../di/shared_preference_service.dart';
+import '../../firebase_service/firebase_service.dart';
+import '../../pages/home/home_controller.dart';
 import '../../repository/important_number_repository.dart';
-import '../server_maintenance_popup/server_maintenance_popup.dart';
+import '../live_page/constant.dart';
 
 class SplashController extends GetxController with WidgetsBindingObserver {
   SharedPreferenceService preferenceService =
@@ -138,24 +142,196 @@ class SplashController extends GetxController with WidgetsBindingObserver {
     return false;
   }
 
+  bool wherego = false;
   navigation() async {
+    log("jsonEncode(preferenceService.getUserDetail())");
+    log("jsonEncode(preferenceService.getUserDetail())");
+    log("jsonEncode(preferenceService.getUserDetail())");
+    log("jsonEncode(preferenceService.getUserDetail())");
+    log("jsonEncode(preferenceService.getUserDetail())");
+
     log(jsonEncode(preferenceService.getUserDetail()));
     log("jsonEncode(preferenceService.getUserDetail())");
     if (preferenceService.getUserDetail() == null) {
+      Get.delete<LoginController>(force: true);
       Get.offAllNamed(RouteName.login);
     } else {
       print("goining in else part");
-      Future.delayed(
-        const Duration(seconds: 1),
-        () => Get.offAllNamed(RouteName.dashboard),
-      );
+      // if (wherego == true) {
+
+      // } else {}
+      fetchconstantsApi();
     }
   }
 
-  // Future<LoginImages> getInitialLoginImages() async {
-  //   final response = await repository.getInitialLoginImages();
-  //   return response;
-  // }
+  fetchconstantsApi() async {
+    print("------comes to hit constants api");
+    try {
+      var commonConstants = await userRepository.constantDetailsData();
+      print("------hit constants api");
+      if (commonConstants.success == true || commonConstants.data != null) {
+        print("------get Data From constants api");
+        final dataSnapshot = await AppFirebaseService()
+            .database
+            .child("masters/disableOnboarding")
+            .get();
+        if (dataSnapshot.value.toString() == "0") {
+          handleNavigate(commonConstants);
+        } else {
+          Future.delayed(
+            const Duration(seconds: 1),
+            () => Get.offAllNamed(RouteName.dashboard),
+          );
+        }
+        update();
+      } else {
+        print("------Not get Data From constants api");
+      }
+    } catch (e) {
+      debugPrint("------Throw error in the constants api" + e.toString());
+    }
+  }
+
+  handleNavigate(commonConstants) {
+    print("onboarding stated------");
+
+    if (commonConstants.data.is_onboarding_in_process.toString() == "0" ||
+        commonConstants.data.is_onboarding_in_process.toString() == "1") {
+      print("--------on------");
+      isNextPage.value = commonConstants.data.stage_no;
+
+      Get.put(HomeController()).showPopup = false;
+      onBoardingList = [1, 2, 3, 4, 5];
+      isOnPage.value = 1;
+      disableButton.value = false;
+
+      Get.toNamed(
+        RouteName.onBoardingScreen,
+      );
+    } else if (commonConstants.data.is_onboarding_in_process.toString() ==
+        "2") {
+      Get.put(HomeController()).showPopup = false;
+      if (commonConstants.data.onboarding_reject_stage_no.isNotEmpty) {
+        disableButton.value = false;
+        isRejected.value = true;
+
+        onBoardingList = commonConstants.data.onboarding_reject_stage_no;
+
+        if (onBoardingList.first == 1) {
+          isOnPage.value = 1;
+
+          Get.toNamed(
+            RouteName.onBoardingScreen,
+          );
+        } else if (onBoardingList.first == 2) {
+          isOnPage.value = 2;
+
+          Get.toNamed(
+            RouteName.onBoardingScreen2,
+          );
+        } else if (onBoardingList.first == 3) {
+          isOnPage.value = 3;
+
+          Get.toNamed(
+            RouteName.onBoardingScreen3,
+          );
+        } else if (onBoardingList.first == 4) {
+          isOnPage.value = 4;
+
+          Get.toNamed(
+            RouteName.onBoardingScreen4,
+          );
+        } else if (onBoardingList.first == 5) {
+          isOnPage.value = 5;
+
+          Get.toNamed(
+            RouteName.onBoardingScreen5,
+          );
+        }
+      } else {
+        disableButton.value = false;
+
+        if (commonConstants.data.stage_no.toString() == "0") {
+          onBoardingList = [1, 2, 3, 4, 5];
+          isOnPage.value = 1;
+
+          Get.toNamed(
+            RouteName.onBoardingScreen,
+          );
+        } else if (commonConstants.data.stage_no.toString() == "1") {
+          onBoardingList = [2, 3, 4, 5];
+          isOnPage.value = 2;
+
+          Get.toNamed(
+            RouteName.onBoardingScreen2,
+          );
+        } else if (commonConstants.data.stage_no.toString() == "2") {
+          onBoardingList = [3, 4, 5];
+          isOnPage.value = 3;
+
+          Get.toNamed(
+            RouteName.onBoardingScreen3,
+          );
+        } else if (commonConstants.data.stage_no.toString() == "3") {
+          onBoardingList = [4, 5];
+          isOnPage.value = 4;
+
+          Get.toNamed(
+            RouteName.onBoardingScreen4,
+          );
+        } else if (commonConstants.data.stage_no.toString() == "4") {
+          onBoardingList = [5];
+          isOnPage.value = 5;
+
+          Get.toNamed(
+            RouteName.onBoardingScreen5,
+          );
+        } else if (commonConstants.data.stage_no.toString() == "5") {
+          Get.toNamed(
+            RouteName.addEcomAutomation,
+          );
+        } else if (commonConstants.data.stage_no.toString() == "6") {
+          Get.toNamed(
+            RouteName.scheduleTraining1,
+          );
+        } else if (commonConstants.data.stage_no.toString() == "7") {
+          Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
+        } else if (commonConstants.data.stage_no.toString() == "8") {
+          Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
+        }
+      }
+    } else if (commonConstants.data.is_onboarding_in_process.toString() ==
+        "3") {
+      Get.put(HomeController()).showPopup = false;
+      showAllPopup.value = false;
+
+      disableButton.value = true;
+      if (commonConstants.data.stage_no.toString() == "4") {
+        Get.toNamed(
+          RouteName.onBoardingScreen5,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "5") {
+        Get.toNamed(
+          RouteName.addEcomAutomation,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "6") {
+        Get.toNamed(
+          RouteName.scheduleTraining1,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "7") {
+        Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
+      } else if (commonConstants.data.stage_no.toString() == "8") {
+        Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
+      }
+    } else if (commonConstants.data.is_onboarding_in_process.toString() ==
+        "4") {
+      showAllPopup.value = true;
+
+      Get.offNamed(
+        RouteName.dashboard,
+      );
+    }
+  }
 
   requestPermissions() async {
     var status = await Permission.contacts.status;

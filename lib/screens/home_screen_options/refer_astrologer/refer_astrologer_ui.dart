@@ -4,10 +4,12 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/select_your_birth_place_sheet.dart';
 import 'package:divine_astrologer/model/cityDataModel.dart';
 import 'package:divine_astrologer/screens/home_screen_options/refer_astrologer/refer_astrologer_controller.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../common/custom_light_yellow_btn.dart';
 
@@ -58,6 +60,73 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   inputType: TextInputType.text,
                   inputAction: TextInputAction.next,
                   hintText: "enterNameMsg".tr,
+                  errorBorder: appColors.white,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  "Father name",
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
+                const SizedBox(height: 5),
+                WhiteTextField(
+                  validator: (value) {
+                    if (value! == "") {
+                      return "";
+                    }
+                    return null;
+                  },
+                  controller: controller.state.fatherNameController,
+                  inputType: TextInputType.text,
+                  inputAction: TextInputAction.next,
+                  hintText: "Enter Astrologer's Father Name",
+                  errorBorder: appColors.white,
+                ),
+                const SizedBox(height: 10),
+                Text(
+                  "Date of Birth",
+                  style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
+                ),
+                const SizedBox(height: 5),
+                WhiteTextField(
+                  validator: (value) {
+                    if (value! == "") {
+                      return "";
+                    }
+                    return null;
+                  },
+                  controller: controller.state.dobController,
+                  inputType: TextInputType.text,
+                  readOnly: true,
+                  onTap: () {
+                    Utils.selectDateOrTime(
+                      initialDate: DateTime.now(),
+                      title: "selectDateBirth".tr,
+                      btnTitle: "confirmDateBirth".tr,
+                      pickerStyle: "DateCalendar",
+                      looping: true,
+                      onChange: (String datetime) {
+                        if (datetime != "") {
+                          DateTime data =
+                              DateFormat("dd MMMM yyyy").parse(datetime);
+                          controller.state.dobController.text =
+                              "${data.day.toString().padLeft(2, '0')}/${data.month.toString().padLeft(2, '0')}/${data.year.toString()}";
+                        }
+                      },
+                      onConfirm: (value) {
+                        if (value != "") {
+                          var temp = DateFormat('dd MMMM yyyy').parse(value);
+                          controller.state.selectDOB =
+                              DateFormat('yyyy-MM-dd').format(temp);
+                          DateTime data =
+                              DateFormat("dd MMMM yyyy").parse(value);
+                          controller.state.dobController.text =
+                              "${data.day.toString().padLeft(2, '0')}/${data.month.toString().padLeft(2, '0')}/${data.year.toString()}";
+                        }
+                      },
+                    );
+                  },
+                  inputAction: TextInputAction.next,
+                  hintText: "Enter Astrologer's Date of Birth",
                   errorBorder: appColors.white,
                 ),
                 const SizedBox(height: 10),
@@ -139,7 +208,8 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   readOnly: true,
                   hintText: "Enter Astrologer's City",
                   onTap: () {
-                    Get.bottomSheet(Padding(
+                    Get.bottomSheet(                              isScrollControlled: true,
+                        Padding(
                       padding: EdgeInsets.only(
                           bottom: MediaQuery.of(context).viewInsets.bottom),
                       child: AllCityListSheet(
@@ -303,6 +373,7 @@ class ReferAstrologerField extends StatelessWidget {
   final Icon? icon;
   final Widget? suffixIcon;
   final Color? errorBorder;
+  final from;
   final TextEditingController? controller;
   final String? Function(String? value)? validator;
   final int? maxLine;
@@ -317,6 +388,7 @@ class ReferAstrologerField extends StatelessWidget {
     required this.inputAction,
     this.errorBorder,
     this.icon,
+    this.from,
     this.suffixIcon,
     this.controller,
     this.validator,
@@ -332,13 +404,21 @@ class ReferAstrologerField extends StatelessWidget {
       height: height ?? 55.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 1.0,
-            offset: const Offset(0.1, 1.0),
-          ),
-        ],
+        boxShadow: from == "profile"
+            ? [
+                // BoxShadow(
+                //   color: Colors.grey.withOpacity(0.1),
+                //   blurRadius: 1,
+                //   offset: const Offset(1, 1),
+                // ),
+              ]
+            : [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 1.0,
+                  offset: const Offset(0.1, 1.0),
+                ),
+              ],
       ),
       child: TextFormField(
         controller: controller,
@@ -362,14 +442,18 @@ class ReferAstrologerField extends StatelessWidget {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: errorBorder ?? appColors.white,
+              color: from == "profile"
+                  ? appColors.grey.withOpacity(0.6)
+                  : errorBorder ?? appColors.white,
               width: 1.0,
             ),
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: errorBorder ?? appColors.white,
+              color: from == "profile"
+                  ? appColors.grey.withOpacity(0.6)
+                  : errorBorder ?? appColors.white,
               width: 1.0,
             ),
           ),
@@ -377,6 +461,8 @@ class ReferAstrologerField extends StatelessWidget {
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
               color: appColors.redColor,
+              // color:from == "profile"? appColors.grey : errorBorder ?? appColors.white,
+
               width: 1.0,
             ),
           ),

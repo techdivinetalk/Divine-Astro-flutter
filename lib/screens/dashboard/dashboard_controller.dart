@@ -1,9 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
-import 'dart:io';
 
-import 'package:android_intent_plus/android_intent.dart';
-import 'package:android_intent_plus/flag.dart';
 // import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:contacts_service/contacts_service.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -15,6 +12,7 @@ import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/ChatOrderResponse.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
+import 'package:divine_astrologer/notification_helper/notification_helpe.dart';
 import 'package:divine_astrologer/repository/pre_defind_repository.dart';
 import 'package:divine_astrologer/screens/dashboard/widgets/terms_and_condition_popup.dart';
 import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
@@ -38,12 +36,12 @@ import '../../common/MiddleWare.dart';
 import '../../common/app_exception.dart';
 import '../../common/app_textstyle.dart';
 import '../../common/common_functions.dart';
-import '../../di/fcm_notification.dart';
 import '../../model/astrologer_gift_response.dart';
 import '../../model/chat/req_common_chat_model.dart';
 import '../../model/chat/res_common_chat_success.dart';
 import '../../model/chat_assistant/chat_assistant_astrologer_response.dart';
 import '../../model/res_login.dart';
+import '../../pages/home/home_controller.dart';
 import '../../repository/astrologer_profile_repository.dart';
 import '../../repository/chat_repository.dart';
 
@@ -105,11 +103,13 @@ class DashboardController extends GetxController
       if (MiddleWare.instance.currentPage ==
           RouteName.chatMessageWithSocketUI) {
         getOrderFromApi();
+        print("getOrderFromApi ");
         if (preferenceService.getUserDetail() != null) {
           // Check for null user details
           appFirebaseService.readData(
               'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
         } else {
+          print("user not found dashboard controller");
           divineSnackBar(data: "User Not Found");
         }
       }
@@ -301,6 +301,7 @@ class DashboardController extends GetxController
     if (!kDebugMode) {
       checkForUpdate();
     }
+
     FirebaseMessaging.instance.getInitialMessage().then((v) {
       RemoteMessage? remoteMessage = v;
       if (remoteMessage != null) {
@@ -312,14 +313,15 @@ class DashboardController extends GetxController
             dataList.name = remoteMessage.data["title"];
             Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
           } else if (remoteMessage.data["orderId"] == "2") {
-
             final ref = AppFirebaseService()
                 .database
-                .child("order/${AppFirebaseService().orderData.value["orderId"]}").path;
+                .child(
+                    "order/${AppFirebaseService().orderData.value["orderId"]}")
+                .path;
 
-            if(ref.split("/").last == remoteMessage.data["order_id"]){
+            if (ref.split("/").last == remoteMessage.data["order_id"]) {
               Get.toNamed(RouteName.acceptChatRequestScreen);
-            } else{
+            } else {
               Fluttertoast.showToast(msg: "Your order has been ended");
             }
 
@@ -327,9 +329,9 @@ class DashboardController extends GetxController
             // acceptOrRejectChat(
             //     orderId: int.parse(remoteMessage.data["order_id"]),
             //     queueId: int.parse(remoteMessage.data["queue_id"]));
-          } else if(remoteMessage.data["type"] == "20"){
-            if(MiddleWare.instance.currentPage == RouteName.dashboard){
-              if(Get.isRegistered<DashboardController>()){
+          } else if (remoteMessage.data["type"] == "20") {
+            if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+              if (Get.isRegistered<DashboardController>()) {
                 Get.find<DashboardController>().selectedIndex.value = 3;
               }
             }
@@ -347,14 +349,14 @@ class DashboardController extends GetxController
         dataList.name = message.data["title"];
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
       } else if (message.data["type"] == "2") {
-
         final ref = AppFirebaseService()
             .database
-            .child("order/${AppFirebaseService().orderData.value["orderId"]}").path;
+            .child("order/${AppFirebaseService().orderData.value["orderId"]}")
+            .path;
 
-        if(ref.split("/").last == message.data["order_id"]){
+        if (ref.split("/").last == message.data["order_id"]) {
           Get.toNamed(RouteName.acceptChatRequestScreen);
-        } else{
+        } else {
           Fluttertoast.showToast(msg: "Your order has been ended");
         }
         // acceptOrRejectChat(
@@ -415,11 +417,14 @@ class DashboardController extends GetxController
     preferenceService.setConstantDetails(commonConstants);
     preferenceService
         .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
+
     if (commonConstants.data.notice == null ||
         commonConstants.data.notice == "null") {
     } else {
       log(commonConstants.data.notice.toString());
-      showRecommendedPopupAlert();
+      if (showAllPopup.value == true) {
+        showRecommendedPopupAlert();
+      }
     } //added by: dev-dharam
     Get.find<SharedPreferenceService>()
         .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
@@ -443,11 +448,25 @@ class DashboardController extends GetxController
     }
 
     loadPreDefineData();
-    initMessaging();
+    // initMessaging();
+    Future.delayed(
+      const Duration(milliseconds: 200),
+      () {
+        NotificationHelper().firebaseNotificationInit();
+      },
+    );
     // firebaseMessagingConfig(Get.context!);
     getConstantDetailsData();
     print("currentTime");
     cacheGift();
+    if (verifyOnboarding.toString() == "0") {
+      if (commonConstants?.data != null) {
+        imageUploadBaseUrl.value =
+            commonConstants?.data?.imageUploadBaseUrl ?? "";
+      }
+
+      // navigateForOnBoardingGlobal(commonConstants);
+    } else {}
   }
 
   Future<void> checkForUpdate() async {
@@ -622,17 +641,18 @@ class DashboardController extends GetxController
         update();
 
         PackageInfo packageInfo = await PackageInfo.fromPlatform();
-
-        if (int.parse(data.data!.appVersion!.split(".").join("")) >
-            int.parse(packageInfo.version.split(".").join(""))) {
-
-          Get.bottomSheet(
-            const ForceUpdateSheet(),
-            isDismissible: false,
-          );
-          // showTutorial(context);
-        } else {
-          // showTutorial(context);
+        if (showAllPopup.value == true) {
+          if (int.parse(data.data!.appVersion!.split(".").join("")) >
+              int.parse(packageInfo.version.split(".").join(""))) {
+            Get.bottomSheet(
+              const ForceUpdateSheet(),
+              isDismissible: false,
+              enableDrag: false,
+            );
+            // showTutorial(context);
+          } else {
+            // showTutorial(context);
+          }
         }
       }
 
@@ -795,7 +815,7 @@ class DashboardController extends GetxController
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    "Queue Tab",
+                    "Orders",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -1315,4 +1335,152 @@ class DashboardController extends GetxController
 //     );
 //   }
 // }
+}
+
+navigateForOnBoardingGlobal(commonConstants) async {
+  print("onboarding stated------");
+
+  if (commonConstants.data.is_onboarding_in_process.toString() == "0" ||
+      commonConstants.data.is_onboarding_in_process.toString() == "1") {
+    print("--------on------");
+    isNextPage.value = commonConstants.data.stage_no;
+
+    Get.put(DashboardController(PreDefineRepository()));
+    Get.put(HomeController()).showPopup = false;
+    onBoardingList = [1, 2, 3, 4, 5];
+    isOnPage.value = 1;
+    disableButton.value = false;
+    showAllPopup.value = false;
+
+    Get.toNamed(
+      RouteName.onBoardingScreen,
+    );
+  } else if (commonConstants.data.is_onboarding_in_process.toString() == "2") {
+    Get.put(DashboardController(PreDefineRepository()));
+
+    Get.put(HomeController()).showPopup = false;
+    showAllPopup.value = false;
+
+    if (commonConstants.data.onboarding_reject_stage_no.isNotEmpty) {
+      disableButton.value = false;
+
+      isRejected.value = true;
+
+      onBoardingList = commonConstants.data.onboarding_reject_stage_no;
+      if (onBoardingList.first == 1) {
+        isOnPage.value = 1;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen,
+        );
+      } else if (onBoardingList.first == 2) {
+        isOnPage.value = 2;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen2,
+        );
+      } else if (onBoardingList.first == 3) {
+        isOnPage.value = 3;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen3,
+        );
+      } else if (onBoardingList.first == 4) {
+        isOnPage.value = 4;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen4,
+        );
+      } else if (onBoardingList.first == 5) {
+        isOnPage.value = 5;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen5,
+        );
+      }
+    } else {
+      disableButton.value = false;
+
+      if (commonConstants.data.stage_no.toString() == "0") {
+        onBoardingList = [1, 2, 3, 4, 5];
+        isOnPage.value = 1;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "1") {
+        onBoardingList = [2, 3, 4, 5];
+        isOnPage.value = 2;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen2,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "2") {
+        onBoardingList = [3, 4, 5];
+        isOnPage.value = 3;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen3,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "3") {
+        onBoardingList = [4, 5];
+        isOnPage.value = 4;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen4,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "4") {
+        onBoardingList = [5];
+        isOnPage.value = 5;
+
+        Get.toNamed(
+          RouteName.onBoardingScreen5,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "5") {
+        Get.toNamed(
+          RouteName.addEcomAutomation,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "6") {
+        Get.toNamed(
+          RouteName.scheduleTraining1,
+        );
+      } else if (commonConstants.data.stage_no.toString() == "7") {
+        Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
+      } else if (commonConstants.data.stage_no.toString() == "8") {
+        Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
+      }
+    }
+  } else if (commonConstants.data.is_onboarding_in_process.toString() == "3") {
+    disableButton.value = true;
+    Get.put(HomeController()).showPopup = false;
+    showAllPopup.value = false;
+
+    if (commonConstants.data.stage_no.toString() == "4") {
+      onBoardingList = [5];
+      isOnPage.value = 5;
+
+      Get.toNamed(
+        RouteName.onBoardingScreen5,
+      );
+    } else if (commonConstants.data.stage_no.toString() == "5") {
+      Get.toNamed(
+        RouteName.addEcomAutomation,
+      );
+    } else if (commonConstants.data.stage_no.toString() == "6") {
+      Get.toNamed(
+        RouteName.scheduleTraining1,
+      );
+    } else if (commonConstants.data.stage_no.toString() == "7") {
+      Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
+    } else if (commonConstants.data.stage_no.toString() == "8") {
+      Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
+    }
+  } else if (commonConstants.data.is_onboarding_in_process.toString() == "4") {
+    print('homeeeee1');
+    showAllPopup.value = true;
+
+    Get.offNamed(
+      RouteName.dashboard,
+    );
+  }
 }

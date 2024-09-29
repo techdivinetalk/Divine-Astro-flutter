@@ -28,6 +28,7 @@ import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart' hide FormData;
 import 'package:get/get_connect/http/src/status/http_status.dart';
+import 'package:network_info_plus/network_info_plus.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../common/app_exception.dart';
@@ -37,18 +38,25 @@ import '../model/AddSupportIssueDataModel.dart';
 import '../model/AllFinancialIssuesModel.dart';
 import '../model/AllSupportIssueModel.dart';
 import '../model/AstroRitentionModel.dart';
+import '../model/AstroTrainingSessionModel.dart';
 import '../model/FinancialCreateIssueModel.dart';
+import '../model/GetAstroOnboarding.dart';
+import '../model/OnBoardingStageModel.dart';
 import '../model/PassBookDataModel.dart';
 import '../model/RitentionPopupModel.dart';
 import '../model/ScreenshotUploadModel.dart';
+import '../model/SubmitScheduleTrainingModel.dart';
 import '../model/TechnicalIssuesData.dart';
 import '../model/TechnicalSupport.dart';
+import '../model/astrologer_training_session_response.dart';
 import "../model/blocked_customers_response.dart";
 import '../model/cityDataModel.dart';
 import '../model/constant_details_model_class.dart';
 import '../model/delete_customer_model_class.dart';
 import '../model/leave/LeaveCancelModel.dart';
 import '../model/leave/LeaveReasonsModel.dart';
+import '../model/number_change_request_model/number_change_response_model.dart';
+import '../model/number_change_request_model/verify_otp_response.dart';
 import '../model/report_review_model_class.dart';
 import '../model/res_blocked_customers.dart';
 import '../model/res_login.dart';
@@ -630,6 +638,15 @@ class UserRepository extends ApiProvider {
   }
 
   Future<ConstantDetailsModelClass> constantDetailsData() async {
+    String? _ipAddress = "Fetching...";
+    final info = NetworkInfo();
+
+    // Get the Wi-Fi IP address
+    final wifiIP = await info.getWifiIP(); // 192.168.1.43
+    // var dat = info.get
+    print('ip_address: $_ipAddress');
+    print('ip_address: $wifiIP');
+
     try {
       PackageInfo packageInfo = await PackageInfo.fromPlatform();
       String version = packageInfo.version;
@@ -653,6 +670,8 @@ class UserRepository extends ApiProvider {
         param["device_sdk_code"] = buildNumber;
         param["appCurrentVersion"] = version;
         param["device_os"] = 1;
+        param['ip_address'] = wifiIP ?? 'Unable to get IP address';
+
         print('🥹🥹🥹🥹🥹🥹🥹🥹');
         print(jsonEncode(param).toString());
         print('🥹🥹🥹🥹🥹🥹🥹🥹');
@@ -691,6 +710,84 @@ class UserRepository extends ApiProvider {
           return constantDetailsModelClass;
         } else {
           throw CustomException(json.decode(response.body)["error"]);
+        }
+      } else {
+        throw CustomException(json.decode(response.body)[0]["message"]);
+      }
+    } catch (e, s) {
+      Utils().handleCatchPreferenceServiceErase();
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<ConstantDetailsModelClass> constantDetailsData2api() async {
+    String? _ipAddress = "Fetching...";
+    final info = NetworkInfo();
+
+    // Get the Wi-Fi IP address
+    final wifiIP = await info.getWifiIP(); // 192.168.1.43
+    // var dat = info.get
+
+    print('ip_address: $_ipAddress');
+    print('ip_address: $wifiIP');
+
+    try {
+      PackageInfo packageInfo = await PackageInfo.fromPlatform();
+      String version = packageInfo.version;
+      String buildNumber = packageInfo.buildNumber;
+      DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+      AndroidDeviceInfo? androidInfo;
+      IosDeviceInfo iosDeviceInfo;
+      if (Platform.isAndroid) {
+        androidInfo = await deviceInfo.androidInfo;
+        print('Running on ${androidInfo!.model}'); // e.g., "Pixel 3"
+        print('App Version: $version');
+      } else {
+        iosDeviceInfo = await deviceInfo.iosInfo;
+      }
+
+      Map<String, dynamic> param = new Map();
+      if (Platform.isAndroid) {
+        param["device_brand"] = androidInfo!.brand;
+        param["device_model"] = androidInfo.model;
+        param["device_manufacture"] = androidInfo.manufacturer;
+        param["device_sdk_code"] = buildNumber;
+        param["appCurrentVersion"] = version;
+        param['ip_address'] = wifiIP ?? 'Unable to get IP address';
+        print('🥹🥹🥹🥹🥹🥹🥹🥹');
+        print(jsonEncode(param).toString());
+        print('🥹🥹🥹🥹🥹🥹🥹🥹');
+      }
+
+      final response = await post(
+        constantDetails,
+        headers: await getJsonHeaderURL(),
+        body: jsonEncode(param).toString(),
+      );
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+      log('😇😇😇😇😇😇😇😇');
+      log(response.body);
+      log('😇😇😇😇😇😇😇😇');
+      log("response.body");
+      final constantDetailsModelClass =
+          ConstantDetailsModelClass.fromJson(json.decode(response.body));
+
+      if (response.statusCode == 200) {
+        final constantDetailsModelClass =
+            ConstantDetailsModelClass.fromJson(json.decode(response.body));
+        if (constantDetailsModelClass.statusCode == successResponse &&
+            constantDetailsModelClass.success == true) {
+          log("1111111 - ${constantDetailsModelClass.toString()}");
+          return constantDetailsModelClass;
+        } else {
+          return constantDetailsModelClass;
+
+          // throw CustomException(json.decode(response.body)["error"]);
         }
       } else {
         throw CustomException(json.decode(response.body)[0]["message"]);
@@ -811,6 +908,238 @@ class UserRepository extends ApiProvider {
         }
       } else {
         throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<OnBoardingStageModel> onBoardingApiFun(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await post(addAstroOnboarding,
+          body: jsonEncode(param), headers: await getJsonHeaderURL());
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final data = OnBoardingStageModel.fromJson(jsonDecode(response.body));
+          return data;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<GetAstroOnboarding> getOnBoardingApiFun(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await post(getAstroOnboarding,
+          body: jsonEncode(param), headers: await getJsonHeaderURL());
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final data = GetAstroOnboarding.fromJson(jsonDecode(response.body));
+          return data;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<AstroTrainingSessionModel> getScheduleTrainingsss(
+      Map<String, dynamic> param) async {
+    try {
+      final response =
+          await get(getScheduleMeetings, headers: await getJsonHeaderURL());
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final data =
+              AstroTrainingSessionModel.fromJson(jsonDecode(response.body));
+          return data;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<SubmitScheduleTrainingModel> submitScheduleTrainingsss(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await post(addAstroScheduleMeetings,
+          body: jsonEncode(param), headers: await getJsonHeaderURL());
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final data =
+              SubmitScheduleTrainingModel.fromJson(jsonDecode(response.body));
+          return data;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<AstrologerTrainingSessionResponse?>
+      doGetAstrologerTrainingSession() async {
+    try {
+      final response = await post(getAstrologerTrainingSession);
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      } else if (response.statusCode == 110 ||
+          response.statusCode == HttpStatus.networkConnectTimeoutError ||
+          response.statusCode == HttpStatus.networkAuthenticationRequired) {
+        divineSnackBar(
+            data: "No Internet connection", color: appColors.redColor);
+      }
+      if (response.statusCode == 200 && json.decode(response.body) != null) {
+        print("test_body: ${response.body}");
+        print("test_body_decode: ${json.decode(response.body)}");
+
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else if (json.decode(response.body)["status_code"] == 200 &&
+            json.decode(response.body)["success"] == true &&
+            json.decode(response.body)["data"] != null) {
+          return AstrologerTrainingSessionResponse.fromJson(
+              json.decode(response.body));
+        } else {
+          return null;
+        }
+      } else {
+        return null;
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<NumberChangeResponse> sendNumberChangeOtpAPI(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await post(
+        sendOtpNumberChange,
+        headers: await getJsonHeaderURL(version: 7),
+        body: jsonEncode(param),
+      );
+
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final numberChangeResponse =
+              NumberChangeResponse.fromJson(json.decode(response.body));
+          if (numberChangeResponse.statusCode == successResponse &&
+              numberChangeResponse.success!) {
+            return numberChangeResponse;
+          } else {
+            throw CustomException(json.decode(response.body)["message"]);
+          }
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<VerifyOtpResponse> verifyOtpAPi(Map<String, dynamic> param) async {
+    try {
+      final response = await post(
+        verifyOtpNumberChange,
+        headers: await getJsonHeaderURL(version: 7),
+        body: jsonEncode(param),
+      );
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final verifyOtpResponse =
+              VerifyOtpResponse.fromJson(json.decode(response.body));
+          if (verifyOtpResponse.statusCode == successResponse &&
+              verifyOtpResponse.success!) {
+            return verifyOtpResponse;
+          } else {
+            throw CustomException(json.decode(response.body)["message"]);
+          }
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
       }
     } catch (e, s) {
       debugPrint("we got $e $s");

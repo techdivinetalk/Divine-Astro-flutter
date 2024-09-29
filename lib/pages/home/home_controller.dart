@@ -462,7 +462,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         AppFirebaseService().readData(
             'astrologer/${preferenceService.getUserDetail()!.id}/realTime');
       } else {
-        divineSnackBar(data: "User Not Found");
+        log("user not found home controller");
+        // divineSnackBar(data: "User Not Found");
       }
       //appFirebaseService.masterData('masters');
     });
@@ -472,7 +473,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       if (event.name == "giftCount") {
         if (int.parse(event.data!["giftCount"].toString()) > 0) {
           if (MiddleWare.instance.currentPage != RouteName.chatMessageUI) {
-            showGiftBottomSheet(event.data?["giftCount"], contextDetail,
+            showGiftBottomSheet(event.data?["giftCount"], Get.context!,
                 baseUrl: preferenceService.getBaseImageURL());
           }
         }
@@ -776,6 +777,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       var response = await HomePageRepository().getDashboardData(params);
       isFeedbackAvailable.value = response.success ?? false;
       homeData = response.data;
+      print("homeData!.trainingVideo!-->>${homeData!.trainingVideo!.length}");
       loading = Loading.loaded;
       updateCurrentData();
       shopDataSync.value = true;
@@ -787,16 +789,18 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       String lastShownDate = await SharedPreferenceService().getLastShowDate();
       if (homeData?.retention < 10 && lastShownDate != currentDate) {
         await SharedPreferenceService().setLastShowDate(currentDate);
-        Get.bottomSheet(CommonInfoSheet(
-          isBackButton: false,
-          title: "⚠ Warning Astrologer ⚠".tr,
-          subTitle:
-              "Your user retention is below industry standard. Your retention is less than 10% Your are not eligible for Bonus wallet. Please review and improve strategies promptly to increase User retention rate. Thank you. 🌟"
-                  .tr,
-          onTap: () {
-            Get.back();
-          },
-        ));
+        if (showAllPopup.value == true) {
+          Get.bottomSheet(CommonInfoSheet(
+            isBackButton: false,
+            title: "⚠ Warning Astrologer ⚠".tr,
+            subTitle:
+                "Your user retention is below industry standard. Your retention is less than 10% Your are not eligible for Bonus wallet. Please review and improve strategies promptly to increase User retention rate. Thank you. 🌟"
+                    .tr,
+            onTap: () {
+              Get.back();
+            },
+          ));
+        }
       }
 
       if (homeData?.technical_support == null ||
@@ -912,6 +916,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       selectedChatDate.value = formattedDate;
       selectedChatTime.value = formattedTime;
     }
+
     if (homeData?.sessionType?.callSchedualAt != null &&
         homeData?.sessionType?.callSchedualAt != '') {
       DateTime formattedDate = DateFormat("yyyy-MM-dd hh:mm:ss")
@@ -1153,10 +1158,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     try {
       AstrologerTrainingSessionResponse? response =
           await homePageRepository.doGetAstrologerTrainingSession();
-
+print("training videsooooooooo-- ${response.toString()}");
       if (response != null && response.statusCode == 200) {
         if (response.data != null && response.data!.isNotEmpty) {
           astrologerTrainingSessionLst.addAll(response.data!);
+          print("astrologerTrainingSessionLst.length-->>${astrologerTrainingSessionLst.length}");
         }
       }
     } catch (error) {
@@ -1468,9 +1474,10 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   }
 
   void scheduleCall(String value, bool fromSwitch) async {
-    if (fromSwitch) {
-      showLoader();
-    }
+    // if (fromSwitch) {
+    //   showLoader();
+    // }
+    showLoader();
     var selectedTime = value == "CHAT"
         ? selectedChatTime.value
         : value == "CALL"
@@ -1536,6 +1543,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               // }
             },
           );
+        } else{
+          sessionTypeLoading.value = Loading.loaded;
         }
         if (fromSwitch && value == "CALL") {
           await callSwitchFN(
@@ -1546,6 +1555,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
               // }
             },
           );
+        } else{
+          sessionTypeLoading.value = Loading.loaded;
         }
       } catch (err) {
         if (err is AppException) {

@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:io';
 
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -104,7 +103,8 @@ class HomeUI extends GetView<HomeController> {
               leading: IconButton(
                 onPressed: () {
                   controller.showPopup = false;
-                    controller.homeScreenKey.currentState?.openDrawer();},
+                  controller.homeScreenKey.currentState?.openDrawer();
+                },
                 highlightColor: appColors.transparent,
                 splashColor: appColors.transparent,
                 icon: const Icon(Icons.menu),
@@ -208,13 +208,8 @@ class HomeUI extends GetView<HomeController> {
                       // padding: EdgeInsets.symmetric(horizontal: 20.w),
                       child: Column(
                         children: [
-                          //   controller.imageSS == null
-                          //       ? SizedBox()
-                          //       : Image.file(
-                          //           height: 50.h,
-                          //           width: 24.w,
-                          //           File(controller.imageSS.toString()),
-                          //         ),
+                          // RechargeScreen(),
+
                           // const SizedBox(height: 15),
                           controller.showAgreement == 1 &&
                                   isAgreement.value == 1
@@ -495,7 +490,7 @@ class HomeUI extends GetView<HomeController> {
                                                                     .start,
                                                             children: [
                                                               Text(
-                                                                "₹${abbreviateNumber(controller.homeData?.retention?.toStringAsFixed(2))}%",
+                                                                "${abbreviateNumber(controller.homeData?.retention?.toStringAsFixed(2))}%",
                                                                 // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
                                                                 maxLines: 1,
                                                                 style: AppTextStyle.textStyle14(
@@ -746,7 +741,7 @@ class HomeUI extends GetView<HomeController> {
                                                                     .start,
                                                             children: [
                                                               Text(
-                                                                "₹${abbreviateNumber(controller.homeData?.repurchaseRate?.toStringAsFixed(2))}%",
+                                                                "${abbreviateNumber(controller.homeData?.repurchaseRate?.toStringAsFixed(2))}%",
                                                                 // "₹${controller.homeData?.todaysEarning?.toStringAsFixed(2)}",
                                                                 maxLines: 1,
 
@@ -2594,77 +2589,78 @@ class HomeUI extends GetView<HomeController> {
                         ],
                       ),
                     ),
-                    // showHelp.value.toString() == "0"
-                    //     ? const SizedBox()
-                    //     : Positioned(
-                    //         top: controller.yPosition,
-                    //         left: controller.xPosition + 10,
-                    //         child: Container(
-                    //           margin: EdgeInsets.symmetric(horizontal: 20.w),
-                    //           child: GestureDetector(
-                    //               onPanUpdate: (tapInfo) {
-                    //                 double newXPosition =
-                    //                     controller.xPosition + tapInfo.delta.dx;
-                    //                 double newYPosition =
-                    //                     controller.yPosition + tapInfo.delta.dy;
-                    //
-                    //                 // Ensure newXPosition is within screen bounds
-                    //                 newXPosition = newXPosition.clamp(
-                    //                     0.0,
-                    //                     maxWidth -
-                    //                         50); // Assuming widget width is 50
-                    //                 newYPosition = newYPosition.clamp(
-                    //                     0,
-                    //                     maxHeight -
-                    //                         50); // Assuming widget height is 50
-                    //
-                    //                 controller.xPosition = newXPosition;
-                    //                 controller.yPosition = newYPosition;
-                    //                 controller.update();
-                    //               },
-                    //               onPanEnd: (details) {
-                    //                 if (controller.xPosition + 25 <
-                    //                     Get.width / 2) {
-                    //                   controller.xPosition = 0;
-                    //                 } else {
-                    //                   controller.xPosition = Get.width - 70;
-                    //                 }
-                    //
-                    //                 controller.update();
-                    //               },
-                    //               onTap: () {
-                    //                 // Get.toNamed(
-                    //                 //   RouteName.technicalIssues,
-                    //                 // );
-                    //                 controller.whatsapp();
-                    //               },
-                    //               child: Container(
-                    //                   key: DashboardController(
-                    //                           PreDefineRepository())
-                    //                       .keyHelp,
-                    //                   height: 50,
-                    //                   width: 50,
-                    //                   decoration: BoxDecoration(
-                    //                     color: appColors.guideColor,
-                    //                     borderRadius: BorderRadius.circular(25.0),
-                    //                   ),
-                    //                   child: Center(
-                    //                     child: Column(
-                    //                       mainAxisAlignment:
-                    //                           MainAxisAlignment.center,
-                    //                       children: [
-                    //                         Assets.images.icHelp
-                    //                             .svg(color: appColors.white),
-                    //                         Text(
-                    //                           "help".tr,
-                    //                           style: AppTextStyle.textStyle10(
-                    //                               fontColor: appColors.white,
-                    //                               fontWeight: FontWeight.w700),
-                    //                         )
-                    //                       ],
-                    //                     ),
-                    //                   ))),
-                    //         ))
+                    isAstroCare.value == 0
+                        ? const SizedBox()
+                        : Positioned(
+                            top: controller.yPosition,
+                            left: controller.xPosition + 10,
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 20.w),
+                              child: GestureDetector(
+                                  onPanUpdate: (tapInfo) {
+                                    double newXPosition =
+                                        controller.xPosition + tapInfo.delta.dx;
+                                    double newYPosition =
+                                        controller.yPosition + tapInfo.delta.dy;
+
+                                    // Ensure newXPosition is within screen bounds
+                                    newXPosition = newXPosition.clamp(
+                                        0.0,
+                                        maxWidth -
+                                            50); // Assuming widget width is 50
+                                    newYPosition = newYPosition.clamp(
+                                        0,
+                                        maxHeight -
+                                            50); // Assuming widget height is 50
+
+                                    controller.xPosition = newXPosition;
+                                    controller.yPosition = newYPosition;
+                                    controller.update();
+                                  },
+                                  onPanEnd: (details) {
+                                    if (controller.xPosition + 25 <
+                                        Get.width / 2) {
+                                      controller.xPosition = 0;
+                                    } else {
+                                      controller.xPosition = Get.width - 70;
+                                    }
+
+                                    controller.update();
+                                  },
+                                  onTap: () {
+                                    // Get.toNamed(
+                                    //   RouteName.technicalIssues,
+                                    // );
+                                    controller.whatsapp();
+                                  },
+                                  child: Container(
+                                      key: DashboardController(
+                                              PreDefineRepository())
+                                          .keyHelp,
+                                      height: 50,
+                                      width: 50,
+                                      decoration: BoxDecoration(
+                                        color: appColors.guideColor,
+                                        borderRadius:
+                                            BorderRadius.circular(25.0),
+                                      ),
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Assets.images.icHelp
+                                                .svg(color: appColors.white),
+                                            Text(
+                                              "help".tr,
+                                              style: AppTextStyle.textStyle10(
+                                                  fontColor: appColors.white,
+                                                  fontWeight: FontWeight.w700),
+                                            )
+                                          ],
+                                        ),
+                                      ))),
+                            ))
                   ]),
                 );
               } else {
@@ -3943,10 +3939,8 @@ class HomeUI extends GetView<HomeController> {
                                   log("here is it is comming - ${chatSwitch.value}");
 
                                   if (chatSwitch.value) {
-                                    print("true ------->");
                                     controller.selectDateTimePopupForChat(true);
                                   } else {
-                                    print("false ------->");
                                     await controller.chatSwitchFN(
                                       onComplete: () {
                                         // if (controller.chatSwitch.value) {
@@ -3971,7 +3965,8 @@ class HomeUI extends GetView<HomeController> {
                                         chatSwitch.value
                                     ? InkWell(
                                         onTap: () => controller
-                                            .selectDateTimePopupForChat(true),
+                                            .selectDateTimePopupForChat(
+                                                chatSwitch.value),
                                         child: Container(
                                           height: 31.h,
                                           decoration: BoxDecoration(
@@ -4086,7 +4081,8 @@ class HomeUI extends GetView<HomeController> {
                                         callSwitch.value
                                     ? InkWell(
                                         onTap: () => controller
-                                            .selectDateTimePopupForCall(true),
+                                            .selectDateTimePopupForCall(
+                                                callSwitch.value),
                                         child: Container(
                                           // width: 128.w,
                                           height: 31.h,
@@ -4613,7 +4609,7 @@ class HomeUI extends GetView<HomeController> {
     //     (controller.homeData?.trainingVideo ?? []).isEmpty) {
     //   return const SizedBox.shrink();
     // }
-    return controller!.astrologerTrainingSessionLst.isNotEmpty
+    return controller!.homeData != null && controller!.homeData!.trainingVideo!.isNotEmpty
         ? Container(
             width: double.infinity,
             margin: EdgeInsets.only(
@@ -5782,18 +5778,19 @@ class ChatAssistanceDataTileHome extends StatelessWidget {
                         children: [
                           ConstrainedBox(
                             constraints: BoxConstraints(
-                                maxWidth: MediaQuery.of(context).size.width*0.35
-                            ),
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.35),
                             child: CustomText(
                               data.customerName ?? '',
                               fontSize: 16.sp,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          if(data.level != null && data.level != "") Padding(
-                            padding: const EdgeInsets.only(left: 5.0),
-                            child: LevelWidget(level: data.level ?? "0"),
-                          ),
+                          if (data.level != null && data.level != "")
+                            Padding(
+                              padding: const EdgeInsets.only(left: 5.0),
+                              child: LevelWidget(level: data.level ?? "0"),
+                            ),
                           const Spacer(),
                           Container(
                             decoration: BoxDecoration(
@@ -5858,6 +5855,175 @@ class ChatAssistanceDataTileHome extends StatelessWidget {
                 : const SizedBox())
           ],
         ),
+      ),
+    );
+  }
+}
+
+class RechargeScreen extends StatelessWidget {
+  List data = ["₹ 200", "₹ 300", "₹ 400"];
+  @override
+  Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    var selected;
+    return Padding(
+      padding: EdgeInsets.only(top: 6, bottom: 6, left: 10, right: 10),
+      child: Container(
+        width: screenWidth * 0.8, // 80% of the screen width
+        padding: const EdgeInsets.all(10.0),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: appColors.white,
+          boxShadow: [
+            BoxShadow(
+              color: appColors.grey.withOpacity(0.2),
+              blurRadius: 2,
+              spreadRadius: 2,
+            ),
+          ],
+          // border: Border.all(color: Colors.grey.shade300),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RichText(
+              text: TextSpan(
+                // text: 'Hello ', // Default text style
+                // style: DefaultTextStyle.of(context).style,
+
+                children: <TextSpan>[
+                  TextSpan(
+                      text: 'Low balance!',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400,
+                          color: Color(0xffFFDF00))),
+                  TextSpan(
+                      text: ' Recharge to continue this chat',
+                      style: TextStyle(
+                          fontWeight: FontWeight.w400, color: appColors.black)),
+                ],
+              ),
+            ),
+            SizedBox(height: 10),
+            GridView.builder(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 3, // 3 buttons in a row
+                crossAxisSpacing: 20,
+                mainAxisSpacing: 5,
+                childAspectRatio: 2.2, // To control the size of each button
+              ),
+              itemCount: data.length,
+
+              shrinkWrap: true,
+              physics:
+                  NeverScrollableScrollPhysics(), // Prevent scrolling inside GridView
+              itemBuilder: (context, index) {
+                return Container(
+                  height: 30,
+                  width: 70,
+                  decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(10),
+                      color: Colors.greenAccent.withOpacity(0.1),
+                      border: Border.all(
+                        color: appColors.green.withOpacity(0.9),
+                      )),
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        // top: 0, bottom: 6, left: 10, right: 10
+                        ),
+                    child: Center(
+                      child: Text(
+                        data[index],
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w600,
+                          color: appColors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ); // return _buildAmountButton(context, "200");
+              },
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'PAY USING',
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        color: appColors.grey,
+                        fontSize: 12,
+                      ),
+                    ),
+                    DropdownButton<String>(
+                      value: 'GPay',
+                      underline: SizedBox(),
+                      // itemHeight:40,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w400,
+                        color: appColors.black,
+                        fontSize: 12,
+                      ),
+                      items: <String>['GPay', 'Paytm', 'PhonePe']
+                          .map((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                      onChanged: (_) {},
+                    ),
+                  ],
+                ),
+                Container(
+                  height: 40,
+                  width: 100,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: appColors.green,
+                  ),
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                        // top: 0, bottom: 6, left: 10, right: 10
+                        ),
+                    child: Center(
+                      child: Text(
+                        "Recharge Now",
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: appColors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildAmountButton(BuildContext context, String amount) {
+    return ElevatedButton(
+      onPressed: () {},
+      style: ElevatedButton.styleFrom(
+        side: BorderSide(color: Colors.green), // Border color
+        padding: EdgeInsets.symmetric(vertical: 16),
+      ),
+      child: Text(
+        amount,
+        style: TextStyle(color: Colors.black),
       ),
     );
   }

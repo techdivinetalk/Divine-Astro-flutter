@@ -20,23 +20,47 @@ class ApiProvider {
   static const String socketUrl = "https://list.divinetalk.live";
 
   static String debugingUrl = "http://13.235.46.27/api/astro/$version/";
+  // static String baseUrl =
+  //     "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+
   static String baseUrl =
       "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+  static String debugUrl = "http://4.188.246.208/api/astro/$version/";
+  // static String baseUrl =
+  //     "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+
   static const String getOnlineOfflineStatus =
       "https://list.divinetalk.live/api/v3/getAstroStatus?uniqueNo=";
   static String imageBaseUrl =
       "${imageUploadBaseUrl.value}/api/astro/$version/";
+
   static const String astOnlineOffline =
       "https://list.divinetalk.live/api/v3/updateAstroStatusV2?unique_no=";
-  static const String astrologerAgreement =
-      "http://20.193.154.99:8080/api/v1/getAstroAgreement?astrologer_id=";
-  static const String astrologerFaceVerification =
-      "http://20.193.154.99:8080/api/v1/uploadAstroImage?astrologer_id=";
-  static const String astrologerAstroSign =
-      "http://20.193.154.99:8080/api/v1/uploadAstroSign?astrologer_id=";
 
+  static const String agreementBase =
+      // kDebugMode
+      //     ? "http://20.193.154.99:8081/api/v1/"
+      //     :
+      "http://20.193.154.99:8080/api/v1/";
+
+  static const String astrologerAgreement =
+      "${agreementBase}getAstroAgreement?astrologer_id=";
+  static const String astrologerFaceVerification =
+      "${agreementBase}uploadAstroImage?astrologer_id=";
+  static const String astrologerAstroSign =
+      "${agreementBase}uploadAstroSign?astrologer_id=";
   static const String astrologerSignPdf =
-      "http://20.193.154.99:8080/api/v1/uploadAstroSignedPdf?astrologer_id=";
+      "${agreementBase}uploadAstroSignedPdf?astrologer_id=";
+
+  // static const String astrologerAgreement =
+  //     "http://20.193.154.99:8081/api/v1/getAstroAgreement?astrologer_id=";
+  // static const String astrologerFaceVerification =
+  //     "http://20.193.154.99:8081/api/v1/uploadAstroImage?astrologer_id=";
+  // static const String astrologerAstroSign =
+  //     "http://20.193.154.99:8081/api/v1/uploadAstroSign?astrologer_id=";
+  //
+  // static const String astrologerSignPdf =
+  //     "http://20.193.154.99:8081/api/v1/uploadAstroSignedPdf?astrologer_id=";
   static const String onlineOfflineStatus =
       "https://list.divinetalk.live/api/v3/getAstrologersData";
 
@@ -92,6 +116,8 @@ class ApiProvider {
   final String saveRemediesChatAssistUrl = "saveRemediesForChatAssist";
   final String getMessageTemplateForChatAssist =
       "getMessageTemplateForChatAssist";
+  final String exotelCallInitiateCustomer = "exotelCallInitiateCustomer";
+  final String exotelCallInitiateMes = "exotelCallInitiateMes";
   final String constantDetails = "constantDetails";
   final String currentChatOrder = "getCurrentChatOrder";
   final String getOrderHistoryUrl = "getOrderHistory";
@@ -255,6 +281,14 @@ class ApiProvider {
   final String astroScheduleOnline = "astroScheduleOnline";
   final String getChatAssistCustomerData = "getChatAssistCustomerData";
 
+  // OnBoarding Apis
+  final String addAstroOnboarding = "addAstroOnboarding";
+  final String getAstroOnboarding = "getAstroOnboarding";
+
+  // Schedule Trainings Apis
+  final String getScheduleMeetings = "getScheduleMeetings";
+  final String addAstroScheduleMeetings = "addAstroScheduleMeetings";
+
   //Basic Auth
   final String username = "625170";
   final String password = "4eb3e540da68887ac72d4d45d7da9906";
@@ -268,7 +302,7 @@ class ApiProvider {
   final sendOtp = "sendOtp";
   final verifyOtpUrl = "verifyOtp";
 
-  //added by dev-dharam
+  //added by development-dharam
   final String getAllGifts = "getAllGifts";
   final String blockCustomerlist = "blockCustomerlist";
   final String blockCustomer = "blockCustomer";
@@ -281,7 +315,7 @@ class ApiProvider {
   final String customeEcommerce = "customeEcommerce";
   final String getTarotCard = "getTarotCard";
 
-  //added by dev-chetan
+  //added by development-chetan
   final String getCustomOffer = "getCustomOffer";
   final String sendOtpNumberChange = "sendOtpForNumberChange";
   final String verifyOtpNumberChange = "verifyOtpForNumberChange";
@@ -397,6 +431,7 @@ class ApiProvider {
 */
   Future<http.Response> get(
     String url, {
+    String? endPoint,
     Map<String, String>? headers,
     Map<String, dynamic>? queryParameters,
     bool closeDialogOnTimeout = true,
@@ -405,15 +440,18 @@ class ApiProvider {
       headers = await getAuthorisedHeader();
       log("headers: $headers");
     }
+    endPoint ??=
+        //isLiveServer.value == 0 ? debugUrl :
+        baseUrl;
 
     if (queryParameters != null) {
       url += '?${Uri(queryParameters: queryParameters).query}';
     }
 
     if (await networkManager.isConnected() ?? false) {
-      log('url: $baseUrl$url');
+      log('url: ${endPoint + url}');
       var response = await http
-          .get(Uri.parse(baseUrl + url), headers: headers)
+          .get(Uri.parse(endPoint + url), headers: headers)
           .timeout(const Duration(minutes: 2), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
@@ -434,9 +472,11 @@ class ApiProvider {
       log("headers: $headers");
     }
     if (await networkManager.isConnected() ?? false) {
-      log('url: $baseUrl$url');
+      log('url: ${ //isLiveServer.value == 0 ? debugUrl :
+          baseUrl}$url');
       var response = await http
-          .delete(Uri.parse(baseUrl + url), headers: headers)
+          .delete(Uri.parse(//isLiveServer.value == 0 ? debugUrl :
+              baseUrl + url), headers: headers)
           .timeout(const Duration(minutes: 1), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
@@ -458,7 +498,8 @@ class ApiProvider {
       log("headers: $headers");
     }
     if (await networkManager.isConnected() ?? false) {
-      log('url:$baseUrl$url');
+      log('url: ${ //isLiveServer.value == 0 ? debugUrl :
+          baseUrl}$url');
       var response = await http
           .get(url, headers: headers)
           .timeout(const Duration(minutes: 2), onTimeout: () {
@@ -481,7 +522,8 @@ class ApiProvider {
       dynamic body,
       Encoding? encoding,
       bool closeDialogOnTimeout = true}) async {
-    endPoint ??= //kDebugMode == true ? debugingUrl :
+    endPoint ??=
+        // isLiveServer.value == 0 ? debugUrl :
         baseUrl;
     headers ??= await getAuthorisedHeader();
     log("Api url: ${endPoint + url}");
@@ -527,11 +569,12 @@ class ApiProvider {
       bool closeDialogOnTimeout = true}) async {
     headers ??= await getAuthorisedHeader();
     if (await networkManager.isConnected() ?? false) {
-      log('url: $baseUrl$url');
+      log('url: ${ //isLiveServer.value == 0 ? debugUrl :
+          baseUrl}$url');
       log('body: $body');
       var response = await http
-          .put(Uri.parse(baseUrl + url),
-              headers: headers, body: body, encoding: encoding)
+          .put(Uri.parse(//isLiveServer.value == 0 ? debugUrl :
+              baseUrl + url), headers: headers, body: body, encoding: encoding)
           .timeout(const Duration(minutes: 1), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
@@ -550,8 +593,10 @@ class ApiProvider {
       Map<String, File> images, Map<String, dynamic> body, String url,
       {String type = "POST", Map<String, String>? headers}) async {
     if (await networkManager.isConnected() ?? false) {
-      var uri = Uri.parse(baseUrl + url);
-      debugPrint("url: $baseUrl$url");
+      var uri = Uri.parse(//isLiveServer.value == 0 ? debugUrl :
+          baseUrl + url);
+      log('url: ${ //isLiveServer.value == 0 ? debugUrl :
+          baseUrl}$url');
       http.MultipartRequest request = http.MultipartRequest(type, uri);
       request.headers.addAll(headers ?? await getAuthorisedHeader());
       debugPrint("header : ${request.headers}");

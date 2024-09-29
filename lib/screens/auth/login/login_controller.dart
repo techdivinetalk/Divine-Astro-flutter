@@ -12,10 +12,12 @@ import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:divine_astrologer/model/login_images.dart';
 import 'package:divine_astrologer/model/res_login.dart';
+import 'package:divine_astrologer/screens/auth/login/true_caller_fault_widget.dart';
 import 'package:divine_astrologer/true_caller_divine/true_caller_divine_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -44,6 +46,7 @@ class LoginController extends GetxController {
   TextEditingController countryCodeController =
       TextEditingController(text: "+91");
   TextEditingController mobileNumberController = TextEditingController();
+  String mobile = "";
   final appFirebaseService = AppFirebaseService();
 
   // RxString get countryCode => countryCodeController.text.obs;
@@ -63,38 +66,43 @@ class LoginController extends GetxController {
   var isLoading = false.obs;
 
   login() async {
+    isUnauthorizedUserCalled = false;
     //deviceToken = await FirebaseMessaging.instance.getToken();
-    print("mobileNumberController.text ------> ${mobileNumberController.text}");
-    Map<String, dynamic> params = {
-      "mobile_no": mobileNumberController.text,
-      "country_code": countryCodeController.text,
-      //"device_token": await FirebaseMessaging.instance.getToken()
-    };
+    if(mobileNumberController.text.isEmpty){
+      mobileNumberController.text = mobile;
+    } else{
+      Map<String, dynamic> params = {
+        "mobile_no": mobileNumberController.text,
+        // "mobile_no": mobile,
+        "country_code": countryCodeController.text,
+        //"device_token": await FirebaseMessaging.instance.getToken()
+      };
 
-    print("params ----->$params");
-    try {
-      isLoading.value = true;
-      final data = await userRepository.sentOtp(params);
-      if (data != null) {
+      print("params ----->$params");
+      try {
+        isLoading.value = true;
+        final data = await userRepository.sentOtp(params);
+        if (data != null) {
+          isLoading.value = false;
+          navigateToOtpPage(data);
+        } else {
+          isLoading.value = false;
+        }
+        update();
+        //updateLoginDatainFirebase(data);
+        //navigateToDashboard(data);
+      } catch (error) {
         isLoading.value = false;
-        navigateToOtpPage(data);
-      } else {
-        isLoading.value = false;
-      }
-      update();
-      //updateLoginDatainFirebase(data);
-      //navigateToDashboard(data);
-    } catch (error) {
-      isLoading.value = false;
-      enable.value = true;
-      debugPrint("error $error");
-      if (error is AppException) {
-        error.onException();
-      } else {
-        divineSnackBar(
-            data: error.toString(),
-            color: appColors.redColor,
-            duration: const Duration(milliseconds: 200));
+        enable.value = true;
+        debugPrint("error $error");
+        if (error is AppException) {
+          error.onException();
+        } else {
+          divineSnackBar(
+              data: error.toString(),
+              color: appColors.redColor,
+              duration: const Duration(milliseconds: 200));
+        }
       }
     }
   }
@@ -106,6 +114,7 @@ class LoginController extends GetxController {
       countryCodeController.text
     ]);
     mobileNumberController.clear();
+    mobile = "";
     enable.value = true;
   }
 
@@ -168,6 +177,7 @@ class LoginController extends GetxController {
           "test_simNumbers: simNoLst.isNotEmpty: ${simNoLst.isNotEmpty}");
 
       if (simNoLst.isNotEmpty) {
+        simNumbers.clear();
         for (int i = 0; i < simNoLst.length; i++) {
           String no = simNoLst[i];
 
@@ -202,8 +212,10 @@ class LoginController extends GetxController {
     return {'countryCode': '+91', 'phoneNumber': number};
   }
 
+  bool isSimPopupAppear = false;
   void showSimNumbersPopup() {
-    if (simNumbers.isNotEmpty) {
+    if (simNumbers.isNotEmpty && !isSimPopupAppear) {
+      isSimPopupAppear = true;
       showDialog(
         context: Get.context!,
         builder: (BuildContext context) {
@@ -232,7 +244,7 @@ class LoginController extends GetxController {
                     ),
                   ),
                   onTap: () {
-                    Get.put(LoginController(UserRepository()));
+                    // Get.put(LoginController(UserRepository()));
 
                     final splitResult = splitNumber(number);
                     String countryCode = splitResult['countryCode'] ?? '+91';
@@ -243,6 +255,7 @@ class LoginController extends GetxController {
 
                     countryCodeController.text = countryCode;
                     mobileNumberController.text = phoneNumber;
+                    mobile = phoneNumber;
                     update();
                     Get.back();
                   },
@@ -267,7 +280,9 @@ class LoginController extends GetxController {
             ],
           );
         },
-      );
+      ).then((value) {
+        isSimPopupAppear = false;
+      });
     }
   }
 
@@ -286,13 +301,24 @@ class LoginController extends GetxController {
     mobileNumberController = TextEditingController();*/
 
     if (kDebugMode || isTruecaller.value == 1) {
-      TrueCallerService().isTrueCallerInstalled().then((value) {
+      TrueCallerService().isTrueCallerInstalled().then((value) async {
         showTrueCaller.value = value;
 
         debugPrint("test_showTrueCaller.value_3: ${showTrueCaller.value}");
         // if (!showTrueCaller.value) {
         //   requestPermissions();
         // }
+
+
+        bool oAuthFlowUsable = await TrueCallerService().isOAuthFlowUsable();
+        Future.delayed(const Duration(seconds: 1)).then((value) async {
+          if(Get.currentRoute == RouteName.login && showTrueCaller.value){
+            oAuthFlowUsable
+                ? await TrueCallerService().startTrueCaller()
+                : trueCallerFaultPopup();
+          }
+        });
+
       });
       TcSdk.streamCallbackData.listen(
         (TcSdkCallback event) async {
@@ -443,6 +469,7 @@ class LoginController extends GetxController {
   bool isTrueCallerLogin = false;
 
   Future<void> customerLoginWithTrueCaller(Map<String, dynamic> profile) async {
+    isUnauthorizedUserCalled = false;
     isTrueCallerLogin = true;
     showLoader();
     final Map<String, dynamic> params = {
@@ -670,4 +697,14 @@ class LoginController extends GetxController {
   void onResumed() {
     numberFocus.requestFocus();
   }*/
+
+  Future<void> trueCallerFaultPopup() async {
+    await showCupertinoModalPopup(
+      context: Get.context!,
+      builder: (BuildContext context) {
+        return TrueCallerFaultWidget(onClose: Get.back);
+      },
+    );
+    return Future<void>.value();
+  }
 }

@@ -7,6 +7,7 @@ import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/chat/req_common_chat_model.dart';
 import 'package:divine_astrologer/repository/chat_repository.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -49,12 +50,14 @@ Future<String> uploadImageToS3Bucket(
     return "";
   }
 }
+
 Future<String> getUserData(String key) async {
   final SharedPreferences prefs = await SharedPreferences.getInstance();
- return prefs.getString(key) ?? "";
+  return prefs.getString(key) ?? "";
 }
+
 Future<String?> uploadImageFileToAws(
-    {required File file, required String moduleName,String? pathType}) async {
+    {required File file, required String moduleName, String? pathType}) async {
   var token = preferenceService.getToken();
 
   var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
@@ -81,14 +84,12 @@ Future<String?> uploadImageFileToAws(
   String? url;
 
   if (response.statusCode == 200) {
-
     var urlResponse = await http.Response.fromStream(response);
-if(pathType == "path"){
-  url = json.decode(urlResponse.body)["data"]['path'];
-}else{
-  url = json.decode(urlResponse.body)["data"]['full_path'];
-}
-
+    if (pathType == "path") {
+      url = json.decode(urlResponse.body)["data"]['path'];
+    } else {
+      url = json.decode(urlResponse.body)["data"]['full_path'];
+    }
   } else {
     url = null;
   }
@@ -123,8 +124,6 @@ void checkNotification(
   // }
   //  removeNotificationNode();
 }
-
-
 
 void updateMsgDelieveredStatus(ChatMessage newMessage, int type) async {
   // type 1= New chat message, 2 = Delievered, 3= Msg read, 4= Other messages
@@ -194,7 +193,7 @@ Future<bool> acceptOrRejectChat(
               orderId: orderId,
               isTimeout: 0,
               acceptOrReject: 1,
-        astrologerImage: astrologerImageLink
+        astrologerImage: kDebugMode ? null : astrologerImageLink
       )
           .toJson());
   print("chat_reject 2");

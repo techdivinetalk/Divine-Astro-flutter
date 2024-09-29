@@ -6,7 +6,13 @@ class ResLogin {
   String? error;
   String? message;
 
-  ResLogin({this.data, this.success, this.statusCode, this.error, this.token, this.message});
+  ResLogin(
+      {this.data,
+      this.success,
+      this.statusCode,
+      this.error,
+      this.token,
+      this.message});
 
   ResLogin.fromJson(Map<String, dynamic> json) {
     data = json['data'] != null ? UserData.fromJson(json['data']) : null;
@@ -34,6 +40,7 @@ class ResLogin {
 class UserData {
   int? id;
   String? name;
+  String? real_name;
   String? phoneNo;
   String? email;
   String? image;
@@ -110,6 +117,7 @@ class UserData {
   UserData({
     this.id,
     this.name,
+    this.real_name,
     this.phoneNo,
     this.email,
     this.image,
@@ -182,6 +190,7 @@ class UserData {
   UserData.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
+    real_name = json['real_name'];
     phoneNo = json['phone_no'];
     email = json['email'];
     image = json['image'];
@@ -270,6 +279,7 @@ class UserData {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['name'] = name;
+    data['real_name'] = real_name;
     data['phone_no'] = phoneNo;
     data['email'] = email;
     data['image'] = image;

@@ -25,6 +25,7 @@ import '../../common/app_exception.dart';
 import '../../common/colors.dart';
 import '../../common/custom_widgets.dart';
 import '../../di/shared_preference_service.dart';
+import '../../firebase_service/firebase_service.dart';
 import '../../gen/assets.gen.dart';
 import '../../model/res_login.dart';
 import '../../model/res_review_ratings.dart';
@@ -98,26 +99,44 @@ class ProfilePageController extends GetxController {
             : false),
   ].obs;
 
+  RxString currLanguage = "".obs;
+
+  setLocalLanguage() {
+    Locale locale = Get.locale!;
+
+    if (locale.languageCode == "en") {
+      currLanguage.value = "english".tr;
+    } else if (locale.languageCode == "hi") {
+      currLanguage.value = "hindi".tr;
+    } else if (locale.languageCode == "mr") {
+      currLanguage.value = "marathi".tr;
+    } else if (locale.languageCode == "gu") {
+      currLanguage.value = "gujarati".tr;
+    }
+    update();
+  }
+
   init() {
     profileList = <ProfileOptionModelClass>[
       ProfileOptionModelClass(
           "bankDetails".tr,
           Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h),
-          '/bankDetailsUI'),
+          '/bankDetailsUI',
+          true),
       ProfileOptionModelClass("uploadStory".tr,
-          Assets.images.icUploadStory.svg(width: 30.h, height: 30.h), ''),
+          Assets.images.icUploadStory.svg(width: 30.h, height: 30.h), '', true),
       ProfileOptionModelClass(
           "uploadYourPhoto".tr,
           Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h),
-          '/uploadYourPhotosUi'),
-      ProfileOptionModelClass("customerSupport".tr,
-          Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), ''),
+          '/uploadYourPhotosUi',
+          true),
       ProfileOptionModelClass(
           "chooseLanguage".tr,
           Assets.images.icLanguages.svg(width: 30.h, height: 30.h),
-          '/languagePopup'),
-      ProfileOptionModelClass(
-          "faq".tr, Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
+          '/languagePopup',
+          true),
+      ProfileOptionModelClass("faq".tr,
+          Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), '', true),
       /*      ProfileOptionModelClass(
           "priceChange".tr,
           Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
@@ -125,44 +144,53 @@ class ProfilePageController extends GetxController {
       ProfileOptionModelClass(
           "numberChange".tr,
           Assets.images.icNumChanges.svg(width: 30.h, height: 30.h),
-          '/numberChangeReqUI'),
+          '/numberChangeReqUI',
+          true),
       ProfileOptionModelClass(
           "blockedUsers".tr,
           Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
-          '/blockedUser'),
+          '/blockedUser',
+          true),
       ProfileOptionModelClass("eCommerce".tr,
-          Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja'),
+          Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja', true),
       ProfileOptionModelClass(
           "resignation".tr,
           Assets.svg.resignation.svg(width: 30.h, height: 30.h),
-          '/resignation'),
+          '/resignation',
+          true),
     ].obs;
   }
 
   bool isFilePickerActive = false;
   bool pickingFileLoading = false;
   ChangeLanguageModelClass? selectedLanguage;
+  var selectedLang = "".obs;
   var profileList = <ProfileOptionModelClass>[
     ProfileOptionModelClass(
-        "bankDetails".tr,
-        Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h),
-        '/bankDetailsUI'),
+      "bankDetails".tr,
+      Assets.images.icBankDetailNew.svg(width: 30.h, height: 30.h),
+      '/bankDetailsUI',
+      true,
+    ),
     ProfileOptionModelClass(
-        "uploadStory".tr,
-        Assets.images.icUploadStory.svg(width: 30.h, height: 30.h),
-        '/uploadStoryUi'),
+      "uploadStory".tr,
+      Assets.images.icUploadStory.svg(width: 30.h, height: 30.h),
+      '/uploadStoryUi',
+      true,
+    ),
     ProfileOptionModelClass(
-        "uploadYourPhoto".tr,
-        Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h),
-        '/uploadYourPhotosUi'),
-    ProfileOptionModelClass("customerSupport".tr,
-        Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), ''),
+      "uploadYourPhoto".tr,
+      Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h),
+      '/uploadYourPhotosUi',
+      true,
+    ),
     ProfileOptionModelClass(
         "chooseLanguage".tr,
         Assets.images.icLanguages.svg(width: 30.h, height: 30.h),
-        '/languagePopup'),
-    ProfileOptionModelClass(
-        "faq".tr, Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
+        '/languagePopup0',
+        true),
+    ProfileOptionModelClass("faq".tr,
+        Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), '', true),
     /* ProfileOptionModelClass(
         "priceChange".tr,
         Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
@@ -170,17 +198,20 @@ class ProfilePageController extends GetxController {
     ProfileOptionModelClass(
         "numberChange".tr,
         Assets.images.icNumChanges.svg(width: 30.h, height: 30.h),
-        '/numberChangeReqUI'),
+        '/numberChangeReqUI',
+        true),
     ProfileOptionModelClass(
         "blockedUsers".tr,
         Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
-        '/blockedUser'),
+        '/blockedUser',
+        true),
     ProfileOptionModelClass("eCommerce".tr,
-        Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja'),
+        Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja', true),
     ProfileOptionModelClass(
         "Custom product".tr,
         SvgPicture.asset("assets/svg/store.svg", width: 30.h, height: 30.h),
-        '/customProduct'),
+        '/customProduct',
+        true),
     // ProfileOptionModelClass(
     //     "Passbook".tr,
     //     SvgPicture.asset("assets/svg/store.svg", width: 30.h, height: 30.h),
@@ -199,7 +230,8 @@ class ProfilePageController extends GetxController {
 
     item.isSelected = true;
     selectedLanguage = item;
-
+    selectedLang.value = item.languages!;
+    update();
     update(['set_language']);
   }
 
@@ -245,7 +277,13 @@ class ProfilePageController extends GetxController {
     debugPrint("test_onInit: call");
     isInit = true;
     // scrollController.l
-
+    if (isAstroCare.value == 1) {
+      profileList.add(ProfileOptionModelClass(
+          "customerSupport".tr,
+          Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h),
+          '',
+          true));
+    }
     userData = preference.getUserDetail();
     getReviewRating();
 
@@ -700,8 +738,9 @@ class ProfileOptionModelClass {
   String? name;
   Widget? widget;
   String? nav;
+  bool? isCheck;
 
-  ProfileOptionModelClass(this.name, this.widget, this.nav);
+  ProfileOptionModelClass(this.name, this.widget, this.nav, this.isCheck);
 }
 
 class ChangeLanguageModelClass {

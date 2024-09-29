@@ -76,6 +76,11 @@ class Data {
   Map? notice;
   dynamic is_screenshot_require;
 
+  dynamic is_onboarding_in_process;
+  List? onboarding_reject_stage_no;
+  dynamic stage_no;
+  dynamic onBoardingrejected;
+  dynamic onboarding_training_video;
   Data({
     required this.leaderboardRankImage,
     required this.lottiFile,
@@ -101,6 +106,10 @@ class Data {
     this.currentTime,
     required this.notice,
     required this.is_screenshot_require,
+    this.is_onboarding_in_process,
+    this.stage_no,
+    this.onboarding_reject_stage_no,
+    this.onboarding_training_video,
   });
 
   Data copyWith({
@@ -127,6 +136,10 @@ class Data {
     num? currentTime,
     Map? notice,
     dynamic is_screenshot_require,
+    dynamic is_onboarding_in_process,
+    dynamic stage_no,
+    List? onboarding_reject_stage_no,
+    dynamic onboarding_training_video,
   }) =>
       Data(
         leaderboardRankImage: leaderboardRankImage ?? this.leaderboardRankImage,
@@ -152,7 +165,15 @@ class Data {
         currentTime: currentTime ?? this.currentTime,
         taroCard: taroCard ?? this.taroCard,
         notice: notice ?? this.notice,
-        is_screenshot_require: is_screenshot_require ?? this.is_screenshot_require,
+        is_onboarding_in_process:
+            is_onboarding_in_process ?? this.is_onboarding_in_process,
+        stage_no: stage_no ?? this.stage_no,
+        is_screenshot_require:
+            is_screenshot_require ?? this.is_screenshot_require,
+        onboarding_reject_stage_no:
+            onboarding_reject_stage_no ?? this.onboarding_reject_stage_no,
+        onboarding_training_video:
+            onboarding_training_video ?? this.onboarding_training_video,
       );
 
   factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
@@ -187,7 +208,11 @@ class Data {
         taroCard: json['taro_card'],
         currentTime: json['current_time'],
         notice: json['notice'],
-    is_screenshot_require: json['is_screenshot_require'],
+        is_screenshot_require: json['is_screenshot_require'],
+        is_onboarding_in_process: json['is_onboarding_in_process'],
+        stage_no: json['stage_no'],
+        onboarding_reject_stage_no: json['onboarding_reject_stage_no'],
+        onboarding_training_video: json['onboarding_training_video'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -218,6 +243,10 @@ class Data {
         'current_time': currentTime,
         'notice': notice,
         'is_screenshot_require': is_screenshot_require,
+        'is_onboarding_in_process': is_onboarding_in_process,
+        'stage_no': stage_no,
+        'onboarding_reject_stage_no': onboarding_reject_stage_no,
+        'onboarding_training_video': onboarding_training_video,
       };
 }
 

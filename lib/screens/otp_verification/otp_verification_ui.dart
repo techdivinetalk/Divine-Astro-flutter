@@ -1,10 +1,10 @@
 import 'dart:async';
 
+import 'package:divine_astrologer/screens/auth/login/login_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:pin_input_text_field/pin_input_text_field.dart';
 import 'package:pinput/pinput.dart';
 
 import '../../common/colors.dart';
@@ -21,7 +21,7 @@ class OtpVerificationUI extends GetView<OtpVerificationController> {
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value:  SystemUiOverlayStyle(
+      value: SystemUiOverlayStyle(
         statusBarIconBrightness: Brightness.dark,
         statusBarColor: appColors.transparent,
       ),
@@ -52,7 +52,7 @@ class OtpVerificationUI extends GetView<OtpVerificationController> {
                             ? SizedBox(
                                 height: 30.h,
                                 width: 30.h,
-                                child:  CircularProgressIndicator(
+                                child: CircularProgressIndicator(
                                     strokeWidth: 3, color: appColors.brown),
                               )
                             : NotReceiveOtpText(
@@ -94,10 +94,10 @@ class OtpVerificationUI extends GetView<OtpVerificationController> {
                                         child: SizedBox(
                                             height: 30.h,
                                             width: 30.h,
-                                            child:
-                                                 CircularProgressIndicator(
-                                                    strokeWidth: 3,
-                                                    color: appColors.whiteGuidedColor)),
+                                            child: CircularProgressIndicator(
+                                                strokeWidth: 3,
+                                                color: appColors
+                                                    .whiteGuidedColor)),
                                       ),
                                     ),
                                   ],
@@ -211,13 +211,17 @@ class _NotReceiveOtpTextState extends State<NotReceiveOtpText> {
           padding: EdgeInsets.symmetric(horizontal: 4.w, vertical: 3.h),
           onTap: _remainingTime == 0 ? widget.onResend : () {},
           child: Text(
-            _remainingTime == 0 ? "resend".tr : "Resend in $_remainingTime seconds",
+            _remainingTime == 0
+                ? "resend".tr
+                : "Resend in $_remainingTime seconds",
             style: TextStyle(
               fontSize: 15.sp,
               fontWeight: FontWeight.w700,
               color: _remainingTime == 0 ? appColors.textColor : appColors.grey,
               fontFamily: FontFamily.notoSans,
-              decoration: _remainingTime == 0 ? TextDecoration.underline : TextDecoration.none,
+              decoration: _remainingTime == 0
+                  ? TextDecoration.underline
+                  : TextDecoration.none,
             ),
           ),
         ),
@@ -261,13 +265,15 @@ class OtpFieldView extends StatelessWidget {
 
     final focusedPinTheme = defaultPinTheme.copyDecorationWith(
         border: Border.all(
-            color: contro.isWrongOtp.isTrue ? appColors.red : appColors.guideColor,
+            color:
+                contro.isWrongOtp.isTrue ? appColors.red : appColors.guideColor,
             width: 2),
         borderRadius: BorderRadius.circular(10));
 
     final submittedPinTheme = defaultPinTheme.copyDecorationWith(
         border: Border.all(
-            color: contro.isWrongOtp.isTrue ? appColors.red : appColors.guideColor,
+            color:
+                contro.isWrongOtp.isTrue ? appColors.red : appColors.guideColor,
             width: 2),
         borderRadius: BorderRadius.circular(10));
     return Padding(
@@ -338,25 +344,29 @@ class OtpSheet extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20.sp), topRight: Radius.circular(20.sp)),
-      child: SizedBox(
-        width: context.width,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-                margin: EdgeInsets.symmetric(vertical: 30.h),
-                child: Assets.svg.caution.svg(height: 70.h, width: 160.w)),
-            Text("noAttemptsLeft".tr, style: textStyle),
-            Container(
-                margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-                child: CustomMaterialButton(
-                    radius: 10,
-                    buttonName: "okay".tr,
-                    onPressed: () {
-                      Get.offAllNamed(RouteName.login);
-                    })),
-            SizedBox(height: 12.h)
-          ],
+      child: ColoredBox(
+        color: appColors.white,
+        child: SizedBox(
+          width: context.width,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                  margin: EdgeInsets.symmetric(vertical: 30.h),
+                  child: Assets.svg.caution.svg(height: 70.h, width: 160.w)),
+              Text("noAttemptsLeft".tr, style: textStyle),
+              Container(
+                  margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                  child: CustomMaterialButton(
+                      radius: 10,
+                      buttonName: "okay".tr,
+                      onPressed: () {
+                        Get.delete<LoginController>(force: true);
+                        Get.offAllNamed(RouteName.login);
+                      })),
+              SizedBox(height: 12.h)
+            ],
+          ),
         ),
       ),
     );

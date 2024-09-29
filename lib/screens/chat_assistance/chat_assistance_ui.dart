@@ -53,6 +53,44 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                 }
               }
             });
+            controller.scrollController.addListener(() async {
+              // Check if the user is at the bottom
+              if (controller.scrollController.hasClients) {
+                final double maxScrollExtent =
+                    controller.scrollController.position.maxScrollExtent;
+                final double currentScrollPosition =
+                    controller.scrollController.position.pixels;
+
+                if (currentScrollPosition >= maxScrollExtent //- 50
+                    &&
+                    controller.checkin2.value == false) {
+                  controller.checkin2(true);
+                  controller.isLoadMoreData2.value = true;
+                  await Future.delayed(const Duration(milliseconds: 100));
+                  controller.scrollController.jumpToBottom();
+                  controller.getAssistantAstrologerList();
+                  print("User is at the bottom of the screen");
+                }
+              }
+            });
+            // controller.scrollController.addListener(() async {
+            //   // Check if the user is at the bottom
+            //   if (controller.scrollController.hasClients) {
+            //     final double maxScrollExtent =
+            //         controller.scrollController.position.maxScrollExtent;
+            //     final double currentScrollPosition =
+            //         controller.scrollController.position.pixels;
+            //
+            //     if (currentScrollPosition >= maxScrollExtent) {
+            //       // controller.checkin(true);
+            //       // controller.isLoadMoreData.value = true;
+            //       await Future.delayed(const Duration(milliseconds: 100));
+            //       controller.scrollController.jumpToBottom();
+            //       controller.getAssistantAstrologerList();
+            //       print("User is at the bottom of the screen");
+            //     }
+            //   }
+            // });
             if (controller.loading == Loading.loading) {
               return const Center(child: GenericLoadingWidget());
             }
@@ -164,40 +202,31 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                         return HelpersWidget().emptyChatWidget();
                       } else {
                         return Expanded(
-                            child: NotificationListener<ScrollNotification>(
-                          onNotification: (ScrollNotification scrollInfo) {
-                            if (scrollInfo.metrics.pixels ==
-                                scrollInfo.metrics.maxScrollExtent) {
-                              controller.getAssistantAstrologerList();
-                              return true;
-                            }
-                            return false;
+                            child: ListView.builder(
+                          padding: EdgeInsets.symmetric(vertical: 10.h),
+                          controller: controller.scrollController,
+                          itemCount: (controller.searchData).isNotEmpty ||
+                                  controller.searchController.text.isNotEmpty
+                              ? controller.searchData.length
+                              : /*controller.chatDataList.length*/ controller
+                                  .chatAssistantAstrologerListResponse!
+                                  .data!
+                                  .data!
+                                  .length,
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return ChatAssistanceTile(
+                              controller: controller,
+                              data: (controller.searchData).isNotEmpty ||
+                                      controller
+                                          .searchController.text.isNotEmpty
+                                  ? controller.searchData[index]
+                                  : /*controller.chatDataList[index]*/ controller
+                                      .chatAssistantAstrologerListResponse!
+                                      .data!
+                                      .data![index],
+                            );
                           },
-                          child: ListView.builder(
-                            padding: EdgeInsets.symmetric(vertical: 10.h),
-                            itemCount: (controller.searchData).isNotEmpty ||
-                                    controller.searchController.text.isNotEmpty
-                                ? controller.searchData.length
-                                : /*controller.chatDataList.length*/ controller
-                                    .chatAssistantAstrologerListResponse!
-                                    .data!
-                                    .data!
-                                    .length,
-                            shrinkWrap: true,
-                            itemBuilder: (context, index) {
-                              return ChatAssistanceTile(
-                                controller: controller,
-                                data: (controller.searchData).isNotEmpty ||
-                                        controller
-                                            .searchController.text.isNotEmpty
-                                    ? controller.searchData[index]
-                                    : /*controller.chatDataList[index]*/ controller
-                                        .chatAssistantAstrologerListResponse!
-                                        .data!
-                                        .data![index],
-                              );
-                            },
-                          ),
                         ));
                       }
                     } else {
@@ -417,10 +446,11 @@ class ChatAssistanceTile extends StatelessWidget {
               fontSize: 16.sp,
               fontWeight: FontWeight.w600,
             ),
-            if((data.level != null && data.level != "")) Padding(
-              padding: const EdgeInsets.only(left: 5.0),
-              child: LevelWidget(level: data.level ?? ""),
-            )
+            if ((data.level != null && data.level != ""))
+              Padding(
+                padding: const EdgeInsets.only(left: 5.0),
+                child: LevelWidget(level: data.level ?? ""),
+              )
           ],
         ),
         subtitle: lastMessage(data.msgType ?? MsgType.text),
@@ -636,8 +666,8 @@ class ChatAssistanceDataTile extends StatelessWidget {
                         children: [
                           ConstrainedBox(
                             constraints: BoxConstraints(
-                              maxWidth: MediaQuery.of(context).size.width*0.4
-                            ),
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.4),
                             child: CustomText(
                               // data.customerName ?? '',
                               data.customerName ?? '',
@@ -645,10 +675,11 @@ class ChatAssistanceDataTile extends StatelessWidget {
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                          if(data.level != null && data.level != "") Padding(
-                            padding: const EdgeInsets.only(left: 5.0),
-                            child: LevelWidget(level: data.level ?? ""),
-                          ),
+                          if (data.level != null && data.level != "")
+                            Padding(
+                              padding: const EdgeInsets.only(left: 5.0),
+                              child: LevelWidget(level: data.level ?? ""),
+                            ),
                           const Spacer(),
                           Container(
                             decoration: BoxDecoration(

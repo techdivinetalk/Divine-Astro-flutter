@@ -29,7 +29,6 @@ import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
-import "package:flutter/scheduler.dart";
 import "package:flutter_html/flutter_html.dart";
 import "package:flutter_image_compress/flutter_image_compress.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -71,7 +70,10 @@ import "../chat_assistance/chat_message/widgets/product/pooja/pooja_dharam/get_s
 import "../live_dharam/gifts_singleton.dart";
 
 class ChatMessageWithSocketController extends GetxController
-    with WidgetsBindingObserver, GetTickerProviderStateMixin {
+    with
+        WidgetsBindingObserver,
+        GetTickerProviderStateMixin,
+        WidgetsBindingObserver {
   late SVGAAnimationController svgController;
 
   var pref = Get.find<SharedPreferenceService>();
@@ -107,6 +109,7 @@ class ChatMessageWithSocketController extends GetxController
   RxList<MessageTemplates> messageTemplatesList = <MessageTemplates>[].obs;
   RxBool isTyping = false.obs;
   final AppSocket socket = AppSocket();
+
   // Timer? extraTimer;
   // Timer? chatTimer;
   Timer? _timer2;
@@ -150,11 +153,25 @@ class ChatMessageWithSocketController extends GetxController
     hasMessage.value = messageController.text.isNotEmpty;
   }
 
-  //variables to manage chat state
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    print("AppResume ${AppFirebaseService().orderData.value["status"]}");
+    if (state == AppLifecycleState.resumed) {
+      if (AppFirebaseService().orderData.value["status"] == null) {
+        print("The order is null going back From Resume");
+        if (MiddleWare.instance.currentPage ==
+            RouteName.chatMessageWithSocketUI) {
+          Get.until(
+            (route) {
+              return Get.currentRoute == RouteName.dashboard;
+            },
+          );
+        }
+      }
+    }
+  }
+
   StreamSubscription? _appLinkingStreamSubscription;
-  late final AppLifecycleListener _listener;
-  late AppLifecycleState? _state;
-  final List<String> _states = <String>[];
 
 //end
   @override
@@ -180,6 +197,9 @@ class ChatMessageWithSocketController extends GetxController
     svgController.dispose();
     messgeScrollController.removeListener(_scrollListener);
     messgeScrollController.dispose();
+    orderRemovedListener?.cancel();
+    chatAddedListener?.cancel();
+    typingListener?.cancel();
     super.dispose();
   }
 
@@ -187,7 +207,7 @@ class ChatMessageWithSocketController extends GetxController
 
   void startOrStopRecording() async {
     bool isPermission = await requestMicroPhone();
-    if(isPermission){
+    if (isPermission) {
       try {
         print("is working");
         if (isRecording.value) {
@@ -220,14 +240,14 @@ class ChatMessageWithSocketController extends GetxController
     final status = await Permission.microphone.status;
     if (status.isGranted) {
       return true;
-    } else if(status.isPermanentlyDenied) {
+    } else if (status.isPermanentlyDenied) {
       Get.bottomSheet(
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 20.0),
           decoration: BoxDecoration(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(40.0)),
-              color: appColors.white
-          ),
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(40.0)),
+              color: appColors.white),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -251,20 +271,21 @@ class ChatMessageWithSocketController extends GetxController
                     Get.back();
                     openAppSettings();
                   }),
-              SizedBox(height: MediaQuery.of(Get.context!).padding.bottom + 20.0),
+              SizedBox(
+                  height: MediaQuery.of(Get.context!).padding.bottom + 20.0),
             ],
           ),
         ),
       );
       return false;
-    } else if(status.isDenied){
+    } else if (status.isDenied) {
       final statusAsk = await Permission.microphone.request();
-      if(statusAsk.isGranted){
+      if (statusAsk.isGranted) {
         return true;
-      } else{
+      } else {
         return false;
       }
-    } else{
+    } else {
       return false;
     }
   }
@@ -296,37 +317,6 @@ class ChatMessageWithSocketController extends GetxController
       ..sampleRate = 44100;
   }
 
-  var isCardVisible = false.obs;
-
-  stateHandling() {
-    WidgetsBinding.instance.addObserver(this);
-    _state = SchedulerBinding.instance.lifecycleState;
-    _listener = AppLifecycleListener(
-      onShow: () {},
-      onResume: () {
-        print("resume");
-      },
-      onHide: () {},
-      onInactive: () {
-        print("InActiveResume");
-        WidgetsBinding.instance.endOfFrame.then(
-          (_) async {},
-        );
-      },
-      onPause: () {},
-      onDetach: () {
-        WidgetsBinding.instance.endOfFrame.then(
-          (_) async {},
-        );
-      },
-      onRestart: () {},
-      onStateChange: (value) {},
-    );
-    if (_state != null) {
-      _states.add(_state!.name);
-    }
-  }
-
   List<String> chatIdList = []; // Initial list
 
   void openShowDeck(
@@ -337,13 +327,15 @@ class ChatMessageWithSocketController extends GetxController
 
   Future<void> openRemedies() async {
     var result = await Get.toNamed(RouteName.chatSuggestRemedy);
-    if (result != null) {
-      final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-      addNewMessage(
-        time,
-        MsgType.remedies,
-        messageText: result.toString(),
-      );
+    if (await checkIfChatIsEnded()) {
+      if (result != null) {
+        final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+        addNewMessage(
+          time,
+          MsgType.remedies,
+          messageText: result.toString(),
+        );
+      }
     }
   }
 
@@ -352,18 +344,45 @@ class ChatMessageWithSocketController extends GetxController
       'customerId':
           int.parse(AppFirebaseService().orderData.value["userId"].toString())
     });
-    if (result != null) {
-      final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-      controller.addNewMessage(
-        time,
-        MsgType.product,
-        data: {
-          'data': result,
-        },
-        messageText: 'Product',
-      );
+    if (await checkIfChatIsEnded()) {
+      if (result != null) {
+        final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+        controller.addNewMessage(
+          time,
+          MsgType.product,
+          data: {
+            'data': result,
+          },
+          messageText: 'Product',
+        );
+      }
     }
   }
+
+  // Future<void> openProduct(ChatMessageWithSocketController controller) async {
+  //   var result = await Get.toNamed(RouteName.chatAssistProductPage, arguments: {
+  //     'customerId':
+  //         int.parse(AppFirebaseService().orderData.value["userId"].toString())
+  //   })
+  //   !
+  //       .then(
+  //     (value) async {
+  //       await controller.checkIfChatIsEnded();
+  //       if (result != null) {
+  //         final String time = "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
+  //         controller.addNewMessage(
+  //           time,
+  //           MsgType.product,
+  //           data: {
+  //             'data': result,
+  //           },
+  //           messageText: 'Product',
+  //         );
+  //       }
+  //     },
+  //   );
+  //
+  // }
 
   void openCustomShop(ChatMessageWithSocketController controller) {
     print(customProductData);
@@ -456,20 +475,9 @@ class ChatMessageWithSocketController extends GetxController
         svgController.stop();
       }
     });
-    AppFirebaseService()
-        .database
-        .child(
-            "chatMessages/${AppFirebaseService().orderData.value["orderId"]}")
-        .orderByChild("msg_send_by")
-        .equalTo("0")
-        .onChildAdded
-        .listen((event) async {
-      var snapshot = event.snapshot;
-      if (snapshot.value != null) {
-        await receiveMessage(snapshot);
-      }
-    });
-
+    print("level ------> ${AppFirebaseService().orderData.value["level"]}");
+    print("customerName ------> ${AppFirebaseService().orderData.value["customerName"]}");
+    WidgetsBinding.instance.addObserver(this);
     if (showRetentionPopup.toString() == "1") {
       print("callling popup api from this side");
       getRitentionPopUpDataApi();
@@ -481,105 +489,26 @@ class ChatMessageWithSocketController extends GetxController
     noticeAPi();
     getSavedRemedies();
     AppFirebaseService().orderData.listen((Map<String, dynamic> p0) async {
-      if (p0["status"] == null || p0["astroId"] == null) {
-        print("realTimeChange backFunction");
-        backFunction();
-      } else {
-        print("orderData Changed");
-
-        initTask(p0);
+      if (p0["astroId"] == null) {
+        if (AppFirebaseService().currentOrder == "") {
+          print("realTimeChange backFunction");
+          backFunction();
+        }
       }
     });
     messgeScrollController.addListener(_scrollListener);
-    //   stateHandling();
-    // broadcastReceiver.start();
-    // broadcastReceiver.messages.listen((BroadcastMessage event) async {
-    //   if (fireChat.value == 0) {
-    //     if (event.name == 'messageReceive') {
-    //       if (!chatIdList.contains(event.data!["chatId"].toString())) {
-    //         chatIdList.add(event.data!["chatId"].toString());
-    //         if (event.data!["msg_type"].toString() == "0") {
-    //           final String time =
-    //               "${DateTime.now().millisecondsSinceEpoch ~/ 1000}";
-    //           ChatMessage chatMessage = ChatMessage(
-    //             orderId: AppFirebaseService().orderData.value["orderId"],
-    //             id: int.parse(time),
-    //             message: event.data!["message"],
-    //             receiverId: int.parse(
-    //                 AppFirebaseService().orderData.value["userId"].toString()),
-    //             senderId: preference.getUserDetail()!.id,
-    //             time: int.parse(time),
-    //             msgSendBy: "0",
-    //             awsUrl: event.data!["message"],
-    //             base64Image: null,
-    //             downloadedPath: null,
-    //             msgType: MsgType.text,
-    //             kundliId: null,
-    //             productPrice: null,
-    //             type: 0,
-    //             userType: "customer",
-    //           );
-    //           chatMessages.add(chatMessage);
-    //           // isPlaying.add(false);
-    //           // progress.add(0.0);
-    //           scrollToBottomFunc();
-    //         } else {
-    //           getChatList();
-    //         }
-    //         updateReadMessage();
-    //       }
-    //     } else if (event.name == 'deliveredMsg') {
-    //       print('deliveredData-Key:${event.data}');
-    //       var response = event.data?['deliveredMsgList'];
-    //       print('deliveredData Outer Key:${response.toString()}');
-    //       response.forEach((key, value) {
-    //         print('deliveredRes:$key - $value');
-    //         value.forEach((innerKey, innerValue) {
-    //           print('deliveredRes1:$innerKey - $innerValue');
-    //           var index = chatMessages
-    //               .indexWhere((element) => innerKey == element.id.toString());
-    //           if (index >= 0) {
-    //             chatMessages[index].type = 1;
-    //             chatMessages[index].seenStatus = 1;
-    //             chatMessages.refresh();
-    //           }
-    //         });
-    //       });
-    //
-    //       int userId = 0;
-    //       String userIdString =
-    //           AppFirebaseService().orderData.value["userId"].toString();
-    //       print('User ID String: $userIdString');
-    //       if (int.tryParse(userIdString) != null) {
-    //         userId = int.parse(userIdString);
-    //       } else {
-    //         print('Invalid userIdString: $userIdString');
-    //         //throw message to user
-    //       }
-    //     }
-    //   }
-    // });
     messageController.addListener(_onMessageChanged);
-    // getMessageTemplates();
-    // isAstroJoinedChat();
     socketReconnect();
     checkIsCustomerJoinedPrivateChat();
     typingListenerSocket();
-    // sendMessageSocketListenerSocket();
     sendMessageListenerSocket();
     listenerMessageStatusSocket();
-    // leavePrivateChat();
     customerLeavedPrivateChatListenerSocket();
     astrologerJoinedPrivateChat();
     socket.startAstroCustumerSocketEvent(
       orderId: AppFirebaseService().orderData.value["orderId"].toString(),
       userId: AppFirebaseService().orderData.value["userId"],
     );
-
-    // socket.startAstroCustumerSocketEvent(
-    //   orderId: AppFirebaseService().orderData.value["orderId"].toString(),
-    //   userId: AppFirebaseService().orderData.value["userId"],
-    // );
     svgController = SVGAAnimationController(vsync: this);
     svgController.addListener(() {
       if (svgController.isCompleted) {
@@ -614,7 +543,6 @@ class ChatMessageWithSocketController extends GetxController
           (AppFirebaseService().currentTime().millisecondsSinceEpoch ~/ 1000);
       print("timeCountDown $timeCountDown");
     }
-    initTask(AppFirebaseService().orderData.value);
     Future.delayed(const Duration(milliseconds: 3000)).then((value) {
       getMessageTemplates();
     });
@@ -639,13 +567,67 @@ class ChatMessageWithSocketController extends GetxController
         makeRealTimeOrderChanges(snapshot);
       }
     });
-    AppFirebaseService()
+    messageController.addListener(() {
+      String text = messageController.text;
+      if (text.length % 3 == 0 && text.isNotEmpty) {
+        FirebaseDatabase.instance
+            .ref(
+                "order/${AppFirebaseService().orderData.value["orderId"]}/isAstroTyping")
+            .set(AppFirebaseService().currentTime().millisecondsSinceEpoch);
+      }
+    });
+    runTimer();
+    setRealTime();
+  }
+
+  StreamSubscription? orderRemovedListener;
+  StreamSubscription? chatAddedListener;
+  StreamSubscription? typingListener;
+
+  void setRealTime() {
+    // Cancel existing listeners to prevent duplication
+    orderRemovedListener?.cancel();
+    chatAddedListener?.cancel();
+    typingListener?.cancel();
+
+    // Listen for order removal
+    orderRemovedListener = AppFirebaseService()
         .database
-        .child(
-        "order/${AppFirebaseService().orderData.value["orderId"]}/isCustTyping")
+        .child("order/${AppFirebaseService().currentOrder}")
+        .onChildRemoved
+        .listen((event) async {
+      if (AppFirebaseService().orderData.value["status"] == null) {
+        print("The order is null, going back");
+        if (MiddleWare.instance.currentPage ==
+            RouteName.chatMessageWithSocketUI) {
+          Get.until((route) {
+            return Get.currentRoute == RouteName.dashboard;
+          });
+        }
+      }
+    });
+
+    // Listen for new chat messages
+    chatAddedListener = AppFirebaseService()
+        .database
+        .child("chatMessages/${AppFirebaseService().currentOrder}")
+        .orderByChild("msg_send_by")
+        .equalTo("0")
+        .onChildAdded
+        .listen((event) async {
+      var snapshot = event.snapshot;
+      if (snapshot.value != null) {
+        print("Received new message");
+        await receiveMessage(snapshot);
+      }
+    });
+
+    // Listen for typing status changes
+    typingListener = AppFirebaseService()
+        .database
+        .child("order/${AppFirebaseService().currentOrder}/isCustTyping")
         .onValue
         .listen((event) async {
-      print("endTimeChanged");
       var snapshot = event.snapshot;
       if (snapshot.value != null) {
         isTyping.value = true;
@@ -653,14 +635,19 @@ class ChatMessageWithSocketController extends GetxController
         scrollToBottomFunc();
       }
     });
-    messageController.addListener(() {
-      String text = messageController.text;
-      if (text.length % 3 == 0 && text.isNotEmpty) {
-        FirebaseDatabase.instance.ref(
-            "order/${AppFirebaseService().orderData.value["orderId"]}/isAstroTyping").set(AppFirebaseService().currentTime().millisecondsSinceEpoch);
+  }
+
+  checkIfChatIsEnded() {
+    print("checkIfChatIsEnded");
+    if (AppFirebaseService().orderData.value["status"] == null) {
+      if (MiddleWare.instance.currentPage ==
+          RouteName.chatMessageWithSocketUI) {
+        Get.until((route) {
+          return Get.currentRoute == RouteName.dashboard;
+        });
       }
-    });
-    runTimer();
+    }
+    return AppFirebaseService().orderData.value["status"] != null;
   }
 
   runTimer() {
@@ -714,7 +701,6 @@ class ChatMessageWithSocketController extends GetxController
           if (MiddleWare.instance.currentPage == RouteName.dashboard ||
               AppFirebaseService().orderData.value["status"] == "3") {
             print("ExtraTalktime is closing");
-            //extraTimer?.cancel();
           }
         }
       } else {
@@ -736,47 +722,6 @@ class ChatMessageWithSocketController extends GetxController
     }
   }
 
-  // void startExtraTimer2() {
-  //   Duration timeLeft = const Duration(minutes: 1);
-  //   extraTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-  //     if (AppFirebaseService().orderData.value["status"] == null ||
-  //         AppFirebaseService().orderData.value["status"].toString() != "4") {
-  //       timer.cancel();
-  //     } else {
-  //       DateTime dateTime = DateTime.fromMillisecondsSinceEpoch(
-  //           AppFirebaseService().orderData.value["order_end_time"]);
-  //       final difference = dateTime.difference(DateTime.now());
-  //       if (difference.isNegative ||
-  //           (difference.inSeconds == 0 &&
-  //               difference.inMinutes == 0 &&
-  //               difference.inHours == 0)) {
-  //         if (AppFirebaseService().orderData.value["orderId"] != null ||
-  //             AppFirebaseService().orderData.value["status"] == "4") {
-  //           extraTimer?.cancel();
-  //           extraTalkTime.value = "0";
-  //           timer.cancel();
-  //           print("WentBack timeUp");
-  //           timeLeft = Duration.zero;
-  //           backFunction();
-  //         }
-  //       } else {
-  //         timeLeft = difference;
-  //         extraTalkTime.value =
-  //             "${timeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
-  //             "${timeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
-  //         print("time Left ${extraTalkTime.value}");
-  //         if (MiddleWare.instance.currentPage == RouteName.dashboard ||
-  //             AppFirebaseService().orderData.value["status"] == "3") {
-  //           print("ExtraTalktime is closing");
-  //           extraTimer?.cancel();
-  //           //AppFirebaseService().orderData.value={};
-  //           //  endChatApi();
-  //         }
-  //       }
-  //     }
-  //   });
-  // }
-
   getMessageTemplates() async {
     try {
       final response = await messageTemplateRepository.fetchTemplates();
@@ -785,7 +730,7 @@ class ChatMessageWithSocketController extends GetxController
       }
       messageTemplatesList.value.clear();
       for (int i = 0; i < messageTemplateList.length; i++) {
-        if (await getBoolFromPrefs(messageTemplateList[i].id.toString())) {
+        if (await getBoolFromPrefs(messageTemplateList[i].id.toString()) || messageTemplateList[i].type.toString() =="0") {
           messageTemplatesList.value.add(messageTemplateList[i]);
         }
       }
@@ -799,95 +744,7 @@ class ChatMessageWithSocketController extends GetxController
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool("${key}template") ?? false;
   }
-
-  // void startExtraTimer(int futureTimeInEpochMillis) {
-  //   if (AppFirebaseService().orderData.value["status"] == "4") {
-  //     chatTimer?.cancel();
-  //     chatTimer = null;
-  //     showTalkTime.value = "-1";
-  //   }
-  //   DateTime dateTime =
-  //   DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis);
-  //   Duration extraTimeLeft = const Duration(minutes: 1);
-  //   if(extraTimer != null){
-  //     extraTimer?.cancel();
-  //     extraTimer = null;
-  //   }
-  //   extraTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-  //     final difference =
-  //     dateTime.difference(AppFirebaseService().currentTime());
-  //     if (difference.isNegative ||
-  //         (difference.inSeconds == 0 &&
-  //             difference.inMinutes == 0 &&
-  //             difference.inHours == 0)) {
-  //       if (AppFirebaseService().orderData.value["orderId"] != null ||
-  //           AppFirebaseService().orderData.value["status"] == "4") {
-  //         extraTimer?.cancel();
-  //         extraTimer = null;
-  //         extraTalkTime.value = "0";
-  //         timer.cancel();
-  //         print("ExtraTimeUp backFunction");
-  //         extraTimeLeft = Duration.zero;
-  //         backFunction();
-  //       }
-  //     } else {
-  //       timeCountDown = timeCountDown - 1;
-  //       extraTimeLeft = difference;
-  //       extraTalkTime.value =
-  //       "${extraTimeLeft.inMinutes.remainder(60).toString().padLeft(2, '0')}:"
-  //           "${extraTimeLeft.inSeconds.remainder(60).toString().padLeft(2, '0')}";
-  //       print("time Left ${extraTalkTime.value}");
-  //       if (MiddleWare.instance.currentPage == RouteName.dashboard ||
-  //           AppFirebaseService().orderData.value["status"] == "3") {
-  //         print("ExtraTalktime is closing");
-  //         extraTimer?.cancel();
-  //         //AppFirebaseService().orderData.value={};
-  //         //  endChatApi();
-  //       }
-  //       print("time Left ${MiddleWare.instance.currentPage}");
-  //     }
-  //   });
-  // }
-
   Duration? timeDifference;
-
-  // void talkTimeStartTimer(int futureTimeInEpochMillis) {
-  //   print("futureTime.minute $futureTimeInEpochMillis");
-  //   DateTime dateTime =
-  //       DateTime.fromMillisecondsSinceEpoch(futureTimeInEpochMillis * 1000);
-  //   if (chatTimer != null) {
-  //     chatTimer?.cancel();
-  //     chatTimer = null;
-  //   }
-  //   chatTimer = Timer.periodic(const Duration(seconds: 1), (Timer timer) async {
-  //     if (AppFirebaseService().orderData.value["status"] == null) {
-  //       timer.cancel();
-  //     } else {
-  //       timeDifference =
-  //           dateTime.difference(AppFirebaseService().currentTime());
-  //       // print("current time difference:  ${timeDifference.toString()}");
-  //       print(
-  //           "timeCountDown:X - $isCountDownTimer ${DateTime.now().millisecondsSinceEpoch}");
-  //       if (isCountDownTimer.toString() == "1") {
-  //         if (timeCountDown == 0 || timeCountDown < 0) {
-  //           await closedChat();
-  //         } else {
-  //           workingChat2(timer);
-  //         }
-  //       } else {
-  //         if (timeDifference!.isNegative ||
-  //             (timeDifference!.inSeconds == 0 &&
-  //                 timeDifference!.inMinutes == 0 &&
-  //                 timeDifference!.inHours == 0)) {
-  //           await closedChat();
-  //         } else {
-  //           workingChat(timer);
-  //         }
-  //       }
-  //     }
-  //   });
-  // }
-
   String formatTime(int seconds) {
     // Calculate hours, minutes, and seconds
     int hours = seconds ~/ 3600;
@@ -926,15 +783,10 @@ class ChatMessageWithSocketController extends GetxController
   Future<void> closedChat() async {
     await callHangup();
     showTalkTime.value = "-1";
-    print("chatTimeLeft ---- ${showTalkTime.value}");
-    // chatTimer?.cancel();
-    // chatTimer = null;
-    // extraTimer?.cancel();
-    // extraTimer = null;
     Future.delayed(const Duration(seconds: 3)).then((value) {
       if (showTalkTime.value == "-1") {
         print('showTalkTime Chat ending on cust app closed');
-        print('${AppFirebaseService().orderData.value["status"].toString()}');
+        print(AppFirebaseService().orderData.value["status"].toString());
         if (AppFirebaseService().orderData.value["status"].toString() == "3" ||
             AppFirebaseService().orderData.value["status"].toString() == "2") {
           DatabaseReference ref = FirebaseDatabase.instance
@@ -984,11 +836,6 @@ class ChatMessageWithSocketController extends GetxController
       WidgetsBinding.instance.endOfFrame.then(
         (_) async {
           socket.socket?.disconnect();
-          // chatTimer?.cancel();
-          // chatTimer = null;
-          // print("WentBack endChat");
-          // extraTimer?.cancel();
-          // extraTimer = null;
           FirebaseDatabase.instance
               .ref(
                   "user/${AppFirebaseService().orderData.value["userId"]}/realTime/queue_list/${param["order_id"]}")
@@ -1018,12 +865,6 @@ class ChatMessageWithSocketController extends GetxController
         print("userLeavePrivateChatListenerSocket");
         socket.leavePrivateChatEmit(userData?.id.toString(),
             AppFirebaseService().orderData.value["userId"], "0");
-        // chatTimer?.cancel();
-        // chatTimer = null;
-        // print("WentBack backFunc ${MiddleWare.instance.currentPage}");
-        // extraTimer?.cancel();
-        // extraTimer = null;
-        // Get.delete<ChatMessageWithSocketController>();
         if (MiddleWare.instance.currentPage ==
             RouteName.chatMessageWithSocketUI) {
           Get.until(
@@ -1134,7 +975,7 @@ class ChatMessageWithSocketController extends GetxController
           '${data['data']["typist"].toString()}  ${AppFirebaseService().orderData.value["userId"].toString()}');
       if (data['data']["typist"].toString() ==
           AppFirebaseService().orderData.value["userId"].toString()) {
-      //  isTyping.value = true;
+        //  isTyping.value = true;
         //chatStatus.value = "Typing";
         // if (isScrollAtBottom()) {
         //   scrollToBottomFunc();
@@ -1183,7 +1024,7 @@ class ChatMessageWithSocketController extends GetxController
       debugPrint("sendMessageListenerSocket context ${Get.context!}");
       if (fireChat.value == 0) {
         if (data is Map<String, dynamic>) {
-        //  isTyping.value = false;
+          //  isTyping.value = false;
           final ChatMessage chatMessage =
               ChatMessage.fromOfflineJson(data["data"]);
           final String time =
@@ -1777,7 +1618,10 @@ class ChatMessageWithSocketController extends GetxController
 
   int getListOfCardLength(BuildContext context) {
     var orderData = AppFirebaseService().orderData.value;
-    if (isCardVisible.value == true && orderData.containsKey("card")) {
+    if ((orderData["card"] != null
+            ? (orderData["card"]["isCardVisible"] ?? false)
+            : false) &&
+        orderData.containsKey("card")) {
       ScaffoldMessenger.of(context).hideCurrentSnackBar();
       if (AppFirebaseService().orderData.value['card']['listOfCard'] != null) {
         var listOfCard =
@@ -1965,48 +1809,6 @@ class ChatMessageWithSocketController extends GetxController
     } else {
       debugPrint('else hit hua');
       return File('');
-    }
-  }
-
-  void initTask(Map<String, dynamic> p0) {
-    if (p0["status"] == null || p0["status"] == "5") {
-      WidgetsBinding.instance.endOfFrame.then(
-        (_) async {
-          socket.socket?.disconnect();
-          // chatTimer?.cancel();
-          // chatTimer = null;
-          // print("WentBack Status- ${p0["status"]}");
-          // extraTimer?.cancel();
-          // extraTimer = null;
-          Get.until(
-            (route) {
-              return Get.currentRoute == RouteName.dashboard;
-            },
-          );
-        },
-      );
-      return;
-    }
-    if (p0["status"] == "4") {
-      // chatTimer?.cancel();
-      // chatTimer = null;
-      showTalkTime.value = "-1";
-    } else if (p0["status"] == "3" || p0["status"] == "2") {
-      // extraTimer?.cancel();
-      // extraTimer = null;
-      print("extraTime closing");
-      int remainingTime = AppFirebaseService().orderData.value["end_time"] ?? 0;
-      //talkTimeStartTimer(remainingTime);
-    }
-
-    isCardVisible.value =
-        p0["card"] != null ? (p0["card"]["isCardVisible"] ?? false) : false;
-
-    if (isCardBotOpen == true &&
-        p0["card"] != null &&
-        !(p0["card"]["isCardVisible"])) {
-      // "Picking tarot card...";
-      update();
     }
   }
 

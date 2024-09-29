@@ -93,7 +93,6 @@ class DashboardScreen extends GetView<DashboardController> {
                       Scaffold(
                           backgroundColor: appColors.white,
                           key: controller.scaffoldkey,
-                          floatingActionButton: rejoinVisibility(),
                           floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
                           body: Obx(
                             () {
@@ -263,7 +262,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                               const SizedBox(height: 5),
                                             ],
                                           ),
-                                          label: "queue".tr,
+                                          label: "Orders".tr,
                                         ),
 
                                         // Profile Tab comment
@@ -337,7 +336,7 @@ class DashboardScreen extends GetView<DashboardController> {
                           ? acceptBottomBar(
                               chatOrderData: controller.chatOrderData)
                           : const SizedBox(),
-
+                      rejoinVisibility()
                     ],
                   );
                 }),

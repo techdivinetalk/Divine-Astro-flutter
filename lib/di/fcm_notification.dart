@@ -1,3 +1,4 @@
+/*
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:math' as math;
@@ -17,16 +18,14 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../common/common_functions.dart';
-import '../model/chat/req_common_chat_model.dart';
-import '../model/chat/res_common_chat_success.dart';
 import '../model/chat_assistant/chat_assistant_astrologer_response.dart';
-import '../repository/chat_repository.dart';
 
-const channel = AndroidNotificationChannel(
-  "DivineAstrologer",
-  "AstrologerNotification",
-  importance: Importance.high,
+  AndroidNotificationChannel channel =  AndroidNotificationChannel(
+'high_importance_channel',
+'High Importance Notifications',
+description: 'This channel is used for important notifications.',
+showBadge: true,
+importance: Importance.high,
 );
 final flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
 
@@ -35,85 +34,6 @@ Map<String, dynamic>? notificationDetails;
 BuildContext? contextDetail;
 String? previousTransId;
 String? previosConversationId;
-
-Future<void> firebaseMessagingConfig(BuildContext buildContext) async {
-  contextDetail = buildContext;
-  initMessaging();
-  final firebaseMessaging = FirebaseMessaging.instance;
-
-  await firebaseMessaging.requestPermission(
-    alert: true,
-    announcement: false,
-    badge: true,
-    carPlay: false,
-    criticalAlert: false,
-    provisional: false,
-    sound: true,
-  );
-
-  firebaseMessaging.setForegroundNotificationPresentationOptions(
-    alert: true,
-    badge: true,
-    sound: true,
-  );
-
-  // //Terminated Notification Configuration
-  // FirebaseMessaging.instance.getInitialMessage().then((message) {
-  //   showNotificationWithActions(message: "Get", title: "Notification");
-  // });
-
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    if (message.notification != null) {
-      debugPrint(
-          "onMessage Notification received : ${message.notification?.title}");
-      showNotificationWithActions(
-        title: message.notification!.title ?? '',
-        message: message.notification!.body ?? '',
-      );
-      //  checkNotification(isFromNotification: true);
-    }
-  });
-  Future<void> showNotification() async {
-    const AndroidNotificationDetails androidPlatformChannelSpecifics =
-        AndroidNotificationDetails(
-      'your channel id',
-      'your channel name',
-      importance: Importance.max,
-      priority: Priority.high,
-      showWhen: false,
-    );
-    const NotificationDetails platformChannelSpecifics =
-        NotificationDetails(android: androidPlatformChannelSpecifics);
-    await flutterLocalNotificationsPlugin.show(
-      0,
-      'Test Notification',
-      'This is the body of the notification',
-      platformChannelSpecifics,
-      payload: 'item x',
-    );
-  }
-
-  FirebaseMessaging.onMessageOpenedApp.listen((message) {
-    AppFirebaseService().payload = message.data;
-    if (message.notification != null) {
-      debugPrint("Notification received : 2");
-      checkNotification(isFromNotification: true);
-    }
-  });
-
-  // FirebaseMessaging.onBackgroundMessage((message) async {
-  //   print("Notification received : 3");
-  //   return checkNotification(isFromNotification: true);
-  // });
-  // ignore: unused_element
-  Future<void> firebaseMessagingBackgroundHandler(RemoteMessage message) async {
-    print("Notification received : 4");
-    if (message.notification != null) {
-      print("Notification received : 4");
-      checkNotification(isFromNotification: true);
-    }
-  }
-}
 
 void initMessaging() async {
   const AndroidInitializationSettings initializationSettingsAndroid =
@@ -130,43 +50,44 @@ void initMessaging() async {
       onDidReceiveNotificationResponse:
           (NotificationResponse notificationResponse) async {
     final String? payload = notificationResponse.payload;
-    print(payload);
+    log(payload.toString());
     if (payload != null) {
       final Map<String, dynamic> payloadMap =
           jsonDecode(notificationResponse.payload!);
-      debugPrint('notification payload: -- ${payloadMap}');
-      //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
-      // if(payloadMap["type"] == "2") {
+      log('notification payload: -- ${payloadMap}');
 
+      //  debuglog('notification payload: ${payloadMap["type"] == "2"}');
 
       log("payloadMap type ------>${payloadMap["type"]}");
       if (payloadMap["type"] == "1") {
-        print("22222" + payloadMap.toString());
+        log("22222" + payloadMap.toString());
         Get.toNamed(RouteName.chatMessageWithSocketUI);
       } else if (payloadMap["type"] == "2") {
-        print(" 1111111111111" + payloadMap.toString());
-            // final snapshot = AppFirebaseService()
-            // .database
-            // .child("order/${AppFirebaseService().orderData.value["orderId"]}");
+        log(" 1111111111111" + payloadMap.toString());
+        // final snapshot = AppFirebaseService()
+        // .database
+        // .child("order/${AppFirebaseService().orderData.value["orderId"]}");
 
         final ref = AppFirebaseService()
             .database
-            .child("order/${AppFirebaseService().orderData.value["orderId"]}").path;
+            .child("order/${AppFirebaseService().orderData.value["orderId"]}")
+            .path;
 
-        if(ref.split("/").last == payloadMap["order_id"]){
+        if (ref.split("/").last == payloadMap["order_id"]) {
           Get.toNamed(RouteName.acceptChatRequestScreen);
-        } else{
+        } else {
           Fluttertoast.showToast(msg: "Your order has been ended");
         }
 
         // Get.toNamed(RouteName.acceptChatRequestScreen);
         // acceptOrRejectChat(orderId: int.parse(payloadMap["order_id"]), queueId: int.parse(payloadMap["queue_id"]));
 
-        /*Future<bool> acceptOrRejectChat(
+        */
+/*Future<bool> acceptOrRejectChat(
             {required int? orderId, required int? queueId}) async {
 // *accept_or_reject: 1 = accept, 3 = chat reject by timeout
 // * is_timeout: should be 1 when reject by timeout"
-          print("chat_reject 1");
+          log("chat_reject 1");
           ResCommonChatStatus response = await ChatRepository().chatAccept(
               ReqCommonChatParams(
                       queueId: queueId,
@@ -174,30 +95,31 @@ void initMessaging() async {
                       isTimeout: 0,
                       acceptOrReject: 1)
                   .toJson());
-          print("chat_reject 2");
+          log("chat_reject 2");
           if (response.statusCode == 200) {
-            print("chat_reject 3");
+            log("chat_reject 3");
             return true;
           } else {
-            print("chat_reject 4");
+            log("chat_reject 4");
             return false;
           }
-        }*/
+        }*//*
+
 
         // Get.toNamed(RouteName.liveDharamScreen);
       } else if (payloadMap["type"] == "8") {
-        print("payloadMap -----> ${payloadMap}");
+        log("payloadMap -----> ${payloadMap}");
         final senderId = payloadMap["sender_id"];
         DataList dataList = DataList();
         dataList.id = int.parse(senderId);
         dataList.name = payloadMap["title"];
-        print("333333" + payloadMap.toString());
+        log("333333" + payloadMap.toString());
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
       } else if (payloadMap["type"] == "13") {
         dasboardCurrentIndex(3);
-      } else if(payloadMap["type"] == "20"){
-        if(MiddleWare.instance.currentPage == RouteName.dashboard){
-          if(Get.isRegistered<DashboardController>()){
+      } else if (payloadMap["type"] == "20") {
+        if (MiddleWare.instance.currentPage == RouteName.dashboard) {
+          if (Get.isRegistered<DashboardController>()) {
             Get.find<DashboardController>().selectedIndex.value = 3;
           }
         }
@@ -227,7 +149,7 @@ void initMessaging() async {
       //   // await Get.toNamed(RouteName.chatMessageWithSocketUI);
       // }, orderId: orderId);
     } else {
-      print("Raj bhai");
+      log("Raj bhai");
     }
   });
 }
@@ -262,18 +184,17 @@ void onDidReceiveLocalNotification(
 void onDidReceiveNotificationResponse(
     NotificationResponse notificationResponse) async {
   final String? payload = notificationResponse.payload;
-  print(payload);
-  print("payloadpayloadpayloadpayloadpayloadpayload");
+  log(payload.toString());
+  log("payloadpayloadpayloadpayloadpayloadpayload");
   if (notificationResponse.payload != null) {
     ///// redirect to bottom sheet of accept the request
-    print(notificationResponse.payload);
-    print("notificationResponse.payload");
+    log(notificationResponse.payload.toString());
+    log("notificationResponse.payload");
     final Map<String, dynamic> payloadMap =
         jsonDecode(notificationResponse.payload!);
-    debugPrint('notification payload: -- ${payloadMap}');
-    //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
+    log('notification payload: -- ${payloadMap}');
+    //  debuglog('notification payload: ${payloadMap["type"] == "2"}');
     // // if(payloadMap["type"] == "2") {
-
 
     if (payloadMap["type"] == "1") {
       Get.toNamed(RouteName.chatMessageWithSocketUI);
@@ -315,37 +236,9 @@ void onDidReceiveNotificationResponse(
   // }
 }
 
-Future<void> chatInit(String requestId) async {
-  try {
-    final userDetail = preferenceService.getUserDetail();
-    // if (userDetail != null) {
-    //   final notificationPath = 'user/$requestId/realTime/notification';
-    //   final int timestamp = DateTime.now().millisecondsSinceEpoch;
-    //   final notificationData = {
-    //     '$timestamp': {
-    //       'isActive': 1,
-    //       'message': '${userDetail.name} wants to chat with you',
-    //       'value': 'Click to chat',
-    //       'requestId': userDetail.id
-    //     },
-    //   };
-    //
-    //   final appFirebaseService = AppFirebaseService();
-    //   await appFirebaseService.writeData(notificationPath, notificationData);
-    //   debugPrint('Notification data written to the database');
-    // } else {
-    //   debugPrint('Error: User details not available');
-    // }
-  } catch (e) {
-    debugPrint('Error writing notification data to the database: $e');
-  }
-}
-
 Future<void> showNotificationWithActions(
-    {required String title,
-    required String message,
-    dynamic payload}) async {
-  debugPrint("enter in showNotificationWithActions --> $message");
+    {required String title, required String message, dynamic payload}) async {
+  log("enter in showNotificationWithActions --> $message");
   String? jsonEncodePayload;
   if (payload != null) {
     jsonEncodePayload = jsonEncode(payload);
@@ -356,25 +249,21 @@ Future<void> showNotificationWithActions(
 
       final databaseMessage = ChatMessagesOffline().obs;
 
-
-
-
-
       log('data message ${databaseMessage.value.toOfflineJson()}');
       log("this is my tableName $tableName");
-
     }
   }
 
-  const AndroidNotificationDetails androidNotificationDetails =
+  AndroidNotificationDetails androidNotificationDetails =
       AndroidNotificationDetails(
     "DivineAstrologer",
     "AstrologerNotification",
     importance: Importance.high,
     icon: "divine_logo_tran",
   );
-  const NotificationDetails notificationDetails =
-      NotificationDetails(android: androidNotificationDetails);
+  NotificationDetails notificationDetails = NotificationDetails(
+    android: androidNotificationDetails,
+  );
   await flutterLocalNotificationsPlugin.show(
     math.Random().nextInt(10000),
     title,
@@ -383,3 +272,4 @@ Future<void> showNotificationWithActions(
     payload: jsonEncodePayload,
   );
 }
+*/

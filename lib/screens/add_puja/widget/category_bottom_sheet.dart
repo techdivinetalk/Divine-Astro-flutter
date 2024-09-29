@@ -7,9 +7,11 @@ import 'package:get/get.dart';
 
 class CategoryBottomSheet extends StatefulWidget {
   final List<PujaProductCategoriesData>? categoriesType;
+  final from;
   final Function(PujaProductCategoriesData)? onTap;
 
-  const CategoryBottomSheet({this.categoriesType, required this.onTap});
+  const CategoryBottomSheet(
+      {this.categoriesType, this.from = "", required this.onTap});
 
   @override
   State<CategoryBottomSheet> createState() => _CategoryBottomSheetState();
@@ -72,7 +74,6 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
                         data.isSelected = !data.isSelected!;
                         widget.onTap!(data);
                         setState(() {});
-
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -80,11 +81,15 @@ class _CategoryBottomSheetState extends State<CategoryBottomSheet> {
                         decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(20),
                             color: data.isSelected!
-                                ? appColors.textColor
+                                ? widget.from == "onBoarding"
+                                    ? appColors.appRedColour
+                                    : appColors.textColor
                                 : appColors.transparent,
                             border: Border.all(
                               color: data.isSelected!
-                                  ? appColors.transparent
+                                  ? widget.from == "onBoarding"
+                                      ? appColors.appRedColour
+                                      : appColors.transparent
                                   : appColors.textColor,
                             )),
                         child: Text(

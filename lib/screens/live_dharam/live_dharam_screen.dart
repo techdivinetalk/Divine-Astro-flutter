@@ -12,6 +12,7 @@ import "package:divine_astrologer/common/app_textstyle.dart";
 import "package:divine_astrologer/common/colors.dart";
 import "package:divine_astrologer/common/common_bottomsheet.dart";
 import "package:divine_astrologer/common/common_functions.dart";
+import "package:divine_astrologer/common/custom_widgets.dart";
 import "package:divine_astrologer/common/generic_loading_widget.dart";
 import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
@@ -394,6 +395,7 @@ class _LivePage extends State<LiveDharamScreen>
                   fullGiftImage: "",
                   isBlockedCustomer: false,
                   isMod: true,
+                  // level: ""
                 );
                 await sendMessageToZego(model);
               } else {}
@@ -411,6 +413,7 @@ class _LivePage extends State<LiveDharamScreen>
                   fullGiftImage: "",
                   isBlockedCustomer: false,
                   isMod: true,
+                  // level: "",
                 );
                 await sendMessageToZego(model);
               } else {}
@@ -745,7 +748,9 @@ class _LivePage extends State<LiveDharamScreen>
 
   Widget foregroundWidget() {
     return Padding(
-      padding: const EdgeInsets.only(top: kToolbarHeight - 16.0),
+      padding: EdgeInsets.only(
+          top: kToolbarHeight - 16.0,
+          bottom: MediaQuery.of(context).padding.bottom),
       child: Column(
         children: <Widget>[
           appBarWidget(),
@@ -781,11 +786,11 @@ class _LivePage extends State<LiveDharamScreen>
               ],
             ),
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           // horizontalGiftBar(ctx: context),
           // const SizedBox(height: 8),
           newUI(),
-          const SizedBox(height: 8),
+          // const SizedBox(height: 8),
         ],
       ),
     );
@@ -942,6 +947,7 @@ class _LivePage extends State<LiveDharamScreen>
               // final isLiveMonitoringTeam =
               //     msg.userName == "Live Monitoring Team";
               final isModerator = msg.isMod;
+              print("-------=====> ${msg.userName} ------> ${msg.level}");
               return msg.type == 0
                   ? const SizedBox()
                   : Row(
@@ -982,34 +988,51 @@ class _LivePage extends State<LiveDharamScreen>
                               Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Container(
-                                    constraints: BoxConstraints(
-                                      maxWidth: Get.width /
-                                          2.5, // Define the maximum width here
-                                    ),
-                                    child: Text(
-                                      msg.userName ?? "",
-                                      // nameWithWithoutIDs(msg, isModerator),
-                                      maxLines: 100000,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: isBlocked ||
-                                                msg.userName ==
-                                                    "Quality Team" ||
-                                                msg.userName ==
-                                                    "Live Monitoring Team"
-                                            ? Colors.red
-                                            : isModerator
-                                                ? appColors.white
-                                                : msg.fullGiftImage.isNotEmpty
+                                  Row(
+                                    children: [
+                                      Container(
+                                        constraints: BoxConstraints(
+                                          maxWidth: Get.width / 2.3,
+                                        ),
+                                        child: Text(
+                                          "${msg.userName} ${isBlocked || msg.userName == "Quality Team" || msg.userName == "Live Monitoring Team" ? "" : "(${msg.userId})"}",
+                                          maxLines: 2,
+                                          style: TextStyle(
+                                            fontSize: 14,
+                                            color: isBlocked ||
+                                                    msg.userName ==
+                                                        "Quality Team" ||
+                                                    msg.userName ==
+                                                        "Live Monitoring Team"
+                                                ? Colors.red
+                                                : isModerator &&
+                                                        msg.fullGiftImage
+                                                            .isNotEmpty
                                                     ? appColors.black
-                                                    : msg.message.contains(
-                                                            "Started following")
-                                                        ? appColors.black
-                                                        : Colors.white,
+                                                    : isModerator
+                                                        ? appColors.white
+                                                        : msg.fullGiftImage
+                                                                .isNotEmpty
+                                                            ? appColors.black
+                                                            : msg.message.contains(
+                                                                    "Started following")
+                                                                ? appColors
+                                                                    .black
+                                                                : Colors.white,
+                                          ),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
+                                      msg.level != null && msg.level != ""
+                                          ? Padding(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      horizontal: 2.0),
+                                              child: LevelWidget(
+                                                  level: msg.level ?? ""),
+                                            )
+                                          : const SizedBox(),
+                                    ],
                                   ),
                                   Container(
                                     constraints: BoxConstraints(
@@ -1017,7 +1040,9 @@ class _LivePage extends State<LiveDharamScreen>
                                           2.5, // Define the maximum width here
                                     ),
                                     child: Text(
-                                      msg.message ?? "",
+                                      isBlocked
+                                          ? "********"
+                                          : msg.message ?? "",
                                       maxLines: 100000,
                                       style: TextStyle(
                                         fontSize: 13,
@@ -1027,6 +1052,10 @@ class _LivePage extends State<LiveDharamScreen>
                                                 msg.userName ==
                                                     "Live Monitoring Team"
                                             ? Colors.red
+                                            : isModerator &&
+                                            msg.fullGiftImage
+                                                .isNotEmpty
+                                            ? appColors.black
                                             : isModerator
                                                 ? appColors.white
                                                 : msg.fullGiftImage.isNotEmpty
@@ -3170,6 +3199,7 @@ class _LivePage extends State<LiveDharamScreen>
         fullGiftImage: "",
         isBlockedCustomer: _controller.isCustomerBlockedBool(),
         isMod: _controller.isMod,
+        // level: "",
       );
       await sendMessageToZego(model);
     }
@@ -3367,11 +3397,9 @@ class _LivePage extends State<LiveDharamScreen>
       needAcceptButton: true,
       needDeclinetButton: false,
       onAcceptButton: () async {
-        print("${user.id}");
-        print("user name ---- ${user.name}");
-        print("calling accept button");
+        print("------->>>>${zegoController.coHost}----user---->>>>${user}");
         final connectInvite = zegoController.coHost;
-        print("calling accept button");
+
         await connectInvite.hostSendCoHostInvitationToAudience(user);
         Get.back();
       },

@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
+
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
@@ -11,21 +12,27 @@ import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_list_model.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../app_socket/app_socket.dart';
 import '../../../common/colors.dart';
 import '../../../common/common_functions.dart';
 import '../../../common/show_permission_widget.dart';
 import '../../../di/shared_preference_service.dart';
+import '../../../gen/fonts.gen.dart';
+import '../../../model/ChatAssCallModel.dart';
+import '../../../model/CheckingAssistantCallModel.dart';
 import '../../../model/chat_assistant/chat_assistant_astrologer_response.dart';
 import '../../../model/chat_assistant/chat_assistant_chats_response.dart';
 import '../../../model/message_template_response.dart';
@@ -41,6 +48,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   final messageScrollController = ScrollController();
   ChatAssistChatResponse? chatAssistChatResponse;
   RxList chatMessageList = [].obs;
+  var showMP = false.obs;
   var preferenceService;
   RxString userProfileImage = "".obs;
   RxList<AssistChatData> unreadMessageList = <AssistChatData>[].obs;
@@ -54,6 +62,8 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   RxString? baseImageUrl = "".obs;
   RxBool isCustomerOnline = false.obs;
   RxBool loading = false.obs;
+  RxBool checkingCalling = false.obs;
+  RxBool callLoading = false.obs;
   File? image;
   final ImagePicker picker = ImagePicker();
   XFile? pickedFile;
@@ -272,7 +282,8 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   getOurImage() async {
     final prefs = await SharedPreferences.getInstance();
     final baseAmazonUrl = prefs.getString(SharedPreferenceService.baseImageUrl);
-    userProfileImage("$baseAmazonUrl/${preferenceService.getUserDetail()?.image}");
+    userProfileImage(
+        "$baseAmazonUrl/${preferenceService.getUserDetail()?.image}");
   }
 
   sendMsgTemplate(MessageTemplates msg, bool isTemplateMsg) {
@@ -296,7 +307,9 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
 
   userjoinedChatSocket() {
     appSocket.emitForStartAstroCustChatAssist(
-        preferenceService.getUserDetail()?.id.toString(), args?.id.toString(), 0);
+        preferenceService.getUserDetail()?.id.toString(),
+        args?.id.toString(),
+        0);
   }
 
   userleftChatSocket() {
@@ -571,6 +584,201 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
       }
     } catch (e, s) {
       debugPrint("Error fetching chat messages: $e $s");
+    }
+  }
+
+  CheckingAssistantCallModel? checkingAssistantCallModel;
+  checkCalling() async {
+    try {
+      checkingCalling(true);
+      update();
+      final map = {"user_id": args!.id};
+      final response = await chatAssistantRepository.checkingCallStatus(map);
+      if (response!.success == true) {
+        checkingCalling(false);
+        Get.dialog(
+          barrierDismissible: true,
+          AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14.0),
+            ),
+            elevation: 0,
+            contentPadding: EdgeInsets.fromLTRB(10, 12, 10, 10),
+            content: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  response.title ?? "",
+                  textAlign: TextAlign.start,
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: FontFamily.poppins,
+                    color: appColors.red,
+                  ),
+                ),
+                Html(data: response.description ?? ""),
+                Obx(() {
+                  return callLoading.value == true
+                      ? Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Center(
+                            child: SizedBox(
+                              height: 30,
+                              width: 30,
+                              child: CircularProgressIndicator(
+                                strokeWidth: 2,
+                                color: appColors.red,
+                              ),
+                            ),
+                          ),
+                        )
+                      : InkWell(
+                          onTap: () {
+                            callUser();
+                            Get.back();
+                          },
+                          child: Container(
+                            height: 45,
+                            width: MediaQuery.of(Get.context!).size.width,
+                            decoration: BoxDecoration(
+                              color: appColors.red,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                              child: Text(
+                                "Start Voice Call",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 16.sp,
+                                  fontWeight: FontWeight.w600,
+                                  fontFamily: FontFamily.poppins,
+                                  color: appColors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        );
+                }),
+                SizedBox(
+                  height: 8,
+                ),
+              ],
+            ),
+          ),
+        );
+        update();
+      } else {
+        checkingCalling(false);
+        Get.dialog(
+          barrierDismissible: true,
+          AlertDialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(14.0),
+            ),
+            elevation: 0,
+            content: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  "Wait",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20.sp,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: FontFamily.poppins,
+                    color: appColors.red,
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                Text(
+                  checkingAssistantCallModel!.message!,
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w400,
+                    fontFamily: FontFamily.poppins,
+                    color: appColors.darkBlue,
+                  ),
+                ),
+                SizedBox(
+                  height: 8,
+                ),
+                InkWell(
+                  onTap: () {
+                    Get.back();
+                  },
+                  child: Container(
+                    height: 40,
+                    width: MediaQuery.of(Get.context!).size.width,
+                    decoration: BoxDecoration(
+                      color: appColors.red,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Okay",
+                        textAlign: TextAlign.center,
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: FontFamily.poppins,
+                          color: appColors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+        update();
+      }
+    } catch (e, s) {
+      debugPrint("Error fetching chat messages: $e $s");
+      Fluttertoast.showToast(
+        msg: "Something went wrong!!",
+        backgroundColor: appColors.darkBlue,
+      );
+    }
+
+    checkingCalling(false);
+    update();
+  }
+
+  ChatAssCallModel? chatAssCallModel;
+  callUser() async {
+    try {
+      callLoading(true);
+      update();
+
+      final map = {"user_id": args!.id}; // Ensure `args` is not null.
+      print("map ---${map}");
+      final response = await chatAssistantRepository.callToAstrologerRepo(map);
+
+      if (response != null && response.success == true) {
+        callLoading(false);
+        chatAssCallModel = response;
+        Fluttertoast.showToast(
+            msg: response.message ?? "Call initiated successfully");
+      } else {
+        callLoading(false);
+        Fluttertoast.showToast(msg: "Failed to initiate call");
+      }
+
+      update();
+    } catch (e, s) {
+      debugPrint("Error fetching chat messages: $e $s");
+    } finally {
+      callLoading(false);
+      update();
     }
   }
 

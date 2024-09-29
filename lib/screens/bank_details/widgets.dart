@@ -199,7 +199,8 @@ class BankDetailsField extends StatelessWidget {
   final Color? errorBorder;
   final TextEditingController? controller;
   final String? Function(String? value)? validator;
-
+  final from;
+  final label;
   const BankDetailsField({
     super.key,
     required this.hintText,
@@ -207,9 +208,11 @@ class BankDetailsField extends StatelessWidget {
     required this.inputAction,
     this.errorBorder,
     this.icon,
+    this.label,
     this.suffixIcon,
     this.controller,
     this.validator,
+    this.from,
   });
 
   @override
@@ -217,59 +220,108 @@ class BankDetailsField extends StatelessWidget {
     return Container(
       height: 55.h,
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.3),
-            blurRadius: 1.0,
-            offset: const Offset(0.1, 1.0),
-          ),
-        ],
+        borderRadius: from == "onBoarding" ? null : BorderRadius.circular(10),
+        boxShadow: from == "onBoarding"
+            ? null
+            : [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.3),
+                  blurRadius: 1.0,
+                  offset: const Offset(0.1, 1.0),
+                ),
+              ],
       ),
       child: TextFormField(
         controller: controller,
         keyboardType: inputType,
         validator: validator,
         textInputAction: inputAction,
+        style: AppTextStyle.textStyle16(
+          fontColor: appColors.black,
+          fontSize: 13,
+          fontWeight: FontWeight.w400,
+        ),
         decoration: InputDecoration(
           isDense: true,
           errorStyle: const TextStyle(height: 0),
           hintText: hintText,
           helperStyle: AppTextStyle.textStyle16(),
           fillColor: appColors.white,
-          hintStyle: AppTextStyle.textStyle16(fontColor: appColors.grey),
+          hintStyle: AppTextStyle.textStyle16(
+            fontColor: appColors.grey,
+            fontSize: 13,
+            fontWeight: FontWeight.w400,
+          ),
           hoverColor: appColors.white,
           prefixIcon: icon,
           suffixIcon: suffixIcon,
           filled: true,
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(
-              color: errorBorder ?? appColors.white,
-              width: 1.0,
-            ),
+          labelText: from == "onBoarding" ? label : null,
+          labelStyle: AppTextStyle.textStyle16(
+            fontColor: appColors.grey,
+            fontSize: 13,
+            fontWeight: FontWeight.w400,
           ),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(
-              color: errorBorder ?? appColors.white,
-              width: 1.0,
-            ),
-          ),
-          errorBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(
-              color: appColors.redColor,
-              width: 1.0,
-            ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10.0),
-            borderSide: BorderSide(
-              color: appColors.guideColor,
-              width: 1.0,
-            ),
-          ),
+          enabledBorder: from == "onBoarding"
+              ? OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: appColors.grey.withOpacity(0.4),
+                    width: 1.0,
+                  ),
+                )
+              : OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: errorBorder ?? appColors.white,
+                    width: 1.0,
+                  ),
+                ),
+          border: from == "onBoarding"
+              ? OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: appColors.grey.withOpacity(0.4),
+                    width: 1.0,
+                  ),
+                )
+              : OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: errorBorder ?? appColors.white,
+                    width: 1.0,
+                  ),
+                ),
+          errorBorder: from == "onBoarding"
+              ? OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: appColors.redColor,
+                    width: 1.0,
+                  ),
+                )
+              : OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: appColors.redColor,
+                    width: 1.0,
+                  ),
+                ),
+          focusedBorder: from == "onBoarding"
+              ? OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: appColors.grey.withOpacity(0.4),
+                    width: 1.0,
+                  ),
+                )
+              : OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  borderSide: BorderSide(
+                    color: appColors.guideColor,
+                    width: 1.0,
+                  ),
+                ),
         ),
       ),
     );

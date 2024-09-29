@@ -19,7 +19,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
 import 'package:sms_autofill/sms_autofill.dart';
 
 import '../../common/app_exception.dart';
@@ -28,8 +27,11 @@ import '../../common/common_functions.dart';
 import '../../common/routes.dart';
 import '../../model/res_login.dart';
 import '../../model/send_otp.dart';
+import '../../model/speciality_list.dart';
 import '../../model/verify_otp.dart';
+import '../../repository/pre_defind_repository.dart';
 import '../../repository/user_repository.dart';
+import '../dashboard/dashboard_controller.dart';
 
 //var globalToken = "";
 class OtpVerificationController extends GetxController with CodeAutoFill {
@@ -52,10 +54,46 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
 
   final timerController = Get.put(TimerController());
   var isLoading = false.obs;
+  // @override
+  // void onInit() {
+  //   // TODO: implement onInit
+  //
+  //   listenForCode();
+  //   // print("otp filling auto -- ${SmsAutoFill().code.toString()}");
+  //   // print("otp filling auto -- ${SmsAutoFill().hint.toString()}");
+  //   // // SmsAutoFill().hint.then((val) {
+  //   //   print("otp filling auto -- ${val.toString()}");
+  //   // });
+  //   // SmsAutoFill().listenForCode(smsCodeRegexPattern: '\\d{4,6}');
+  //   // SmsAutoFill()
+  //   // SmsAutoFill().code.listen((val) {
+  //   //   print("otp filling auto -- ${val.toString()}");
+  //   //   print("otp filling auto -- ${val.toString()}");
+  //   // });
+  //
+  //   super.onInit();
+  // }
+  @override
+  void onInit() {
+    getOtp();
+    super.onInit();
+  }
+
+  getOtp() async {
+    print(
+        "-------------------------------------------------------${otp_autoFill.value}");
+    if (otp_autoFill.value.toString() == "1") {
+      await SmsAutoFill().listenForCode();
+      var signature = await SmsAutoFill().getAppSignature;
+      print(
+          "-------------------------------------------------------${signature.toString()}");
+      listenForCode();
+    }
+  }
 
   @override
   void onReady() async {
-    listenForCode();
+    // listenForCode();
     var arguments = Get.arguments;
     if (arguments != null) {
       var args = arguments as List;
@@ -172,6 +210,7 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
           imageUploadBaseUrl.value =
               commonConstants.data?.imageUploadBaseUrl ?? "";
         }
+
         if (isCustomToken.value.toString() == "1") {
           print("firebaseAuthEmail");
           await customTokenWithFirebase(
@@ -186,7 +225,7 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
                 commonConstants.data!.firebaseAuthPassword!);
           }
         }
-        await updateLoginDataInFirebase(data);
+        await updateLoginDataInFirebase(data, commonConstants);
       }
     } catch (error) {
       enableSubmit.value = true;
@@ -221,7 +260,7 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
     }
   }
 
-  Future<void> updateLoginDataInFirebase(ResLogin data) async {
+  Future<void> updateLoginDataInFirebase(ResLogin data, commonConstants) async {
     await FirebaseDatabase.instance.goOnline();
     final String uniqueId = await getDeviceId() ?? '';
     final String firebaseNodeUrl = 'astrologer/${data.data?.id}';
@@ -248,7 +287,36 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
         deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
     firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
     firebaseDatabase.ref().child("$firebaseNodeUrl/realTime").update(realTime);
-    await navigateToDashboard(data);
+    var isOnboardings;
+
+    final dataSnapshot = await AppFirebaseService()
+        .database
+        .child(
+            "astrologer/${preferenceService.getUserDetail()!.id}/realTime/isOnboarding")
+        .get();
+    isOnboardings = dataSnapshot.value;
+
+    print("response of isOnboarding - ${isOnboardings.toString()}");
+
+    final dasnap = await AppFirebaseService()
+        .database
+        .child("masters/disableOnboarding")
+        .get();
+
+    if (dasnap.value.toString() == "0") {
+      if (isOnboardings.toString() == "4" //|| isOnboardings == null
+          ) {
+        print('homeeeee1');
+
+        Get.offAllNamed(RouteName.dashboard);
+      } else {
+        await navigateToOnboarding(commonConstants);
+      }
+    } else {
+      await navigateToDashboard(data, commonConstants);
+    }
+    // await navigateToDashboard(data, commonConstants);
+
     // } else {
     //   final FirebaseUserData userData = FirebaseUserData(
     //     data.data?.name ?? "",
@@ -309,8 +377,37 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
   //   );
   //   return Future<void>.value();
   // }
+  navigateToOnboarding(commonConstants) async {
+    if (Constants.isUploadMode) {
+      await initServices();
+    }
+    SpecialityList response =
+        await PreDefineRepository().getAstrologerCategoryApi();
 
-  navigateToDashboard(ResLogin data) async {
+    SharedPreferenceService preferenceService =
+        Get.find<SharedPreferenceService>();
+    await preferenceService.setConstantDetails(commonConstants);
+
+    await preferenceService.setSpecialAbility(response.toPrettyJson());
+
+    print("------${response.toPrettyJson()}");
+    print("------${preferenceService.getSpecialAbility()}");
+    if (commonConstants?.data != null) {
+      imageUploadBaseUrl.value =
+          commonConstants?.data?.imageUploadBaseUrl ?? "";
+    }
+    preferenceService
+        .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
+    Get.find<SharedPreferenceService>()
+        .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
+    onboarding_training_videoData =
+        commonConstants.data!.onboarding_training_video;
+
+    navigateForOnBoardingGlobal(commonConstants);
+    enableSubmit.value = true;
+  }
+
+  navigateToDashboard(ResLogin data, commonConstants) async {
     print("beforeGoing ${preferenceService.getUserDetail()?.id}");
     //_counterSubscription.cancel();
     if (Constants.isUploadMode) {
@@ -320,7 +417,6 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
       const Duration(seconds: 1),
       () => Get.offAllNamed(RouteName.dashboard),
     );
-    enableSubmit.value = true;
   }
 
   removeAttempts() {

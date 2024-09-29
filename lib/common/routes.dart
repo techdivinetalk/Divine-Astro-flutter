@@ -2,6 +2,8 @@ import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
 import 'package:divine_astrologer/model/add_custom_product/add_custom_product_binding.dart';
 import 'package:divine_astrologer/model/add_custom_product/add_custom_product_view.dart';
 import 'package:divine_astrologer/model/custom_product/custom_product__list_binding.dart';
+import 'package:divine_astrologer/model/custom_product/my_remedies_listing/my_remedies_listing_binding.dart';
+import 'package:divine_astrologer/model/custom_product/my_remedies_listing/my_remedies_listing_view.dart';
 import 'package:divine_astrologer/pages/profile/profile_binding.dart';
 import 'package:divine_astrologer/pages/profile/profile_ui.dart';
 import 'package:divine_astrologer/pages/wallet/wallet_binding.dart';
@@ -68,6 +70,7 @@ import 'package:divine_astrologer/screens/suggest_remedies_flow/category_detail/
 import 'package:divine_astrologer/screens/suggest_remedies_flow/category_detail/category_detail_ui.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy/final_remedies_sub_binding.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/final_sub_remedy/final_remedies_sub_ui.dart';
+import 'package:divine_astrologer/screens/suggest_remedies_flow/remedies/remedies_view.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggest_remedies_sub/suggest_remedies_sub_binding.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggest_remedies_sub/suggest_remedies_sub_ui.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggested_remedies/suggested_ramedies_screen.dart';
@@ -86,6 +89,19 @@ import 'package:get/get.dart';
 
 import '../model/custom_product/custom_product_list_view.dart';
 import '../pages/home/passbook/passbook_ui.dart';
+import '../pages/on_boarding/add_ecom/add_ecom_binding.dart';
+import '../pages/on_boarding/add_ecom/add_ecom_screen.dart';
+import '../pages/on_boarding/bank/add_bank_details.dart';
+import '../pages/on_boarding/bank/bank_binding.dart';
+import '../pages/on_boarding/on_boarding_1.dart';
+import '../pages/on_boarding/on_boarding_2.dart';
+import '../pages/on_boarding/on_boarding_3.dart';
+import '../pages/on_boarding/on_boarding_4.dart';
+import '../pages/on_boarding/on_boarding_5.dart';
+import '../pages/on_boarding/on_boarding_binding.dart';
+import '../pages/on_boarding/schedule_training/schedule_training_1.dart';
+import '../pages/on_boarding/schedule_training/schedule_training_2.dart';
+import '../pages/on_boarding/schedule_training/schedule_training_binding.dart';
 import '../screens/add_message_template/add_message_template_binding.dart';
 import '../screens/add_message_template/add_message_template_ui.dart';
 import '../screens/bank_details/bank_detail_binding.dart';
@@ -184,6 +200,7 @@ class RouteName {
   static const String donationDetailPage = "/donationDetailPage";
   static const String chatMessageUI = "/chatMessageUI";
   static const String chatMessageWithSocketUI = "/chatMessageWithSocketUI";
+  static const String remedies = "/remedies";
   static const String suggestRemediesSubUI = "/suggestRemediesSubUI";
   static const String finalRemediesSubUI = "/finalRemediesSubUI";
   static const String categoryDetail = "/categoryDetail";
@@ -201,7 +218,7 @@ class RouteName {
   static const String imagePreviewUi = "/imagePreviewUi";
   static const String walletScreenUI = "/walletScreenUI";
   static const String privacyPolicy = "/privacyPolicy";
-  static const String remedies = "/remedies";
+  static const String remediesView = "/remediesView";
   static const String addRemedies = "/addRemedies";
   static const String termsCondition = "/termsCondition";
   static const String videoCallPage = "/videoCallPage";
@@ -237,8 +254,18 @@ class RouteName {
   static const String termsAndConditionScreen = "/TermsAndConditionScreen";
   static const String addCustomProduct = "/addCustomProduct";
   static const String customProduct = "/customProduct";
+  static const String myRemediesListingView = "/myRemediesListingView";
   static const String passbook = "/passbook";
   static const String passbookUI = "/passbookUI";
+  static const String onBoardingScreen = "/OnBoarding1";
+  static const String onBoardingScreen2 = "/OnBoarding2";
+  static const String onBoardingScreen3 = "/OnBoarding3";
+  static const String onBoardingScreen4 = "/OnBoarding4";
+  static const String onBoardingScreen5 = "/OnBoarding5";
+  static const String scheduleTraining1 = "/scheduleTraining1";
+  static const String scheduleTraining2 = "/scheduleTraining2";
+  static const String addBankAutoMation = "/addBankAutoMation";
+  static const String addEcomAutomation = "/addEcomAutomation";
 }
 
 final Set<String> validRoutes = {
@@ -283,6 +310,10 @@ class Routes {
         page: () => const CustomProductListView(),
         name: RouteName.customProduct,
         binding: CustomProductListBinding()),
+    GetPage(
+        page: () => const MyRemediesListingView(),
+        name: RouteName.myRemediesListingView,
+        binding: MyRemediesListingBinding()),
     GetPage(
         page: () => const PassbookScreen(),
         name: RouteName.passbook,
@@ -343,6 +374,51 @@ class Routes {
       page: () => PassbookUi(),
       name: RouteName.passbookUI,
       binding: PassbookBinding(),
+    ),
+    GetPage(
+      page: () => OnBoarding1(),
+      name: RouteName.onBoardingScreen,
+      binding: OnBoardingBinding(),
+    ),
+    GetPage(
+      page: () => OnBoarding2(),
+      name: RouteName.onBoardingScreen2,
+      binding: OnBoarding2Binding(),
+    ),
+    GetPage(
+      page: () => OnBoarding3(),
+      name: RouteName.onBoardingScreen3,
+      binding: OnBoarding3Binding(),
+    ),
+    GetPage(
+      page: () => OnBoarding4(),
+      name: RouteName.onBoardingScreen4,
+      binding: OnBoarding4Binding(),
+    ),
+    GetPage(
+      page: () => OnBoarding5(),
+      name: RouteName.onBoardingScreen5,
+      binding: OnBoarding5Binding(),
+    ),
+    GetPage(
+      page: () => ScheduleTraining1(),
+      name: RouteName.scheduleTraining1,
+      binding: ScheduleTrainingBinding(),
+    ),
+    GetPage(
+      page: () => ScheduleTraining2(),
+      name: RouteName.scheduleTraining2,
+      binding: ScheduleTraining2Binding(),
+    ),
+    GetPage(
+      page: () => AddBankDetails(),
+      name: RouteName.addBankAutoMation,
+      binding: BankBinding(),
+    ),
+    GetPage(
+      page: () => AddEcomScreen(),
+      name: RouteName.addEcomAutomation,
+      binding: AddEcomBinding(),
     ),
     GetPage(
       page: () => AllTechnicalIssueScreen(),
@@ -456,6 +532,10 @@ class Routes {
         page: () => ChatMessageWithSocketUI(),
         name: RouteName.chatMessageWithSocketUI,
         binding: ChatMessageWithSocketBinding()),
+    GetPage(
+        page: () => RemediesView(),
+        name: RouteName.remediesView,
+        binding: RemediesBindings()),
     GetPage(
         page: () => SuggestedRemediesScreen(),
         name: RouteName.suggestRemediesView),

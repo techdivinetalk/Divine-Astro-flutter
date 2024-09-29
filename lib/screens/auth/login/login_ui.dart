@@ -4,9 +4,7 @@ import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
-import 'package:divine_astrologer/screens/auth/login/true_caller_fault_widget.dart';
 import 'package:divine_astrologer/screens/auth/login/widget/country_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -26,8 +24,7 @@ class LoginUI extends GetView<LoginController> {
 
   @override
   Widget build(BuildContext context) {
-    Get.put(LoginController(UserRepository()));
-
+    // Get.put(LoginController(UserRepository()));
     return GetBuilder<LoginController>(
         init: LoginController(UserRepository()),
         assignId: true,
@@ -124,6 +121,15 @@ class LoginUI extends GetView<LoginController> {
                                                       decoration: TextDecoration
                                                           .underline))))
                                     ])))),
+                        Text(
+                          "I hereby authorize to receive RCS, Whatsapp messages, and informational emails.",
+                          style: TextStyle(
+                            color: appColors.textColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
                         SizedBox(height: 20.h),
                         Obx(() {
                           return GestureDetector(
@@ -158,8 +164,9 @@ class LoginUI extends GetView<LoginController> {
                         }),
                         SizedBox(height: 20.h),
                         Obx(() => Visibility(
-                            visible: controller.enable.value &&
-                                isTruecaller.value.toString() == "1" || kDebugMode,
+                            visible: (controller.showTrueCaller.value &&
+                                    isTruecaller.value.toString() == "1") ||
+                                kDebugMode,
                             child: TextWithDivider(
                               text: 'Or',
                               textColor: appColors.greyColor,
@@ -170,9 +177,10 @@ class LoginUI extends GetView<LoginController> {
                           print(
                               "showTrueCaller ${controller.showTrueCaller.value}");
                           return Visibility(
-                            visible: kDebugMode || (controller.showTrueCaller.value &&
-                                controller.enable.value &&
-                                isTruecaller.value.toString() == "1"),
+                            visible: kDebugMode ||
+                                (controller.showTrueCaller.value &&
+                                    controller.enable.value &&
+                                    isTruecaller.value.toString() == "1"),
                             child: Padding(
                               padding:
                                   const EdgeInsets.symmetric(vertical: 10.0),
@@ -194,11 +202,15 @@ class LoginUI extends GetView<LoginController> {
                                     oAuthFlowUsable = await TrueCallerService()
                                         .isOAuthFlowUsable();
 
-                                    if(Get.currentRoute == RouteName.login){
-                                      oAuthFlowUsable
+                                    if (Get.currentRoute == RouteName.login &&
+                                        oAuthFlowUsable) {
+                                      await TrueCallerService()
+                                          .startTrueCaller();
+
+                                      /*oAuthFlowUsable
                                         ? await TrueCallerService()
                                         .startTrueCaller()
-                                        : trueCallerFaultPopup();
+                                        : controller.trueCallerFaultPopup();*/
                                     }
                                   },
                                   child: Row(
@@ -220,7 +232,44 @@ class LoginUI extends GetView<LoginController> {
                               ),
                             ),
                           );
-                        })
+                        }),
+                        // Obx(() {
+                        //   return kDebugMode == true
+                        //       ? GestureDetector(
+                        //           onTap: () {
+                        //             if (!Get.isRegistered<LoginController>()) {
+                        //               Get.put(LoginController(UserRepository()),
+                        //                   permanent: true);
+                        //             }
+                        //
+                        //             if (isLiveServer.value == 1) {
+                        //               isLiveServer.value = 0;
+                        //             } else {
+                        //               isLiveServer.value = 1;
+                        //             }
+                        //             print(
+                        //                 "checking server -- ${isLiveServer.value.toString()} ${isLiveServer.value == 0 ? "Development" : "Live"}");
+                        //             controller.update();
+                        //           },
+                        //           child: Container(
+                        //             width: MediaQuery.of(context).size.width,
+                        //             height: 50.h,
+                        //             alignment: Alignment.center,
+                        //             decoration: BoxDecoration(
+                        //               color: appColors.grey,
+                        //               borderRadius: BorderRadius.circular(10),
+                        //             ),
+                        //             child: Text(
+                        //               "Change Server to ${isLiveServer.value == 1 ? "Development" : "Live"}",
+                        //               style: AppTextStyle.textStyle16(
+                        //                 fontWeight: FontWeight.w600,
+                        //                 fontColor: appColors.white,
+                        //               ),
+                        //             ),
+                        //           ),
+                        //         )
+                        //       : SizedBox();
+                        // }),
                       ],
                     ),
                   ),
@@ -229,16 +278,6 @@ class LoginUI extends GetView<LoginController> {
             ),
           );
         });
-  }
-
-  Future<void> trueCallerFaultPopup() async {
-    await showCupertinoModalPopup(
-      context: Get.context!,
-      builder: (BuildContext context) {
-        return TrueCallerFaultWidget(onClose: Get.back);
-      },
-    );
-    return Future<void>.value();
   }
 
   Widget mobileField() {
@@ -256,7 +295,7 @@ class LoginUI extends GetView<LoginController> {
               offset: const Offset(0.3, 3.0)),
         ]),
         child: TextFormField(
-          focusNode: controller.numberFocus,
+          // focusNode: controller.numberFocus,
           validator: (value) {
             String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
             RegExp regExp = RegExp(pattern);
@@ -324,6 +363,9 @@ class LoginUI extends GetView<LoginController> {
                   width: 1.0,
                 )),
           ),
+          onChanged: (value) {
+            controller.mobile = value;
+          },
         ),
       ),
     );
