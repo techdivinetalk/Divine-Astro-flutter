@@ -1,9 +1,6 @@
 import "dart:convert";
 import "dart:developer";
-import "package:divine_astrologer/common/custom_widgets.dart";
-import "package:divine_astrologer/screens/live_dharam/widgets/common_button.dart";
-import "package:flutter/foundation.dart";
-import 'package:http/http.dart' as http;
+
 import "package:audioplayers/audioplayers.dart";
 import "package:camera/camera.dart";
 import "package:divine_astrologer/app_socket/app_socket.dart";
@@ -19,6 +16,7 @@ import "package:divine_astrologer/gen/fonts.gen.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/common_button.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
 import "package:firebase_analytics/firebase_analytics.dart";
+import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
 import "package:get/get.dart";
@@ -126,7 +124,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
   bool isCheckPermission = false;
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    if(!kDebugMode && isAstrologerPhotoChatCall.value == 1){
+    if (!kDebugMode && isAstrologerPhotoChatCall.value == 1) {
       setState(() {
         if (state == AppLifecycleState.paused) {
           if ((cameraController == null ||
@@ -209,9 +207,10 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
 
   CameraController? cameraController;
   Future initCamera({bool isOpenSetting = true}) async {
-    if(!kDebugMode && isAstrologerPhotoChatCall.value == 1){
-      bool isPermission = await requestCameraAndMicPermissions(isOpenSetting: isOpenSetting);
-      if(isPermission){
+    if (!kDebugMode && isAstrologerPhotoChatCall.value == 1) {
+      bool isPermission =
+          await requestCameraAndMicPermissions(isOpenSetting: isOpenSetting);
+      if (isPermission) {
         List<CameraDescription> cameras = await availableCameras();
         cameraController = CameraController(cameras[1], ResolutionPreset.high);
         try {
@@ -283,14 +282,14 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
         orderId: AppFirebaseService().orderData.value["orderId"] ?? 0,
         queueId: AppFirebaseService().orderData.value["queue_id"] ?? 0,
         astrologerImageLink: imageLink,
-        ).then((value) {
-          isLoading.value = false;
-          if(value == true){
-            isAcceptSuccess.value = true;
-          } else{
-            isAcceptSuccess.value = false;
-          }
-        });
+      ).then((value) {
+        isLoading.value = false;
+        if (value == true) {
+          isAcceptSuccess.value = true;
+        } else {
+          isAcceptSuccess.value = false;
+        }
+      });
     });
 
     if (response.statusCode == 200) {
@@ -887,114 +886,166 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
                                                   .value["status"] ??
                                               "-1") ==
                                           "1"*/
-                                    isLoading.value
-                                  ? Container(
-                                      height: kToolbarHeight,
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: appColors.brown),
-                                          borderRadius:
-                                              BorderRadius.circular(5.r)),
-                                      child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: [
-                                            Text(
-                                                "Accepting the chat",
-                                                style: TextStyle(
-                                                    fontWeight:
-                                                        FontWeight.w600,
-                                                    fontFamily: FontFamily
-                                                        .metropolis,
-                                                    fontSize: 16.sp,
-                                                    color: appColors
-                                                        .brownColour)),
-                                            Assets.lottie.loadingDots
-                                                .lottie(
-                                                    width: 45,
-                                                    height: 30,
-                                                    repeat: true,
-                                                    frameRate:
-                                                        FrameRate(120),
-                                                    animate: true)
-                                          ]))
-                                  : isAcceptSuccess.value ? Container(
-                                        height: kToolbarHeight,
-                                        width: double.infinity,
-                                        decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: appColors.brown),
-                                            borderRadius:
-                                            BorderRadius.circular(5.r)),
-                                        child: Row(
-                                            mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                  "Waiting for user to connect",
-                                                  style: TextStyle(
-                                                      fontWeight:
-                                                      FontWeight.w600,
-                                                      fontFamily: FontFamily
-                                                          .metropolis,
-                                                      fontSize: 16.sp,
-                                                      color: appColors
-                                                          .brownColour)),
-                                              Assets.lottie.loadingDots
-                                                  .lottie(
-                                                  width: 45,
-                                                  height: 30,
-                                                  repeat: true,
-                                                  frameRate:
-                                                  FrameRate(120),
-                                                  animate: true)
-                                            ]))
-                                      : (AppFirebaseService()
-                                                      .orderData
-                                                      .value["status"] ??
-                                                  "-1") ==
-                                              "0"
-                                          ? CommonElevatedButton(
-                                              showBorder: false,
+                                      isLoading.value
+                                          ? Container(
+                                              height: kToolbarHeight,
                                               width: double.infinity,
-                                              borderRadius: 5.r,
-                                              backgroundColor:
-                                                  appColors.brownColour,
-                                              text: "acceptChatRequest".tr,
-                                              onPressed: () async {
-                                                if(!kDebugMode && isAstrologerPhotoChatCall.value == 1){
-                                                  if(await Permission.camera.isGranted && await Permission.microphone.isGranted){
-                                                    await cameraController?.setFlashMode(FlashMode.off);
-                                                    XFile picture = await cameraController!.takePicture();
-                                                    await uploadImage(picture);
-                                                  } else{
-                                                    initCamera();
-                                                  }
-                                                } else{
-                                                  isLoading.value = true;
-                                                  await acceptOrRejectChat(
-                                                    orderId: AppFirebaseService()
-                                                        .orderData
-                                                        .value["orderId"] ??
-                                                        0,
-                                                    queueId: AppFirebaseService()
-                                                        .orderData
-                                                        .value["queue_id"] ??
-                                                        0,
-                                                  ).then((value) {
-                                                    isLoading.value = false;
-                                                    if(value == true){
-                                                      isAcceptSuccess.value = true;
-                                                    } else{
-                                                      isAcceptSuccess.value = false;
-                                                    }
-                                                  });
-                                                }
-                                              },
-                                              // widget.onPressed
-                                            )
-                                          : const SizedBox();
+                                              decoration: BoxDecoration(
+                                                  border: Border.all(
+                                                      color: appColors.brown),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          5.r)),
+                                              child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text("Accepting the chat",
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                            fontFamily:
+                                                                FontFamily
+                                                                    .metropolis,
+                                                            fontSize: 16.sp,
+                                                            color: appColors
+                                                                .brownColour)),
+                                                    Assets.lottie.loadingDots
+                                                        .lottie(
+                                                            width: 45,
+                                                            height: 30,
+                                                            repeat: true,
+                                                            frameRate:
+                                                                FrameRate(120),
+                                                            animate: true)
+                                                  ]))
+                                          : isAcceptSuccess.value
+                                              ? Container(
+                                                  height: kToolbarHeight,
+                                                  width: double.infinity,
+                                                  decoration: BoxDecoration(
+                                                      border: Border.all(
+                                                          color:
+                                                              appColors.brown),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              5.r)),
+                                                  child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.center,
+                                                      children: [
+                                                        Text(
+                                                            "Waiting for user to connect",
+                                                            style: TextStyle(
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
+                                                                fontFamily:
+                                                                    FontFamily
+                                                                        .metropolis,
+                                                                fontSize: 16.sp,
+                                                                color: appColors
+                                                                    .brownColour)),
+                                                        Assets
+                                                            .lottie.loadingDots
+                                                            .lottie(
+                                                                width: 45,
+                                                                height: 30,
+                                                                repeat: true,
+                                                                frameRate:
+                                                                    FrameRate(
+                                                                        120),
+                                                                animate: true)
+                                                      ]))
+                                              : (AppFirebaseService().orderData.value["status"] ?? "-1") == "0"
+                                                  ? CommonElevatedButton(
+                                                      showBorder: false,
+                                                      width: double.infinity,
+                                                      borderRadius: 5.r,
+                                                      backgroundColor:
+                                                          appColors.brownColour,
+                                                      text: "acceptChatRequest"
+                                                          .tr,
+                                                      onPressed: () async {
+                                                        if (!kDebugMode &&
+                                                            isAstrologerPhotoChatCall
+                                                                    .value ==
+                                                                1) {
+                                                          if (await Permission
+                                                                  .camera
+                                                                  .isGranted &&
+                                                              await Permission
+                                                                  .microphone
+                                                                  .isGranted) {
+                                                            await cameraController
+                                                                ?.setFlashMode(
+                                                                    FlashMode
+                                                                        .off);
+                                                            XFile picture =
+                                                                await cameraController!
+                                                                    .takePicture();
+                                                            await uploadImage(
+                                                                picture);
+                                                          } else {
+                                                            initCamera();
+                                                          }
+                                                        } else {
+                                                          isLoading.value =
+                                                              true;
+
+                                                          await acceptOrRejectChat(
+                                                            orderId: AppFirebaseService()
+                                                                        .orderData
+                                                                        .value[
+                                                                    "orderId"] ??
+                                                                0,
+                                                            queueId: AppFirebaseService()
+                                                                        .orderData
+                                                                        .value[
+                                                                    "queue_id"] ??
+                                                                0,
+                                                          ).then((value) {
+                                                            isLoading.value =
+                                                                false;
+                                                            if (value == true) {
+                                                              isAcceptSuccess
+                                                                  .value = true;
+                                                            } else {
+                                                              isAcceptSuccess
+                                                                      .value =
+                                                                  false;
+                                                            }
+                                                          });
+                                                          if (disableAstroEvent
+                                                                  .toString() ==
+                                                              "1") {
+                                                            FirebaseAnalytics
+                                                                .instance
+                                                                .logEvent(
+                                                                    name:
+                                                                        "astrologer_accept_chat",
+                                                                    parameters: {
+                                                                  "Name": AppFirebaseService()
+                                                                          .orderData
+                                                                          .value["customerName"] ??
+                                                                      "",
+                                                                  "order_status":
+                                                                      "Accepted",
+                                                                  "orderId": AppFirebaseService()
+                                                                          .orderData
+                                                                          .value["orderId"] ??
+                                                                      "",
+                                                                  "queueId": AppFirebaseService()
+                                                                          .orderData
+                                                                          .value["queue_id"] ??
+                                                                      "",
+                                                                });
+                                                          }
+                                                        }
+                                                      },
+                                                      // widget.onPressed
+                                                    )
+                                                  : const SizedBox();
                                 },
                               )
                             ],
