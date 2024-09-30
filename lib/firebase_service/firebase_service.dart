@@ -65,6 +65,9 @@ RxInt showDailyLive = 0.obs;
 RxInt verifyOnboarding = 0.obs;
 RxInt isAstrologerPhotoChatCall = 0.obs;
 RxInt disableOnboarding = 0.obs;
+RxInt disableAstroEvent = 0.obs;
+RxInt astrologer_notification = 0.obs;
+RxInt astrologer_camera_permission = 0.obs;
 //RxInt showHelp = 0.obs;
 RxInt maximumStorySize = 2048.obs;
 RxInt astroHome = 0.obs;
@@ -466,6 +469,15 @@ class AppFirebaseService {
         break;
       case "disableOnboarding":
         disableOnboarding(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "disableAstroEvent":
+        disableAstroEvent(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "astrologer_notification":
+        astrologer_notification(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "astrologer_camera_permission":
+        astrologer_camera_permission(int.parse(dataSnapshot.value.toString()));
         break;
       case "isAstrologerPhotoChatCall":
         isAstrologerPhotoChatCall(int.parse(dataSnapshot.value.toString()));
