@@ -208,26 +208,28 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   readOnly: true,
                   hintText: "Enter Astrologer's City",
                   onTap: () {
-                    Get.bottomSheet(                              isScrollControlled: true,
+                    Get.bottomSheet(
+                        isScrollControlled: true,
                         Padding(
-                      padding: EdgeInsets.only(
-                          bottom: MediaQuery.of(context).viewInsets.bottom),
-                      child: AllCityListSheet(
-                        onSelect: (value) {
-                          controller.state.cityController.text =
-                              value.cityName ?? "";
-                          controller.state.cityList.add(CityStateData(
-                            cityName: value.cityName,
-                            latitude: value.latitude,
-                            longitude: value.longitude,
-                          ));
-                          controller.update();
-                          Get.back();
-                        },
-                        country: "India",
-                        cityData: controller.state.cityList,
-                      ),
-                    ));
+                          padding: EdgeInsets.only(
+                              // bottom: MediaQuery.of(context).viewInsets.bottom
+                              ),
+                          child: AllCityListSheet(
+                            onSelect: (value) {
+                              controller.state.cityController.text =
+                                  value.cityName ?? "";
+                              controller.state.cityList.add(CityStateData(
+                                cityName: value.cityName,
+                                latitude: value.latitude,
+                                longitude: value.longitude,
+                              ));
+                              controller.update();
+                              Get.back();
+                            },
+                            country: "India",
+                            cityData: controller.state.cityList,
+                          ),
+                        ));
                   },
                 ),
                 const SizedBox(height: 10),
