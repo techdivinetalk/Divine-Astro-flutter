@@ -88,14 +88,14 @@ class AddSupportIssueDataModelData {
   }
 
   AddSupportIssueDataModelData.fromJson(dynamic json) {
-    _astrologerId = json['astrologer_id'];
-    _description = json['description'];
-    _ticketType = json['ticket_type'];
-    _status = json['status'];
-    _isViewed = json['is_viewed'];
-    _updatedAt = json['updated_at'];
-    _createdAt = json['created_at'];
-    _id = json['id'];
+    _astrologerId = json['astrologer_id'] ?? 0;
+    _description = json['description'] ?? "";
+    _ticketType = json['ticket_type'] ?? "";
+    _status = json['status'] ?? 0;
+    _isViewed = json['is_viewed'] ?? false;
+    _updatedAt = json['updated_at'] ?? "";
+    _createdAt = json['created_at'] ?? "";
+    _id = json['id'] ?? 0;
   }
   num? _astrologerId;
   String? _description;

@@ -32,7 +32,7 @@ RxString imageUploadBaseUrl = ''.obs;
 RxInt fireChat = 1.obs;
 RxInt isEngagedStatus = 0.obs;
 RxInt isLiveServer = 1.obs;
-
+RxInt isLogin = 0.obs;
 RxInt isOnboarding = 0.obs;
 RxInt dasboardCurrentIndex = 0.obs;
 RxInt isCountDownTimer = 0.obs;

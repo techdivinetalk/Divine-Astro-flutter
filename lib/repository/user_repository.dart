@@ -21,6 +21,7 @@ import 'package:divine_astrologer/model/upload_image_model.dart';
 import 'package:divine_astrologer/model/upload_story_response.dart';
 import 'package:divine_astrologer/screens/add_puja/model/puja_product_categories_model.dart';
 import 'package:divine_astrologer/screens/chat_message_with_socket/model/custom_product_model.dart';
+import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/screens/puja/model/add_edit_puja_model.dart';
 import 'package:divine_astrologer/screens/puja/model/pooja_listing_model.dart';
 import 'package:divine_astrologer/screens/remedies/model/remedies_model.dart';
@@ -1599,16 +1600,28 @@ class UserRepository extends ApiProvider {
     try {
       log(11.toString());
 
-      final response = await post(addSupport,
+      final response = await post(
+          isLogin.value == 1 ? addSupportWithOutLogin : addSupport,
           body: jsonEncode(param).toString(),
           headers: await getJsonHeaderURL());
       log(111.toString());
 
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
+        if (isLogin.value == 1) {
+          divineSnackBar(
+              data: json.decode(response.body)['message'].toString(),
+              color: appColors.redColor);
+        }
+
         throw CustomException('Unauthorized access');
       } else if (response.statusCode == HttpStatus.badRequest) {
         Utils().handleStatusCode400(response.body);
+        if (isLogin.value == 1) {
+          divineSnackBar(
+              data: json.decode(response.body)['message'].toString(),
+              color: appColors.redColor);
+        }
         throw CustomException('Bad request');
       }
 
@@ -1621,6 +1634,15 @@ class UserRepository extends ApiProvider {
           log(2.toString());
           Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(responseBody["error"] ?? 'Unauthorized access');
+        } else if (responseBody["status_code"] == HttpStatus.badRequest) {
+          if (isLogin.value == 1) {
+            divineSnackBar(
+                data: json.decode(response.body)['message'].toString(),
+                color: appColors.redColor,
+                duration: Duration(seconds: 5));
+          }
+          throw CustomException(
+              json.decode(response.body)['message'].toString());
         } else {
           log(11111.toString());
 

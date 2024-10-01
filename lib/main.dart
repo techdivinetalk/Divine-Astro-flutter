@@ -49,6 +49,7 @@ import 'model/chat_assistant/chat_assistant_astrologer_response.dart';
 import 'model/constant_details_model_class.dart';
 import 'screens/live_page/constant.dart';
 
+// 8393008800
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 late List<CameraDescription>? cameras;
 
@@ -243,6 +244,7 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
     WidgetsBinding.instance.addObserver(this);
     WidgetsBinding.instance.addObserver(_lifecycleObserver);
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      isLogin.value = 0;
       final dataSnapshot = await AppFirebaseService()
           .database
           .child("masters/disableOnboarding")
