@@ -268,6 +268,7 @@ class ApiProvider {
 
   //Financial Support
   final String addSupport = "addSupport"; //Post Api
+  final String addSupportWithOutLogin = "addSupportWithOutLogin"; //Post Api
   final String getSupportDetails = "getSupportDetails"; //Api
   final String getSupportlist = "getSupportlist"; //Get Api
 

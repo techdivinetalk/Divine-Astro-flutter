@@ -18,9 +18,13 @@ import '../../common/custom_widgets.dart';
 import '../../common/permission_handler.dart';
 import '../../common/routes.dart';
 import '../../di/api_provider.dart';
+import '../../di/shared_preference_service.dart';
+import '../../firebase_service/firebase_service.dart';
 import '../../gen/assets.gen.dart';
 import '../../model/AddSupportIssueDataModel.dart';
+import '../../model/res_login.dart';
 import '../../repository/user_repository.dart';
+import '../live_page/constant.dart';
 
 class FileUtils {
   static String getfilesizestring({required int bytes, int decimals = 0}) {
@@ -40,15 +44,26 @@ class FileUtils {
 
 class SupportIssueController extends GetxController {
   SupportIssueController(this.userRepository);
+  UserData? userData;
 
   final UserRepository userRepository;
+  TextEditingController mobileController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   List<String> dropDownItems = ["Issue", "Suggestion"];
   var isLoading = false.obs;
-  var isTechnicalLoading = false.obs;  var showMimimum = false.obs;
+  var isTechnicalLoading = false.obs;
+  var showMimimum = false.obs;
+  final pref = Get.find<SharedPreferenceService>();
 
   AddSupportIssueDataModel? technicalSupport;
   AddSupportIssueDataModelData? technicalIssuesList;
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    userData = pref.getUserDetail();
+  }
 
   var selected;
   String poojaImageUrl = "";
@@ -345,7 +360,10 @@ class SupportIssueController extends GetxController {
 
     print("image length - ${imageFile.path}");
 
-    var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+    var uri = isLogin.value == 1
+        ? Uri.parse(
+            "${image_upload_url.value.toString()}api/astro/${ApiProvider.version}/uploadImage")
+        : Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
 
     var request = http.MultipartRequest('POST', uri);
     request.headers.addAll({
@@ -366,15 +384,24 @@ class SupportIssueController extends GetxController {
     // Listen for the response
 
     print("responseresponseresponse");
+
     response.stream.transform(utf8.decoder).listen((value) {
+      print("responseresponseresponse");
+
+      print(jsonDecode(value));
+      print("responseresponseresponse");
+
       print(jsonDecode(value)["data"]);
       uploadedImagesList.add(jsonDecode(value)["data"]["path"]);
       update();
       currentUploadedFile = jsonDecode(value)["data"]["path"];
       print("img-- ${uploadedImagesList.toString()}");
       print("valuevaluevaluevaluevaluevaluevalue");
+    }).onError((e) {
+      print("Image uploaded faileddd. === ${e.toString()}");
     });
-    print("uploadedImages -- ${uploadedImagesList.toString()}");
+    print("uploadedImages -- ${response.statusCode}");
+    print("uploadedImages -- ${response.request.toString()}");
 
     if (response.statusCode == 200) {
       print("Image uploaded successfully.");
@@ -385,7 +412,7 @@ class SupportIssueController extends GetxController {
     } else {
       isLoading(false);
 
-      print("Failed to upload image.");
+      print("Failed to upload image. -- ");
     }
   }
 
@@ -423,11 +450,19 @@ class SupportIssueController extends GetxController {
     isLoading(true);
     print("uploadedImages -- ${uploadedImagesList.toString()}");
 
-    Map<String, dynamic> param = {
-      "description": descriptionController.text,
-      "ticket_type": selected,
-      "images": uploadedImagesList
-    };
+    Map<String, dynamic> param = isLogin.value == 1
+        ? {
+            "mobile_no": mobileController.text,
+            "description": descriptionController.text,
+            "ticket_type": selected,
+            "images": uploadedImagesList
+          }
+        : {
+            "astrologer_id": userData!.id.toString(),
+            "description": descriptionController.text,
+            "ticket_type": selected,
+            "images": uploadedImagesList
+          };
 
     print("paramssss${param.toString()}");
     isLoading(true);
@@ -440,13 +475,16 @@ class SupportIssueController extends GetxController {
         technicalSupport = response;
         divineSnackBar(
             data: response.message.toString(), color: appColors.green);
+        mobileController.clear();
         descriptionController.clear();
         uploadedImagesList.clear();
         selectedImages.clear();
         selectedFiles.clear();
         selected = null;
-        Get.toNamed(RouteName.allSupportIssuesScreen);
-
+        if (isLogin.value == 1) {
+        } else {
+          Get.toNamed(RouteName.allSupportIssuesScreen);
+        }
         isLoading(false);
       } else {
         print(3.toString());
@@ -456,6 +494,9 @@ class SupportIssueController extends GetxController {
       print("Data Of submit ==> ${jsonEncode(response.data)}");
     } catch (error) {
       print(33.toString());
+      uploadedImagesList.clear();
+      selectedImages.clear();
+      selectedFiles.clear();
 
       isLoading(false);
       debugPrint("error $error");

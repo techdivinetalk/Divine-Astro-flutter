@@ -13,6 +13,7 @@ import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../../common/colors.dart';
+import '../../../firebase_service/firebase_service.dart';
 import '../../../true_caller_divine/true_caller_divine_service.dart';
 import '../../live_page/constant.dart';
 import 'login_controller.dart';
@@ -35,245 +36,284 @@ class LoginUI extends GetView<LoginController> {
               statusBarColor: Colors.transparent,
             ),
             child: Scaffold(
-              body: SafeArea(
-                child: SingleChildScrollView(
-                  child: Padding(
-                    padding: const EdgeInsets.only(
-                      left: 20,
-                      right: 20,
-                    ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(top: 30.h),
-                          child: Assets.images.divineLogo
-                              .image(width: ScreenUtil().screenWidth * 0.55),
+              extendBodyBehindAppBar: true,
+              body: Stack(
+                children: [
+                  SafeArea(
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.only(
+                          left: 20,
+                          right: 20,
                         ),
-                        SizedBox(height: 10.h),
-                        ImageSliderWidget(
-                          controller: controller,
-                        ),
-                        TextWithDivider(
-                          text: 'Log in or Sign up',
-                          textColor: appColors.greyColor,
-                          dividerHeight: 1.0,
-                        ),
-                        SizedBox(height: 20.h),
-                        mobileField(),
-                        SizedBox(height: 5.h),
-                        Center(
-                            child: Container(
-                                alignment: Alignment.center,
-                                margin: EdgeInsets.only(bottom: 8.h),
-                                child: Text.rich(
-                                    textAlign: TextAlign.center,
-                                    TextSpan(children: [
-                                      WidgetSpan(
-                                        child: Text(
-                                          "By signing up, you agree to our ",
-                                          style: TextStyle(
-                                            color: appColors.textColor,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ),
-                                      WidgetSpan(
-                                        child: GestureDetector(
-                                          behavior: HitTestBehavior.translucent,
-                                          onTap: () => Get.toNamed(
-                                              RouteName.termsCondition),
-                                          child: Text(
-                                            "terms of use",
-                                            style: TextStyle(
-                                              color: appColors.textColor,
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w400,
-                                              decoration:
-                                                  TextDecoration.underline,
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.only(top: 30.h),
+                              child: Assets.images.divineLogo.image(
+                                  width: ScreenUtil().screenWidth * 0.55),
+                            ),
+                            SizedBox(height: 10.h),
+                            ImageSliderWidget(
+                              controller: controller,
+                            ),
+                            TextWithDivider(
+                              text: 'Log in or Sign up',
+                              textColor: appColors.greyColor,
+                              dividerHeight: 1.0,
+                            ),
+                            SizedBox(height: 20.h),
+                            mobileField(),
+                            SizedBox(height: 5.h),
+                            Center(
+                                child: Container(
+                                    alignment: Alignment.center,
+                                    margin: EdgeInsets.only(bottom: 8.h),
+                                    child: Text.rich(
+                                        textAlign: TextAlign.center,
+                                        TextSpan(children: [
+                                          WidgetSpan(
+                                            child: Text(
+                                              "By signing up, you agree to our ",
+                                              style: TextStyle(
+                                                color: appColors.textColor,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                              ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                      WidgetSpan(
-                                        child: Text(
-                                          " ${"and".tr} ",
-                                          style: TextStyle(
-                                            color: appColors.textColor,
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.w400,
-                                          ),
-                                        ),
-                                      ),
-                                      WidgetSpan(
-                                          child: GestureDetector(
+                                          WidgetSpan(
+                                            child: GestureDetector(
                                               behavior:
                                                   HitTestBehavior.translucent,
                                               onTap: () => Get.toNamed(
-                                                  RouteName.privacyPolicy),
-                                              child: Text("privacy policy",
-                                                  style: TextStyle(
-                                                      color:
-                                                          appColors.textColor,
-                                                      fontSize: 12,
-                                                      fontWeight:
-                                                          FontWeight.w400,
-                                                      decoration: TextDecoration
-                                                          .underline))))
-                                    ])))),
-                        Text(
-                          "I hereby authorize to receive RCS, Whatsapp messages, and informational emails.",
-                          style: TextStyle(
-                            color: appColors.textColor,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400,
-                          ),
-                          textAlign: TextAlign.center,
-                        ),
-                        SizedBox(height: 20.h),
-                        Obx(() {
-                          return GestureDetector(
-                            onTap: controller.enable.value
-                                ? () {
-                                    if (_formKey.currentState!.validate()) {
-                                      controller.login();
-                                      // controller.enable.value = false;
-                                    }
-                                  }
-                                : () {},
-                            child: Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: 50.h,
-                              alignment: Alignment.center,
-                              decoration: BoxDecoration(
-                                color: appColors.red,
-                                borderRadius: BorderRadius.circular(10),
+                                                  RouteName.termsCondition),
+                                              child: Text(
+                                                "terms of use",
+                                                style: TextStyle(
+                                                  color: appColors.textColor,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w400,
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                          WidgetSpan(
+                                            child: Text(
+                                              " ${"and".tr} ",
+                                              style: TextStyle(
+                                                color: appColors.textColor,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                              ),
+                                            ),
+                                          ),
+                                          WidgetSpan(
+                                              child: GestureDetector(
+                                                  behavior: HitTestBehavior
+                                                      .translucent,
+                                                  onTap: () => Get.toNamed(
+                                                      RouteName.privacyPolicy),
+                                                  child: Text("privacy policy",
+                                                      style: TextStyle(
+                                                          color: appColors
+                                                              .textColor,
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.w400,
+                                                          decoration:
+                                                              TextDecoration
+                                                                  .underline))))
+                                        ])))),
+                            Text(
+                              "I hereby authorize to receive RCS, Whatsapp messages, and informational emails.",
+                              style: TextStyle(
+                                color: appColors.textColor,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w400,
                               ),
-                              child: !controller.isLoading.value
-                                  ? Text(
-                                      "Send OTP",
-                                      style: AppTextStyle.textStyle16(
-                                        fontWeight: FontWeight.w600,
-                                        fontColor: appColors.white,
-                                      ),
-                                    )
-                                  : CircularProgressIndicator(
-                                      strokeWidth: 3, color: appColors.brown),
+                              textAlign: TextAlign.center,
                             ),
-                          );
-                        }),
-                        SizedBox(height: 20.h),
-                        Obx(() => Visibility(
-                            visible: (controller.showTrueCaller.value &&
-                                    isTruecaller.value.toString() == "1") ||
-                                kDebugMode,
-                            child: TextWithDivider(
-                              text: 'Or',
-                              textColor: appColors.greyColor,
-                              dividerHeight: 1.0,
-                            ))),
-                        SizedBox(height: 20.h),
-                        Obx(() {
-                          print(
-                              "showTrueCaller ${controller.showTrueCaller.value}");
-                          return Visibility(
-                            visible: kDebugMode ||
-                                (controller.showTrueCaller.value &&
-                                    controller.enable.value &&
-                                    isTruecaller.value.toString() == "1"),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(vertical: 10.0),
-                              child: SizedBox(
-                                height: 50,
-                                width: double.infinity,
-                                child: OutlinedButton(
-                                  style: OutlinedButton.styleFrom(
-                                    shape: RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(10.0),
-                                    ),
-                                    side: const BorderSide(
-                                      width: 1.0,
-                                      color: Color(0xff0087FF),
-                                    ),
+                            SizedBox(height: 20.h),
+                            Obx(() {
+                              return GestureDetector(
+                                onTap: controller.enable.value
+                                    ? () {
+                                        if (_formKey.currentState!.validate()) {
+                                          isLogin.value = 0;
+                                          controller.update();
+                                          controller.login();
+                                          // controller.enable.value = false;
+                                        }
+                                      }
+                                    : () {},
+                                child: Container(
+                                  width: MediaQuery.of(context).size.width,
+                                  height: 50.h,
+                                  alignment: Alignment.center,
+                                  decoration: BoxDecoration(
+                                    color: appColors.red,
+                                    borderRadius: BorderRadius.circular(10),
                                   ),
-                                  onPressed: () async {
-                                    bool oAuthFlowUsable = false;
-                                    oAuthFlowUsable = await TrueCallerService()
-                                        .isOAuthFlowUsable();
-
-                                    if (Get.currentRoute == RouteName.login &&
-                                        oAuthFlowUsable) {
-                                      await TrueCallerService()
-                                          .startTrueCaller();
-
-                                      /*oAuthFlowUsable
-                                        ? await TrueCallerService()
-                                        .startTrueCaller()
-                                        : controller.trueCallerFaultPopup();*/
-                                    }
-                                  },
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Image.asset(
-                                          "assets/images/true_caller_icon.png"),
-                                      const SizedBox(width: 16),
-                                      const Text(
-                                        "Login with TrueCaller",
-                                        style: TextStyle(
+                                  child: !controller.isLoading.value
+                                      ? Text(
+                                          "Send OTP",
+                                          style: AppTextStyle.textStyle16(
+                                            fontWeight: FontWeight.w600,
+                                            fontColor: appColors.white,
+                                          ),
+                                        )
+                                      : CircularProgressIndicator(
+                                          strokeWidth: 3,
+                                          color: appColors.brown),
+                                ),
+                              );
+                            }),
+                            SizedBox(height: 20.h),
+                            Obx(() => Visibility(
+                                visible: (controller.showTrueCaller.value &&
+                                        isTruecaller.value.toString() == "1") ||
+                                    kDebugMode,
+                                child: TextWithDivider(
+                                  text: 'Or',
+                                  textColor: appColors.greyColor,
+                                  dividerHeight: 1.0,
+                                ))),
+                            SizedBox(height: 20.h),
+                            Obx(() {
+                              print(
+                                  "showTrueCaller ${controller.showTrueCaller.value}");
+                              return Visibility(
+                                visible: kDebugMode ||
+                                    (controller.showTrueCaller.value &&
+                                        controller.enable.value &&
+                                        isTruecaller.value.toString() == "1"),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      vertical: 10.0),
+                                  child: SizedBox(
+                                    height: 50,
+                                    width: double.infinity,
+                                    child: OutlinedButton(
+                                      style: OutlinedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        ),
+                                        side: const BorderSide(
+                                          width: 1.0,
                                           color: Color(0xff0087FF),
                                         ),
                                       ),
-                                      const SizedBox(width: 16),
-                                    ],
+                                      onPressed: () async {
+                                        bool oAuthFlowUsable = false;
+                                        oAuthFlowUsable =
+                                            await TrueCallerService()
+                                                .isOAuthFlowUsable();
+
+                                        if (Get.currentRoute ==
+                                                RouteName.login &&
+                                            oAuthFlowUsable) {
+                                          await TrueCallerService()
+                                              .startTrueCaller();
+
+                                          /*oAuthFlowUsable
+                                            ? await TrueCallerService()
+                                            .startTrueCaller()
+                                            : controller.trueCallerFaultPopup();*/
+                                        }
+                                      },
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Image.asset(
+                                              "assets/images/true_caller_icon.png"),
+                                          const SizedBox(width: 16),
+                                          const Text(
+                                            "Login with TrueCaller",
+                                            style: TextStyle(
+                                              color: Color(0xff0087FF),
+                                            ),
+                                          ),
+                                          const SizedBox(width: 16),
+                                        ],
+                                      ),
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ),
-                          );
-                        }),
-                        // Obx(() {
-                        //   return kDebugMode == true
-                        //       ? GestureDetector(
-                        //           onTap: () {
-                        //             if (!Get.isRegistered<LoginController>()) {
-                        //               Get.put(LoginController(UserRepository()),
-                        //                   permanent: true);
-                        //             }
-                        //
-                        //             if (isLiveServer.value == 1) {
-                        //               isLiveServer.value = 0;
-                        //             } else {
-                        //               isLiveServer.value = 1;
-                        //             }
-                        //             print(
-                        //                 "checking server -- ${isLiveServer.value.toString()} ${isLiveServer.value == 0 ? "Development" : "Live"}");
-                        //             controller.update();
-                        //           },
-                        //           child: Container(
-                        //             width: MediaQuery.of(context).size.width,
-                        //             height: 50.h,
-                        //             alignment: Alignment.center,
-                        //             decoration: BoxDecoration(
-                        //               color: appColors.grey,
-                        //               borderRadius: BorderRadius.circular(10),
-                        //             ),
-                        //             child: Text(
-                        //               "Change Server to ${isLiveServer.value == 1 ? "Development" : "Live"}",
-                        //               style: AppTextStyle.textStyle16(
-                        //                 fontWeight: FontWeight.w600,
-                        //                 fontColor: appColors.white,
-                        //               ),
-                        //             ),
-                        //           ),
-                        //         )
-                        //       : SizedBox();
-                        // }),
-                      ],
+                              );
+                            }),
+                            // Obx(() {
+                            //   return kDebugMode == true
+                            //       ? GestureDetector(
+                            //           onTap: () {
+                            //             if (!Get.isRegistered<LoginController>()) {
+                            //               Get.put(LoginController(UserRepository()),
+                            //                   permanent: true);
+                            //             }
+                            //
+                            //             if (isLiveServer.value == 1) {
+                            //               isLiveServer.value = 0;
+                            //             } else {
+                            //               isLiveServer.value = 1;
+                            //             }
+                            //             print(
+                            //                 "checking server -- ${isLiveServer.value.toString()} ${isLiveServer.value == 0 ? "Development" : "Live"}");
+                            //             controller.update();
+                            //           },
+                            //           child: Container(
+                            //             width: MediaQuery.of(context).size.width,
+                            //             height: 50.h,
+                            //             alignment: Alignment.center,
+                            //             decoration: BoxDecoration(
+                            //               color: appColors.grey,
+                            //               borderRadius: BorderRadius.circular(10),
+                            //             ),
+                            //             child: Text(
+                            //               "Change Server to ${isLiveServer.value == 1 ? "Development" : "Live"}",
+                            //               style: AppTextStyle.textStyle16(
+                            //                 fontWeight: FontWeight.w600,
+                            //                 fontColor: appColors.white,
+                            //               ),
+                            //             ),
+                            //           ),
+                            //         )
+                            //       : SizedBox();
+                            // }),
+                          ],
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  Obx(() {
+                    return showLoginSupport.value == 1
+                        ? Positioned(
+                            child: Padding(
+                              padding: EdgeInsets.fromLTRB(15, 50, 10, 10),
+                              child: InkWell(
+                                  splashColor: appColors.grey,
+                                  onTap: () {
+                                    isLogin.value = 1;
+                                    controller.update();
+                                    Get.toNamed(RouteName.newSupportScreen);
+                                  },
+                                  child: Padding(
+                                    padding: EdgeInsets.all(5),
+                                    child: Text(
+                                      "Support",
+                                      style: TextStyle(
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                    ),
+                                  )),
+                            ),
+                          )
+                        : SizedBox();
+                  }),
+                ],
               ),
             ),
           );

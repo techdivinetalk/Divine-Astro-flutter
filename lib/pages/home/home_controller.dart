@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:app_settings/app_settings.dart';
 import "package:contacts_service/contacts_service.dart";
 import 'package:cron/cron.dart';
 import 'package:dio/dio.dart';
@@ -11,7 +12,6 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
-import 'package:divine_astrologer/di/fcm_notification.dart';
 import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/astro_schedule_response.dart';
 import 'package:divine_astrologer/model/astrologer_training_session_response.dart';
@@ -361,6 +361,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 //         getConsulation();
 //       }
 //     });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      askNotificationPermission();
+      askCameraPermission();
+    });
   }
 
   initData() {
@@ -486,6 +491,353 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     getAstrologerStatus();
     getConsulation();
     // cron.schedule(Schedule.parse('*/5 * * * * *'), checkForScheduleUpdate);
+  }
+
+  askNotificationPermission() async {
+    print("notification permission denied checking ---- ");
+    if (astrologer_notification.toString() == "1") {
+      Permission.notification.request().then((value) async {
+        if (value.isDenied) {
+          if (await Permission.notification.isDenied ||
+              await Permission.notification.isPermanentlyDenied) {
+            showNotiSheet();
+          }
+        }
+      });
+      if (await Permission.notification.isDenied ||
+          await Permission.notification.isPermanentlyDenied) {
+        showNotiSheet();
+      }
+    }
+  }
+
+  showNotiSheet() {
+    Get.bottomSheet(
+      ignoreSafeArea: true,
+      isScrollControlled: true,
+      enableDrag: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+          topLeft: Radius.circular(20.0),
+          topRight: Radius.circular(20.0),
+        ),
+      ),
+      Padding(
+        padding: EdgeInsets.only(
+            bottom: MediaQuery.of(Get.context!).viewInsets.bottom),
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Container(
+            width: MediaQuery.of(Get.context!).size.width,
+            decoration: BoxDecoration(
+              borderRadius:
+                  const BorderRadius.vertical(top: Radius.circular(20.0)),
+              border: Border.all(color: Colors.white, width: 2),
+              color: Colors.white,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: Container(
+                      height: 3,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        color: Colors.grey.shade300,
+                        borderRadius: BorderRadius.circular(100),
+                      ),
+                    ),
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Get.back();
+                        },
+                        child: CircleAvatar(
+                          radius: 12,
+                          backgroundColor: appColors.textColor.withOpacity(0.1),
+                          child: Center(
+                            child: Icon(
+                              Icons.clear,
+                              color: appColors.textColor,
+                              size: 15,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  Image.asset(
+                    "assets/images/notification.png",
+                    height: 100,
+                    width: 100,
+                    fit: BoxFit.contain,
+                    filterQuality: FilterQuality.high,
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    "Don't miss out on updates!",
+                    textAlign: TextAlign.center,
+                    style: AppTextStyle.textStyle20(
+                      fontColor: appColors.black,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Padding(
+                    padding: const EdgeInsets.all(0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(14),
+                      child: Container(
+                        color: appColors.red.withOpacity(0.1),
+                        child: ListTile(
+                          selected: true,
+                          selectedTileColor: appColors.red.withOpacity(0.2),
+                          leading: CircleAvatar(
+                            radius: 14,
+                            backgroundColor: appColors.red,
+                            child: Icon(
+                              Icons.notifications_active,
+                              color: appColors.white,
+                              size: 15,
+                            ),
+                          ),
+                          title: Text(
+                            "Notifications",
+                            textAlign: TextAlign.left,
+                            style: AppTextStyle.textStyle16(
+                              fontColor: appColors.black,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          subtitle: Text(
+                            "Get real-time updates on your mobile.",
+                            textAlign: TextAlign.left,
+                            style: AppTextStyle.textStyle14(
+                              fontColor: appColors.black,
+                              fontWeight: FontWeight.w400,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  InkWell(
+                    onTap: () {
+                      Get.back();
+                      AppSettings.openAppSettings(
+                          type: AppSettingsType.notification);
+                    },
+                    child: Container(
+                      height: 40,
+                      width: MediaQuery.of(Get.context!).size.width,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(30),
+                        color: appColors.red,
+                        boxShadow: [
+                          BoxShadow(
+                            blurRadius: 2,
+                            spreadRadius: 2,
+                            color: appColors.grey.withOpacity(0.4),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Align(
+                          alignment: Alignment.center,
+                          child: Text(
+                            "Allow Access",
+                            overflow: TextOverflow.clip,
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 20.sp,
+                              fontWeight: FontWeight.w500,
+                              color: appColors.white,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 6),
+                  TextButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
+                      child: Text(
+                        "Maybe Later",
+                        textAlign: TextAlign.center,
+                        style: AppTextStyle.textStyle18(
+                          fontColor: appColors.grey,
+                          fontWeight: FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  askCameraPermission() async {
+    if (astrologer_camera_permission.toString() == "1") {
+      Permission.camera.request().then((value) async {
+        if (value.isDenied) {
+          print("camera permission denied checking ---- ");
+          if (await Permission.camera.isDenied ||
+              await Permission.camera.isPermanentlyDenied) {
+            print("camera permission denied checking  permantely---- 1");
+
+            getCameraNotiFun();
+          }
+        }
+      });
+      if (await Permission.camera.isDenied ||
+          await Permission.camera.isPermanentlyDenied) {
+        print("camera permission denied checking  permantely---- 1");
+        getCameraNotiFun();
+      }
+    }
+  }
+
+  getCameraNotiFun() {
+    Get.bottomSheet(
+      ignoreSafeArea: true,
+      isScrollControlled: true,
+      enableDrag: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.only(
+            topLeft: Radius.circular(20.0), topRight: Radius.circular(20.0)),
+      ),
+      Padding(
+        padding: EdgeInsets.only(
+            bottom: MediaQuery.of(Get.context!).viewInsets.bottom),
+        child: SingleChildScrollView(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          child: Column(
+            children: [
+              InkWell(
+                onTap: () {
+                  Get.back();
+                },
+                child: Container(
+                  height: 60,
+                  width: 60,
+                  decoration: BoxDecoration(
+                    color: appColors.grey.withOpacity(0.2),
+                    border: Border.all(
+                      color: appColors.grey,
+                    ),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Icon(
+                      Icons.clear,
+                      color: appColors.textColor,
+                      size: 23,
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 10,
+              ),
+              Container(
+                width: MediaQuery.of(Get.context!).size.width,
+                decoration: BoxDecoration(
+                  borderRadius:
+                      const BorderRadius.vertical(top: Radius.circular(20.0)),
+                  border: Border.all(color: Colors.white, width: 2),
+                  color: Colors.white,
+                ),
+                child: Padding(
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 12),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Image.asset(
+                        "assets/images/camera_per.png",
+                        height: 100,
+                        width: 100,
+                        fit: BoxFit.contain,
+                        filterQuality: FilterQuality.high,
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "Enable Camera Access",
+                        textAlign: TextAlign.center,
+                        style: AppTextStyle.textStyle20(
+                            fontColor: appColors.guideColor,
+                            fontWeight: FontWeight.w600),
+                      ),
+                      SizedBox(height: 10),
+                      Text(
+                        "Allow camera access to start the live session.",
+                        textAlign: TextAlign.center,
+                        style: AppTextStyle.textStyle16(
+                            fontColor: appColors.textColor,
+                            fontWeight: FontWeight.w400),
+                      ),
+                      SizedBox(height: 10),
+                      InkWell(
+                        onTap: () {
+                          Get.back();
+                          AppSettings.openAppSettings();
+                        },
+                        child: Container(
+                            height: 40,
+                            width: MediaQuery.of(Get.context!).size.width,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: appColors.red,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 2,
+                                  spreadRadius: 2,
+                                  color: appColors.grey.withOpacity(0.4),
+                                ),
+                              ],
+                            ),
+                            child: Center(
+                              child: Align(
+                                alignment: Alignment.center,
+                                child: Text(
+                                  "Allow Access",
+                                  overflow: TextOverflow.clip,
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 20.sp,
+                                    fontWeight: FontWeight.w500,
+                                    color: appColors.white,
+                                    // fontFamily: FontFamily.poppins,
+                                  ),
+                                ),
+                              ),
+                            )),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
   }
 
   getAllDashboardData({bool isReapeting = false}) async {
@@ -1158,11 +1510,12 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     try {
       AstrologerTrainingSessionResponse? response =
           await homePageRepository.doGetAstrologerTrainingSession();
-print("training videsooooooooo-- ${response.toString()}");
+      print("training videsooooooooo-- ${response.toString()}");
       if (response != null && response.statusCode == 200) {
         if (response.data != null && response.data!.isNotEmpty) {
           astrologerTrainingSessionLst.addAll(response.data!);
-          print("astrologerTrainingSessionLst.length-->>${astrologerTrainingSessionLst.length}");
+          print(
+              "astrologerTrainingSessionLst.length-->>${astrologerTrainingSessionLst.length}");
         }
       }
     } catch (error) {
@@ -1543,7 +1896,7 @@ print("training videsooooooooo-- ${response.toString()}");
               // }
             },
           );
-        } else{
+        } else {
           sessionTypeLoading.value = Loading.loaded;
         }
         if (fromSwitch && value == "CALL") {
@@ -1555,7 +1908,7 @@ print("training videsooooooooo-- ${response.toString()}");
               // }
             },
           );
-        } else{
+        } else {
           sessionTypeLoading.value = Loading.loaded;
         }
       } catch (err) {

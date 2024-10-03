@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:divine_astrologer/screens/support_issue/support_issue_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -49,31 +50,34 @@ class SupportIssueScreen extends GetView<SupportIssueController> {
             ),
             // centerTitle: true,
             actions: [
-              Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: InkWell(
-                  onTap: () {
-                    Get.toNamed(RouteName.allSupportIssuesScreen);
-                  },
-                  child: Container(
-                    decoration: BoxDecoration(
-                      border: Border.all(width: 1, color: AppColors().red),
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(6.0),
-                      child: Text(
-                        "Current Tickets",
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: AppColors().black,
-                          fontWeight: FontWeight.w400,
+              isLogin.value == 1
+                  ? SizedBox()
+                  : Padding(
+                      padding: const EdgeInsets.only(right: 10),
+                      child: InkWell(
+                        onTap: () {
+                          Get.toNamed(RouteName.allSupportIssuesScreen);
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border:
+                                Border.all(width: 1, color: AppColors().red),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.all(6.0),
+                            child: Text(
+                              "Current Tickets",
+                              style: TextStyle(
+                                fontSize: 12,
+                                color: AppColors().black,
+                                fontWeight: FontWeight.w400,
+                              ),
+                            ),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ),
-              ),
               SizedBox(
                 width: 10,
               ),
@@ -172,6 +176,21 @@ class SupportIssueScreen extends GetView<SupportIssueController> {
                   ),
                   const SizedBox(
                     height: 20,
+                  ),
+                  isLogin.value == 1
+                      ? PoojaRemedyTextFiled(
+                          title: "Add Astrologer Mobile Number",
+                          maxLines: 1,
+                          textInputFormatter: [CustomSpaceInputFormatter()],
+                          controller: controller.mobileController,
+                          keyboardType: TextInputType.number,
+                          onChanged: (value) {},
+                          maxLength: 10,
+                          isSuffix: false,
+                        )
+                      : SizedBox(),
+                  const SizedBox(
+                    height: 5,
                   ),
                   PoojaRemedyTextFiled(
                     title: "Please explain your issue in detail",
@@ -316,34 +335,55 @@ class SupportIssueScreen extends GetView<SupportIssueController> {
                         splashColor: Colors.red.withOpacity(0.5),
                         highlightColor: Colors.transparent,
                         onTap: () {
-                          // if (controller.descriptionController.text.length >
-                          //     100) {
-                          //   if (!controller.isLoading.value) {
-                          //     controller.uploadImagesListsFun();
-                          //   }
-                          // } else {
-                          //   Fluttertoast.showToast(msg: "Detail is to short");
-                          // }
-                          if (controller.selected == null) {
-                            Fluttertoast.showToast(msg: "Select Issue type");
-                          } else if (controller.descriptionController.text
-                                  .trim()
-                                  .length <
-                              100) {
-                            controller.showMimimum.value = true;
-                            controller.update();
-                            Fluttertoast.showToast(msg: "Detail is to short");
-                          } else if (controller.selectedFiles.isEmpty) {
-                            controller.showMimimum.value = false;
-                            controller.update();
-
-                            Fluttertoast.showToast(msg: "Select Images");
-                          } else {
-                            if (!controller.isLoading.value) {
+                          if (isLogin.value == 1) {
+                            if (controller.selected == null) {
+                              Fluttertoast.showToast(msg: "Select Issue type");
+                            } else if (controller
+                                .mobileController.text.isEmpty) {
+                              Fluttertoast.showToast(
+                                  msg: "Mobile Number can't be empty");
+                            } else if (controller.descriptionController.text
+                                    .trim()
+                                    .length <
+                                100) {
+                              controller.showMimimum.value = true;
+                              controller.update();
+                              Fluttertoast.showToast(msg: "Detail is to short");
+                            } else if (controller.selectedFiles.isEmpty) {
                               controller.showMimimum.value = false;
                               controller.update();
 
-                              controller.uploadImagesListsFun();
+                              Fluttertoast.showToast(msg: "Select Images");
+                            } else {
+                              if (!controller.isLoading.value) {
+                                controller.showMimimum.value = false;
+                                controller.update();
+
+                                controller.uploadImagesListsFun();
+                              }
+                            }
+                          } else {
+                            if (controller.selected == null) {
+                              Fluttertoast.showToast(msg: "Select Issue type");
+                            } else if (controller.descriptionController.text
+                                    .trim()
+                                    .length <
+                                100) {
+                              controller.showMimimum.value = true;
+                              controller.update();
+                              Fluttertoast.showToast(msg: "Detail is to short");
+                            } else if (controller.selectedFiles.isEmpty) {
+                              controller.showMimimum.value = false;
+                              controller.update();
+
+                              Fluttertoast.showToast(msg: "Select Images");
+                            } else {
+                              if (!controller.isLoading.value) {
+                                controller.showMimimum.value = false;
+                                controller.update();
+
+                                controller.uploadImagesListsFun();
+                              }
                             }
                           }
                         },
