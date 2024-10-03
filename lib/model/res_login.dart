@@ -93,7 +93,7 @@ class UserData {
   int? uniqueNo;
   int? isBusy;
   String? deviceToken;
-  double? appVersion;
+  dynamic appVersion;
   String? deviceBrand;
   String? deviceModel;
   String? deviceManufacture;
