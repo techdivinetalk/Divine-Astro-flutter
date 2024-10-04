@@ -1161,14 +1161,13 @@ class OnBoardingController extends GetxController {
     UserData? userData = await preference.getUserDetail();
     print("---------------${userData!.toJson().toString()}");
     try {
-      print(
-          "ApiProvider.astrologerAgreement - > ${ApiProvider.astrologerAgreement}${userData!.id}");
       Dio().options.headers = {
         'Connection': 'keep-alive',
         'Keep-Alive': 'timeout=5, max=1000',
       };
-      final response =
-          await Dio().get("${ApiProvider.astrologerAgreement}${userData!.id}");
+
+      final response = await Dio().get(
+          "${isLiveServer.value == 0 ? ApiProvider.agreementBaseDebug : ApiProvider.agreementBase}${ApiProvider.astrologerAgreement}${userData!.id}");
       print("astrologerAgreement.data${jsonEncode(response.data)}");
       AgreementModel agreementModel = AgreementModel.fromJson(response.data);
       if (agreementModel.data != null) {

@@ -2135,7 +2135,7 @@ class HomeUI extends GetView<HomeController> {
                           Obx(
                             () {
                               return isLive.value == 1
-                                  ? controller.isLiveEnable.value //== false
+                                  ? controller.isLiveEnable.value// == false
                                       ? Container(
                                           margin: EdgeInsets.symmetric(
                                               horizontal: 16, vertical: 6),
@@ -2165,6 +2165,26 @@ class HomeUI extends GetView<HomeController> {
                                                             false &&
                                                         isVideoCallOn ==
                                                             false) {
+                                                      if (disableAstroEvent
+                                                              .toString() ==
+                                                          "1") {
+                                                        controller.firebaseEvent
+                                                            .go_live(
+                                                          {
+                                                            "astrolgoer_id":
+                                                                controller
+                                                                        .userData
+                                                                        .id ??
+                                                                    "",
+                                                            "date_time":
+                                                                DateTime.now()
+                                                                    .toString(),
+                                                            "is_going_live":
+                                                                "Yes"
+                                                          },
+                                                        );
+                                                      }
+
                                                       await Get.toNamed(
                                                           RouteName.liveTipsUI);
                                                     } else {

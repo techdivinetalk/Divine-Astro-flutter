@@ -30,6 +30,7 @@ import '../../../common/colors.dart';
 import '../../../common/common_functions.dart';
 import '../../../common/show_permission_widget.dart';
 import '../../../di/shared_preference_service.dart';
+import '../../../firebase_service/firebasae_event.dart';
 import '../../../gen/fonts.gen.dart';
 import '../../../model/ChatAssCallModel.dart';
 import '../../../model/CheckingAssistantCallModel.dart';
@@ -49,6 +50,8 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   ChatAssistChatResponse? chatAssistChatResponse;
   RxList chatMessageList = [].obs;
   var showMP = false.obs;
+  final firebaseEvent = Get.find<FirebaseEvent>();
+
   var preferenceService;
   RxString userProfileImage = "".obs;
   RxList<AssistChatData> unreadMessageList = <AssistChatData>[].obs;
@@ -766,6 +769,11 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
       if (response != null && response.success == true) {
         callLoading(false);
         chatAssCallModel = response;
+        firebaseEvent.exotel_call_chat_assistants({
+          "astrolgoer_id": preferenceService.getUserDetail()!.id.toString(),
+          "user_id": args!.id.toString(),
+          "date_time": DateTime.now().toString(),
+        });
         Fluttertoast.showToast(
             msg: response.message ?? "Call initiated successfully");
       } else {

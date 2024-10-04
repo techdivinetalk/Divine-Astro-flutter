@@ -17,6 +17,7 @@ import '../side_menu/side_menu_ui.dart';
 import 'Widget/all_order_history_ui.dart';
 import 'Widget/call_order_history_ui.dart';
 import 'Widget/chat_order_history_ui.dart';
+import 'Widget/fine_orders_ui.dart';
 import 'Widget/suggest_remedies_history.dart';
 import 'order_history_controller.dart';
 
@@ -36,7 +37,8 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
             appBar: commonDetailAppbar(
                 title: "orderHistory".tr,
                 trailingWidget: InkWell(
-                  onTap: () =>  Get.offNamed(RouteName.wallet, arguments: {"is_order_history" : true}),
+                  onTap: () => Get.offNamed(RouteName.wallet,
+                      arguments: {"is_order_history": true}),
                   child: Padding(
                       padding: EdgeInsets.only(right: 20.w),
                       child: Assets.svg.iconWallet.svg()),
@@ -143,17 +145,18 @@ class OrderTab extends StatefulWidget {
 
 class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
   late final OrderHistoryController controller;
- // late final ScrollController scrollController;
+  // late final ScrollController scrollController;
 
   @override
   void initState() {
     super.initState();
+
     controller = Get.find<OrderHistoryController>();
     controller.tabbarController = TabController(
-        length: 6, vsync: this, initialIndex: widget.initialPage ?? 0);
-   // scrollController = ScrollController();
+        length: 7, vsync: this, initialIndex: widget.initialPage ?? 0);
+    // scrollController = ScrollController();
     controller.tabbarController?.addListener(() {
-     /* if (controller.tabbarController!.index == 0) {
+      /* if (controller.tabbarController!.index == 0) {
         controller.getOrderHistory(
             type: 0, page: controller.allPageCount); //wallet
       } else if (controller.tabbarController!.index == 1) {
@@ -181,50 +184,58 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
         children: [
           Theme(
             data: ThemeData(useMaterial3: true),
-            child: TabBar(
-              isScrollable: true,
-              tabAlignment: TabAlignment.start,
-              controller: controller.tabbarController,
-              labelColor: appColors.blackColor,
-              unselectedLabelColor: appColors.blackColor,
-              labelStyle: AppTextStyle.textStyle16(fontWeight: FontWeight.w700),
-              enableFeedback: true,
-              onTap: (value) {
-                if (value == 0) {
-                  controller.getOrderHistory(
-                      type: 0, page: controller.allPageCount); //wallet
-                } else if (value == 1) {
-                  controller.getOrderHistory(
-                      type: 1, page: controller.callPageCount); //call
-                } else if (value == 2) {
-                  controller.getOrderHistory(
-                      type: 2, page: controller.chatPageCount); //chat
-                } else if (value == 3) {
-                  controller.getOrderHistory(
-                      type: 3,
-                      page: controller.liveGiftPageCount); // liveGiftPageCount
-                } else if (value == 4) {
-                  controller.getOrderHistory(
-                      type: 4, page: controller.remedyPageCount); // shop
-                }
-                else if (value == 5) {
-                  controller.getOrderHistory(
-                      type: 5, page: controller.feedBackPageCount); // shop
-                }
-              },
-              indicatorColor: appColors.blackColor,
-              indicatorWeight: 4,
-              dividerColor: appColors.blackColor,
-              unselectedLabelStyle:
-                  AppTextStyle.textStyle16(fontWeight: FontWeight.w400),
-              tabs: [
-                ("all".tr),
-                "call".tr,
-                "chat".tr,
-                "Gifts".tr,
-                ("remedySuggested".tr),
-                 "Order Feedbacks"
-              ].map((e) => Tab(text: e)).toList(),
+            child: Padding(
+              padding: const EdgeInsets.only(left: 10, right: 10),
+              child: TabBar(
+                isScrollable: true,
+                tabAlignment: TabAlignment.start,
+                controller: controller.tabbarController,
+                labelColor: appColors.blackColor,
+                unselectedLabelColor: appColors.blackColor,
+                labelStyle:
+                    AppTextStyle.textStyle16(fontWeight: FontWeight.w700),
+                enableFeedback: true,
+                onTap: (value) {
+                  if (value == 0) {
+                    controller.getOrderHistory(
+                        type: 0, page: controller.allPageCount); //wallet
+                  } else if (value == 1) {
+                    controller.getOrderHistory(
+                        type: 1, page: controller.callPageCount); //call
+                  } else if (value == 2) {
+                    controller.getOrderHistory(
+                        type: 2, page: controller.chatPageCount); //chat
+                  } else if (value == 3) {
+                    controller.getOrderHistory(
+                        type: 3,
+                        page:
+                            controller.liveGiftPageCount); // liveGiftPageCount
+                  } else if (value == 4) {
+                    controller.getOrderHistory(
+                        type: 4, page: controller.remedyPageCount); // shop
+                  } else if (value == 5) {
+                    controller.getOrderHistory(
+                        type: 5, page: controller.feedBackPageCount); // shop
+                  } else if (value == 6) {
+                    controller.getOrderHistory(
+                        type: 6, page: controller.finePageCount); // shop
+                  }
+                },
+                indicatorColor: appColors.blackColor,
+                indicatorWeight: 4,
+                dividerColor: appColors.blackColor,
+                unselectedLabelStyle:
+                    AppTextStyle.textStyle16(fontWeight: FontWeight.w400),
+                tabs: [
+                  ("all".tr),
+                  "call".tr,
+                  "chat".tr,
+                  "Gifts".tr,
+                  ("remedySuggested".tr),
+                  "Order Feedbacks",
+                  "Fines"
+                ].map((e) => Tab(text: e)).toList(),
+              ),
             ),
           ),
           Expanded(
@@ -233,29 +244,35 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
               controller: controller.tabbarController,
               children: [
                 Obx(() => (controller.allApiCalling.value &&
-                    controller.allPageCount == 1)
+                        controller.allPageCount == 1)
                     ? const GenericLoadingWidget()
                     : AllOrderHistoryUi()),
                 Obx(() => (controller.callApiCalling.value &&
-                    controller.callPageCount == 1)
+                        controller.callPageCount == 1)
                     ? const GenericLoadingWidget()
-                    :  CallOrderHistory()),
+                    : CallOrderHistory()),
                 Obx(() => (controller.chatApiCalling.value &&
-                    controller.chatPageCount == 1)
+                        controller.chatPageCount == 1)
                     ? const GenericLoadingWidget()
                     : ChatOrderHistory()),
                 Obx(() => (controller.giftsApiCalling.value &&
-                    controller.liveGiftPageCount == 1)
+                        controller.liveGiftPageCount == 1)
                     ? const GenericLoadingWidget()
-                    :  LiveGiftsHistory()),
+                    : LiveGiftsHistory()),
                 Obx(() => (controller.suggestApiCalling.value &&
-                    controller.remedyPageCount == 1)
+                        controller.remedyPageCount == 1)
                     ? const GenericLoadingWidget()
-                    :  SuggestRemedies()),
+                    : SuggestRemedies()),
                 Obx(() => (controller.orderApiCalling.value &&
-                    controller.feedBackPageCount == 1)
+                        controller.feedBackPageCount == 1)
                     ? const LoadingWidget()
                     : FeedBackOrderHistory()),
+                Obx(
+                  () => (controller.orderFineCalling.value &&
+                          controller.finePageCount == 1)
+                      ? const LoadingWidget()
+                      : FineOrderHistory(),
+                ),
               ],
             ),
           ),

@@ -1,24 +1,27 @@
 import 'dart:developer';
-import 'package:divine_astrologer/app_socket/app_socket.dart';
+
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/routes.dart';
-import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/pivacy_policy_model.dart';
 import 'package:divine_astrologer/model/terms_and_condition_model.dart';
 import 'package:divine_astrologer/screens/auth/login/login_controller.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../../../common/app_exception.dart';
 import '../../../common/common_functions.dart';
 import '../../../di/shared_preference_service.dart';
+import '../../../firebase_service/firebasae_event.dart';
 import '../../../firebase_service/firebase_authentication.dart';
 import '../../../model/delete_customer_model_class.dart';
 
 class SettingsController extends GetxController {
   SharedPreferenceService preferenceService =
       Get.find<SharedPreferenceService>();
+
+
+  final firebaseEvent =
+      Get.find<FirebaseEvent>();
   RxString currLanguage = "".obs;
 
   @override
@@ -66,6 +69,14 @@ class SettingsController extends GetxController {
     userRepository.logOut().then(
       (value) async {
         if (value.statusCode == 200 && value.success == true) {
+          FirebaseEvent().logoutMyAccountEvent({
+            "astrologer_id": preferenceService.getUserDetail()!.id ?? "",
+            "astrologer_number":
+                preferenceService.getUserDetail()!.mobileNumber ?? "",
+            "astrologer_name": preferenceService.getUserDetail()!.name ?? "",
+            "time": DateTime.now().toString() ?? "",
+          });
+
           preferenceService.erase().whenComplete(() async {
             await Auth().handleSignOut();
             Get.delete<LoginController>(force: true);

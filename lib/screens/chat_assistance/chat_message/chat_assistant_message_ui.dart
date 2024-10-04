@@ -223,35 +223,37 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
           ),
         ),
         actions: [
-          // Obx(() {
-          //   return Padding(
-          //     padding: const EdgeInsets.all(8.0),
-          //     child: controller.checkingCalling.value == true
-          //         ? Padding(
-          //             padding: const EdgeInsets.only(right: 10),
-          //             child: Center(
-          //               child: SizedBox(
-          //                 height: 30,
-          //                 width: 30,
-          //                 child: CircularProgressIndicator(
-          //                   strokeWidth: 2,
-          //                   color: appColors.white,
-          //                 ),
-          //               ),
-          //             ),
-          //           )
-          //         : IconButton(
-          //             onPressed: () {
-          //               print(controller.args!.id);
-          //               controller.checkCalling();
-          //             },
-          //             icon: Icon(
-          //               Icons.call,
-          //               color: appColors.white,
-          //             ),
-          //           ),
-          //   );
-          // }),
+          show_call_on_assistant.value.toString() == "0"
+              ? Obx(() {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: controller.checkingCalling.value == true
+                        ? Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: Center(
+                              child: SizedBox(
+                                height: 30,
+                                width: 30,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: appColors.white,
+                                ),
+                              ),
+                            ),
+                          )
+                        : IconButton(
+                            onPressed: () {
+                              print(controller.args!.id);
+                              controller.checkCalling();
+                            },
+                            icon: Icon(
+                              Icons.call,
+                              color: appColors.white,
+                            ),
+                          ),
+                  );
+                })
+              : SizedBox(),
         ],
         leadingWidth: 30,
         title: Row(

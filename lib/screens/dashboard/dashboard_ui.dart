@@ -93,7 +93,8 @@ class DashboardScreen extends GetView<DashboardController> {
                       Scaffold(
                           backgroundColor: appColors.white,
                           key: controller.scaffoldkey,
-                          floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+                          floatingActionButtonLocation:
+                              FloatingActionButtonLocation.centerFloat,
                           body: Obx(
                             () {
                               debugPrint(

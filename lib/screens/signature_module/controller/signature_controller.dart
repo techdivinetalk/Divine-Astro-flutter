@@ -169,8 +169,10 @@ class SignatureController extends GetxController {
     log(imageFile.path);
     log("imageFileimageFile");
     UserData? userData = await pref.getUserDetail();
+
     try {
-      var uri = "${ApiProvider.astrologerAstroSign}${userData!.id}";
+      var uri =
+          "${isLiveServer.value == 0 ? ApiProvider.agreementBaseDebug : ApiProvider.agreementBase}${ApiProvider.astrologerAstroSign}${userData!.id}";
       var data = await Dio().get(uri,
           data: FormData.fromMap({
             "signFile": imageFile != null
@@ -197,7 +199,8 @@ class SignatureController extends GetxController {
   Future<void> uploadSignaturePdf(File imageFile) async {
     UserData? userData = await pref.getUserDetail();
     try {
-      var uri = "${ApiProvider.astrologerSignPdf}${userData!.id}";
+      var uri =
+          "${isLiveServer.value == 0 ? ApiProvider.agreementBaseDebug : ApiProvider.agreementBase}${ApiProvider.astrologerSignPdf}${userData!.id}";
       var data = await Dio().get(uri,
           data: FormData.fromMap({
             "signPdf": imageFile != null

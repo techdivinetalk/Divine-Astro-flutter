@@ -11,6 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide FormData, MultipartFile;
 import 'package:image_picker/image_picker.dart';
 
+import '../../live_page/constant.dart';
+
 class FaceVerificationController extends GetxController
     with WidgetsBindingObserver {
   String kycImage = "";
@@ -52,10 +54,12 @@ class FaceVerificationController extends GetxController
   var uploadingImage = false.obs;
   Future<void> uploadFaceImage(File imageFile) async {
     log("uploadFaceImage-----uploadFaceImage");
-    uploadingImage.value = true;update();
+    uploadingImage.value = true;
+    update();
     UserData? userData = await pref.getUserDetail();
     try {
-      var uri = "${ApiProvider.astrologerFaceVerification}${userData!.id}";
+      var uri =
+          "${isLiveServer.value == 0 ? ApiProvider.agreementBaseDebug : ApiProvider.agreementBase}${ApiProvider.astrologerFaceVerification}${userData!.id}";
       var data = await Dio().get(uri,
           data: FormData.fromMap({
             "imageFile": imageFile != null
@@ -66,7 +70,7 @@ class FaceVerificationController extends GetxController
       AgreementModel agreementModel = AgreementModel.fromJson(data.data);
       if (agreementModel.status!.code == 200) {
         uploadingImage.value = false;
-update();
+        update();
         if (argu == "") {
           Get.to(() => SignatureView(), arguments: {
             "astrologerProfilePhoto": agreementModel.data!.imageLink,

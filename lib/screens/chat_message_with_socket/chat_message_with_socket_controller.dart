@@ -25,6 +25,7 @@ import "package:divine_astrologer/screens/live_dharam/widgets/common_button.dart
 import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:divine_astrologer/screens/live_page/constant.dart";
 import "package:divine_astrologer/zego_call/zego_service.dart";
+import "package:firebase_analytics/firebase_analytics.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
 import "package:flutter/foundation.dart";
@@ -476,7 +477,8 @@ class ChatMessageWithSocketController extends GetxController
       }
     });
     print("level ------> ${AppFirebaseService().orderData.value["level"]}");
-    print("customerName ------> ${AppFirebaseService().orderData.value["customerName"]}");
+    print(
+        "customerName ------> ${AppFirebaseService().orderData.value["customerName"]}");
     WidgetsBinding.instance.addObserver(this);
     if (showRetentionPopup.toString() == "1") {
       print("callling popup api from this side");
@@ -635,6 +637,16 @@ class ChatMessageWithSocketController extends GetxController
         scrollToBottomFunc();
       }
     });
+    if (disableAstroEvent.toString() == "1") {
+      FirebaseAnalytics.instance
+          .logEvent(name: "astrolgoer_in_chat", parameters: {
+        "astrologer_id": userData!.id ?? "",
+        "order_id": AppFirebaseService().orderData.value["orderId"] ?? "",
+        "customer_name":
+            AppFirebaseService().orderData.value["customerName"] ?? "",
+        "customer_id": AppFirebaseService().orderData.value["userId"] ?? "",
+      });
+    }
   }
 
   checkIfChatIsEnded() {
@@ -730,7 +742,8 @@ class ChatMessageWithSocketController extends GetxController
       }
       messageTemplatesList.value.clear();
       for (int i = 0; i < messageTemplateList.length; i++) {
-        if (await getBoolFromPrefs(messageTemplateList[i].id.toString()) || messageTemplateList[i].type.toString() =="0") {
+        if (await getBoolFromPrefs(messageTemplateList[i].id.toString()) ||
+            messageTemplateList[i].type.toString() == "0") {
           messageTemplatesList.value.add(messageTemplateList[i]);
         }
       }
@@ -744,6 +757,7 @@ class ChatMessageWithSocketController extends GetxController
     SharedPreferences prefs = await SharedPreferences.getInstance();
     return prefs.getBool("${key}template") ?? false;
   }
+
   Duration? timeDifference;
   String formatTime(int seconds) {
     // Calculate hours, minutes, and seconds

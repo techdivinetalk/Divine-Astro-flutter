@@ -55,6 +55,7 @@ import '../../common/feedback_bottomsheet.dart';
 import "../../common/important_number_bottomsheet.dart";
 import '../../common/switch_component.dart';
 import '../../di/shared_preference_service.dart';
+import '../../firebase_service/firebasae_event.dart';
 import '../../model/AstroRitentionModel.dart';
 import '../../model/astro_notice_board_response.dart';
 import '../../model/chat_assistant/CustomerDetailsResponse.dart';
@@ -102,6 +103,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   ExpandedTileController? expandedTile2Controller = ExpandedTileController();
   UserData userData = UserData();
   UserRepository userRepository = UserRepository();
+  final firebaseEvent = Get.find<FirebaseEvent>();
+
   HomePageRepository homePageRepository = HomePageRepository();
   final homeScreenKey = GlobalKey<ScaffoldState>();
   int scoreIndex = 0;
@@ -1679,6 +1682,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
             response.message == "Successfully Checkin" &&
             params.containsKey("check_in")) {
           print("here is it is comming --- ${params.containsKey("check_in")}");
+          if (disableAstroEvent.toString() == "1") {
+            firebaseEvent.chat_event({
+              "astrologer_id": userData.id ?? "",
+              "chat_on": "yes",
+              "date_time": DateTime.now().toString(),
+            });
+          }
           chatSwitch(true);
           showDiscountPopup();
         } else {}
@@ -1686,6 +1696,13 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         if (type == 2 &&
             response.message == "Successfully Checkin" &&
             params.containsKey("check_in")) {
+          if (disableAstroEvent.toString() == "1") {
+            firebaseEvent.call_event({
+              "astrologer_id": userData.id ?? "",
+              "call_on": "yes",
+              "date_time": DateTime.now().toString(),
+            });
+          }
           callSwitch(true);
           print("here is it is comming");
           showDiscountPopup();
@@ -1694,12 +1711,26 @@ class HomeController extends GetxController with WidgetsBindingObserver {
             response.message == "Successfully Checkout" &&
             params.containsKey("check_out")) {
           print("here is it is comming --- ${params.containsKey("check_in")}");
+          if (disableAstroEvent.toString() == "1") {
+            firebaseEvent.chat_event({
+              "astrologer_id": userData.id ?? "",
+              "chat_on": "no",
+              "date_time": DateTime.now().toString(),
+            });
+          }
           chatSwitch(false);
         } else {}
 
         if (type == 2 &&
             response.message == "Successfully Checkout" &&
             params.containsKey("check_out")) {
+          if (disableAstroEvent.toString() == "1") {
+            firebaseEvent.call_event({
+              "astrologer_id": userData.id ?? "",
+              "call_on": "no",
+              "date_time": DateTime.now().toString(),
+            });
+          }
           callSwitch(false);
         } else {}
         if (!videoSwitch.value && type == 3) {
@@ -1761,6 +1792,15 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         homeData!.offers!.customOffer![index].isOn = value;
       } else {
         homeData!.offers!.customOffer![index].isOn = !value;
+      }
+      if (disableAstroEvent.toString() == "1") {
+        print("hfdjfdfjfjfhjdhfjdhfjdfhjdfh");
+        firebaseEvent.astrolgoer_enable_offer({
+          "astrologer_id": userData.id.toString(),
+          "action": value.toString(),
+          "offer_id": offerId.toString(),
+          "offerType": offerType.toString(),
+        });
       }
       update();
     } catch (error) {

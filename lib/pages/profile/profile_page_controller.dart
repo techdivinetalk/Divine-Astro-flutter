@@ -25,6 +25,7 @@ import '../../common/app_exception.dart';
 import '../../common/colors.dart';
 import '../../common/custom_widgets.dart';
 import '../../di/shared_preference_service.dart';
+import '../../firebase_service/firebasae_event.dart';
 import '../../firebase_service/firebase_service.dart';
 import '../../gen/assets.gen.dart';
 import '../../model/res_login.dart';
@@ -234,6 +235,8 @@ class ProfilePageController extends GetxController {
     update();
     update(['set_language']);
   }
+
+  var firebaseEvent = Get.find<FirebaseEvent>();
 
   getSelectedLanguage() {
     if (selectedLanguage != null) {

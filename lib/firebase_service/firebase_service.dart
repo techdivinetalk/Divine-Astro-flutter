@@ -66,6 +66,7 @@ RxInt verifyOnboarding = 0.obs;
 RxInt isAstrologerPhotoChatCall = 0.obs;
 RxInt disableOnboarding = 0.obs;
 RxInt disableAstroEvent = 0.obs;
+RxInt show_call_on_assistant = 0.obs;
 RxString image_upload_url = "".obs;
 RxInt astrologer_notification = 0.obs;
 RxInt showLoginSupport = 0.obs;
@@ -473,7 +474,10 @@ class AppFirebaseService {
         disableOnboarding(int.parse(dataSnapshot.value.toString()));
         break;
       case "disableAstroEvent":
-        disableAstroEvent();
+        disableAstroEvent(int.parse(dataSnapshot.value.toString()));
+        break;
+      case "show_call_on_assistant":
+        show_call_on_assistant(int.parse(dataSnapshot.value.toString()));
         break;
       case "image_upload_url":
         image_upload_url(dataSnapshot.value.toString());

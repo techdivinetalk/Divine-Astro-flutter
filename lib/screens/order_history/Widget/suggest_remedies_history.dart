@@ -6,7 +6,6 @@ import 'package:divine_astrologer/screens/order_history/Widget/empty_widget.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:tutorial_coach_mark/tutorial_coach_mark.dart';
 
 import '../../../common/app_textstyle.dart';
 import '../../../common/cached_network_image.dart';
@@ -138,7 +137,8 @@ class SuggestRemedies extends StatelessWidget {
                         Row(
                           children: [
                             ConstrainedBox(
-                              constraints: const BoxConstraints(maxWidth: 140.0),
+                              constraints:
+                                  const BoxConstraints(maxWidth: 140.0),
                               child: CustomText(
                                 "${data[index].getCustomers != null ? data[index].getCustomers?.name : "UserName"}",
                                 fontWeight: FontWeight.w600,
@@ -148,10 +148,14 @@ class SuggestRemedies extends StatelessWidget {
                                 overflow: TextOverflow.ellipsis,
                               ),
                             ),
-                            if(data[index].getCustomers?.level != null && data[index].getCustomers?.level != "")Padding(
-                              padding: const EdgeInsets.only(left: 5.0),
-                              child: LevelWidget(level: data[index].getCustomers?.level ?? ""),
-                            )
+                            if (data[index].getCustomers?.level != null &&
+                                data[index].getCustomers?.level != "")
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5.0),
+                                child: LevelWidget(
+                                    level:
+                                        data[index].getCustomers?.level ?? ""),
+                              )
                           ],
                         )
                       ],

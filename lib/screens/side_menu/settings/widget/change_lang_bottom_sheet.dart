@@ -5,7 +5,6 @@ import 'package:get/get.dart';
 import '../../../../common/app_textstyle.dart';
 import '../../../../common/colors.dart';
 import '../../../../pages/profile/profile_page_controller.dart';
-import '../../../../repository/user_repository.dart';
 
 class LanguageBottomSheetWidget extends StatelessWidget {
   const LanguageBottomSheetWidget({
@@ -17,8 +16,7 @@ class LanguageBottomSheetWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
-
+    print("--------------------------");
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
@@ -29,7 +27,7 @@ class LanguageBottomSheetWidget extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
                 border: Border.all(color: appColors.white, width: 1.5.w),
-                borderRadius:  BorderRadius.all(Radius.circular(50.r)),
+                borderRadius: BorderRadius.all(Radius.circular(50.r)),
                 color: appColors.white.withOpacity(0.1)),
             child: const Icon(
               Icons.close,
@@ -40,8 +38,8 @@ class LanguageBottomSheetWidget extends StatelessWidget {
         Container(
           width: double.maxFinite,
           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 0.h),
-          decoration:  BoxDecoration(
-            borderRadius:  BorderRadius.vertical(top: Radius.circular(50.r)),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(50.r)),
             color: appColors.white,
           ),
           child: Column(
@@ -104,7 +102,7 @@ class LanguageBottomSheetWidget extends StatelessWidget {
                                             Text(
                                               item.languagesMain.toString(),
                                               style: AppTextStyle.textStyle20(
-                                                fontSize: 16.h,
+                                                  fontSize: 16.h,
                                                   fontWeight: FontWeight.w600),
                                             ),
                                             SizedBox(height: 10.h),

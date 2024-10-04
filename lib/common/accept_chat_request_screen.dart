@@ -119,6 +119,17 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
         // print("stop the sound");
       }
     });
+    if (disableAstroEvent.toString() == "1") {
+      FirebaseAnalytics.instance
+          .logEvent(name: "astrologer_on_accept_screen", parameters: {
+        "astrologer_id": pref.getUserDetail()!.id ?? "",
+        "astrologer_name": pref.getUserDetail()!.name ?? "",
+        "Name": AppFirebaseService().orderData.value["customerName"] ?? "",
+        "order_status": "Accepted",
+        "orderId": AppFirebaseService().orderData.value["orderId"] ?? "",
+        "queueId": AppFirebaseService().orderData.value["queue_id"] ?? "",
+      });
+    }
   }
 
   bool isCheckPermission = false;
@@ -1025,6 +1036,14 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
                                                                     name:
                                                                         "astrologer_accept_chat",
                                                                     parameters: {
+                                                                  "astrologer_id": pref
+                                                                          .getUserDetail()!
+                                                                          .id ??
+                                                                      "",
+                                                                  "astrologer_name": pref
+                                                                          .getUserDetail()!
+                                                                          .name ??
+                                                                      "",
                                                                   "Name": AppFirebaseService()
                                                                           .orderData
                                                                           .value["customerName"] ??

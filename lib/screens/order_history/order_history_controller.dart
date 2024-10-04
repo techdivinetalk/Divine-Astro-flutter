@@ -10,6 +10,7 @@ import 'package:intl/intl.dart';
 
 import '../../common/app_exception.dart';
 import '../../di/shared_preference_service.dart';
+import '../../model/order_history_model/Fine_order_histroy_model.dart';
 import '../../model/order_history_model/all_order_history.dart';
 import '../../model/order_history_model/call_order_history.dart';
 import '../../model/order_history_model/chat_order_history.dart';
@@ -34,6 +35,7 @@ class OrderHistoryController extends GetxController {
   var giftsApiCalling = false.obs;
   var suggestApiCalling = false.obs;
   var orderApiCalling = false.obs;
+  var orderFineCalling = false.obs;
   var emptyMsg = "".obs;
 
   RxList<AllHistoryData> allHistoryList = <AllHistoryData>[].obs;
@@ -41,6 +43,7 @@ class OrderHistoryController extends GetxController {
   RxList<ChatDataList> chatHistoryList = <ChatDataList>[].obs;
   RxList<FeedBackData> feedHistoryList = <FeedBackData>[].obs;
   RxList<GiftDataList> giftHistoryList = <GiftDataList>[].obs;
+  RxList<FineData> fineHistoryList = <FineData>[].obs;
   RxList<RemedySuggestedDataList> remedySuggestedHistoryList =
       <RemedySuggestedDataList>[].obs;
   final preferenceService = Get.find<SharedPreferenceService>();
@@ -51,6 +54,7 @@ class OrderHistoryController extends GetxController {
   var liveGiftPageCount = 1;
   var remedyPageCount = 1;
   var feedBackPageCount = 1;
+  var finePageCount = 1;
   double calculatePercentage(double value, double price) {
     return value / 100 * price;
   }
@@ -221,6 +225,22 @@ class OrderHistoryController extends GetxController {
           if (page == 1) feedHistoryList.clear();
           feedHistoryList.addAll(feedbackOrder);
           feedBackPageCount++;
+        } else {
+          emptyMsg.value = data.message ?? "No data found!";
+        }
+      } else if (type == 6) {
+        orderFineCalling.value = true;
+        update();
+        FineOrderHistroyModel data =
+            await OrderHistoryRepository().getFineOrderHistory(params);
+        orderFineCalling.value = false;
+        var history = data.data;
+
+        if (history!.isNotEmpty && data.data != null) {
+          emptyMsg.value = "";
+          if (page == 1) fineHistoryList.clear();
+          fineHistoryList.addAll(history);
+          finePageCount++;
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }

@@ -25,6 +25,7 @@ import '../../common/app_exception.dart';
 import '../../common/colors.dart';
 import '../../common/common_functions.dart';
 import '../../common/routes.dart';
+import '../../firebase_service/firebasae_event.dart';
 import '../../model/res_login.dart';
 import '../../model/send_otp.dart';
 import '../../model/speciality_list.dart';
@@ -288,7 +289,13 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
     firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
     firebaseDatabase.ref().child("$firebaseNodeUrl/realTime").update(realTime);
     var isOnboardings;
-
+    FirebaseEvent().loginUser({
+      "astrologer_id": preferenceService.getUserDetail()!.id ?? "",
+      "astrologer_number":
+          preferenceService.getUserDetail()!.mobileNumber ?? "",
+      "astrologer_name": preferenceService.getUserDetail()!.name ?? "",
+      "time": DateTime.now().toString() ?? "",
+    });
     final dataSnapshot = await AppFirebaseService()
         .database
         .child(

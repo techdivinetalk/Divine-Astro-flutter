@@ -217,7 +217,7 @@ class SupportIssueScreen extends GetView<SupportIssueController> {
                           child: Align(
                             alignment: Alignment.topLeft,
                             child: Text(
-                              "Please provide a more detailed description.",
+                              "Please provide a more detailed description. (100 characters)",
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 color: appColors.appRedColour,

@@ -5,11 +5,10 @@ import 'package:dio/dio.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/res_login.dart';
 import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/product/pooja/widgets/custom_widget/pooja_common_list.dart';
-import 'package:flutter/services.dart';
 import 'package:get/get.dart' hide FormData, MultipartFile;
 import 'package:path_provider/path_provider.dart';
-import 'package:permission_handler/permission_handler.dart';
 
+import '../../live_page/constant.dart';
 import '../model/agreement_model.dart';
 
 class AgreementController extends GetxController {
@@ -41,14 +40,12 @@ class AgreementController extends GetxController {
     UserData? userData = await pref.getUserDetail();
     print("---------------${userData!.toJson().toString()}");
     try {
-      print(
-          "ApiProvider.astrologerAgreement${ApiProvider.astrologerAgreement}${userData!.id}");
       Dio().options.headers = {
         'Connection': 'keep-alive',
         'Keep-Alive': 'timeout=5, max=1000',
       };
-      final response =
-          await Dio().get("${ApiProvider.astrologerAgreement}${userData!.id}");
+      final response = await Dio().get(
+          "${isLiveServer.value == 1 ? ApiProvider.agreementBaseDebug : ApiProvider.agreementBase}${ApiProvider.astrologerAgreement}${userData!.id}");
       print("astrologerAgreement.data${jsonEncode(response.data)}");
       AgreementModel agreementModel = AgreementModel.fromJson(response.data);
       if (agreementModel.data != null) {
