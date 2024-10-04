@@ -93,7 +93,6 @@ class UserData {
   int? uniqueNo;
   int? isBusy;
   String? deviceToken;
-  double? appVersion;
   String? deviceBrand;
   String? deviceModel;
   String? deviceManufacture;
@@ -167,7 +166,6 @@ class UserData {
     this.uniqueNo,
     this.isBusy,
     this.deviceToken,
-    this.appVersion,
     this.deviceBrand,
     this.deviceModel,
     this.deviceManufacture,
@@ -240,7 +238,6 @@ class UserData {
     uniqueNo = json['unique_no'];
     isBusy = json['is_busy'];
     deviceToken = json['device_token'];
-    appVersion = json['appVersion'];
     deviceBrand = json['device_brand'];
     deviceModel = json['device_model'];
     deviceManufacture = json['device_manufacture'];
@@ -329,7 +326,6 @@ class UserData {
     data['unique_no'] = uniqueNo;
     data['is_busy'] = isBusy;
     data['device_token'] = deviceToken;
-    data['appVersion'] = appVersion;
     data['device_brand'] = deviceBrand;
     data['device_model'] = deviceModel;
     data['device_manufacture'] = deviceManufacture;
