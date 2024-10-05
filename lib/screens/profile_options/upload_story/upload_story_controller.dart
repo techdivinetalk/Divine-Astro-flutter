@@ -164,7 +164,9 @@ class UploadStoryController extends GetxController {
       request.fields.addAll({"is_large_file": "1"});
     }
 
-    print("request : ${request.fields}");
+    print("request : ${request.toString()}");
+    print("request : ${request.headers.toString()}");
+    print("request : ${request.fields.toString()}");
     var response = await request.send();
 
     // Listen for the response
