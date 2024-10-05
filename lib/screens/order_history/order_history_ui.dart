@@ -13,7 +13,6 @@ import '../../common/app_textstyle.dart';
 import '../../common/appbar.dart';
 import '../../common/colors.dart';
 import '../../gen/assets.gen.dart';
-import '../side_menu/side_menu_ui.dart';
 import 'Widget/all_order_history_ui.dart';
 import 'Widget/call_order_history_ui.dart';
 import 'Widget/chat_order_history_ui.dart';
@@ -33,7 +32,7 @@ class OrderHistoryUI extends GetView<OrderHistoryController> {
         return AnnotatedRegion<SystemUiOverlayStyle>(
           value: const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
           child: Scaffold(
-            drawer: const SideMenuDrawer(),
+            // drawer:   SideMenuDrawer(),
             appBar: commonDetailAppbar(
                 title: "orderHistory".tr,
                 trailingWidget: InkWell(

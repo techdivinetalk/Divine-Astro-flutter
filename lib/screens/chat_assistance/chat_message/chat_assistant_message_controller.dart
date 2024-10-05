@@ -608,7 +608,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
             elevation: 0,
             contentPadding: EdgeInsets.fromLTRB(10, 12, 10, 10),
             content: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -622,7 +622,19 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
                     color: appColors.red,
                   ),
                 ),
-                Html(data: response.description ?? ""),
+                SizedBox(
+                  height: 300,
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Html(
+                          shrinkWrap: true,
+                          data: response.description ?? "",
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 Obx(() {
                   return callLoading.value == true
                       ? Padding(
@@ -665,9 +677,6 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
                           ),
                         );
                 }),
-                SizedBox(
-                  height: 8,
-                ),
               ],
             ),
           ),
@@ -767,13 +776,14 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
       final response = await chatAssistantRepository.callToAstrologerRepo(map);
 
       if (response != null && response.success == true) {
-        callLoading(false);
         chatAssCallModel = response;
         firebaseEvent.exotel_call_chat_assistants({
           "astrolgoer_id": preferenceService.getUserDetail()!.id.toString(),
           "user_id": args!.id.toString(),
           "date_time": DateTime.now().toString(),
         });
+        callLoading(false);
+
         Fluttertoast.showToast(
             msg: response.message ?? "Call initiated successfully");
       } else {

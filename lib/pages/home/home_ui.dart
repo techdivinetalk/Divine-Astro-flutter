@@ -98,7 +98,9 @@ class HomeUI extends GetView<HomeController> {
           return Scaffold(
             key: controller.homeScreenKey,
             backgroundColor: appColors.white,
-            drawer: const SideMenuDrawer(),
+            drawer: SideMenuDrawer(
+              from: "Home",
+            ),
             appBar: AppBar(
               leading: IconButton(
                 onPressed: () {
@@ -2135,7 +2137,7 @@ class HomeUI extends GetView<HomeController> {
                           Obx(
                             () {
                               return isLive.value == 1
-                                  ? controller.isLiveEnable.value// == false
+                                  ? controller.isLiveEnable.value // == false
                                       ? Container(
                                           margin: EdgeInsets.symmetric(
                                               horizontal: 16, vertical: 6),

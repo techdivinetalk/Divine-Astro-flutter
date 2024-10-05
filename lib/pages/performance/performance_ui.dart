@@ -30,7 +30,9 @@ class PerformanceUI extends GetView<PerformanceController> {
       backgroundColor: appColors.white,
       appBar:
           commonAppbar(title: "performance".tr, trailingWidget: Container()),
-      drawer: const SideMenuDrawer(),
+      drawer: SideMenuDrawer(
+        from: "Performance",
+      ),
       body: GetBuilder<PerformanceController>(builder: (controller) {
         return AnimatedCrossFade(
           duration: const Duration(milliseconds: 200),

@@ -11,7 +11,8 @@ import '../../common/routes.dart';
 import '../../pages/home/home_controller.dart';
 
 class SideMenuDrawer extends GetView<HomeController> {
-  const SideMenuDrawer({super.key});
+  final from;
+  SideMenuDrawer({this.from});
 
   @override
   Widget build(BuildContext context) {
@@ -34,9 +35,12 @@ class SideMenuDrawer extends GetView<HomeController> {
                 ),*/
                 InkWell(
                   onTap: () {
-                    Get.put(HomeController()).homeScreenKey
-                      ..currentState?.closeDrawer();
-                    Get.back();
+                    if (from == "Home") {
+                      Get.put(HomeController()).homeScreenKey
+                        ..currentState?.closeDrawer();
+                    } else {
+                      Get.back();
+                    }
                     Get.put(HomeController()).showPopup = true;
                   },
                   child: const Icon(Icons.close),
@@ -50,10 +54,14 @@ class SideMenuDrawer extends GetView<HomeController> {
                 leading: Assets.images.icWaiting.svg(),
                 title: Text("waitlist".tr),
                 onTap: () {
-                  Get.put(HomeController()).homeScreenKey
-                    ..currentState?.closeDrawer();
-                  Get.back();
-                  Get.put(HomeController()).showPopup = false;
+                  if (from == "Home") {
+                    Get.put(HomeController()).homeScreenKey
+                      ..currentState?.closeDrawer();
+                  } else {
+                    Get.back();
+                  }
+                  Get.put(HomeController()).showPopup = true;
+
                   Get.toNamed(RouteName.waitList);
                 },
               ),
@@ -62,11 +70,14 @@ class SideMenuDrawer extends GetView<HomeController> {
                 leading: Assets.images.icOrderHistory.svg(),
                 title: Text("orderHistory".tr),
                 onTap: () {
-                  Get.put(HomeController()).homeScreenKey
-                    ..currentState?.closeDrawer();
-                  Get.back();
+                  if (from == "Home") {
+                    Get.put(HomeController()).homeScreenKey
+                      ..currentState?.closeDrawer();
+                  } else {
+                    Get.back();
+                  }
+                  Get.put(HomeController()).showPopup = true;
 
-                  Get.put(HomeController()).showPopup = false;
                   Get.toNamed(RouteName.orderHistory);
                 },
               ),
@@ -75,13 +86,14 @@ class SideMenuDrawer extends GetView<HomeController> {
                 leading: Assets.images.icMessageTemplate.svg(),
                 title: Text("messageTemplate".tr),
                 onTap: () {
-                  Get.put(HomeController()).homeScreenKey
-                    ..currentState?.closeDrawer();
-                  Get.back();
+                  if (from == "Home") {
+                    Get.put(HomeController()).homeScreenKey
+                      ..currentState?.closeDrawer();
+                  } else {
+                    Get.back();
+                  }
+                  Get.put(HomeController()).showPopup = true;
 
-                  Get.put(HomeController()).showPopup = false;
-
-                  Get.back();
                   Get.toNamed(RouteName.messageTemplate);
                 },
               ),
@@ -101,11 +113,14 @@ class SideMenuDrawer extends GetView<HomeController> {
                 leading: Assets.images.icCustomerCare.svg(),
                 title: Text('customerCare'.tr),
                 onTap: () {
-                  Get.put(HomeController()).homeScreenKey
-                    ..currentState?.closeDrawer();
-                  Get.back();
+                  if (from == "Home") {
+                    Get.put(HomeController()).homeScreenKey
+                      ..currentState?.closeDrawer();
+                  } else {
+                    Get.back();
+                  }
+                  Get.put(HomeController()).showPopup = true;
 
-                  Get.put(HomeController()).showPopup = false;
                   controller.whatsapp();
                 },
               ),
@@ -114,11 +129,14 @@ class SideMenuDrawer extends GetView<HomeController> {
                 leading: Assets.images.icImportContact.svg(),
                 title: Text('importantNumbers'.tr),
                 onTap: () async {
-                  Get.put(HomeController()).homeScreenKey
-                    ..currentState?.closeDrawer();
-                  Get.back();
+                  if (from == "Home") {
+                    Get.put(HomeController()).homeScreenKey
+                      ..currentState?.closeDrawer();
+                  } else {
+                    Get.back();
+                  }
+                  Get.put(HomeController()).showPopup = true;
 
-                  Get.put(HomeController()).showPopup = false;
                   bool isPermission = await requestPermissions();
                   if (isPermission) {
                     Get.toNamed(RouteName.importantNumbers);
@@ -132,13 +150,14 @@ class SideMenuDrawer extends GetView<HomeController> {
                 leading: const Icon(Icons.notifications_active_outlined),
                 title: Text("Notice".tr),
                 onTap: () {
-                  Get.put(HomeController())
-                      .homeScreenKey
-                      .currentState
-                      ?.closeDrawer();
-                  Get.back();
+                  if (from == "Home") {
+                    Get.put(HomeController()).homeScreenKey
+                      ..currentState?.closeDrawer();
+                  } else {
+                    Get.back();
+                  }
+                  Get.put(HomeController()).showPopup = true;
 
-                  Get.put(HomeController()).showPopup = false;
                   Get.toNamed(RouteName.noticeBoard);
                 },
               ),
@@ -147,11 +166,14 @@ class SideMenuDrawer extends GetView<HomeController> {
                 leading: const Icon(Icons.bug_report_outlined),
                 title: Text('Technical Support'.tr),
                 onTap: () {
-                  Get.put(HomeController()).homeScreenKey
-                    ..currentState?.closeDrawer();
-                  Get.back();
+                  if (from == "Home") {
+                    Get.put(HomeController()).homeScreenKey
+                      ..currentState?.closeDrawer();
+                  } else {
+                    Get.back();
+                  }
+                  Get.put(HomeController()).showPopup = true;
 
-                  Get.put(HomeController()).showPopup = false;
                   Get.toNamed(RouteName.technicalIssues);
                 },
               ),
@@ -160,11 +182,14 @@ class SideMenuDrawer extends GetView<HomeController> {
                 leading: const Icon(Icons.request_quote_outlined),
                 title: Text('Financial Support'.tr),
                 onTap: () {
-                  Get.put(HomeController()).homeScreenKey
-                    ..currentState?.closeDrawer();
-                  Get.back();
+                  if (from == "Home") {
+                    Get.put(HomeController()).homeScreenKey
+                      ..currentState?.closeDrawer();
+                  } else {
+                    Get.back();
+                  }
+                  Get.put(HomeController()).showPopup = true;
 
-                  Get.put(HomeController()).showPopup = false;
                   Get.toNamed(RouteName.financialSupport);
                 },
               ),
@@ -173,11 +198,14 @@ class SideMenuDrawer extends GetView<HomeController> {
                 leading: const Icon(Icons.contact_support_outlined),
                 title: Text('Support'.tr),
                 onTap: () {
-                  Get.put(HomeController()).homeScreenKey
-                    ..currentState?.closeDrawer();
-                  Get.back();
+                  if (from == "Home") {
+                    Get.put(HomeController()).homeScreenKey
+                      ..currentState?.closeDrawer();
+                  } else {
+                    Get.back();
+                  }
+                  Get.put(HomeController()).showPopup = true;
 
-                  Get.put(HomeController()).showPopup = false;
                   Get.toNamed(RouteName.newSupportScreen);
                 },
               ),
@@ -186,11 +214,14 @@ class SideMenuDrawer extends GetView<HomeController> {
                     leading: const Icon(Icons.check_box_outline_blank),
                     title: Text('Testing'.tr),
                     onTap: () {
-                      Get.put(HomeController()).homeScreenKey
-                        ..currentState?.closeDrawer();
-                      Get.back();
+                      if (from == "Home") {
+                        Get.put(HomeController()).homeScreenKey
+                          ..currentState?.closeDrawer();
+                      } else {
+                        Get.back();
+                      }
+                      Get.put(HomeController()).showPopup = true;
 
-                      Get.put(HomeController()).showPopup = false;
                       Get.toNamed(RouteName.testingScreen);
                     },
                   )
@@ -200,13 +231,13 @@ class SideMenuDrawer extends GetView<HomeController> {
                 leading: Assets.images.icSetting.svg(),
                 title: Text('settings'.tr),
                 onTap: () {
-                  Get.find<HomeController>()
-                      .homeScreenKey
-                      .currentState
-                      ?.closeDrawer();
-                  Get.back();
-
-                  Get.put(HomeController()).showPopup = false;
+                  if (from == "Home") {
+                    Get.put(HomeController()).homeScreenKey
+                      ..currentState?.closeDrawer();
+                  } else {
+                    Get.back();
+                  }
+                  Get.put(HomeController()).showPopup = true;
 
                   Get.toNamed(RouteName.settingsUI);
                 },

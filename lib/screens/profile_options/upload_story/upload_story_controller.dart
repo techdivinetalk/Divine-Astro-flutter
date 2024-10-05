@@ -172,18 +172,31 @@ class UploadStoryController extends GetxController {
     // Listen for the response
     response.stream.transform(utf8.decoder).listen((value) {
       print("value ----> $value");
-      if (value.isEmpty) {
+      // if (value.isEmpty) {
+      //   isLoading(false);
+      // }
+      if (jsonDecode(value)["data"]["path"] == null) {
+        // Convert the string to JSON
+        Map<String, dynamic> jsonResponse = jsonDecode(value.toString());
+
+        Fluttertoast.showToast(
+          msg: jsonResponse['data']['image'][0].toString(),
+        );
         isLoading(false);
+        Get.back();
+      } else {
+        print(value); // Handle the response from the server
+        uploadedStory = jsonDecode(value)["data"]["path"];
+        update();
+        print(
+            "Image uploaded successfully. --  - ${jsonDecode(value)["data"]["full_path"].toString()}");
+        uploadStory(jsonDecode(value)["data"]["full_path"].toString(),
+            duration: storyDuration);
+        isLoading(false);
+
+        print(
+            "valuevaluevaluevaluevaluevaluevalue"); // Handle the response from the server
       }
-      print(value); // Handle the response from the server
-      uploadedStory = jsonDecode(value)["data"]["path"];
-      update();
-      print(
-          "Image uploaded successfully. --  - ${jsonDecode(value)["data"]["full_path"].toString()}");
-      uploadStory(jsonDecode(value)["data"]["full_path"].toString(),
-          duration: storyDuration);
-      print(
-          "valuevaluevaluevaluevaluevaluevalue"); // Handle the response from the server
     });
 
     if (response.statusCode == 200) {
