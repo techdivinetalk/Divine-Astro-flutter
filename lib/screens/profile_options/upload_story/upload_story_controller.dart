@@ -208,6 +208,8 @@ class UploadStoryController extends GetxController {
       print("Image uploaded successfully.");
       // uploadStory(uploadedStory.toString());
     } else {
+      isLoading(false);
+
       print("Failed to upload image.");
     }
   }
