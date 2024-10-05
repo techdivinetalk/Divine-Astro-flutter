@@ -45,6 +45,7 @@ class UploadStoryController extends GetxController {
   bool isStoryMoreThan2MB = false;
   saveVideo() {
     progressVisibility.value = true;
+    isLoading.value = true;
     trimmer.saveTrimmedVideo(
       startValue: startValue,
       endValue: endValue,
@@ -73,6 +74,8 @@ class UploadStoryController extends GetxController {
           Fluttertoast.showToast(msg: "${'uploadStory'.tr}..");
           await uploadImage(File(outputPath!));
         } else {
+          isLoading.value = false;
+
           Fluttertoast.showToast(
               msg:
                   "Story video size should be maximum ${convertKBtoMB(double.parse(maximumStorySize.value.toString()))} MB",
@@ -140,7 +143,7 @@ class UploadStoryController extends GetxController {
 
   uploadImage(imageFile) async {
     var uploadedStory;
-    // isLoading(true);
+    isLoading(true);
     var token = await preferenceService.getToken();
     log("image length - ${imageFile.path}");
 
@@ -180,6 +183,7 @@ class UploadStoryController extends GetxController {
       if (jsonDecode(value)["data"]["path"] == null) {
         // Convert the string to JSON
         Map<String, dynamic> jsonResponse = jsonDecode(value.toString());
+        isLoading.value = false;
 
         Fluttertoast.showToast(
           msg: jsonResponse['data']['image'][0].toString(),
@@ -194,7 +198,6 @@ class UploadStoryController extends GetxController {
             "Image uploaded successfully. --  - ${jsonDecode(value)["data"]["full_path"].toString()}");
         uploadStory(jsonDecode(value)["data"]["full_path"].toString(),
             duration: storyDuration);
-        isLoading(false);
 
         print(
             "valuevaluevaluevaluevaluevaluevalue"); // Handle the response from the server
