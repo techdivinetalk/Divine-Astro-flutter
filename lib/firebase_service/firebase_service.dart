@@ -1,5 +1,6 @@
 import "dart:async";
 
+import "package:device_apps/device_apps.dart";
 import "package:divine_astrologer/app_socket/app_socket.dart";
 import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/constants.dart";
@@ -412,8 +413,8 @@ class AppFirebaseService {
       debugPrint("Error reading data from the database: $e");
     }
   }
-
-  saveMasterData(DataSnapshot dataSnapshot) {
+  List<String> installedApp = [];
+  saveMasterData(DataSnapshot dataSnapshot) async {
     print("dataSnapshot-Value ${dataSnapshot.value}");
     switch (dataSnapshot.key) {
       case "call":
@@ -600,6 +601,18 @@ class AppFirebaseService {
       case "acceptChatRequestScreen":
         acceptChatRequestScreen(int.parse(dataSnapshot.value.toString()));
         break;
+      case "app":
+        Map<Object?, Object?> appList = dataSnapshot.value as Map<Object?, Object?>;
+        appList.forEach((key, value) async {
+          print('App ID: $key, App Name: $value');
+          bool isKiteInstalled =
+              await DeviceApps.isAppInstalled(value.toString());
+          if (isKiteInstalled) {
+            installedApp.add(key.toString());
+          }
+        });
+
+        break;
       default:
         // preferenceService.setStringPref(
         //     dataSnapshot.key.toString(), dataSnapshot.value.toString());
@@ -608,7 +621,7 @@ class AppFirebaseService {
   }
 
   Future<DatabaseEvent?> masterData(String path) async {
-    print("dataSnapshot-1");
+    print("dataSnapshot-1-$path");
     try {
       database.child(path).onChildAdded.listen((event) {
         print("dataSnapshot-Key ${event.snapshot.key}");
