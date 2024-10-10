@@ -599,88 +599,90 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
       final response = await chatAssistantRepository.checkingCallStatus(map);
       if (response!.success == true) {
         checkingCalling(false);
-        Get.dialog(
-          barrierDismissible: true,
-          AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14.0),
-            ),
-            elevation: 0,
-            contentPadding: EdgeInsets.fromLTRB(10, 12, 10, 10),
-            content: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  response.title ?? "",
-                  textAlign: TextAlign.start,
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: FontFamily.poppins,
-                    color: appColors.red,
-                  ),
-                ),
-                SizedBox(
-                  height: 300,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                        Html(
-                          shrinkWrap: true,
-                          data: response.description ?? "",
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Obx(() {
-                  return callLoading.value == true
-                      ? Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: Center(
-                            child: SizedBox(
-                              height: 30,
-                              width: 30,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: appColors.red,
-                              ),
-                            ),
-                          ),
-                        )
-                      : InkWell(
-                          onTap: () {
-                            callUser();
-                            Get.back();
-                          },
-                          child: Container(
-                            height: 45,
-                            width: MediaQuery.of(Get.context!).size.width,
-                            decoration: BoxDecoration(
-                              color: appColors.red,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: Center(
-                              child: Text(
-                                "Start Voice Call",
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 16.sp,
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: FontFamily.poppins,
-                                  color: appColors.white,
-                                ),
-                              ),
-                            ),
-                          ),
-                        );
-                }),
-              ],
-            ),
-          ),
-        );
+        showCallingPopup(response, callLoading, callUser);
+
+        // Get.dialog(
+        //   barrierDismissible: true,
+        //   AlertDialog(
+        //     shape: RoundedRectangleBorder(
+        //       borderRadius: BorderRadius.circular(14.0),
+        //     ),
+        //     elevation: 0,
+        //     contentPadding: EdgeInsets.fromLTRB(10, 12, 10, 10),
+        //     content: Column(
+        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        //       crossAxisAlignment: CrossAxisAlignment.start,
+        //       mainAxisSize: MainAxisSize.min,
+        //       children: [
+        //         Text(
+        //           response.title ?? "",
+        //           textAlign: TextAlign.start,
+        //           style: TextStyle(
+        //             fontSize: 20.sp,
+        //             fontWeight: FontWeight.w600,
+        //             fontFamily: FontFamily.poppins,
+        //             color: appColors.red,
+        //           ),
+        //         ),
+        //         SizedBox(
+        //           height: 300,
+        //           child: SingleChildScrollView(
+        //             child: Column(
+        //               children: [
+        //                 Html(
+        //                   shrinkWrap: true,
+        //                   data: response.description ?? "",
+        //                 ),
+        //               ],
+        //             ),
+        //           ),
+        //         ),
+        //         Obx(() {
+        //           return callLoading.value == true
+        //               ? Padding(
+        //                   padding: const EdgeInsets.only(right: 10),
+        //                   child: Center(
+        //                     child: SizedBox(
+        //                       height: 30,
+        //                       width: 30,
+        //                       child: CircularProgressIndicator(
+        //                         strokeWidth: 2,
+        //                         color: appColors.red,
+        //                       ),
+        //                     ),
+        //                   ),
+        //                 )
+        //               : InkWell(
+        //                   onTap: () {
+        //                     callUser();
+        //                     Get.back();
+        //                   },
+        //                   child: Container(
+        //                     height: 45,
+        //                     width: MediaQuery.of(Get.context!).size.width,
+        //                     decoration: BoxDecoration(
+        //                       color: appColors.red,
+        //                       borderRadius: BorderRadius.circular(10),
+        //                     ),
+        //                     child: Center(
+        //                       child: Text(
+        //                         "Start Voice Call",
+        //                         textAlign: TextAlign.center,
+        //                         style: TextStyle(
+        //                           fontSize: 16.sp,
+        //                           fontWeight: FontWeight.w600,
+        //                           fontFamily: FontFamily.poppins,
+        //                           color: appColors.white,
+        //                         ),
+        //                       ),
+        //                     ),
+        //                   ),
+        //                 );
+        //         }),
+        //       ],
+        //     ),
+        //   ),
+        // );
         update();
       } else {
         checkingCalling(false);
