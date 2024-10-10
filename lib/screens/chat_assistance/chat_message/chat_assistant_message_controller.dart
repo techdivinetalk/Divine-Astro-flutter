@@ -14,7 +14,6 @@ import 'package:divine_astrologer/screens/chat_message_with_socket/model/custom_
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -42,6 +41,7 @@ import '../../../repository/chat_assistant_repository.dart';
 import '../../../repository/chat_repository.dart';
 import '../../../repository/kundli_repository.dart';
 import '../../live_page/constant.dart';
+import 'chat_assistant_message_ui.dart';
 import 'widgets/product/pooja/pooja_dharam/get_single_pooja_response.dart';
 
 class ChatMessageController extends GetxController with WidgetsBindingObserver {
