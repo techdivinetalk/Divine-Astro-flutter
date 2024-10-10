@@ -14,6 +14,7 @@ import 'package:divine_astrologer/repository/notice_repository.dart';
 import 'package:divine_astrologer/utils/load_image.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
@@ -26,6 +27,7 @@ import '../../../common/common_functions.dart';
 import '../../../common/routes.dart';
 import '../../../firebase_service/firebase_service.dart';
 import '../../../gen/assets.gen.dart';
+import '../../../gen/fonts.gen.dart';
 import '../../../model/chat_offline_model.dart';
 import '../../../model/message_template_response.dart';
 import '../../live_page/constant.dart';
@@ -940,4 +942,92 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
       rethrow;
     }
   }
+}
+
+Future<void> showCallingPopup(response, callLoading, callUser) async {
+  return Get.dialog(
+    barrierDismissible: true,
+    AlertDialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14.0),
+      ),
+      elevation: 0,
+      contentPadding: EdgeInsets.fromLTRB(10, 12, 10, 10),
+      content: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            response.title ?? "",
+            textAlign: TextAlign.start,
+            style: TextStyle(
+              fontSize: 20.sp,
+              fontWeight: FontWeight.w600,
+              fontFamily: FontFamily.poppins,
+              color: appColors.red,
+            ),
+          ),
+          // Wrap the SingleChildScrollView in a Flexible widget
+          Flexible(
+            child: SizedBox(
+              height: 300, // You can also set this dynamically or adjust it
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Html(
+                      shrinkWrap: true,
+                      data: response.description ?? "",
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+          Obx(() {
+            return callLoading.value == true
+                ? Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Center(
+                      child: SizedBox(
+                        height: 30,
+                        width: 30,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          color: appColors.red,
+                        ),
+                      ),
+                    ),
+                  )
+                : InkWell(
+                    onTap: () {
+                      callUser();
+                      Get.back();
+                    },
+                    child: Container(
+                      height: 45,
+                      width: MediaQuery.of(Get.context!).size.width,
+                      decoration: BoxDecoration(
+                        color: appColors.red,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Center(
+                        child: Text(
+                          "Start Voice Call",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16.sp,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: FontFamily.poppins,
+                            color: appColors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  );
+          }),
+        ],
+      ),
+    ),
+  );
 }
