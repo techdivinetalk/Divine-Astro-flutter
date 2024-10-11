@@ -599,6 +599,8 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
       final response = await chatAssistantRepository.checkingCallStatus(map);
       if (response!.success == true) {
         checkingCalling(false);
+        update();
+
         showCallingPopup(response, callLoading, callUser);
 
         // Get.dialog(
@@ -683,7 +685,6 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
         //     ),
         //   ),
         // );
-        update();
       } else {
         checkingCalling(false);
         Get.dialog(
