@@ -225,7 +225,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
           ),
         ),
         actions: [
-          show_call_on_assistant.value.toString() == "1"
+          show_call_on_assistant.value.toString() == "0"
               ? Obx(() {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
@@ -976,36 +976,37 @@ Future<void> showCallingPopup(response, callLoading, callUser) async {
               ),
             ),
             // Wrap the SingleChildScrollView in a Flexible widget
-            // Flexible(
-            //   child: SizedBox(
-            //     height: 300, // You can also set this dynamically or adjust it
-            //     child: SingleChildScrollView(
-            //       child: Column(
-            //         children: [
-            //           Html(
-            //             shrinkWrap: true,
-            //             data: response.description ?? "",
-            //           ),
-            //         ],
-            //       ),
-            //     ),
-            //   ),
-            // ),
             Flexible(
               child: SizedBox(
                 height: 300, // You can also set this dynamically or adjust it
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: Html(
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Html(
                         shrinkWrap: true,
                         data: response.description ?? "",
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
+
+            // Flexible(
+            //   child: SizedBox(
+            //     height: 300, // You can also set this dynamically or adjust it
+            //     child: Column(
+            //       children: [
+            //         Expanded(
+            //           child: Html(
+            //             shrinkWrap: true,
+            //             data: response.description ?? "",
+            //           ),
+            //         ),
+            //       ],
+            //     ),
+            //   ),
+            // ),
             Obx(() {
               return callLoading.value == true
                   ? Padding(
