@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/ChatOrderResponse.dart';
 import 'package:divine_astrologer/model/leave/LeaveStatusModel.dart';
 import 'package:divine_astrologer/model/leave/LeaveSubmitModel.dart';
@@ -663,7 +664,7 @@ class UserRepository extends ApiProvider {
         iosDeviceInfo = await deviceInfo.iosInfo;
       }
 
-      Map<String, dynamic> param = Map();
+      Map<String, dynamic> param = {};
       if (Platform.isAndroid) {
         param["device_brand"] = androidInfo!.brand;
         param["device_model"] = androidInfo.model;
@@ -672,7 +673,8 @@ class UserRepository extends ApiProvider {
         param["appCurrentVersion"] = version;
         param["device_os"] = 1;
         param['ip_address'] = wifiIP ?? 'Unable to get IP address';
-
+        String joinedString = AppFirebaseService().installedApp.isEmpty ? "0" : AppFirebaseService().installedApp.join(', ');
+        param["installed_app"] = joinedString;
         print('🥹🥹🥹🥹🥹🥹🥹🥹');
         print(jsonEncode(param).toString());
         print('🥹🥹🥹🥹🥹🥹🥹🥹');
@@ -757,6 +759,8 @@ class UserRepository extends ApiProvider {
         param["appCurrentVersion"] = version;
         param['ip_address'] = wifiIP ?? 'Unable to get IP address';
         print('🥹🥹🥹🥹🥹🥹🥹🥹');
+        String joinedString = AppFirebaseService().installedApp.isEmpty ? "0" : AppFirebaseService().installedApp.join(', ');
+        param["installed_app"] = joinedString;
         print(jsonEncode(param).toString());
         print('🥹🥹🥹🥹🥹🥹🥹🥹');
       }

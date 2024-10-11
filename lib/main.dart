@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:camera/camera.dart';
+import 'package:device_apps/device_apps.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
@@ -78,6 +79,7 @@ Future<void> main() async {
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   // initMessaging();
+  AppFirebaseService().masterData("dynamic");
   AppFirebaseService().masterData("masters");
   if (!kIsWeb) {
     await setupFlutterNotifications();
@@ -167,10 +169,6 @@ Future<void> main() async {
       } else {}
     }
   });
-  AppFirebaseService().masterData("masters");
-  if (!kDebugMode) {
-    AppFirebaseService().masterData("masters");
-  }
 }
 
 bool isFlutterLocalNotificationsInitialized = false;
