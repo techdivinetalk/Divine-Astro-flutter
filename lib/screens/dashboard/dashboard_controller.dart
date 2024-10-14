@@ -1612,7 +1612,5 @@ navigateForOnBoardingGlobal(commonConstants) async {
     Get.offNamed(
       RouteName.dashboard,
     );
-  } else {
-    Fluttertoast.showToast(msg: "Something went wrong! Contact Admin");
   }
 }

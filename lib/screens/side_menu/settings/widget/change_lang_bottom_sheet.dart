@@ -10,9 +10,11 @@ class LanguageBottomSheetWidget extends StatelessWidget {
   const LanguageBottomSheetWidget({
     Key? key,
     this.onChangedLanguage,
+    this.from,
   }) : super(key: key);
 
   final void Function()? onChangedLanguage;
+  final from;
 
   @override
   Widget build(BuildContext context) {
@@ -129,9 +131,17 @@ class LanguageBottomSheetWidget extends StatelessWidget {
                   builder: (controller1) {
                     return InkWell(
                       onTap: () {
-                        controller1.getSelectedLanguage();
-                        onChangedLanguage!();
-                        Get.back();
+                        if (from == "profile") {
+                          controller1.getSelectedLanguage();
+
+                          onChangedLanguage!();
+                          Get.back();
+                        } else {
+                          controller1.getSelectedLanguage();
+                          onChangedLanguage!();
+
+                          Get.back();
+                        }
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,

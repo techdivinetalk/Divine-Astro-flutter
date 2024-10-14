@@ -259,7 +259,7 @@ class ProfilePageController extends GetxController {
         init();
       }
     } else {
-      Get.back();
+      // Get.back();
     }
     update(['set_lang', 'profile_option']);
   }

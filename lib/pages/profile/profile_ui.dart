@@ -314,6 +314,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                                       LanguageBottomSheetWidget(
                                     onChangedLanguage: () =>
                                         controller.setLocalLanguage(),
+                                    from: "profile",
                                   ));
                               /*openBottomSheet(
                                 context,
