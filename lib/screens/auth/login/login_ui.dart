@@ -288,6 +288,9 @@ class LoginUI extends GetView<LoginController> {
                                     );
                                   })
                                 : SizedBox(),
+                            kDebugMode == true
+                                ? SizedBox(height: 20.h)
+                                : SizedBox(),
                           ],
                         ),
                       ),

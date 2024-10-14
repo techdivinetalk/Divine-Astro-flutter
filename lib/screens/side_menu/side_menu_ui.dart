@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 
 import '../../common/routes.dart';
 import '../../pages/home/home_controller.dart';
+import '../live_page/constant.dart';
 
 class SideMenuDrawer extends GetView<HomeController> {
   final from;
@@ -161,6 +162,23 @@ class SideMenuDrawer extends GetView<HomeController> {
                   Get.toNamed(RouteName.noticeBoard);
                 },
               ),
+            ecomSupport.value.toString() == "1"
+                ? ListTile(
+                    leading: const Icon(Icons.shop_outlined),
+                    title: Text('Ecom Support'.tr),
+                    onTap: () async {
+                      if (from == "Home") {
+                        Get.put(HomeController()).homeScreenKey
+                          ..currentState?.closeDrawer();
+                      } else {
+                        Get.back();
+                      }
+                      Get.put(HomeController()).showPopup = true;
+
+                      controller.whatsapp();
+                    },
+                  )
+                : SizedBox(),
             if (isTechnicalSupport.value == 1)
               ListTile(
                 leading: const Icon(Icons.bug_report_outlined),

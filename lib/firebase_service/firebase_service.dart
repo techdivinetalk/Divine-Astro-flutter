@@ -316,6 +316,9 @@ class AppFirebaseService {
         print("------giftImage---$path/giftImage");
         FirebaseDatabase.instance.ref("$path/giftImage").remove();
         break;
+      case "is_ecom_support":
+        ecomSupport(value);
+        break;
       case "voiceCallStatus":
         callSwitch(value > 0);
         break;
@@ -413,6 +416,7 @@ class AppFirebaseService {
       debugPrint("Error reading data from the database: $e");
     }
   }
+
   List<String> installedApp = [];
   saveMasterData(DataSnapshot dataSnapshot) async {
     print("dataSnapshot-Value ${dataSnapshot.value}");
@@ -602,7 +606,8 @@ class AppFirebaseService {
         acceptChatRequestScreen(int.parse(dataSnapshot.value.toString()));
         break;
       case "app":
-        Map<Object?, Object?> appList = dataSnapshot.value as Map<Object?, Object?>;
+        Map<Object?, Object?> appList =
+            dataSnapshot.value as Map<Object?, Object?>;
         appList.forEach((key, value) async {
           print('App ID: $key, App Name: $value');
           bool isKiteInstalled =

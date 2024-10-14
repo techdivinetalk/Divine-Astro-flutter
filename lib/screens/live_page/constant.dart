@@ -34,6 +34,7 @@ RxInt isEngagedStatus = 0.obs;
 RxInt isLiveServer = 1.obs;
 RxInt isLogin = 0.obs;
 RxInt isOnboarding = 0.obs;
+RxInt ecomSupport = 0.obs;
 RxInt dasboardCurrentIndex = 0.obs;
 RxInt isCountDownTimer = 0.obs;
 RxString razorPay = "https://rzp.io/l/nf14i1U".obs;

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:developer';
+import 'dart:io';
 
 // import 'package:awesome_notifications/awesome_notifications.dart';
 import 'package:contacts_service/contacts_service.dart';
@@ -1399,6 +1400,47 @@ navigateForOnBoardingGlobal(commonConstants) async {
         );
       } else {
         Fluttertoast.showToast(msg: "Something went wrong! Contact Admin");
+        showModalBottomSheet(
+          context: Get.context!,
+          backgroundColor: appColors.white,
+          isDismissible: false,
+          enableDrag: false,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(16.0),
+            ),
+          ),
+          builder: (context) {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    'Oops!',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Something went wrong. Please contact the admin. (${commonConstants.data.is_onboarding_in_process == null ? "" : commonConstants.data.is_onboarding_in_process.toString()} , ${commonConstants.data.stage_no == null ? "" : commonConstants.data.stage_no.toString()})',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      exit(0);
+                    },
+                    child: Text('Close'),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
       }
     } else {
       disableButton.value = false;
@@ -1452,6 +1494,47 @@ navigateForOnBoardingGlobal(commonConstants) async {
         Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
       } else {
         Fluttertoast.showToast(msg: "Something went wrong! Contact Admin");
+        showModalBottomSheet(
+          context: Get.context!,
+          backgroundColor: appColors.white,
+          isDismissible: false,
+          enableDrag: false,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(
+              top: Radius.circular(16.0),
+            ),
+          ),
+          builder: (context) {
+            return Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: <Widget>[
+                  Text(
+                    'Oops!',
+                    style: TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'Something went wrong. Please contact the admin. (${commonConstants.data.is_onboarding_in_process.toString()} , ${commonConstants.data.stage_no.toString()})',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 18),
+                  ),
+                  SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      exit(0);
+                    },
+                    child: Text('Close'),
+                  ),
+                ],
+              ),
+            );
+          },
+        );
       }
     }
   } else if (commonConstants.data.is_onboarding_in_process.toString() == "3") {
@@ -1480,6 +1563,47 @@ navigateForOnBoardingGlobal(commonConstants) async {
       Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
     } else {
       Fluttertoast.showToast(msg: "Something went wrong! Contact Admin");
+      showModalBottomSheet(
+        context: Get.context!,
+        backgroundColor: appColors.white,
+        isDismissible: false,
+        enableDrag: false,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(
+            top: Radius.circular(16.0),
+          ),
+        ),
+        builder: (context) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Text(
+                  'Oops!',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                SizedBox(height: 10),
+                Text(
+                  'Something went wrong. Please contact the admin. (${commonConstants.data.is_onboarding_in_process == null ? "" : commonConstants.data.is_onboarding_in_process.toString()} , ${commonConstants.data.stage_no == null ? "" : commonConstants.data.stage_no.toString()})',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 18),
+                ),
+                SizedBox(height: 20),
+                ElevatedButton(
+                  onPressed: () {
+                    exit(0);
+                  },
+                  child: Text('Close'),
+                ),
+              ],
+            ),
+          );
+        },
+      );
     }
   } else if (commonConstants.data.is_onboarding_in_process.toString() == "4") {
     print('homeeeee1');
