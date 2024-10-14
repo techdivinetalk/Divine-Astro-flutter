@@ -946,7 +946,6 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
 
 Future<void> showCallingPopup(response, callLoading, callUser) async {
   var size = MediaQuery.of(Get.context!).size;
-
   return Get.dialog(
     barrierDismissible: true,
     AlertDialog(
@@ -958,7 +957,7 @@ Future<void> showCallingPopup(response, callLoading, callUser) async {
       scrollable: true,
       contentPadding: EdgeInsets.fromLTRB(10, 12, 10, 10),
       content: SizedBox(
-        height: 370,
+        height: 330,
         width: size.width * 0.9,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -975,19 +974,17 @@ Future<void> showCallingPopup(response, callLoading, callUser) async {
                 color: appColors.red,
               ),
             ),
-            // Wrap the SingleChildScrollView in a Flexible widget
-            Flexible(
-              child: SizedBox(
-                height: 300, // You can also set this dynamically or adjust it
-                child: SingleChildScrollView(
-                  child: Column(
-                    children: [
-                      Html(
-                        shrinkWrap: true,
-                        data: response.description ?? "",
-                      ),
-                    ],
-                  ),
+            // Set a fixed height to avoid layout issues
+            Container(
+              height: 250,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Html(
+                      shrinkWrap: true,
+                      data: response.description ?? "",
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -1007,6 +1004,7 @@ Future<void> showCallingPopup(response, callLoading, callUser) async {
             //     ),
             //   ),
             // ),
+
             Obx(() {
               return callLoading.value == true
                   ? Padding(
@@ -1049,6 +1047,84 @@ Future<void> showCallingPopup(response, callLoading, callUser) async {
                       ),
                     );
             }),
+          ],
+        ),
+      ),
+    ),
+  );
+}
+
+Future<void> showCallingError(response, callLoading, callUser) async {
+  var size = MediaQuery.of(Get.context!).size;
+  return Get.dialog(
+    barrierDismissible: true,
+    AlertDialog(
+      insetPadding: EdgeInsets.all(24),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14.0),
+      ),
+      elevation: 0,
+      scrollable: true,
+      contentPadding: EdgeInsets.fromLTRB(10, 12, 10, 10),
+      content: SizedBox(
+        height: 370,
+        width: size.width * 0.9,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              "Wait",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20.sp,
+                fontWeight: FontWeight.w600,
+                fontFamily: FontFamily.poppins,
+                color: appColors.red,
+              ),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            Text(
+              response!.message! ?? "Something went wrong",
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 14.sp,
+                fontWeight: FontWeight.w400,
+                fontFamily: FontFamily.poppins,
+                color: appColors.darkBlue,
+              ),
+            ),
+            SizedBox(
+              height: 8,
+            ),
+            InkWell(
+              onTap: () {
+                Get.back();
+              },
+              child: Container(
+                height: 40,
+                width: MediaQuery.of(Get.context!).size.width,
+                decoration: BoxDecoration(
+                  color: appColors.red,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Center(
+                  child: Text(
+                    "Okay",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontSize: 16.sp,
+                      fontWeight: FontWeight.w600,
+                      fontFamily: FontFamily.poppins,
+                      color: appColors.white,
+                    ),
+                  ),
+                ),
+              ),
+            ),
           ],
         ),
       ),

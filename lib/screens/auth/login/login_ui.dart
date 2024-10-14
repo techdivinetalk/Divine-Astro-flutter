@@ -246,9 +246,9 @@ class LoginUI extends GetView<LoginController> {
                                 ),
                               );
                             }),
-                            Obx(() {
-                              return kDebugMode == true
-                                  ? GestureDetector(
+                            kDebugMode == true
+                                ? Obx(() {
+                                    return GestureDetector(
                                       onTap: () {
                                         if (!Get.isRegistered<
                                             LoginController>()) {
@@ -285,9 +285,9 @@ class LoginUI extends GetView<LoginController> {
                                           ),
                                         ),
                                       ),
-                                    )
-                                  : SizedBox();
-                            }),
+                                    );
+                                  })
+                                : SizedBox(),
                           ],
                         ),
                       ),

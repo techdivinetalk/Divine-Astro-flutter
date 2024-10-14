@@ -16,7 +16,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:image_cropper/image_cropper.dart';
@@ -30,7 +29,6 @@ import '../../../common/common_functions.dart';
 import '../../../common/show_permission_widget.dart';
 import '../../../di/shared_preference_service.dart';
 import '../../../firebase_service/firebasae_event.dart';
-import '../../../gen/fonts.gen.dart';
 import '../../../model/ChatAssCallModel.dart';
 import '../../../model/CheckingAssistantCallModel.dart';
 import '../../../model/chat_assistant/chat_assistant_astrologer_response.dart';
@@ -602,158 +600,10 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
         update();
 
         showCallingPopup(response, callLoading, callUser);
-
-        // Get.dialog(
-        //   barrierDismissible: true,
-        //   AlertDialog(
-        //     shape: RoundedRectangleBorder(
-        //       borderRadius: BorderRadius.circular(14.0),
-        //     ),
-        //     elevation: 0,
-        //     contentPadding: EdgeInsets.fromLTRB(10, 12, 10, 10),
-        //     content: Column(
-        //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        //       crossAxisAlignment: CrossAxisAlignment.start,
-        //       mainAxisSize: MainAxisSize.min,
-        //       children: [
-        //         Text(
-        //           response.title ?? "",
-        //           textAlign: TextAlign.start,
-        //           style: TextStyle(
-        //             fontSize: 20.sp,
-        //             fontWeight: FontWeight.w600,
-        //             fontFamily: FontFamily.poppins,
-        //             color: appColors.red,
-        //           ),
-        //         ),
-        //         SizedBox(
-        //           height: 300,
-        //           child: SingleChildScrollView(
-        //             child: Column(
-        //               children: [
-        //                 Html(
-        //                   shrinkWrap: true,
-        //                   data: response.description ?? "",
-        //                 ),
-        //               ],
-        //             ),
-        //           ),
-        //         ),
-        //         Obx(() {
-        //           return callLoading.value == true
-        //               ? Padding(
-        //                   padding: const EdgeInsets.only(right: 10),
-        //                   child: Center(
-        //                     child: SizedBox(
-        //                       height: 30,
-        //                       width: 30,
-        //                       child: CircularProgressIndicator(
-        //                         strokeWidth: 2,
-        //                         color: appColors.red,
-        //                       ),
-        //                     ),
-        //                   ),
-        //                 )
-        //               : InkWell(
-        //                   onTap: () {
-        //                     callUser();
-        //                     Get.back();
-        //                   },
-        //                   child: Container(
-        //                     height: 45,
-        //                     width: MediaQuery.of(Get.context!).size.width,
-        //                     decoration: BoxDecoration(
-        //                       color: appColors.red,
-        //                       borderRadius: BorderRadius.circular(10),
-        //                     ),
-        //                     child: Center(
-        //                       child: Text(
-        //                         "Start Voice Call",
-        //                         textAlign: TextAlign.center,
-        //                         style: TextStyle(
-        //                           fontSize: 16.sp,
-        //                           fontWeight: FontWeight.w600,
-        //                           fontFamily: FontFamily.poppins,
-        //                           color: appColors.white,
-        //                         ),
-        //                       ),
-        //                     ),
-        //                   ),
-        //                 );
-        //         }),
-        //       ],
-        //     ),
-        //   ),
-        // );
       } else {
         checkingCalling(false);
-        Get.dialog(
-          barrierDismissible: true,
-          AlertDialog(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(14.0),
-            ),
-            elevation: 0,
-            content: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  "Wait",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 20.sp,
-                    fontWeight: FontWeight.w600,
-                    fontFamily: FontFamily.poppins,
-                    color: appColors.red,
-                  ),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                Text(
-                  checkingAssistantCallModel!.message!,
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontSize: 14.sp,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: FontFamily.poppins,
-                    color: appColors.darkBlue,
-                  ),
-                ),
-                SizedBox(
-                  height: 8,
-                ),
-                InkWell(
-                  onTap: () {
-                    Get.back();
-                  },
-                  child: Container(
-                    height: 40,
-                    width: MediaQuery.of(Get.context!).size.width,
-                    decoration: BoxDecoration(
-                      color: appColors.red,
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Center(
-                      child: Text(
-                        "Okay",
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16.sp,
-                          fontWeight: FontWeight.w600,
-                          fontFamily: FontFamily.poppins,
-                          color: appColors.white,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        );
+        showCallingError(response, callLoading, callUser);
+
         update();
       }
     } catch (e, s) {

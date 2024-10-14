@@ -93,6 +93,7 @@ import '../pages/on_boarding/add_ecom/add_ecom_binding.dart';
 import '../pages/on_boarding/add_ecom/add_ecom_screen.dart';
 import '../pages/on_boarding/bank/add_bank_details.dart';
 import '../pages/on_boarding/bank/bank_binding.dart';
+import '../pages/on_boarding/issue/on_boarding_issue_screen.dart';
 import '../pages/on_boarding/on_boarding_1.dart';
 import '../pages/on_boarding/on_boarding_2.dart';
 import '../pages/on_boarding/on_boarding_3.dart';
@@ -266,6 +267,7 @@ class RouteName {
   static const String scheduleTraining2 = "/scheduleTraining2";
   static const String addBankAutoMation = "/addBankAutoMation";
   static const String addEcomAutomation = "/addEcomAutomation";
+  static const String onBoardingGotIssue = "/onBoardingGotIssue";
 }
 
 final Set<String> validRoutes = {
@@ -419,6 +421,11 @@ class Routes {
       page: () => AddEcomScreen(),
       name: RouteName.addEcomAutomation,
       binding: AddEcomBinding(),
+    ),
+    GetPage(
+      page: () => OnBoardingIssueScreen(),
+      name: RouteName.onBoardingGotIssue,
+      binding: OnBoardingIssueBinding(),
     ),
     GetPage(
       page: () => AllTechnicalIssueScreen(),

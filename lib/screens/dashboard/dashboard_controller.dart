@@ -1397,6 +1397,8 @@ navigateForOnBoardingGlobal(commonConstants) async {
         Get.toNamed(
           RouteName.onBoardingScreen5,
         );
+      } else {
+        Fluttertoast.showToast(msg: "Something went wrong! Contact Admin");
       }
     } else {
       disableButton.value = false;
@@ -1448,6 +1450,8 @@ navigateForOnBoardingGlobal(commonConstants) async {
         Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
       } else if (commonConstants.data.stage_no.toString() == "8") {
         Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
+      } else {
+        Fluttertoast.showToast(msg: "Something went wrong! Contact Admin");
       }
     }
   } else if (commonConstants.data.is_onboarding_in_process.toString() == "3") {
@@ -1474,6 +1478,8 @@ navigateForOnBoardingGlobal(commonConstants) async {
       Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
     } else if (commonConstants.data.stage_no.toString() == "8") {
       Get.toNamed(RouteName.scheduleTraining2, arguments: "sheduled");
+    } else {
+      Fluttertoast.showToast(msg: "Something went wrong! Contact Admin");
     }
   } else if (commonConstants.data.is_onboarding_in_process.toString() == "4") {
     print('homeeeee1');
@@ -1482,5 +1488,7 @@ navigateForOnBoardingGlobal(commonConstants) async {
     Get.offNamed(
       RouteName.dashboard,
     );
+  } else {
+    Fluttertoast.showToast(msg: "Something went wrong! Contact Admin");
   }
 }
