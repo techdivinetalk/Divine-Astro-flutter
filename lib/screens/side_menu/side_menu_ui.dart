@@ -175,7 +175,7 @@ class SideMenuDrawer extends GetView<HomeController> {
                       }
                       Get.put(HomeController()).showPopup = true;
 
-                      controller.whatsapp();
+                      controller.is_ecom_supportWhatAspp();
                     },
                   )
                 : SizedBox(),

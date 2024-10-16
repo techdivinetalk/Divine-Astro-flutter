@@ -81,6 +81,7 @@ class Data {
   dynamic stage_no;
   dynamic onBoardingrejected;
   dynamic onboarding_training_video;
+  dynamic is_ecom_support;
   Data({
     required this.leaderboardRankImage,
     required this.lottiFile,
@@ -110,6 +111,7 @@ class Data {
     this.stage_no,
     this.onboarding_reject_stage_no,
     this.onboarding_training_video,
+    this.is_ecom_support,
   });
 
   Data copyWith({
@@ -140,6 +142,7 @@ class Data {
     dynamic stage_no,
     List? onboarding_reject_stage_no,
     dynamic onboarding_training_video,
+    dynamic is_ecom_support,
   }) =>
       Data(
         leaderboardRankImage: leaderboardRankImage ?? this.leaderboardRankImage,
@@ -174,6 +177,7 @@ class Data {
             onboarding_reject_stage_no ?? this.onboarding_reject_stage_no,
         onboarding_training_video:
             onboarding_training_video ?? this.onboarding_training_video,
+        is_ecom_support: is_ecom_support ?? this.is_ecom_support,
       );
 
   factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
@@ -213,6 +217,7 @@ class Data {
         stage_no: json['stage_no'],
         onboarding_reject_stage_no: json['onboarding_reject_stage_no'],
         onboarding_training_video: json['onboarding_training_video'],
+        is_ecom_support: json['is_ecom_support'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -247,6 +252,7 @@ class Data {
         'stage_no': stage_no,
         'onboarding_reject_stage_no': onboarding_reject_stage_no,
         'onboarding_training_video': onboarding_training_video,
+        'is_ecom_support': is_ecom_support,
       };
 }
 

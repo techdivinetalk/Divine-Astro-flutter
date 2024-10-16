@@ -225,7 +225,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
           ),
         ),
         actions: [
-          show_call_on_assistant.value.toString() == "0"
+          show_call_on_assistant.value.toString() == "1"
               ? Obx(() {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),

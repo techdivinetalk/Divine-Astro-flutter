@@ -1546,6 +1546,23 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  is_ecom_supportWhatAspp() async {
+    var contact = getConstantDetails?.data?.is_ecom_support ?? '';
+    var androidUrl = "whatsapp://send?phone=$contact&text=Hi";
+    var iosUrl = "https://wa.me/$contact?text=${Uri.parse('Hi')}";
+
+    try {
+      if (Platform.isIOS) {
+        await launchUrl(Uri.parse(iosUrl));
+      } else {
+        await launchUrl(Uri.parse(androidUrl));
+      }
+    } on Exception {
+      divineSnackBar(data: 'WhatsApp is not installed.');
+      log('WhatsApp is not installed.');
+    }
+  }
+
   Future<void> chatSwitchFN({required Function() onComplete}) async {
     await updateSessionType(!chatSwitch.value, chatSwitch, 1);
     onComplete();
