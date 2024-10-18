@@ -39,13 +39,18 @@ class ReferAstrologerController extends GetxController {
           .referAstrologer(state.referAstrologerRequestString());
       if (response.status!.code == 200) {
         submitting(false);
+        update();
+
         Fluttertoast.showToast(msg: "Success");
         Get.back();
       } else if (response.status!.code == 400) {
         submitting(false);
-
+        update();
+        print("showing toast -- ${response.status!.message.toString()}");
         Fluttertoast.showToast(msg: response.status!.message.toString());
-      } else {}
+      } else {
+        submitting(false);
+      }
     } else {
       formValidateVal.value = false;
     }

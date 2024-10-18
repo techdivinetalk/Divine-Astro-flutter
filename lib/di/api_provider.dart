@@ -537,7 +537,8 @@ class ApiProvider {
 
       if (response.statusCode == HttpStatus.unauthorized) {
         Utils().handleStatusCodeUnauthorizedServer();
-      } else if (response.statusCode == HttpStatus.badRequest) {
+      } else if (response.statusCode == HttpStatus.badRequest &&
+          url != referAnAstrologer) {
         Utils().handleStatusCode400(response.body);
       }
 
