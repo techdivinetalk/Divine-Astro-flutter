@@ -20,7 +20,6 @@ class ChatAssistanceController extends GetxController {
   RxList searchData = [].obs;
   RxList filteredUserData = [].obs;
   final appSocket = AppSocket();
-
   // RxBool isLoadingMore = false.obs;
   // int _currentPage = 1;
   // bool _hasMoreData = true;
@@ -30,6 +29,7 @@ class ChatAssistanceController extends GetxController {
   final searchController = TextEditingController();
 
   bool isInit = false;
+  RxInt onWhichPage = 0.obs;
 
   @override
   void onReady() {
@@ -37,13 +37,23 @@ class ChatAssistanceController extends GetxController {
     super.onReady();
   }
 
+  Rx<bool> isUSerTabSelected = true.obs;
+
   @override
   Future<void> onInit() async {
     super.onInit();
     debugPrint("test_onInit: call");
+    debugPrint("test_onInit: cdall");
+    debugPrint("test_onInit: cadll");
+    debugPrint("test_onInit: ${onWhichPage.value}");
+    debugPrint("test_onInit: cadll");
     isInit = true;
 
+    // if (onWhichPage.value == 0) {
     getAssistantAstrologerList();
+    // } else if (onWhichPage.value == 1) {
+    //   getConsulation();
+    // } else {}
     /* scrollController.addListener(() {
       if (scrollController.position.pixels ==
           scrollController.position.maxScrollExtent) {

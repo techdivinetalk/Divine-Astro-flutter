@@ -33,8 +33,11 @@ import '../../../di/firebase_network_service.dart';
 import '../../../di/shared_preference_service.dart';
 import '../../../firebase_service/firebase_authentication.dart';
 import '../../../model/send_otp.dart';
+import '../../../model/speciality_list.dart';
+import '../../../repository/pre_defind_repository.dart';
 import '../../../repository/user_repository.dart';
 import '../../../utils/show_loader.dart';
+import '../../dashboard/dashboard_controller.dart';
 import '../../live_page/constant.dart';
 
 class LoginController extends GetxController {
@@ -68,9 +71,9 @@ class LoginController extends GetxController {
   login() async {
     isUnauthorizedUserCalled = false;
     //deviceToken = await FirebaseMessaging.instance.getToken();
-    if(mobileNumberController.text.isEmpty){
+    if (mobileNumberController.text.isEmpty) {
       mobileNumberController.text = mobile;
-    } else{
+    } else {
       Map<String, dynamic> params = {
         "mobile_no": mobileNumberController.text,
         // "mobile_no": mobile,
@@ -309,16 +312,14 @@ class LoginController extends GetxController {
         //   requestPermissions();
         // }
 
-
         bool oAuthFlowUsable = await TrueCallerService().isOAuthFlowUsable();
         Future.delayed(const Duration(seconds: 1)).then((value) async {
-          if(Get.currentRoute == RouteName.login && showTrueCaller.value){
+          if (Get.currentRoute == RouteName.login && showTrueCaller.value) {
             oAuthFlowUsable
                 ? await TrueCallerService().startTrueCaller()
                 : trueCallerFaultPopup();
           }
         });
-
       });
       TcSdk.streamCallbackData.listen(
         (TcSdkCallback event) async {
@@ -511,7 +512,7 @@ class LoginController extends GetxController {
       await Future.delayed(
         const Duration(milliseconds: 400),
         () async {
-          await updateLoginDataInFirebase(data);
+          await updateLoginDataInFirebase(data, commonConstants);
         },
       );
     } else {
@@ -545,7 +546,7 @@ class LoginController extends GetxController {
     }
   }
 
-  Future<void> updateLoginDataInFirebase(ResLogin data) async {
+  Future<void> updateLoginDataInFirebase(ResLogin data, commonConstants) async {
     await FirebaseDatabase.instance.goOnline();
     final String uniqueId = await getDeviceId() ?? '';
     final String firebaseNodeUrl = 'astrologer/${data.data?.id}';
@@ -568,21 +569,36 @@ class LoginController extends GetxController {
         deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "";
     firebaseDatabase.ref().child(firebaseNodeUrl).update(deviceTokenNode);
     firebaseDatabase.ref().child("$firebaseNodeUrl/realTime").update(realTime);
-    navigateToDashboard(data);
-    // } else {
-    //   final FirebaseUserData userData = FirebaseUserData(
-    //     data.data?.name ?? "",
-    //     deviceToken ?? await FirebaseMessaging.instance.getToken() ?? "",
-    //     data.data?.image ?? "",
-    //     RealTime(isEngagedStatus: 0, uniqueId: uniqueId, walletBalance: 0),
-    //   );
-    //   firebaseDatabase.ref().child(firebaseNodeUrl).set(userData.toJson());
-    //   navigateToDashboard(data);
-    // }
+
+    final dataSnapshot = await AppFirebaseService()
+        .database
+        .child("${firebaseNodeUrl}/realTime/isOnboarding")
+        .get();
+    var isOnboardings = dataSnapshot.value;
+
+    print("response of isOnboarding - ${isOnboardings.toString()}");
+
+    final dasnap = await AppFirebaseService()
+        .database
+        .child("masters/onboarding_w_truecaller")
+        .get();
+
+    if (dasnap.value.toString() == "0") {
+      if (isOnboardings.toString() == "4") {
+        print('homeeeee1');
+
+        Get.offAllNamed(RouteName.dashboard);
+      } else {
+        await navigateToOnboarding(commonConstants);
+      }
+    } else {
+      await navigateToDashboard(data, commonConstants);
+    }
+
     return Future<void>.value();
   }
 
-  navigateToDashboard(ResLogin data) async {
+  navigateToDashboard(ResLogin data, commonConstants) async {
     print("beforeGoing ${preferenceService.getUserDetail()?.id}");
     //_counterSubscription.cancel();
     isTrueCallerLogin = false;
@@ -593,6 +609,35 @@ class LoginController extends GetxController {
       const Duration(seconds: 1),
       () => Get.offAllNamed(RouteName.dashboard),
     );
+  }
+
+  navigateToOnboarding(commonConstants) async {
+    if (Constants.isUploadMode) {
+      await initServices();
+    }
+    SpecialityList response =
+        await PreDefineRepository().getAstrologerCategoryApi();
+
+    SharedPreferenceService preferenceService =
+        Get.find<SharedPreferenceService>();
+    await preferenceService.setConstantDetails(commonConstants);
+
+    await preferenceService.setSpecialAbility(response.toPrettyJson());
+
+    print("------${response.toPrettyJson()}");
+    print("------${preferenceService.getSpecialAbility()}");
+    if (commonConstants?.data != null) {
+      imageUploadBaseUrl.value =
+          commonConstants?.data?.imageUploadBaseUrl ?? "";
+    }
+    preferenceService
+        .setBaseImageURL(commonConstants.data!.awsCredentails.baseurl!);
+    Get.find<SharedPreferenceService>()
+        .setAmazonUrl(commonConstants.data!.awsCredentails.baseurl!);
+    onboarding_training_videoData =
+        commonConstants.data!.onboarding_training_video;
+
+    navigateForOnBoardingGlobal(commonConstants);
   }
 
   Future<void> initServices() async {
@@ -631,7 +676,7 @@ class LoginController extends GetxController {
     // });
 
     bool isTrueCaller = await TrueCallerService().isTrueCallerInstalled();
-    if(isTruecaller.value == 0 && !isTrueCaller){
+    if (isTruecaller.value == 0 && !isTrueCaller) {
       requestPermissions();
     }
   }

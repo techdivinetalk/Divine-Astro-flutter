@@ -21,6 +21,7 @@ import '../../pages/home/home_controller.dart';
 import '../../pages/home/home_ui.dart';
 import '../../pages/performance/performance_controller.dart';
 import '../../pages/performance/performance_ui.dart';
+import '../chat_assistance/chat_assistance_controller.dart';
 import '../chat_assistance/chat_assistance_ui.dart';
 import '../live_page/constant.dart';
 import 'dashboard_controller.dart';
@@ -116,10 +117,12 @@ class DashboardScreen extends GetView<DashboardController> {
                               } else if (controller.selectedIndex.value == 2) {
                                 // debugPrint(
                                 //     "test_selectedIndex_isRegistered: ${Get.isRegistered<ChatAssistanceController>()}");
-                                // if (Get.isRegistered<
-                                //         ChatAssistanceController>() &&
+                                // if (Get.isRegistered<ChatAssistanceController>()
+                                //     /*      &&
                                 //     !Get.find<ChatAssistanceController>()
-                                //         .isInit) {
+                                //         .isInit*/
+                                //     ) {
+                                //   print("fetchedddd");
                                 //   Get.find<ChatAssistanceController>().onInit();
                                 // }
                               } else if (controller.selectedIndex.value == 3) {

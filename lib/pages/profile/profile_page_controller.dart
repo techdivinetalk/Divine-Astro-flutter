@@ -233,6 +233,7 @@ class ProfilePageController extends GetxController {
     selectedLanguage = item;
     selectedLang.value = item.languages!;
     update();
+
     update(['set_language']);
   }
 

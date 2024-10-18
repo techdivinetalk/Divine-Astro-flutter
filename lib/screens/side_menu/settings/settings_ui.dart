@@ -54,6 +54,7 @@ class SettingsUI extends GetView<SettingsController> {
                 onTap: () {
                   openBottomSheet(context,
                       functionalityWidget: LanguageBottomSheetWidget(
+                        from: "settings",
                         onChangedLanguage: () => controller.setLocalLanguage(),
                       ));
                 },

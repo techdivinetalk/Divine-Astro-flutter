@@ -25,8 +25,6 @@ import 'chat_assistance_controller.dart';
 class ChatAssistancePage extends GetView<ChatAssistanceController> {
   ChatAssistancePage({super.key});
 
-  Rx<bool> isUSerTabSelected = true.obs;
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -106,7 +104,10 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                             Expanded(
                               child: GestureDetector(
                                 onTap: () {
-                                  isUSerTabSelected.value = true;
+                                  controller.onWhichPage.value == 0;
+                                  controller.update();
+
+                                  controller.isUSerTabSelected.value = true;
                                   controller.getAssistantAstrologerList();
                                 },
                                 child: Container(
@@ -116,9 +117,10 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                                   decoration: BoxDecoration(
                                     border: Border(
                                       bottom: BorderSide(
-                                        color: Colors.blue,
+                                        color: Colors.black,
                                         // Color of the underline
-                                        width: isUSerTabSelected.value
+                                        width: controller
+                                                .isUSerTabSelected.value
                                             ? 3.0
                                             : 00, // Thickness of the underline
                                       ),
@@ -147,7 +149,9 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                             Expanded(
                               child: GestureDetector(
                                 onTap: () {
-                                  isUSerTabSelected.value = false;
+                                  controller.onWhichPage.value == 1;
+                                  controller.update();
+                                  controller.isUSerTabSelected.value = false;
                                   controller.getConsulation();
                                 },
                                 child: Container(
@@ -159,7 +163,9 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                                       bottom: BorderSide(
                                         color: Colors.black,
                                         // Color of the underline
-                                        width: !isUSerTabSelected.value
+                                        width: controller
+                                                    .isUSerTabSelected.value ==
+                                                false
                                             ? 3.0
                                             : 00, // Thickness of the underline
                                       ),
@@ -191,7 +197,7 @@ class ChatAssistancePage extends GetView<ChatAssistanceController> {
                     ),
                   ),
                   Obx(() {
-                    if (isUSerTabSelected.value) {
+                    if (controller.isUSerTabSelected.value) {
                       if (controller.chatAssistantAstrologerListResponse ==
                               null ||
                           controller

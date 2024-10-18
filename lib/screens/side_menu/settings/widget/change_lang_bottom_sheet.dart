@@ -18,6 +18,9 @@ class LanguageBottomSheetWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    if (!Get.isRegistered<ProfilePageController>()) {
+      Get.put(ProfilePageController());
+    }
     print("--------------------------");
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -52,6 +55,10 @@ class LanguageBottomSheetWidget extends StatelessWidget {
               ),
               SizedBox(height: 32.h),
               GetBuilder<ProfilePageController>(builder: (controller) {
+                if (controller.languageList == null ||
+                    controller.languageList.isEmpty) {
+                  return CircularProgressIndicator(); // Or any fallback widget
+                }
                 return SizedBox(
                   child: GridView.builder(
                       padding: EdgeInsets.zero,
@@ -86,8 +93,10 @@ class LanguageBottomSheetWidget extends StatelessWidget {
                                       shape: BoxShape.circle,
                                       gradient: LinearGradient(
                                         colors: [
-                                          item.colors!.withOpacity(0),
-                                          item.colors!.withOpacity(0.2),
+                                          item.colors?.withOpacity(0) ??
+                                              Colors.transparent,
+                                          item.colors?.withOpacity(0.2) ??
+                                              Colors.transparent,
                                         ],
                                         begin: Alignment.topLeft,
                                         end: Alignment.bottomRight,
@@ -102,14 +111,16 @@ class LanguageBottomSheetWidget extends StatelessWidget {
                                               MainAxisAlignment.center,
                                           children: [
                                             Text(
-                                              item.languagesMain.toString(),
+                                              item.languagesMain?.toString() ??
+                                                  'N/A', // Use a default value like 'N/A'
                                               style: AppTextStyle.textStyle20(
                                                   fontSize: 16.h,
                                                   fontWeight: FontWeight.w600),
                                             ),
                                             SizedBox(height: 10.h),
                                             Text(
-                                              item.languages.toString(),
+                                              item.languages?.toString() ??
+                                                  'N/A', // Default to 'N/A'
                                               style: AppTextStyle.textStyle16(
                                                 fontSize: 14.h,
                                               ),
@@ -133,13 +144,15 @@ class LanguageBottomSheetWidget extends StatelessWidget {
                       onTap: () {
                         if (from == "profile") {
                           controller1.getSelectedLanguage();
-
-                          onChangedLanguage!();
+                          if (onChangedLanguage != null) {
+                            onChangedLanguage!();
+                          }
                           Get.back();
                         } else {
                           controller1.getSelectedLanguage();
-                          onChangedLanguage!();
-
+                          if (onChangedLanguage != null) {
+                            onChangedLanguage!();
+                          }
                           Get.back();
                         }
                       },

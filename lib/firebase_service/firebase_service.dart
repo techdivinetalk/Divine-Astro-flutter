@@ -475,6 +475,9 @@ class AppFirebaseService {
       case "isAgreement":
         isAgreement(int.parse(dataSnapshot.value.toString()));
         break;
+      case "onboarding_w_truecaller":
+        onboarding_w_truecaller(int.parse(dataSnapshot.value.toString()));
+        break;
       case "disableOnboarding":
         disableOnboarding(int.parse(dataSnapshot.value.toString()));
         break;
