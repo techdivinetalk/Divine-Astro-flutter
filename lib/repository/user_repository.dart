@@ -673,10 +673,8 @@ class UserRepository extends ApiProvider {
         param["appCurrentVersion"] = version;
         param["device_os"] = 1;
         param['ip_address'] = wifiIP ?? 'Unable to get IP address';
-        String joinedString = AppFirebaseService().installedApp.isEmpty ? "0" : AppFirebaseService().installedApp.join(', ');
-        param["installed_app"] = joinedString;
+        param["installed_app"] = "";
         print('🥹🥹🥹🥹🥹🥹🥹🥹');
-        print(jsonEncode(param).toString());
         print('🥹🥹🥹🥹🥹🥹🥹🥹');
       } else {
         IosDeviceInfo iosDeviceInfo = await deviceInfo.iosInfo;
@@ -759,9 +757,7 @@ class UserRepository extends ApiProvider {
         param["appCurrentVersion"] = version;
         param['ip_address'] = wifiIP ?? 'Unable to get IP address';
         print('🥹🥹🥹🥹🥹🥹🥹🥹');
-        String joinedString = AppFirebaseService().installedApp.isEmpty ? "0" : AppFirebaseService().installedApp.join(', ');
-        param["installed_app"] = joinedString;
-        print(jsonEncode(param).toString());
+        param["installed_app"] = "";
         print('🥹🥹🥹🥹🥹🥹🥹🥹');
       }
 

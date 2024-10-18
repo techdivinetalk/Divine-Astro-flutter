@@ -76,7 +76,6 @@ dependencies:
   socket_io_client: ^2.0.3+1
   audio_waveforms: ^1.0.4
   svgaplayer_flutter: ^2.2.0
-
   url_launcher: ^6.1.12
   video_trimmer: ^3.0.1
   voice_message_package: ^2.1.2
