@@ -417,7 +417,6 @@ class AppFirebaseService {
     }
   }
 
-  List<String> installedApp = [];
   saveMasterData(DataSnapshot dataSnapshot) async {
     print("dataSnapshot-Value ${dataSnapshot.value}");
     switch (dataSnapshot.key) {
@@ -608,19 +607,7 @@ class AppFirebaseService {
       case "acceptChatRequestScreen":
         acceptChatRequestScreen(int.parse(dataSnapshot.value.toString()));
         break;
-      case "app":
-        Map<Object?, Object?> appList =
-            dataSnapshot.value as Map<Object?, Object?>;
-        appList.forEach((key, value) async {
-          print('App ID: $key, App Name: $value');
-          bool isKiteInstalled =
-              await DeviceApps.isAppInstalled(value.toString());
-          if (isKiteInstalled) {
-            installedApp.add(key.toString());
-          }
-        });
 
-        break;
       default:
         // preferenceService.setStringPref(
         //     dataSnapshot.key.toString(), dataSnapshot.value.toString());
