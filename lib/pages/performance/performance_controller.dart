@@ -82,13 +82,14 @@ class PerformanceController extends GetxController {
     super.onInit();
     debugPrint("test_onInit: call");
     isInit = true;
-    getRitentionDataApi();
 
     init();
   }
 
   Future<void> init() async {
     await getPerformance();
+    await getRitentionDataApi();
+
     // await getRitentionDataApi();
   }
 
@@ -129,11 +130,18 @@ class PerformanceController extends GetxController {
   }
 
   AstroRitentionModel? getRitentionModel;
-
+  var loadingritention = false.obs;
   getRitentionDataApi() async {
+    loadingritention.value = true;
+    update();
     try {
       var data = await userRepository.getRitentionData({});
-      getRitentionModel = data;
+      if (data.statusCode == 200) {
+        getRitentionModel = data;
+        loadingritention.value = false;
+      } else {
+        getRitentionModel = null;
+      }
       print(
           "-----------------------getRitentionData -------- ${data.toJson().toString()}");
 
@@ -141,6 +149,8 @@ class PerformanceController extends GetxController {
           "-----------------------getRitentionData -------- ${getRitentionModel!.toJson().toString()}");
       update();
     } catch (error) {
+      loadingritention.value = false;
+
       debugPrint("error $error");
       if (error is AppException) {
         error.onException();

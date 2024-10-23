@@ -1,8 +1,6 @@
 import 'dart:convert';
-import 'dart:io';
 
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_dharam_screen.dart';
 import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
@@ -12,7 +10,6 @@ import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter_timer_countdown/flutter_timer_countdown.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
@@ -76,7 +73,8 @@ class ZegoService {
           ),
           iOSNotificationConfig: ZegoCallIOSNotificationConfig(
             systemCallingIconName: 'CallKitIcon',
-            certificateIndex: ZegoSignalingPluginMultiCertificate.secondCertificate,
+            certificateIndex:
+                ZegoSignalingPluginMultiCertificate.secondCertificate,
           )),
 
       invitationEvents: ZegoUIKitPrebuiltCallInvitationEvents(
@@ -263,8 +261,32 @@ class ZegoService {
                             ],
                           ),
                         ),
+
                         const SizedBox(height: 8),
                         commonTimerCountdown(color, false),
+                        const SizedBox(height: 8),
+
+                        call_recording_sentences.value == "" ||
+                                call_recording_sentences.value == "null"
+                            ? SizedBox()
+                            : Text(
+                                call_recording_sentences.value == ""
+                                    ? ""
+                                    : call_recording_sentences.value.toString(),
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w400,
+                                  color: appColors.black,
+                                  shadows: [
+                                    Shadow(
+                                      color: color,
+                                      offset: const Offset(1.0, 1.0),
+                                      blurRadius: 1.0,
+                                    ),
+                                  ],
+                                ),
+                              ),
                         // SizedBox(height: Get.height * 0.60),
                         const Spacer(),
                         commonBottomCard(),

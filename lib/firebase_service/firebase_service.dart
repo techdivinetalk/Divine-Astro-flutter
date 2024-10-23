@@ -1,6 +1,5 @@
 import "dart:async";
 
-import "package:device_apps/device_apps.dart";
 import "package:divine_astrologer/app_socket/app_socket.dart";
 import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/constants.dart";
@@ -69,13 +68,13 @@ RxInt disableOnboarding = 0.obs;
 RxInt disableAstroEvent = 0.obs;
 RxInt show_call_on_assistant = 0.obs;
 RxString image_upload_url = "".obs;
+RxString call_recording_sentences = "".obs;
 RxInt astrologer_notification = 0.obs;
 RxInt showLoginSupport = 0.obs;
 RxInt astrologer_camera_permission = 0.obs;
 //RxInt showHelp = 0.obs;
 RxInt maximumStorySize = 2048.obs;
 RxInt astroHome = 0.obs;
-RxInt showLatLng = 0.obs;
 RxInt isAstroCare = 1.obs;
 // RxInt isTruecaller = 1.obs;
 RxInt isLiveCall = 1.obs;
@@ -548,8 +547,8 @@ class AppFirebaseService {
       case "showStaticText":
         showStaticText(int.parse(dataSnapshot.value.toString()));
         break;
-      case "showLatLng":
-        showLatLng(int.parse(dataSnapshot.value.toString()));
+      case "call_recording_sentences":
+        call_recording_sentences(dataSnapshot.value.toString());
         break;
       // case "tarrotCard":
       //   isRemidies(int.parse(dataSnapshot.value.toString()));

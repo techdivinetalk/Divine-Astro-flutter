@@ -2,6 +2,7 @@ library flutter_carousel_widget;
 
 import 'dart:async';
 
+import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/utils.dart';
 import 'package:divine_astrologer/tarotCard/src/typedefs/widget_builder.dart';
 import 'package:flutter/gestures.dart';
@@ -206,7 +207,7 @@ class ExpandableCarouselState extends State<ExpandableCarousel>
   CarouselControllerImpl get carouselController =>
       widget.options.controller != null
           ? widget.options.controller as CarouselControllerImpl
-          : CarouselController() as CarouselControllerImpl;
+          : CarouselSliderController() as CarouselControllerImpl;
 
   /// Timer
   Timer? _getTimer() {

@@ -10,9 +10,7 @@ import '../../../common/colors.dart';
 import '../../../common/custom_radio_button.dart';
 import '../../../common/custom_widgets.dart';
 import '../../../common/text_field_custom.dart';
-import '../../../firebase_service/firebase_service.dart';
 import '../../../gen/assets.gen.dart';
-import '../../../gen/fonts.gen.dart';
 import '../../../model/cityDataModel.dart';
 import '../../../utils/utils.dart';
 import 'kundli_controller.dart';
@@ -381,29 +379,6 @@ class CheckYours extends GetView<KundliController> {
                   },
                   readOnly: true,
                 ),
-
-                showLatLng.toString() == "0"
-                    ? SizedBox()
-                    : Obx(
-                        () => controller.yourParams.value.lat == null ||
-                                controller.yourParams.value.long == null
-                            ? SizedBox()
-                            : Padding(
-                                padding: const EdgeInsets.only(left: 10),
-                                child: Align(
-                                  alignment: Alignment.topLeft,
-                                  child: Text(
-                                    "${controller.yourParams.value.lat!.toStringAsFixed(3)} - ${controller.yourParams.value.long!.toStringAsFixed(3)}",
-                                    style: TextStyle(
-                                      fontFamily: FontFamily.poppins,
-                                      fontWeight: FontWeight.w400,
-                                      color: appColors.grey,
-                                      fontSize: 12,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                      ),
               ],
             ),
           ),

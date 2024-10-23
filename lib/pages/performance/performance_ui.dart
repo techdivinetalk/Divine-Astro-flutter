@@ -15,7 +15,6 @@ import '../../common/appbar.dart';
 import '../../common/common_bottomsheet.dart';
 import '../../common/common_image_view.dart';
 import '../../common/routes.dart';
-import '../../firebase_service/firebase_service.dart';
 import '../../gen/assets.gen.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import 'performance_controller.dart';
@@ -47,42 +46,192 @@ class PerformanceUI extends GetView<PerformanceController> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Obx(
-                    () => astroHome.toString() == "0"
-                        ? controller.getRitentionModel == null ||
-                                controller.getRitentionModel!.data == null
-                            ? SizedBox()
-                            : SizedBox(
+                  controller.loadingritention.value == true
+                      ? SizedBox()
+                      : controller.getRitentionModel == null ||
+                              controller.getRitentionModel!.data == null
+                          ? SizedBox()
+                          : SizedBox(
+                              child: CustomText(
+                                'Your Level & Rank',
+                                fontWeight: FontWeight.w600,
+                                fontColor: appColors.black,
+                                maxLines: 1,
+                                fontSize: 12,
+                              ),
+                            ),
+                  controller.loadingritention.value == true
+                      ? SizedBox()
+                      : controller.getRitentionModel == null ||
+                              controller.getRitentionModel!.data == null
+                          ? SizedBox()
+                          : Padding(
+                              padding: EdgeInsets.symmetric(vertical: 6),
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceEvenly,
+                                children: [
+                                  controller.getRitentionModel!.data!.badge ==
+                                          null
+                                      ? SizedBox()
+                                      : Ink(
+                                          height: 50,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.44,
+                                          decoration: BoxDecoration(
+                                            color: appColors.white,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(10),
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                blurRadius: 6,
+                                                spreadRadius: 2,
+                                                color: appColors.grey
+                                                    .withOpacity(0.2),
+                                              ),
+                                            ],
+                                          ),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 5),
+                                          // alignment: Alignment.center,
+                                          child: Center(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                CommonImageView(
+                                                  imagePath: controller
+                                                      .getRitentionModel!
+                                                      .data!
+                                                      .badge!
+                                                      .image
+                                                      .toString(),
+                                                  height: 30,
+                                                  width: 30,
+                                                  placeHolder: Assets.images
+                                                      .defaultProfile.path,
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text(
+                                                  controller.getRitentionModel!
+                                                      .data!.badge!.value
+                                                      .toString(),
+                                                  style:
+                                                      AppTextStyle.textStyle12(
+                                                          fontColor:
+                                                              appColors.black,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                  controller.getRitentionModel!.data!.level ==
+                                          null
+                                      ? SizedBox()
+                                      : Ink(
+                                          height: 50,
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
+                                              0.44,
+                                          decoration: BoxDecoration(
+                                            color: appColors.white,
+                                            borderRadius:
+                                                const BorderRadius.all(
+                                              Radius.circular(10),
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                blurRadius: 6,
+                                                spreadRadius: 2,
+                                                color: appColors.grey
+                                                    .withOpacity(0.2),
+                                              ),
+                                            ],
+                                          ),
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 5),
+                                          child: Center(
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.center,
+                                              children: [
+                                                CommonImageView(
+                                                  imagePath:
+                                                      "assets/images/rank.png",
+                                                  height: 30,
+                                                  width: 30,
+                                                  placeHolder: Assets.images
+                                                      .defaultProfile.path,
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text(
+                                                  "Level. ${controller.getRitentionModel!.data!.level!.hours.toString()}"
+                                                      .tr,
+                                                  style:
+                                                      AppTextStyle.textStyle12(
+                                                          fontColor:
+                                                              appColors.black,
+                                                          fontWeight:
+                                                              FontWeight.w500),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
+                                ],
+                              ),
+                            ),
+                  controller.loadingritention.value == true
+                      ? SizedBox()
+                      : controller.getRitentionModel == null ||
+                              controller.getRitentionModel!.data == null ||
+                              controller.getRitentionModel!.data!.retention ==
+                                  null
+                          ? SizedBox()
+                          : Padding(
+                              padding: EdgeInsets.only(top: 10),
+                              child: SizedBox(
                                 child: CustomText(
-                                  'Your Level & Rank',
+                                  'User Retention ( Last 200 Orders )',
                                   fontWeight: FontWeight.w600,
                                   fontColor: appColors.black,
                                   maxLines: 1,
                                   fontSize: 12,
                                 ),
-                              )
-                        : SizedBox(),
-                  ),
-                  Obx(
-                    () => astroHome.toString() == "0"
-                        ? controller.getRitentionModel == null ||
-                                controller.getRitentionModel!.data == null
-                            ? SizedBox()
-                            : Padding(
-                                padding: EdgeInsets.symmetric(vertical: 6),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    controller.getRitentionModel!.data!.badge ==
-                                            null
-                                        ? SizedBox()
-                                        : Ink(
-                                            height: 50,
+                              ),
+                            ),
+                  controller.loadingritention.value == true
+                      ? SizedBox()
+                      : controller.getRitentionModel == null
+                          ? SizedBox()
+                          : controller.getRitentionModel!.data == null
+                              ? SizedBox()
+                              : controller.getRitentionModel!.data!.retention ==
+                                      null
+                                  ? SizedBox()
+                                  : Padding(
+                                      padding:
+                                          EdgeInsets.symmetric(vertical: 6),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Ink(
                                             width: MediaQuery.of(context)
                                                     .size
                                                     .width *
-                                                0.44,
+                                                0.9,
                                             decoration: BoxDecoration(
                                               color: appColors.white,
                                               borderRadius:
@@ -99,337 +248,195 @@ class PerformanceUI extends GetView<PerformanceController> {
                                               ],
                                             ),
                                             padding: EdgeInsets.symmetric(
-                                                horizontal: 5),
-                                            // alignment: Alignment.center,
+                                                horizontal: 0),
                                             child: Center(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  CommonImageView(
-                                                    imagePath: controller
-                                                        .getRitentionModel!
-                                                        .data!
-                                                        .badge!
-                                                        .image
-                                                        .toString(),
-                                                    height: 30,
-                                                    width: 30,
-                                                    placeHolder: Assets.images
-                                                        .defaultProfile.path,
-                                                  ),
-                                                  SizedBox(width: 5),
-                                                  Text(
-                                                    controller
-                                                        .getRitentionModel!
-                                                        .data!
-                                                        .badge!
-                                                        .value
-                                                        .toString(),
-                                                    style: AppTextStyle
-                                                        .textStyle12(
-                                                            fontColor:
-                                                                appColors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                    controller.getRitentionModel!.data!.level ==
-                                            null
-                                        ? SizedBox()
-                                        : Ink(
-                                            height: 50,
-                                            width: MediaQuery.of(context)
-                                                    .size
-                                                    .width *
-                                                0.44,
-                                            decoration: BoxDecoration(
-                                              color: appColors.white,
-                                              borderRadius:
-                                                  const BorderRadius.all(
-                                                Radius.circular(10),
-                                              ),
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  blurRadius: 6,
-                                                  spreadRadius: 2,
-                                                  color: appColors.grey
-                                                      .withOpacity(0.2),
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    top: 10, bottom: 10),
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment
+                                                          .spaceBetween,
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  children: [
+                                                    SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.3,
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text(
+                                                            "Total Free Order"
+                                                                .tr,
+                                                            maxLines: 2,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .fade,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: AppTextStyle
+                                                                .textStyle12(
+                                                                    fontColor:
+                                                                        appColors
+                                                                            .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600),
+                                                          ),
+                                                          SizedBox(height: 5),
+                                                          Text(
+                                                            controller
+                                                                    .getRitentionModel!
+                                                                    .data!
+                                                                    .retention!
+                                                                    .totalFreeOrder
+                                                                    .toString() ??
+                                                                "0",
+                                                            maxLines: 2,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .fade,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: AppTextStyle
+                                                                .textStyle12(
+                                                                    fontColor:
+                                                                        appColors
+                                                                            .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.3,
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text(
+                                                            "Converted User".tr,
+                                                            maxLines: 2,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .fade,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: AppTextStyle
+                                                                .textStyle12(
+                                                                    fontColor:
+                                                                        appColors
+                                                                            .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600),
+                                                          ),
+                                                          SizedBox(height: 5),
+                                                          Text(
+                                                            controller
+                                                                    .getRitentionModel!
+                                                                    .data!
+                                                                    .retention!
+                                                                    .freeUser
+                                                                    .toString() ??
+                                                                "0",
+                                                            maxLines: 2,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .fade,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: AppTextStyle
+                                                                .textStyle12(
+                                                                    fontColor:
+                                                                        appColors
+                                                                            .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width:
+                                                          MediaQuery.of(context)
+                                                                  .size
+                                                                  .width *
+                                                              0.3,
+                                                      child: Column(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .spaceEvenly,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text(
+                                                            "Retention".tr,
+                                                            maxLines: 2,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .fade,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: AppTextStyle
+                                                                .textStyle12(
+                                                                    fontColor:
+                                                                        appColors
+                                                                            .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600),
+                                                          ),
+                                                          SizedBox(height: 5),
+                                                          Text(
+                                                            "${controller.getRitentionModel!.data!.retention!.retention.toString()}%",
+                                                            maxLines: 2,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .fade,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: AppTextStyle
+                                                                .textStyle12(
+                                                                    fontColor:
+                                                                        appColors
+                                                                            .black,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w400),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                              ],
-                                            ),
-                                            padding: EdgeInsets.symmetric(
-                                                horizontal: 5),
-                                            child: Center(
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.center,
-                                                children: [
-                                                  CommonImageView(
-                                                    imagePath:
-                                                        "assets/images/rank.png",
-                                                    height: 30,
-                                                    width: 30,
-                                                    placeHolder: Assets.images
-                                                        .defaultProfile.path,
-                                                  ),
-                                                  SizedBox(width: 5),
-                                                  Text(
-                                                    "Level. ${controller.getRitentionModel!.data!.level!.hours.toString()}"
-                                                        .tr,
-                                                    style: AppTextStyle
-                                                        .textStyle12(
-                                                            fontColor:
-                                                                appColors.black,
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .w500),
-                                                  ),
-                                                ],
                                               ),
                                             ),
-                                          ),
-                                  ],
-                                ),
-                              )
-                        : SizedBox(),
-                  ),
-                  Obx(
-                    () => astroHome.toString() == "0"
-                        ? controller.getRitentionModel == null ||
-                                controller.getRitentionModel!.data == null ||
-                                controller.getRitentionModel!.data!.retention ==
-                                    null
-                            ? SizedBox()
-                            : Padding(
-                                padding: EdgeInsets.only(top: 10),
-                                child: SizedBox(
-                                  child: CustomText(
-                                    'User Retention ( Last 200 Orders )',
-                                    fontWeight: FontWeight.w600,
-                                    fontColor: appColors.black,
-                                    maxLines: 1,
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              )
-                        : SizedBox(),
-                  ),
-                  Obx(
-                    () => astroHome.toString() == "0"
-                        ? controller.getRitentionModel == null ||
-                                controller.getRitentionModel!.data == null ||
-                                controller.getRitentionModel!.data!.retention ==
-                                    null
-                            ? SizedBox()
-                            : Padding(
-                                padding: EdgeInsets.symmetric(vertical: 6),
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Ink(
-                                      width: MediaQuery.of(context).size.width *
-                                          0.9,
-                                      decoration: BoxDecoration(
-                                        color: appColors.white,
-                                        borderRadius: const BorderRadius.all(
-                                          Radius.circular(10),
-                                        ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            blurRadius: 6,
-                                            spreadRadius: 2,
-                                            color:
-                                                appColors.grey.withOpacity(0.2),
                                           ),
                                         ],
                                       ),
-                                      padding:
-                                          EdgeInsets.symmetric(horizontal: 0),
-                                      child: Center(
-                                        child: Padding(
-                                          padding: const EdgeInsets.only(
-                                              top: 10, bottom: 10),
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            children: [
-                                              SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.3,
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "Total Free Order".tr,
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.fade,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: AppTextStyle
-                                                          .textStyle12(
-                                                              fontColor:
-                                                                  appColors
-                                                                      .black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600),
-                                                    ),
-                                                    SizedBox(height: 5),
-                                                    Text(
-                                                      controller
-                                                              .getRitentionModel!
-                                                              .data!
-                                                              .retention!
-                                                              .totalFreeOrder
-                                                              .toString() ??
-                                                          "0",
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.fade,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: AppTextStyle
-                                                          .textStyle12(
-                                                              fontColor:
-                                                                  appColors
-                                                                      .black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.3,
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "Converted User".tr,
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.fade,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: AppTextStyle
-                                                          .textStyle12(
-                                                              fontColor:
-                                                                  appColors
-                                                                      .black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600),
-                                                    ),
-                                                    SizedBox(height: 5),
-                                                    Text(
-                                                      controller
-                                                              .getRitentionModel!
-                                                              .data!
-                                                              .retention!
-                                                              .freeUser
-                                                              .toString() ??
-                                                          "0",
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.fade,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: AppTextStyle
-                                                          .textStyle12(
-                                                              fontColor:
-                                                                  appColors
-                                                                      .black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                              SizedBox(
-                                                width: MediaQuery.of(context)
-                                                        .size
-                                                        .width *
-                                                    0.3,
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment
-                                                          .spaceEvenly,
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      "Retention".tr,
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.fade,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: AppTextStyle
-                                                          .textStyle12(
-                                                              fontColor:
-                                                                  appColors
-                                                                      .black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w600),
-                                                    ),
-                                                    SizedBox(height: 5),
-                                                    Text(
-                                                      "${controller.getRitentionModel!.data!.retention!.retention.toString()}%",
-                                                      maxLines: 2,
-                                                      overflow:
-                                                          TextOverflow.fade,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: AppTextStyle
-                                                          .textStyle12(
-                                                              fontColor:
-                                                                  appColors
-                                                                      .black,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .w400),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                      ),
                                     ),
-                                  ],
-                                ),
-                              )
-                        : SizedBox(),
-                  ),
 
                   TodayAvailabilityWidget(
                       todaysAvailiblity: controller

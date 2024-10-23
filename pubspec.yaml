@@ -16,7 +16,7 @@ dependencies:
   screenshot: ^3.0.0
   syncfusion_flutter_signaturepad:
   cached_network_image: ^3.2.3
-  carousel_slider: ^4.2.1
+  carousel_slider: 5.0.0
   camera: ^0.10.5+9
   in_app_update: ^4.2.2
   chips_choice: ^3.0.0
@@ -142,6 +142,7 @@ dependency_overrides:
 #  firebase_messaging_platform_interface: ^4.5.45
   fading_edge_scrollview: ^4.1.1
   intl: ^0.18.1
+  carousel_slider: 5.0.0
 
 dev_dependencies:
 

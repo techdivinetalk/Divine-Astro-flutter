@@ -15,7 +15,6 @@ import "package:divine_astrologer/gen/assets.gen.dart";
 import "package:divine_astrologer/gen/fonts.gen.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/common_button.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
-import "package:firebase_analytics/firebase_analytics.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -119,17 +118,17 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
         // print("stop the sound");
       }
     });
-    if (disableAstroEvent.toString() == "1") {
-      FirebaseAnalytics.instance
-          .logEvent(name: "astrologer_on_accept_screen", parameters: {
-        "astrologer_id": pref.getUserDetail()!.id ?? "",
-        "astrologer_name": pref.getUserDetail()!.name ?? "",
-        "Name": AppFirebaseService().orderData.value["customerName"] ?? "",
-        "order_status": "Accepted",
-        "orderId": AppFirebaseService().orderData.value["orderId"] ?? "",
-        "queueId": AppFirebaseService().orderData.value["queue_id"] ?? "",
-      });
-    }
+    // if (disableAstroEvent.toString() == "1") {
+    //   FirebaseAnalytics.instance
+    //       .logEvent(name: "astrologer_on_accept_screen", parameters: {
+    //     "astrologer_id": pref.getUserDetail()!.id ?? "",
+    //     "astrologer_name": pref.getUserDetail()!.name ?? "",
+    //     "Name": AppFirebaseService().orderData.value["customerName"] ?? "",
+    //     "order_status": "Accepted",
+    //     "orderId": AppFirebaseService().orderData.value["orderId"] ?? "",
+    //     "queueId": AppFirebaseService().orderData.value["queue_id"] ?? "",
+    //   });
+    // }
   }
 
   bool isCheckPermission = false;
@@ -297,6 +296,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
         isLoading.value = false;
         if (value == true) {
           isAcceptSuccess.value = true;
+          print("Waiting for user to connect------");
         } else {
           isAcceptSuccess.value = false;
         }
@@ -1021,45 +1021,111 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
                                                             if (value == true) {
                                                               isAcceptSuccess
                                                                   .value = true;
+                                                              Get.bottomSheet(
+                                                                Column(
+                                                                  mainAxisSize:
+                                                                      MainAxisSize
+                                                                          .min,
+                                                                  children: [
+                                                                    GestureDetector(
+                                                                      onTap: () =>
+                                                                          Get.back(),
+                                                                      child:
+                                                                          Container(
+                                                                        padding: const EdgeInsets
+                                                                            .all(
+                                                                            15.0),
+                                                                        decoration:
+                                                                            BoxDecoration(
+                                                                          border:
+                                                                              Border.all(color: appColors.white),
+                                                                          borderRadius:
+                                                                              const BorderRadius.all(
+                                                                            Radius.circular(50.0),
+                                                                          ),
+                                                                          color: appColors
+                                                                              .white
+                                                                              .withOpacity(0.2),
+                                                                        ),
+                                                                        child:
+                                                                            const Icon(
+                                                                          Icons
+                                                                              .close,
+                                                                          color:
+                                                                              Colors.white,
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                    const SizedBox(
+                                                                        height:
+                                                                            10.0),
+                                                                    Container(
+                                                                      width: double
+                                                                          .infinity,
+                                                                      decoration: BoxDecoration(
+                                                                          borderRadius: const BorderRadius
+                                                                              .vertical(
+                                                                              top: Radius.circular(
+                                                                                  50.0)),
+                                                                          color:
+                                                                              appColors.white),
+                                                                      child:
+                                                                          Center(
+                                                                        child:
+                                                                            Column(
+                                                                          children: [
+                                                                            SizedBox(height: 25.h),
+                                                                            Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                                                                              Text("Waiting for user to connect", style: TextStyle(fontWeight: FontWeight.w600, fontFamily: FontFamily.metropolis, fontSize: 16.sp, color: appColors.brownColour)),
+                                                                              Assets.lottie.loadingDots.lottie(width: 45, height: 30, repeat: true, frameRate: FrameRate(120), animate: true)
+                                                                            ]),
+                                                                            SizedBox(height: 12.h),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              );
                                                             } else {
                                                               isAcceptSuccess
                                                                       .value =
                                                                   false;
                                                             }
                                                           });
-                                                          if (disableAstroEvent
-                                                                  .toString() ==
-                                                              "1") {
-                                                            FirebaseAnalytics
-                                                                .instance
-                                                                .logEvent(
-                                                                    name:
-                                                                        "astrologer_accept_chat",
-                                                                    parameters: {
-                                                                  "astrologer_id": pref
-                                                                          .getUserDetail()!
-                                                                          .id ??
-                                                                      "",
-                                                                  "astrologer_name": pref
-                                                                          .getUserDetail()!
-                                                                          .name ??
-                                                                      "",
-                                                                  "Name": AppFirebaseService()
-                                                                          .orderData
-                                                                          .value["customerName"] ??
-                                                                      "",
-                                                                  "order_status":
-                                                                      "Accepted",
-                                                                  "orderId": AppFirebaseService()
-                                                                          .orderData
-                                                                          .value["orderId"] ??
-                                                                      "",
-                                                                  "queueId": AppFirebaseService()
-                                                                          .orderData
-                                                                          .value["queue_id"] ??
-                                                                      "",
-                                                                });
-                                                          }
+                                                          // if (disableAstroEvent
+                                                          //         .toString() ==
+                                                          //     "1") {
+                                                          //   FirebaseAnalytics
+                                                          //       .instance
+                                                          //       .logEvent(
+                                                          //           name:
+                                                          //               "astrologer_accept_chat",
+                                                          //           parameters: {
+                                                          //         "astrologer_id": pref
+                                                          //                 .getUserDetail()!
+                                                          //                 .id ??
+                                                          //             "",
+                                                          //         "astrologer_name": pref
+                                                          //                 .getUserDetail()!
+                                                          //                 .name ??
+                                                          //             "",
+                                                          //         "Name": AppFirebaseService()
+                                                          //                 .orderData
+                                                          //                 .value["customerName"] ??
+                                                          //             "",
+                                                          //         "order_status":
+                                                          //             "Accepted",
+                                                          //         "orderId": AppFirebaseService()
+                                                          //                 .orderData
+                                                          //                 .value["orderId"] ??
+                                                          //             "",
+                                                          //         "queueId": AppFirebaseService()
+                                                          //                 .orderData
+                                                          //                 .value["queue_id"] ??
+                                                          //             "",
+                                                          //       });
+                                                          // }
                                                         }
                                                       },
                                                       // widget.onPressed

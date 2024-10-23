@@ -71,46 +71,49 @@ class FineOrderHistory extends StatelessWidget {
   }
 
   Widget orderDetailView(context, int index, List<FineData> data) {
-    String productTypeText;
-    switch (data[index].getOrder!.productType) {
-      case 1:
-        productTypeText = 'Astrologer Products';
-        break;
-      case 2:
-        productTypeText = 'Gifts';
-        break;
-      case 3:
-        productTypeText = 'Video Call';
-        break;
-      case 4:
-        productTypeText = 'Audio Call';
-        break;
-      case 5:
-        productTypeText = 'Anonymous Call';
-        break;
-      case 7:
-        productTypeText = 'Audio Call';
-        break;
-      case 8:
-        productTypeText = 'Meditations';
-        break;
-      case 9:
-        productTypeText = 'Ayurveda Products';
-        break;
-      case 10:
-        productTypeText = "Pooja's";
-        break;
-      case 11:
-        productTypeText = 'Donation';
-        break;
-      case 12:
-        productTypeText = 'Customer Chat';
-        break;
-      case 14:
-        productTypeText = 'Ecommerce Product';
-        break;
-      default:
-        productTypeText = 'Unknown';
+    String productTypeText = "";
+    if (controller.fineHistoryList[index].getOrder == null) {
+    } else {
+      switch (data[index].getOrder!.productType) {
+        case 1:
+          productTypeText = 'Astrologer Products';
+          break;
+        case 2:
+          productTypeText = 'Gifts';
+          break;
+        case 3:
+          productTypeText = 'Video Call';
+          break;
+        case 4:
+          productTypeText = 'Audio Call';
+          break;
+        case 5:
+          productTypeText = 'Anonymous Call';
+          break;
+        case 7:
+          productTypeText = 'Audio Call';
+          break;
+        case 8:
+          productTypeText = 'Meditations';
+          break;
+        case 9:
+          productTypeText = 'Ayurveda Products';
+          break;
+        case 10:
+          productTypeText = "Pooja's";
+          break;
+        case 11:
+          productTypeText = 'Donation';
+          break;
+        case 12:
+          productTypeText = 'Customer Chat';
+          break;
+        case 14:
+          productTypeText = 'Ecommerce Product';
+          break;
+        default:
+          productTypeText = 'Unknown';
+      }
     }
     return Container(
       padding: const EdgeInsets.all(12.0),
@@ -203,29 +206,33 @@ class FineOrderHistory extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomText(
-                        data[index].getOrder!.orderId == null
-                            ? ""
-                            : data[index].getOrder!.orderId.toString(),
+                        data[index].getOrder == null
+                            ? "N/A"
+                            : data[index].getOrder!.orderId == null
+                                ? ""
+                                : data[index].getOrder!.orderId.toString(),
                         fontWeight: FontWeight.w400,
                         fontSize: 12.sp,
                         fontColor: appColors.textColor,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       CustomText(
-                        productTypeText ?? "",
+                        productTypeText == "" ? "N/A" : productTypeText,
                         fontWeight: FontWeight.w400,
                         fontSize: 12.sp,
                         fontColor: appColors.textColor,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 8,
                       ),
                       CustomText(
-                        data[index].getOrder!.createdAt == null
-                            ? ""
-                            : data[index].getOrder!.createdAt.toString(),
+                        data[index].getOrder == null
+                            ? "N/A"
+                            : data[index].getOrder!.createdAt == null
+                                ? ""
+                                : data[index].getOrder!.createdAt.toString(),
                         fontWeight: FontWeight.w400,
                         fontSize: 12.sp,
                         fontColor: appColors.textColor,

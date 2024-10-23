@@ -1,9 +1,9 @@
+import 'package:carousel_slider/carousel_controller.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../enums/carousel_page_changed_reason.dart';
 import '../enums/center_page_enlarge_strategy.dart';
-import 'flutter_carousel_controller.dart';
 
 class CarouselOptions {
   CarouselOptions({
@@ -83,7 +83,7 @@ class CarouselOptions {
   final Clip clipBehavior;
 
   /// A [MapController], used to control the map.
-  final CarouselController? controller;
+  final CarouselSliderController? controller;
 
   /// Whether or not to disable the `Center` widget for each slide.
   final bool disableCenter;
@@ -222,7 +222,7 @@ class CarouselOptions {
     Curve? autoPlayCurve,
     bool? enlargeCenterPage,
     Axis? scrollDirection,
-    CarouselController? carouselController,
+    CarouselSliderController? carouselController,
     Function(int index, CarouselPageChangedReason reason)? onPageChanged,
     ValueChanged<double?>? onScrolled,
     ScrollPhysics? physics,
