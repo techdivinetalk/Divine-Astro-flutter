@@ -296,6 +296,63 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
         isLoading.value = false;
         if (value == true) {
           isAcceptSuccess.value = true;
+          Get.bottomSheet(
+            Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                GestureDetector(
+                  onTap: () => Get.back(),
+                  child: Container(
+                    padding: const EdgeInsets.all(15.0),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: appColors.white),
+                      borderRadius: const BorderRadius.all(
+                        Radius.circular(50.0),
+                      ),
+                      color: appColors.white.withOpacity(0.2),
+                    ),
+                    child: const Icon(
+                      Icons.close,
+                      color: Colors.white,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 10.0),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.vertical(
+                          top: Radius.circular(50.0)),
+                      color: appColors.white),
+                  child: Center(
+                    child: Column(
+                      children: [
+                        SizedBox(height: 25.h),
+                        Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Waiting for user to connect",
+                                  style: TextStyle(
+                                      fontWeight: FontWeight.w600,
+                                      fontFamily: FontFamily.metropolis,
+                                      fontSize: 16.sp,
+                                      color: appColors.brownColour)),
+                              Assets.lottie.loadingDots.lottie(
+                                  width: 45,
+                                  height: 30,
+                                  repeat: true,
+                                  frameRate: FrameRate(120),
+                                  animate: true)
+                            ]),
+                        SizedBox(height: 12.h),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+
           print("Waiting for user to connect------");
         } else {
           isAcceptSuccess.value = false;
@@ -982,6 +1039,8 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
                                                             isAstrologerPhotoChatCall
                                                                     .value ==
                                                                 1) {
+                                                          print(
+                                                              "here we are coming 1");
                                                           if (await Permission
                                                                   .camera
                                                                   .isGranted &&
@@ -1001,6 +1060,9 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
                                                             initCamera();
                                                           }
                                                         } else {
+                                                          print(
+                                                              "here we are coming 2");
+
                                                           isLoading.value =
                                                               true;
 
@@ -1019,6 +1081,9 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
                                                             isLoading.value =
                                                                 false;
                                                             if (value == true) {
+                                                              print(
+                                                                  "here we are coming done");
+
                                                               isAcceptSuccess
                                                                   .value = true;
                                                               Get.bottomSheet(
@@ -1088,6 +1153,9 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
                                                                 ),
                                                               );
                                                             } else {
+                                                              print(
+                                                                  "here we are coming not done");
+
                                                               isAcceptSuccess
                                                                       .value =
                                                                   false;
