@@ -94,8 +94,7 @@ class SuggestRemedies extends StatelessWidget {
         "images ${"${preferenceService.getBaseImageURL()}/${data[index].getCustomers?.avatar}"}");
     return InkWell(
       onTap: () {
-        print("-----${data[index].getCustomers}");
-        if (data[index].getCustomers == null) {
+         if (data[index].getCustomers == null) {
         } else {
           DataList dataList = DataList();
           dataList.name = data[index].getCustomers!.name;
