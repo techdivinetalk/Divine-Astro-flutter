@@ -10,7 +10,9 @@ import 'package:get/get.dart';
 import '../../../common/app_textstyle.dart';
 import '../../../common/cached_network_image.dart';
 import '../../../common/colors.dart';
+import '../../../common/routes.dart';
 import '../../../di/shared_preference_service.dart';
+import '../../../model/chat_assistant/chat_assistant_astrologer_response.dart';
 import '../../../model/order_history_model/remedy_suggested_order_history.dart';
 import '../order_history_controller.dart';
 
@@ -91,7 +93,17 @@ class SuggestRemedies extends StatelessWidget {
     print(
         "images ${"${preferenceService.getBaseImageURL()}/${data[index].getCustomers?.avatar}"}");
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        print("-----${data[index].getCustomers}");
+        if (data[index].getCustomers == null) {
+        } else {
+          DataList dataList = DataList();
+          dataList.name = data[index].getCustomers!.name;
+          dataList.id = data[index].getCustomers!.id;
+          dataList.image = data[index].getCustomers!.avatar;
+          Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
+        }
+      },
       child: Container(
         padding: const EdgeInsets.all(12.0),
         decoration: BoxDecoration(
