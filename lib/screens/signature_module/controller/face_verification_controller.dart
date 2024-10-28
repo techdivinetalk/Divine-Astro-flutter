@@ -59,7 +59,9 @@ class FaceVerificationController extends GetxController
     UserData? userData = await pref.getUserDetail();
     try {
       var uri =
-          "${isLiveServer.value == 0 ? ApiProvider.agreementBaseDebug : ApiProvider.agreementBase}${ApiProvider.astrologerFaceVerification}${userData!.id}";
+          "${isLiveServer.value == 1 ? ApiProvider.agreementBase : ApiProvider.agreementBaseDebug}${ApiProvider.astrologerFaceVerification}${userData!.id}";
+      print(uri);
+
       var data = await Dio().get(uri,
           data: FormData.fromMap({
             "imageFile": imageFile != null
@@ -74,6 +76,7 @@ class FaceVerificationController extends GetxController
         if (argu == "") {
           Get.to(() => SignatureView(), arguments: {
             "astrologerProfilePhoto": agreementModel.data!.imageLink,
+            "from": "",
           });
         } else {
           Get.to(() => SignatureView(), arguments: {

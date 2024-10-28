@@ -68,8 +68,10 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
     super.initState();
     noticeAPi();
     controller.listenSocket();
+
     if (Get.arguments != null) {
       controller.args = Get.arguments;
+
       controller.update();
       chatAssistantCurrentUserId(controller.args?.id);
       updateFirebaseToken();
@@ -98,6 +100,10 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
       assistChatNewMsg.listen((newChatList) {
         if (newChatList.isNotEmpty) {
           print("ˇˇ ${newChatList.length} ");
+          controller.messageScrollController.position.animateTo(
+              controller.messageScrollController.position.maxScrollExtent + 80,
+              duration: Duration(seconds: 1),
+              curve: Curves.ease);
           for (int index = 0; index < newChatList.length; index++) {
             print("new chat list ${jsonEncode(newChatList[index])} ");
             var responseMsg = newChatList[index];
@@ -162,6 +168,9 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
       controller.messageScrollController.addListener(() {
         final topPosition =
             controller.messageScrollController.position.minScrollExtent;
+        if (controller.isKeyboardOpen(context)) {
+          controller.scrollToBottomFunc();
+        }
         if (controller.messageScrollController.position.pixels == topPosition) {
           //code to fetch old messages
           print("to fetch old messages");
@@ -174,6 +183,8 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
             controller.messageScrollController.position.maxScrollExtent;
         if (controller.messageScrollController.position.pixels ==
             bottomPosition) {
+          print("to fetch new messages");
+
           //code to fetch old messages
         }
       });
@@ -379,7 +390,11 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                                           controller.chatMessageList.length,
                                       controller:
                                           controller.messageScrollController,
-                                      reverse: false,
+                                      physics: const ScrollPhysics(),
+                                      keyboardDismissBehavior:
+                                          ScrollViewKeyboardDismissBehavior
+                                              .manual,
+                                      // reverse: false,
                                       shrinkWrap: true,
                                       itemBuilder: (context, index) {
                                         final currentMsg =
@@ -728,10 +743,10 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                             suffixIcon: InkWell(
                               onTap: () async {
                                 showCurvedBottomSheet(context);
-
                                 // Move focus to an invisible focus node to dismiss the keyboard
                                 FocusScope.of(context)
                                     .requestFocus(FocusNode());
+
                                 // if (controller.isOngoingChat.value) {
 
                                 //   } else {
@@ -766,6 +781,12 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                       if (controller.messageController.text.isNotEmpty) {
                         controller.sendMsg(MsgType.text,
                             {'text': controller.messageController.text}, false);
+                        controller.messageScrollController.position.animateTo(
+                            controller.messageScrollController.position
+                                    .maxScrollExtent +
+                                80,
+                            duration: Duration(seconds: 1),
+                            curve: Curves.ease);
                       } /*else {
                         final result = await voucherPopUp(context);
                         if (result != null) {

@@ -40,6 +40,10 @@ class ApiProvider {
   static const String agreementBase = "http://20.193.154.99:8080/api/v1/";
   static const String agreementBaseDebug = "http://20.193.154.99:8081/api/v1/";
 
+  static const String getAstroExclusiveAgreement =
+      "getAstroExclusiveAgreement?astrologer_id=";
+  static const String getAstroExclusiveAgreementSignedPdf =
+      "getAstroExclusiveAgreementSignedPdf?astrologer_id=";
   static const String astrologerAgreement = "getAstroAgreement?astrologer_id=";
   static const String astrologerFaceVerification =
       "uploadAstroImage?astrologer_id=";

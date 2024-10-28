@@ -313,7 +313,7 @@ class LoginController extends GetxController {
         // }
 
         bool oAuthFlowUsable = await TrueCallerService().isOAuthFlowUsable();
-        Future.delayed(const Duration(seconds: 1)).then((value) async {
+        Future.delayed(const Duration(seconds: 0)).then((value) async {
           if (Get.currentRoute == RouteName.login && showTrueCaller.value) {
             oAuthFlowUsable
                 ? await TrueCallerService().startTrueCaller()

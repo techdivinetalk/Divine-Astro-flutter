@@ -149,6 +149,8 @@ import '../screens/profile_options/upload_story/upload_story_ui.dart';
 import '../screens/profile_options/upload_your_photos/upload_your_photos.dart';
 import '../screens/rank_system/rank_system_binding.dart';
 import '../screens/rank_system/rank_system_ui.dart';
+import '../screens/remedie_chat/remedies_chat_binding.dart';
+import '../screens/remedie_chat/remedies_chat_screen.dart';
 import '../screens/side_menu/donation/donation_binding.dart';
 import '../screens/side_menu/donation_detail/donation_detail_ui.dart';
 import '../screens/side_menu/important_numbers/important_numbers_binding.dart';
@@ -268,6 +270,7 @@ class RouteName {
   static const String addBankAutoMation = "/addBankAutoMation";
   static const String addEcomAutomation = "/addEcomAutomation";
   static const String onBoardingGotIssue = "/onBoardingGotIssue";
+  static const String remediesChatScreen = "/remediesChatScreen";
 }
 
 final Set<String> validRoutes = {
@@ -426,6 +429,11 @@ class Routes {
       page: () => OnBoardingIssueScreen(),
       name: RouteName.onBoardingGotIssue,
       binding: OnBoardingIssueBinding(),
+    ),
+    GetPage(
+      name: RouteName.remediesChatScreen,
+      page: () => const RemediesChatScreen(),
+      binding: RemediesChatBinding(),
     ),
     GetPage(
       page: () => AllTechnicalIssueScreen(),

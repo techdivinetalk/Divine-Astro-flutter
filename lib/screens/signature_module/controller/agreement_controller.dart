@@ -44,9 +44,12 @@ class AgreementController extends GetxController {
         'Connection': 'keep-alive',
         'Keep-Alive': 'timeout=5, max=1000',
       };
+      print(
+          "${isLiveServer.value == 1 ? ApiProvider.agreementBase : ApiProvider.agreementBaseDebug}${ApiProvider.getAstroExclusiveAgreement}${userData!.id}");
       final response = await Dio().get(
-          "${isLiveServer.value == 1 ? ApiProvider.agreementBaseDebug : ApiProvider.agreementBase}${ApiProvider.astrologerAgreement}${userData!.id}");
+          "${isLiveServer.value == 1 ? ApiProvider.agreementBase : ApiProvider.agreementBaseDebug}${ApiProvider.getAstroExclusiveAgreement}${userData!.id}");
       print("astrologerAgreement.data${jsonEncode(response.data)}");
+
       AgreementModel agreementModel = AgreementModel.fromJson(response.data);
       if (agreementModel.data != null) {
         exclusiveAgreementStages =

@@ -262,6 +262,10 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
     Future.delayed(const Duration(milliseconds: 600)).then((value) {
       print("calling after milliseconds: 600");
       scrollToBottomFunc();
+      messageScrollController.position.animateTo(
+          messageScrollController.position.maxScrollExtent + 80,
+          duration: Duration(seconds: 1),
+          curve: Curves.ease);
     });
   }
 
@@ -499,14 +503,18 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
 
   scrollToBottomFunc() {
     print("chat Assist Scrolled to bottom");
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
     messageScrollController.hasClients
         ? messageScrollController.animateTo(
             messageScrollController.position.maxScrollExtent * 2,
-            duration: const Duration(milliseconds: 600),
-            curve: Curves.easeOut)
+            duration: const Duration(seconds: 2),
+            curve: Curves.ease)
         : ();
+    // });
   }
-
+  bool isKeyboardOpen(BuildContext context) {
+    return MediaQuery.of(context).viewInsets.bottom != 0;
+  }
   reArrangeChatList() {
     // to remove duplicacy of messages
     // chatMessageList(chatMessageList
@@ -861,7 +869,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
       ..createdAt = DateTime.parse(msgData.createdAt ?? '')
           .millisecondsSinceEpoch
           .toString());
-    scrollToBottomFunc();
+
     messageController.clear();
 
     print("test_isTemplateMsg: $isTemplateMsg");

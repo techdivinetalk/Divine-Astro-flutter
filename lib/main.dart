@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:camera/camera.dart';
-import 'package:device_apps/device_apps.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_function.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
@@ -27,6 +26,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sms_autofill/sms_autofill.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
@@ -86,7 +86,7 @@ Future<void> main() async {
   }
   FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
 
-  // SmsAutoFill().listenForCode;
+  SmsAutoFill().listenForCode;
 
   cameras = await availableCameras();
   Get.put(AppColors());

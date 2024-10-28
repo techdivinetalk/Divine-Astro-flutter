@@ -1,14 +1,11 @@
-
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/cached_network_image.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/custom_widgets.dart';
 import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/model/chat_assistant/chat_assistant_astrologer_response.dart';
 import 'package:divine_astrologer/model/order_history_model/remedy_suggested_order_history.dart';
-import 'package:divine_astrologer/screens/live_dharam/widgets/common_button.dart';
 import 'package:divine_astrologer/screens/suggest_remedies_flow/suggested_remedies/suggested_remedies_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -17,6 +14,7 @@ import 'package:intl/intl.dart';
 
 import '../../../common/build_empty.dart';
 import '../../../gen/assets.gen.dart';
+import '../../../gen/fonts.gen.dart';
 
 class SuggestedRemediesScreen extends StatelessWidget {
   SuggestedRemediesScreen({super.key});
@@ -26,11 +24,12 @@ class SuggestedRemediesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: appColors.white,
       appBar: AppBar(
         centerTitle: false,
         forceMaterialTransparency: true,
         backgroundColor: appColors.white,
-        title: Text("Suggested Remedies",
+        title: Text("Suggested Remedieddds",
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
@@ -41,6 +40,37 @@ class SuggestedRemediesScreen extends StatelessWidget {
           controller.suggestApiCalling.value && controller.remedyPageCount == 1
               ? const GenericLoadingWidget()
               : suggestRemedies()),
+      // bottomNavigationBar: SizedBox(
+      //   height: 70,
+      //   child: Row(
+      //     mainAxisAlignment: MainAxisAlignment.center,
+      //     crossAxisAlignment: CrossAxisAlignment.end,
+      //     children: [
+      //       Padding(
+      //         padding: EdgeInsets.only(left: 10, right: 10, top: 5, bottom: 8),
+      //         child: Container(
+      //           height: 50,
+      //           width: MediaQuery.of(context).size.width * 0.9,
+      //           decoration: BoxDecoration(
+      //             borderRadius: BorderRadius.circular(14),
+      //             color: appColors.guideColor,
+      //           ),
+      //           child: Center(
+      //             child: Text(
+      //               "My Remedies Listing",
+      //               style: TextStyle(
+      //                 fontSize: 16.sp,
+      //                 fontWeight: FontWeight.w600,
+      //                 fontFamily: FontFamily.poppins,
+      //                 color: appColors.white,
+      //               ),
+      //             ),
+      //           ),
+      //         ),
+      //       ),
+      //     ],
+      //   ),
+      // ),
     );
   }
 
@@ -114,8 +144,7 @@ class SuggestedRemediesScreen extends StatelessWidget {
   }
 
   Widget remediesDetail(int index, List<RemedySuggestedDataList> data) {
-    print(
-        "create at  ${data[index].createdAt}");
+    print("create at  ${data[index].createdAt}");
     return InkWell(
       onTap: () {
         DataList dataList = DataList();
@@ -224,7 +253,8 @@ class SuggestedRemediesScreen extends StatelessWidget {
                             .format(data[index].createdAt!)
                         : "N/A"*/
                     data[index].createdAt != null
-                        ? controller.newFormatDateTime(data[index].createdAt.toString())
+                        ? controller
+                            .newFormatDateTime(data[index].createdAt.toString())
                         : "N/A",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
@@ -334,6 +364,374 @@ class SuggestedRemediesScreen extends StatelessWidget {
       default:
         return Colors.black;
     }
+  }
+
+  Widget suggestedRemedies() {
+    return Container(
+      decoration: BoxDecoration(
+        color: appColors.white,
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: appColors.grey.withOpacity(0.3),
+            spreadRadius: 2,
+            blurRadius: 6,
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          // Padding(
+          //   padding: const EdgeInsets.only(top: 8, bottom: 2),
+          //   child: Row(
+          //     children: [
+          //       SizedBox(
+          //         width: 15,
+          //       ),
+          //       Text(
+          //         "Repeat",
+          //         style: TextStyle(
+          //           fontSize: 16.sp,
+          //           fontFamily: FontFamily.poppins,
+          //           fontWeight: FontWeight.w400,
+          //           color: appColors.red,
+          //         ),
+          //       ),
+          //       SizedBox(
+          //         width: 5,
+          //       ),
+          //       SizedBox(
+          //         height: 20,
+          //         child: VerticalDivider(
+          //           color: appColors.grey.withOpacity(0.4),
+          //         ),
+          //       ),
+          //       SizedBox(
+          //         width: 5,
+          //       ),
+          //       Text(
+          //         "fjdfdjfkdjfjfd",
+          //         style: TextStyle(
+          //           fontSize: 16.sp,
+          //           fontFamily: FontFamily.poppins,
+          //           fontWeight: FontWeight.w400,
+          //           color: Color.fromRGBO(252, 183, 66, 1),
+          //         ),
+          //       ),
+          //     ],
+          //   ),
+          // ),
+          // Padding(
+          //   padding: const EdgeInsets.only(left: 8, right: 8),
+          //   child: Divider(
+          //     color: appColors.grey.withOpacity(0.4),
+          //   ),
+          // ),
+          SizedBox(
+            height: 2,
+          ),
+          Row(
+            children: [
+              SizedBox(
+                width: 10,
+              ),
+              CircleAvatar(
+                radius: 25,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(80),
+                  child: CachedNetworkPhoto(
+                    url: "fjdfdjfkdjfjfd",
+                  ),
+                ),
+              ),
+              SizedBox(
+                width: 10,
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        "fjdfdjfkdjfjfd",
+                        style: TextStyle(
+                          fontSize: 16.sp,
+                          fontWeight: FontWeight.w600,
+                          fontFamily: FontFamily.poppins,
+                          color: appColors.black,
+                        ),
+                      ),
+                      // if (waitingCustomer.level != null &&
+                      //     waitingCustomer.level != "")
+                      Padding(
+                        padding: const EdgeInsets.only(left: 5.0),
+                        child: LevelWidget(level: "1" ?? ""),
+                      ),
+                    ],
+                  ),
+                  Text(
+                    "01 Aug 24, 05:01 PM",
+                    style: TextStyle(
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: FontFamily.poppins,
+                      color: appColors.grey,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 6,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(Get.context!).size.width * 0.18,
+                        child: Text(
+                          "Order Id",
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: FontFamily.poppins,
+                            color: appColors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(Get.context!).size.width * 0.01,
+                        child: Text(
+                          ":",
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: FontFamily.poppins,
+                            color: appColors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(Get.context!).size.width * 0.22,
+                        child: Text(
+                          "fjdfdjfkdjfjfd",
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: FontFamily.poppins,
+                            color: appColors.grey,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(Get.context!).size.width * 0.18,
+                        child: Text(
+                          "Product Name",
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: FontFamily.poppins,
+                            color: appColors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(Get.context!).size.width * 0.01,
+                        child: Text(
+                          ":",
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: FontFamily.poppins,
+                            color: appColors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(Get.context!).size.width * 0.22,
+                        child: Text(
+                          "Job Healing",
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: FontFamily.poppins,
+                            color: appColors.grey,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                  Row(
+                    children: [
+                      SizedBox(
+                        width: 10,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(Get.context!).size.width * 0.18,
+                        child: Text(
+                          "Quantity",
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: FontFamily.poppins,
+                            color: appColors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(Get.context!).size.width * 0.01,
+                        child: Text(
+                          ":",
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: FontFamily.poppins,
+                            color: appColors.black,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 10,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(Get.context!).size.width * 0.22,
+                        child: Text(
+                          "1",
+                          style: TextStyle(
+                            fontSize: 12.sp,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: FontFamily.poppins,
+                            color: appColors.grey,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 8,
+                  ),
+                ],
+              ),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.end,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 0, 10, 10),
+                    child: Container(
+                        height: 38.sp,
+                        width: MediaQuery.of(Get.context!).size.width * 0.4.sp,
+                        decoration: BoxDecoration(
+                            color: appColors.white,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: appColors.red,
+                            )),
+                        child: Center(
+                          child: Text(
+                            "Chat with us",
+                            style: TextStyle(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.w400,
+                              fontFamily: FontFamily.poppins,
+                              color: appColors.red,
+                            ),
+                          ),
+                        )),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(5, 5, 10, 10),
+                    child: InkWell(
+                      onTap: () {},
+                      child: Container(
+                          height: 38.sp,
+                          width:
+                              MediaQuery.of(Get.context!).size.width * 0.4.sp,
+                          decoration: BoxDecoration(
+                            color: appColors.red,
+                            borderRadius: BorderRadius.circular(10),
+                            border: Border.all(
+                              color: appColors.red,
+                            ),
+                          ),
+                          child: Center(
+                            child: Text(
+                              "Request to close",
+                              style: TextStyle(
+                                fontSize: 14.sp,
+                                fontWeight: FontWeight.w400,
+                                fontFamily: FontFamily.poppins,
+                                color: appColors.white,
+                              ),
+                            ),
+                          )),
+                    ),
+                  ),
+                  // Padding(
+                  //   padding: const EdgeInsets.fromLTRB(5, 5, 10, 10),
+                  //   child: InkWell(
+                  //     onTap: () {},
+                  //     child: Container(
+                  //         height: 38,
+                  //         width: MediaQuery.of(context).size.width * 0.4,
+                  //         decoration: BoxDecoration(
+                  //           color: appColors.grey.withOpacity(0.5),
+                  //           borderRadius: BorderRadius.circular(10),
+                  //           border: Border.all(
+                  //             color: appColors.grey.withOpacity(0.5),
+                  //           ),
+                  //         ),
+                  //         child: Center(
+                  //           child: Text(
+                  //             "Requested to close",
+                  //             style: TextStyle(
+                  //               fontSize: 14.sp,
+                  //               fontWeight: FontWeight.w400,
+                  //               fontFamily: FontFamily.poppins,
+                  //               color: appColors.white,
+                  //             ),
+                  //           ),
+                  //         )),
+                  //   ),
+                  // ),
+                ],
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 }
 

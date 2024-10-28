@@ -172,7 +172,8 @@ class SignatureController extends GetxController {
 
     try {
       var uri =
-          "${isLiveServer.value == 0 ? ApiProvider.agreementBaseDebug : ApiProvider.agreementBase}${ApiProvider.astrologerAstroSign}${userData!.id}";
+          "${isLiveServer.value == 1 ? ApiProvider.agreementBase : ApiProvider.agreementBaseDebug}${ApiProvider.astrologerAstroSign}${userData!.id}";
+      print(uri);
       var data = await Dio().get(uri,
           data: FormData.fromMap({
             "signFile": imageFile != null
@@ -200,7 +201,8 @@ class SignatureController extends GetxController {
     UserData? userData = await pref.getUserDetail();
     try {
       var uri =
-          "${isLiveServer.value == 0 ? ApiProvider.agreementBaseDebug : ApiProvider.agreementBase}${ApiProvider.astrologerSignPdf}${userData!.id}";
+          "${isLiveServer.value == 1 ? ApiProvider.agreementBase : ApiProvider.agreementBaseDebug}${from == "" ? ApiProvider.getAstroExclusiveAgreementSignedPdf : ApiProvider.astrologerSignPdf}${userData!.id}";
+      print(uri);
       var data = await Dio().get(uri,
           data: FormData.fromMap({
             "signPdf": imageFile != null
