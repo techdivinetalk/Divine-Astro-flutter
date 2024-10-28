@@ -47,7 +47,6 @@ import '../../common/common_bottomsheet.dart';
 import '../../gen/fonts.gen.dart';
 import '../../model/feedback_response.dart';
 import '../../repository/pre_defind_repository.dart';
-import '../../screens/remedie_chat/remedies_chat_screen.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import '../../utils/utils.dart';
 import 'home_controller.dart';
