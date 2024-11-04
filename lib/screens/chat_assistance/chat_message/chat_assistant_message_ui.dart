@@ -85,7 +85,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
 
       controller.getMessageTemplateForChatAssist();
       // controller.getMessageTemplatesLocally();
-      controller.scrollToBottomFunc();
+      // controller.scrollToBottomFunc();
       timer = Timer.periodic(const Duration(minutes: 5), (timer) {
         controller.socketReconnect();
       });
@@ -137,7 +137,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                     customerId: int.parse(responseMsg['sender_id'] ?? 0))
               ]);
               controller.chatMessageList.refresh();
-              controller.scrollToBottomFunc();
+              // controller.scrollToBottomFunc();
               assistChatNewMsg.removeAt(index);
               controller.update();
               print(
@@ -146,60 +146,68 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
           }
           controller.update();
         }
-        controller.scrollToBottomFunc();
+        // controller.scrollToBottomFunc();
+
         controller.reArrangeChatList();
       });
+
       controller.update();
 
-      Future.delayed(const Duration(milliseconds: 600)).then((value) {
-        controller.scrollToBottomFunc();
-      });
       //to check if the list has enough number of elements to scroll
       // messageScrollController.hasClients ? null : getAssistantChatList();
       //
-
       // controller.keyboardVisibilityController.onChange.listen(
       //       (bool visible) {
       //     if (visible == false) {
       //     } else {}
       //   },
       // );
+      if (mounted && controller.messageScrollController.hasClients) {
+        controller.messageScrollController.addListener(() {
+          final topPosition =
+              controller.messageScrollController.position.minScrollExtent;
+          // if (controller.isKeyboardOpen(context)) {
+          //   // controller.scrollToBottomFunc();
+          // }
 
-      controller.messageScrollController.addListener(() {
-        final topPosition =
-            controller.messageScrollController.position.minScrollExtent;
-        if (controller.isKeyboardOpen(context)) {
-          controller.scrollToBottomFunc();
-        }
-        if (controller.messageScrollController.position.pixels == topPosition) {
-          //code to fetch old messages
-          print("to fetch old messages");
-          controller.getAssistantChatList();
-        }
-      });
-      controller.scrollToBottomFunc();
-      controller.messageScrollController.addListener(() {
-        final bottomPosition =
-            controller.messageScrollController.position.maxScrollExtent;
-        if (controller.messageScrollController.position.pixels ==
-            bottomPosition) {
-          print("to fetch new messages");
+          if (controller.messageScrollController.position.pixels ==
+              topPosition) {
+            //code to fetch old messages
+            print("to fetch old messages");
+            controller.getAssistantChatList();
+          }
+        });
+        // WidgetsBinding.instance.addPostFrameCallback((_) {
+        //   if (mounted && _scrollController.hasClients) {
+        //     _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+        //   }
+        // });
 
-          //code to fetch old messages
-        }
-      });
+        // controller.scrollToBottomFunc();
+        controller.messageScrollController.addListener(() {
+          final bottomPosition =
+              controller.messageScrollController.position.maxScrollExtent;
+          if (controller.messageScrollController.position.pixels ==
+              bottomPosition) {
+            print("to fetch new messages");
+
+            //code to fetch old messages
+          }
+        });
+      }
+
       // getAssistantChatList();
-      controller.scrollToBottomFunc();
+      // controller.scrollToBottomFunc();
       controller.update();
     }
-    controller.scrollToBottomFunc();
+    // controller.scrollToBottomFunc();
   }
 
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    controller.scrollToBottomFunc();
+    // controller.scrollToBottomFunc();
   }
 
   @override
@@ -221,271 +229,302 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
     print(
         "print image:: ${preferenceService.getAmazonUrl()}/${controller.args?.image ?? ''}");
     Get.put(ChatMessageController(KundliRepository(), ChatRepository()));
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: appColors.guideColor,
-        centerTitle: false,
-        leading: IconButton(
-          onPressed: () {
-            Get.delete<ChatMessageController>();
-            Get.back();
-          },
-          icon: Icon(
-            Icons.arrow_back_ios_new_rounded,
-            color: appColors.whiteGuidedColor,
+    return WillPopScope(
+      onWillPop: () async {
+        print("datascrollingBack");
+        print(controller.isKeyboardOpen(context));
+        print("datascrollingBack");
+        if (controller.isKeyboardOpen(context)) {
+          print("object");
+
+          FocusScope.of(context).unfocus();
+          WidgetsBinding.instance.addPostFrameCallback((_) {
+            controller.messageScrollController.jumpToBottom();
+            if (mounted && controller.messageScrollController.hasClients) {
+              controller.messageScrollController.jumpTo(
+                  controller.messageScrollController.position.maxScrollExtent);
+              controller.update();
+            }
+          });
+        } else {
+          Get.delete<ChatMessageController>();
+          Get.back();
+        }
+        controller.update();
+
+        return false;
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: appColors.guideColor,
+          centerTitle: false,
+          leading: IconButton(
+            onPressed: () {
+              Get.delete<ChatMessageController>();
+              Get.back();
+            },
+            icon: Icon(
+              Icons.arrow_back_ios_new_rounded,
+              color: appColors.whiteGuidedColor,
+            ),
           ),
-        ),
-        actions: [
-          show_call_on_assistant.value.toString() == "1"
-              ? Obx(() {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: controller.checkingCalling.value == true
-                        ? Padding(
-                            padding: const EdgeInsets.only(right: 10),
-                            child: Center(
-                              child: SizedBox(
-                                height: 30,
-                                width: 30,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: appColors.white,
+          actions: [
+            show_call_on_assistant.value.toString() == "1"
+                ? Obx(() {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: controller.checkingCalling.value == true
+                          ? Padding(
+                              padding: const EdgeInsets.only(right: 10),
+                              child: Center(
+                                child: SizedBox(
+                                  height: 30,
+                                  width: 30,
+                                  child: CircularProgressIndicator(
+                                    strokeWidth: 2,
+                                    color: appColors.white,
+                                  ),
                                 ),
                               ),
-                            ),
-                          )
-                        : IconButton(
-                            onPressed: () {
-                              print(controller.args!.id);
-                              controller.checkCalling();
-                            },
-                            icon: Icon(
-                              Icons.call,
-                              color: appColors.white,
-                            ),
-                          ),
-                  );
-                })
-              : SizedBox(),
-        ],
-        leadingWidth: 30,
-        title: Row(
-          children: [
-            SizedBox(
-              height: 32.r,
-              width: 32.r,
-              child: ClipRRect(
-                  borderRadius: BorderRadius.circular(20.r),
-                  child: LoadImage(
-                    boxFit: BoxFit.fill,
-                    imageModel: ImageModel(
-                        assetImage: false,
-                        placeHolderPath: Assets.images.defaultProfile.path,
-                        imagePath: (controller.args?.image ?? '').startsWith(
-                                'https://divineprod.blob.core.windows.net/divineprod/')
-                            ? controller.args?.image ?? ''
-                            : "${preferenceService.getAmazonUrl()}/${controller.args?.image ?? ''}",
-                        loadingIndicator: SizedBox(
-                            child: CircularProgressIndicator(
-                                color: appColors.guideColor, strokeWidth: 2))),
-                  )),
-            ),
-            SizedBox(width: 10.w),
-            Text(controller.args!.name ?? '',
-                style: AppTextStyle.textStyle16(
-                    fontWeight: FontWeight.w500,
-                    fontColor: appColors.whiteGuidedColor))
-          ],
-        ),
-      ),
-      body: Stack(
-        children: [
-          Assets.images.bgChatWallpaper.image(
-              height: MediaQuery.of(context).size.height,
-              width: MediaQuery.of(context).size.width,
-              fit: BoxFit.cover),
-          Column(
-            children: [
-              Obx(() {
-                return Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 7),
-                    child: controller.loading.value
-                        ? msgShimmerList()
-                        : controller.chatMessageList.isEmpty
-                            ? HelpersWidget().emptyChatWidget()
-                            : Stack(
-                                children: [
-                                  Positioned(
-                                    top: 10, // Position at the top
-                                    left: 0,
-                                    right: 0,
-                                    child: SizedBox(
-                                      height:
-                                          noticeDataChat.isNotEmpty ? 50 : 0,
-                                      // Adjust the height as needed
-                                      child: noticeDataChat.isNotEmpty
-                                          ? CarouselSlider(
-                                              options: CarouselOptions(
-                                                height: 200,
-                                                autoPlay: true,
-                                                aspectRatio: 1,
-                                                viewportFraction: 1,
-                                              ),
-                                              items: noticeDataChat.map((i) {
-                                                return Builder(
-                                                  builder:
-                                                      (BuildContext context) {
-                                                    return Container(
-                                                      margin: const EdgeInsets
-                                                          .symmetric(
-                                                          horizontal: 10),
-                                                      width:
-                                                          MediaQuery.of(context)
-                                                              .size
-                                                              .width,
-                                                      alignment:
-                                                          Alignment.center,
-                                                      decoration: BoxDecoration(
-                                                        color: appColors.white,
-                                                        border: Border.all(
-                                                            color:
-                                                                appColors.red,
-                                                            width: 2),
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(20),
-                                                      ),
-                                                      child: RichText(
-                                                        textAlign:
-                                                            TextAlign.center,
-                                                        text: HTML.toTextSpan(
-                                                            context,
-                                                            i.description ??
-                                                                ""),
-                                                        maxLines: 2,
-
-                                                        //...
-                                                      ),
-                                                      /* ExpandableHtml(
-                                                          htmlData: '${i.description}',
-                                                          trimLength: 3000,
-                                                        )*/
-                                                    );
-                                                  },
-                                                );
-                                              }).toList(),
-                                            )
-                                          : const SizedBox(),
-                                    ),
-                                  ),
-                                  Positioned(
-                                    top: noticeDataChat.isNotEmpty ? 70 : 0,
-                                    left: 0,
-                                    right: 0,
-                                    bottom: 0,
-                                    // Take remaining space
-                                    child: ListView.builder(
-                                      itemCount:
-                                          controller.chatMessageList.length,
-                                      controller:
-                                          controller.messageScrollController,
-                                      physics: const ScrollPhysics(),
-                                      keyboardDismissBehavior:
-                                          ScrollViewKeyboardDismissBehavior
-                                              .manual,
-                                      // reverse: false,
-                                      shrinkWrap: true,
-                                      itemBuilder: (context, index) {
-                                        final currentMsg =
-                                            controller.chatMessageList[index]
-                                                as AssistChatData;
-                                        final nextIndex =
-                                            controller.chatMessageList.length -
-                                                        1 ==
-                                                    index
-                                                ? index
-                                                : index + 1;
-                                        print(
-                                            "chat assist msg data:${currentMsg.toJson()}");
-                                        print(
-                                            "controller.chatMessageList.length ------> ${controller.chatMessageList.length}");
-                                        print(
-                                            "=== ------> ${controller.chatMessageList[0]}");
-                                        print(
-                                            "currentMsg type ------> ${currentMsg.msgType}");
-                                        return AssistMessageView(
-                                          index: index,
-                                          chatMessage: currentMsg,
-                                          nextMessage: index ==
-                                                  controller.chatMessageList
-                                                          .length -
-                                                      1
-                                              ? controller
-                                                  .chatMessageList[index]
-                                              : controller
-                                                  .chatMessageList[index + 1],
-                                          yourMessage: currentMsg.sendBy ==
-                                              SendBy.astrologer,
-                                          unreadMessage: controller
-                                                  .unreadMessageList.isNotEmpty
-                                              ? controller
-                                                      .chatMessageList[index]
-                                                      .id ==
-                                                  controller.unreadMessageList
-                                                      .first.id
-                                              : false,
-                                          baseImageUrl: controller
-                                                  .preferenceService
-                                                  .getBaseImageURL() ??
-                                              '',
-                                        );
-                                      },
-                                    ),
-                                  ),
-                                ],
+                            )
+                          : IconButton(
+                              onPressed: () {
+                                print(controller.args!.id);
+                                controller.checkCalling();
+                              },
+                              icon: Icon(
+                                Icons.call,
+                                color: appColors.white,
                               ),
-                  ),
-                );
-              }),
-              // Obx(
-              //   () => Column(
-              //     children: [
-              //       messageTemplateRow(),
-              //       SizedBox(height: 20.h),
-              //     ],
-              //   ),
-              // ),
-              SizedBox(height: 10.h),
-              chatBottomBar(context),
-
-              // Padding(
-              //   padding:
-              //   EdgeInsets.only(left: 20.h, right: 20.h, bottom: 20.h),
-              //   child: MaterialButton(
-              //       height: 50,
-              //       elevation: 0,
-              //       minWidth: Get.width,
-              //       shape: const RoundedRectangleBorder(
-              //         borderRadius:
-              //         BorderRadius.all(Radius.circular(25.0)),
-              //       ),
-              //       onPressed: () {
-              //         chatAssistantTemplateSendMessagePopup();
-              //       },
-              //       color: appColors.guideColor,
-              //       child: Text(
-              //         "sendMessage".tr,
-              //         style: TextStyle(
-              //           fontWeight: FontWeight.w600,
-              //           fontSize: 20.sp,
-              //           color: appColors.white,
-              //         ),
-              //       )),
-              // ),
+                            ),
+                    );
+                  })
+                : SizedBox(),
+          ],
+          leadingWidth: 30,
+          title: Row(
+            children: [
+              SizedBox(
+                height: 32.r,
+                width: 32.r,
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20.r),
+                    child: LoadImage(
+                      boxFit: BoxFit.fill,
+                      imageModel: ImageModel(
+                          assetImage: false,
+                          placeHolderPath: Assets.images.defaultProfile.path,
+                          imagePath: (controller.args?.image ?? '').startsWith(
+                                  'https://divineprod.blob.core.windows.net/divineprod/')
+                              ? controller.args?.image ?? ''
+                              : "${preferenceService.getAmazonUrl()}/${controller.args?.image ?? ''}",
+                          loadingIndicator: SizedBox(
+                              child: CircularProgressIndicator(
+                                  color: appColors.guideColor,
+                                  strokeWidth: 2))),
+                    )),
+              ),
+              SizedBox(width: 10.w),
+              Text(controller.args!.name ?? '',
+                  style: AppTextStyle.textStyle16(
+                      fontWeight: FontWeight.w500,
+                      fontColor: appColors.whiteGuidedColor))
             ],
           ),
-        ],
+        ),
+        body: Stack(
+          children: [
+            Assets.images.bgChatWallpaper.image(
+                height: MediaQuery.of(context).size.height,
+                width: MediaQuery.of(context).size.width,
+                fit: BoxFit.cover),
+            Column(
+              children: [
+                Obx(() {
+                  return Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 7),
+                      child: controller.loading.value
+                          ? msgShimmerList()
+                          : controller.chatMessageList.isEmpty
+                              ? HelpersWidget().emptyChatWidget()
+                              : Stack(
+                                  children: [
+                                    Positioned(
+                                      top: 10, // Position at the top
+                                      left: 0,
+                                      right: 0,
+                                      child: SizedBox(
+                                        height:
+                                            noticeDataChat.isNotEmpty ? 50 : 0,
+                                        // Adjust the height as needed
+                                        child: noticeDataChat.isNotEmpty
+                                            ? CarouselSlider(
+                                                options: CarouselOptions(
+                                                  height: 200,
+                                                  autoPlay: true,
+                                                  aspectRatio: 1,
+                                                  viewportFraction: 1,
+                                                ),
+                                                items: noticeDataChat.map((i) {
+                                                  return Builder(
+                                                    builder:
+                                                        (BuildContext context) {
+                                                      return Container(
+                                                        margin: const EdgeInsets
+                                                            .symmetric(
+                                                            horizontal: 10),
+                                                        width: MediaQuery.of(
+                                                                context)
+                                                            .size
+                                                            .width,
+                                                        alignment:
+                                                            Alignment.center,
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color:
+                                                              appColors.white,
+                                                          border: Border.all(
+                                                              color:
+                                                                  appColors.red,
+                                                              width: 2),
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(20),
+                                                        ),
+                                                        child: RichText(
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          text: HTML.toTextSpan(
+                                                              context,
+                                                              i.description ??
+                                                                  ""),
+                                                          maxLines: 2,
+
+                                                          //...
+                                                        ),
+                                                        /* ExpandableHtml(
+                                                            htmlData: '${i.description}',
+                                                            trimLength: 3000,
+                                                          )*/
+                                                      );
+                                                    },
+                                                  );
+                                                }).toList(),
+                                              )
+                                            : const SizedBox(),
+                                      ),
+                                    ),
+                                    Positioned(
+                                      top: noticeDataChat.isNotEmpty ? 70 : 0,
+                                      left: 0,
+                                      right: 0,
+                                      bottom: 0,
+                                      // Take remaining space
+                                      child: ListView.builder(
+                                        itemCount:
+                                            controller.chatMessageList.length,
+                                        controller:
+                                            controller.messageScrollController,
+                                        physics: const ScrollPhysics(),
+                                        keyboardDismissBehavior:
+                                            ScrollViewKeyboardDismissBehavior
+                                                .manual,
+                                        // reverse: false,
+                                        shrinkWrap: true,
+                                        itemBuilder: (context, index) {
+                                          final currentMsg =
+                                              controller.chatMessageList[index]
+                                                  as AssistChatData;
+                                          final nextIndex = controller
+                                                          .chatMessageList
+                                                          .length -
+                                                      1 ==
+                                                  index
+                                              ? index
+                                              : index + 1;
+                                          print(
+                                              "chat assist msg data:${currentMsg.toJson()}");
+                                          print(
+                                              "controller.chatMessageList.length ------> ${controller.chatMessageList.length}");
+                                          print(
+                                              "=== ------> ${controller.chatMessageList[0]}");
+                                          print(
+                                              "currentMsg type ------> ${currentMsg.msgType}");
+                                          return AssistMessageView(
+                                            index: index,
+                                            chatMessage: currentMsg,
+                                            nextMessage: index ==
+                                                    controller.chatMessageList
+                                                            .length -
+                                                        1
+                                                ? controller
+                                                    .chatMessageList[index]
+                                                : controller
+                                                    .chatMessageList[index + 1],
+                                            yourMessage: currentMsg.sendBy ==
+                                                SendBy.astrologer,
+                                            unreadMessage: controller
+                                                    .unreadMessageList
+                                                    .isNotEmpty
+                                                ? controller
+                                                        .chatMessageList[index]
+                                                        .id ==
+                                                    controller.unreadMessageList
+                                                        .first.id
+                                                : false,
+                                            baseImageUrl: controller
+                                                    .preferenceService
+                                                    .getBaseImageURL() ??
+                                                '',
+                                          );
+                                        },
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                    ),
+                  );
+                }),
+                // Obx(
+                //   () => Column(
+                //     children: [
+                //       messageTemplateRow(),
+                //       SizedBox(height: 20.h),
+                //     ],
+                //   ),
+                // ),
+                SizedBox(height: 10.h),
+                chatBottomBar(context),
+
+                // Padding(
+                //   padding:
+                //   EdgeInsets.only(left: 20.h, right: 20.h, bottom: 20.h),
+                //   child: MaterialButton(
+                //       height: 50,
+                //       elevation: 0,
+                //       minWidth: Get.width,
+                //       shape: const RoundedRectangleBorder(
+                //         borderRadius:
+                //         BorderRadius.all(Radius.circular(25.0)),
+                //       ),
+                //       onPressed: () {
+                //         chatAssistantTemplateSendMessagePopup();
+                //       },
+                //       color: appColors.guideColor,
+                //       child: Text(
+                //         "sendMessage".tr,
+                //         style: TextStyle(
+                //           fontWeight: FontWeight.w600,
+                //           fontSize: 20.sp,
+                //           color: appColors.white,
+                //         ),
+                //       )),
+                // ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -723,6 +762,7 @@ class _ChatMessageSupportUIState extends State<ChatMessageSupportUI> {
                           textInputAction: TextInputAction.newline,
                           maxLines: 1,
                           // focusNode: controller.msgFocus,
+
                           onChanged: (value) {
                             // controller.isEmojiShowing.value = true;
                             // FocusManager.instance.primaryFocus?.hasFocus ?? false

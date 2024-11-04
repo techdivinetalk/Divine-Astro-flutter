@@ -86,7 +86,7 @@ Future<void> main() async {
   }
   FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true);
 
-  SmsAutoFill().listenForCode;
+  // SmsAutoFill().listenForCode;
 
   cameras = await availableCameras();
   Get.put(AppColors());

@@ -80,21 +80,14 @@ class OtpVerificationController extends GetxController with CodeAutoFill {
     super.onInit();
   }
 
-  getOtp() async {
-    print(
-        "-------------------------------------------------------${otp_autoFill.value}");
+  getOtp() {
     if (otp_autoFill.value.toString() == "1") {
-      await SmsAutoFill().listenForCode();
-      var signature = await SmsAutoFill().getAppSignature;
-      print(
-          "-------------------------------------------------------${signature.toString()}");
       listenForCode();
     }
   }
 
   @override
   void onReady() async {
-    // listenForCode();
     var arguments = Get.arguments;
     if (arguments != null) {
       var args = arguments as List;

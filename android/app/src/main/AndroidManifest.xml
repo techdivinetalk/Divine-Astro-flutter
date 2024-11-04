@@ -56,6 +56,7 @@
         android:largeHeap="true"
         android:allowBackup="false"
         android:requestLegacyExternalStorage="true"
+        android:enableOnBackInvokedCallback="true"
         android:usesCleartextTraffic="true">
         <service
             android:name="com.google.firebase.messaging.FirebaseMessagingService"

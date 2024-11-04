@@ -260,7 +260,6 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
   void onReady() {
     super.onReady();
     Future.delayed(const Duration(milliseconds: 600)).then((value) {
-      print("calling after milliseconds: 600");
       scrollToBottomFunc();
       messageScrollController.position.animateTo(
           messageScrollController.position.maxScrollExtent + 80,
@@ -501,6 +500,12 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  bool isKeyboardOpen(BuildContext context) {
+    final viewInsets = MediaQuery.of(context).viewInsets;
+    return viewInsets.bottom >
+        0; // Keyboard is open if bottom inset is greater than 0
+  }
+
   scrollToBottomFunc() {
     print("chat Assist Scrolled to bottom");
     // WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -512,9 +517,7 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
         : ();
     // });
   }
-  bool isKeyboardOpen(BuildContext context) {
-    return MediaQuery.of(context).viewInsets.bottom != 0;
-  }
+
   reArrangeChatList() {
     // to remove duplicacy of messages
     // chatMessageList(chatMessageList

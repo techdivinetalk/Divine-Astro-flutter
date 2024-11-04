@@ -325,6 +325,8 @@ class LoginController extends GetxController {
         (TcSdkCallback event) async {
           switch (event.result) {
             case TcSdkCallbackResult.success:
+              showTrueCaller.value = false;
+
               TcOAuthData oAuth = event.tcOAuthData ?? TcOAuthData.fromJson({});
               String authCode = oAuth.authorizationCode;
               String stateReceivedFromServer = oAuth.state;
@@ -339,6 +341,8 @@ class LoginController extends GetxController {
               break;
 
             case TcSdkCallbackResult.failure:
+              showTrueCaller.value = true;
+
               int errorCode = event.error?.code ?? 0;
               String errorMessage = event.error?.message ?? "";
               log("TrueCallerService: event: result: failure");

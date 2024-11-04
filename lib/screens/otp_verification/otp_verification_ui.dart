@@ -356,7 +356,8 @@ class OtpSheet extends StatelessWidget {
                   child: Assets.svg.caution.svg(height: 70.h, width: 160.w)),
               Text("noAttemptsLeft".tr, style: textStyle),
               Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                  margin:
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
                   child: CustomMaterialButton(
                       radius: 10,
                       buttonName: "okay".tr,
