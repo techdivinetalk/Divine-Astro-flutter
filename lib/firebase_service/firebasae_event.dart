@@ -163,4 +163,24 @@ class FirebaseEvent extends GetxService {
     FirebaseAnalytics.instance
         .logEvent(name: "language_change_astrologer", parameters: json);
   }
+
+  void isInAcceptChatScreen(Map<String, dynamic> json1) {
+    Map<String, Object> json = json1.cast<String, Object>();
+    analytics.logEvent(name: "astrologer_accept_chat_screen", parameters: json);
+  }
+
+  void isChatAccept(Map<String, dynamic> json1) {
+    Map<String, Object> json = json1.cast<String, Object>();
+    analytics.logEvent(name: "astrologer_chat_accept", parameters: json);
+  }
+
+  void astrologer_in_chat(Map<String, dynamic> json1) {
+    Map<String, Object> json = json1.cast<String, Object>();
+    analytics.logEvent(name: "astrologer_in_chat", parameters: json);
+  }
+
+  void astrologer_end_chat(Map<String, dynamic> json1) {
+    Map<String, Object> json = json1.cast<String, Object>();
+    analytics.logEvent(name: "astrologer_end_chat", parameters: json);
+  }
 }

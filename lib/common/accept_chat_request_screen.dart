@@ -15,6 +15,7 @@ import "package:divine_astrologer/gen/assets.gen.dart";
 import "package:divine_astrologer/gen/fonts.gen.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/common_button.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart";
+import "package:firebase_analytics/firebase_analytics.dart";
 import "package:flutter/foundation.dart";
 import "package:flutter/material.dart";
 import "package:flutter_screenutil/flutter_screenutil.dart";
@@ -118,17 +119,17 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
         // print("stop the sound");
       }
     });
-    // if (disableAstroEvent.toString() == "1") {
-    //   FirebaseAnalytics.instance
-    //       .logEvent(name: "astrologer_on_accept_screen", parameters: {
-    //     "astrologer_id": pref.getUserDetail()!.id ?? "",
-    //     "astrologer_name": pref.getUserDetail()!.name ?? "",
-    //     "Name": AppFirebaseService().orderData.value["customerName"] ?? "",
-    //     "order_status": "Accepted",
-    //     "orderId": AppFirebaseService().orderData.value["orderId"] ?? "",
-    //     "queueId": AppFirebaseService().orderData.value["queue_id"] ?? "",
-    //   });
-    // }
+    if (disableAstroEvent.toString() == "0") {
+      FirebaseAnalytics.instance
+          .logEvent(name: "astrologer_on_accept_screen", parameters: {
+        "astrologer_id": pref.getUserDetail()!.id ?? "",
+        "astrologer_name": pref.getUserDetail()!.name ?? "",
+        "Name": AppFirebaseService().orderData.value["customerName"] ?? "",
+        "order_status": "Accepted",
+        "orderId": AppFirebaseService().orderData.value["orderId"] ?? "",
+        "queueId": AppFirebaseService().orderData.value["queue_id"] ?? "",
+      });
+    }
   }
 
   bool isCheckPermission = false;
@@ -1163,7 +1164,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
                                                           });
                                                           // if (disableAstroEvent
                                                           //         .toString() ==
-                                                          //     "1") {
+                                                          //     "0") {
                                                           //   FirebaseAnalytics
                                                           //       .instance
                                                           //       .logEvent(
