@@ -1,9 +1,13 @@
+import 'dart:convert';
+import 'dart:typed_data';
+
 import 'package:divine_astrologer/gen/fonts.gen.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/remedie_chat/remedies_chat_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:swipe_to/swipe_to.dart';
 
 import '../../common/app_textstyle.dart';
 import '../../common/colors.dart';
@@ -70,113 +74,376 @@ class RemediesChatScreen extends GetView<RemediesChatController> {
                       padding: const EdgeInsets.only(left: 8),
                       itemBuilder: (context, index) {
                         var data = controller.messages[index];
-                        return Align(
-                          alignment: data['from'] == "me"
-                              ? Alignment.centerRight
-                              : Alignment.centerLeft,
-                          child: Padding(
-                            padding: const EdgeInsets.only(right: 8, top: 5),
-                            child: Container(
-                              decoration: BoxDecoration(
-                                borderRadius: data['from'] == "me"
-                                    ? const BorderRadius.only(
-                                        bottomLeft: Radius.circular(14),
-                                        bottomRight: Radius.circular(14),
-                                        topLeft: Radius.circular(14),
-                                      )
-                                    : BorderRadius.only(
-                                        bottomRight: Radius.circular(14),
-                                        bottomLeft: Radius.circular(14),
-                                        topRight: Radius.circular(14),
-                                        // topLeft: Radius.circular(14),
+                        Uint8List? bytes;
+                        if (data['is_reply'] == true) {
+                          bytes = Base64Decoder().convert(data["reply_to"]);
+                        }
+                        return SwipeTo(
+                          animationDuration: Duration(seconds: 1),
+                          swipeSensitivity: 5,
+                          onRightSwipe: data['from'] == "me"
+                              ? null
+                              : (DragUpdateDetails drag) {},
+                          onLeftSwipe: data['from'] != "me"
+                              ? null
+                              : (DragUpdateDetails drag) {},
+                          child: Align(
+                            alignment: data['from'] == "me"
+                                ? Alignment.centerRight
+                                : Alignment.centerLeft,
+                            child: data['is_reply']
+                                ? Padding(
+                                    padding:
+                                        const EdgeInsets.only(right: 8, top: 5),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: data['from'] == "me"
+                                            ? const BorderRadius.only(
+                                                bottomLeft: Radius.circular(14),
+                                                bottomRight:
+                                                    Radius.circular(14),
+                                                topLeft: Radius.circular(14),
+                                              )
+                                            : BorderRadius.only(
+                                                bottomRight:
+                                                    Radius.circular(14),
+                                                bottomLeft: Radius.circular(14),
+                                                topRight: Radius.circular(14),
+                                                // topLeft: Radius.circular(14),
+                                              ),
+                                        color: data['from'] == "me"
+                                            ? appColors.guideColor
+                                                .withOpacity(0.05)
+                                            : appColors.white,
+                                        border: Border.all(
+                                          color: data['from'] == "me"
+                                              ? appColors.guideColor
+                                                  .withOpacity(0.1)
+                                              : appColors.grey.withOpacity(0.2),
+                                        ),
                                       ),
-                                color: data['from'] == "me"
-                                    ? appColors.guideColor.withOpacity(0.05)
-                                    : appColors.white,
-                                border: Border.all(
-                                  color: data['from'] == "me"
-                                      ? appColors.guideColor.withOpacity(0.1)
-                                      : appColors.grey.withOpacity(0.2),
-                                ),
-                              ),
-                              constraints: BoxConstraints(
-                                  maxWidth: ScreenUtil().screenWidth * 0.7,
-                                  minWidth: ScreenUtil().screenWidth * 0.27),
-                              child: Padding(
-                                padding: const EdgeInsets.only(
-                                    left: 8, right: 8, top: 4, bottom: 4),
-                                child: Stack(
-                                  alignment: data['from'] == "me"
-                                      ? Alignment.centerRight
-                                      : Alignment.centerLeft,
-                                  children: [
-                                    Column(
-                                      children: [
-                                        Wrap(
-                                            alignment: data['from'] == "me"
-                                                ? WrapAlignment.end
-                                                : WrapAlignment.start,
-                                            children: [
-                                              Text(data['message'] ?? "",
-                                                  maxLines: 100,
-                                                  style:
-                                                      AppTextStyle.textStyle14(
-                                                          fontColor: appColors
-                                                              .darkBlue))
-                                            ]),
-                                        SizedBox(height: 20.h)
-                                      ],
-                                    ),
-                                    Positioned(
-                                      bottom: 0,
-                                      right: 0,
-                                      child: Row(
-                                        children: [
-                                          data['from'] != "me"
-                                              ? Text(
-                                                  "Admin",
-                                                  style:
-                                                      AppTextStyle.textStyle10(
-                                                    fontColor:
-                                                        appColors.guideColor,
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                )
-                                              : SizedBox(),
-                                          SizedBox(width: 3.w),
+                                      constraints: BoxConstraints(
+                                          maxWidth:
+                                              ScreenUtil().screenWidth * 0.7,
+                                          minWidth:
+                                              ScreenUtil().screenWidth * 0.27),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8,
+                                            right: 8,
+                                            top: 4,
+                                            bottom: 4),
+                                        child: Stack(
+                                          alignment: data['from'] == "me"
+                                              ? Alignment.centerRight
+                                              : Alignment.centerLeft,
+                                          children: [
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                data['is_reply'] == true
+                                                    ? IntrinsicHeight(
+                                                        child: Row(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .start,
+                                                          children: [
+                                                            Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .fromLTRB(
+                                                                      0,
+                                                                      8,
+                                                                      0,
+                                                                      8),
+                                                              child: Container(
+                                                                width: 4,
+                                                                decoration:
+                                                                    BoxDecoration(
+                                                                  color: appColors
+                                                                      .guideColor,
+                                                                  borderRadius: const BorderRadius
+                                                                      .only(
+                                                                      topLeft: const Radius
+                                                                          .circular(
+                                                                          4.0),
+                                                                      bottomLeft: const Radius
+                                                                          .circular(
+                                                                          4.0)),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                            Expanded(
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .fromLTRB(
+                                                                        0,
+                                                                        4,
+                                                                        8,
+                                                                        4),
+                                                                child:
+                                                                    Container(
+                                                                  // constraints: BoxConstraints(
+                                                                  //     maxWidth: ScreenUtil()
+                                                                  //             .screenWidth *
+                                                                  //         0.62,
+                                                                  //     minWidth: ScreenUtil()
+                                                                  //             .screenWidth *
+                                                                  //         0.27),
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: appColors
+                                                                        .white,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(
+                                                                            10),
+                                                                  ),
+                                                                  child: Column(
+                                                                    mainAxisSize:
+                                                                        MainAxisSize
+                                                                            .min,
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .start,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: [
+                                                                      Padding(
+                                                                        padding: const EdgeInsets
+                                                                            .only(
+                                                                            left:
+                                                                                5,
+                                                                            top:
+                                                                                4),
+                                                                        child: Text(
+                                                                            data['from'] == "me"
+                                                                                ? "You"
+                                                                                : data['from'] ?? "",
+                                                                            maxLines: 1,
+                                                                            style: AppTextStyle.textStyle12(fontColor: appColors.guideColor)),
+                                                                      ),
+                                                                      ClipRRect(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(10),
+                                                                        child: Image
+                                                                            .memory(
+                                                                          bytes!,
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      )
+                                                    : SizedBox(),
+                                                SizedBox(
+                                                  height:
+                                                      data['is_reply'] == true
+                                                          ? 5
+                                                          : 0,
+                                                ),
+                                                Wrap(
+                                                    alignment: data['from'] ==
+                                                            "me"
+                                                        ? WrapAlignment.end
+                                                        : WrapAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                          data['message'] ?? "",
+                                                          maxLines: 100,
+                                                          style: AppTextStyle
+                                                              .textStyle14(
+                                                                  fontColor:
+                                                                      appColors
+                                                                          .darkBlue))
+                                                    ]),
+                                                SizedBox(height: 20.h)
+                                              ],
+                                            ),
+                                            Positioned(
+                                              bottom: 0,
+                                              right: 0,
+                                              child: Row(
+                                                children: [
+                                                  data['from'] != "me"
+                                                      ? Text(
+                                                          "Admin",
+                                                          style: AppTextStyle
+                                                              .textStyle10(
+                                                            fontColor: appColors
+                                                                .guideColor,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                        )
+                                                      : SizedBox(),
+                                                  SizedBox(width: 3.w),
 
-                                          Text(
-                                              "${DateTime.parse(data['time'].toString()).hour}:${DateTime.parse(data['time'].toString()).minute}",
-                                              style: AppTextStyle.textStyle10(
-                                                  fontColor:
-                                                      appColors.darkBlue)),
-                                          SizedBox(width: 3.w),
-                                          // if ( data['from'] == "me")
-                                          // chatSeenStatusWidget(
-                                          //     seenStatus:
-                                          //     currentMsg.seenStatus ?? SeenStatus.sent)
-                                        ],
+                                                  Text(
+                                                      "${DateTime.parse(data['time'].toString()).hour}:${DateTime.parse(data['time'].toString()).minute}",
+                                                      style: AppTextStyle
+                                                          .textStyle10(
+                                                              fontColor: appColors
+                                                                  .darkBlue)),
+                                                  SizedBox(width: 3.w),
+                                                  // if ( data['from'] == "me")
+                                                  // chatSeenStatusWidget(
+                                                  //     seenStatus:
+                                                  //     currentMsg.seenStatus ?? SeenStatus.sent)
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        // child: Column(
+                                        //   children: [
+                                        //     Wrap(
+                                        //         alignment: data['from'] == "me"
+                                        //             ? WrapAlignment.end
+                                        //             : WrapAlignment.start,
+                                        //         children: [
+                                        //           Text(data['message'] ?? "",
+                                        //               maxLines: 100,
+                                        //               style: AppTextStyle.textStyle14(
+                                        //                   fontColor:
+                                        //                       appColors.darkBlue))
+                                        //         ]),
+                                        //   ],
+                                        // ),
                                       ),
                                     ),
-                                  ],
-                                ),
-                                // child: Column(
-                                //   children: [
-                                //     Wrap(
-                                //         alignment: data['from'] == "me"
-                                //             ? WrapAlignment.end
-                                //             : WrapAlignment.start,
-                                //         children: [
-                                //           Text(data['message'] ?? "",
-                                //               maxLines: 100,
-                                //               style: AppTextStyle.textStyle14(
-                                //                   fontColor:
-                                //                       appColors.darkBlue))
-                                //         ]),
-                                //   ],
-                                // ),
-                              ),
-                            ),
+                                  )
+                                : Padding(
+                                    padding:
+                                        const EdgeInsets.only(right: 8, top: 5),
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        borderRadius: data['from'] == "me"
+                                            ? const BorderRadius.only(
+                                                bottomLeft: Radius.circular(14),
+                                                bottomRight:
+                                                    Radius.circular(14),
+                                                topLeft: Radius.circular(14),
+                                              )
+                                            : BorderRadius.only(
+                                                bottomRight:
+                                                    Radius.circular(14),
+                                                bottomLeft: Radius.circular(14),
+                                                topRight: Radius.circular(14),
+                                                // topLeft: Radius.circular(14),
+                                              ),
+                                        color: data['from'] == "me"
+                                            ? appColors.guideColor
+                                                .withOpacity(0.05)
+                                            : appColors.white,
+                                        border: Border.all(
+                                          color: data['from'] == "me"
+                                              ? appColors.guideColor
+                                                  .withOpacity(0.1)
+                                              : appColors.grey.withOpacity(0.2),
+                                        ),
+                                      ),
+                                      constraints: BoxConstraints(
+                                          maxWidth:
+                                              ScreenUtil().screenWidth * 0.7,
+                                          minWidth:
+                                              ScreenUtil().screenWidth * 0.27),
+                                      child: Padding(
+                                        padding: const EdgeInsets.only(
+                                            left: 8,
+                                            right: 8,
+                                            top: 4,
+                                            bottom: 4),
+                                        child: Stack(
+                                          alignment: data['from'] == "me"
+                                              ? Alignment.centerRight
+                                              : Alignment.centerLeft,
+                                          children: [
+                                            Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.start,
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Wrap(
+                                                    alignment: data['from'] ==
+                                                            "me"
+                                                        ? WrapAlignment.end
+                                                        : WrapAlignment.start,
+                                                    children: [
+                                                      Text(
+                                                          data['message'] ?? "",
+                                                          maxLines: 100,
+                                                          style: AppTextStyle
+                                                              .textStyle14(
+                                                                  fontColor:
+                                                                      appColors
+                                                                          .darkBlue))
+                                                    ]),
+                                                SizedBox(height: 20.h)
+                                              ],
+                                            ),
+                                            Positioned(
+                                              bottom: 0,
+                                              right: 0,
+                                              child: Row(
+                                                children: [
+                                                  data['from'] != "me"
+                                                      ? Text(
+                                                          "Admin",
+                                                          style: AppTextStyle
+                                                              .textStyle10(
+                                                            fontColor: appColors
+                                                                .guideColor,
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                        )
+                                                      : SizedBox(),
+                                                  SizedBox(width: 3.w),
+
+                                                  Text(
+                                                      "${DateTime.parse(data['time'].toString()).hour}:${DateTime.parse(data['time'].toString()).minute}",
+                                                      style: AppTextStyle
+                                                          .textStyle10(
+                                                              fontColor: appColors
+                                                                  .darkBlue)),
+                                                  SizedBox(width: 3.w),
+                                                  // if ( data['from'] == "me")
+                                                  // chatSeenStatusWidget(
+                                                  //     seenStatus:
+                                                  //     currentMsg.seenStatus ?? SeenStatus.sent)
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        // child: Column(
+                                        //   children: [
+                                        //     Wrap(
+                                        //         alignment: data['from'] == "me"
+                                        //             ? WrapAlignment.end
+                                        //             : WrapAlignment.start,
+                                        //         children: [
+                                        //           Text(data['message'] ?? "",
+                                        //               maxLines: 100,
+                                        //               style: AppTextStyle.textStyle14(
+                                        //                   fontColor:
+                                        //                       appColors.darkBlue))
+                                        //         ]),
+                                        //   ],
+                                        // ),
+                                      ),
+                                    ),
+                                  ),
                           ),
                         );
                       }),
@@ -293,6 +560,8 @@ class RemediesChatScreen extends GetView<RemediesChatController> {
                                                   "message": controller
                                                       .textController.text
                                                       .toString(),
+                                                  "is_reply": false,
+                                                  "reply_to": "",
                                                   "time": DateTime.now(),
                                                 },
                                               );

@@ -13,7 +13,6 @@ import 'package:get/get.dart';
 import 'package:velocity_x/velocity_x.dart';
 
 import '../../../common/colors.dart';
-import '../../../firebase_service/firebase_service.dart';
 import '../../../true_caller_divine/true_caller_divine_service.dart';
 import '../../live_page/constant.dart';
 import 'login_controller.dart';
@@ -296,31 +295,32 @@ class LoginUI extends GetView<LoginController> {
                       ),
                     ),
                   ),
-                  Obx(() {
-                    return showLoginSupport.value == 1
-                        ? Positioned(
-                            child: Padding(
-                              padding: EdgeInsets.fromLTRB(15, 50, 10, 10),
-                              child: InkWell(
-                                  splashColor: appColors.grey,
-                                  onTap: () {
-                                    isLogin.value = 1;
-                                    controller.update();
-                                    Get.toNamed(RouteName.newSupportScreen);
-                                  },
-                                  child: Padding(
-                                    padding: EdgeInsets.all(5),
-                                    child: Text(
-                                      "Support",
-                                      style: TextStyle(
-                                        decoration: TextDecoration.underline,
-                                      ),
-                                    ),
-                                  )),
+                  // Obx(() {
+                  // return showLoginSupport.value == 1
+                  // /    ?
+                  Positioned(
+                    child: Padding(
+                      padding: EdgeInsets.fromLTRB(15, 50, 10, 10),
+                      child: InkWell(
+                          splashColor: appColors.grey,
+                          onTap: () {
+                            isLogin.value = 1;
+                            controller.update();
+                            Get.toNamed(RouteName.newSupportScreen);
+                          },
+                          child: Padding(
+                            padding: EdgeInsets.all(5),
+                            child: Text(
+                              "Support",
+                              style: TextStyle(
+                                decoration: TextDecoration.underline,
+                              ),
                             ),
-                          )
-                        : SizedBox();
-                  }),
+                          )),
+                    ),
+                  ),
+                  // : SizedBox();
+                  // }),
                 ],
               ),
             ),
