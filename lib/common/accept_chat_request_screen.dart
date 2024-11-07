@@ -119,7 +119,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
         // print("stop the sound");
       }
     });
-    if (disableAstroEvent.toString() == "0") {
+    if (disableAstroEvent.toString() == "1") {
       FirebaseAnalytics.instance
           .logEvent(name: "astrologer_on_accept_screen", parameters: {
         "astrologer_id": pref.getUserDetail()!.id ?? "",
