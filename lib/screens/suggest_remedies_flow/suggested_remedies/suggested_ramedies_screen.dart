@@ -29,7 +29,7 @@ class SuggestedRemediesScreen extends StatelessWidget {
         centerTitle: false,
         forceMaterialTransparency: true,
         backgroundColor: appColors.white,
-        title: Text("Suggested Remedieddds",
+        title: Text("Suggested Remedies",
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
