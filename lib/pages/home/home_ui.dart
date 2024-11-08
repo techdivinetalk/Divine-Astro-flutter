@@ -4031,18 +4031,17 @@ class HomeUI extends GetView<HomeController> {
                                     fontColor: appColors.red,
                                   ),
                                 )
-                          :
-                      controller.chatMessage.isNotEmpty
-                          ? Text(
-                              controller.chatMessage,
-                              style: AppTextStyle.textStyle10(
-                                fontWeight: FontWeight.w500,
-                                fontColor: Color(int.parse(controller
-                                    .chatMessageColor
-                                    .replaceAll("#", "0xff"))),
-                              ),
-                            )
-                          : SizedBox(),
+                          : controller.chatMessage.isNotEmpty
+                              ? Text(
+                                  controller.chatMessage,
+                                  style: AppTextStyle.textStyle10(
+                                    fontWeight: FontWeight.w500,
+                                    fontColor: Color(int.parse(controller
+                                        .chatMessageColor
+                                        .replaceAll("#", "0xff"))),
+                                  ),
+                                )
+                              : SizedBox(),
                     ],
                   )
                 : const SizedBox(),
@@ -4149,19 +4148,17 @@ class HomeUI extends GetView<HomeController> {
                                     fontColor: appColors.red,
                                   ),
                                 )
-                          :
-
-                      controller.callMessage.isNotEmpty
-                          ? Text(
-                              controller.callMessage,
-                              style: AppTextStyle.textStyle10(
-                                fontWeight: FontWeight.w500,
-                                fontColor: Color(int.parse(controller
-                                    .callMessageColor
-                                    .replaceAll("#", "0xff"))),
-                              ),
-                            )
-                          : SizedBox(),
+                          : controller.callMessage.isNotEmpty
+                              ? Text(
+                                  controller.callMessage,
+                                  style: AppTextStyle.textStyle10(
+                                    fontWeight: FontWeight.w500,
+                                    fontColor: Color(int.parse(controller
+                                        .callMessageColor
+                                        .replaceAll("#", "0xff"))),
+                                  ),
+                                )
+                              : SizedBox(),
                     ],
                   )
                 : SizedBox(),

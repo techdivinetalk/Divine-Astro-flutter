@@ -1132,7 +1132,6 @@ Future<void> showCallingError(response, callLoading, callUser) async {
       scrollable: true,
       contentPadding: EdgeInsets.fromLTRB(10, 12, 10, 10),
       content: SizedBox(
-        height: 370,
         width: size.width * 0.9,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -1140,20 +1139,7 @@ Future<void> showCallingError(response, callLoading, callUser) async {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              "Wait",
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 20.sp,
-                fontWeight: FontWeight.w600,
-                fontFamily: FontFamily.poppins,
-                color: appColors.red,
-              ),
-            ),
-            SizedBox(
-              height: 8,
-            ),
-            Text(
-              response!.message! ?? "Something went wrong",
+              response!.message!,
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14.sp,
@@ -1191,6 +1177,52 @@ Future<void> showCallingError(response, callLoading, callUser) async {
               ),
             ),
           ],
+        ),
+      ),
+    ),
+  );
+}
+
+Future<void> showErrorPopup(response) async {
+  var size = MediaQuery.of(Get.context!).size;
+  return Get.dialog(
+    barrierDismissible: true,
+    AlertDialog(
+      // insetPadding: EdgeInsets.all(24),
+      // shape: RoundedRectangleBorder(
+      //   borderRadius: BorderRadius.circular(14.0),
+      // ),
+      elevation: 0,
+      scrollable: true,
+      // contentPadding: EdgeInsets.fromLTRB(10, 12, 10, 10),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Get.back();
+          },
+          child: Text(
+            "Okay",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16.sp,
+              fontWeight: FontWeight.w400,
+              fontFamily: FontFamily.poppins,
+              color: appColors.black,
+            ),
+          ),
+        )
+      ],
+      content: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Text(
+          response!.message! ?? "",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 16.sp,
+            fontWeight: FontWeight.w600,
+            fontFamily: FontFamily.poppins,
+            color: appColors.darkBlue,
+          ),
         ),
       ),
     ),

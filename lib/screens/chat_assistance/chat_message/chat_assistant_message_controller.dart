@@ -652,7 +652,9 @@ class ChatMessageController extends GetxController with WidgetsBindingObserver {
             msg: response.message ?? "Call initiated successfully");
       } else {
         callLoading(false);
-        Fluttertoast.showToast(msg: "Failed to initiate call");
+        showErrorPopup(response);
+
+        Fluttertoast.showToast(msg: response!.message ?? "");
       }
 
       update();
