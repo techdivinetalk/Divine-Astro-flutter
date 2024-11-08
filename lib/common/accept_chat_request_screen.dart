@@ -121,7 +121,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
         // print("stop the sound");
       }
     });
-    if (disableAstroEvent.toString() == "0") {
+    if (disableAstroEvent.toString() == "1") {
       Map<String, Object> json = {
         "astrologer_id": pref.getUserDetail()!.id ?? "",
         "astrologer_name": pref.getUserDetail()!.name ?? "",

@@ -637,7 +637,7 @@ class ChatMessageWithSocketController extends GetxController
         scrollToBottomFunc();
       }
     });
-    if (disableAstroEvent.toString() == "0") {
+    if (disableAstroEvent.toString() == "1") {
       FirebaseAnalytics.instance
           .logEvent(name: "astrolgoer_in_chat", parameters: {
         "astrologer_id": userData!.id ?? "",
