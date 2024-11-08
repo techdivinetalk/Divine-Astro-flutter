@@ -1,7 +1,5 @@
-import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
@@ -365,6 +363,7 @@ class MessageView extends StatelessWidget {
       ),
     );
   }
+
   Widget textMsgView(
       BuildContext context, ChatMessage chatMessage, bool yourMessage) {
     RxInt msgType = (chatMessage.seenStatus ?? 0).obs;
@@ -373,41 +372,41 @@ class MessageView extends StatelessWidget {
       width: double.maxFinite,
       child: Column(
         crossAxisAlignment:
-        yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
+            yourMessage ? CrossAxisAlignment.end : CrossAxisAlignment.start,
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment:
-            yourMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
+                yourMessage ? MainAxisAlignment.end : MainAxisAlignment.start,
             children: [
               !yourMessage
                   ? Obx(
-                    () {
-                  Map<String, dynamic> order = {};
-                  order = AppFirebaseService().orderData.value;
-                  String imageURL = order["customerImage"] ?? "";
-                  String appended =
-                      "${Get.find<SharedPreferenceService>().getAmazonUrl()}/$imageURL";
-                  print("img:: $appended");
-                  return Padding(
-                    padding: const EdgeInsets.only(top: 3),
-                    child: SizedBox(
-                      height: 35,
-                      width: 35,
-                      child: CustomImageWidget(
-                        imageUrl: appended,
-                        rounded: true,
-                        typeEnum: TypeEnum.user,
-                      ),
-                    ),
-                  );
-                },
-              )
+                      () {
+                        Map<String, dynamic> order = {};
+                        order = AppFirebaseService().orderData.value;
+                        String imageURL = order["customerImage"] ?? "";
+                        String appended =
+                            "${Get.find<SharedPreferenceService>().getAmazonUrl()}/$imageURL";
+                        print("img:: $appended");
+                        return Padding(
+                          padding: const EdgeInsets.only(top: 3),
+                          child: SizedBox(
+                            height: 35,
+                            width: 35,
+                            child: CustomImageWidget(
+                              imageUrl: appended,
+                              rounded: true,
+                              typeEnum: TypeEnum.user,
+                            ),
+                          ),
+                        );
+                      },
+                    )
                   : const SizedBox(),
               const SizedBox(width: 5),
               Container(
                 padding:
-                const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
                   border: Border.all(
@@ -415,7 +414,7 @@ class MessageView extends StatelessWidget {
                           ? const Color(0xffFFEEF0)
                           : const Color(0xffDCDCDC)),
                   color:
-                  yourMessage ? const Color(0xffFFF9FA) : appColors.white,
+                      yourMessage ? const Color(0xffFFF9FA) : appColors.white,
                   borderRadius: BorderRadius.only(
                     bottomLeft: const Radius.circular(10),
                     topLeft: Radius.circular(yourMessage ? 10 : 0),
@@ -438,43 +437,43 @@ class MessageView extends StatelessWidget {
                           children: [
                             chatMessage.message == razorPay.value
                                 ? RichText(
-                              text: TextSpan(
-                                text: chatMessage.message ?? "",
-                                style: AppTextStyle.textStyle14(
-                                  fontColor: Colors
-                                      .blue, // Set the color for the link
-                                  decoration: TextDecoration
-                                      .underline, // Add underline to signify a link
-                                ),
-                                recognizer: TapGestureRecognizer()
-                                  ..onTap = () async {
-                                    final url = chatMessage.message;
-                                    if (url != null &&
-                                        await canLaunch(url)) {
-                                      await launch(url);
-                                    } else {
-                                      // Handle error, e.g., show a message that the URL can't be opened
-                                    }
-                                  },
-                              ),
-                            )
+                                    text: TextSpan(
+                                      text: chatMessage.message ?? "",
+                                      style: AppTextStyle.textStyle14(
+                                        fontColor: Colors
+                                            .blue, // Set the color for the link
+                                        decoration: TextDecoration
+                                            .underline, // Add underline to signify a link
+                                      ),
+                                      recognizer: TapGestureRecognizer()
+                                        ..onTap = () async {
+                                          final url = chatMessage.message;
+                                          if (url != null &&
+                                              await canLaunch(url)) {
+                                            await launch(url);
+                                          } else {
+                                            // Handle error, e.g., show a message that the URL can't be opened
+                                          }
+                                        },
+                                    ),
+                                  )
                                 : Text(
-                              chatMessage.message ?? "",
-                              style: AppTextStyle.textStyle14(
-                                fontColor: yourMessage
-                                    ? chatMessage.msgType == "warningMsg"
-                                    ? appColors.red
-                                    : appColors.textColor
-                                    : appColors.textColor,
-                              ),
-                            ),
+                                    chatMessage.message ?? "",
+                                    style: AppTextStyle.textStyle14(
+                                      fontColor: yourMessage
+                                          ? chatMessage.msgType == "warningMsg"
+                                              ? appColors.red
+                                              : appColors.textColor
+                                          : appColors.textColor,
+                                    ),
+                                  ),
                           ],
                         ),
                         SizedBox(
                           height: chatMessage.id.toString() ==
-                              AppFirebaseService()
-                                  .orderData["userId"]
-                                  .toString()
+                                  AppFirebaseService()
+                                      .orderData["userId"]
+                                      .toString()
                               ? 10
                               : 0,
                         ),
@@ -496,7 +495,7 @@ class MessageView extends StatelessWidget {
 
                                 // Format the DateTime to 'dd/MM/yyyy'
                                 String formattedDate =
-                                DateFormat('dd/MM/yyyy').format(date);
+                                    DateFormat('dd/MM/yyyy').format(date);
 
                                 final dateData = DateFormat("dd/MM/yyyy")
                                     .parse(formattedDate);
@@ -528,13 +527,13 @@ class MessageView extends StatelessWidget {
                                   "from_kundli": false,
                                   "params": params,
                                   "gender":
-                                  AppFirebaseService().orderData["gender"],
+                                      AppFirebaseService().orderData["gender"],
                                 });
                               },
                               child: Text(
                                 "View Kundli",
                                 style:
-                                TextStyle(color: appColors.guideTextColor),
+                                    TextStyle(color: appColors.guideTextColor),
                               )),
                         ),
                         const SizedBox(height: 20),

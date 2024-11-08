@@ -1,5 +1,6 @@
 import "dart:convert";
 import "dart:developer";
+import "dart:io";
 
 import "package:audioplayers/audioplayers.dart";
 import "package:camera/camera.dart";
@@ -24,6 +25,7 @@ import 'package:http/http.dart' as http;
 import "package:lottie/lottie.dart";
 import "package:permission_handler/permission_handler.dart";
 
+import "../utils/utils.dart";
 import "MiddleWare.dart";
 
 // acceptChatRequestBottomSheet(BuildContext context,
@@ -119,16 +121,18 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
         // print("stop the sound");
       }
     });
-    if (disableAstroEvent.toString() == "1") {
-      FirebaseAnalytics.instance
-          .logEvent(name: "astrologer_on_accept_screen", parameters: {
+    if (disableAstroEvent.toString() == "0") {
+      Map<String, Object> json = {
         "astrologer_id": pref.getUserDetail()!.id ?? "",
         "astrologer_name": pref.getUserDetail()!.name ?? "",
         "Name": AppFirebaseService().orderData.value["customerName"] ?? "",
         "order_status": "Accepted",
         "orderId": AppFirebaseService().orderData.value["orderId"] ?? "",
         "queueId": AppFirebaseService().orderData.value["queue_id"] ?? "",
-      });
+      }.cast<String, Object>();
+
+      FirebaseAnalytics.instance
+          .logEvent(name: "astrologer_on_accept_screen", parameters: json);
     }
   }
 
@@ -223,7 +227,7 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
           await requestCameraAndMicPermissions(isOpenSetting: isOpenSetting);
       if (isPermission) {
         List<CameraDescription> cameras = await availableCameras();
-        cameraController = CameraController(cameras[1], ResolutionPreset.high);
+        cameraController = CameraController(cameras[1], ResolutionPreset.low);
         try {
           await cameraController?.initialize().then((_) {
             if (!mounted) return;
@@ -1055,6 +1059,28 @@ class _AcceptChatRequestScreenState extends State<AcceptChatRequestScreen>
                                                             XFile picture =
                                                                 await cameraController!
                                                                     .takePicture();
+                                                            final imageTemp =
+                                                                File(picture
+                                                                    .path);
+                                                            var bytes = imageTemp
+                                                                .readAsBytesSync()
+                                                                .lengthInBytes;
+                                                            final kb =
+                                                                bytes / 1024;
+                                                            final mb =
+                                                                kb / 1024;
+                                                            print(bytes
+                                                                .toString());
+                                                            print(
+                                                                kb.toString());
+                                                            print(
+                                                                mb.toString());
+                                                            print(getfilesizestring(
+                                                                bytes: imageTemp
+                                                                    .lengthSync()));
+                                                            print(
+                                                                "dkdddjffjkdfj");
+
                                                             await uploadImage(
                                                                 picture);
                                                           } else {

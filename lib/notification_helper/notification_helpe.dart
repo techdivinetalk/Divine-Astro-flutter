@@ -233,6 +233,7 @@ class NotificationHelper {
           AndroidNotificationAction(
             'accept',
             'CHAT NOW',
+            showsUserInterface: true,
           )
         ],
       );

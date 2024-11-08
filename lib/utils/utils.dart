@@ -1,3 +1,5 @@
+import "dart:math";
+
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/screens/auth/login/login_controller.dart';
@@ -56,22 +58,25 @@ class Utils {
     divineSnackBar(data: message, color: appColors.redColor);
   }
 
-  flutterDatePicker({String? dateFormat, DateTime? lastDate, firstDate,DateTime? initialDate}) async {
+  flutterDatePicker(
+      {String? dateFormat,
+      DateTime? lastDate,
+      firstDate,
+      DateTime? initialDate}) async {
     DateTime? pickedDate = await showDatePicker(
       context: Get.context!,
-      initialDate:initialDate ?? DateTime.now(),
+      initialDate: initialDate ?? DateTime.now(),
       firstDate: firstDate ?? DateTime.now(),
       lastDate: lastDate ?? DateTime(2500),
       builder: (context, child) {
         return Theme(
           data: Theme.of(context).copyWith(
-            colorScheme:  ColorScheme.light(
+            colorScheme: ColorScheme.light(
               primary: appColors.guideColor,
               onPrimary: Colors.white,
               onSurface: appColors.guideColor,
             ),
             textButtonTheme: TextButtonThemeData(
-
               style: TextButton.styleFrom(
                 foregroundColor: appColors.guideColor,
               ),
@@ -94,7 +99,7 @@ class Utils {
     /// responseBody["status_code"] == HttpStatus.unauthorized
     // status code 401
 
-    if(!isUnauthorizedUserCalled){
+    if (!isUnauthorizedUserCalled) {
       isUnauthorizedUserCalled = true;
       await preferenceService.erase();
       Get.delete<LoginController>(force: true);
@@ -216,6 +221,14 @@ double viewBottomPadding(double padding) {
   return Get.mediaQuery.viewPadding.bottom > 0
       ? Get.mediaQuery.viewPadding.bottom
       : padding;
+}
+
+// format file size
+String getfilesizestring({required int bytes, int decimals = 0}) {
+  if (bytes <= 0) return "0 bytes";
+  const suffixes = [" bytes", "kb", "mb", "gb", "tb"];
+  var i = (log(bytes) / log(1024)).floor();
+  return ((bytes / pow(1024, i)).toStringAsFixed(decimals)) + suffixes[i];
 }
 
 // void divineSnackBar({required String data, Color? color}) {

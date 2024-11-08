@@ -1699,7 +1699,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
             response.message == "Successfully Checkin" &&
             params.containsKey("check_in")) {
           print("here is it is comming --- ${params.containsKey("check_in")}");
-          if (disableAstroEvent.toString() == "1") {
+          if (disableAstroEvent.toString() == "0") {
             firebaseEvent.chat_event({
               "astrologer_id": userData.id ?? "",
               "chat_on": "yes",
@@ -1713,7 +1713,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         if (type == 2 &&
             response.message == "Successfully Checkin" &&
             params.containsKey("check_in")) {
-          if (disableAstroEvent.toString() == "1") {
+          if (disableAstroEvent.toString() == "0") {
             firebaseEvent.call_event({
               "astrologer_id": userData.id ?? "",
               "call_on": "yes",
@@ -1728,7 +1728,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
             response.message == "Successfully Checkout" &&
             params.containsKey("check_out")) {
           print("here is it is comming --- ${params.containsKey("check_in")}");
-          if (disableAstroEvent.toString() == "1") {
+          if (disableAstroEvent.toString() == "0") {
             firebaseEvent.chat_event({
               "astrologer_id": userData.id ?? "",
               "chat_on": "no",
@@ -1741,7 +1741,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         if (type == 2 &&
             response.message == "Successfully Checkout" &&
             params.containsKey("check_out")) {
-          if (disableAstroEvent.toString() == "1") {
+          if (disableAstroEvent.toString() == "0") {
             firebaseEvent.call_event({
               "astrologer_id": userData.id ?? "",
               "call_on": "no",
@@ -1810,7 +1810,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       } else {
         homeData!.offers!.customOffer![index].isOn = !value;
       }
-      if (disableAstroEvent.toString() == "1") {
+      if (disableAstroEvent.toString() == "0") {
         print("hfdjfdfjfjfhjdhfjdhfjdfhjdfh");
         firebaseEvent.astrolgoer_enable_offer({
           "astrologer_id": userData.id.toString(),

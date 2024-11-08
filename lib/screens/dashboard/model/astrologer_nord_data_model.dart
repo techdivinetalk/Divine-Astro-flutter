@@ -8,13 +8,15 @@ class AstrologerNordModel {
   });
 
   AstrologerNordModel.fromJson(Map<String, dynamic> json)
-      : status = (json['status'] as Map<String,dynamic>?) != null ? Status.fromJson(json['status'] as Map<String,dynamic>) : null,
-        data = (json['data'] as Map<String,dynamic>?) != null ? Data.fromJson(json['data'] as Map<String,dynamic>) : null;
+      : status = (json['status'] as Map<String, dynamic>?) != null
+            ? Status.fromJson(json['status'] as Map<String, dynamic>)
+            : null,
+        data = (json['data'] as Map<String, dynamic>?) != null
+            ? Data.fromJson(json['data'] as Map<String, dynamic>)
+            : null;
 
-  Map<String, dynamic> toJson() => {
-    'status' : status?.toJson(),
-    'data' : data?.toJson()
-  };
+  Map<String, dynamic> toJson() =>
+      {'status': status?.toJson(), 'data': data?.toJson()};
 }
 
 class Status {
@@ -30,10 +32,7 @@ class Status {
       : code = json['code'] as int?,
         message = json['message'] as String?;
 
-  Map<String, dynamic> toJson() => {
-    'code' : code,
-    'message' : message
-  };
+  Map<String, dynamic> toJson() => {'code': code, 'message': message};
 }
 
 class Data {
@@ -61,22 +60,24 @@ class Data {
       : index = json['_index'] as String?,
         id = json['_id'] as String?,
         score = json['_score'] as int?,
-        source = (json['_source'] as Map<String,dynamic>?) != null ? Source.fromJson(json['_source'] as Map<String,dynamic>) : null,
+        source = (json['_source'] as Map<String, dynamic>?) != null
+            ? Source.fromJson(json['_source'] as Map<String, dynamic>)
+            : null,
         chatMsg = json['chat_msg'] as String?,
         callMsg = json['call_msg'] as String?,
         chatColor = json['chat_color'] as String?,
         callColor = json['call_color'] as String?;
 
   Map<String, dynamic> toJson() => {
-    '_index' : index,
-    '_id' : id,
-    '_score' : score,
-    '_source' : source?.toJson(),
-    'chat_msg' : chatMsg,
-    'call_msg' : callMsg,
-    'chat_color' : chatColor,
-    'call_color' : callColor
-  };
+        '_index': index,
+        '_id': id,
+        '_score': score,
+        '_source': source?.toJson(),
+        'chat_msg': chatMsg,
+        'call_msg': callMsg,
+        'chat_color': chatColor,
+        'call_color': callColor
+      };
 }
 
 class Source {
@@ -170,80 +171,85 @@ class Source {
         isManual = json['is_manual'],
         videoStatus = json['video_status'] as String?,
         language = json['language'] as String?,
-        experiance = json['experiance'] ,
-        videoCallAmount = json['video_call_amount'] ,
-        audioCallAmount = json['audio_call_amount'] ,
-        anonymousCallAmount = json['anonymous_call_amount'] ,
-        retention2 = json['retention2'] ,
+        experiance = json['experiance'],
+        videoCallAmount = json['video_call_amount'],
+        audioCallAmount = json['audio_call_amount'],
+        anonymousCallAmount = json['anonymous_call_amount'],
+        retention2 = json['retention2'],
         offer = json['offer'] as String?,
         callStatus = json['call_status'] as String?,
-        customerAssignmentLevel = json['customerAssignmentLevel'] ,
-        roleId = json['role_id'] ,
-        freeOrderTaken = json['free_order_taken'] ,
-        rank = json['rank'] ,
-        id = json['id'] ,
-        categories = (json['categories'] as List?)?.map((dynamic e) => Categories.fromJson(e as Map<String,dynamic>)).toList(),
-        retention = json['retention'] ,
-        specialities = (json['specialities'] as List?)?.map((dynamic e) => Specialities.fromJson(e as Map<String,dynamic>)).toList(),
+        customerAssignmentLevel = json['customerAssignmentLevel'],
+        roleId = json['role_id'],
+        freeOrderTaken = json['free_order_taken'],
+        rank = json['rank'],
+        id = json['id'],
+        categories = (json['categories'] as List?)
+            ?.map((dynamic e) => Categories.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        retention = json['retention'],
+        specialities = (json['specialities'] as List?)
+            ?.map(
+                (dynamic e) => Specialities.fromJson(e as Map<String, dynamic>))
+            .toList(),
         image = json['image'] as String?,
         assignedCustomerList = json['assignedCustomerList'] as List?,
         waitTime = json['wait_time'] as String?,
         breathingTime = json['breathing_time'] as String?,
         freeOrderCount = json['free_order_count'] as String?,
         premiumText = json['premium_text'] as String?,
-        isTestAccount = json['is_test_account'] ,
-        retentionTotalFreeOrder = json['retentionTotalFreeOrder'] ,
+        isTestAccount = json['is_test_account'],
+        retentionTotalFreeOrder = json['retentionTotalFreeOrder'],
         backgroundColor = json['background_color'] as String?,
         deviceToken = json['device_token'] as String?,
-        freeOfferAvilable = json['freeOfferAvilable'] ,
+        freeOfferAvilable = json['freeOfferAvilable'],
         name = json['name'] as String?,
         chatAmount = json['chat_amount'],
-        retentionPercentage = json['retentionPercentage'] ,
-        retentionPriority = json['retentionPriority'] ,
-        status = json['status'] ,
-        retentionBucket = json['retentionBucket'] ;
+        retentionPercentage = json['retentionPercentage'],
+        retentionPriority = json['retentionPriority'],
+        status = json['status'],
+        retentionBucket = json['retentionBucket'];
 
   Map<String, dynamic> toJson() => {
-    'chat_status' : chatStatus,
-    'unique_no' : uniqueNo,
-    'repurchase_rate' : repurchaseRate,
-    'rating' : rating,
-    'is_manual' : isManual,
-    'video_status' : videoStatus,
-    'language' : language,
-    'experiance' : experiance,
-    'video_call_amount' : videoCallAmount,
-    'audio_call_amount' : audioCallAmount,
-    'anonymous_call_amount' : anonymousCallAmount,
-    'retention2' : retention2,
-    'offer' : offer,
-    'call_status' : callStatus,
-    'customerAssignmentLevel' : customerAssignmentLevel,
-    'role_id' : roleId,
-    'free_order_taken' : freeOrderTaken,
-    'rank' : rank,
-    'id' : id,
-    'categories' : categories?.map((e) => e.toJson()).toList(),
-    'retention' : retention,
-    'specialities' : specialities?.map((e) => e.toJson()).toList(),
-    'image' : image,
-    'assignedCustomerList' : assignedCustomerList,
-    'wait_time' : waitTime,
-    'breathing_time' : breathingTime,
-    'free_order_count' : freeOrderCount,
-    'premium_text' : premiumText,
-    'is_test_account' : isTestAccount,
-    'retentionTotalFreeOrder' : retentionTotalFreeOrder,
-    'background_color' : backgroundColor,
-    'device_token' : deviceToken,
-    'freeOfferAvilable' : freeOfferAvilable,
-    'name' : name,
-    'chat_amount' : chatAmount,
-    'retentionPercentage' : retentionPercentage,
-    'retentionPriority' : retentionPriority,
-    'status' : status,
-    'retentionBucket' : retentionBucket
-  };
+        'chat_status': chatStatus,
+        'unique_no': uniqueNo,
+        'repurchase_rate': repurchaseRate,
+        'rating': rating,
+        'is_manual': isManual,
+        'video_status': videoStatus,
+        'language': language,
+        'experiance': experiance,
+        'video_call_amount': videoCallAmount,
+        'audio_call_amount': audioCallAmount,
+        'anonymous_call_amount': anonymousCallAmount,
+        'retention2': retention2,
+        'offer': offer,
+        'call_status': callStatus,
+        'customerAssignmentLevel': customerAssignmentLevel,
+        'role_id': roleId,
+        'free_order_taken': freeOrderTaken,
+        'rank': rank,
+        'id': id,
+        'categories': categories?.map((e) => e.toJson()).toList(),
+        'retention': retention,
+        'specialities': specialities?.map((e) => e.toJson()).toList(),
+        'image': image,
+        'assignedCustomerList': assignedCustomerList,
+        'wait_time': waitTime,
+        'breathing_time': breathingTime,
+        'free_order_count': freeOrderCount,
+        'premium_text': premiumText,
+        'is_test_account': isTestAccount,
+        'retentionTotalFreeOrder': retentionTotalFreeOrder,
+        'background_color': backgroundColor,
+        'device_token': deviceToken,
+        'freeOfferAvilable': freeOfferAvilable,
+        'name': name,
+        'chat_amount': chatAmount,
+        'retentionPercentage': retentionPercentage,
+        'retentionPriority': retentionPriority,
+        'status': status,
+        'retentionBucket': retentionBucket
+      };
 }
 
 class Categories {
@@ -259,10 +265,7 @@ class Categories {
       : name = json['name'] as String?,
         id = json['id'] as int?;
 
-  Map<String, dynamic> toJson() => {
-    'name' : name,
-    'id' : id
-  };
+  Map<String, dynamic> toJson() => {'name': name, 'id': id};
 }
 
 class Specialities {
@@ -278,8 +281,5 @@ class Specialities {
       : name = json['name'] as String?,
         id = json['id'] as int?;
 
-  Map<String, dynamic> toJson() => {
-    'name' : name,
-    'id' : id
-  };
+  Map<String, dynamic> toJson() => {'name': name, 'id': id};
 }

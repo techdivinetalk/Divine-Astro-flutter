@@ -637,7 +637,7 @@ class ChatMessageWithSocketController extends GetxController
         scrollToBottomFunc();
       }
     });
-    if (disableAstroEvent.toString() == "1") {
+    if (disableAstroEvent.toString() == "0") {
       FirebaseAnalytics.instance
           .logEvent(name: "astrolgoer_in_chat", parameters: {
         "astrologer_id": userData!.id ?? "",
@@ -645,6 +645,7 @@ class ChatMessageWithSocketController extends GetxController
         "customer_name":
             AppFirebaseService().orderData.value["customerName"] ?? "",
         "customer_id": AppFirebaseService().orderData.value["userId"] ?? "",
+        "astrolger_is_in_chat": "yes"
       });
     }
   }

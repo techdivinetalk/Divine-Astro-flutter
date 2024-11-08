@@ -47,7 +47,6 @@ import '../../common/common_bottomsheet.dart';
 import '../../gen/fonts.gen.dart';
 import '../../model/feedback_response.dart';
 import '../../repository/pre_defind_repository.dart';
-import '../../screens/remedie_chat/remedies_chat_screen.dart';
 import '../../screens/side_menu/side_menu_ui.dart';
 import '../../utils/utils.dart';
 import 'home_controller.dart';
@@ -1968,7 +1967,7 @@ class HomeUI extends GetView<HomeController> {
                                 ),
                                 GestureDetector(
                                   onTap: () => Get.toNamed(
-                                  RouteName.suggestRemediesView),
+                                      RouteName.suggestRemediesView),
                                   // onTap: () {
                                   //   Get.to(() => RemediesChatScreen());
                                   // },
@@ -4016,7 +4015,7 @@ class HomeUI extends GetView<HomeController> {
                               )),
                         ],
                       ),
-                      showStaticText.value.toString() == "0"
+                      showStaticText.value.toString() == "1"
                           ? chatSwitch.value == true
                               ? Text(
                                   "You are online on chat",
@@ -4032,17 +4031,18 @@ class HomeUI extends GetView<HomeController> {
                                     fontColor: appColors.red,
                                   ),
                                 )
-                          : controller.chatMessage.isNotEmpty
-                              ? Text(
-                                  controller.chatMessage,
-                                  style: AppTextStyle.textStyle10(
-                                    fontWeight: FontWeight.w500,
-                                    fontColor: Color(int.parse(controller
-                                        .chatMessageColor
-                                        .replaceAll("#", "0xff"))),
-                                  ),
-                                )
-                              : SizedBox(),
+                          :
+                      controller.chatMessage.isNotEmpty
+                          ? Text(
+                              controller.chatMessage,
+                              style: AppTextStyle.textStyle10(
+                                fontWeight: FontWeight.w500,
+                                fontColor: Color(int.parse(controller
+                                    .chatMessageColor
+                                    .replaceAll("#", "0xff"))),
+                              ),
+                            )
+                          : SizedBox(),
                     ],
                   )
                 : const SizedBox(),
@@ -4133,7 +4133,7 @@ class HomeUI extends GetView<HomeController> {
                               )),
                         ],
                       ),
-                      showStaticText.value.toString() == "0"
+                      showStaticText.value.toString() == "1"
                           ? callSwitch.value == true
                               ? Text(
                                   "You are online on call",
@@ -4149,17 +4149,19 @@ class HomeUI extends GetView<HomeController> {
                                     fontColor: appColors.red,
                                   ),
                                 )
-                          : controller.callMessage.isNotEmpty
-                              ? Text(
-                                  controller.callMessage,
-                                  style: AppTextStyle.textStyle10(
-                                    fontWeight: FontWeight.w500,
-                                    fontColor: Color(int.parse(controller
-                                        .callMessageColor
-                                        .replaceAll("#", "0xff"))),
-                                  ),
-                                )
-                              : SizedBox(),
+                          :
+
+                      controller.callMessage.isNotEmpty
+                          ? Text(
+                              controller.callMessage,
+                              style: AppTextStyle.textStyle10(
+                                fontWeight: FontWeight.w500,
+                                fontColor: Color(int.parse(controller
+                                    .callMessageColor
+                                    .replaceAll("#", "0xff"))),
+                              ),
+                            )
+                          : SizedBox(),
                     ],
                   )
                 : SizedBox(),
