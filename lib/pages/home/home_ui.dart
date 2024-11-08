@@ -4015,7 +4015,7 @@ class HomeUI extends GetView<HomeController> {
                               )),
                         ],
                       ),
-                      showStaticText.value.toString() == "1"
+                      showStaticText.value.toString() == "0"
                           ? chatSwitch.value == true
                               ? Text(
                                   "You are online on chat",
@@ -4133,7 +4133,7 @@ class HomeUI extends GetView<HomeController> {
                               )),
                         ],
                       ),
-                      showStaticText.value.toString() == "1"
+                      showStaticText.value.toString() == "0"
                           ? callSwitch.value == true
                               ? Text(
                                   "You are online on call",
