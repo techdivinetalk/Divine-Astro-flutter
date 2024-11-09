@@ -50,7 +50,7 @@ class OrderFeedbackUI extends GetView<OrderFeedbackController> {
                     FeedbackData feedback = controller.feedbacks[index];
                     return FeedbackCardWidget(feedback: feedback);
                   },
-                  itemCount: 1,
+                  itemCount: controller.feedbacks.length,
                   separatorBuilder: (context, index) => SizedBox(height: 20.h),
                 ),
         );
