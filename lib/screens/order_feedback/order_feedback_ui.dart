@@ -27,8 +27,8 @@ class OrderFeedbackUI extends GetView<OrderFeedbackController> {
               onTap: () => HomeController().whatsapp(),
               child: Container(
                   margin: const EdgeInsets.symmetric(horizontal: 20),
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16, vertical: 8),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(20.r)),
                     border: Border.all(color: appColors.red, width: 1),
@@ -44,14 +44,15 @@ class OrderFeedbackUI extends GetView<OrderFeedbackController> {
           body: controller.loading
               ? const GenericLoadingWidget()
               : ListView.separated(
-            padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
-            itemBuilder: (context, index) {
-              FeedbackData feedback = controller.feedbacks[index];
-              return FeedbackCardWidget(feedback: feedback);
-            },
-            itemCount: controller.feedbacks.length,
-            separatorBuilder: (context, index) => SizedBox(height: 20.h),
-          ),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                  itemBuilder: (context, index) {
+                    FeedbackData feedback = controller.feedbacks[index];
+                    return FeedbackCardWidget(feedback: feedback);
+                  },
+                  itemCount: 1,
+                  separatorBuilder: (context, index) => SizedBox(height: 20.h),
+                ),
         );
       },
     );
