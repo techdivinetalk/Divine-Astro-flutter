@@ -79,7 +79,7 @@ class SuggestProducts extends GetView<SuggestProductController> {
                                     SliverGridDelegateWithFixedCrossAxisCount(
                                         crossAxisCount: 3,
                                         crossAxisSpacing: 25.h,
-                                        childAspectRatio: 0.6,
+                                        childAspectRatio: 0.585,
                                         mainAxisSpacing: 20.h),
                                 itemBuilder: (BuildContext context, int index) {
                                   Shop item =
