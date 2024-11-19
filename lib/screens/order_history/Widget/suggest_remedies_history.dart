@@ -94,7 +94,7 @@ class SuggestRemedies extends StatelessWidget {
         "images ${"${preferenceService.getBaseImageURL()}/${data[index].getCustomers?.avatar}"}");
     return InkWell(
       onTap: () {
-         if (data[index].getCustomers == null) {
+        if (data[index].getCustomers == null) {
         } else {
           DataList dataList = DataList();
           dataList.name = data[index].getCustomers!.name;
@@ -141,7 +141,7 @@ class SuggestRemedies extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Order Id : ${data[index].orderId}",
+                        Text("${"orderId".tr} : ${data[index].orderId}",
                             style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w400,
                                 fontColor: appColors.darkBlue)),
@@ -206,7 +206,7 @@ class SuggestRemedies extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Date Time :",
+                Text("${"dateTime".tr} :",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
@@ -229,7 +229,7 @@ class SuggestRemedies extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: Text("Remedy Suggested :",
+                  child: Text("${"remedySuggested".tr} :",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
                           fontColor: appColors.darkBlue)),
@@ -269,7 +269,7 @@ class SuggestRemedies extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Referral Bonus :",
+                Text("${"referral_bonus".tr} :",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
@@ -293,7 +293,7 @@ class SuggestRemedies extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  "Total Earning",
+                  "totalEarning".tr,
                   style: AppTextStyle.textStyle12(fontWeight: FontWeight.w600),
                 ),
                 Text(
@@ -314,7 +314,7 @@ class SuggestRemedies extends StatelessWidget {
                           : data[index].status == "completed" &&
                                   data[index].poojaDetails!.payoutType == 2
                               ? data[index].poojaDetails!.payoutValue.toString()
-                              : "Nil"
+                              : "nil".tr
                       : data[index].status == "completed" &&
                               data[index].productDetails!.payoutType == 1
                           ? controller
@@ -334,7 +334,7 @@ class SuggestRemedies extends StatelessWidget {
                                   .productDetails!
                                   .payoutValue
                                   .toString()
-                              : "Nil",
+                              : "nil".tr,
                   // data[index].status == "approved" ||
                   //        data[index].status == "completed"
                   //    ? controller

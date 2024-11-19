@@ -53,7 +53,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                           ? SizedBox()
                           : SizedBox(
                               child: CustomText(
-                                'Your Level & Rank',
+                                'yourLevelRanks'.tr,
                                 fontWeight: FontWeight.w600,
                                 fontColor: appColors.black,
                                 maxLines: 1,
@@ -176,7 +176,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                                                 ),
                                                 SizedBox(width: 5),
                                                 Text(
-                                                  "Level. ${controller.getRitentionModel!.data!.level!.hours.toString()}"
+                                                  "${"level".tr}. ${controller.getRitentionModel!.data!.level!.hours.toString()}"
                                                       .tr,
                                                   style:
                                                       AppTextStyle.textStyle12(
@@ -203,7 +203,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                               padding: EdgeInsets.only(top: 10),
                               child: SizedBox(
                                 child: CustomText(
-                                  'User Retention ( Last 200 Orders )',
+                                  'user_retention_order'.tr,
                                   fontWeight: FontWeight.w600,
                                   fontColor: appColors.black,
                                   maxLines: 1,
@@ -275,7 +275,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                                                                 .center,
                                                         children: [
                                                           Text(
-                                                            "Total Free Order"
+                                                            "total_free_order"
                                                                 .tr,
                                                             maxLines: 2,
                                                             overflow:
@@ -334,7 +334,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                                                                 .center,
                                                         children: [
                                                           Text(
-                                                            "Converted User".tr,
+                                                            "converted_user".tr,
                                                             maxLines: 2,
                                                             overflow:
                                                                 TextOverflow
@@ -392,7 +392,7 @@ class PerformanceUI extends GetView<PerformanceController> {
                                                                 .center,
                                                         children: [
                                                           Text(
-                                                            "Retention".tr,
+                                                            "retention".tr,
                                                             maxLines: 2,
                                                             overflow:
                                                                 TextOverflow
@@ -577,7 +577,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                 children: [
                                   SizedBox(height: 25.h),
                                   Text(
-                                    "Your Score",
+                                    "your_score".tr,
                                     style: AppTextStyle.textStyle10(
                                         fontColor: appColors.darkBlue),
                                   ),
@@ -594,7 +594,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                   ),
                                   SizedBox(height: 5.h),
                                   Text(
-                                    'Out of ${item?.performance?.totalMarks ?? 0}',
+                                    '${"out_of".tr} ${item?.performance?.totalMarks ?? 0}',
                                     // item?.performance?.isNotEmpty ?? false
                                     //     ? 'Out of ${item?.performance?[0].valueOutOff ?? 0}'
                                     //     : "Out of 0",
@@ -821,7 +821,7 @@ class YourScoreWidget extends GetView<PerformanceController> {
                                           // overflow: TextOverflow.ellipsis,
                                         ),
                                         Text(
-                                          "(Click here to know the criteria)",
+                                          "(${"click_here_to_know_criteria".tr})",
                                           textAlign: TextAlign.center,
                                           style: AppTextStyle.textStyle9(
                                               fontColor: appColors.darkBlue),

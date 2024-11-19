@@ -531,7 +531,7 @@ class MessageView extends StatelessWidget {
                                 });
                               },
                               child: Text(
-                                "View Kundli",
+                                "viewKundali".tr,
                                 style:
                                     TextStyle(color: appColors.guideTextColor),
                               )),

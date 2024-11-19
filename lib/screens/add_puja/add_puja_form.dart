@@ -34,7 +34,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
                   icon: const Icon(Icons.arrow_back_ios_new_rounded)),
               title: Obx(() => controller.id.value == 0
                   ? CustomText(
-                      'Add ${controller.selectedValue}',
+                      '${"add".tr} ${controller.selectedValue.value == "Puja" ? "pooja".tr : "products".tr}',
                     )
                   : const CustomText('Edit Remedies'))),
           bottomNavigationBar: Container(
@@ -67,7 +67,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
                         : () {},
                     child: !controller.isPujaLoading
                         ? Text(
-                            'Add ${controller.selectedValue}',
+                            '${"add".tr} ${controller.selectedValue.value == "Puja" ? "pooja".tr : "products".tr}',
                             style: AppTextStyle.textStyle16(
                               fontWeight: FontWeight.w600,
                               fontColor: appColors.white,
@@ -141,7 +141,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
                     ),
                     SizedBox(height: 10.h),
                     CustomText(
-                      'Upload ${controller.selectedValue} Image',
+                      '${"upload".tr} ${controller.selectedValue} ${"image".tr}',
                       fontColor: appColors.textColor,
                     ),
                   ],
@@ -151,7 +151,8 @@ class AddPujaScreen extends GetView<AddPujaController> {
                             controller.selectedPujaName!.id == 0 ||
                         controller.selectedValue.value == "Product"
                     ? PoojaRemedyTextFiled(
-                        title: "${controller.selectedValue} Name",
+                        title:
+                            "${controller.selectedValue.value == "Puja" ? "pooja".tr : "products".tr} ${"name".tr}",
                         maxLength: 20,
                         controller: controller.poojaName,
                         keyboardType: TextInputType.text,
@@ -169,7 +170,8 @@ class AddPujaScreen extends GetView<AddPujaController> {
                     : SizedBox(),
                 SizedBox(height: 20.h),
                 PoojaRemedyTextFiled(
-                  title: "${controller.selectedValue} Description",
+                  title:
+                      "${controller.selectedValue.value == "Puja" ? "pooja".tr : "products".tr} ${"descriptions".tr}",
                   maxLines: 5,
                   textInputFormatter: [CustomSpaceInputFormatter()],
                   controller: controller.poojaDes,
@@ -195,7 +197,8 @@ class AddPujaScreen extends GetView<AddPujaController> {
                   ],
                   isSuffix: false,
                   keyboardType: TextInputType.number,
-                  title: '${controller.selectedValue} Price ( In INR )',
+                  title:
+                      '${controller.selectedValue.value == "Puja" ? "pooja".tr : "products".tr} ${"price_inr".tr}',
                   controller: controller.poojaPrice,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -218,7 +221,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         CustomText(
-          'Ecom type',
+          'ecom_type'.tr,
           fontColor: appColors.textColor,
         ),
         SizedBox(height: 8.h),
@@ -235,7 +238,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
         ),
         SizedBox(height: 10.h),
         CustomText(
-          'Categories',
+          'categories'.tr,
           fontColor: appColors.textColor,
         ),
         SizedBox(height: 8.h),
@@ -252,7 +255,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
         ),
         SizedBox(height: 10.h),
         CustomText(
-          'Tags',
+          'tags'.tr,
           fontColor: appColors.textColor,
         ),
         SizedBox(height: 8.h),
@@ -286,7 +289,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
                 Row(
                   children: [
                     Text(
-                      "Select tag",
+                      "select_tag".tr,
                       style: AppTextStyle.textStyle16(
                           fontWeight: FontWeight.w400,
                           fontColor: appColors.darkBlue),
@@ -369,7 +372,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
                 children: [
                   SizedBox(height: 10.h),
                   CustomText(
-                    'Select puja name',
+                    'select_puja_name'.tr,
                     fontColor: appColors.textColor,
                   ),
                   SizedBox(height: 8.h),
@@ -397,7 +400,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
           child: DropdownButton2<String>(
             isExpanded: true,
             hint: Text(
-              "puja",
+              "pooja".tr,
               style: AppTextStyle.textStyle16(
                   fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
             ),
@@ -454,7 +457,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
       child: DropdownButton2<PujaProductCategoriesData>(
         isExpanded: true,
         hint: Text(
-          "Select puja name",
+          "select_puja_name".tr,
           style: AppTextStyle.textStyle16(
               fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
         ),
@@ -511,7 +514,7 @@ class AddPujaScreen extends GetView<AddPujaController> {
       child: DropdownButton2<PujaProductCategoriesData>(
         isExpanded: true,
         hint: Text(
-          "Category",
+          "categories".tr,
           style: AppTextStyle.textStyle16(
               fontWeight: FontWeight.w400, fontColor: appColors.darkBlue),
         ),

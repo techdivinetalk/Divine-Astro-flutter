@@ -1,10 +1,8 @@
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/routes.dart';
-import 'package:divine_astrologer/pages/home/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
 class CommonInfoSheet extends StatelessWidget {
@@ -14,7 +12,12 @@ class CommonInfoSheet extends StatelessWidget {
   final dynamic argument;
   final Function()? onTap;
 
-  CommonInfoSheet({this.title, this.subTitle, this.argument, this.onTap, this.isBackButton = true});
+  CommonInfoSheet(
+      {this.title,
+      this.subTitle,
+      this.argument,
+      this.onTap,
+      this.isBackButton = true});
 
   @override
   Widget build(BuildContext context) {
@@ -22,19 +25,20 @@ class CommonInfoSheet extends StatelessWidget {
       alignment: WrapAlignment.center,
       runSpacing: 20,
       children: [
-        if(isBackButton)GestureDetector(
-          onTap: () {
-            Get.back();
-          },
-          child: CircleAvatar(
-            backgroundColor: appColors.textColor,
-            radius: 35,
-            child: const Icon(
-              Icons.close_rounded,
-              color: Colors.white,
+        if (isBackButton)
+          GestureDetector(
+            onTap: () {
+              Get.back();
+            },
+            child: CircleAvatar(
+              backgroundColor: appColors.textColor,
+              radius: 35,
+              child: const Icon(
+                Icons.close_rounded,
+                color: Colors.white,
+              ),
             ),
           ),
-        ),
         // const SizedBox(height: 20),
         Container(
           padding: EdgeInsets.symmetric(horizontal: 20.h, vertical: 30.h),
@@ -62,15 +66,16 @@ class CommonInfoSheet extends StatelessWidget {
               ),
               const SizedBox(height: 20),
               GestureDetector(
-                onTap: onTap ??() {
-                  Get.back();
-                  if (argument != null){
-                    Get.toNamed(RouteName.noticeDetail,
-                        arguments: argument,
-                        parameters: {"from_list": "0"});
-                  }
-                  // Fluttertoast.showToast(msg: "No info for now!");
-                },
+                onTap: onTap ??
+                    () {
+                      Get.back();
+                      if (argument != null) {
+                        Get.toNamed(RouteName.noticeDetail,
+                            arguments: argument,
+                            parameters: {"from_list": "0"});
+                      }
+                      // Fluttertoast.showToast(msg: "No info for now!");
+                    },
                 child: Container(
                   height: 60,
                   width: double.infinity,
@@ -80,7 +85,7 @@ class CommonInfoSheet extends StatelessWidget {
                     color: appColors.guideColor,
                   ),
                   child: Text(
-                    "Got it",
+                    "gotIt".tr,
                     textAlign: TextAlign.center,
                     style: AppTextStyle.textStyle20(
                       fontColor: appColors.whiteGuidedColor,

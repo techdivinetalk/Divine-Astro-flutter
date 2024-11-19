@@ -336,7 +336,7 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 5),
                     child: Text(
-                      "Kundali Details",
+                      "kundli_detail".tr,
                       textAlign: TextAlign.start,
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
@@ -410,7 +410,7 @@ class KundliDetailUi extends GetView<KundliDetailController> {
                         child: Padding(
                           padding: const EdgeInsets.only(),
                           child: Text(
-                            "Planets Details",
+                            "planets_detail".tr,
                             textAlign: TextAlign.start,
                             style: TextStyle(
                               fontWeight: FontWeight.w600,

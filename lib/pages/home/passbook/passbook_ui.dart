@@ -21,7 +21,7 @@ class PassbookUi extends GetView<PassbooksController> {
       init: PassbooksController(),
       builder: (controller) {
         return Scaffold(
-          appBar: appbarSmall1(context, "Passbook"),
+          appBar: appbarSmall1(context, "pass_book".tr),
           body: Column(
             children: [
               Row(
@@ -30,7 +30,7 @@ class PassbookUi extends GetView<PassbooksController> {
                 children: [
                   selectDate(
                       controller.startDate == null
-                          ? "Start Date"
+                          ? "startDate".tr
                           : "${DateTime.parse(controller.startDate).day}-${DateTime.parse(controller.startDate).month}-${DateTime.parse(controller.startDate).year}",
                       context,
                       controller, () {
@@ -38,9 +38,9 @@ class PassbookUi extends GetView<PassbooksController> {
                         context: Get.context!,
                         builder: (context) {
                           return selectDateWid(
-                            name: "Start Date",
+                            name: "startDate".tr,
                             looping: true,
-                            buttonTitle: "Confirm",
+                            buttonTitle: "confirm".tr,
                             initialDate: DateTime.now(),
                             onConfirm: (String value) {
                               controller.setStartDate(value);
@@ -56,7 +56,7 @@ class PassbookUi extends GetView<PassbooksController> {
                   ),
                   selectDate(
                       controller.endDate == null
-                          ? "End Date"
+                          ? "endDate".tr
                           : "${DateTime.parse(controller.endDate).day}-${DateTime.parse(controller.endDate).month}-${DateTime.parse(controller.endDate).year}",
                       context,
                       controller, () {
@@ -64,9 +64,9 @@ class PassbookUi extends GetView<PassbooksController> {
                         context: Get.context!,
                         builder: (context) {
                           return selectDateWid(
-                            name: "End Date",
+                            name: "endDate".tr,
                             looping: true,
-                            buttonTitle: "Confirm",
+                            buttonTitle: "confirm".tr,
                             initialDate: DateTime.now(),
                             onConfirm: (String value) {
                               controller.setEndDate(value);
@@ -86,15 +86,15 @@ class PassbookUi extends GetView<PassbooksController> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  selectTypeWidget("Bonus", context, controller),
+                  selectTypeWidget("bonus".tr, context, controller),
                   const SizedBox(
                     width: 10,
                   ),
-                  selectTypeWidget("Paid", context, controller),
+                  selectTypeWidget("paid".tr, context, controller),
                   const SizedBox(
                     width: 10,
                   ),
-                  selectTypeWidget("Ecomm", context, controller),
+                  selectTypeWidget("ecom".tr, context, controller),
                 ],
               ),
               controller.isLoading.value == true
@@ -250,6 +250,7 @@ class PassbookUi extends GetView<PassbooksController> {
                 const EdgeInsets.only(left: 10, right: 10, top: 6, bottom: 6),
             child: Text(
               title,
+              textAlign: TextAlign.center,
               style: AppTextStyle.textStyle16(
                   fontWeight: FontWeight.w600, fontColor: appColors.grey),
             ),

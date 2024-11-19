@@ -25,7 +25,6 @@ import "package:get/get_connect/http/src/status/http_status.dart";
 import "package:http/http.dart" as http;
 
 import "../../common/common_functions.dart";
-import "../../common/routes.dart";
 import "../../repository/home_page_repository.dart";
 
 class LiveDharamController extends GetxController {
@@ -183,6 +182,7 @@ class LiveDharamController extends GetxController {
     leaderboardModel.value = [];
 
     isFront = true;
+
     isCamOn = true;
     isMicOn = true;
     currentCaller = WaitListModel(
@@ -214,9 +214,40 @@ class LiveDharamController extends GetxController {
     isProcessing = false;
     extendTimeWidgetVisible = false;
     hasReInitCoHost = false;
-
+    // print(
+    //     "------------------------------------------------checking toggle 2 ${showFrontCamera.value}");
+    // if (showFrontCamera.value == false) {
+    //   zegoController.audioVideo.camera.switchFrontFacing(true);
+    // } else {
+    //   zegoController.audioVideo.camera.switchFrontFacing(false);
+    // }
+    // update();
+    // if (showFrontCamera.value == false) {
+    //   // Ensure that the camera is set to use the back camera initially
+    //   ZegoExpressEngine.instance.useFrontCamera(false);
+    //
+    //   zegoController.audioVideo.camera.switchFrontFacing(false);
+    // } else {
+    //   // Ensure that the camera is set to use the back camera initially
+    //   ZegoExpressEngine.instance.useFrontCamera(true);
+    //
+    //   zegoController.audioVideo.camera.switchFrontFacing(true);
+    // }
     return;
   }
+
+  // @override
+  // void onReady() {
+  //   super.onReady();
+  //   print(
+  //       "------------------------------------------------checking toggle${showFrontCamera.value}");
+  //   if (showFrontCamera.value == false) {
+  //     zegoController.audioVideo.camera.switchFrontFacing(true);
+  //   } else {
+  //     zegoController.audioVideo.camera.switchFrontFacing(false);
+  //   }
+  //   update();
+  // }
 
   @override
   void onClose() {

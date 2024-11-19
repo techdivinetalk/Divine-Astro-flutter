@@ -209,7 +209,7 @@ class ProfilePageController extends GetxController {
     ProfileOptionModelClass("eCommerce".tr,
         Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja', true),
     ProfileOptionModelClass(
-        "Custom product".tr,
+        "custom_product".tr,
         SvgPicture.asset("assets/svg/store.svg", width: 30.h, height: 30.h),
         '/customProduct',
         true),

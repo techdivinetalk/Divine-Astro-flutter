@@ -64,7 +64,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  "Father name",
+                  "father_name".tr,
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 5),
@@ -78,12 +78,12 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   controller: controller.state.fatherNameController,
                   inputType: TextInputType.text,
                   inputAction: TextInputAction.next,
-                  hintText: "Enter Astrologer's Father Name",
+                  hintText: "enter_father_name".tr,
                   errorBorder: appColors.white,
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  "Date of Birth",
+                  "date_birth".tr,
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 5),
@@ -126,7 +126,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                     );
                   },
                   inputAction: TextInputAction.next,
-                  hintText: "Enter Astrologer's Date of Birth",
+                  hintText: "enter_dob".tr,
                   errorBorder: appColors.white,
                 ),
                 const SizedBox(height: 10),
@@ -191,7 +191,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  "City*",
+                  "city".tr + "*",
                   style: AppTextStyle.textStyle14(fontWeight: FontWeight.w400),
                 ),
                 const SizedBox(height: 5),
@@ -206,7 +206,7 @@ class ReferAnAstrologer extends GetView<ReferAstrologerController> {
                   inputType: TextInputType.name,
                   inputAction: TextInputAction.done,
                   readOnly: true,
-                  hintText: "Enter Astrologer's City",
+                  hintText: "enter_city".tr,
                   onTap: () {
                     Get.bottomSheet(
                         isScrollControlled: true,

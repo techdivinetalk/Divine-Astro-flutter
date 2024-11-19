@@ -25,7 +25,6 @@ import "package:intl/intl.dart";
 import "package:lottie/lottie.dart";
 import "package:simple_html_css/simple_html_css.dart";
 import "package:svgaplayer_flutter/svgaplayer_flutter.dart";
-import "package:swipe_to/swipe_to.dart";
 
 import "../../common/common_bottomsheet.dart";
 import "../../model/message_template_response.dart";
@@ -143,17 +142,17 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                               child: MessageView(
                                                 index: index,
                                                 nextChatMessage: index ==
-                                                    controller.chatMessages
-                                                        .length -
-                                                        1
+                                                        controller.chatMessages
+                                                                .length -
+                                                            1
                                                     ? controller
-                                                    .chatMessages[index]
+                                                        .chatMessages[index]
                                                     : controller.chatMessages[
-                                                index + 1],
+                                                        index + 1],
                                                 chatMessage: chatMessage,
                                                 yourMessage:
-                                                chatMessage.msgSendBy ==
-                                                    "1",
+                                                    chatMessage.msgSendBy ==
+                                                        "1",
                                                 userName: controller
                                                     .customerName.value,
                                                 unreadMessage: controller
@@ -163,7 +162,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                             ),
                                             if (index ==
                                                 (controller
-                                                    .chatMessages.length -
+                                                        .chatMessages.length -
                                                     1))
                                               typingWidget()
                                           ],
@@ -1025,7 +1024,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                     mainAxisSize: MainAxisSize.min,
                                     mainAxisAlignment: MainAxisAlignment.end,
                                     children: [
-                                      !controller.hasMessage.value && asForGifts.toString() == "1"
+                                      !controller.hasMessage.value &&
+                                              asForGifts.toString() == "1"
                                           ? GestureDetector(
                                               onTap: () {
                                                 controller.askForGift();
@@ -1052,7 +1052,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: <Widget>[
                                                   Text(
-                                                    "${AppFirebaseService().orderData["customerName"]}'s Kundali Details",
+                                                    "${AppFirebaseService().orderData["customerName"]}'s ${"kundli_detail".tr}",
                                                     style: AppTextStyle
                                                         .textStyle20(
                                                             fontColor:
@@ -1171,7 +1171,8 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                                             });
                                                       },
                                                       child: Text(
-                                                        'Check Kundli Details',
+                                                        'check_kundli_details'
+                                                            .tr,
                                                         style: AppTextStyle
                                                             .textStyle14(
                                                                 fontColor:
@@ -1197,7 +1198,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                               borderRadius:
                                                   BorderRadius.circular(16)),
                                           child: Text(
-                                            "Kundli",
+                                            "kundli".tr,
                                             style: AppTextStyle.textStyle9(
                                                 fontColor: AppColors().white),
                                           ),
@@ -1315,7 +1316,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                     height: 5.0,
                                   ),
                                   Text(
-                                    "Kundli",
+                                    "kundli".tr,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w400,
@@ -1326,91 +1327,95 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                 ],
                               )
                             : const SizedBox(),
-                    productChat.toString() == "1" ?
-                    Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            controller.openProduct(controller);
-                          },
-                          child: Center(
-                              child: SvgPicture.asset(
-                                  "assets/svg/chat_new_product.svg")),
-                        ),
-                        const SizedBox(
-                          height: 5.0,
-                        ),
-                        Text(
-                          "Product",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 10.sp,
-                            color: appColors.black,
-                          ),
-                        )
-                      ],
-                    )
+                    productChat.toString() == "1"
+                        ? Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  controller.openProduct(controller);
+                                },
+                                child: Center(
+                                    child: SvgPicture.asset(
+                                        "assets/svg/chat_new_product.svg")),
+                              ),
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              Text(
+                                "products".tr,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 10.sp,
+                                  color: appColors.black,
+                                ),
+                              )
+                            ],
+                          )
                         : const SizedBox(),
-                    customProduct.toString() == "1" ?
-                    Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            controller.openCustomShop(controller);
-                          },
-                          child: Center(
-                              child: SvgPicture.asset(
-                                  "assets/svg/chat_new_custom_product.svg")),
-                        ),
-                        const SizedBox(
-                          height: 5.0,
-                        ),
-                        Text(
-                          "My Remedy",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 10.sp,
-                            color: appColors.black,
-                          ),
-                        )
-                      ],
-                    ) : const SizedBox(),
-                    tarotCard.toString() == "1" ?
-                    Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () {
-                            if (!AppFirebaseService()
-                                .orderData
-                                .value
-                                .containsKey("card")) {
-                              controller.openShowDeck(context, controller);
-                            } else {
-                              Fluttertoast.showToast(
-                                  msg: 'Tarot Card is still in progress...');
-                            }
-                          },
-                          child: Center(
-                            child: SvgPicture.asset(
-                                "assets/svg/new_chat_tarrot_card.svg"),
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 5.0,
-                        ),
-                        Text(
-                          "Tarot",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 10.sp,
-                            color: appColors.black,
-                          ),
-                        )
-                      ],
-                    ) : const SizedBox(),
+                    customProduct.toString() == "1"
+                        ? Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  controller.openCustomShop(controller);
+                                },
+                                child: Center(
+                                    child: SvgPicture.asset(
+                                        "assets/svg/chat_new_custom_product.svg")),
+                              ),
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              Text(
+                                "my_remedy".tr,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 10.sp,
+                                  color: appColors.black,
+                                ),
+                              )
+                            ],
+                          )
+                        : const SizedBox(),
+                    tarotCard.toString() == "1"
+                        ? Column(
+                            children: [
+                              GestureDetector(
+                                onTap: () {
+                                  if (!AppFirebaseService()
+                                      .orderData
+                                      .value
+                                      .containsKey("card")) {
+                                    controller.openShowDeck(
+                                        context, controller);
+                                  } else {
+                                    Fluttertoast.showToast(
+                                        msg:
+                                            'Tarot Card is still in progress...');
+                                  }
+                                },
+                                child: Center(
+                                  child: SvgPicture.asset(
+                                      "assets/svg/new_chat_tarrot_card.svg"),
+                                ),
+                              ),
+                              const SizedBox(
+                                height: 5.0,
+                              ),
+                              Text(
+                                "tarot".tr,
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 10.sp,
+                                  color: appColors.black,
+                                ),
+                              )
+                            ],
+                          )
+                        : const SizedBox(),
                     Obx(
                       () {
                         Map orderData = AppFirebaseService().orderData.value;
@@ -1467,7 +1472,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                     height: 5.0,
                                   ),
                                   Text(
-                                    "Audio",
+                                    "audio".tr,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w400,
@@ -1535,7 +1540,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                     height: 5.0,
                                   ),
                                   Text(
-                                    "Video",
+                                    "video".tr,
                                     textAlign: TextAlign.center,
                                     style: TextStyle(
                                       fontWeight: FontWeight.w400,
@@ -1696,7 +1701,7 @@ class ChatMessageWithSocketUI extends GetView<ChatMessageWithSocketController> {
                                   height: 5.0,
                                 ),
                                 Text(
-                                  "Media",
+                                  "media".tr,
                                   textAlign: TextAlign.center,
                                   style: TextStyle(
                                     fontWeight: FontWeight.w400,
@@ -2110,14 +2115,15 @@ class AstrologerChatAppBar extends StatelessWidget {
                                       const SizedBox(width: 10),
                                       Text(
                                         (AppFirebaseService()
-                                                    .orderData
-                                                    .value["status"]
-                                                    .toString() ==
-                                                "4" ||   AppFirebaseService()
-                                            .orderData
-                                            .value["status"]
-                                            .toString() ==
-                                            "5")
+                                                        .orderData
+                                                        .value["status"]
+                                                        .toString() ==
+                                                    "4" ||
+                                                AppFirebaseService()
+                                                        .orderData
+                                                        .value["status"]
+                                                        .toString() ==
+                                                    "5")
                                             ? "Chat Ended"
                                             : showTalkTime.value,
                                         style: TextStyle(
@@ -2137,7 +2143,7 @@ class AstrologerChatAppBar extends StatelessWidget {
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        "Chat in progress",
+                                        "chat_in_process".tr,
                                         style: TextStyle(
                                           fontWeight: FontWeight.w400,
                                           fontSize: 10.sp,

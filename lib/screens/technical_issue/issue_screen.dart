@@ -44,7 +44,7 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
             ),
             titleSpacing: 0,
             title: Text(
-              "Technical Support",
+              "technical_support".tr,
               style: AppTextStyle.textStyle16(),
             ),
             // centerTitle: true,
@@ -63,7 +63,7 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
                     child: Padding(
                       padding: const EdgeInsets.all(6.0),
                       child: Text(
-                        "Current Tickets",
+                        "current_tickets".tr,
                         style: TextStyle(
                           fontSize: 12,
                           color: AppColors().black,
@@ -137,7 +137,7 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
                         ),
                       ),
                       hint: Text(
-                        'Please select Types',
+                        'please_select_types'.tr,
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontWeight: FontWeight.w600,
@@ -174,7 +174,7 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
                     height: 20,
                   ),
                   PoojaRemedyTextFiled(
-                    title: "Please explain your issue in detail",
+                    title: "please_explain_your_issue".tr,
                     maxLines: 5,
                     textInputFormatter: [CustomSpaceInputFormatter()],
                     controller: controller.descriptionController,
@@ -198,7 +198,7 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
                           child: Align(
                             alignment: Alignment.topLeft,
                             child: Text(
-                              "Please provide a more detailed description. (100 characters)",
+                              "please_provide_100_characters".tr,
                               textAlign: TextAlign.start,
                               style: TextStyle(
                                 color: appColors.appRedColour,
@@ -269,7 +269,7 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
                           ),
                           SizedBox(height: 10.h),
                           CustomText(
-                            'Upload Image',
+                            '${"upload".tr} ${"image".tr}',
                             fontColor: appColors.textColor,
                           ),
                           SingleChildScrollView(
@@ -344,7 +344,7 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
                                   color: AppColors().white,
                                 )
                               : Text(
-                                  "Submit Issue",
+                                  "submit_issue".tr,
                                   style: AppTextStyle.textStyle16(
                                     fontWeight: FontWeight.w500,
                                     fontColor: AppColors().white,

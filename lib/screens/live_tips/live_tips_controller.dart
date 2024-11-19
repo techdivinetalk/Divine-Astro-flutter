@@ -3,20 +3,15 @@ import 'dart:developer';
 
 import 'package:camerax/camerax.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-
 import 'package:divine_astrologer/di/shared_preference_service.dart';
-import 'package:divine_astrologer/main.dart';
 import 'package:divine_astrologer/model/live/blocked_customer_list_res.dart';
 import 'package:divine_astrologer/repository/astrologer_profile_repository.dart';
 import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/live_dharam/live_global_singleton.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
-
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/status/http_status.dart';
@@ -381,6 +376,14 @@ class LiveTipsController extends GetxController {
     controller = CameraController(
       isFrontCamera.value ? CameraFacing.front : CameraFacing.back,
     );
+    if (isFrontCamera.value) {
+      showFrontCamera.value = true;
+    } else {
+      showFrontCamera.value = false;
+    }
+
+    print(
+        "------------------------------------------------changing toggle${showFrontCamera.value}");
     controller?.startAsync().then((_) {});
     update();
   }

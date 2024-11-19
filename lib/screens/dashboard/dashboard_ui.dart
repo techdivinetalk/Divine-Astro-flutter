@@ -21,7 +21,6 @@ import '../../pages/home/home_controller.dart';
 import '../../pages/home/home_ui.dart';
 import '../../pages/performance/performance_controller.dart';
 import '../../pages/performance/performance_ui.dart';
-import '../chat_assistance/chat_assistance_controller.dart';
 import '../chat_assistance/chat_assistance_ui.dart';
 import '../live_page/constant.dart';
 import 'dashboard_controller.dart';
@@ -266,7 +265,7 @@ class DashboardScreen extends GetView<DashboardController> {
                                               const SizedBox(height: 5),
                                             ],
                                           ),
-                                          label: "Orders".tr,
+                                          label: "orders".tr,
                                         ),
 
                                         // Profile Tab comment

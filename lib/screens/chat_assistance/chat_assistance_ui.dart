@@ -407,6 +407,7 @@ class ChatAssistanceTile extends StatelessWidget {
         }
       }
       return ListTile(
+        splashColor: appColors.grey.withOpacity(0.4),
         onTap: () async {
           if (assistChatUnreadMessages.isNotEmpty) {
             assistChatUnreadMessages
@@ -621,7 +622,8 @@ class ChatAssistanceDataTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
+      splashColor: appColors.grey.withOpacity(0.4),
       onTap: () {
         DataList dataList = DataList();
         dataList.name = data.customerName;
@@ -696,14 +698,14 @@ class ChatAssistanceDataTile extends StatelessWidget {
                                 color: appColors.darkGreen),
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-                              child: CustomText("Connect",
+                              child: CustomText("connect".tr,
                                   fontColor: Colors.white, fontSize: 12.sp),
                             ),
                           )
                         ],
                       ),
                       CustomText(
-                        "Total Consultation : ${data.totalConsultation}",
+                        "${"total_consulation".tr} : ${data.totalConsultation}",
                         fontColor:
                             // (index == 0) ? appColors.darkBlue:
                             appColors.grey,
@@ -713,7 +715,7 @@ class ChatAssistanceDataTile extends StatelessWidget {
                             FontWeight.normal,
                       ),
                       CustomText(
-                        "Last Consulted : ${data.lastConsulted}",
+                        "${"last_consulted".tr} : ${data.lastConsulted}",
                         fontColor:
                             // (index == 0) ? appColors.darkBlue:
                             appColors.grey,
@@ -723,7 +725,7 @@ class ChatAssistanceDataTile extends StatelessWidget {
                             FontWeight.normal,
                       ),
                       CustomText(
-                        "Days Since Last Consulted : ${data.daySinceLastConsulted}",
+                        "${"days_since_last_consulted".tr} : ${data.daySinceLastConsulted}",
                         fontColor:
                             // (index == 0) ? appColors.darkBlue:
                             appColors.grey,

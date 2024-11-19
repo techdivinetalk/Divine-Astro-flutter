@@ -14,7 +14,6 @@ import "package:divine_astrologer/common/common_bottomsheet.dart";
 import "package:divine_astrologer/common/common_functions.dart";
 import "package:divine_astrologer/common/custom_widgets.dart";
 import "package:divine_astrologer/common/generic_loading_widget.dart";
-import "package:divine_astrologer/common/routes.dart";
 import "package:divine_astrologer/firebase_service/firebase_service.dart";
 import "package:divine_astrologer/model/astrologer_gift_response.dart";
 import "package:divine_astrologer/model/live/deck_card_model.dart";
@@ -46,7 +45,6 @@ import "package:divine_astrologer/screens/live_dharam/widgets/live_end_widget.da
 import "package:divine_astrologer/screens/live_dharam/widgets/more_options_widget.dart";
 import "package:divine_astrologer/screens/live_dharam/widgets/notif_overlay.dart";
 import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
-
 // import "package:divine_astrologer/screens/live_dharam/zego_team/player.dart";
 import "package:firebase_database/firebase_database.dart";
 import "package:flutter/cupertino.dart";
@@ -60,7 +58,6 @@ import "package:get/get.dart";
 import "package:simple_html_css/simple_html_css.dart";
 import "package:svgaplayer_flutter/parser.dart";
 import "package:svgaplayer_flutter/player.dart";
-import "package:velocity_x/velocity_x.dart";
 import "package:zego_express_engine/zego_express_engine.dart";
 import "package:zego_uikit_beauty_plugin/zego_uikit_beauty_plugin.dart";
 import "package:zego_uikit_prebuilt_live_streaming/zego_uikit_prebuilt_live_streaming.dart";
@@ -68,6 +65,7 @@ import "package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart";
 
 import '../../cache/custom_cache_manager.dart';
 import "../../model/live/blocked_customer_list_res.dart";
+import "../live_page/constant.dart";
 
 const int appID = 696414715;
 const String appSign =
@@ -156,7 +154,6 @@ class _LivePage extends State<LiveDharamScreen>
         .getSignalingPlugin()
         .getInRoomCommandMessageReceivedEventStream()
         .listen(onInRoomCommandMessageReceived);
-
     zegoController.coHost.audienceLocalConnectStateNotifier
         .addListener(onAudienceLocalConnectStateChanged);
     _controller.liveStore.doc(_controller.userId).snapshots().listen(
@@ -224,6 +221,10 @@ class _LivePage extends State<LiveDharamScreen>
           .turnOn(_controller.isCamOn, userID: _controller.userId);
       _controller.update();
     }
+    Future.delayed(Duration(seconds: 2)).then((val) {
+      zegoController.audioVideo.camera.switchFrontFacing(showFrontCamera.value);
+      _controller.update();
+    });
   }
 
   Future<void> _showOverlay() async {
@@ -518,7 +519,6 @@ class _LivePage extends State<LiveDharamScreen>
     //
     LiveGlobalSingleton().buildContext = context;
     //
-
     // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
@@ -1053,17 +1053,17 @@ class _LivePage extends State<LiveDharamScreen>
                                                     "Live Monitoring Team"
                                             ? Colors.red
                                             : isModerator &&
-                                            msg.fullGiftImage
-                                                .isNotEmpty
-                                            ? appColors.black
-                                            : isModerator
-                                                ? appColors.white
-                                                : msg.fullGiftImage.isNotEmpty
-                                                    ? appColors.black
-                                                    : msg.message.contains(
-                                                            "Started following")
+                                                    msg.fullGiftImage.isNotEmpty
+                                                ? appColors.black
+                                                : isModerator
+                                                    ? appColors.white
+                                                    : msg.fullGiftImage
+                                                            .isNotEmpty
                                                         ? appColors.black
-                                                        : Colors.white,
+                                                        : msg.message.contains(
+                                                                "Started following")
+                                                            ? appColors.black
+                                                            : Colors.white,
                                       ),
                                       // maxLines: 2,
                                       // overflow: TextOverflow.ellipsis,
@@ -2386,9 +2386,13 @@ class _LivePage extends State<LiveDharamScreen>
             InkWell(
               onTap: () async {
                 _controller.isFront = !_controller.isFront;
+                print("switching cameras -- main ${_controller.isFront}");
+
                 zegoController.audioVideo.camera
                     .switchFrontFacing(_controller.isFront);
                 _controller.update();
+                print("switching cameras -- ${_controller.isFront}");
+                print("switching cameras -- 2 ${showFrontCamera.value}");
               },
               child: SizedBox(
                 height: 32,
@@ -2407,7 +2411,7 @@ class _LivePage extends State<LiveDharamScreen>
                     padding: const EdgeInsets.all(0.0),
                     child: Image.asset(
                       _controller.isFront
-                          ? "assets/images/live_switch_cam_new.png"
+                          ? "assets/images/live_switch_cam_new.png" //assets/images/profile_review.png
                           : "assets/images/live_switch_cam_new.png",
                     ),
                   ),
@@ -2556,6 +2560,9 @@ class _LivePage extends State<LiveDharamScreen>
                         _controller.isFront = !_controller.isFront;
                         zegoController.audioVideo.camera
                             .switchFrontFacing(_controller.isFront);
+                        print("switching cameras -- ${_controller.isFront}");
+                        print(
+                            "switching cameras -- 2 ${showFrontCamera.value}");
                       },
                       child: SizedBox(
                         height: 50,

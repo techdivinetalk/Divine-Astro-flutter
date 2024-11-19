@@ -149,7 +149,7 @@ class SideMenuDrawer extends GetView<HomeController> {
             if (isNotice.value == 1)
               ListTile(
                 leading: const Icon(Icons.notifications_active_outlined),
-                title: Text("Notice".tr),
+                title: Text("noticeBoard".tr),
                 onTap: () {
                   if (from == "Home") {
                     Get.put(HomeController()).homeScreenKey
@@ -165,7 +165,7 @@ class SideMenuDrawer extends GetView<HomeController> {
             ecomSupport.value.toString() == "1"
                 ? ListTile(
                     leading: const Icon(Icons.shop_outlined),
-                    title: Text('Ecom Support'.tr),
+                    title: Text('ecom_support'.tr),
                     onTap: () async {
                       if (from == "Home") {
                         Get.put(HomeController()).homeScreenKey
@@ -182,7 +182,7 @@ class SideMenuDrawer extends GetView<HomeController> {
             if (isTechnicalSupport.value == 1)
               ListTile(
                 leading: const Icon(Icons.bug_report_outlined),
-                title: Text('Technical Support'.tr),
+                title: Text('technical_support'.tr),
                 onTap: () {
                   if (from == "Home") {
                     Get.put(HomeController()).homeScreenKey
@@ -198,7 +198,7 @@ class SideMenuDrawer extends GetView<HomeController> {
             if (isFinancialSupport.value == 1)
               ListTile(
                 leading: const Icon(Icons.request_quote_outlined),
-                title: Text('Financial Support'.tr),
+                title: Text('financial_support'.tr),
                 onTap: () {
                   if (from == "Home") {
                     Get.put(HomeController()).homeScreenKey
@@ -214,7 +214,7 @@ class SideMenuDrawer extends GetView<HomeController> {
             if (isDrawerSupport.value == 1)
               ListTile(
                 leading: const Icon(Icons.contact_support_outlined),
-                title: Text('Support'.tr),
+                title: Text('support'.tr),
                 onTap: () {
                   if (from == "Home") {
                     Get.put(HomeController()).homeScreenKey

@@ -400,8 +400,8 @@ class HomeUI extends GetView<HomeController> {
                                                                             .context!,
                                                                         controller
                                                                             .walletData,
-                                                                        title:
-                                                                            "What is Bonus Wallet ?",
+                                                                        title: "what_is_bonus"
+                                                                            .tr,
                                                                         controller:
                                                                             controller,
                                                                         type:
@@ -431,7 +431,7 @@ class HomeUI extends GetView<HomeController> {
                                                                             fontWeight: FontWeight.w700),
                                                                       ),
                                                                       Text(
-                                                                        "Bonus"
+                                                                        "bonusWallet"
                                                                             .tr,
                                                                         maxLines:
                                                                             1,
@@ -467,7 +467,7 @@ class HomeUI extends GetView<HomeController> {
                                                                           fontWeight: FontWeight.w700),
                                                                     ),
                                                                     Text(
-                                                                      "Bonus"
+                                                                      "bonusWallet"
                                                                           .tr,
                                                                       maxLines:
                                                                           1,
@@ -508,7 +508,7 @@ class HomeUI extends GetView<HomeController> {
                                                                             .w700),
                                                               ),
                                                               Text(
-                                                                "Retention Rate"
+                                                                "retentionRate"
                                                                     .tr,
                                                                 maxLines: 1,
                                                                 style: AppTextStyle.textStyle10(
@@ -552,8 +552,8 @@ class HomeUI extends GetView<HomeController> {
                                                                             .context!,
                                                                         controller
                                                                             .walletData,
-                                                                        title:
-                                                                            "What is Ecommerce Wallet ?",
+                                                                        title: "what_is_ecommerce"
+                                                                            .tr,
                                                                         controller:
                                                                             controller,
                                                                         type:
@@ -583,7 +583,7 @@ class HomeUI extends GetView<HomeController> {
                                                                             fontWeight: FontWeight.w700),
                                                                       ),
                                                                       Text(
-                                                                        "Ecom. Wallet"
+                                                                        "ecommerceWallet"
                                                                             .tr,
                                                                         maxLines:
                                                                             1,
@@ -619,7 +619,7 @@ class HomeUI extends GetView<HomeController> {
                                                                           fontWeight: FontWeight.w700),
                                                                     ),
                                                                     Text(
-                                                                      "Ecom. Wallet"
+                                                                      "ecommerceWallet"
                                                                           .tr,
                                                                       maxLines:
                                                                           1,
@@ -651,8 +651,8 @@ class HomeUI extends GetView<HomeController> {
                                                                             .context!,
                                                                         controller
                                                                             .walletData,
-                                                                        title:
-                                                                            "What is Paid Wallet ?",
+                                                                        title: "what_is_paid"
+                                                                            .tr,
                                                                         controller:
                                                                             controller,
                                                                         type:
@@ -682,7 +682,7 @@ class HomeUI extends GetView<HomeController> {
                                                                             fontWeight: FontWeight.w700),
                                                                       ),
                                                                       Text(
-                                                                        "Paid Wallet"
+                                                                        "paidWallet"
                                                                             .tr,
                                                                         maxLines:
                                                                             1,
@@ -718,7 +718,7 @@ class HomeUI extends GetView<HomeController> {
                                                                           fontWeight: FontWeight.w700),
                                                                     ),
                                                                     Text(
-                                                                      "Paid Wallet"
+                                                                      "paidWallet"
                                                                           .tr,
                                                                       maxLines:
                                                                           1,
@@ -760,7 +760,7 @@ class HomeUI extends GetView<HomeController> {
                                                                             .w700),
                                                               ),
                                                               Text(
-                                                                "Repurchase Rate"
+                                                                "rePurchaseRate"
                                                                     .tr,
                                                                 maxLines: 1,
                                                                 style: AppTextStyle.textStyle10(
@@ -931,7 +931,7 @@ class HomeUI extends GetView<HomeController> {
                                                                   .width *
                                                               0.18,
                                                           child: Text(
-                                                            "PassBook".tr,
+                                                            "pass_book".tr,
                                                             overflow:
                                                                 TextOverflow
                                                                     .clip,
@@ -1014,7 +1014,7 @@ class HomeUI extends GetView<HomeController> {
                                                                   .width *
                                                               0.18,
                                                           child: Text(
-                                                            "View Kundli".tr,
+                                                            "viewKundali".tr,
                                                             overflow:
                                                                 TextOverflow
                                                                     .clip,
@@ -1953,7 +1953,7 @@ class HomeUI extends GetView<HomeController> {
                                                     .width *
                                                 0.15,
                                             child: Text(
-                                              "Message Template",
+                                              "messageTemplate".tr,
                                               style: AppTextStyle.textStyle10(
                                                 fontWeight: FontWeight.w500,
                                                 fontColor: appColors.black,
@@ -2008,7 +2008,7 @@ class HomeUI extends GetView<HomeController> {
                                                     .width *
                                                 0.15,
                                             child: Text(
-                                              "Suggested Remedies",
+                                              "suggestedRemedies".tr,
                                               style: AppTextStyle.textStyle10(
                                                 fontWeight: FontWeight.w500,
                                                 fontColor: appColors.black,
@@ -2060,7 +2060,7 @@ class HomeUI extends GetView<HomeController> {
                                                     .width *
                                                 0.15,
                                             child: Text(
-                                              "Custom Product",
+                                              "custom_product".tr,
                                               style: AppTextStyle.textStyle10(
                                                 fontWeight: FontWeight.w500,
                                                 fontColor: appColors.black,
@@ -2317,7 +2317,7 @@ class HomeUI extends GetView<HomeController> {
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 16, vertical: 5),
                                     child: Text(
-                                      "User Data".tr,
+                                      "user_data".tr,
                                       style: TextStyle(
                                         fontFamily: FontFamily.poppins,
                                         fontWeight: FontWeight.w400,
@@ -2333,8 +2333,8 @@ class HomeUI extends GetView<HomeController> {
                               ? SizedBox()
                               : ListView.builder(
                                   shrinkWrap: true,
-                                  padding:
-                                      EdgeInsets.symmetric(horizontal: 10.h),
+                                  // padding:
+                                  //     EdgeInsets.symmetric(horizontal: 10.h),
                                   physics: NeverScrollableScrollPhysics(),
                                   itemCount: (controller.filteredUserData)
                                               .isNotEmpty ||
@@ -3909,7 +3909,7 @@ class HomeUI extends GetView<HomeController> {
                         fontSize: 10.sp,
                         overflow: TextOverflow.ellipsis,
                       ),
-                      SizedBox(
+                      const SizedBox(
                         width: 4,
                       ),
                       GestureDetector(
@@ -4231,7 +4231,7 @@ class HomeUI extends GetView<HomeController> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      "Order Offers",
+                      "order_offers".tr,
                       style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w500,
                         fontColor: appColors.darkBlue,
@@ -4321,7 +4321,7 @@ class HomeUI extends GetView<HomeController> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                "Discount Offers",
+                "discount_offer".tr,
                 style: AppTextStyle.textStyle12(
                   fontWeight: FontWeight.w500,
                   fontColor: appColors.darkBlue,
@@ -5753,8 +5753,9 @@ class ChatAssistanceDataTileHome extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () {
+    return InkWell(
+      splashColor: appColors.grey.withOpacity(0.4),
+       onTap: () {
         DataList dataList = DataList();
         dataList.name = data.customerName;
         dataList.id = data.customerId;
@@ -5762,7 +5763,7 @@ class ChatAssistanceDataTileHome extends StatelessWidget {
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
       },
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(left: 16,right: 16,top: 8,bottom: 8),
         child: Column(
           children: [
             Row(
@@ -5827,14 +5828,14 @@ class ChatAssistanceDataTileHome extends StatelessWidget {
                                 color: appColors.darkGreen),
                             child: Padding(
                               padding: const EdgeInsets.fromLTRB(8, 4, 8, 4),
-                              child: CustomText("Connect",
+                              child: CustomText("connect".tr,
                                   fontColor: Colors.white, fontSize: 12.sp),
                             ),
                           )
                         ],
                       ),
                       CustomText(
-                        "Total Consultation : ${data.totalConsultation}",
+                        "${"total_consulation".tr} : ${data.totalConsultation}",
                         fontColor:
                             // (index == 0) ? appColors.darkBlue:
                             appColors.grey,
@@ -5844,7 +5845,7 @@ class ChatAssistanceDataTileHome extends StatelessWidget {
                             FontWeight.normal,
                       ),
                       CustomText(
-                        "Last Consulted : ${data.lastConsulted}",
+                        "${"last_consulted".tr} : ${data.lastConsulted}",
                         fontColor:
                             // (index == 0) ? appColors.darkBlue:
                             appColors.grey,
@@ -5854,7 +5855,7 @@ class ChatAssistanceDataTileHome extends StatelessWidget {
                             FontWeight.normal,
                       ),
                       CustomText(
-                        "Days Since Last Consulted : ${data.daySinceLastConsulted}",
+                        "${"days_since_last_consulted".tr} : ${data.daySinceLastConsulted}",
                         fontColor:
                             // (index == 0) ? appColors.darkBlue:
                             appColors.grey,

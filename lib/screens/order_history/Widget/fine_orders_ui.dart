@@ -142,7 +142,7 @@ class FineOrderHistory extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         CustomText(
-                          "Order Id",
+                          "orderId".tr,
                           fontWeight: FontWeight.w600,
                           fontSize: 12.sp,
                           fontColor: appColors.textColor,
@@ -151,7 +151,7 @@ class FineOrderHistory extends StatelessWidget {
                           height: 8,
                         ),
                         CustomText(
-                          "Type",
+                          "type".tr,
                           fontWeight: FontWeight.w600,
                           fontSize: 12.sp,
                           fontColor: appColors.textColor,
@@ -160,7 +160,7 @@ class FineOrderHistory extends StatelessWidget {
                           height: 8,
                         ),
                         CustomText(
-                          "Date",
+                          "dateTime".tr,
                           fontWeight: FontWeight.w600,
                           fontSize: 12.sp,
                           fontColor: appColors.textColor,

@@ -8,7 +8,7 @@ import '../../../common/common_elevated_button.dart';
 import '../../../common/routes.dart';
 import '../home_controller.dart';
 
-Future<void>    showTechnicalPopupAlert() async {
+Future<void> showTechnicalPopupAlert() async {
   // Ensure the HomeController is available
   if (!Get.isRegistered<HomeController>()) {
     Get.put<HomeController>(HomeController(), permanent: true);
@@ -31,7 +31,7 @@ Future<void>    showTechnicalPopupAlert() async {
           Padding(
             padding: const EdgeInsets.only(top: 10),
             child: CommonElevatedButton(
-              text: "Ok",
+              text: "okay".tr,
               onPressed: () {
                 Get.back();
               },
@@ -103,7 +103,7 @@ class TechnicalPopup extends GetView<HomeController> {
                                     alignment: Alignment.topRight,
                                     child: Text(
                                       // "Ticket No. :  DJF4389483",
-                                      "Ticket No. :  ${data['ticket_number'].toString()}",
+                                      "${"ticket_no".tr}. :  ${data['ticket_number'].toString()}",
                                       style: TextStyle(
                                         color: AppColors().grey,
                                         fontSize: 10,
@@ -119,7 +119,7 @@ class TechnicalPopup extends GetView<HomeController> {
                                     alignment: Alignment.topRight,
                                     child: Text(
                                       // "Created : 10-02-2022",
-                                      "Created : ${date.day}-${date.month}-${date.year}",
+                                      "${"created".tr} : ${date.day}-${date.month}-${date.year}",
                                       style: TextStyle(
                                         color: AppColors().red,
                                         fontSize: 10,
@@ -135,7 +135,7 @@ class TechnicalPopup extends GetView<HomeController> {
                                   bottom: 0, left: 16, top: 0, right: 16),
                               title: Text(
                                 // "Ticket Type : Issues (Pending)",
-                                "Ticket Type : ${data['ticket_type'] ?? ""} ${"( ${data['status_text'] ?? ""} )"}",
+                                "${"ticket_type".tr} : ${data['ticket_type'] ?? ""} ${"( ${data['status_text'] ?? ""} )"}",
                                 style: TextStyle(
                                   color: AppColors().black,
                                   fontSize: 14,
@@ -143,7 +143,7 @@ class TechnicalPopup extends GetView<HomeController> {
                                 ),
                               ),
                               subtitle: Text(
-                                "Description : ${data['description'] ?? ""}",
+                                "${"descriptions".tr} : ${data['description'] ?? ""}",
                                 style: TextStyle(
                                   color: AppColors().grey,
                                   fontSize: 12,
@@ -159,7 +159,7 @@ class TechnicalPopup extends GetView<HomeController> {
                                     child: Align(
                                       alignment: Alignment.topLeft,
                                       child: Text(
-                                        "How to solve :",
+                                        "${"how_to_solve".tr} :",
                                         style: TextStyle(
                                           color: AppColors().green,
                                           fontSize: 14,

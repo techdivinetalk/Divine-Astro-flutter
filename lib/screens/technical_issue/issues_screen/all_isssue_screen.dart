@@ -43,7 +43,7 @@ class AllTechnicalIssueScreen extends GetView<TechnicalIssuesListController> {
             ),
             titleSpacing: 0,
             title: Text(
-              "All Issues",
+              "all_issues".tr,
               style: AppTextStyle.textStyle16(),
             ),
             // centerTitle: true,
@@ -88,7 +88,7 @@ class AllTechnicalIssueScreen extends GetView<TechnicalIssuesListController> {
                                           child: Align(
                                             alignment: Alignment.topRight,
                                             child: Text(
-                                              "Ticket No. :  ${data.ticketId.toString()}",
+                                              "${"ticket_no".tr} :  ${data.ticketId.toString()}",
                                               style: TextStyle(
                                                 color: AppColors().grey,
                                                 fontSize: 10,
@@ -103,7 +103,7 @@ class AllTechnicalIssueScreen extends GetView<TechnicalIssuesListController> {
                                           child: Align(
                                             alignment: Alignment.topRight,
                                             child: Text(
-                                              "Created : ${date.day}-${date.month}-${date.year}",
+                                              "${"created".tr} : ${date.day}-${date.month}-${date.year}",
                                               style: TextStyle(
                                                 color: AppColors().red,
                                                 fontSize: 10,
@@ -121,7 +121,7 @@ class AllTechnicalIssueScreen extends GetView<TechnicalIssuesListController> {
                                           top: 0,
                                           right: 16),
                                       title: Text(
-                                        "Ticket Type : ${data.ticketType} ${"( ${data.status_text.toString()} )"}",
+                                        "${"ticket_type".tr} : ${data.ticketType} ${"( ${data.status_text.toString()} )"}",
                                         style: TextStyle(
                                           color: AppColors().black,
                                           fontSize: 14,
@@ -129,7 +129,7 @@ class AllTechnicalIssueScreen extends GetView<TechnicalIssuesListController> {
                                         ),
                                       ),
                                       subtitle: Text(
-                                        "Description : ${data.description}",
+                                        "${"descriptions".tr} : ${data.description}",
                                         style: TextStyle(
                                           color: AppColors().grey,
                                           fontSize: 12,
@@ -150,7 +150,7 @@ class AllTechnicalIssueScreen extends GetView<TechnicalIssuesListController> {
                                             child: Align(
                                               alignment: Alignment.topLeft,
                                               child: Text(
-                                                "Images Added :",
+                                                "${"image_added".tr} :",
                                                 style: TextStyle(
                                                   color: AppColors().grey,
                                                   fontSize: 12,
@@ -195,7 +195,7 @@ class AllTechnicalIssueScreen extends GetView<TechnicalIssuesListController> {
                                             child: Align(
                                               alignment: Alignment.topLeft,
                                               child: Text(
-                                                "How to solve :",
+                                                "${"how_to_solve".tr} :",
                                                 style: TextStyle(
                                                   color: AppColors().green,
                                                   fontSize: 14,
