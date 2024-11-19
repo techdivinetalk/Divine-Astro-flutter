@@ -34,7 +34,7 @@ class ForceUpdateSheet extends StatelessWidget {
               children: [
                 Assets.svg.update.svg(),
                 Text(
-                  "New Version is Available!",
+                  "new_version_is_availble".tr,
                   style: AppTextStyle.textStyle20(
                     fontColor: appColors.textColor,
                     fontWeight: FontWeight.w700,
@@ -42,7 +42,7 @@ class ForceUpdateSheet extends StatelessWidget {
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  "We recommend you to update your Divine App to the latest version to continue using the services.",
+                  "new_version_is_availble_text".tr,
                   textAlign: TextAlign.center,
                   style: AppTextStyle.textStyle14(
                     fontColor: appColors.lightGrey,
@@ -63,7 +63,7 @@ class ForceUpdateSheet extends StatelessWidget {
                       borderRadius: BorderRadius.circular(35),
                     ),
                     child: Text(
-                      "Update Now",
+                      "update_now".tr,
                       style: AppTextStyle.textStyle20(
                         fontColor: appColors.white,
                         fontWeight: FontWeight.w600,

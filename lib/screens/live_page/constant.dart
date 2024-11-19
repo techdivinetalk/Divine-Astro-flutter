@@ -27,6 +27,7 @@ RxList<AssistChatData> assistChatUnreadMessages = <AssistChatData>[].obs;
 RxBool chatSwitch = false.obs;
 RxBool callSwitch = false.obs;
 RxBool videoSwitch = false.obs;
+RxBool showFrontCamera = true.obs;
 RxString userImage = ''.obs;
 RxString imageUploadBaseUrl = ''.obs;
 RxInt fireChat = 1.obs;

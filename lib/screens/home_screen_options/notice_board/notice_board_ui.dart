@@ -38,26 +38,29 @@ class NoticeBoardUi extends GetView<NoticeBoardController> {
             }
 
             if (controller.loading == Loading.loaded) {
-              return controller.noticeList.isNotEmpty ? ListView.separated(
-                controller: controller.earningScrollController,
-                scrollDirection: Axis.vertical,
-                shrinkWrap: true,
-                itemCount: controller.noticeList.length,
-                itemBuilder: (context, index) {
-                  final data = controller.noticeList[index];
-                  return noticeBoardDetail(
-                    onTap: () {
-                      Get.toNamed(RouteName.noticeDetail,
-                          arguments: data, parameters: {"from_list": "1"});
-                    },
-                    title: data.title.toString(),
-                    date: data.createdAt,
-                    description: data.description.toString(),
-                  );
-                },
-                separatorBuilder: (context, index) => SizedBox(height: 15.sp),
-              )
-              : const Center(child: CustomText("No data found"));
+              return controller.noticeList.isNotEmpty
+                  ? ListView.separated(
+                      controller: controller.earningScrollController,
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: controller.noticeList.length,
+                      itemBuilder: (context, index) {
+                        final data = controller.noticeList[index];
+                        return noticeBoardDetail(
+                          onTap: () {
+                            Get.toNamed(RouteName.noticeDetail,
+                                arguments: data,
+                                parameters: {"from_list": "1"});
+                          },
+                          title: data.title.toString(),
+                          date: data.createdAt,
+                          description: data.description.toString(),
+                        );
+                      },
+                      separatorBuilder: (context, index) =>
+                          SizedBox(height: 15.sp),
+                    )
+                  : const Center(child: CustomText("No data found"));
             }
 
             return const SizedBox.shrink();
@@ -179,7 +182,7 @@ class _ExpandableHtmlState extends State<ExpandableHtml>
                 });
               },
               child: Text(
-                _isExpanded ? "Read Less" : "Read More",
+                _isExpanded ? "readLess".tr : "readMore".tr,
                 style: TextStyle(
                   fontSize: 12.sp,
                   fontWeight: FontWeight.w700,

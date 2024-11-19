@@ -214,7 +214,7 @@ class _AllCityListSheetState extends State<AllCityListSheet> {
                     // ),
                     SizedBox(width: 16.w),
                     Text(
-                      "Please select city",
+                      "please_select_city".tr,
                       style: TextStyle(
                         fontWeight: FontWeight.w700,
                         color: appColors.textColor,

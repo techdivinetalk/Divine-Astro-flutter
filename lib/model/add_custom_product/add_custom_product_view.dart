@@ -36,7 +36,7 @@ class AddCustomProductView extends GetView<AddCustomProductController> {
             leading: IconButton(
                 onPressed: () => Get.back(),
                 icon: const Icon(Icons.arrow_back_ios_new_rounded)),
-            title: CustomText('Add Custom Product'.tr),
+            title: CustomText('add_custom_product'.tr),
           ),
           body: ListView(
             padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -63,13 +63,13 @@ class AddCustomProductView extends GetView<AddCustomProductController> {
               ),
               SizedBox(height: 10.h),
               CustomText(
-                'Upload Product Image',
+                'upload_product_image'.tr,
                 fontColor: appColors.textColor,
                 textAlign: TextAlign.center,
               ),
               SizedBox(height: 20.h),
               PoojaRemedyTextFiled(
-                title: "Product Name",
+                title: "product_name".tr,
                 maxLength: 20,
                 controller: controller.productName,
                 textInputFormatter: [CustomSpaceInputFormatter()],
@@ -97,7 +97,7 @@ class AddCustomProductView extends GetView<AddCustomProductController> {
                   FilteringTextInputFormatter.digitsOnly
                 ],
                 isSuffix: false,
-                title: 'Product Price ( In INR )',
+                title: 'product_price'.tr,
                 focusNode: controller.priceNode,
                 keyboardType: TextInputType.number,
                 onFieldSubmitted: (value) {
@@ -138,7 +138,7 @@ class AddCustomProductView extends GetView<AddCustomProductController> {
                           color: appColors.white,
                         )
                       : CustomText(
-                          'Save',
+                          'save'.tr,
                           fontColor: appColors.white,
                           fontWeight: FontWeight.w500,
                           fontSize: 16,

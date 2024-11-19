@@ -1073,7 +1073,7 @@ class ProfileUI extends GetView<ProfilePageController> {
                         }
                       },
                       child: Text(
-                        "Load More Reviews".tr,
+                        "loadMoreReview".tr,
                         style: TextStyle(
                           fontSize: 12.sp,
                           // decoration: TextDecoration.underline,

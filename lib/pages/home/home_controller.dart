@@ -1147,10 +1147,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         if (showAllPopup.value == true) {
           Get.bottomSheet(CommonInfoSheet(
             isBackButton: false,
-            title: "⚠ Warning Astrologer ⚠".tr,
-            subTitle:
-                "Your user retention is below industry standard. Your retention is less than 10% Your are not eligible for Bonus wallet. Please review and improve strategies promptly to increase User retention rate. Thank you. 🌟"
-                    .tr,
+            title: "⚠ ${"warning_astrologers".tr} ⚠".tr,
+            subTitle: "warning_text".tr,
             onTap: () {
               Get.back();
             },
@@ -2157,7 +2155,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    "Discount Offers",
+                    "discount_offer".tr,
                     style: AppTextStyle.textStyle12(
                       fontWeight: FontWeight.w500,
                       fontColor: appColors.darkBlue,

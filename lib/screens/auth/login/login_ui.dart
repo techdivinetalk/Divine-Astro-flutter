@@ -57,7 +57,7 @@ class LoginUI extends GetView<LoginController> {
                               controller: controller,
                             ),
                             TextWithDivider(
-                              text: 'Log in or Sign up',
+                              text: 'loginOrSignUp'.tr,
                               textColor: appColors.greyColor,
                               dividerHeight: 1.0,
                             ),
@@ -73,7 +73,7 @@ class LoginUI extends GetView<LoginController> {
                                         TextSpan(children: [
                                           WidgetSpan(
                                             child: Text(
-                                              "By signing up, you agree to our ",
+                                              "bySigning".tr,
                                               style: TextStyle(
                                                 color: appColors.textColor,
                                                 fontSize: 12,
@@ -88,7 +88,7 @@ class LoginUI extends GetView<LoginController> {
                                               onTap: () => Get.toNamed(
                                                   RouteName.termsCondition),
                                               child: Text(
-                                                "terms of use",
+                                                "termsOfUse".tr,
                                                 style: TextStyle(
                                                   color: appColors.textColor,
                                                   fontSize: 12,
@@ -115,7 +115,8 @@ class LoginUI extends GetView<LoginController> {
                                                       .translucent,
                                                   onTap: () => Get.toNamed(
                                                       RouteName.privacyPolicy),
-                                                  child: Text("privacy policy",
+                                                  child: Text(
+                                                      "privacyPolicy".tr,
                                                       style: TextStyle(
                                                           color: appColors
                                                               .textColor,
@@ -127,7 +128,7 @@ class LoginUI extends GetView<LoginController> {
                                                                   .underline))))
                                         ])))),
                             Text(
-                              "I hereby authorize to receive RCS, Whatsapp messages, and informational emails.",
+                              "i_here_by_authorize".tr,
                               style: TextStyle(
                                 color: appColors.textColor,
                                 fontSize: 12,
@@ -158,7 +159,7 @@ class LoginUI extends GetView<LoginController> {
                                   ),
                                   child: !controller.isLoading.value
                                       ? Text(
-                                          "Send OTP",
+                                          "sendOTP".tr,
                                           style: AppTextStyle.textStyle16(
                                             fontWeight: FontWeight.w600,
                                             fontColor: appColors.white,
@@ -176,7 +177,7 @@ class LoginUI extends GetView<LoginController> {
                                         isTruecaller.value.toString() == "1") ||
                                     kDebugMode,
                                 child: TextWithDivider(
-                                  text: 'Or',
+                                  text: 'or'.tr,
                                   textColor: appColors.greyColor,
                                   dividerHeight: 1.0,
                                 ))),
@@ -231,8 +232,8 @@ class LoginUI extends GetView<LoginController> {
                                           Image.asset(
                                               "assets/images/true_caller_icon.png"),
                                           const SizedBox(width: 16),
-                                          const Text(
-                                            "Login with TrueCaller",
+                                          Text(
+                                            "loginWithTrueCaller".tr,
                                             style: TextStyle(
                                               color: Color(0xff0087FF),
                                             ),
@@ -311,7 +312,7 @@ class LoginUI extends GetView<LoginController> {
                           child: Padding(
                             padding: EdgeInsets.all(5),
                             child: Text(
-                              "Support",
+                              'support'.tr,
                               style: TextStyle(
                                 decoration: TextDecoration.underline,
                               ),
@@ -367,7 +368,7 @@ class LoginUI extends GetView<LoginController> {
           ],
           decoration: InputDecoration(
             counterText: '',
-            hintText: "Enter mobile number",
+            hintText: "mobileNumberEmptyMsg".tr,
             fillColor: appColors.white,
             hintStyle: AppTextStyle.textStyle16(fontColor: appColors.greyColor),
             prefixIcon: InkWell(

@@ -47,11 +47,11 @@ class PassbooksController extends GetxController with WidgetsBindingObserver {
   getPassbookData(value) async {
     isLoading(true);
 
-    int walletType = value == "Bonus"
+    int walletType = value == "bonus".tr
         ? 2
-        : value == "Paid"
+        : value == "paid".tr
             ? 1
-            : value == "Ecomm"
+            : value == "ecom".tr
                 ? 3
                 : 1;
 

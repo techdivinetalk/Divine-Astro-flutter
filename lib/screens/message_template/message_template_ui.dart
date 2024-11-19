@@ -179,7 +179,7 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                           Expanded(
                                             child: Row(
                                               children: [
-                                                Text('Template Name: ',
+                                                Text('${"template_name".tr} : ',
                                                     style: AppTextStyle
                                                         .textStyle14(
                                                             fontWeight:
@@ -296,7 +296,8 @@ class MessageTemplateUI extends GetView<MessageTemplateController> {
                                           maxLines: 4,
                                           text: TextSpan(children: [
                                             TextSpan(
-                                                text: 'Display Message: ',
+                                                text:
+                                                    '${"template_message".tr} : ',
                                                 style: AppTextStyle.textStyle14(
                                                     fontWeight:
                                                         FontWeight.w600)),

@@ -213,7 +213,7 @@ class _NotReceiveOtpTextState extends State<NotReceiveOtpText> {
           child: Text(
             _remainingTime == 0
                 ? "resend".tr
-                : "Resend in $_remainingTime seconds",
+                : "${"resendIn".tr} $_remainingTime ${"seconds".tr}",
             style: TextStyle(
               fontSize: 15.sp,
               fontWeight: FontWeight.w700,

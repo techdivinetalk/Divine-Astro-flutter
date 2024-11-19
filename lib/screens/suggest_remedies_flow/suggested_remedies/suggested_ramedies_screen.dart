@@ -29,7 +29,7 @@ class SuggestedRemediesScreen extends StatelessWidget {
         centerTitle: false,
         forceMaterialTransparency: true,
         backgroundColor: appColors.white,
-        title: Text("Suggested Remedies",
+        title: Text("suggestedRemedies".tr,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
@@ -191,7 +191,7 @@ class SuggestedRemediesScreen extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Order Id : ${data[index].orderId}",
+                        Text("${"orderId".tr} : ${data[index].orderId}",
                             style: AppTextStyle.textStyle12(
                                 fontWeight: FontWeight.w400,
                                 fontColor: appColors.darkBlue)),
@@ -243,7 +243,7 @@ class SuggestedRemediesScreen extends StatelessWidget {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text("Date Time :",
+                Text("${"dateTime".tr} :",
                     style: AppTextStyle.textStyle12(
                         fontWeight: FontWeight.w400,
                         fontColor: appColors.darkBlue)),
@@ -266,7 +266,7 @@ class SuggestedRemediesScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Expanded(
-                  child: Text("Remedy Suggested :",
+                  child: Text("${"remedySuggested".tr} :",
                       style: AppTextStyle.textStyle12(
                           fontWeight: FontWeight.w400,
                           fontColor: appColors.darkBlue)),
@@ -285,8 +285,7 @@ class SuggestedRemediesScreen extends StatelessWidget {
               ],
             ),
             const SizedBox(height: 8),
-            Text(
-                "(Click to connect with user and try to increase your Ecom on chat assistance)",
+            Text("click_to_connect_with_user".tr,
                 textAlign: TextAlign.center,
                 style: AppTextStyle.textStyle12(
                     fontWeight: FontWeight.w400,

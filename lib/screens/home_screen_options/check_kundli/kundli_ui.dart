@@ -144,7 +144,7 @@ class CheckYours extends GetView<KundliController> {
                     return null;
                   },
                   prefixIcon: Assets.images.icUser.svg(),
-                  hintText: "Enter Name",
+                  hintText: "hintTextName".tr,
                   onTap: () {},
                 ),
                 // Row(
@@ -255,7 +255,7 @@ class CheckYours extends GetView<KundliController> {
                                 ? DateFormat("dd/MM/yyyy")
                                     .parse(controller.yourDateController.text)
                                 : DateTime.now(),
-                            title: "Select Date Of Birth".tr,
+                            title: "selectDateBirth".tr,
                             btnTitle: "confirmDateBirth".tr,
                             pickerStyle: "DateCalendar",
                             looping: true,
@@ -295,7 +295,7 @@ class CheckYours extends GetView<KundliController> {
                                 ? DateFormat("hh:mm a")
                                     .parse(controller.yourTimeController.text)
                                 : DateTime.now(),
-                            title: "Select Time Of Birth".tr,
+                            title: "confirmTimeBirth".tr,
                             btnTitle: "confirmTimeBirth".tr,
                             pickerStyle: "TimeCalendar",
                             looping: true,
@@ -336,7 +336,7 @@ class CheckYours extends GetView<KundliController> {
                     return null;
                   },
                   prefixIcon: Assets.images.icLocation.svg(),
-                  hintText: "birthPlace".tr,
+                  hintText: "please_select_city".tr,
                   onTap: () {
                     // if (controller!.yourCountryController.text.isNotEmpty) {
                     Get.bottomSheet(Padding(

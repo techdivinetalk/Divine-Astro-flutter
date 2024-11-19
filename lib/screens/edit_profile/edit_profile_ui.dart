@@ -267,7 +267,7 @@ class EditProfileUI extends GetView<EditProfileController> {
                 ),
                 SizedBox(height: 20.h),*/
                     Text(
-                      "Select Skills".tr,
+                      "select_skills".tr,
                       style: AppTextStyle.textStyle14(),
                     ),
                     SizedBox(height: 5.h),

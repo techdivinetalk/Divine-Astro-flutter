@@ -1164,7 +1164,7 @@ Future<void> showCallingError(response, callLoading, callUser) async {
                 ),
                 child: Center(
                   child: Text(
-                    "Okay",
+                    "okay".tr,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 16.sp,
@@ -1201,7 +1201,7 @@ Future<void> showErrorPopup(response) async {
             Get.back();
           },
           child: Text(
-            "Okay",
+            "okay".tr,
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: 16.sp,

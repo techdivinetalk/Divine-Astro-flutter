@@ -1,24 +1,17 @@
-import 'dart:io';
-
 // import 'package:camera/camera.dart';
 import 'package:camerax/camerax.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
-import 'package:divine_astrologer/common/permission_handler.dart';
-import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/screens/live_dharam/perm/app_permission_service.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/common_button.dart';
-import 'package:flutter/cupertino.dart';
-
 import 'package:flutter/material.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
-
 // import 'package:flutter_screen_recording/flutter_screen_recording.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../live_page/constant.dart';
 import 'live_tips_controller.dart';
 
 class LiveTipsUI extends GetView<LiveTipsController> {
@@ -100,6 +93,8 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                           child: InkWell(
                             onTap: () {
                               controller.toggleCameraLens();
+                              print(
+                                  "------------------------------------------------changing toggle${showFrontCamera.value}");
                             },
                             child: Obx(
                               () => Icon(
@@ -132,7 +127,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                   Expanded(
                     flex: 0,
                     child: Text(
-                      "Please make sure you and your background environment are ready to start a live check   your video and audio.",
+                      "please_make_sure_background_env".tr,
                       style: AppTextStyle.textStyle16(
                           fontColor: appColors.white,
                           fontWeight: FontWeight.w500),
@@ -144,7 +139,7 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                   Expanded(
                     flex: 0,
                     child: Text(
-                      "To guarantee the user experience, please make sure you can live for 30 mins at least.",
+                      "to_guarantee_user_experience".tr,
                       style: AppTextStyle.textStyle16(
                           fontColor: appColors.white,
                           fontWeight: FontWeight.w500),

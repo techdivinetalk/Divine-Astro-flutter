@@ -37,9 +37,9 @@ class WalletPage extends GetView<WalletController> {
           highlightColor: appColors.transparent,
           splashColor: appColors.transparent,
           onPressed: () {
-            if(controller.isOrderHistoryBack){
+            if (controller.isOrderHistoryBack) {
               Get.offNamed(RouteName.orderHistory);
-            } else{
+            } else {
               Get.back();
             }
           },
@@ -211,7 +211,7 @@ class WalletPage extends GetView<WalletController> {
                       child: Column(
                         children: [
                           Text(
-                            'Available Balance:',
+                            '${"availableBalance".tr} :',
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             style: AppTextStyle.textStyle12(
@@ -233,7 +233,7 @@ class WalletPage extends GetView<WalletController> {
                       child: Column(
                         children: [
                           Text(
-                            'PG \n Charges:',
+                            '${"pgCharges".tr} :',
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             style: AppTextStyle.textStyle12(
@@ -255,7 +255,7 @@ class WalletPage extends GetView<WalletController> {
                       child: Column(
                         children: [
                           Text(
-                            'Sub \n Total:',
+                            '${"subTotal".tr} :',
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             style: AppTextStyle.textStyle12(
@@ -277,7 +277,7 @@ class WalletPage extends GetView<WalletController> {
                       child: Column(
                         children: [
                           Text(
-                            'Product  \n Sold:',
+                            '${"product_sold".tr} :',
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             style: AppTextStyle.textStyle12(
@@ -321,7 +321,7 @@ class WalletPage extends GetView<WalletController> {
                       child: Column(
                         children: [
                           Text(
-                            'Total \n Amount',
+                            '${"totalAmount".tr} :',
                             textAlign: TextAlign.center,
                             maxLines: 2,
                             style: AppTextStyle.textStyle12(
