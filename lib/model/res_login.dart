@@ -41,6 +41,7 @@ class UserData {
   String? description;
   int? isChat;
   int? isCall;
+  int? isLive;
   int? isVideo;
   num? amount;
   int? videoCallAmount;
@@ -51,12 +52,12 @@ class UserData {
   int? anonymousCallMinimumTime;
   int? chatAmount;
   int? chatMinimumTime;
-  double? videoCallPayout;
-  double? audioCallPayout;
+  num? videoCallPayout;
+  num? audioCallPayout;
 
   // int? anonymousCallPayout;
   // String? chatPayout;
-  double? giftPayout;
+  dynamic giftPayout;
   String? accountNumber;
   String? ifscCode;
   String? accountHolderName;
@@ -89,6 +90,7 @@ class UserData {
   String? sessionId;
   int? callPreviousStatus;
   int? chatPreviousStatus;
+  int? videoCallPreviousStatus;
   num? retention;
   String? premium;
   List<AstrologerSpeciality>? astrologerSpeciality;
@@ -115,6 +117,7 @@ class UserData {
     this.description,
     this.isChat,
     this.isCall,
+    this.isLive,
     this.isVideo,
     this.amount,
     this.videoCallAmount,
@@ -160,6 +163,7 @@ class UserData {
     this.sessionId,
     this.callPreviousStatus,
     this.chatPreviousStatus,
+    this.videoCallPreviousStatus,
     this.retention,
     this.premium,
     // this.astroCat,
@@ -185,7 +189,8 @@ class UserData {
     description = json['description'];
     isChat = json['is_chat'];
     isCall = json['is_call'];
-    isVideo = json['is_video'];
+    isLive = json['is_video'];
+    isVideo = json['is_video_call'];
     amount = json['amount'];
     videoCallAmount = json['video_call_amount'];
     videoCallMinimumTime = json['video_call_minimum_time'];
@@ -195,11 +200,11 @@ class UserData {
     anonymousCallMinimumTime = json['anonymous_call_minimum_time'];
     chatAmount = json['chat_amount'];
     chatMinimumTime = json['chat_minimum_time'];
-    videoCallPayout = double.parse(json['video_call_payout'].toString());
-    audioCallPayout = double.parse(json['audio_call_payout'].toString());
+    videoCallPayout = json['video_call_payout'];
+    audioCallPayout = json['audio_call_payout'];
     // anonymousCallPayout = json['anonymous_call_payout'];
     // chatPayout = json['chat_payout'];
-    giftPayout = double.parse(json['gift_payout'].toString());
+    giftPayout = json['gift_payout'] ?? 0.0;
     accountNumber = json['account_number'];
     ifscCode = json['ifsc_code'];
     accountHolderName = json['account_holder_name'];
@@ -230,6 +235,7 @@ class UserData {
     sessionId = json['session_id'];
     callPreviousStatus = json['call_previous_status'];
     chatPreviousStatus = json['chat_previous_status'];
+    videoCallPreviousStatus = json['video_call_previous_status'];
     retention = json['retention'];
     premium = json['premium'];
     mobileNumber = json['mobile_no'];
@@ -271,7 +277,8 @@ class UserData {
     data['description'] = description;
     data['is_chat'] = isChat;
     data['is_call'] = isCall;
-    data['is_video'] = isVideo;
+    data['is_video'] = isLive;
+    data['is_video_call'] = isVideo;
     data['amount'] = amount;
     data['video_call_amount'] = videoCallAmount;
     data['video_call_minimum_time'] = videoCallMinimumTime;

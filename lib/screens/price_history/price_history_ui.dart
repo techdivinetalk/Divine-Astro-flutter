@@ -42,7 +42,7 @@ class PriceHistoryUI extends GetView<PriceHistoryController> {
                           blurRadius: 1.0,
                           offset: const Offset(0.0, 3.0)),
                     ],
-                    color: AppColors.white,
+                    color: appColors.white,
                     borderRadius: const BorderRadius.all(Radius.circular(20)),
                   ),
                   child: Row(
@@ -57,7 +57,7 @@ class PriceHistoryUI extends GetView<PriceHistoryController> {
                           "priceChangeBtn".tr,
                           style: AppTextStyle.textStyle20(
                               fontWeight: FontWeight.w400,
-                              fontColor: AppColors.darkBlue),
+                              fontColor: appColors.darkBlue),
                         ),
                       ),
                     ],
@@ -85,13 +85,13 @@ class PriceHistoryUI extends GetView<PriceHistoryController> {
                             "${"serviceType".tr} : ",
                             style: AppTextStyle.textStyle16(
                                 fontWeight: FontWeight.w400,
-                                fontColor: AppColors.darkBlue),
+                                fontColor: appColors.darkBlue),
                           ),
                           Text(
                             "call".tr,
                             style: AppTextStyle.textStyle16(
                                 fontWeight: FontWeight.w700,
-                                fontColor: AppColors.darkBlue),
+                                fontColor: appColors.darkBlue),
                           ),
                         ],
                       ),
@@ -104,13 +104,13 @@ class PriceHistoryUI extends GetView<PriceHistoryController> {
                             "${'priceRequested'.tr} : ",
                             style: AppTextStyle.textStyle16(
                                 fontWeight: FontWeight.w400,
-                                fontColor: AppColors.darkBlue),
+                                fontColor: appColors.darkBlue),
                           ),
                           Text(
                             "₹35/Min",
                             style: AppTextStyle.textStyle16(
                                 fontWeight: FontWeight.w400,
-                                fontColor: AppColors.darkBlue),
+                                fontColor: appColors.darkBlue),
                           ),
                         ],
                       ),
@@ -123,13 +123,13 @@ class PriceHistoryUI extends GetView<PriceHistoryController> {
                             "${"requestRaised".tr} : ",
                             style: AppTextStyle.textStyle16(
                                 fontWeight: FontWeight.w400,
-                                fontColor: AppColors.darkBlue),
+                                fontColor: appColors.darkBlue),
                           ),
                           Text(
                             "24 Aug 22, 12:20 PM",
                             style: AppTextStyle.textStyle16(
                                 fontWeight: FontWeight.w400,
-                                fontColor: AppColors.darkBlue),
+                                fontColor: appColors.darkBlue),
                           ),
                         ],
                       ),
@@ -142,13 +142,13 @@ class PriceHistoryUI extends GetView<PriceHistoryController> {
                             "${"status".tr} : ",
                             style: AppTextStyle.textStyle16(
                                 fontWeight: FontWeight.w400,
-                                fontColor: AppColors.darkBlue),
+                                fontColor: appColors.darkBlue),
                           ),
                           Text(
                             "approved".tr,
                             style: AppTextStyle.textStyle16(
                                 fontWeight: FontWeight.w700,
-                                fontColor: AppColors.darkGreen),
+                                fontColor: appColors.darkGreen),
                           ),
                         ],
                       ),

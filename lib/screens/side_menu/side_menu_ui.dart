@@ -1,35 +1,41 @@
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
+import 'package:divine_astrologer/pages/new_registration/new_registration_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../common/routes.dart';
+import '../../pages/home/home_controller.dart';
 
-class SideMenuDrawer extends StatelessWidget {
+class SideMenuDrawer extends GetView<HomeController> {
   const SideMenuDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // checkInternetSpeed(true,context);
     return Drawer(
-      backgroundColor: AppColors.white,
+      backgroundColor: appColors.white,
       surfaceTintColor: Colors.transparent,
+      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.zero),
       child: SafeArea(
         child: ListView(
           padding: EdgeInsets.zero,
           children: <Widget>[
             const SizedBox(height: 10),
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Text(
-                  "Version 0.0.0.0.0",
-                  style: TextStyle(fontSize: 16),
-                ),
+                /*Text(
+                 */ /* "${'version'.tr} 4.1.0"*/ /*"",
+                  style: TextStyle(fontSize: 16, color: appColors.grey),
+                ),*/
                 InkWell(
-                    onTap: () {
-                     Navigator.pop(context);
-                    },
-                    child: const Icon(Icons.close))
+                  onTap: () => Navigator.pop(context),
+                  child: const Icon(Icons.close),
+                ),
+                const SizedBox(width: 10),
               ],
             ),
             const SizedBox(height: 10),
@@ -46,11 +52,11 @@ class SideMenuDrawer extends StatelessWidget {
               title: Text("orderHistory".tr),
               onTap: () => {Get.back(), Get.toNamed(RouteName.orderHistory)},
             ),
-            // ListTile(
-            //   leading: Assets.images.icReport.svg(),
-            //   title: Text("reportAnAstrologer".tr),
-            //   onTap: () => {},
-            // ),
+            ListTile(
+              leading: Assets.images.icMessageTemplate.svg(),
+              title: Text("messageTemplate".tr),
+              onTap: () => {Get.back(), Get.toNamed(RouteName.messageTemplate)},
+            ),
             ListTile(
               leading: Assets.images.icSetting.svg(),
               title: Text('settings'.tr),
@@ -60,34 +66,59 @@ class SideMenuDrawer extends StatelessWidget {
               },
             ),
             ListTile(
-              leading: Assets.images.icContactUs1.svg(),
-              title: Text('contactUs'.tr),
-              onTap: () => {Navigator.of(context).pop()},
-            ),
-            ListTile(
-              leading: Assets.images.icFeedBack.svg(),
-              title: Text('shareFeedback'.tr),
-              onTap: () => {Navigator.of(context).pop()},
+              leading: Assets.images.icCustomerCare.svg(),
+              title: Text('customerCare'.tr),
+              onTap: () => {Navigator.of(context).pop(), controller.whatsapp()},
             ),
             ListTile(
               leading: Assets.images.icImportContact.svg(),
               title: Text('importantNumbers'.tr),
-              onTap: () => {
-                Navigator.of(context).pop(),
-                Get.toNamed(RouteName.importantNumbers)
+              onTap: () async {
+                Navigator.of(context).pop();
+                bool isPermission = await requestPermissions();
+                if (isPermission) {
+                  Get.toNamed(RouteName.importantNumbers);
+                } else {
+                  divineSnackBar(data: "Please give permission for contacts");
+                }
               },
             ),
             ListTile(
+              leading: Assets.images.icImportContact.svg(),
+              title: Text('New Reg'.tr),
+              onTap: () async {
+                Navigator.of(context).pop();
+                Get.to(NewRegstrationScreen());
+                // bool isPermission = await requestPermissions();
+                // if (isPermission) {
+                //   Get.toNamed(RouteName.importantNumbers);
+                // } else {
+                //   divineSnackBar(data: "Please give permission for contacts");
+                // }
+              },
+            ),
+            /*  ListTile(
               leading: Assets.images.icDonations.svg(),
               title: Text('donation'.tr),
               onTap: () => {
                 Navigator.of(context).pop(),
                 Get.toNamed(RouteName.donationUi)
               },
-            ),
+            ),*/
           ],
         ),
       ),
     );
+  }
+
+  requestPermissions() async {
+    var status = await Permission.contacts.status;
+    bool isGranted = false;
+    if (!status.isGranted) {
+      await Permission.contacts.request().then((value) {
+        print("is granted contact permission ? ==> ${isGranted}");
+      });
+    } else {}
+    return Permission.contacts.isGranted;
   }
 }

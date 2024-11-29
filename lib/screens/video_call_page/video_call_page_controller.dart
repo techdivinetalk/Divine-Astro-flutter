@@ -1,7 +1,6 @@
 import 'package:divine_astrologer/model/chat/req_common_chat_model.dart';
 import 'package:divine_astrologer/model/chat/res_astro_chat_listener.dart';
 import 'package:divine_astrologer/repository/chat_repository.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../common/routes.dart';
@@ -51,8 +50,6 @@ class VideoCallPageController extends GetxController {
         orderId: data!.orderId,
         queueId: data!.queueId,
       ).toJson());
-      debugPrint("Request has been changed : $response");
-      // response = response as R/esCommonChatStatus;
       if (response.statusCode == 200) {
         isWaiting.value = true;
         btnTitle.value = "Waiting for user to connect ...";

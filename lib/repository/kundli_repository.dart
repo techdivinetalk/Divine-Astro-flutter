@@ -1,10 +1,11 @@
 import 'dart:convert';
-import 'dart:developer';
 
 import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 import '../common/routes.dart';
 import '../model/get_kundli_data.dart' as kundli_data;
 import '../model/internal/astro_details_model.dart';
@@ -26,6 +27,11 @@ class KundliRepository extends ApiProvider {
       final response = await post(getAstroDetailsInt,
           headers: await getJsonHeaderURL(version: 7),
           body: jsonEncode(params).toString());
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
       if (response.statusCode == 200) {
         final astroDetails = astroDetailsModelFromJson(response.body);
         return astroDetails;
@@ -45,6 +51,11 @@ class KundliRepository extends ApiProvider {
       final response = await post(getBirthDetailsInt,
           headers: await getJsonHeaderURL(version: 7),
           body: jsonEncode(params));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
       if (response.statusCode == 200) {
         final birthDetails = birthDetailsModelFromJson(response.body);
         return birthDetails;
@@ -65,6 +76,11 @@ class KundliRepository extends ApiProvider {
       final response = await post(getManglikDetailsInt,
           headers: await getJsonHeaderURL(version: 7),
           body: jsonEncode(params));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
       if (response.statusCode == 200) {
         final manglikDosh = manglikDoshModelFromJson(response.body);
         return manglikDosh;
@@ -84,6 +100,11 @@ class KundliRepository extends ApiProvider {
     try {
       final response = await post('$horoChartImageInt$chartId',
           headers: await getJsonHeaderURL(), body: jsonEncode(params));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
       if (response.statusCode == 200) {
         final horoChart = horoChartModelFromJson(response.body);
         return horoChart;
@@ -104,6 +125,11 @@ class KundliRepository extends ApiProvider {
       final response = await post(getGeneralNakshatraReportInt,
           headers: await getJsonHeaderURL(version: 7),
           body: jsonEncode(params));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
       if (response.statusCode == 200) {
         final kundliPrediction = kundliPredictionModelFromJson(response.body);
         return kundliPrediction;
@@ -122,14 +148,18 @@ class KundliRepository extends ApiProvider {
       Map<String, dynamic> param) async {
     try {
       final response = await post(getKundliData,
-          endPoint: "https://wakanda-api.divinetalk.live/api/v7/",
+          endPoint: ApiProvider.baseUrl,
           body: jsonEncode(param),
           headers: await getJsonHeaderURL());
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final customerLoginModel =
@@ -154,6 +184,11 @@ class KundliRepository extends ApiProvider {
           // endPoint: astrologyBaseUrl,
           headers: await getJsonHeaderURL(),
           body: jsonEncode(params));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
       if (response.statusCode == 200) {
         final kpData = kpDataModelFromJson(response.body);
         return kpData;
@@ -174,6 +209,11 @@ class KundliRepository extends ApiProvider {
           // endPoint: astrologyBaseUrl,
           headers: await getJsonHeaderURL(),
           body: jsonEncode(params));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
       if (response.statusCode == 200) {
         final planetData = planetlDetailModelFromJson(response.body);
         return planetData;
@@ -194,6 +234,11 @@ class KundliRepository extends ApiProvider {
           // endPoint: astrologyBaseUrl,
           headers: await getJsonHeaderURL(),
           body: jsonEncode(params));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
       if (response.statusCode == 200) {
         final kpData = dashaChartDataModelFromJson(response.body);
         return kpData;
@@ -214,6 +259,11 @@ class KundliRepository extends ApiProvider {
           // endPoint: astrologyBaseUrl,
           headers: await getJsonHeaderURL(),
           body: jsonEncode(params));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
       if (response.statusCode == 200) {
         final planetData = getPratyantarDashaModelFromJson(response.body);
         return planetData;
@@ -239,6 +289,11 @@ class KundliRepository extends ApiProvider {
               // endPoint: astrologyBaseUrl,
               headers: await getJsonHeaderURL(),
               body: jsonEncode(params));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
       if (response.statusCode == 200) {
         final planetData = sookshmaDashaModelFromJson(response.body);
         return planetData;
@@ -265,6 +320,11 @@ class KundliRepository extends ApiProvider {
           // endPoint: astrologyBaseUrl,
           headers: await getJsonHeaderURL(),
           body: jsonEncode(params));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
       if (response.statusCode == 200) {
         final planetData = pranDashaModelFromJson(response.body);
         return planetData;

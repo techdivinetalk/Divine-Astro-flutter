@@ -2,7 +2,6 @@ class FirebaseUserData {
   final String name;
   final String deviceToken;
   final String profileImage;
-
   RealTime realTime;
 
   FirebaseUserData(
@@ -14,7 +13,7 @@ class FirebaseUserData {
 
   FirebaseUserData.fromJson(Map<dynamic, dynamic> json)
       : name = json['name'] as String,
-        deviceToken = json['deviceToken'] as String,
+        deviceToken = json['deviceToken'],
         profileImage = json['profileImage'] as String,
         realTime = RealTime.fromJson(json["realTime"]);
 

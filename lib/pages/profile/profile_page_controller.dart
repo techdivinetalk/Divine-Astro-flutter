@@ -1,21 +1,26 @@
-// ignore_for_file: depend_on_referenced_packages
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
-import 'package:divine_astrologer/pages/profile/profile_ui.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:divine_astrologer/common/zego_services.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:path/path.dart' as p;
+
 import 'package:aws_s3_upload/aws_s3_upload.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage.dart';
 import 'package:divine_astrologer/common/getStorage/get_storage_key.dart';
+import 'package:divine_astrologer/di/api_provider.dart';
+import 'package:divine_astrologer/model/constant_details_model_class.dart';
 import 'package:divine_astrologer/model/res_reply_review.dart';
+import 'package:divine_astrologer/pages/profile/profile_ui.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:image_cropper/image_cropper.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as p;
+import 'package:url_launcher/url_launcher.dart';
+
 import '../../common/app_exception.dart';
 import '../../common/colors.dart';
 import '../../common/custom_widgets.dart';
@@ -25,8 +30,7 @@ import '../../model/res_login.dart';
 import '../../model/res_review_ratings.dart';
 import '../../model/res_user_profile.dart';
 import '../../repository/user_repository.dart';
-import '../../screens/dashboard/dashboard_controller.dart';
-import '../../utils/utils.dart';
+import '../../screens/live_page/constant.dart';
 
 class ProfilePageController extends GetxController {
   final UserRepository userRepository;
@@ -39,13 +43,15 @@ class ProfilePageController extends GetxController {
   ResReviewRatings? ratingsData;
   ResReviewReply? reviewReply;
   var preference = Get.find<SharedPreferenceService>();
-  var dashboardController = Get.find<DashboardController>();
+
+  // var dashboardController = Get.find<DashboardController>();
   RxBool profileDataSync = false.obs;
   RxBool reviewDataSync = false.obs;
   File? image;
   final picker = ImagePicker();
   XFile? pickedFile;
   File? uploadFile;
+  RxBool isLoading = false.obs;
 
   List<List<String>> reportReason = <List<String>>[
     ["itSpam", ''],
@@ -60,28 +66,28 @@ class ProfilePageController extends GetxController {
     ChangeLanguageModelClass(
         'English',
         'Eng',
-        AppColors.appYellowColour,
+        appColors.textColor,
         (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "en_US"
             ? true
             : false),
     ChangeLanguageModelClass(
         'Hindi',
         'हिन्दी',
-        AppColors.teal,
+        appColors.teal,
         (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "hi_IN"
             ? true
             : false),
     ChangeLanguageModelClass(
         'Marathi',
         'मराठी',
-        AppColors.appRedColour,
+        appColors.appRedColour,
         (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "mr_IN"
             ? true
             : false),
     ChangeLanguageModelClass(
         'Gujarati',
         'ગુજરાતી',
-        AppColors.appRedColour,
+        appColors.appRedColour,
         (GetStorages.get(GetStorageKeys.language) ?? "en_US") == "gu_IN"
             ? true
             : false),
@@ -95,8 +101,10 @@ class ProfilePageController extends GetxController {
           '/bankDetailsUI'),
       ProfileOptionModelClass("uploadStory".tr,
           Assets.images.icUploadStory.svg(width: 30.h, height: 30.h), ''),
-      ProfileOptionModelClass("uploadYourPhoto".tr,
-          Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h), ''),
+      ProfileOptionModelClass(
+          "uploadYourPhoto".tr,
+          Assets.images.icUploadPhoto.svg(width: 30.h, height: 30.h),
+          '/uploadYourPhotosUi'),
       ProfileOptionModelClass("customerSupport".tr,
           Assets.images.icSupportTeam.svg(width: 30.h, height: 30.h), ''),
       ProfileOptionModelClass(
@@ -104,11 +112,11 @@ class ProfilePageController extends GetxController {
           Assets.images.icLanguages.svg(width: 30.h, height: 30.h),
           '/languagePopup'),
       ProfileOptionModelClass(
-          "F&Q", Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
-      ProfileOptionModelClass(
+          "faq".tr, Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
+/*      ProfileOptionModelClass(
           "priceChange".tr,
           Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
-          '/priceHistoryUI'),
+          '/priceHistoryUI'),*/
       ProfileOptionModelClass(
           "numberChange".tr,
           Assets.images.icNumChanges.svg(width: 30.h, height: 30.h),
@@ -117,6 +125,12 @@ class ProfilePageController extends GetxController {
           "blockedUsers".tr,
           Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
           '/blockedUser'),
+      ProfileOptionModelClass("eCommerce".tr,
+          Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja'),
+      ProfileOptionModelClass(
+          "resignation".tr,
+          Assets.images.resignation.svg(width: 30.h, height: 30.h),
+          '/resignation'),
     ].obs;
   }
 
@@ -141,11 +155,11 @@ class ProfilePageController extends GetxController {
         Assets.images.icLanguages.svg(width: 30.h, height: 30.h),
         '/languagePopup'),
     ProfileOptionModelClass(
-        "F&Q", Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
-    ProfileOptionModelClass(
+        "faq".tr, Assets.images.icFaqImg.svg(width: 30.h, height: 30.h), ''),
+    /* ProfileOptionModelClass(
         "priceChange".tr,
         Assets.images.icPriceChangeNew.svg(width: 30.h, height: 30.h),
-        '/priceHistoryUI'),
+        '/priceHistoryUI'),*/
     ProfileOptionModelClass(
         "numberChange".tr,
         Assets.images.icNumChanges.svg(width: 30.h, height: 30.h),
@@ -154,6 +168,12 @@ class ProfilePageController extends GetxController {
         "blockedUsers".tr,
         Assets.images.icBlockUserNew.svg(width: 30.h, height: 30.h),
         '/blockedUser'),
+    ProfileOptionModelClass("eCommerce".tr,
+        Assets.images.remedies.svg(width: 30.h, height: 30.h), '/puja'),
+    // ProfileOptionModelClass("resignation".tr,
+    //     Assets.images.resignation.svg(width: 30.h, height: 30.h), '/resignation'),
+    // ProfileOptionModelClass("Add Remedies",
+    //     Assets.images.remedies.svg(width: 30.h, height: 30.h), ''),
   ].obs;
 
   selectedLanguageData(ChangeLanguageModelClass item) {
@@ -194,12 +214,24 @@ class ProfilePageController extends GetxController {
 
   String? baseAmazonUrl;
 
+  bool isInit = false;
+  @override
+  void onReady() {
+    isInit = false;
+    super.onReady();
+  }
+
   @override
   void onInit() {
     super.onInit();
+    debugPrint("test_onInit: call");
+    isInit = true;
     userData = preference.getUserDetail();
     baseAmazonUrl = preference.getBaseImageURL();
     userProfileImage.value = "$baseAmazonUrl/${userData?.image}";
+    print(userProfileImage.value);
+    print("userProfileImage.value");
+    getConstantDetailsData();
     getUserProfileDetails();
     getReviewRating();
   }
@@ -228,7 +260,7 @@ class ProfilePageController extends GetxController {
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
   }
@@ -238,14 +270,14 @@ class ProfilePageController extends GetxController {
       Map<String, dynamic> params = {"role_id": userData?.roleId, "page": 1};
       var response = await userRepository.getReviewRatings(params);
       ratingsData = response;
-
+      update();
       log("Data==>${jsonEncode(ratingsData!.data)}");
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
     reviewDataSync.value = true;
@@ -264,40 +296,52 @@ class ProfilePageController extends GetxController {
     if (response.statusCode == 200) {
       // Get.back();
       showCupertinoModalPopup(
-        barrierColor: AppColors.darkBlue.withOpacity(0.5),
+        barrierColor: appColors.darkBlue.withOpacity(0.5),
         context: Get.context!,
         builder: (context) => ThankYouReportUI(
           onPressed: () {
-            // Get.back();
+            Get.back();
           },
         ),
       );
     } else {
       Get.back();
-      divineSnackBar(data: "${response.message}", color: AppColors.redColor);
+      divineSnackBar(data: "${response.message}", color: appColors.redColor);
     }
   }
 
-  getReplyOnReview({required String textMsg, required int reviewId}) async {
+  Future<void> getReplyOnReview(
+      {required String textMsg, required int reviewId}) async {
     try {
+      // Set loading state to true
+      isLoading.value = true;
+
       Map<String, dynamic> params = {
         "review_id": reviewId,
         "comment": textMsg,
         "role_id": userData?.roleId ?? 7
       };
-      var response = await userRepository.reviewReply(params);
-      reviewReply = response;
 
+      var response = await userRepository.reviewReply(params);
+      // reviewReply = response;
+      print(jsonEncode(response));
+      print("responseresponseresponseresponseresponse");
       getReviewRating();
+      update();
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(), color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
+    } finally {
+      // Set loading state to false regardless of success or failure
+      isLoading.value = false;
+
+      // Update the value
+      reviewDataSync.value = true;
     }
-    reviewDataSync.value = true;
   }
 
 //Update profile image
@@ -305,10 +349,10 @@ class ProfilePageController extends GetxController {
   updateProfileImage() {
     showCupertinoModalPopup(
       context: Get.context!,
-      barrierColor: AppColors.darkBlue.withOpacity(0.5),
+      barrierColor: appColors.darkBlue.withOpacity(0.5),
       builder: (BuildContext context) {
         return Material(
-          color: AppColors.transparent,
+          color: appColors.transparent,
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -319,10 +363,10 @@ class ProfilePageController extends GetxController {
                 child: Container(
                   padding: const EdgeInsets.all(15.0),
                   decoration: BoxDecoration(
-                      border: Border.all(color: AppColors.white, width: 1.5),
+                      border: Border.all(color: appColors.white, width: 1.5),
                       borderRadius:
                           const BorderRadius.all(Radius.circular(50.0)),
-                      color: AppColors.white.withOpacity(0.1)),
+                      color: appColors.white.withOpacity(0.1)),
                   child: const Icon(
                     Icons.close,
                     color: Colors.white,
@@ -336,7 +380,7 @@ class ProfilePageController extends GetxController {
                 decoration: BoxDecoration(
                   borderRadius:
                       BorderRadius.vertical(top: Radius.circular(20.r)),
-                  color: AppColors.white,
+                  color: appColors.white,
                 ),
                 child: Column(
                   children: [
@@ -349,7 +393,7 @@ class ProfilePageController extends GetxController {
                     CustomText(
                       'shareOptions'.tr,
                       fontSize: 16.sp,
-                      fontColor: AppColors.grey,
+                      fontColor: appColors.grey,
                     ),
                     const SizedBox(height: 32),
                     Row(
@@ -402,9 +446,10 @@ class ProfilePageController extends GetxController {
 
   Future getImage(bool isCamera) async {
     pickedFile = await picker.pickImage(
-        source: isCamera ? ImageSource.camera : ImageSource.gallery,
-        imageQuality: 90,
-        maxWidth: 250);
+      source: isCamera ? ImageSource.camera : ImageSource.gallery,
+      imageQuality: 90,
+      maxWidth: 250,
+    );
 
     if (pickedFile != null) {
       image = File(pickedFile!.path);
@@ -421,15 +466,16 @@ class ProfilePageController extends GetxController {
         CropAspectRatioPreset.ratio3x2,
         CropAspectRatioPreset.original,
         CropAspectRatioPreset.ratio4x3,
-        CropAspectRatioPreset.ratio16x9
+        CropAspectRatioPreset.ratio16x9,
       ],
       uiSettings: [
         AndroidUiSettings(
-            toolbarTitle: 'Update image',
-            toolbarColor: AppColors.white,
-            toolbarWidgetColor: AppColors.blackColor,
-            initAspectRatio: CropAspectRatioPreset.original,
-            lockAspectRatio: false),
+          toolbarTitle: 'Update image',
+          toolbarColor: appColors.white,
+          toolbarWidgetColor: appColors.blackColor,
+          initAspectRatio: CropAspectRatioPreset.original,
+          lockAspectRatio: false,
+        ),
         IOSUiSettings(
           title: 'Update image',
         ),
@@ -449,7 +495,8 @@ class ProfilePageController extends GetxController {
         minWidth: 500,
       );
       if (result != null) {
-        uploadImageToS3Bucket(File(result.path));
+        // uploadImageToS3Bucket(File(result.path));
+        uploadImage(File(result.path));
       }
     } else {
       debugPrint("Image is not cropped.");
@@ -458,12 +505,12 @@ class ProfilePageController extends GetxController {
 
   uploadImageToS3Bucket(File? selectedFile) async {
     var commonConstants = await userRepository.constantDetailsData();
-    var dataString = commonConstants.data.awsCredentails.baseurl?.split(".");
+    var dataString = commonConstants.data!.awsCredentails.baseurl?.split(".");
     var extension = p.extension(selectedFile!.path);
 
     var response = await AwsS3.uploadFile(
-      accessKey: commonConstants.data.awsCredentails.accesskey!,
-      secretKey: commonConstants.data.awsCredentails.secretKey!,
+      accessKey: commonConstants.data!.awsCredentails.accesskey!,
+      secretKey: commonConstants.data!.awsCredentails.secretKey!,
       file: selectedFile,
       bucket: dataString![0].split("//")[1],
       destDir: 'astrologer/${userData?.id}',
@@ -471,16 +518,89 @@ class ProfilePageController extends GetxController {
       region: dataString[2],
     );
     if (response != null) {
-      dashboardController.userProfileImage.value = response;
+      // dashboardController.userProfileImage.value = response;
+      userImage(response ?? '');
       userProfileImage.value = response;
       userData?.image = response;
       preference.setUserDetail(userData!);
-      await ZegoServices()
-          .initZegoInvitationServices("${userData?.id}", "${userData?.name}");
+      update();
       divineSnackBar(data: "Profile image update successfully");
-      debugPrint("Uploaded Url : $response");
     } else {
       CustomException("Something went wrong");
+    }
+  }
+
+  Future<void> uploadImage(File imageFile) async {
+    var token = preferenceService.getToken();
+    // Create a Uri from the URL string
+    var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadAstroImage");
+
+    // Create a MultipartRequest
+    var request = http.MultipartRequest('POST', uri);
+
+    // Add headers to the request
+    request.headers.addAll({
+      'Authorization': 'Bearer $token',
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    });
+
+    // Attach the image file to the request
+    request.files.add(await http.MultipartFile.fromPath(
+      'profile_image',
+      imageFile.path,
+    ));
+
+    var response = await request.send();
+
+    // Listen for the response
+    response.stream.transform(utf8.decoder).listen((value) {
+      print(value); // Handle the response from the server
+      print(
+          "valuevaluevaluevaluevaluevaluevalue"); // Handle the response from the server
+    });
+
+    if (response.statusCode == 200) {
+      print("Image uploaded successfully.");
+    } else {
+      print("Failed to upload image.");
+    }
+  }
+
+  ConstantDetailsModelClass? getConstantDetails;
+
+  getConstantDetailsData() async {
+    try {
+      var data = await userRepository.constantDetailsData();
+      getConstantDetails = data;
+      preferenceService.setConstantDetails(data);
+
+      profileDataSync.value = true;
+      //    getDashboardDetail();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  whatsapp() async {
+    var contact = getConstantDetails?.data?.whatsappNo ?? '';
+    var androidUrl = "whatsapp://send?phone=$contact&text=Hi";
+    var iosUrl = "https://wa.me/$contact?text=${Uri.parse('Hi')}";
+
+    try {
+      if (Platform.isIOS) {
+        await launchUrl(Uri.parse(iosUrl));
+      } else {
+        await launchUrl(Uri.parse(androidUrl));
+      }
+    } on Exception {
+      divineSnackBar(data: 'WhatsApp is not installed.');
+      log('WhatsApp is not installed.');
     }
   }
 }

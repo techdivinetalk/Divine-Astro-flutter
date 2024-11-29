@@ -1,16 +1,16 @@
 import 'dart:convert';
 
 class ConstantDetailsModelClass {
-  Data data;
-  bool success;
-  int statusCode;
-  String message;
+  Data? data;
+  bool? success;
+  int? statusCode;
+  String? message;
 
   ConstantDetailsModelClass({
-    required this.data,
-    required this.success,
-    required this.statusCode,
-    required this.message,
+    this.data,
+    this.success,
+    this.statusCode,
+    this.message,
   });
 
   ConstantDetailsModelClass copyWith({
@@ -31,16 +31,19 @@ class ConstantDetailsModelClass {
 
   String toRawJson() => json.encode(toJson());
 
-  factory ConstantDetailsModelClass.fromJson(Map<String, dynamic> json) =>
-      ConstantDetailsModelClass(
-        data: Data.fromJson(json["data"]),
-        success: json["success"],
-        statusCode: json["status_code"],
-        message: json["message"],
-      );
+  factory ConstantDetailsModelClass.fromJson(Map<String, dynamic>? json) {
+    return ConstantDetailsModelClass(
+      data: (json?['data'] as Map<String, dynamic>?) != null
+          ? Data.fromJson(json?['data'] as Map<String, dynamic>)
+          : null,
+      success: json?["success"],
+      statusCode: json?["status_code"],
+      message: json?["message"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
-        "data": data.toJson(),
+        "data": data?.toJson(),
         "success": success,
         "status_code": statusCode,
         "message": message,
@@ -60,8 +63,16 @@ class Data {
   List<String> cityList;
   Map<String, String> notificationType;
   String whatsappNo;
+  String? token;
   AwsCredential awsCredentails;
-
+  String? taroCard;
+  String? firebaseAuthEmail;
+  String? firebaseAuthPassword;
+  String? imageUploadBaseUrl;
+  String? appVersion;
+  int? isForceTraningVideo;
+  num? currentTime;
+  Map? notice;
   Data({
     required this.leaderboardRankImage,
     required this.lottiFile,
@@ -76,6 +87,15 @@ class Data {
     required this.notificationType,
     required this.whatsappNo,
     required this.awsCredentails,
+    this.taroCard,
+    this.token,
+    this.isForceTraningVideo,
+    this.appVersion,
+    this.imageUploadBaseUrl,
+    this.firebaseAuthEmail,
+    this.firebaseAuthPassword,
+    this.currentTime,
+    required this.notice,
   });
 
   Data copyWith({
@@ -92,6 +112,15 @@ class Data {
     Map<String, String>? notificationType,
     AwsCredential? awsCredential,
     String? whatsappNo,
+    String? imageUploadBaseUrl,
+    String? token,
+    String? appVersion,
+    String? taroCard,
+    String? firebaseAuthEmail,
+    String? firebaseAuthPassword,
+    int? isForceTraningVideo,
+    num? currentTime,
+    Map? notice,
   }) =>
       Data(
         leaderboardRankImage: leaderboardRankImage ?? this.leaderboardRankImage,
@@ -100,13 +129,22 @@ class Data {
         giftTimeInterval: giftTimeInterval ?? this.giftTimeInterval,
         chat: chat ?? this.chat,
         call: call ?? this.call,
+        token: token ?? this.token,
+        appVersion: appVersion ?? this.appVersion,
+        isForceTraningVideo: isForceTraningVideo ?? this.isForceTraningVideo,
+        firebaseAuthEmail: firebaseAuthEmail ?? this.firebaseAuthEmail,
+        firebaseAuthPassword: firebaseAuthPassword ?? this.firebaseAuthPassword,
         badWordsData: badWordsData ?? this.badWordsData,
         liveBackgroundImage: liveBackgroundImage ?? this.liveBackgroundImage,
         chatSuspiciousRegex: chatSuspiciousRegex ?? this.chatSuspiciousRegex,
         cityList: cityList ?? this.cityList,
+        imageUploadBaseUrl: imageUploadBaseUrl ?? this.imageUploadBaseUrl,
         notificationType: notificationType ?? this.notificationType,
         awsCredentails: awsCredentails,
         whatsappNo: whatsappNo ?? this.whatsappNo,
+        currentTime: currentTime ?? this.currentTime,
+        taroCard: taroCard ?? this.taroCard,
+        notice: notice ?? this.notice,
       );
 
   factory Data.fromRawJson(String str) => Data.fromJson(json.decode(str));
@@ -120,10 +158,16 @@ class Data {
             .map((k, v) => MapEntry<String, String>(k, v)),
         reviewFreeAnimation: json["review_free_animation"],
         giftTimeInterval: json["gift_time_interval"],
+        firebaseAuthEmail: json["firebase_auth_email"],
+        firebaseAuthPassword: json["firebase_auth_password"],
+        appVersion: json["app_version"],
+        imageUploadBaseUrl: json["image_upload_base_url"],
+        isForceTraningVideo: json["is_force_traning_video"],
         chat: Chat.fromJson(json["chat"]),
         call: Call.fromJson(json["call"]),
         badWordsData: List<String>.from(json["bad_words_data"].map((x) => x)),
         liveBackgroundImage: json["live_background_image"],
+        token: json["token"] ?? "",
         chatSuspiciousRegex:
             List<String>.from(json["chat_suspicious_regex"].map((x) => x)),
         cityList: List<String>.from(json["city_list"].map((x) => x)),
@@ -131,6 +175,9 @@ class Data {
             .map((k, v) => MapEntry<String, String>(k, v)),
         awsCredentails: AwsCredential.fromJson(json["aws_credential"]),
         whatsappNo: json["whatsappNo"],
+        taroCard: json['taro_card'],
+        currentTime: json['current_time'],
+        notice: json['notice'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -140,8 +187,11 @@ class Data {
             Map.from(lottiFile).map((k, v) => MapEntry<String, dynamic>(k, v)),
         "review_free_animation": reviewFreeAnimation,
         "gift_time_interval": giftTimeInterval,
+        "is_force_traning_video": isForceTraningVideo,
+        "image_upload_base_url": imageUploadBaseUrl,
         "chat": chat.toJson(),
         "call": call.toJson(),
+        "token": token,
         "bad_words_data": List<dynamic>.from(badWordsData.map((x) => x)),
         "live_background_image": liveBackgroundImage,
         "chat_suspicious_regex":
@@ -151,6 +201,11 @@ class Data {
             .map((k, v) => MapEntry<String, dynamic>(k, v)),
         "aws_credential": awsCredentails.toJson(),
         "whatsappNo": whatsappNo,
+        'taro_card': taroCard,
+        'firebase_auth_email': firebaseAuthEmail,
+        'firebase_auth_password': firebaseAuthPassword,
+        'current_time': currentTime,
+        'notice': notice,
       };
 }
 

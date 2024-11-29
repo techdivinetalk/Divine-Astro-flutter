@@ -11,7 +11,7 @@ import 'package:intl/intl.dart';
 import 'date_picker/date_picker_widget.dart';
 
 Future openBottomSheet(BuildContext context,
-    {String? title, String? btnTitle, required Widget functionalityWidget}) {
+    {String? title, String? btnTitle, required Widget functionalityWidget,Color? btnColor,Color? btnBorderColor}) {
   return showModalBottomSheet(
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
@@ -28,11 +28,11 @@ Future openBottomSheet(BuildContext context,
             padding: const EdgeInsets.all(15.0),
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                border: Border.all(color: AppColors.darkBlue),
-                color: AppColors.darkBlue),
-            child: const Icon(
+                border: Border.all(color: btnBorderColor?? appColors.darkBlue),
+                color: btnColor?? appColors.darkBlue),
+            child:  Icon(
               Icons.close_rounded,
-              color: AppColors.white,
+              color: appColors.white,
             ),
           ),
         ),
@@ -67,10 +67,10 @@ Future openBottomSheet(BuildContext context,
                       Navigator.pop(context);
                       // Get.back();
                     },
-                    color: AppColors.lightYellow,
+                    color: appColors.guideColor,
                     child: Text(
                       btnTitle,
-                      style: const TextStyle(color: AppColors.brownColour),
+                      style:  TextStyle(color: appColors.brownColour),
                     )),
               const SizedBox(height: 10),
             ],
@@ -92,11 +92,13 @@ selectDateOrTime(
   required String pickerStyle,
   required Function(String datetime) onChange,
   required Function(String datetime) onConfirm,
-  Function()? onClickOkay,
+  Function(String datetime)? onClickOkay,
   required bool looping,
   DateTime? lastDate,
   DateTime? initialDate,
+  bool? futureDate,
 }) {
+  DateTime updateDateTime = DateTime.now();
   return showCupertinoModalPopup(
     context: context,
     builder: (context) => Column(
@@ -110,8 +112,8 @@ selectDateOrTime(
             padding: const EdgeInsets.all(15.0),
             decoration: BoxDecoration(
                 borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                border: Border.all(color: AppColors.darkBlue),
-                color: AppColors.darkBlue),
+                border: Border.all(color: appColors.darkBlue),
+                color: appColors.darkBlue),
             child: Assets.images.icClose.svg(height: 12.h, width: 12.h),
           ),
         ),
@@ -120,8 +122,8 @@ selectDateOrTime(
           decoration: BoxDecoration(
             borderRadius:
                 const BorderRadius.vertical(top: Radius.circular(50.0)),
-            border: Border.all(color: AppColors.white, width: 2),
-            color: AppColors.white,
+            border: Border.all(color: appColors.white, width: 2),
+            color: appColors.white,
           ),
           child: Column(
             children: [
@@ -133,15 +135,15 @@ selectDateOrTime(
                         ? Icons.calendar_month
                         : Icons.access_time_rounded,
                     size: 50,
-                    color: AppColors.darkBlue,
+                    color: appColors.darkBlue,
                   )),
               const SizedBox(height: 20),
               Material(
                 child: Text(
                   title,
-                  style: const TextStyle(
+                  style:  TextStyle(
                       fontWeight: FontWeight.w700,
-                      color: AppColors.darkBlue,
+                      color: appColors.darkBlue,
                       fontSize: 20.0),
                 ),
               ),
@@ -149,14 +151,18 @@ selectDateOrTime(
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 25),
                 child: DatePickerWidget(
+                  initialDate: initialDate ?? DateTime.now(),
                   lastDate: lastDate ?? DateTime.now(),
-                  firstDate: initialDate ?? DateTime(DateTime.now().year - 100),
+                  firstDate: (futureDate ?? false)
+                      ? DateTime.now()
+                      : DateTime(DateTime.now().year - 100),
                   dateFormat: pickerStyle == "DateCalendar"
                       ? "MMM/dd/yyyy"
                       : "MM/dd/yyyy",
                   pickerType: pickerStyle,
                   looping: looping,
                   onConfirm: (DateTime newDate, _) {
+                    updateDateTime = newDate;
                     if (pickerStyle == "DateCalendar") {
                       onConfirm(dateToString(newDate));
                       // debugPrint(Utils.dateToString(newDate));
@@ -166,19 +172,21 @@ selectDateOrTime(
                     }
                   },
                   onChange: (DateTime newDate, _) {
+                    updateDateTime = newDate;
                     if (pickerStyle == "DateCalendar") {
                       onChange(dateToString(newDate));
                     } else {
                       onChange(dateToString(newDate, format: "h:mm a"));
                     }
+
                     // debugPrint("$newDate");
                   },
                   pickerTheme: DateTimePickerTheme(
                     pickerHeight: 180,
                     itemHeight: 44,
-                    backgroundColor: AppColors.white,
-                    itemTextStyle: const TextStyle(
-                        color: AppColors.darkBlue,
+                    backgroundColor: appColors.white,
+                    itemTextStyle:  TextStyle(
+                        color: appColors.darkBlue,
                         fontSize: 20,
                         fontWeight: FontWeight.w700),
                     dividerColor: Colors.black.withOpacity(0.5),
@@ -193,16 +201,23 @@ selectDateOrTime(
                     borderRadius: BorderRadius.all(Radius.circular(25.0)),
                   ),
                   onPressed: () {
-                    Navigator.pop(context);
+                    if (!(futureDate ?? false)) {
+                      Navigator.pop(context);
+                    }
                     if (onClickOkay != null) {
-                      onClickOkay();
+                      if (pickerStyle == "DateCalendar") {
+                        onClickOkay(dateToString(updateDateTime));
+                      } else {
+                        onClickOkay(
+                            dateToString(updateDateTime, format: "h:mm a"));
+                      }
                     }
                     // Get.back();
                   },
-                  color: AppColors.appYellowColour,
+                  color: appColors.guideColor,
                   child: Text(
                     btnTitle,
-                    style: const TextStyle(color: AppColors.brownColour),
+                    style:  TextStyle(color: appColors.brownColour),
                   )),
               const SizedBox(height: 30),
             ],

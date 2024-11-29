@@ -1,13 +1,3 @@
-// To parse this JSON data, do
-//
-//     final allOrderHistoryModelClass = allOrderHistoryModelClassFromJson(jsonString);
-
-import 'dart:convert';
-
-AllOrderHistoryModelClass allOrderHistoryModelClassFromJson(String str) => AllOrderHistoryModelClass.fromJson(json.decode(str));
-
-String allOrderHistoryModelClassToJson(AllOrderHistoryModelClass data) => json.encode(data.toJson());
-
 class AllOrderHistoryModelClass {
   List<AllHistoryData>? data;
   bool? success;
@@ -21,15 +11,21 @@ class AllOrderHistoryModelClass {
     this.message,
   });
 
-  factory AllOrderHistoryModelClass.fromJson(Map<String, dynamic> json) => AllOrderHistoryModelClass(
-    data: json["data"] == null ? [] : List<AllHistoryData>.from(json["data"]!.map((x) => AllHistoryData.fromJson(x))),
-    success: json["success"],
-    statusCode: json["status_code"],
-    message: json["message"],
-  );
+  factory AllOrderHistoryModelClass.fromJson(Map<String, dynamic> json) =>
+      AllOrderHistoryModelClass(
+        data: json["data"] == null
+            ? []
+            : List<AllHistoryData>.from(
+            json["data"].map((x) => AllHistoryData.fromJson(x))),
+        success: json["success"],
+        statusCode: json["status_code"],
+        message: json["message"],
+      );
 
   Map<String, dynamic> toJson() => {
-    "data": data == null ? [] : List<dynamic>.from(data!.map((x) => x.toJson())),
+    "data": data == null
+        ? []
+        : List<dynamic>.from(data!.map((x) => x.toJson())),
     "success": success,
     "status_code": statusCode,
     "message": message,
@@ -38,8 +34,8 @@ class AllOrderHistoryModelClass {
 
 class AllHistoryData {
   int? id;
-  int? amount;
-  int? orderId;
+  dynamic amount;
+  String? orderId;
   String? status;
   int? transactionId;
   DateTime? createdAt;
@@ -49,8 +45,12 @@ class AllHistoryData {
   int? astrologerId;
   int? productId;
   String? duration;
+  int? quantity;
+  int? feedbackReviewStatus;
   GetCustomers? getCustomers;
-  dynamic getGift;
+  Gift? getGift;
+  int? partnerPrice;
+  String? partnerOrderId;
 
   AllHistoryData({
     this.id,
@@ -65,25 +65,39 @@ class AllHistoryData {
     this.astrologerId,
     this.productId,
     this.duration,
+    this.quantity,
+    this.feedbackReviewStatus,
     this.getCustomers,
     this.getGift,
+    this.partnerPrice,
+    this.partnerOrderId,
   });
 
   factory AllHistoryData.fromJson(Map<String, dynamic> json) => AllHistoryData(
-    id: json["id"],
+    id: json["id"] as int?,
     amount: json["amount"],
-    orderId: json["order_id"],
-    status: json["status"],
-    transactionId: json["transaction_id"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    productType: json["product_type"],
-    userId: json["user_id"],
-    roleId: json["role_id"],
-    astrologerId: json["astrologer_id"],
-    productId: json["product_id"],
-    duration: json["duration"],
-    getCustomers: json["get_customers"] == null ? null : GetCustomers.fromJson(json["get_customers"]),
-    getGift: json["get_gift"],
+    orderId: json["order_id"] as String?,
+    status: json["status"] as String?,
+    transactionId: json["transaction_id"] as int?,
+    createdAt: json["created_at"] == null
+        ? null
+        : DateTime.tryParse(json["created_at"] as String),
+    productType: json["product_type"] as int?,
+    userId: json["user_id"] as int?,
+    roleId: json["role_id"] as int?,
+    astrologerId: json["astrologer_id"] as int?,
+    productId: json["product_id"] as int?,
+    duration: json["duration"] as String?,
+    quantity: json["quantity"] as int?,
+    feedbackReviewStatus: json["feedback_review_status"] as int?,
+    getCustomers: json["get_customers"] == null
+        ? null
+        : GetCustomers.fromJson(json["get_customers"] as Map<String, dynamic>),
+    getGift: json["get_gift"] == null
+        ? null
+        : Gift.fromJson(json["get_gift"] as Map<String, dynamic>),
+    partnerPrice: json["partner_price"] as int?,
+    partnerOrderId: json["partner_order_id"] as String?,
   );
 
   Map<String, dynamic> toJson() => {
@@ -99,9 +113,13 @@ class AllHistoryData {
     "astrologer_id": astrologerId,
     "product_id": productId,
     "duration": duration,
+    "quantity": quantity,
+    "feedback_review_status": feedbackReviewStatus,
     "get_customers": getCustomers?.toJson(),
-    "get_gift": getGift,
-  };
+    "get_gift": getGift?.toJson(),
+    "partner_price": partnerPrice,
+    "partner_order_id": partnerOrderId,
+  }..removeWhere((key, value) => value == null);
 }
 
 class GetCustomers {
@@ -109,65 +127,71 @@ class GetCustomers {
   String? name;
   String? avatar;
   int? customerNo;
+  DateTime? dateOfBirth;
+  String? placeOfBirth;
+  int? gender;
 
   GetCustomers({
     this.id,
     this.name,
     this.avatar,
     this.customerNo,
+    this.dateOfBirth,
+    this.placeOfBirth,
+    this.gender,
   });
 
-  factory GetCustomers.fromJson(Map<String, dynamic> json) => GetCustomers(
-    id: json["id"],
-    name: json["name"],
-    avatar: json["avatar"],
-    customerNo: json["customer_no"],
-  );
+  factory GetCustomers.fromJson(Map<String, dynamic> json) {
+    return GetCustomers(
+      id: json["id"],
+      name: json["name"],
+      avatar: json["avatar"],
+      customerNo: json["customer_no"],
+      dateOfBirth: json["date_of_birth"] != null ? DateTime.parse(json["date_of_birth"]) : null,
+      placeOfBirth: json["place_of_birth"],
+      gender: json["gender"],
+    );
+  }
 
   Map<String, dynamic> toJson() => {
     "id": id,
     "name": name,
     "avatar": avatar,
     "customer_no": customerNo,
+    "date_of_birth": dateOfBirth?.toIso8601String(),
+    "place_of_birth": placeOfBirth,
+    "gender": gender,
   };
 }
 
-enum Avatar {
-  GROUP_121666_PNG,
-  THE_851420230622125447_PNG
-}
+class Gift {
+  final int id;
+  final String giftName;
+  final String giftImage;
+  final int giftPrice;
 
-final avatarValues = EnumValues({
-  "Group_121666.png": Avatar.GROUP_121666_PNG,
-  "851420230622_125447.png": Avatar.THE_851420230622125447_PNG
-});
+  Gift({
+    required this.id,
+    required this.giftName,
+    required this.giftImage,
+    required this.giftPrice,
+  });
 
-enum Name {
-  DEMO,
-  KAMLESH
-}
+  factory Gift.fromJson(Map<String, dynamic> json) {
+    return Gift(
+      id: json['id'] ?? 0,
+      giftName: json['gift_name'] ?? '',
+      giftImage: json['gift_image'] ?? '',
+      giftPrice: json['gift_price'] ?? 0,
+    );
+  }
 
-final nameValues = EnumValues({
-  "Demo": Name.DEMO,
-  "kamlesh": Name.KAMLESH
-});
-
-enum Status {
-  COMPLETED
-}
-
-final statusValues = EnumValues({
-  "completed": Status.COMPLETED
-});
-
-class EnumValues<T> {
-  Map<String, T> map;
-  late Map<T, String> reverseMap;
-
-  EnumValues(this.map);
-
-  Map<T, String> get reverse {
-    reverseMap = map.map((k, v) => MapEntry(v, k));
-    return reverseMap;
+  Map<String, dynamic> toJson() {
+    return {
+      "id": id,
+      "gift_name": giftName,
+      "gift_image": giftImage,
+      "gift_price": giftPrice,
+    };
   }
 }

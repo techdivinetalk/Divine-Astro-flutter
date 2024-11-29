@@ -1,3 +1,4 @@
+import "package:divine_astrologer/di/shared_preference_service.dart";
 import 'package:divine_astrologer/model/refer_astrologer/refer_astrologer_request.dart';
 import 'package:divine_astrologer/model/refer_astrologer/refer_astrologer_response.dart';
 import 'package:divine_astrologer/repository/refer_astrologer_repository.dart';
@@ -5,7 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
-enum WorkingForPlatform { initial, yes, no }
+import "../../../model/res_login.dart";
+
+enum WorkingForPlatform { yes, no }
 
 class ReferAstrologerController extends GetxController {
   final ReferAstrologerRepository repository;
@@ -18,6 +21,7 @@ class ReferAstrologerController extends GetxController {
   bool get isNo => state.isNo;
 
   GlobalKey<FormState> get formState => state.formKey;
+  RxBool formValidateVal = true.obs;
 
   void workingForPlatForm({required WorkingForPlatform value}) {
     state.platform = value;
@@ -26,6 +30,7 @@ class ReferAstrologerController extends GetxController {
 
   void submitForm() async {
     if (formState.currentState!.validate()) {
+      formValidateVal.value = true;
       formState.currentState!.save();
       ReferAstrologerResponse response = await repository
           .referAstrologer(state.referAstrologerRequestString());
@@ -35,7 +40,18 @@ class ReferAstrologerController extends GetxController {
       if (response.status!.code == 400) {
         Fluttertoast.showToast(msg: response.status!.message.toString());
       }
+    } else {
+      formValidateVal.value = false;
     }
+  }
+
+  checkFormValidation() {
+    if (formState.currentState!.validate()) {
+      formValidateVal.value = true;
+    } else {
+      formValidateVal.value = false;
+    }
+    update();
   }
 
   @override
@@ -46,14 +62,16 @@ class ReferAstrologerController extends GetxController {
 
   @override
   void dispose() {
-    super.dispose();
     state.dispose();
+    super.dispose();
   }
 }
 
 class ReferAstrologerState {
-  WorkingForPlatform platform = WorkingForPlatform.initial;
+  WorkingForPlatform platform = WorkingForPlatform.no;
   late final GlobalKey<FormState> formKey;
+
+  SharedPreferenceService pref = Get.find<SharedPreferenceService>();
 
   bool get isYes => platform == WorkingForPlatform.yes;
 
@@ -64,6 +82,7 @@ class ReferAstrologerState {
   late final TextEditingController astrologySkills;
   late final TextEditingController astrologerExperience;
   late final TextEditingController otherPlatform;
+  UserData? user;
 
   void init() {
     formKey = GlobalKey<FormState>();
@@ -72,6 +91,7 @@ class ReferAstrologerState {
     astrologySkills = TextEditingController();
     astrologerExperience = TextEditingController();
     otherPlatform = TextEditingController();
+    user = pref.getUserDetail();
   }
 
   void dispose() {
@@ -85,12 +105,12 @@ class ReferAstrologerState {
   ReferAstrologerRequest referAstrologerRequest() {
     return ReferAstrologerRequest(
       firstName: astrologerName.text.trim(),
+      email: "",
       contactNumber: mobileNumber.text.trim(),
-      skills: astrologySkills.text.trim(),
+      segment: astrologySkills.text.trim(),
+      notes: "came from ${otherPlatform.text.trim()}",
       experience: astrologerExperience.text.trim(),
-      isCustApp: "0",
-      userId: "31",
-      email: "test12Or289@gmail.com",
+      referBy: user?.id,
     );
   }
 

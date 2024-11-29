@@ -1,10 +1,9 @@
-import 'dart:developer';
-
 import 'package:divine_astrologer/common/app_textstyle.dart';
-import 'package:divine_astrologer/utils/utils.dart';
+import 'package:divine_astrologer/common/permission_handler.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../../common/colors.dart';
 import '../../../model/important_numbers.dart';
@@ -20,93 +19,93 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
       appBar: AppBar(
         centerTitle: false,
         forceMaterialTransparency: true,
-        backgroundColor: AppColors.white,
+        backgroundColor: appColors.white,
         title: Text("importantNumbers".tr,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
-              color: AppColors.darkBlue,
+              color: appColors.darkBlue,
             )),
       ),
-      body: GetBuilder<ImportantNumbersController>(builder: (context) {
-        return GetBuilder<ImportantNumbersController>(builder: (controller) {
-          if (controller.loading == Loading.loading ||
-              controller.importantNumbers.isEmpty) {
-            return const Center(
-              child: CircularProgressIndicator.adaptive(
-                valueColor: AlwaysStoppedAnimation(Colors.yellow),
-              ),
-            );
-          } else {
-            return SingleChildScrollView(
-              child: Padding(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      decoration: BoxDecoration(
-                          boxShadow: [
-                            BoxShadow(
-                                color: Colors.white.withOpacity(0.2),
-                                blurRadius: 1.0,
-                                offset: const Offset(0.0, 3.0)),
-                          ],
-                          border:
-                              Border.all(width: 1, color: AppColors.redColor),
-                          borderRadius: BorderRadius.circular(12)),
-                      child: Padding(
-                        padding: const EdgeInsets.all(12.0),
-                        child: Text(
-                            "You will get call and chat alerts from these numbers. Save these numbers to avoid any confusion.",
-                            style: TextStyle(
-                              color: AppColors.redColor,
-                              fontWeight: FontWeight.w400,
-                              fontSize: 13.sp,
-                            )),
-                      ),
+      body: GetBuilder<ImportantNumbersController>(builder: (controller) {
+        if (controller.loading == Loading.loading) {
+          return const Center(
+            child: CircularProgressIndicator.adaptive(
+              valueColor: AlwaysStoppedAnimation(Colors.yellow),
+            ),
+          );
+        } else if (controller.importantNumbers.isEmpty) {
+          return Center(
+            child: Text(
+              "No data found!",
+              style: AppTextStyle.textStyle14(),
+            ),
+          );
+        } else {
+          return SingleChildScrollView(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                        boxShadow: [
+                          BoxShadow(
+                              color: Colors.white.withOpacity(0.2),
+                              blurRadius: 1.0,
+                              offset: const Offset(0.0, 3.0)),
+                        ],
+                        border: Border.all(width: 1, color: appColors.redColor),
+                        borderRadius: BorderRadius.circular(12)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(12.0),
+                      child: Text("importNumText".tr,
+                          style: TextStyle(
+                            color: appColors.redColor,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 13.sp,
+                          )),
                     ),
-                    SizedBox(
-                      height: 20.h,
-                    ),
-                    ListView.builder(
-                      itemCount: controller.importantNumbers.length,
-                      primary: false,
-                      shrinkWrap: true,
-                      itemBuilder: (context, index) {
-                        MobileNumber phoneNumber =
-                            controller.importantNumbers[index];
-                        var exist =
-                            controller.checkForContactExist(phoneNumber);
+                  ),
+                  SizedBox(height: 20.h),
+                  ListView.builder(
+                    itemCount: controller.importantNumbers.length,
+                    primary: false,
+                    shrinkWrap: true,
+                    itemBuilder: (context, index) {
+                      MobileNumber phoneNumber =
+                          controller.importantNumbers[index];
+                      var exist = controller.checkForContactExist(phoneNumber);
 
-                        return SingleChildScrollView(
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          phoneNumber.title ?? "",
-                                          style: AppTextStyle.textStyle16(
-                                              fontColor: AppColors.darkBlue),
-                                        ),
-                                        SizedBox(height: 5.h),
-                                        Text(
-                                          phoneNumber.mobileNumber ?? "",
-                                          style: AppTextStyle.textStyle12(
-                                              fontColor: AppColors.darkBlue),
-                                        ),
-                                      ],
-                                    ),
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        phoneNumber.title ?? "",
+                                        style: AppTextStyle.textStyle16(
+                                            fontColor: appColors.darkBlue),
+                                      ),
+                                      SizedBox(height: 5.h),
+                                      Text(
+                                        phoneNumber.mobileNumber ?? "",
+                                        style: AppTextStyle.textStyle12(
+                                            fontColor: appColors.darkBlue),
+                                      ),
+                                    ],
                                   ),
-                                  AddContactButton(
-                                      exist: exist, phoneNumber: phoneNumber)
-                                  /* GestureDetector(
+                                ),
+                                SizedBox(width: 10.w),
+                                AddContactButton(
+                                    exist: exist, phoneNumber: phoneNumber)
+                                /* GestureDetector(
                                       onTap: () {
                                         if (!exist) {
                                           List<String> phoneNumbers = phoneNumber
@@ -123,8 +122,8 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                                         decoration: BoxDecoration(
                                             borderRadius: BorderRadius.circular(20),
                                             color: exist
-                                                ? AppColors.grey
-                                                : AppColors.lightYellow),
+                                                ? appColors.grey
+                                                : appColors.lightYellow),
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(
                                               horizontal: 15.w, vertical: 10.h),
@@ -132,25 +131,24 @@ class ImportantNumbersUI extends GetView<ImportantNumbersController> {
                                             exist ? "Added" : "addContact".tr,
                                             style: AppTextStyle.textStyle16(
                                                 fontWeight: FontWeight.w600,
-                                                fontColor: AppColors.brownColour),
+                                                fontColor: appColors.brownColour),
                                           ),
                                         ),
                                       ),
                                     )*/
-                                ],
-                              ),
-                              SizedBox(height: 25.h),
-                            ],
-                          ),
-                        );
-                      },
-                    )
-                  ],
-                ),
+                              ],
+                            ),
+                            SizedBox(height: 25.h),
+                          ],
+                        ),
+                      );
+                    },
+                  )
+                ],
               ),
-            );
-          }
-        });
+            ),
+          );
+        }
       }),
     );
   }
@@ -179,19 +177,20 @@ class _AddContactButtonState extends State<AddContactButton> {
 
   @override
   Widget build(BuildContext context) {
-
     return GetBuilder<ImportantNumbersController>(
         builder: (controller) => GestureDetector(
-              onTap: () {
-
-                if (!isButtonTap) {
-                  List<String> phoneNumbers =
-                      widget.phoneNumber.mobileNumber!.split(",").toList();
-                  controller.addContact(
-                    contactNumbers: phoneNumbers,
-                    givenName: widget.phoneNumber.title ?? "",
-                  );
-                  /*Map<String, bool> value = {
+              onTap: () async {
+                if (await PermissionHelper()
+                    .askCustomPermission(Permission.contacts)) {
+                  if (!isButtonTap) {
+                    List<String> phoneNumbers =
+                        widget.phoneNumber.mobileNumber?.split(",").toList() ??
+                            [];
+                    controller.addContact(
+                      contactNumbers: phoneNumbers,
+                      givenName: widget.phoneNumber.title ?? "",
+                    );
+                    /*Map<String, bool> value = {
                     widget.phoneNumber.mobileNumber ?? "": isButtonTap
                   };
                   if (controller.allAdded.contains(value)) {
@@ -200,16 +199,18 @@ class _AddContactButtonState extends State<AddContactButton> {
                   }else{
                     controller.allAdded.add(value);
                   }*/
-                  setState(() {
-                    isButtonTap = !isButtonTap;
-                  });
+                    setState(() {
+                      isButtonTap = !isButtonTap;
+                    });
+                  }
                 }
               },
               child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(20),
-                    color:
-                        isButtonTap ? AppColors.grey : AppColors.lightYellow),
+                    color: isButtonTap
+                        ? appColors.grey.withOpacity(0.2)
+                        : appColors.guideColor),
                 child: Padding(
                   padding:
                       EdgeInsets.symmetric(horizontal: 15.w, vertical: 10.h),
@@ -217,7 +218,9 @@ class _AddContactButtonState extends State<AddContactButton> {
                     isButtonTap ? "Saved".tr : "addContact".tr,
                     style: AppTextStyle.textStyle16(
                         fontWeight: FontWeight.w600,
-                        fontColor: AppColors.brownColour),
+                        fontColor: isButtonTap
+                            ? appColors.grey
+                            : appColors.brownColour),
                   ),
                 ),
               ),
