@@ -1,29 +1,34 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'package:divine_astrologer/model/number_change_request_model/verify_otp_response.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/common/app_exception.dart';
 import 'package:divine_astrologer/model/number_change_request_model/number_change_response_model.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 
 class NumberChangeReqRepository extends ApiProvider {
   Future<NumberChangeResponse> sendOtpForNumberChange(
       Map<String, dynamic> param) async {
     try {
       final response = await post(
-        sendOtp,
+        sendOtpNumberChange,
         headers: await getJsonHeaderURL(version: 7),
         body: jsonEncode(param),
       );
-      log("data------->${response.body.toString()}");
+
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
-        } else {
+        }  else {
           final numberChangeResponse =
               NumberChangeResponse.fromJson(json.decode(response.body));
           if (numberChangeResponse.statusCode == successResponse &&
@@ -45,15 +50,19 @@ class NumberChangeReqRepository extends ApiProvider {
   Future<VerifyOtpResponse> verifyOtpAPi(Map<String, dynamic> param) async {
     try {
       final response = await post(
-        verifyOtp,
+        verifyOtpNumberChange,
         headers: await getJsonHeaderURL(version: 7),
         body: jsonEncode(param),
       );
-      log("data------->${response.body.toString()}");
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
           final verifyOtpResponse =

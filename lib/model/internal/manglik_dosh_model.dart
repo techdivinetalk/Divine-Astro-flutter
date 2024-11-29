@@ -121,8 +121,8 @@ class Manglik {
   List<String>? manglikCancelRule;
   bool? isMarsManglikCancelled;
   String? manglikStatus;
-  int? percentageManglikPresent;
-  int? percentageManglikAfterCancellation;
+  num? percentageManglikPresent;
+  num? percentageManglikAfterCancellation;
   String? manglikReport;
   bool? isPresent;
 

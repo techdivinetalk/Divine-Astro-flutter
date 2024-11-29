@@ -43,33 +43,38 @@ class KpUI extends StatelessWidget {
                   children: [
                     AnimatedCrossFade(
                       duration: const Duration(milliseconds: 200),
-                      crossFadeState: controller.chalitChart.value.data?.svg == null
-                          ? CrossFadeState.showSecond
-                          : CrossFadeState.showFirst,
+                      crossFadeState:
+                          controller.chalitChart.value.data?.svg == null
+                              ? CrossFadeState.showSecond
+                              : CrossFadeState.showFirst,
                       secondChild: const SizedBox.shrink(),
                       firstChild: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("bhavChalitChart".tr,
-                        style: AppTextStyle.textStyle20(
-                            fontWeight: FontWeight.w500,
-                            fontColor: AppColors.appYellowColour)),
-                    SizedBox(height: 15.h),
-                    SvgPicture.string(
-                      controller.chalitChart.value.data?.svg ?? '',
-                    ),
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text("bhavChalitChart".tr,
+                              style: AppTextStyle.textStyle20(
+                                  fontWeight: FontWeight.w500,
+                                  fontColor: appColors.textColor)),
+                          SizedBox(height: 15.h),
+                          SvgPicture.string(
+                            controller.chalitChart.value.data?.svg ?? '',
+                          ),
                           SizedBox(height: 15.h),
                         ],
-                    ),
+                      ),
                     ),
                     Visibility(
-                        visible: (controller.kpTableData.value.data?.planets?.isNotEmpty ?? false),
+                        visible: (controller
+                                .kpTableData.value.data?.planets?.isNotEmpty ??
+                            false),
                         child: planetsWidget(controller.kpTableData)),
                     SizedBox(
                       height: 15.h,
                     ),
                     Visibility(
-                        visible: (controller.kpTableData.value.data?.cusps?.isNotEmpty ?? false),
+                        visible: (controller
+                                .kpTableData.value.data?.cusps?.isNotEmpty ??
+                            false),
                         child: cuspsWidget(controller.kpTableData)),
                   ],
                 ),
@@ -88,7 +93,7 @@ class KpUI extends StatelessWidget {
         Text("cusps".tr,
             style: AppTextStyle.textStyle20(
                 fontWeight: FontWeight.w500,
-                fontColor: AppColors.appYellowColour)),
+                fontColor: appColors.textColor)),
         SizedBox(
           height: 20.h,
         ),
@@ -110,7 +115,7 @@ class KpUI extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: Text(
-                          'Cusp',
+                          'cusp'.tr,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
@@ -120,7 +125,7 @@ class KpUI extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: Text(
-                          'Degree',
+                          'degree'.tr,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
@@ -130,7 +135,7 @@ class KpUI extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: Text(
-                          'Sign',
+                          'sign'.tr,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
@@ -140,7 +145,7 @@ class KpUI extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: Text(
-                          'Sign\nLord',
+                          'SignLord'.tr,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
@@ -150,7 +155,7 @@ class KpUI extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: Text(
-                          'Star\nLord',
+                          'starLord'.tr,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
@@ -160,7 +165,7 @@ class KpUI extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: Text(
-                          'Sub\nLord',
+                          'subLord'.tr,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
@@ -241,7 +246,7 @@ class KpUI extends StatelessWidget {
         Text("planets".tr,
             style: AppTextStyle.textStyle20(
                 fontWeight: FontWeight.w500,
-                fontColor: AppColors.appYellowColour)),
+                fontColor: appColors.textColor)),
         SizedBox(
           height: 20.h,
         ),
@@ -263,7 +268,7 @@ class KpUI extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: Text(
-                          'Planet',
+                          "planet".tr,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
@@ -273,7 +278,7 @@ class KpUI extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: Text(
-                          'Cusp',
+                          "cusp".tr,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
@@ -283,7 +288,7 @@ class KpUI extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: Text(
-                          'Sign',
+                          'sign'.tr,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
@@ -293,7 +298,7 @@ class KpUI extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: Text(
-                          'Sign\nLord',
+                          'SignLord'.tr,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
@@ -303,7 +308,7 @@ class KpUI extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: Text(
-                          'Star\nLord',
+                          'starLord'.tr,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
@@ -313,7 +318,7 @@ class KpUI extends StatelessWidget {
                       Padding(
                         padding: EdgeInsets.symmetric(vertical: 12.h),
                         child: Text(
-                          'Sub\nLord',
+                          'subLord'.tr,
                           textAlign: TextAlign.center,
                           style: AppTextStyle.textStyle12(
                               fontWeight: FontWeight.w500,
@@ -394,7 +399,7 @@ class KpUI extends StatelessWidget {
         Text("rulingPlanets".tr,
             style: AppTextStyle.textStyle20(
                 fontWeight: FontWeight.w500,
-                fontColor: AppColors.appYellowColour)),
+                fontColor: appColors.textColor)),
         SizedBox(
           height: 15.h,
         ),
@@ -422,7 +427,7 @@ class KpUI extends StatelessWidget {
                       "--",
                       textAlign: TextAlign.center,
                       style: AppTextStyle.textStyle16(
-                          fontColor: AppColors.brownColour,
+                          fontColor: appColors.brownColour,
                           fontWeight: FontWeight.w500),
                     ),
                   )),
@@ -451,7 +456,7 @@ class KpUI extends StatelessWidget {
                       "Sign\nLord",
                       textAlign: TextAlign.center,
                       style: AppTextStyle.textStyle16(
-                          fontColor: AppColors.brownColour,
+                          fontColor: appColors.brownColour,
                           fontWeight: FontWeight.w500),
                     ),
                   )),
@@ -480,7 +485,7 @@ class KpUI extends StatelessWidget {
                       "Star\nLord",
                       textAlign: TextAlign.center,
                       style: AppTextStyle.textStyle16(
-                          fontColor: AppColors.brownColour,
+                          fontColor: appColors.brownColour,
                           fontWeight: FontWeight.w500),
                     ),
                   )),
@@ -509,7 +514,7 @@ class KpUI extends StatelessWidget {
                       "Sub\nLord",
                       textAlign: TextAlign.center,
                       style: AppTextStyle.textStyle16(
-                          fontColor: AppColors.brownColour,
+                          fontColor: appColors.brownColour,
                           fontWeight: FontWeight.w500),
                     ),
                   )),
@@ -528,7 +533,7 @@ class KpUI extends StatelessWidget {
                   "Mo",
                   textAlign: TextAlign.center,
                   style: AppTextStyle.textStyle12(
-                      fontColor: AppColors.darkBlue,
+                      fontColor: appColors.darkBlue,
                       fontWeight: FontWeight.w400),
                 ),
               ),
@@ -542,7 +547,7 @@ class KpUI extends StatelessWidget {
                   "Mo",
                   textAlign: TextAlign.center,
                   style: AppTextStyle.textStyle12(
-                      fontColor: AppColors.darkBlue,
+                      fontColor: appColors.darkBlue,
                       fontWeight: FontWeight.w400),
                 ),
               ),
@@ -556,7 +561,7 @@ class KpUI extends StatelessWidget {
                   "Mo",
                   textAlign: TextAlign.center,
                   style: AppTextStyle.textStyle12(
-                      fontColor: AppColors.darkBlue,
+                      fontColor: appColors.darkBlue,
                       fontWeight: FontWeight.w400),
                 ),
               ),
@@ -570,7 +575,7 @@ class KpUI extends StatelessWidget {
                   "Mo",
                   textAlign: TextAlign.center,
                   style: AppTextStyle.textStyle12(
-                      fontColor: AppColors.darkBlue,
+                      fontColor: appColors.darkBlue,
                       fontWeight: FontWeight.w400),
                 ),
               ),
@@ -589,7 +594,7 @@ class KpUI extends StatelessWidget {
                   "Asc",
                   textAlign: TextAlign.center,
                   style: AppTextStyle.textStyle12(
-                      fontColor: AppColors.darkBlue,
+                      fontColor: appColors.darkBlue,
                       fontWeight: FontWeight.w400),
                 ),
               ),
@@ -603,7 +608,7 @@ class KpUI extends StatelessWidget {
                   "Mars",
                   textAlign: TextAlign.center,
                   style: AppTextStyle.textStyle12(
-                      fontColor: AppColors.darkBlue,
+                      fontColor: appColors.darkBlue,
                       fontWeight: FontWeight.w400),
                 ),
               ),
@@ -617,7 +622,7 @@ class KpUI extends StatelessWidget {
                   "Jupiter",
                   textAlign: TextAlign.center,
                   style: AppTextStyle.textStyle12(
-                      fontColor: AppColors.darkBlue,
+                      fontColor: appColors.darkBlue,
                       fontWeight: FontWeight.w400),
                 ),
               ),
@@ -631,7 +636,7 @@ class KpUI extends StatelessWidget {
                   "Mars",
                   textAlign: TextAlign.center,
                   style: AppTextStyle.textStyle12(
-                      fontColor: AppColors.darkBlue,
+                      fontColor: appColors.darkBlue,
                       fontWeight: FontWeight.w400),
                 ),
               ),
@@ -650,7 +655,7 @@ class KpUI extends StatelessWidget {
               Text(
                 "Day Lord",
                 style: AppTextStyle.textStyle16(
-                    fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                    fontWeight: FontWeight.w500, fontColor: appColors.darkBlue),
               ),
               Container(
                 height: 40.h,
@@ -667,7 +672,7 @@ class KpUI extends StatelessWidget {
               Text(
                 "Day Lord",
                 style: AppTextStyle.textStyle16(
-                    fontWeight: FontWeight.w500, fontColor: AppColors.darkBlue),
+                    fontWeight: FontWeight.w500, fontColor: appColors.darkBlue),
               ),
             ],
           ),

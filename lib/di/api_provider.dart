@@ -1,10 +1,12 @@
-// ignore_for_file: depend_on_referenced_packages
-
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 
+import 'package:divine_astrologer/common/constants.dart';
 import 'package:divine_astrologer/di/progress_service.dart';
+import 'package:divine_astrologer/screens/live_dharam/live_global_singleton.dart';
+import 'package:divine_astrologer/screens/otp_verification/otp_verification_controller.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -16,13 +18,27 @@ import 'shared_preference_service.dart';
 
 class ApiProvider {
   static const String version = 'v7';
-  static const String socketUrl = "http://13.127.116.89:4000";
-  final String baseUrl = "https://wakanda-api.divinetalk.live/admin/$version/";
+
+  // static const String socketUrl = "http://13.127.116.89:4000";
+  static const String socketUrl = "https://list.divinetalk.live";
+
+  static String
+      baseUrl = /*Constants.isTeamTestingMode
+      ? "http://3.111.219.202/api/astro/$version/"
+      :*/
+      "https://uat-divine-partner.divinetalk.live/api/astro/$version/";
+
+  static const String astOnlineOffline =
+      "https://list.divinetalk.live/api/v3/updateAstroStatusV2?unique_no=";
+
   //final String baseUrl = "http://13.235.46.27/admin/$version/";
 
   //Socket Event
   final String deleteSession = "deleteSession";
   final String deleteSessionResponse = "deleteSessionResponse";
+  static String playStoreLiveUrl =
+      "https://play.google.com/store/apps/details?id=app.divine.astrologer";
+
   final String initResponse = "initResponse";
   final String initLeaderBoardSession = "initLeaderBoardSession";
   final String leaderBoardResponse = "leaderBoardResponse";
@@ -39,35 +55,86 @@ class ApiProvider {
   final int successResponse = 200;
   String _token = "";
 
+  //
+  final String generateOrderAPI = "wallet/recharge";
+  final String getPooja = "getPooja";
+
+  //final String getBookedPooja = "getBookedPooja";
+  final String getSinglePooja = "getSinglPooja";
+
+  //final String getPoojaAddOns = "addOns";
+  final String getUserAddressForPooja = "getUserAddress";
+  final String addUserAddressForPooja = "saveUserAddress";
+  final String updateUserAddressForPooja = "editUserAddress";
+  final String deleteUserAddressForPooja = "deleteUserAddress";
+
   final String loginUrl = "astroLogin";
+  final String viewTrainingVideo = "viewTrainingVideo";
+  final String saveAstrologerExperience = "saveAstrologerExperience";
   final String getProfileUrl = "getAstrologerProfile";
   final String getReviewRatingUrl = "getReviewRating";
+  final String getPoojaListUrl = "getPoojaList";
+  final String getRemedyUrl = "getRemedy";
   final String blockCustomerlistUrl = "blockCustomerlist";
   final String blockCustomerUrl = "blockCustomer";
+  final String uploadAstroImage = "uploadAstroImage";
   final String getShopUrl = "getShop";
   final String getProductListUrl = "getProductList";
   final String getProductDetailsUrl = "getProductDetails";
+  final String saveRemediesUrl = "saveRemedies";
+  final String saveRemediesChatAssistUrl = "saveRemediesForChatAssist";
+  final String getMessageTemplateForChatAssist =
+      "getMessageTemplateForChatAssist";
   final String constantDetails = "constantDetails";
+  final String currentChatOrder = "getCurrentChatOrder";
   final String getOrderHistoryUrl = "getOrderHistory";
   final String reviewReplyUrl = "reviewReply";
   final String astroNoticeBoard = "astroNoticeBoard";
+  final String getAstroAllNotice = "getAstroAllNotice";
   final String getSpecialityList = "getSpecialityList";
   final String updateProfileDetails = "updateProfileDetails";
+  final String addPooja = "addPooja";
+  final String addProductByAstrologer = "addProductByAstrologer";
+  final String getCategory = "getCategory";
+  final String getPoojaNameMaster = "getPoojaNameMaster";
+  final String getTag = "getTag";
+  final String deletePuja = "pooja";
   final String uploadAstroStories = "uploadAstroStories";
   final String deleteAccount = "deleteAccount";
   final String reportUserReview = "reportReview";
   final String getPerformanceData = "performance";
+  final String getFilteredPerformace = "performanceFilter";
   final String getIntroPageDesc = "getIntroPageDesc";
   final String logout = "Logout";
   final String updateBankDetails = "updateBankDetails";
   final String getKundliData = "getKundliData";
   final String getHomePageData = "astroDashboard";
-  final String agoraEndCall = "agoraEndCall";
+  final String getTarotCardDataApi = "getTarotCard";
+  final String getwalletPointDetail = "getwalletPointDetail";
+  final String getNotFeedback = "getNotSeenFeedback";
+  final String getTrainingVideo = "getTrainingVideo";
+  final String getFeedbackList = "getAstroFeedbackList";
+  final String getAstroFeedback = "getAstroFeedbackDetail";
+  final String viewChatHistory = "getAllChatHistory";
+  final String agoraCallEnd = "agoraCallEnd";
   final String getWaitingListQueue = "getWaitingListQueue";
+  final String partnerOfflineChoiceOrder = "PartnerOfflineChoiceOrder";
   final String getImportantNumber = "getImportantNumber";
+  final String getMessageTemplate = "getMessageTemplate";
+  final String addMessageTemplate = "addMessageTemplate";
+  final String editMessageTemplate = "editMessageTemplate";
   final String getDonationList = "getDonationList";
   final String updateSessionType = "updateSessionType";
+  final String astroOnline = "astroOnline";
   final String updateOfferFlag = "updateOfferFlag";
+  final String customOfferManage = "customOfferManage";
+  final String faq = "faq";
+  final String getAllFeedbackFineDetail = "getAllFeedbackFineDetail";
+  final String walletPayout = "payoutDetails";
+  final String getAstrologerLiveData = "getAstrologerLiveData";
+  final String astrologerLiveLog = "astrologerLiveLog";
+  final String getSampleText = "getMarqueeForAstrologer";
+  final String getAstrologerTrainingSession = "getAstrologerTrainingSession";
 
   //Astro Internal API
   final String horoChartImageInt = "getChartImage/";
@@ -95,9 +162,14 @@ class ApiProvider {
 
   //chat
   final String getChatList = "getChatList";
+  final String saveKundliDetails = "saveKundliDetails";
   final String chatAcceptAPI = "partner_chat_accept";
   final String endChatAPI = "end_chat";
   final String uploadAstrologerimage = "uploadAstrologerimage";
+  final String getChatHistory = "getOrderChatHistory";
+  final String getOrderCallHistory = "getOrderCallHistory";
+  final String getChatSuggestRemedies = "getMasterRemedies";
+  final String getChatSuggestRemediesDetail = "getRemediesForMasterRemedy";
 
   //Socket Events for Chat
   final String initChat = "initChat";
@@ -107,11 +179,39 @@ class ApiProvider {
   final String deleteChatSession = "deleteChatSession";
   final String deleteChatSessionResponse = "deleteChatSessionResponse";
 
+  final String startAstroCustPrivateChat = "start-astro-cust-private-chat";
+  final String astrologerJoinedPrivateChat = "astrologer-joined-private-chat";
+  final String userJoinedPrivateChat = "user-joined-private-chat";
+  final String userTyping = "user-typing";
+  final String sendMessage = "send-message";
+  final String messageSent = "message-sent";
+  final String changeMsgStatus = "change-msg-status";
+  final String msgStatusChanged = "msg-status-changed";
+  final String leavePrivateChat = "leave-private-chat";
+  final String userDisconnected = "user-disconnected";
+  final String sendConnectRequest = "send-connect-request";
+  final String getChatAssistAstrologers = "getChatAssistCustomers";
+  final String getConsulationData = "getConsulationData";
+  final String sendChatAssistMessage = "send-chat-assist-message";
+  final String listenChatAssistMessage = "listen-chat-assist-message";
+  final String chatAssistMessageSent = "chat-assist-message-sent";
+  final String startAstroCustChatAssist = "start-astro-cust-chatAssist";
+  final String astrologerLeftChatAssist = "leave-chat-assist";
+  final String enterChatAssist = "enter-chat-assist";
+  final String astrologerJoinedChatAssist = "astro-joined-chatAssist";
+  final String userJoinedChatAssist = "user-joined-chatAssist";
+
+  // Added By: divine-dharam
+  final String joinLive = "join-live";
+
+  //
+
   //privacy policy & terms
   final String termsAndCondition = "termsAndCondition";
   final String privacyPolicy = "privacyPolicy";
 
   final String astroScheduleOnline = "astroScheduleOnline";
+  final String getChatAssistCustomerData = "getChatAssistCustomerData";
 
   //Basic Auth
   final String username = "625170";
@@ -120,11 +220,32 @@ class ApiProvider {
   ///ReferAn Astrologer Base
   final elasticDivineTalkBase = "https://crm-api.divinetalk.live/api/v1/";
 
-  final referAnAstrologer = "testaddQuickLeadByApp";
+  final referAnAstrologer = "addQuickLeadByApp";
 
   ///This End point is for number change request not for login purpose.
   final sendOtp = "sendOtp";
-  final verifyOtp = "verifyOtp";
+  final verifyOtpUrl = "verifyOtp";
+
+  //added by dev-dharam
+  final String getAllGifts = "getAllGifts";
+  final String blockCustomerlist = "blockCustomerlist";
+  final String blockCustomer = "blockCustomer";
+  final String getAstroAllNoticeType2 = "getAstroAllNotice?notice_type=2";
+  static const String getAstroAllNoticeType3 =
+      "getAstroAllNotice?notice_type=3";
+  static const String getAstroAllNoticeType4 =
+      "getAstroAllNotice?notice_type=4";
+  static const String getCustomEcom = "getCustomEcom";
+  final String customeEcommerce = "customeEcommerce";
+  final String getTarotCard = "getTarotCard";
+
+  //added by dev-chetan
+  final String getCustomOffer = "getCustomOffer";
+  final String sendOtpNumberChange = "sendOtpForNumberChange";
+  final String verifyOtpNumberChange = "verifyOtpForNumberChange";
+
+  // // socket
+  // final String masterDataSocket = "master-Data";
 
   //
   final NetworkService networkManager = Get.find<NetworkService>();
@@ -141,13 +262,25 @@ class ApiProvider {
 
   Future<Map<String, String>> getJsonHeaderURL({int version = 6}) async {
     _token = await _getAuthToken();
+    debugPrint("test_token: $_token");
+
     var header = <String, String>{};
     header[jsonHeaderName] = jsonHeaderValue;
     header[jsonAuthenticationName] = 'Bearer $_token';
     header[jsonCookieName] =
-        'XSRF-TOKEN=eyJpdiI6ImtleHdkdFJqMzRMVTJYaElPZk1Rc3c9PSIsInZhbHVlIjoiMEVJR01VVEdqbkRpd0FKT3lRMy9tTVdkRjFBSTlPT0ZXWHFlV3RHRVVFa2Zja2hsVHdwR2xRd0FHcVBzK2FJQjY3ODkxeHhWem1zeW4yQTlsY2M0RkQyRmo4Tk1hSUVnNi9LU2FSU2tpTnlnemR2ZTgxbTU1WUVpL3cvUlg2WFkiLCJtYWMiOiI1YWJlZDJmYjM4MmU0OGZmODMwODVmYzNjM2EwY2ZlNmQ1YzE5ZjY4ZTdmYmQ4Njg0Yzc4ZDU3YWQzNDM4NzhmIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6ImdSSnBXbHJjbUZhbXRQU3FoZXB2eHc9PSIsInZhbHVlIjoibitoYmNtVEVrTjNRTm4yR3hJbmY1S01SZVhqaEtjSW5xUXQ2T2k5L3hia3hWVW00U2pRMHhucGdDK084ZVdEYzk1bnJ6dE50ZXRyTi9aMlRzeDQyUG9pa3dQc2Z1QzJDaHI5ZE5UeTllaDlSTmllTVZaRFV1MkJ3c21GUEd4TzYiLCJtYWMiOiJmYWE1NWZkNDZiYzk0YmY0ZGQ1MWUxZWI0YTIyZjVkNzJkNDQyYTljYjY1ZDk0OTAzYTAxY2E2NWU5YWU1YmU0IiwidGFnIjoiIn0%3D';
+        'XSRF-TOKEN=eyJpdiI6ImdlSWE2a2I0M2FIbHk0VGRHd3RubGc9PSIsInZhbHVlIjoiY1FwMjJYVUh1VnE5SHl4eDR1ZFhXWkFTTWlsMDU3S1Urcm9YWVRVeDBHQzc0OG42ZVMvbUNWZVBzNGZFOTVLOXQzYlk0bGdNNDNmRzJ0b0tJWU5SaU50Z2ZrWkpCbjFXc1plWHl1NFF4R1d0dGJDUnU2STNPVjltNTF6NXN3UVkiLCJtYWMiOiJmODY5MmE4MjI4ZWEyYTFhNzk3MmNiYzZmODkyNDJlYTUyZGE5MDNiN2EzNjA5MTY0NzMzZDc3MjMyNGEzODJmIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6Ikx4WGlYUVlPMWtXM2p6aVh3TEdtWkE9PSIsInZhbHVlIjoieThMZldWYUw3YzVBRGk4dDJNdGptOTAvRmkvS1hDM0NvL1YxZm1ZOVdPdEszTzhEU043aHRXLy9lWUE4d1ZSeE9meUtWUmhnVm0vZ2x2S21kNUw5R1NvWnBOc0g5UmFJTFg5TksyTXV1REoyQXluOEZsdFJSZGk3ZXkwOFdjSk0iLCJtYWMiOiI1YWRjYWRjOTAzMDNjNWEyZmQ4NTY4OWU5ZjI2YzFhODE4ZmQ1MjQzN2E3ZWZjMjEwODlhMThjYzdlZTg1MGMwIiwidGFnIjoiIn0%3D';
     return header;
   }
+
+  // Future<Map<String, String>> getJsonHeaderURLDebugWakanda() async {
+  //   // _token = await _getAuthToken();
+  //   var header = <String, String>{};
+  //   header[jsonHeaderName] = jsonHeaderValue;
+  //   header[jsonAuthenticationName] = 'Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiI5IiwianRpIjoiODQ2OTU2YjMzNDA0NDgwOGNiYTAyNjRlNDZiMmQ0ZDk4ZTUxNjFlNDc1NTk4OWViN2I4ODk0YjU0OTkwMjM4YzUwNmUyM2E0MjJmMWQxMGIiLCJpYXQiOjE3MTcxMzk3MzIuOTA2MTUxLCJuYmYiOjE3MTcxMzk3MzIuOTA2MTUzLCJleHAiOjE4NzQ5MDYxMzIuODgzMTQ3LCJzdWIiOiIzNTYiLCJzY29wZXMiOltdfQ.nus0R6pO1iu2DLiKODGVk97H3BD2CJ2HP_QxUUUrLz7z4i8ZizTQ-f8DgvO3FEZThqCwx6C75_pnEX8Lr_zSflXddiYN6qjhkWoY4JB1usBVj_DgJ6CbKwKtatv0ewZgwYB8KwZCmFHG6DtHZcgGM0rTyevU3lWy0XGtdQty49q77YybuRI8hDkufojjcOunLk-Jy_6ldM0ZgiGzbwoS-AXgyDy5tSwzpz3AULnYH9TzX1F3yBT7fnpNjP4pOPl16w0NQrD342lkpsB_eqDhKdOY2BCF87V5VFwbYW1DI5Uco3SYZDUJuqhbF-8cIL9e4m0WBo-5VvOB1SQgDeLXk7PsmoLkJXQ91X2vFONOtnYghgxuiaLpayHapGwIDWTmqhAi8rNaxWwJeTwTLn-pkkxMbef-ib7NhgtiAuTDRGz1Y_nF1vM4_xev4l4kpfnicqAY6EZt8Vs8hxihaGr4EoC2774Tm_fumvCamBJmk3eQToRfyMHLCgK7Fk5Xxhzmr_aPkrNZuI3zMl3WTc5EWO2L0MVPQi0b3JbCEzC1fvcOxxNCnZhMdOg4vRJgAU17Ycrxv0r3Blb4mhvcjhSOjuk06DfZqh7HfZkl7qpEQg9PSVrN75yTNRP4x7MshfAw8_RYaAXBhnsqujYapngTpzsrGhtCtpbL_sK_oun6lQY';
+  //   header[jsonCookieName] =
+  //       'XSRF-TOKEN=eyJpdiI6ImdlSWE2a2I0M2FIbHk0VGRHd3RubGc9PSIsInZhbHVlIjoiY1FwMjJYVUh1VnE5SHl4eDR1ZFhXWkFTTWlsMDU3S1Urcm9YWVRVeDBHQzc0OG42ZVMvbUNWZVBzNGZFOTVLOXQzYlk0bGdNNDNmRzJ0b0tJWU5SaU50Z2ZrWkpCbjFXc1plWHl1NFF4R1d0dGJDUnU2STNPVjltNTF6NXN3UVkiLCJtYWMiOiJmODY5MmE4MjI4ZWEyYTFhNzk3MmNiYzZmODkyNDJlYTUyZGE5MDNiN2EzNjA5MTY0NzMzZDc3MjMyNGEzODJmIiwidGFnIjoiIn0%3D; laravel_session=eyJpdiI6Ikx4WGlYUVlPMWtXM2p6aVh3TEdtWkE9PSIsInZhbHVlIjoieThMZldWYUw3YzVBRGk4dDJNdGptOTAvRmkvS1hDM0NvL1YxZm1ZOVdPdEszTzhEU043aHRXLy9lWUE4d1ZSeE9meUtWUmhnVm0vZ2x2S21kNUw5R1NvWnBOc0g5UmFJTFg5TksyTXV1REoyQXluOEZsdFJSZGk3ZXkwOFdjSk0iLCJtYWMiOiI1YWRjYWRjOTAzMDNjNWEyZmQ4NTY4OWU5ZjI2YzFhODE4ZmQ1MjQzN2E3ZWZjMjEwODlhMThjYzdlZTg1MGMwIiwidGFnIjoiIn0%3D';
+  //   return header;
+  // }
 
   Future<Map<String, String>> getAuthorisedHeader() async {
     //if (_token.isEmpty) {
@@ -156,6 +289,11 @@ class ApiProvider {
     var header = getJsonHeader();
     if (_token.isNotEmpty) {
       header[jsonAuthenticationName] = 'Bearer $_token';
+
+      // Added by: divine-dharam
+      header['Content-type'] = 'application/json';
+      header['Accept'] = 'application/json';
+      //
     }
     log("Token is $_token");
     return header;
@@ -168,6 +306,11 @@ class ApiProvider {
     var header = <String, String>{};
     if (_token.isNotEmpty) {
       header[jsonAuthenticationName] = 'Bearer $_token';
+
+      // Added by: divine-dharam
+      header['Content-type'] = 'application/json';
+      header['Accept'] = 'application/json';
+      //
     }
     log("Token is $_token");
     return header;
@@ -182,7 +325,7 @@ class ApiProvider {
     }
   }
 
-  get(String url,
+  /*get(String url,
       {Map<String, String>? headers, bool closeDialogOnTimeout = true}) async {
     if (headers == null) {
       headers = await getAuthorisedHeader();
@@ -192,13 +335,46 @@ class ApiProvider {
       log('url: $baseUrl$url');
       var response = await http
           .get(Uri.parse(baseUrl + url), headers: headers)
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+          .timeout(const Duration(minutes: 1), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
         }
         throw CustomException(AppString.timeoutMessage);
       });
       log('response: ${response.body}');
+      return response;
+    } else {
+      throw NoInternetException(AppString.noInternetConnection);
+    }
+  }
+*/
+  Future<http.Response> get(
+    String url, {
+    Map<String, String>? headers,
+    Map<String, dynamic>? queryParameters,
+    bool closeDialogOnTimeout = true,
+  }) async {
+    if (headers == null) {
+      headers = await getAuthorisedHeader();
+      log("headers: $headers");
+    }
+
+    if (queryParameters != null) {
+      url += '?${Uri(queryParameters: queryParameters).query}';
+    }
+
+    if (await networkManager.isConnected() ?? false) {
+      log('url: $baseUrl$url');
+      var response = await http
+          .get(Uri.parse(baseUrl + url), headers: headers)
+          .timeout(const Duration(minutes: 1), onTimeout: () {
+        if (closeDialogOnTimeout) {
+          progressService.showProgressDialog(false);
+        }
+        throw CustomException(AppString.timeoutMessage);
+      });
+      log('response: ${response.body}');
+      await doLiveStreamPendingTasks(response);
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
@@ -215,13 +391,14 @@ class ApiProvider {
       log('url: $baseUrl$url');
       var response = await http
           .delete(Uri.parse(baseUrl + url), headers: headers)
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+          .timeout(const Duration(minutes: 1), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
         }
         throw CustomException(AppString.timeoutMessage);
       });
       log('response: ${response.body}');
+      await doLiveStreamPendingTasks(response);
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
@@ -238,13 +415,14 @@ class ApiProvider {
       log('url:$baseUrl$url');
       var response = await http
           .get(url, headers: headers)
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+          .timeout(const Duration(minutes: 1), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
         }
         throw CustomException(AppString.timeoutMessage);
       });
       log('response: ${response.body}');
+      await doLiveStreamPendingTasks(response);
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
@@ -259,22 +437,36 @@ class ApiProvider {
       bool closeDialogOnTimeout = true}) async {
     endPoint ??= baseUrl;
     headers ??= await getAuthorisedHeader();
+
     if (await networkManager.isConnected() ?? false) {
       log('url: $endPoint$url');
       log('body: $body');
       log("headers: $headers");
       var response = await http
-          .post(Uri.parse(endPoint + url),
-              headers: headers, body: body, encoding: encoding)
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+          .post(
+        Uri.parse(endPoint + url),
+        headers: headers,
+        body: body,
+        encoding: encoding,
+      )
+          .timeout(const Duration(minutes: 1), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
         }
+        //print("urlFound ${url} ${response}");
         throw CustomException(AppString.timeoutMessage);
       });
+
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
       if (url != constantDetails) {
         log('response: ${response.body}');
       }
+      await doLiveStreamPendingTasks(response);
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
@@ -293,13 +485,14 @@ class ApiProvider {
       var response = await http
           .put(Uri.parse(baseUrl + url),
               headers: headers, body: body, encoding: encoding)
-          .timeout(const Duration(seconds: 15), onTimeout: () {
+          .timeout(const Duration(minutes: 1), onTimeout: () {
         if (closeDialogOnTimeout) {
           progressService.showProgressDialog(false);
         }
         throw CustomException(AppString.timeoutMessage);
       });
       log('response: ${response.body}');
+      await doLiveStreamPendingTasks(response);
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
@@ -334,6 +527,7 @@ class ApiProvider {
       log("request : $request");
       final response = await http.Response.fromStream(await request.send());
       log(response.body);
+      await doLiveStreamPendingTasks(response);
       return response;
     } else {
       throw NoInternetException(AppString.noInternetConnection);
@@ -348,5 +542,19 @@ class ApiProvider {
       'Content-Type': 'application/json',
     };
     return headers;
+  }
+
+  Future<void> doLiveStreamPendingTasks(http.Response response) async {
+    final bool cond1 = response.statusCode == HttpStatus.unauthorized;
+    final bool cond2 =
+        json.decode(response.body)["status_code"] == HttpStatus.unauthorized;
+    print("LiveGlobalSingleton:: doLiveStreamPendingTasks():: cond1:: $cond1");
+    print("LiveGlobalSingleton:: doLiveStreamPendingTasks():: cond2:: $cond2");
+
+    if (cond1 || cond2) {
+      await LiveGlobalSingleton().leaveLiveIfIsInLiveScreen();
+    } else {}
+
+    return Future<void>.value();
   }
 }

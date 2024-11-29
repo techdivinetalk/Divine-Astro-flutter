@@ -1,4 +1,6 @@
 import 'package:divine_astrologer/common/app_exception.dart';
+import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/number_change_request_model/number_change_response_model.dart';
@@ -6,16 +8,17 @@ import 'package:divine_astrologer/model/number_change_request_model/verify_otp_r
 import 'package:divine_astrologer/model/res_login.dart';
 import 'package:divine_astrologer/repository/number_change_req_repository.dart';
 import 'package:divine_astrologer/screens/number_change/sub_screen/otp_screen_for_update_mobile_number.dart';
-import 'package:divine_astrologer/utils/utils.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 class NumberChangeReqController extends GetxController {
   final pref = Get.find<SharedPreferenceService>();
   late UserData userData;
   late final TextEditingController controller;
   late final TextEditingController pinController;
-  Rx<String> countryCode = "+91".obs;
+  RxString countryCode = "+91".obs;
   FocusNode focusNodeOtp = FocusNode();
   final repository = Get.put(NumberChangeReqRepository());
   late NumberChangeResponse numberChangeResponse;
@@ -23,14 +26,14 @@ class NumberChangeReqController extends GetxController {
 
   VerifyOtpResponse? verifyOtpResponse;
 
-  int get remainingCount => numberChangeResponse.data!.remainingAttempt!;
+  int get remainingCount => numberChangeResponse.data?.remainingAttempt??0;
 
   @override
   void onInit() {
     super.onInit();
     userData = pref.getUserDetail()!;
-    controller = TextEditingController(text: userData.mobileNumber);
-    controller.addListener(listenerForNumberChange);
+    controller = TextEditingController(/*text: userData.mobileNumber*/);
+    // controller.addListener(listenerForNumberChange);
     pinController = TextEditingController();
   }
 
@@ -42,14 +45,19 @@ class NumberChangeReqController extends GetxController {
   }
 
   void listenerForNumberChange() {
-    if (userData.mobileNumber == controller.text) {
+    if (userData.mobileNumber == controller.text ) {
       enableUpdateButton.value = false;
     } else {
-      enableUpdateButton.value = true;
+      print(int.parse(controller.text).length  == 10);
+      if(int.parse(controller.text).length  == 10 ){
+      print("controller.text");
+        enableUpdateButton.value = true;
+      }
+
     }
   }
 
-  void sendOtp() async {
+  void sendOtpForNumberChange() async {
     try {
       Map<String, dynamic> param = {
         "mobile_no": controller.text.trim(),
@@ -58,8 +66,16 @@ class NumberChangeReqController extends GetxController {
       if (response.statusCode == 200 && response.success!) {
         numberChangeResponse = response;
         update();
-        Get.toNamed(RouteName.numberChangeOtpScreen);
-        focusNodeOtp.requestFocus();
+        print("request to change mobile number");
+        var alreadyInApproved = numberChangeResponse.data?.alreadyInApproved == 1;
+        print("alreadyInApproved: $alreadyInApproved");
+        if(alreadyInApproved == true){
+          divineSnackBar(data: numberChangeResponse.message!,color: appColors.red);
+        }else{
+          Get.toNamed(RouteName.numberChangeOtpScreen);
+          focusNodeOtp.requestFocus();
+        }
+
       }
     } catch (err) {
       if (err is CustomException) {
@@ -74,7 +90,7 @@ class NumberChangeReqController extends GetxController {
 
   String? errorMessage;
 
-  void verifyOtp() async {
+  void verifyOtpForNumberChange() async {
     try {
       if (pinController.text.isEmpty || pinController.text.length != 6) return;
       Map<String, dynamic> param = {
@@ -87,6 +103,8 @@ class NumberChangeReqController extends GetxController {
       if (response.statusCode == 200 && response.success!) {
         divineSnackBar(data: response.message.toString());
         Get.back();
+        // await preferenceService.erase();
+        Get.offNamed(RouteName.dashboard);
       }
     } catch (err) {
       if (err is CustomException) {

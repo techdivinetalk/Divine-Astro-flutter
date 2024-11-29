@@ -1,4 +1,3 @@
-import 'package:divine_astrologer/repository/user_repository.dart';
 import 'package:divine_astrologer/screens/side_menu/settings/widget/change_lang_bottom_sheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ import '../../../common/colors.dart';
 import '../../../common/common_bottomsheet.dart';
 import '../../../common/routes.dart';
 import '../../../gen/assets.gen.dart';
-import '../../../pages/profile/profile_page_controller.dart';
 import 'settings_controller.dart';
 import 'widget/delete_account_popup.dart';
 
@@ -23,18 +21,18 @@ class SettingsUI extends GetView<SettingsController> {
       appBar: AppBar(
         centerTitle: false,
         leading: IconButton(
-          highlightColor: AppColors.transparent,
-          splashColor: AppColors.transparent,
+          highlightColor: appColors.transparent,
+          splashColor: appColors.transparent,
           onPressed: () => Get.back(),
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
         forceMaterialTransparency: true,
-        backgroundColor: AppColors.white,
+        backgroundColor: appColors.white,
         title: Text("settings".tr,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
-              color: AppColors.darkBlue,
+              color: appColors.darkBlue,
             )),
       ),
       body: SingleChildScrollView(
@@ -45,7 +43,7 @@ class SettingsUI extends GetView<SettingsController> {
             children: [
               Text("changeAppLanguage".tr,
                   style: TextStyle(
-                    color: AppColors.darkBlue,
+                    color: appColors.darkBlue,
                     fontWeight: FontWeight.w500,
                     fontSize: 16.sp,
                   )),
@@ -54,11 +52,9 @@ class SettingsUI extends GetView<SettingsController> {
               ),
               InkWell(
                 onTap: () {
-                  // Get.put(ProfilePageController(UserRepository()));
-                  // Get.put(ProfilePageController());
                   openBottomSheet(context,
-                      functionalityWidget:  LanguageBottomSheetWidget(
-                      //  ontap: () => Get.back(),
+                      functionalityWidget: LanguageBottomSheetWidget(
+                        onChangedLanguage: () => controller.setLocalLanguage(),
                       ));
                 },
                 child: Container(
@@ -71,10 +67,12 @@ class SettingsUI extends GetView<SettingsController> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "english".tr,
-                          style: AppTextStyle.textStyle16(
-                              fontColor: AppColors.darkBlue),
+                        Obx(
+                          () => Text(
+                            controller.currLanguage.value,
+                            style: AppTextStyle.textStyle16(
+                                fontColor: appColors.darkBlue),
+                          ),
                         ),
                         Icon(
                           Icons.keyboard_arrow_right,
@@ -90,7 +88,7 @@ class SettingsUI extends GetView<SettingsController> {
               ),
               Text("general".tr,
                   style: TextStyle(
-                    color: AppColors.darkBlue,
+                    color: appColors.darkBlue,
                     fontWeight: FontWeight.w500,
                     fontSize: 16.sp,
                   )),
@@ -112,7 +110,7 @@ class SettingsUI extends GetView<SettingsController> {
                         Text(
                           "termsAndConditions".tr,
                           style: AppTextStyle.textStyle16(
-                              fontColor: AppColors.darkBlue),
+                              fontColor: appColors.darkBlue),
                         ),
                         Icon(
                           Icons.keyboard_arrow_right,
@@ -141,7 +139,7 @@ class SettingsUI extends GetView<SettingsController> {
                         Text(
                           "privacyPolicy".tr,
                           style: AppTextStyle.textStyle16(
-                              fontColor: AppColors.darkBlue),
+                              fontColor: appColors.darkBlue),
                         ),
                         Icon(
                           Icons.keyboard_arrow_right,
@@ -175,7 +173,7 @@ class SettingsUI extends GetView<SettingsController> {
                         Text(
                           "logoutMyAccount".tr,
                           style: AppTextStyle.textStyle16(
-                              fontColor: AppColors.darkBlue),
+                              fontColor: appColors.darkBlue),
                         ),
                       ],
                     ),
@@ -190,7 +188,7 @@ class SettingsUI extends GetView<SettingsController> {
                   // controller.deleteAccountPopup(Get.context!);
                   showCupertinoModalPopup(
                     context: context,
-                    barrierColor: AppColors.darkBlue.withOpacity(0.5),
+                    barrierColor: appColors.darkBlue.withOpacity(0.5),
                     builder: (context) => const DeleteAccountPopup(),
                   );
                 },
@@ -210,7 +208,7 @@ class SettingsUI extends GetView<SettingsController> {
                         Text(
                           "deleteMyAccount".tr,
                           style: AppTextStyle.textStyle16(
-                              fontColor: AppColors.appRedColour),
+                              fontColor: appColors.appRedColour),
                         ),
                       ],
                     ),
@@ -235,9 +233,9 @@ class SettingsUI extends GetView<SettingsController> {
             },
             child: Container(
               decoration: BoxDecoration(
-                  border: Border.all(color: AppColors.white, width: 1.5),
+                  border: Border.all(color: appColors.white, width: 1.5),
                   borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                  color: AppColors.white.withOpacity(0.1)),
+                  color: appColors.white.withOpacity(0.1)),
               child: const Icon(
                 Icons.close,
                 color: Colors.white,
@@ -248,7 +246,7 @@ class SettingsUI extends GetView<SettingsController> {
             padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 0.h),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.vertical(top: Radius.circular(20.r)),
-              color: AppColors.white,
+              color: appColors.white,
             ),
             child: Column(
               children: [
@@ -259,7 +257,7 @@ class SettingsUI extends GetView<SettingsController> {
                   "${'logout'.tr}?",
                   style: TextStyle(
                     fontSize: 24.sp,
-                    color: AppColors.redColor,
+                    color: appColors.redColor,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
@@ -267,7 +265,7 @@ class SettingsUI extends GetView<SettingsController> {
                 Text(
                   'logoutText'.tr,
                   style:
-                      AppTextStyle.textStyle16(fontColor: AppColors.darkBlue),
+                      AppTextStyle.textStyle16(fontColor: appColors.darkBlue),
                 ),
                 SizedBox(height: 20.h),
                 Row(
@@ -281,7 +279,7 @@ class SettingsUI extends GetView<SettingsController> {
                           // Get.offAndToNamed(RouteName.login);
                         },
                         style: FilledButton.styleFrom(
-                          backgroundColor: AppColors.lightYellow,
+                          backgroundColor: appColors.guideColor,
                           padding: EdgeInsets.symmetric(vertical: 16.h),
                           minimumSize: Size.zero,
                         ),
@@ -289,7 +287,7 @@ class SettingsUI extends GetView<SettingsController> {
                           'logout'.tr,
                           style: TextStyle(
                             fontSize: 16.sp,
-                            color: AppColors.brownColour,
+                            color: appColors.brownColour,
                             fontWeight: FontWeight.w600,
                           ),
                         ),

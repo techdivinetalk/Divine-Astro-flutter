@@ -1,12 +1,23 @@
+import 'dart:convert';
+import 'dart:developer';
+import 'dart:math' as math;
+
+import 'package:divine_astrologer/common/accept_chat_request_screen.dart';
+import 'package:divine_astrologer/common/routes.dart';
+import "package:divine_astrologer/di/hive_services.dart";
+import 'package:divine_astrologer/firebase_service/firebase_service.dart';
+import "package:divine_astrologer/model/chat_offline_model.dart";
+import "package:divine_astrologer/screens/live_page/constant.dart";
+import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:get/get.dart';
-import 'dart:math' as math;
+import 'package:url_launcher/url_launcher.dart';
 
 import '../common/common_functions.dart';
-import '../common/routes.dart';
+import '../model/chat_assistant/chat_assistant_astrologer_response.dart';
 
 const channel = AndroidNotificationChannel(
   "DivineAstrologer",
@@ -27,13 +38,14 @@ Future<void> firebaseMessagingConfig(BuildContext buildContext) async {
   final firebaseMessaging = FirebaseMessaging.instance;
 
   await firebaseMessaging.requestPermission(
-      alert: true,
-      announcement: false,
-      badge: true,
-      carPlay: false,
-      criticalAlert: false,
-      provisional: false,
-      sound: true);
+    alert: true,
+    announcement: false,
+    badge: true,
+    carPlay: false,
+    criticalAlert: false,
+    provisional: false,
+    sound: true,
+  );
 
   firebaseMessaging.setForegroundNotificationPresentationOptions(
     alert: true,
@@ -48,8 +60,13 @@ Future<void> firebaseMessagingConfig(BuildContext buildContext) async {
 
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
     if (message.notification != null) {
-      debugPrint("Notification received : 1");
-      checkNotification(isFromNotification: true);
+      debugPrint(
+          "onMessage Notification received : ${message.notification?.title}");
+      showNotificationWithActions(
+        title: message.notification!.title ?? '',
+        message: message.notification!.body ?? '',
+      );
+      //  checkNotification(isFromNotification: true);
     }
   });
 
@@ -79,13 +96,64 @@ void initMessaging() async {
       AndroidInitializationSettings("@mipmap/ic_launcher");
   const DarwinInitializationSettings initializationSettingsDarwin =
       DarwinInitializationSettings(
-          onDidReceiveLocalNotification: onDidReceiveLocalNotification);
+          // onDidReceiveLocalNotification: onDidReceiveLocalNotification,
+          );
 
   const InitializationSettings initializationSettings = InitializationSettings(
       android: initializationSettingsAndroid,
       iOS: initializationSettingsDarwin);
   flutterLocalNotificationsPlugin.initialize(initializationSettings,
-      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse);
+      onDidReceiveNotificationResponse:
+          (NotificationResponse notificationResponse) async {
+    final String? payload = notificationResponse.payload;
+    print(payload);
+    print("payloadpayloadpayloadpayloadpayloadpayload");
+    if (payload != null) {
+      ///// redirect to bottom sheet of accept the request
+      print(notificationResponse.payload);
+      print("notificationResponse.payload");
+      final Map<String, dynamic> payloadMap =
+          jsonDecode(notificationResponse.payload!);
+      debugPrint('notification payload: -- ${payloadMap}');
+      //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
+      // // if(payloadMap["type"] == "2") {
+      if (payloadMap["type"] == "1") {
+        Get.toNamed(RouteName.chatMessageWithSocketUI);
+      } else if (payloadMap["type"] == "8") {
+        final senderId = payloadMap["sender_id"];
+        DataList dataList = DataList();
+        dataList.id = int.parse(senderId);
+        dataList.name = payloadMap["title"];
+        Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
+      }else if (payloadMap["type"] == "13") {
+        dasboardCurrentIndex(3);
+      } else {
+        if (!await launchUrl(Uri.parse(payloadMap["url"].toString()))) {
+          throw Exception('Could not launch ${payloadMap["url"]}');
+        }
+      }
+
+      AppFirebaseService().openChatUserId = payloadMap["userid"] ?? "";
+      // }
+      // Accessing individual values
+      // String requestId = payloadMap['receiver_id'].toString();
+      // String orderId = payloadMap['order_id'].toString();
+      //
+      // if (payloadMap['msgType'] == 'request') {
+      //   await AppFirebaseService().writeData('order/$orderId', {'status': '1'});
+      // }
+      //
+      // final notificationPath = 'astrologer/${preferenceService.getUserDetail()!.id}/realTime';
+      // final orderData = {'order_id': orderId};
+      // await AppFirebaseService().writeData(notificationPath, orderData);
+      // chatInit(requestId);
+
+      // acceptChatRequestBottomSheet(Get.context!, onPressed: () async {
+      //
+      //   // await Get.toNamed(RouteName.chatMessageWithSocketUI);
+      // }, orderId: orderId);
+    }
+  });
 }
 
 void onDidReceiveLocalNotification(
@@ -118,25 +186,127 @@ void onDidReceiveLocalNotification(
 void onDidReceiveNotificationResponse(
     NotificationResponse notificationResponse) async {
   final String? payload = notificationResponse.payload;
+  print(payload);
+  print("payloadpayloadpayloadpayloadpayloadpayload");
   if (notificationResponse.payload != null) {
-    debugPrint('notification payload: $payload');
+    ///// redirect to bottom sheet of accept the request
+    print(notificationResponse.payload);
+    print("notificationResponse.payload");
+    final Map<String, dynamic> payloadMap =
+        jsonDecode(notificationResponse.payload!);
+    debugPrint('notification payload: -- ${payloadMap}');
+    //  debugPrint('notification payload: ${payloadMap["type"] == "2"}');
+    // // if(payloadMap["type"] == "2") {
+    if (payloadMap["type"] == "1") {
+      Get.toNamed(RouteName.chatMessageWithSocketUI);
+    } else if (payloadMap["type"] == "8") {
+      final senderId = payloadMap["sender_id"];
+      DataList dataList = DataList();
+      dataList.id = int.parse(senderId);
+      dataList.name = payloadMap["title"];
+      Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
+    } else {
+      if (!await launchUrl(Uri.parse(payloadMap["url"].toString()))) {
+        throw Exception('Could not launch ${payloadMap["url"]}');
+      }
+    }
+
+    AppFirebaseService().openChatUserId = payloadMap["userid"];
+    // }
+    // Accessing individual values
+    // String requestId = payloadMap['receiver_id'].toString();
+    // String orderId = payloadMap['order_id'].toString();
+    //
+    // if (payloadMap['msgType'] == 'request') {
+    //   await AppFirebaseService().writeData('order/$orderId', {'status': '1'});
+    // }
+    //
+    // final notificationPath = 'astrologer/${preferenceService.getUserDetail()!.id}/realTime';
+    // final orderData = {'order_id': orderId};
+    // await AppFirebaseService().writeData(notificationPath, orderData);
+    // chatInit(requestId);
+
+    // acceptChatRequestBottomSheet(Get.context!, onPressed: () async {
+    //
+    //   // await Get.toNamed(RouteName.chatMessageWithSocketUI);
+    // }, orderId: orderId);
   }
-  if (Get.currentRoute == RouteName.chatMessageUI) {
-  } else {
-    await Get.toNamed(RouteName.chatMessageUI, arguments: true);
+  // if (Get.currentRoute == RouteName.chatMessageUI) {
+  // } else {
+  //   await Get.toNamed(RouteName.chatMessageUI, arguments: astroChatWatcher.value);
+  // }
+}
+
+Future<void> chatInit(String requestId) async {
+  try {
+    final userDetail = preferenceService.getUserDetail();
+    // if (userDetail != null) {
+    //   final notificationPath = 'user/$requestId/realTime/notification';
+    //   final int timestamp = DateTime.now().millisecondsSinceEpoch;
+    //   final notificationData = {
+    //     '$timestamp': {
+    //       'isActive': 1,
+    //       'message': '${userDetail.name} wants to chat with you',
+    //       'value': 'Click to chat',
+    //       'requestId': userDetail.id
+    //     },
+    //   };
+    //
+    //   final appFirebaseService = AppFirebaseService();
+    //   await appFirebaseService.writeData(notificationPath, notificationData);
+    //   debugPrint('Notification data written to the database');
+    // } else {
+    //   debugPrint('Error: User details not available');
+    // }
+  } catch (e) {
+    debugPrint('Error writing notification data to the database: $e');
   }
 }
 
 Future<void> showNotificationWithActions(
-    {required String title, required String message}) async {
+    {required String title,
+    required String message,
+    dynamic payload,
+    HiveServices? hiveServices}) async {
+  debugPrint("enter in showNotificationWithActions --> $message");
+  String? jsonEncodePayload;
+  if (payload != null) {
+    jsonEncodePayload = jsonEncode(payload);
+    if (payload["type"] == 2) {
+      final Map<String, dynamic> chatListMap = jsonDecode(payload["chatList"]);
+      final ChatMessage chatMessage = ChatMessage.fromOfflineJson(chatListMap);
+      final String tableName = "chat_${chatMessage.senderId}";
+
+      final databaseMessage = ChatMessagesOffline().obs;
+      final res = await hiveServices?.getData(key: tableName);
+      var msg = ChatMessagesOffline.fromOfflineJson(jsonDecode(res));
+      var chatMessages = msg.chatMessages ?? [];
+      chatMessages.add(chatMessage);
+      databaseMessage.value.chatMessages = chatMessages;
+      log('data message ${databaseMessage.value.toOfflineJson()}');
+      await hiveServices?.addData(
+          key: tableName,
+          data: jsonEncode(databaseMessage.value.toOfflineJson()));
+      final newRes = await hiveServices?.getData(key: tableName);
+      log("this is my tableName $tableName");
+      log("enter in if condition $newRes");
+    }
+  }
+
   const AndroidNotificationDetails androidNotificationDetails =
       AndroidNotificationDetails(
     "DivineAstrologer",
     "AstrologerNotification",
     importance: Importance.high,
+    icon: "divine_logo_tran",
   );
   const NotificationDetails notificationDetails =
       NotificationDetails(android: androidNotificationDetails);
   await flutterLocalNotificationsPlugin.show(
-      math.Random().nextInt(10000), title, message, notificationDetails);
+    math.Random().nextInt(10000),
+    title,
+    message,
+    notificationDetails,
+    payload: jsonEncodePayload,
+  );
 }

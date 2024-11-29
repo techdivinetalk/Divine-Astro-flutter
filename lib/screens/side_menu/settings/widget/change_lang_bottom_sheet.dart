@@ -10,9 +10,10 @@ import '../../../../repository/user_repository.dart';
 class LanguageBottomSheetWidget extends StatelessWidget {
   const LanguageBottomSheetWidget({
     Key? key,
+    this.onChangedLanguage,
   }) : super(key: key);
 
-  // final void Function()? ontap;
+  final void Function()? onChangedLanguage;
 
   @override
   Widget build(BuildContext context) {
@@ -21,27 +22,27 @@ class LanguageBottomSheetWidget extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-       /* GestureDetector(
+        GestureDetector(
           onTap: () {
             Get.back();
           },
           child: Container(
             decoration: BoxDecoration(
-                border: Border.all(color: AppColors.white, width: 1.5),
+                border: Border.all(color: appColors.white, width: 1.5),
                 borderRadius: const BorderRadius.all(Radius.circular(50.0)),
-                color: AppColors.white.withOpacity(0.1)),
+                color: appColors.white.withOpacity(0.1)),
             child: const Icon(
               Icons.close,
               color: Colors.white,
             ),
           ),
-        ),*/
+        ),
         Container(
           width: double.maxFinite,
           padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 0.h),
-          decoration: const BoxDecoration(
-            borderRadius: BorderRadius.vertical(top: Radius.circular(50.0)),
-            color: AppColors.white,
+          decoration:  BoxDecoration(
+            borderRadius: const BorderRadius.vertical(top: Radius.circular(50.0)),
+            color: appColors.white,
           ),
           child: Column(
             children: [
@@ -103,7 +104,7 @@ class LanguageBottomSheetWidget extends StatelessWidget {
                                             Text(
                                               item.languagesMain.toString(),
                                               style: AppTextStyle.textStyle20(
-                                                  fontWeight: FontWeight.w700),
+                                                  fontWeight: FontWeight.w600),
                                             ),
                                             SizedBox(height: 10.h),
                                             Text(
@@ -128,12 +129,13 @@ class LanguageBottomSheetWidget extends StatelessWidget {
                     return InkWell(
                       onTap: () {
                         controller1.getSelectedLanguage();
+                        onChangedLanguage!();
                         Get.back();
                       },
                       child: Container(
                         width: MediaQuery.of(context).size.width,
                         decoration: BoxDecoration(
-                            color: AppColors.lightYellow,
+                            color: appColors.guideColor,
                             borderRadius: BorderRadius.circular(10)),
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 15.0),
@@ -142,7 +144,7 @@ class LanguageBottomSheetWidget extends StatelessWidget {
                               'okay'.tr,
                               style: AppTextStyle.textStyle16(
                                   fontWeight: FontWeight.w600,
-                                  fontColor: AppColors.brownColour),
+                                  fontColor: appColors.white),
                             ),
                           ),
                         ),

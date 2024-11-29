@@ -1,32 +1,38 @@
 import 'package:divine_astrologer/common/colors.dart';
+import 'package:divine_astrologer/common/generic_loading_widget.dart';
 import 'package:divine_astrologer/model/terms_and_condition_model.dart';
 import 'package:divine_astrologer/screens/side_menu/settings/settings_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../../common/custom_widgets.dart';
 
-class TermsConditionUI extends GetView<SettingsController> {
-  const TermsConditionUI({Key? key}) : super(key: key);
+class TermsConditionUI extends StatelessWidget{
+  TermsConditionUI({super.key});
+
+  final controller = Get.put(SettingsController());
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: AppColors.white,
-        surfaceTintColor: AppColors.white,
-        title: Text("Terms And Condition".tr,
+        backgroundColor: appColors.white,
+        surfaceTintColor: appColors.white,
+        title: Text("termsAndConditions".tr,
             style: TextStyle(
               fontWeight: FontWeight.w400,
               fontSize: 16.sp,
-              color: AppColors.darkBlue,
+              color: appColors.darkBlue,
             )),
         leading: IconButton(
-          highlightColor: AppColors.transparent,
-          splashColor: AppColors.transparent,
-          onPressed: () => Get.back(),
+          highlightColor: appColors.transparent,
+          splashColor: appColors.transparent,
+          onPressed: () {
+            Get.back();
+          },
           icon: const Icon(Icons.arrow_back_ios_new_rounded),
         ),
       ),
@@ -37,20 +43,18 @@ class TermsConditionUI extends GetView<SettingsController> {
             return SingleChildScrollView(
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 20.h),
-                child: Html(data: snapshot.data!.data.termsAndCondition),
+                child: Html(data: snapshot.data!.data.termsAndCondition, onLinkTap: (url, attributes, element) {
+                  launchUrl(Uri.parse(url ?? ''));
+                },),
               ),
             );
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(
-              child: CircularProgressIndicator.adaptive(
-                valueColor: AlwaysStoppedAnimation(Colors.yellow),
-              ),
-            );
+            return const GenericLoadingWidget();
           }
           if (snapshot.hasError) {
             return Center(
-              child: CustomText("Something went wrong", fontSize: 20.sp),
+              child: CustomText("somethingWentWrong".tr, fontSize: 20.sp),
             );
           }
           return const SizedBox.shrink();

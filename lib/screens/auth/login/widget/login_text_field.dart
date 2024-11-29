@@ -43,7 +43,7 @@ class LoginMobileTextField extends StatelessWidget {
         keyboardType: keyboardType,
         controller: controller,
         validator: validator,
-        cursorColor: AppColors.darkBlue.withOpacity(0.15),
+        cursorColor: appColors.darkBlue.withOpacity(0.15),
         decoration: InputDecoration(
           hintText: hintText,
           prefixIcon: Padding(
@@ -59,7 +59,7 @@ class LoginMobileTextField extends StatelessWidget {
           hintStyle: TextStyle(
             fontSize: 16.sp,
             fontWeight: FontWeight.w400,
-            color: AppColors.darkBlue.withOpacity(0.5),
+            color: appColors.darkBlue.withOpacity(0.5),
           ),
           enabledBorder: buildOutlineInputBorder(),
           focusedBorder: buildOutlineInputBorder(),
@@ -74,7 +74,7 @@ class LoginMobileTextField extends StatelessWidget {
   OutlineInputBorder buildOutlineInputBorder() {
     return OutlineInputBorder(
       borderSide: BorderSide(
-        color: borderColor ?? AppColors.appYellowColour,
+        color: borderColor ?? appColors.guideColor,
       ),
       borderRadius: BorderRadius.circular(10.sp),
     );

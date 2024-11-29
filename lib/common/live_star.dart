@@ -16,10 +16,10 @@ class LiveStar extends StatelessWidget {
         child: Stack(
           children: [
             AlertDialog(
-              backgroundColor: AppColors.white,
-              surfaceTintColor: AppColors.white,
+              backgroundColor: appColors.white,
+              surfaceTintColor: appColors.white,
               shape: OutlineInputBorder(
-                borderSide: const BorderSide(color: AppColors.appYellowColour),
+                borderSide:  BorderSide(color: appColors.guideColor),
                 borderRadius: BorderRadius.circular(20),
               ),
               title: Row(
@@ -59,29 +59,29 @@ class LiveStar extends StatelessWidget {
                             text: "Raj ",
                             style: TextStyle(
                                 fontSize: 16.sp,
-                                color: AppColors.darkBlue,
+                                color: appColors.darkBlue,
                                 fontWeight: FontWeight.bold)),
                         TextSpan(
                             text: "is your",
                             style: TextStyle(
-                                fontSize: 16.sp, color: AppColors.darkBlue))
+                                fontSize: 16.sp, color: appColors.darkBlue))
                       ])),
                       Text.rich(TextSpan(children: <InlineSpan>[
                         TextSpan(
                             text: "Live Star ",
                             style: TextStyle(
                                 fontSize: 16.sp,
-                                color: AppColors.appYellowColour,
+                                color: appColors.textColor,
                                 fontWeight: FontWeight.bold)),
                         TextSpan(
                             text: "now!!!",
                             style: TextStyle(
-                                fontSize: 16.sp, color: AppColors.darkBlue))
+                                fontSize: 16.sp, color: appColors.darkBlue))
                       ])),
                       Text("Okay! Got it.",
                           style: TextStyle(
                               fontSize: 12.sp,
-                              color: AppColors.darkBlue,
+                              color: appColors.darkBlue,
                               decoration: TextDecoration.underline)),
                     ],
                   )

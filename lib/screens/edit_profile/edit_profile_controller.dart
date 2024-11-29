@@ -1,5 +1,4 @@
 import 'package:divine_astrologer/common/common_functions.dart';
-import 'package:divine_astrologer/common/zego_services.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/res_login.dart';
 import 'package:divine_astrologer/model/speciality_list.dart';
@@ -65,32 +64,33 @@ class EditProfileController extends GetxController {
       };
       final response = await repository.updateProfile(param);
       if (response.statusCode == 200) {
-        UserData data = UserData.fromJson(response.data!.toJson());
-        state.preferenceService.setUserDetail(data);
-        await ZegoServices()
-            .initZegoInvitationServices("${data.id}", "${data.name}");
-        Get.back();
-        Get.find<ProfilePageController>().setUserData(state.preferenceService.getUserDetail());
-        divineSnackBar(data: response.message.toString());
-      }
-      if (response.statusCode == 400) {
-        Fluttertoast.showToast(msg: response.statusCode.toString());
+        if (response.data != null) {
+          UserData data = UserData.fromJson(response.data!.toJson());
+          state.preferenceService.setUserDetail(data);
+          Navigator.pop(Get.context!);
+          Get.find<ProfilePageController>()
+              .setUserData(state.preferenceService.getUserDetail());
+          divineSnackBar(data: "${'profileUpdatedSuccessfully'.tr}.");
+        } else {
+          Get.back();
+        }
+      } else if (response.statusCode == 400) {
+        Fluttertoast.showToast(msg: response.message.toString());
       }
     }
   }
 
-
   List<SpecialityData> reorderList(
-      List<SpecialityData> originalList,
-      List<SpecialityData> selectedItems,
-      ) {
+    List<SpecialityData> originalList,
+    List<SpecialityData> selectedItems,
+  ) {
     // Create a copy of the original list
     List<SpecialityData> resultList = List.from(originalList);
 
     // Remove the selected items from the copy
     for (SpecialityData item in selectedItems) {
       resultList.removeWhere(
-            (element) => element.id == item.id,
+        (element) => element.id == item.id,
       );
     }
 
@@ -123,13 +123,11 @@ class EditProfileState {
 
   void assignData() {
     userData = preferenceService.getUserDetail();
-
     nameController.text = userData?.name ?? "";
-    experienceController.text = userData?.experiance.toString() ?? "";
-
+    experienceController.text =
+        (userData?.experiance != "null" ? userData?.experiance : "")!;
     Document description = parse(userData?.description ?? "");
     descriptionController.text = description.documentElement!.text;
-
     String specialityString = preferenceService.getSpecialAbility()!;
     specialityList = specialityListFromJson(specialityString);
   }

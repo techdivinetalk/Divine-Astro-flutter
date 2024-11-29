@@ -4,6 +4,8 @@
 
 import 'dart:convert';
 
+import 'all_order_history.dart';
+
 CallOrderHistoryModelClass callOrderHistoryModelClassFromJson(String str) => CallOrderHistoryModelClass.fromJson(json.decode(str));
 
 String callOrderHistoryModelClassToJson(CallOrderHistoryModelClass data) => json.encode(data.toJson());
@@ -38,8 +40,8 @@ class CallOrderHistoryModelClass {
 
 class CallHistoryData {
   int? id;
-  int? amount;
-  int? orderId;
+  dynamic amount;
+  String? orderId;
   String? status;
   int? transactionId;
   DateTime? createdAt;
@@ -50,6 +52,10 @@ class CallHistoryData {
   int? productId;
   String? duration;
   GetCustomers? getCustomers;
+  int? quantity;
+  int? feedbackReviewStatus;
+  int? partnerPrice;
+  String? partnerOrderId;
 
   CallHistoryData({
     this.id,
@@ -65,22 +71,34 @@ class CallHistoryData {
     this.productId,
     this.duration,
     this.getCustomers,
+    this.quantity,
+    this.feedbackReviewStatus,
+    this.partnerPrice,
+    this.partnerOrderId,
   });
 
   factory CallHistoryData.fromJson(Map<String, dynamic> json) => CallHistoryData(
-    id: json["id"],
-    amount: json["amount"],
-    orderId: json["order_id"],
-    status: json["status"],
-    transactionId: json["transaction_id"],
-    createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-    productType: json["product_type"],
-    userId: json["user_id"],
-    roleId: json["role_id"],
-    astrologerId: json["astrologer_id"],
-    productId: json["product_id"],
-    duration: json["duration"],
-    getCustomers: json["get_customers"] == null ? null : GetCustomers.fromJson(json["get_customers"]),
+    id: json["id"] as int?,
+    amount: json["amount"] as dynamic,
+    orderId: json["order_id"] as String?,
+    status: json["status"] as String?,
+    transactionId: json["transaction_id"] as int?,
+    createdAt: json["created_at"] == null
+        ? null
+        : DateTime.parse(json["created_at"] as String),
+    productType: json["product_type"] as int?,
+    userId: json["user_id"] as int?,
+    roleId: json["role_id"] as int?,
+    astrologerId: json["astrologer_id"] as int?,
+    productId: json["product_id"] as int?,
+    duration: json["duration"] as String?,
+    getCustomers: json["get_customers"] == null
+        ? null
+        : GetCustomers.fromJson(json["get_customers"] as Map<String, dynamic>),
+    quantity: json["quantity"] as int?,
+    feedbackReviewStatus: json["feedback_review_status"] as int?,
+    partnerPrice: json["partner_price"] as int?,
+    partnerOrderId: json["partner_order_id"] as String?,
   );
 
   Map<String, dynamic> toJson() => {
@@ -97,32 +115,11 @@ class CallHistoryData {
     "product_id": productId,
     "duration": duration,
     "get_customers": getCustomers?.toJson(),
-  };
+    "quantity": quantity,
+    "feedback_review_status": feedbackReviewStatus,
+    "partner_price": partnerPrice,
+    "partner_order_id": partnerOrderId,
+  }..removeWhere((key, value) => value == null);
 }
 
-class GetCustomers {
-  int? id;
-  String? name, avatar;
-  int? customerNo;
 
-  GetCustomers({
-    this.id,
-    this.name,
-    this.avatar,
-    this.customerNo,
-  });
-
-  factory GetCustomers.fromJson(Map<String, dynamic> json) => GetCustomers(
-    id: json["id"],
-    name: json["name"],
-    avatar: json["avatar"],
-    customerNo: json["customer_no"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "id": id,
-    "name": name,
-    "avatar": avatar,
-    "customer_no": customerNo,
-  };
-}

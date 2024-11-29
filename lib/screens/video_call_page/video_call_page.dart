@@ -20,14 +20,14 @@ class VideoCallPage extends GetView<VideoCallPageController> {
         body: Container(
           decoration: BoxDecoration(
             color: controller.isForChat
-                ? AppColors.white
-                : AppColors.blackColor.withOpacity(0.7),
+                ? appColors.white
+                : appColors.blackColor.withOpacity(0.7),
           ),
           child: SafeArea(
             child: Stack(
               children: [
                 acceptUI(),
-                if (!controller.isForChat) closeButton(color: AppColors.white),
+                if (!controller.isForChat) closeButton( ),
               ],
             ),
           ),
@@ -52,7 +52,7 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                   CustomText(
                     controller.name,
                     fontSize: 20.sp,
-                    fontColor: AppColors.appYellowColour,
+                    fontColor: appColors.textColor,
                     fontWeight: FontWeight.w600,
                   ),
                   SizedBox(height: 5.h),
@@ -62,12 +62,12 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                     textAlign: TextAlign.center,
                     overflow: TextOverflow.visible,
                     fontColor: controller.isForChat
-                        ? AppColors.blackColor
-                        : AppColors.white,
+                        ? appColors.blackColor
+                        : appColors.white,
                     fontWeight: FontWeight.w600,
                   ),
                   SizedBox(height: 24.h),
-                  const Divider(color: AppColors.lightGrey),
+                   Divider(color: appColors.lightGrey),
                   SizedBox(height: 24.h),
                   detailRow('Name', controller.name),
                   detailRow('Gender', controller.gender),
@@ -87,7 +87,7 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                 child: Container(
                   padding: EdgeInsets.symmetric(vertical: 17.h),
                   decoration: BoxDecoration(
-                      border: Border.all(width: 2, color: AppColors.brownColour),
+                      border: Border.all(width: 2, color: appColors.brownColour),
                       borderRadius: BorderRadius.circular(100.r)),
                   child: Row(
                     children: [
@@ -97,7 +97,7 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                             child: CustomText(
                               controller.btnTitle.value,
                               fontSize: 20.sp,
-                              fontColor: AppColors.brownColour,
+                              fontColor: appColors.brownColour,
                               fontWeight: FontWeight.w600,
                             ),
                           ),
@@ -115,13 +115,13 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                       child: FilledButton(
                         onPressed: () => controller.onAccept(),
                         style: FilledButton.styleFrom(
-                          backgroundColor: AppColors.lightYellow,
+                          backgroundColor: appColors.textColor,
                           padding: EdgeInsets.symmetric(vertical: 20.h),
                         ),
                         child: Obx(() => CustomText(
                               controller.btnTitle.value,
                               fontSize: 20.sp,
-                              fontColor: AppColors.brownColour,
+                              fontColor: appColors.brownColour,
                               fontWeight: FontWeight.w600,
                             )),
                       ),
@@ -143,8 +143,8 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                 title,
                 fontSize: 16.sp,
                 fontColor: controller.isForChat
-                    ? AppColors.blackColor
-                    : AppColors.white,
+                    ? appColors.blackColor
+                    : appColors.white,
               ),
             ),
             SizedBox(width: 14.w),
@@ -152,7 +152,7 @@ class VideoCallPage extends GetView<VideoCallPageController> {
               '-',
               fontSize: 16.sp,
               fontColor:
-                  controller.isForChat ? AppColors.blackColor : AppColors.white,
+                  controller.isForChat ? appColors.blackColor : appColors.white,
             ),
             SizedBox(width: 14.w),
             Expanded(
@@ -160,8 +160,8 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                 data,
                 fontSize: 16.sp,
                 fontColor: controller.isForChat
-                    ? AppColors.blackColor
-                    : AppColors.white,
+                    ? appColors.blackColor
+                    : appColors.white,
                 overflow: TextOverflow.visible,
                 textAlign: TextAlign.right,
               ),
@@ -173,7 +173,7 @@ class VideoCallPage extends GetView<VideoCallPageController> {
     );
   }
 
-  Widget closeButton({Color color = AppColors.blackColor}) {
+  Widget closeButton() {
     return SizedBox(
       height: AppBar().preferredSize.height,
       width: double.maxFinite,
@@ -182,7 +182,7 @@ class VideoCallPage extends GetView<VideoCallPageController> {
           SizedBox(width: 8.w),
           IconButton(
             onPressed: () => Get.back(),
-            icon: Icon(Icons.close, color: color),
+            icon: Icon(Icons.close, color: appColors.white),
           ),
         ],
       ),
@@ -209,30 +209,30 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                   CustomText(
                     'Astrologer Name',
                     fontSize: 20.sp,
-                    fontColor: AppColors.appYellowColour,
+                    fontColor: appColors.textColor,
                     fontWeight: FontWeight.w700,
                   ),
                   SizedBox(height: 5.h),
                   CustomText(
-                    'is ready to assist you!',
+                    'is ready to chat with you!',
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
                   ),
                   SizedBox(height: 24.h),
-                  const Divider(color: AppColors.lightGrey),
+                   Divider(color: appColors.lightGrey),
                   SizedBox(height: 24.h),
                   CustomText(
                     'Specialty',
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
-                    fontColor: AppColors.appYellowColour,
+                    fontColor: appColors.textColor,
                   ),
                   SizedBox(height: 8.h),
                   CustomText(
                     'Vedic, Numerology, Vastu, Tarot and Prashana.',
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
-                    fontColor: AppColors.grey,
+                    fontColor: appColors.grey,
                     overflow: TextOverflow.visible,
                     textAlign: TextAlign.center,
                   ),
@@ -241,14 +241,14 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                     'Language',
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
-                    fontColor: AppColors.appYellowColour,
+                    fontColor: appColors.textColor,
                   ),
                   SizedBox(height: 8.h),
                   CustomText(
                     'Hindi, English, Tamil and Telugu',
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
-                    fontColor: AppColors.grey,
+                    fontColor: appColors.grey,
                     overflow: TextOverflow.visible,
                     textAlign: TextAlign.center,
                   ),
@@ -257,14 +257,14 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                     'Experience',
                     fontSize: 20.sp,
                     fontWeight: FontWeight.w700,
-                    fontColor: AppColors.appYellowColour,
+                    fontColor: appColors.textColor,
                   ),
                   SizedBox(height: 8.h),
                   CustomText(
                     '10 years of experience',
                     fontSize: 16.sp,
                     fontWeight: FontWeight.w500,
-                    fontColor: AppColors.grey,
+                    fontColor: appColors.grey,
                     overflow: TextOverflow.visible,
                     textAlign: TextAlign.center,
                   ),
@@ -288,16 +288,16 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                       },
                       padding: EdgeInsets.all(17.h),
                       radius: 50.r,
-                      border: Border.all(color: AppColors.darkBlue, width: 4),
+                      border: Border.all(color: appColors.darkBlue, width: 4),
                       color: controller.muteValue.value
-                          ? AppColors.darkBlue
-                          : AppColors.white,
+                          ? appColors.darkBlue
+                          : appColors.white,
                       child: Assets.svg.mute.svg(
                           width: 30,
                           colorFilter: ColorFilter.mode(
                               controller.muteValue.value
-                                  ? AppColors.white
-                                  : AppColors.darkBlue,
+                                  ? appColors.white
+                                  : appColors.darkBlue,
                               BlendMode.srcIn)),
                     ),
                   ),
@@ -310,16 +310,16 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                       },
                       padding: EdgeInsets.all(17.h),
                       radius: 50.r,
-                      border: Border.all(color: AppColors.darkBlue, width: 4),
+                      border: Border.all(color: appColors.darkBlue, width: 4),
                       color: controller.videoValue.value
-                          ? AppColors.darkBlue
-                          : AppColors.white,
+                          ? appColors.darkBlue
+                          : appColors.white,
                       child: Assets.svg.videoMute.svg(
                           width: 30,
                           colorFilter: ColorFilter.mode(
                               controller.videoValue.value
-                                  ? AppColors.white
-                                  : AppColors.darkBlue,
+                                  ? appColors.white
+                                  : appColors.darkBlue,
                               BlendMode.srcIn)),
                     ),
                   ),
@@ -334,14 +334,14 @@ class VideoCallPage extends GetView<VideoCallPageController> {
                         Get.toNamed(RouteName.videoCall);
                       },
                       style: FilledButton.styleFrom(
-                        backgroundColor: AppColors.lightYellow,
+                        backgroundColor: appColors.guideColor,
                         padding: EdgeInsets.symmetric(vertical: 20.h),
                       ),
                       child: CustomText(
                         'Start Video Call',
                         fontSize: 20.sp,
                         fontWeight: FontWeight.w600,
-                        fontColor: AppColors.brownColour,
+                        fontColor: appColors.brownColour,
                       ),
                     ),
                   ),

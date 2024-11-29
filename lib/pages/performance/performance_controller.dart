@@ -2,11 +2,13 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
+import 'package:divine_astrologer/model/performance_response.dart';
 import 'package:divine_astrologer/screens/rank_system/rank_system_controller.dart';
+import 'package:divine_astrologer/utils/enum.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import '../../common/app_exception.dart';
-import '../../model/performance_model_class.dart';
+import '../../model/filter_performance_response.dart';
 import '../../repository/performance_repository.dart';
 
 class PerformanceController extends GetxController {
@@ -21,6 +23,7 @@ class PerformanceController extends GetxController {
         "Total busy hours out of online hours when busy over consultation."),
   ].obs;
 
+  Rx<Loading> loading = Loading.initial.obs;
   var txt =
       "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It ";
 
@@ -43,62 +46,107 @@ class PerformanceController extends GetxController {
     PercentageModelClass("45+", '100'),
   ].obs;
 
-  var durationValue = ['today', 'last_week', 'last_month'].obs;
+  var durationValue = ['yesterday', 'last_week', 'last_month'].obs;
 
-  var durationOptions = ['Today', 'Last Week', 'Last Month'].obs;
-  RxString selectedValue = "today".obs;
-  RxString selectedOption = "Today".obs;
+  var durationOptions = ['Yesterday', 'Last Week', 'Last Month'].obs;
+  RxString selectedValue = "yesterday".obs;
+  RxString selectedOption = "Yesterday".obs;
 
   updateDurationValue(String val) {
-    selectedOption.value = val;
-    int index = durationOptions.indexOf(val);
-    selectedValue.value = durationValue[index];
+    if (selectedOption.value != val) {
+      selectedOption.value = val;
+      int index = durationOptions.indexOf(val);
+      selectedValue.value = durationValue[index];
+      getPerformance();
+    }
   }
 
-  PerformanceModelClass? performanceData;
+  PerformanceResponse? performanceData;
+
+  // PerformanceFilterResponse? performanceFilterResponse;
+
+  bool isInit = false;
+  @override
+  void onReady() {
+    isInit = false;
+    super.onReady();
+  }
 
   @override
   void onInit() {
     super.onInit();
+    debugPrint("test_onInit: call");
+    isInit = true;
     init();
   }
 
   init() async {
-    await getPerformanceList();
+    await getPerformance();
+    // await getFilteredPerformance();
   }
 
-  RxList<BusyHours?> overAllScoreList = <BusyHours?>[].obs;
+  RxList<dynamic> overAllScoreList = <dynamic?>[].obs;
 
-  getPerformanceList() async {
+  getPerformance() async {
+    loading.value = Loading.loading;
+    update();
     try {
-      // Map<String, dynamic> params = {"filter": selectedOption.value};
-      Map<String, dynamic> params = {"filter": 'last_month'};
+      Map<String, dynamic> params = {"filter": selectedValue.value};
       var response = await PerformanceRepository().getPerformance(params);
       log("Res-->${jsonEncode(response.data)}");
       performanceData = response;
       overAllScoreList.value = [
-        response.data?.response?.conversionRate,
-        response.data?.response?.repurchaseRate,
-        response.data?.response?.onlineHours,
-        response.data?.response?.liveHours,
-        response.data?.response?.eCommerce,
-        response.data?.response?.busyHours,
+        response.data?.conversionRate,
+        response.data?.repurchaseRate,
+        response.data?.onlineHours,
+        response.data?.liveHours,
+        response.data?.ecom,
+        response.data?.busyHours,
       ];
 
       update();
-      RankSystemController rankSystemController = Get.put(RankSystemController());
-      rankSystemController.rankSystemList = performanceData?.data?.rankSystem;
-
       log("performanceData==>${jsonEncode(performanceData!.data)}");
     } catch (error) {
       debugPrint("error $error");
       if (error is AppException) {
         error.onException();
       } else {
-        divineSnackBar(data: error.toString(),color: AppColors.redColor);
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
       }
     }
+    loading.value = Loading.loaded;
   }
+
+/* getFilteredPerformance() async {
+    loading.value = Loading.loading;
+    update();
+    try {
+      Map<String, dynamic> params = {"filter": selectedValue.value};
+      // Map<String, dynamic> params = {"filter": 'last_month'};
+      var response = await PerformanceRepository().getFilteredPerformance(params);
+      log("Res-->${jsonEncode(response.data)}");
+      performanceFilterResponse = response;
+      overAllScoreList.value = [
+        response.data?.response?.conversion,
+        response.data?.response?.repurchaseRate,
+        response.data?.response?.onlineHours,
+        response.data?.response?.liveOnline,
+        response.data?.response?.averageServiceTime,
+        response.data?.response?.customerSatisfactionRatings,
+      ];
+
+      update();
+      log("performanceData==>${jsonEncode(performanceData!.data)}");
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+    loading.value = Loading.loaded;
+  }*/
 }
 
 class ScoreModelClass {

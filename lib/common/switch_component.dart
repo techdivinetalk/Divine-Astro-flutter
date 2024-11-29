@@ -7,16 +7,25 @@ import 'package:flutter_switch/flutter_switch.dart';
 class SwitchWidget extends StatelessWidget {
   bool? switchValue;
   Function? onTap;
-  String? onText,offText;
+  String? onText, offText;
   double? width;
   double? height;
-  SwitchWidget({super.key, this.switchValue, this.onTap,this.onText,this.offText,this.width,this.height});
+  Color? activeTextColor;
+  SwitchWidget(
+      {super.key,
+      this.switchValue,
+      this.onTap,
+      this.activeTextColor,
+      this.onText,
+      this.offText,
+      this.width,
+      this.height});
 
   @override
   Widget build(BuildContext context) {
     return FlutterSwitch(
-      inactiveTextColor: AppColors.darkBlue,
-      activeTextColor: AppColors.darkBlue,
+      inactiveTextColor: appColors.darkBlue,
+      activeTextColor:activeTextColor ?? appColors.darkBlue,
       width: width ?? 58.0,
       height: height ?? 28.0,
       toggleSize: 20.0,
@@ -29,11 +38,11 @@ class SwitchWidget extends StatelessWidget {
       valueFontSize: 12.0,
       activeTextFontWeight: FontWeight.w400,
       inactiveTextFontWeight: FontWeight.w400,
-      activeToggleColor: AppColors.appYellowColour,
+      activeToggleColor: appColors.guideColor,
       inactiveToggleColor: Colors.grey,
-      toggleColor: AppColors.greyColour,
+      toggleColor: appColors.greyColour,
       switchBorder: Border.all(
-        color: AppColors.darkBlue,
+        color: appColors.darkBlue,
         width: 01.0,
       ),
       toggleBorder: Border.all(

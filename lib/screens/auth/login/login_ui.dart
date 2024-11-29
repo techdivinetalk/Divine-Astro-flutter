@@ -1,20 +1,22 @@
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
+import 'package:divine_astrologer/common/custom_widgets.dart';
+import 'package:divine_astrologer/common/routes.dart';
 import 'package:divine_astrologer/gen/assets.gen.dart';
 import 'package:divine_astrologer/screens/auth/login/widget/country_picker.dart';
-import 'package:divine_astrologer/utils/load_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:velocity_x/velocity_x.dart';
 
 import '../../../common/colors.dart';
-import '../../../common/custom_light_yellow_btn.dart';
 import 'login_controller.dart';
 
-class LoginUI extends GetView<LoginController>  {
-  LoginUI({Key? key}) : super(key: key);
+class LoginUI extends GetView<LoginController> {
+  LoginUI({super.key});
+
   final _formKey = GlobalKey<FormState>();
 
   @override
@@ -39,46 +41,163 @@ class LoginUI extends GetView<LoginController>  {
                     child: Assets.images.divineLogo
                         .image(width: ScreenUtil().screenWidth * 0.55),
                   ),
+                  SizedBox(height: 10.h),
                   const ImageSliderWidget(),
-                  SizedBox(height: 5.h),
+                  TextWithDivider(
+                    text: 'Log in or Sign up',
+                    textColor: appColors.greyColor,
+                    dividerHeight: 1.0,
+                  ),
+                  SizedBox(height: 20.h),
                   mobileField(),
                   SizedBox(height: 5.h),
-                  Text(
-                    "You will get a call on the number given above for verification",
-                    style: AppTextStyle.textStyle12(
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  SizedBox(height: 10.h),
-                  GestureDetector(
-                    onTap: controller.enable.value
-                        ? () {
-                            if (_formKey.currentState!.validate()) {
-                              controller.enable.value = false;
-                              controller.login();
+                  Center(
+                      child: Container(
+                          alignment: Alignment.center,
+                          margin: EdgeInsets.only(bottom: 8.h),
+                          child: Text.rich(
+                              textAlign: TextAlign.center,
+                              TextSpan(children: [
+                                WidgetSpan(
+                                  child: Text(
+                                    "By signing up, you agree to our ",
+                                    style: TextStyle(
+                                      color: appColors.textColor,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                                WidgetSpan(
+                                  child: GestureDetector(
+                                    behavior: HitTestBehavior.translucent,
+                                    onTap: () => Get.toNamed(
+                                        RouteName.termsCondition),
+                                    child: Text(
+                                      "terms of use",
+                                      style: TextStyle(
+                                        color: appColors.textColor,
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w400,
+                                        decoration:
+                                        TextDecoration.underline,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                WidgetSpan(
+                                  child: Text(
+                                    " ${"and".tr} ",
+                                    style: TextStyle(
+                                      color: appColors.textColor,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w400,
+                                    ),
+                                  ),
+                                ),
+                                WidgetSpan(
+                                    child: GestureDetector(
+                                        behavior:
+                                        HitTestBehavior.translucent,
+                                        onTap: () => Get.toNamed(
+                                            RouteName.privacyPolicy),
+                                        child: Text("privacy policy",
+                                            style: TextStyle(
+                                                color: appColors.textColor,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w400,
+                                                decoration: TextDecoration
+                                                    .underline))))
+                              ])))),
+                  SizedBox(height: 20.h),
+                  Obx(() {
+                    return GestureDetector(
+                      onTap:  controller.enable.value
+                          ? () {
+                              if (_formKey.currentState!.validate()) {
+                                controller.login();
+                                controller.enable.value = false;
+                              }
                             }
-                          }
-                        : () {},
-                    child: Container(
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        color: AppColors.lightYellow,
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Center(
-                          child: Text(
-                            "Verify",
-                            style: AppTextStyle.textStyle16(
-                              fontWeight: FontWeight.w600,
-                              fontColor: AppColors.brownColour,
-                            ),
-                          ),
+                          : () {},
+                      child: Container(
+                        width: MediaQuery.of(context).size.width,
+                        height: 50.h,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: appColors.red,
+                          borderRadius: BorderRadius.circular(10),
                         ),
+                        child: !controller.isLoading.value
+                            ? Text(
+                                "Send OTP",
+                                style: AppTextStyle.textStyle16(
+                                  fontWeight: FontWeight.w600,
+                                  fontColor: appColors.white,
+                                ),
+                              )
+                            : CircularProgressIndicator(
+                                strokeWidth: 3, color: appColors.brown),
                       ),
-                    ),
-                  ),
+                    );
+                  }),
+                  // SizedBox(height: 20.h),
+                  // Obx(() => Visibility(
+                  //     visible: controller.enable.value && isTruecaller.value.toString() == "1",
+                  //     child: TextWithDivider(
+                  //       text: 'Or',
+                  //       textColor: appColors.greyColor,
+                  //       dividerHeight: 1.0,
+                  //     ))),
+                  // SizedBox(height: 20.h),
+                  // Obx(() {
+                  //   print("showTrueCaller ${controller.showTrueCaller.value}");
+                  //   return Visibility(
+                  //     visible: (controller.showTrueCaller.value && controller.enable.value && isTruecaller.value.toString() == "1"),
+                  //     child: Padding(
+                  //       padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  //       child: SizedBox(
+                  //         height: 50,
+                  //         width: double.infinity,
+                  //         child: OutlinedButton(
+                  //           style: OutlinedButton.styleFrom(
+                  //             shape: RoundedRectangleBorder(
+                  //               borderRadius: BorderRadius.circular(10.0),
+                  //             ),
+                  //             side: const BorderSide(
+                  //               width: 1.0,
+                  //               color: Color(0xff0087FF),
+                  //             ),
+                  //           ),
+                  //           onPressed: () async {
+                  //             bool oAuthFlowUsable = false;
+                  //             oAuthFlowUsable =
+                  //                 await TrueCallerService().isOAuthFlowUsable();
+                  //
+                  //             oAuthFlowUsable
+                  //                 ? await TrueCallerService().startTrueCaller()
+                  //                 : trueCallerFaultPopup();
+                  //           },
+                  //           child: Row(
+                  //             mainAxisAlignment: MainAxisAlignment.center,
+                  //             children: [
+                  //               Image.asset(
+                  //                   "assets/images/true_caller_icon.png"),
+                  //               const SizedBox(width: 16),
+                  //               const Text(
+                  //                 "Login with TrueCaller",
+                  //                 style: TextStyle(
+                  //                   color: Color(0xff0087FF),
+                  //                 ),
+                  //               ),
+                  //               const SizedBox(width: 16),
+                  //             ],
+                  //           ),
+                  //         ),
+                  //       ),
+                  //     ),
+                  //   );
+                  // })
                 ],
               ),
             ),
@@ -87,6 +206,16 @@ class LoginUI extends GetView<LoginController>  {
       ),
     );
   }
+
+  // Future<void> trueCallerFaultPopup() async {
+  //   await showCupertinoModalPopup(
+  //     context: Get.context!,
+  //     builder: (BuildContext context) {
+  //       return TrueCallerFaultWidget(onClose: Get.back);
+  //     },
+  //   );
+  //   return Future<void>.value();
+  // }
 
   Widget mobileField() {
     return Form(
@@ -106,13 +235,18 @@ class LoginUI extends GetView<LoginController>  {
           builder: (controller) => TextFormField(
             focusNode: controller.numberFocus,
             validator: (value) {
-              if (value == null || value.isEmpty) {
-                return 'Please Enter Valid Phone Number';
+              String pattern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+              RegExp regExp = RegExp(pattern);
+              if (value!.isEmpty) {
+                return 'mobileNumberEmptyMsg'.tr;
               } else if (value.length != 10) {
-                return 'Mobile number should be 10 digits';
+                return 'mobileNumber10Digits'.tr;
+              } else if (!regExp.hasMatch(value)) {
+                return 'validPhoneNumber'.tr;
               }
               return null;
             },
+            onTapOutside: (value) => FocusScope.of(Get.context!).unfocus(),
             controller: controller.mobileNumberController,
             keyboardType: TextInputType.number,
             enabled: controller.enable.value,
@@ -123,10 +257,10 @@ class LoginUI extends GetView<LoginController>  {
             ],
             decoration: InputDecoration(
               counterText: '',
-              hintText: "Enter Registered Number",
-              fillColor: AppColors.white,
+              hintText: "Enter mobile number",
+              fillColor: appColors.white,
               hintStyle:
-                  AppTextStyle.textStyle16(fontColor: AppColors.greyColor),
+                  AppTextStyle.textStyle16(fontColor: appColors.greyColor),
               prefixIcon: InkWell(
                 onTap: () => countryPickerSheet(Get.context!, (value) {
                   controller.setCode(value.phoneCode);
@@ -142,29 +276,29 @@ class LoginUI extends GetView<LoginController>  {
               ),
               filled: true,
               errorStyle:
-                  AppTextStyle.textStyle16(fontColor: AppColors.appRedColour),
+                  AppTextStyle.textStyle16(fontColor: appColors.appRedColour),
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(
-                    color: AppColors.appYellowColour,
+                  borderSide: BorderSide(
+                    color: appColors.greyColor,
                     width: 1.0,
                   )),
               focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(
-                    color: AppColors.appYellowColour,
+                  borderSide: BorderSide(
+                    color: appColors.guideColor,
                     width: 1.0,
                   )),
               errorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(
-                    color: AppColors.redColor,
+                  borderSide: BorderSide(
+                    color: appColors.redColor,
                     width: 1.0,
                   )),
               focusedErrorBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
-                  borderSide: const BorderSide(
-                    color: AppColors.redColor,
+                  borderSide: BorderSide(
+                    color: appColors.redColor,
                     width: 1.0,
                   )),
             ),
@@ -176,7 +310,7 @@ class LoginUI extends GetView<LoginController>  {
 }
 
 class ImageSliderWidget extends StatefulWidget {
-  const ImageSliderWidget({Key? key}) : super(key: key);
+  const ImageSliderWidget({super.key});
 
   @override
   State<ImageSliderWidget> createState() => _ImageSliderWidgetState();
@@ -195,7 +329,7 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
             onPageChanged: (index, reason) {
               setState(() => swipeIndex = index);
             },
-            height: ScreenUtil().screenHeight * 0.48,
+            height: ScreenUtil().screenHeight * 0.350,
             viewportFraction: 1,
             autoPlay: true,
           ),
@@ -204,13 +338,10 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
               .entries
               .map((item) => Column(
                     children: [
-                      item.value,
-                      Center(
-                        child: Container(
-                          margin: EdgeInsets.symmetric(horizontal: 20.w),
-                          child: Text(controller.imageDec[item.key]),
-                        ),
-                      ),
+                      item.value.expand(),
+                      Text(controller.imageDec[item.key],
+                              textAlign: TextAlign.center)
+                          .centered()
                     ],
                   ))
               .toList(),
@@ -224,13 +355,57 @@ class _ImageSliderWidgetState extends State<ImageSliderWidget> {
                 (e) => Container(
                   margin: EdgeInsets.symmetric(vertical: 20.h, horizontal: 2.w),
                   child: e.key == swipeIndex
-                      ? Assets.svg.pinkSlider
-                          .svg(color: AppColors.appYellowColour)
+                      ? Assets.svg.pinkSlider.svg(
+                          colorFilter: ColorFilter.mode(
+                              appColors.greyColor, BlendMode.srcIn))
                       : Assets.svg.blackDot.svg(),
                 ),
               )
               .toList(),
         )
+      ],
+    );
+  }
+}
+
+/// Test Divider
+class TextWithDivider extends StatelessWidget {
+  final String text;
+  final Color textColor;
+  final double dividerHeight;
+
+  const TextWithDivider({
+    super.key,
+    required this.text,
+    this.textColor = Colors.black,
+    this.dividerHeight = 1.0,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    // double screenWidth = MediaQuery.of(context).size.width;
+    return Row(
+      children: [
+        Container(
+          height: dividerHeight,
+          color: Colors.grey[300],
+        ).expand(),
+        SizedBox(
+          width: 10.w,
+        ),
+        Center(
+          child: CustomText(
+            text,
+            fontColor: textColor,
+          ),
+        ),
+        SizedBox(
+          width: 10.w,
+        ),
+        Container(
+          height: dividerHeight,
+          color: Colors.grey[300],
+        ).expand(),
       ],
     );
   }

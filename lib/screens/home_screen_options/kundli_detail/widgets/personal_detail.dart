@@ -40,7 +40,7 @@ class PersonalDetailUi extends StatelessWidget {
                 "name".tr,
                 controller.kundliParams.value.name == null
                     ? ""
-                    : "${controller.kundliParams.value.name}" ?? '',
+                    : "${controller.kundliParams.value.name}",
               ),
               detailTile(
                 "birthDate".tr,
@@ -143,7 +143,7 @@ class PersonalDetailUi extends StatelessWidget {
               child: CustomText(
                 title,
                 fontSize: 14.sp,
-                fontColor: AppColors.darkBlue.withOpacity(0.5),
+                fontColor: appColors.darkBlue.withOpacity(0.5),
               ),
             ),
             SizedBox(

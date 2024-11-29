@@ -46,8 +46,8 @@ class BackNavigationWidget extends StatelessWidget {
                       children: [
                         SizedBox(width: 16.w),
                         IconButton(
-                          splashColor: AppColors.transparent,
-                          highlightColor: AppColors.transparent,
+                          splashColor: appColors.transparent,
+                          highlightColor: appColors.transparent,
                           onPressed: onPressedBack,
                           icon: const Icon(Icons.arrow_back_ios_new_rounded),
                         ),
@@ -89,32 +89,40 @@ class CustomMaterialButton extends StatelessWidget {
     this.onPressed,
     this.height,
     this.color,
+    this.disabledColor,
     this.textColor,
+    this.fontSize,
+    this.radius,
     this.fontWeight,
     this.style,
+    this.margin,
   }) : super(key: key);
 
   final String buttonName;
   final void Function()? onPressed;
   final double? height;
-  final Color? color;
+  final Color? color, disabledColor;
   final Color? textColor;
   final FontWeight? fontWeight;
   final TextStyle? style;
+  final double? fontSize;
+  final double? radius;
+  final EdgeInsets? margin;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(vertical: 15.sp),
+      margin: margin ?? EdgeInsets.symmetric(vertical: 15.sp),
       child: Row(
         children: [
           Expanded(
             child: MaterialButton(
               height: height ?? 55.h,
-              color: color ?? AppColors.lightYellow,
+              color: color ?? appColors.guideColor,
+              disabledColor: disabledColor,
               highlightElevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(79.sp),
+                borderRadius: BorderRadius.circular(radius ?? 79.sp),
               ),
               elevation: 0.0,
               onPressed: onPressed,
@@ -122,8 +130,8 @@ class CustomMaterialButton extends StatelessWidget {
                 buttonName,
                 style: style ??
                     TextStyle(
-                      fontSize: 20.sp,
-                      color: textColor ?? AppColors.blackColor,
+                      fontSize: fontSize ?? 20.sp,
+                      color: textColor ?? appColors.white,
                       fontWeight: fontWeight ?? FontWeight.w500,
                     ),
               ),
@@ -228,37 +236,37 @@ class BankDetailsField extends StatelessWidget {
           errorStyle: const TextStyle(height: 0),
           hintText: hintText,
           helperStyle: AppTextStyle.textStyle16(),
-          fillColor: AppColors.white,
-          hintStyle: AppTextStyle.textStyle16(fontColor: AppColors.grey),
-          hoverColor: AppColors.white,
+          fillColor: appColors.white,
+          hintStyle: AppTextStyle.textStyle16(fontColor: appColors.grey),
+          hoverColor: appColors.white,
           prefixIcon: icon,
           suffixIcon: suffixIcon,
           filled: true,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: errorBorder ?? AppColors.white,
+              color: errorBorder ?? appColors.white,
               width: 1.0,
             ),
           ),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
             borderSide: BorderSide(
-              color: errorBorder ?? AppColors.white,
+              color: errorBorder ?? appColors.white,
               width: 1.0,
             ),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide: const BorderSide(
-              color: AppColors.redColor,
+            borderSide: BorderSide(
+              color: appColors.redColor,
               width: 1.0,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10.0),
-            borderSide: const BorderSide(
-              color: AppColors.lightYellow,
+            borderSide: BorderSide(
+              color: appColors.guideColor,
               width: 1.0,
             ),
           ),

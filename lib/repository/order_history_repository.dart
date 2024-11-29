@@ -1,7 +1,10 @@
 import 'dart:convert';
 
+import 'package:divine_astrologer/model/order_history_model/feed_order_history.dart';
+import 'package:divine_astrologer/utils/utils.dart';
 import 'package:flutter/foundation.dart';
 import 'package:get/get.dart';
+import 'package:get/get_connect/http/src/status/http_status.dart';
 
 import '../common/app_exception.dart';
 import '../common/routes.dart';
@@ -13,20 +16,26 @@ import '../model/order_history_model/gift_order_history.dart';
 import '../model/order_history_model/remedy_suggested_order_history.dart';
 
 class OrderHistoryRepository extends ApiProvider {
-  Future<AllOrderHistoryModelClass> getAllOrderHistory(Map<String, dynamic> param) async {
+  Future<AllOrderHistoryModelClass> getAllOrderHistory(
+      Map<String, dynamic> param) async {
     try {
       final response = await post(getOrderHistoryUrl,
-          body: jsonEncode(param),
-          headers: await getJsonHeaderURL(version: 7));
+          body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
-          final orderHistoryModel = AllOrderHistoryModelClass.fromJson(json.decode(response.body));
-          if (orderHistoryModel.statusCode == successResponse && orderHistoryModel.success!) {
+          final orderHistoryModel =
+              AllOrderHistoryModelClass.fromJson(json.decode(response.body));
+          if (orderHistoryModel.statusCode == successResponse &&
+              orderHistoryModel.success!) {
             return orderHistoryModel;
           } else {
             throw CustomException(json.decode(response.body)["message"]);
@@ -41,20 +50,26 @@ class OrderHistoryRepository extends ApiProvider {
     }
   }
 
-  Future<CallOrderHistoryModelClass> getCallOrderHistory(Map<String, dynamic> param) async {
+  Future<CallOrderHistoryModelClass> getCallOrderHistory(
+      Map<String, dynamic> param) async {
     try {
       final response = await post(getOrderHistoryUrl,
-          body: jsonEncode(param),
-          headers: await getJsonHeaderURL(version: 7));
+          body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
-          final orderHistoryModel = CallOrderHistoryModelClass.fromJson(json.decode(response.body));
-          if (orderHistoryModel.statusCode == successResponse && orderHistoryModel.success!) {
+          final orderHistoryModel =
+              CallOrderHistoryModelClass.fromJson(json.decode(response.body));
+          if (orderHistoryModel.statusCode == successResponse &&
+              orderHistoryModel.success!) {
             return orderHistoryModel;
           } else {
             throw CustomException(json.decode(response.body)["message"]);
@@ -69,20 +84,26 @@ class OrderHistoryRepository extends ApiProvider {
     }
   }
 
-  Future<ChatOrderHistoryModelClass> getChatOrderHistory(Map<String, dynamic> param) async {
+  Future<ChatOrderHistoryModelClass> getChatOrderHistory(
+      Map<String, dynamic> param) async {
     try {
       final response = await post(getOrderHistoryUrl,
-          body: jsonEncode(param),
-          headers: await getJsonHeaderURL(version: 7));
+          body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
-          final orderHistoryModel = ChatOrderHistoryModelClass.fromJson(json.decode(response.body));
-          if (orderHistoryModel.statusCode == successResponse && orderHistoryModel.success!) {
+          final orderHistoryModel =
+              ChatOrderHistoryModelClass.fromJson(json.decode(response.body));
+          if (orderHistoryModel.statusCode == successResponse &&
+              orderHistoryModel.success!) {
             return orderHistoryModel;
           } else {
             throw CustomException(json.decode(response.body)["message"]);
@@ -97,20 +118,62 @@ class OrderHistoryRepository extends ApiProvider {
     }
   }
 
-  Future<GiftOrderHistoryModelClass> getGiftOrderHistory(Map<String, dynamic> param) async {
+  Future<FeedBackOrder> getFeedbackChatOrderHistory(
+      Map<String, dynamic> param) async {
     try {
       final response = await post(getOrderHistoryUrl,
-          body: jsonEncode(param),
-          headers: await getJsonHeaderURL(version: 7));
+          body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
 
       if (response.statusCode == 200) {
-        if (json.decode(response.body)["status_code"] == 401) {
-          preferenceService.erase();
-          Get.offNamed(RouteName.login);
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
+          Utils().handleStatusCodeUnauthorizedBackend();
           throw CustomException(json.decode(response.body)["error"]);
         } else {
-          final orderHistoryModel = GiftOrderHistoryModelClass.fromJson(json.decode(response.body));
-          if (orderHistoryModel.statusCode == successResponse && orderHistoryModel.success!) {
+          final orderFeedHistoryModel =
+          FeedBackOrder.fromJson(json.decode(response.body));
+          if (orderFeedHistoryModel.statusCode == successResponse &&
+              orderFeedHistoryModel.success!) {
+            return orderFeedHistoryModel;
+          } else {
+            throw CustomException(json.decode(response.body)["message"]);
+          }
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["message"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<GiftOrderHistoryModelClass> getGiftOrderHistory(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await post(getOrderHistoryUrl,
+          body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
+      print("Body :: ${jsonEncode(param)}");
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized ) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final orderHistoryModel =
+              GiftOrderHistoryModelClass.fromJson(json.decode(response.body));
+          if (orderHistoryModel.statusCode == successResponse &&
+              orderHistoryModel.success!) {
             return orderHistoryModel;
           } else {
             throw CustomException(json.decode(response.body)["message"]);
@@ -130,25 +193,27 @@ class OrderHistoryRepository extends ApiProvider {
     //progressService.showProgressDialog(true);
     try {
       final response = await post(getOrderHistoryUrl,
-          body: jsonEncode(param),
-          headers: await getJsonHeaderURL(version: 7));
+          body: jsonEncode(param), headers: await getJsonHeaderURL(version: 7));
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
 
-      print('Response: ${response.request}');
-      //progressService.showProgressDialog(false);
+      debugPrint('Response: ${response.request}');
       if (response.statusCode == 200) {
-        final orderHistoryShop = remedySuggestedOrderHistoryModelClassFromJson(response.body);
-        if (orderHistoryShop.statusCode == successResponse && orderHistoryShop.success!) {
+        final orderHistoryShop =
+            remedySuggestedOrderHistoryModelClassFromJson(response.body);
+        if (orderHistoryShop.statusCode == successResponse &&
+            orderHistoryShop.success!) {
           return orderHistoryShop;
         } else {
-          print("Error-=-=->${orderHistoryShop.message!}");
-          throw CustomException(orderHistoryShop.message!);
+          throw CustomException(orderHistoryShop.message ?? "");
         }
       } else {
-        print("ErrorData-->" + json.decode(response.body)["message"]);
         throw CustomException(json.decode(response.body)["message"]);
       }
     } catch (e, s) {
-      //progressService.showProgressDialog(false);
       debugPrint("we got $e $s");
       rethrow;
     }
@@ -163,9 +228,9 @@ class OrderHistoryRepository extends ApiProvider {
 //     // print("-->"+ response.request.toString());
 //     // print("-->"+ response.body.toString());
 //     if (response.statusCode == 200) {
-//       if (json.decode(response.body)["status_code"] == 401) {
-//         preferenceService.erase();
-//         Get.offNamed(RouteName.login);
+//       if (json.decode(response.body)["status_code"]  == HttpStatus.unauthorized || json.decode(response.body)["status_code"] ==
+//                 HttpStatus.badRequest) {
+//           Utils().handleStatusCodeUnauthorized();
 //         throw CustomException(json.decode(response.body)["error"]);
 //       } else {
 //         final orderHistoryModel =

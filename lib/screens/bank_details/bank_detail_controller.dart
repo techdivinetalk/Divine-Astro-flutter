@@ -1,32 +1,43 @@
+import 'dart:convert';
 import 'dart:io';
 
 import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/update_bank_request.dart';
+import 'package:divine_astrologer/model/update_bank_response.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:file_picker/file_picker.dart';
 
 class BankDetailController extends GetxController {
-  final state = BankDetailState();
 
-  GlobalKey<FormState> get formKey => state.formState;
 
+  String status = "";
+
+  bool isImagesUploaded = false;
+  String passBookUrl = "";
+  String cancelledChequeUrl = "";
+
+  final GlobalKey<FormState> formState = GlobalKey<FormState>();
   File? passBook;
   File? cancelledCheque;
-
+  late int userId;
+  late SharedPreferenceService service;
+   TextEditingController bankName = TextEditingController();
+   TextEditingController holderName = TextEditingController();
+   TextEditingController accountNumber = TextEditingController();
+   TextEditingController ifscCode = TextEditingController();
   @override
   void onInit() {
+    service = Get.find<SharedPreferenceService>();
+    final userData = service.getUserDetail();
+    userId = userData!.id!;
+    setUserData();
     super.onInit();
-    state.init();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    state.dispose();
-  }
+
 
   Future<File?> pickFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
@@ -51,10 +62,19 @@ class BankDetailController extends GetxController {
     update();
   }
 
+  void submit() {
+    if (formState.currentState!.validate()) {
+      updateDetails();
+    } else {
+      divineSnackBar(data: "Please Fill All Data", color: appColors.redColor);
+    }
+  }
+
   void uploadToBucket() {
+
     if (passBook != null && cancelledCheque != null) {
-      state.uploadImagesToS3Bucket(
-        passBook: passBook!,
+      uploadImagesToS3Bucket(
+        passBook: passBook!, 
         cancelledCheque: cancelledCheque!,
         uploadDone: () => divineSnackBar(
             data: "Uploading Done", duration: const Duration(seconds: 1)),
@@ -64,88 +84,36 @@ class BankDetailController extends GetxController {
     }
   }
 
-  void submit() {
-    if (formKey.currentState!.validate()) {
-      updateDetails();
-    } else {
-      divineSnackBar(data: "Please Fill All Data", color: AppColors.redColor);
-    }
-  }
+
 
   void updateDetails() async {
-    if (state.passBookUrl == null && state.cancelledChequeUrl == null) {
+    print(passBookUrl.toString());
+    print(cancelledChequeUrl.toString());
+    print("state.cancelledChequeUrl");
+    if (passBookUrl.isEmpty && cancelledChequeUrl.isEmpty) {
       divineSnackBar(
           data: "Please pick your documents",
           duration: const Duration(seconds: 1));
       return;
     }
-    if (!state.isImagesUploaded) {
+    if (!isImagesUploaded) {
       divineSnackBar(
           data: "Images Not uploaded yet",
           duration: const Duration(seconds: 1));
       return;
     }
-    UpdateBankRequest request = state.getFormData().copyWith(
+    UpdateBankRequest request = getFormData().copyWith(
           legalDocuments: LegalDocuments(
-            the0: state.passBookUrl.toString(),
-            the1: state.cancelledChequeUrl.toString(),
+            the0: passBookUrl.toString(),
+            the1: cancelledChequeUrl.toString(),
           ),
         );
     final response =
         await userRepository.updateBankDetailsApi(request.toJson());
-    await state.saveUpdatedBankDetails(response.toPrettyString());
+    status = response.data.status!;
+    update();
+    await saveUpdatedBankDetails(response.toPrettyString());
     divineSnackBar(data: response.message);
-  }
-}
-
-class BankDetailState {
-  BankDetailState() {
-    service = Get.find<SharedPreferenceService>();
-    final userData = service.getUserDetail();
-    userId = userData!.id!;
-  }
-
-  late int userId;
-  late SharedPreferenceService service;
-  late TextEditingController bankName;
-  late TextEditingController holderName;
-  late TextEditingController accountNumber;
-  late TextEditingController ifscCode;
-  bool isImagesUploaded = false;
-  String? passBookUrl;
-  String? cancelledChequeUrl;
-
-  final GlobalKey<FormState> formState = GlobalKey<FormState>();
-
-  void init() {
-    bankName = TextEditingController();
-    holderName = TextEditingController();
-    accountNumber = TextEditingController();
-    ifscCode = TextEditingController();
-    setUserData();
-  }
-
-  void setUserData() {
-    final details = service.getUpdatedBankDetails();
-    if (details != null) {
-      bankName.text = details.data.bankName;
-      holderName.text = details.data.accountHolderName;
-      accountNumber.text = details.data.accountNumber;
-      ifscCode.text = details.data.ifscCode;
-    } else {
-      final userData = service.getUserDetail();
-      bankName.text = userData?.bankName ?? "";
-      holderName.text = userData?.accountHolderName ?? "";
-      accountNumber.text = userData?.accountNumber ?? "";
-      ifscCode.text = userData?.ifscCode ?? "";
-    }
-  }
-
-  void dispose() {
-    bankName.dispose();
-    holderName.dispose();
-    accountNumber.dispose();
-    ifscCode.dispose();
   }
 
   UpdateBankRequest getFormData() {
@@ -177,4 +145,32 @@ class BankDetailState {
     isImagesUploaded = true;
     uploadDone();
   }
+
+  void setUserData() {
+    final details =
+    service.prefs!.getString(SharedPreferenceService.updatedBankDetails);
+    if (details != null) {
+      UpdateBankResponse data = updateBankResponseFromJson(details);
+      bankName.text = data.data.bankName ?? "";
+      holderName.text = data.data.accountHolderName ?? "";
+      accountNumber.text = data.data.accountNumber ?? "";
+      ifscCode.text = data.data.ifscCode ?? "";
+      status = data.data.status ?? "";
+      if (data.data.legalDocuments!.isNotEmpty) {
+        print("images getting");
+        passBookUrl = jsonDecode(data.data.legalDocuments!)[0] ?? "";
+        cancelledChequeUrl = jsonDecode(data.data.legalDocuments!)[1] ?? "";
+        print(passBookUrl);
+        print(cancelledChequeUrl);
+      }
+    } else {
+      final userData = service.getUserDetail();
+      bankName.text = userData?.bankName ?? "";
+      holderName.text = userData?.accountHolderName ?? "";
+      accountNumber.text = userData?.accountNumber ?? "";
+      ifscCode.text = userData?.ifscCode ?? "";
+    }
+  }
 }
+
+

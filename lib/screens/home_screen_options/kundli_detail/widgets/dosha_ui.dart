@@ -45,7 +45,7 @@ class DoshaUi extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     details(
-                        title: "Manglik Dosha",
+                        title: "manglikDosha".tr,
                         details: controller.manglikDosh.value.data?.manglik
                                     ?.manglikReport ==
                                 null
@@ -54,7 +54,7 @@ class DoshaUi extends StatelessWidget {
                                     ?.manglikReport ??
                                 ''),
                     details(
-                        title: "Kalsarp Dosha",
+                        title: "kalsarpDosha".tr,
                         details: controller.manglikDosh.value.data
                                     ?.kalsarpaDetails?.oneLine ==
                                 null
@@ -63,7 +63,7 @@ class DoshaUi extends StatelessWidget {
                                     ?.oneLine ??
                                 ''),
                     details(
-                      title: "Sadesathi Dosha",
+                      title: "sadesathiDosha".tr,
                       details: controller
                                   .manglikDosh
                                   .value
@@ -76,7 +76,7 @@ class DoshaUi extends StatelessWidget {
                       "${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.isUndergoingSadhesati} ${(controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.sadhesatiStatus ?? false) ? " ${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.sadhesatiPhase ?? ''} of Sadesathi from ${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.startDate ?? ''} to ${controller.manglikDosh.value.data?.sadhesatiCurrentStatus?.endDate ?? ''}." : ""}",
                     ),
                     details(
-                      title: "Pitri Dosha",
+                      title: "pitriDosha".tr,
                       details: controller.manglikDosh.value.data?.pitraDoshaReport
                                   ?.conclusion ==
                               null
@@ -99,16 +99,16 @@ class DoshaUi extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(title,
+        Text(title.tr,
             style: AppTextStyle.textStyle20(
                 fontWeight: FontWeight.w500,
-                fontColor: AppColors.appYellowColour)),
+                fontColor: appColors.textColor)),
         SizedBox(height: 5.h),
         Text(
           details,
           style: AppTextStyle.textStyle12(
               fontWeight: FontWeight.w500,
-              fontColor: AppColors.blackColor.withOpacity(.5)),
+              fontColor: appColors.blackColor.withOpacity(.5)),
         ),
         SizedBox(height: 16.h)
       ],
