@@ -82,6 +82,7 @@ class OnBoardingController extends GetxController {
   // Fetch user data and assign it to the form fields
   void _assignData() {
     userData = preference.getUserDetail();
+
     // Fetch the categories list
     String specialityString = preference.getSpecialAbility()!;
     print("categories data printing ---- ${specialityString.toString()}");
@@ -157,39 +158,40 @@ class OnBoardingController extends GetxController {
 
   getStatusFromFir() async {
     print("astrologer////////////////////////");
+    if (userData != null) {
+      database
+          .child("astrologer/${userData!.id}/realTime")
+          .onValue
+          .listen((DatabaseEvent event) async {
+        final DataSnapshot dataSnapshot = event.snapshot;
 
-    database
-        .child("astrologer/${userData!.id}/realTime")
-        .onValue
-        .listen((DatabaseEvent event) async {
-      final DataSnapshot dataSnapshot = event.snapshot;
+        if (dataSnapshot.exists) {
+          if (dataSnapshot.value is Map<dynamic, dynamic>) {
+            Map<dynamic, dynamic> map = (dataSnapshot.value ??
+                <dynamic, dynamic>{}) as Map<dynamic, dynamic>;
 
-      if (dataSnapshot.exists) {
-        if (dataSnapshot.value is Map<dynamic, dynamic>) {
-          Map<dynamic, dynamic> map = (dataSnapshot.value ??
-              <dynamic, dynamic>{}) as Map<dynamic, dynamic>;
+            // Assuming firebaseDDDD is a reactive variable
+            firebaseDDDD.value = Map<String, dynamic>.from(map);
 
-          // Assuming firebaseDDDD is a reactive variable
-          firebaseDDDD.value = Map<String, dynamic>.from(map);
+            // Check for verifyingOnboarding status
+            if (firebaseDDDD.value["verifyingOnboarding"] != null) {
+              print(
+                  "verifyingOnboarding--status -- ${firebaseDDDD.value["verifyingOnboarding"]}");
 
-          // Check for verifyingOnboarding status
-          if (firebaseDDDD.value["verifyingOnboarding"] != null) {
-            print(
-                "verifyingOnboarding--status -- ${firebaseDDDD.value["verifyingOnboarding"]}");
+              String onboardingStatus =
+                  firebaseDDDD.value["verifyingOnboarding"].toString();
 
-            String onboardingStatus =
-                firebaseDDDD.value["verifyingOnboarding"].toString();
-
-            // Update enableOrDisable with .value
-            // if (onboardingStatus == "0" || onboardingStatus == "1") {
-            enableOrDisable.value =
-                onboardingStatus; // Correctly setting value for RxString
-            update();
-            // }
+              // Update enableOrDisable with .value
+              // if (onboardingStatus == "0" || onboardingStatus == "1") {
+              enableOrDisable.value =
+                  onboardingStatus; // Correctly setting value for RxString
+              update();
+              // }
+            }
           }
         }
-      }
-    });
+      });
+    }
   }
 
   BroadcastReceiver receiver = BroadcastReceiver(
@@ -202,6 +204,9 @@ class OnBoardingController extends GetxController {
     super.onInit();
     loadPreDefineData();
     getStatusFromFir();
+    print('User data: $userData');
+    _assignData();
+
     realController = TextEditingController();
     nameController = TextEditingController();
     skillsController = TextEditingController();
@@ -236,8 +241,6 @@ class OnBoardingController extends GetxController {
       experiencesController.text = userData!.experiance ?? "";
     }
 
-    print('User data: $userData');
-    _assignData();
     _initializeTags();
     // if (userData != null) {
     //   userData?.astroCatPivot?.asMap().entries.forEach((element) {
