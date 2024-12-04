@@ -468,6 +468,8 @@ class ChatMessageWithSocketController extends GetxController
   @override
   void onInit() {
     super.onInit();
+    ScaffoldMessenger.of(Get.context!).removeCurrentSnackBar();
+
     showTalkTime.value = "";
     svgController = SVGAAnimationController(vsync: this);
     svgController.addListener(() {

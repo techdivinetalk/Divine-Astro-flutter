@@ -202,15 +202,15 @@ class FeedBackOrderHistory extends StatelessWidget {
                           : appColors.darkBlue*/
                 ),
               ),
-              Text(
-                // "$amount",
-                "- ₹${data[index].amount}",
-                style: AppTextStyle.textStyle12(
-                    fontWeight: FontWeight.w400,
-                    fontColor: /*data[index].amount.toString().contains("+")
-                          ?*/
-                        appColors.guideColor /*: appColors.appRedColour*/),
-              )
+              // Text(
+              //   // "$amount",
+              //   "- ₹${data[index].amount}",
+              //   style: AppTextStyle.textStyle12(
+              //       fontWeight: FontWeight.w400,
+              //       fontColor: /*data[index].amount.toString().contains("+")
+              //             ?*/
+              //           appColors.guideColor /*: appColors.appRedColour*/),
+              // )
             ],
           ),
           Text(

@@ -202,93 +202,113 @@ Future<bool> acceptOrRejectChat(
   print("chat_reject 2");
   if (response.statusCode == 200) {
     print("chat_reject 3");
-    Get.bottomSheet(
-      Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          GestureDetector(
-            onTap: () => Get.back(),
-            child: Container(
-              padding: const EdgeInsets.all(15.0),
-              decoration: BoxDecoration(
-                border: Border.all(color: appColors.white),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(50.0),
-                ),
-                color: appColors.white.withOpacity(0.2),
-              ),
-              child: const Icon(
-                Icons.close,
-                color: Colors.white,
-              ),
-            ),
-          ),
-          const SizedBox(height: 10.0),
-          Container(
-            width: double.infinity,
-            decoration: BoxDecoration(
-                borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(30.0)),
-                color: appColors.white),
-            child: Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: 15.h),
-                  Image.asset(
-                    "assets/images/user_accepting.png",
-                    height: 100,
-                  ),
-                  SizedBox(height: 8.h),
-                  Text("Waiting for User to Join",
-                      style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontFamily: FontFamily.metropolis,
-                          fontSize: 20.sp,
-                          color: appColors.brownColour)),
-                  SizedBox(height: 5.h),
-                  Text(
-                      "Please hold on. The user has received your connection request and will join shortly.",
-                      textAlign: TextAlign.center,
-                      style: TextStyle(
-                          fontWeight: FontWeight.w400,
-                          fontFamily: FontFamily.metropolis,
-                          fontSize: 16.sp,
-                          color: appColors.grey)),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(50),
-                      onTap: () {
-                        Get.back();
-                      },
-                      child: Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(50),
-                          color: appColors.guideColor,
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.only(
-                              left: 20, right: 20, top: 12, bottom: 12),
-                          child: Text("Okay",
-                              style: TextStyle(
-                                  fontWeight: FontWeight.w600,
-                                  fontFamily: FontFamily.metropolis,
-                                  fontSize: 16.sp,
-                                  color: appColors.white)),
-                        ),
-                      ),
-                    ),
-                  ),
-                  SizedBox(height: 5.h),
-                ],
-              ),
-            ),
-          ),
-        ],
+    // Show the Snackbar
+    ScaffoldMessenger.of(Get.context!).showSnackBar(
+      SnackBar(
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.only(left: 10, right: 10, bottom: 10),
+        padding:
+            const EdgeInsets.only(left: 10, right: 10, bottom: 10, top: 10),
+        backgroundColor: appColors.guideColor,
+        content: Text(
+          'Waiting for User to Join',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+              fontWeight: FontWeight.w600,
+              fontFamily: FontFamily.metropolis,
+              fontSize: 20.sp,
+              color: appColors.black),
+        ),
+        duration: Duration(days: 365), // Long duration
       ),
     );
+    // Get.bottomSheet(
+    //   Column(
+    //     mainAxisSize: MainAxisSize.min,
+    //     children: [
+    //       GestureDetector(
+    //         onTap: () => Get.back(),
+    //         child: Container(
+    //           padding: const EdgeInsets.all(15.0),
+    //           decoration: BoxDecoration(
+    //             border: Border.all(color: appColors.white),
+    //             borderRadius: const BorderRadius.all(
+    //               Radius.circular(50.0),
+    //             ),
+    //             color: appColors.white.withOpacity(0.2),
+    //           ),
+    //           child: const Icon(
+    //             Icons.close,
+    //             color: Colors.white,
+    //           ),
+    //         ),
+    //       ),
+    //       const SizedBox(height: 10.0),
+    //       Container(
+    //         width: double.infinity,
+    //         decoration: BoxDecoration(
+    //             borderRadius:
+    //                 const BorderRadius.vertical(top: Radius.circular(30.0)),
+    //             color: appColors.white),
+    //         child: Center(
+    //           child: Column(
+    //             mainAxisAlignment: MainAxisAlignment.center,
+    //             crossAxisAlignment: CrossAxisAlignment.center,
+    //             children: [
+    //               SizedBox(height: 15.h),
+    //               Image.asset(
+    //                 "assets/images/user_accepting.png",
+    //                 height: 100,
+    //               ),
+    //               SizedBox(height: 8.h),
+    //               Text("Waiting for User to Join",
+    //                   style: TextStyle(
+    //                       fontWeight: FontWeight.w600,
+    //                       fontFamily: FontFamily.metropolis,
+    //                       fontSize: 20.sp,
+    //                       color: appColors.brownColour)),
+    //               SizedBox(height: 5.h),
+    //               Text(
+    //                   "Please hold on. The user has received your connection request and will join shortly.",
+    //                   textAlign: TextAlign.center,
+    //                   style: TextStyle(
+    //                       fontWeight: FontWeight.w400,
+    //                       fontFamily: FontFamily.metropolis,
+    //                       fontSize: 16.sp,
+    //                       color: appColors.grey)),
+    //               Padding(
+    //                 padding: const EdgeInsets.all(8.0),
+    //                 child: InkWell(
+    //                   borderRadius: BorderRadius.circular(50),
+    //                   onTap: () {
+    //                     Get.back();
+    //                   },
+    //                   child: Container(
+    //                     decoration: BoxDecoration(
+    //                       borderRadius: BorderRadius.circular(50),
+    //                       color: appColors.guideColor,
+    //                     ),
+    //                     child: Padding(
+    //                       padding: const EdgeInsets.only(
+    //                           left: 20, right: 20, top: 12, bottom: 12),
+    //                       child: Text("Okay",
+    //                           style: TextStyle(
+    //                               fontWeight: FontWeight.w600,
+    //                               fontFamily: FontFamily.metropolis,
+    //                               fontSize: 16.sp,
+    //                               color: appColors.white)),
+    //                     ),
+    //                   ),
+    //                 ),
+    //               ),
+    //               SizedBox(height: 5.h),
+    //             ],
+    //           ),
+    //         ),
+    //       ),
+    //     ],
+    //   ),
+    // );
     // divineSnackBar(data: message, color: appColors.redColor);
     return true;
   } else {
