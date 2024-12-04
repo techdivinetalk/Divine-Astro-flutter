@@ -1811,6 +1811,7 @@ class HomeUI extends GetView<HomeController> {
                           astroHome.toString() == "0"
                               ? PerformanceTab(context, controller: controller)
                               : SizedBox(),
+                          // TemplateTab(context, controller: controller),
                           Obx(
                             () => controller.isFeedbackAvailable.value
                                 ? controller.homeData?.feedback == null
@@ -3255,6 +3256,82 @@ class HomeUI extends GetView<HomeController> {
             ),
           )
         : const SizedBox();
+  }
+
+  Widget TemplateTab(context, {HomeController? controller}) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 6, bottom: 6, left: 16, right: 16),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(10),
+          boxShadow: [
+            BoxShadow(
+              blurRadius: 4,
+              spreadRadius: 2,
+              color: appColors.grey.withOpacity(0.2),
+            ),
+          ],
+        ),
+        child: Theme(
+          data: Theme.of(context).copyWith(dividerColor: Colors.transparent),
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: CustomText(
+                    'Customized Wish Card For You',
+                    fontWeight: FontWeight.w600,
+                    fontColor: appColors.black,
+                    maxLines: 1,
+                    fontSize: 14,
+                  ),
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                CommonImageView(
+                  imagePath: "assets/images/demo-1.png",
+                  height: 160,
+                ),
+                SizedBox(
+                  height: 12,
+                ),
+                InkWell(
+                  onTap: () {},
+                  child: Container(
+                    height: 40,
+                    width: MediaQuery.of(context).size.width * 0.4,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      color: appColors.guideColor,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 10, right: 10, top: 6, bottom: 6),
+                      child: Align(
+                        alignment: Alignment.center,
+                        child: CustomText(
+                          'Share Now',
+                          fontWeight: FontWeight.w600,
+                          fontColor: appColors.white,
+                          maxLines: 1,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   Widget PerformanceTab(context, {HomeController? controller}) {
@@ -5755,7 +5832,7 @@ class ChatAssistanceDataTileHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       splashColor: appColors.grey.withOpacity(0.4),
-       onTap: () {
+      onTap: () {
         DataList dataList = DataList();
         dataList.name = data.customerName;
         dataList.id = data.customerId;
@@ -5763,7 +5840,7 @@ class ChatAssistanceDataTileHome extends StatelessWidget {
         Get.toNamed(RouteName.chatMessageUI, arguments: dataList);
       },
       child: Padding(
-        padding: const EdgeInsets.only(left: 16,right: 16,top: 8,bottom: 8),
+        padding: const EdgeInsets.only(left: 16, right: 16, top: 8, bottom: 8),
         child: Column(
           children: [
             Row(
