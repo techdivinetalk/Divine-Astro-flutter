@@ -7,6 +7,7 @@ import 'package:divine_astrologer/common/colors.dart';
 import 'package:divine_astrologer/common/common_functions.dart';
 import 'package:divine_astrologer/di/api_provider.dart';
 import 'package:divine_astrologer/model/res_login.dart';
+import 'package:divine_astrologer/pages/home/home_controller.dart';
 import 'package:divine_astrologer/screens/chat_assistance/chat_message/widgets/product/pooja/widgets/custom_widget/pooja_common_list.dart';
 import 'package:divine_astrologer/screens/signature_module/model/agreement_model.dart';
 import 'package:flutter/material.dart';
@@ -219,6 +220,11 @@ class SignatureController extends GetxController {
       if (agreementModel.status!.code == 200) {
         log("agreementModel.data!.signLink-->>${agreementModel.toJson()}");
         if (from == "") {
+          if (!Get.isRegistered<HomeController>()) {
+            Get.put(HomeController()).onInit();
+          } else {
+            Get.put(HomeController()).onInit();
+          }
           Get.until(
             (route) {
               return Get.currentRoute == RouteName.dashboard;

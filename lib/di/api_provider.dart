@@ -321,6 +321,9 @@ class ApiProvider {
 
   final String getRetentionDetails = "getRetentionDetails";
 
+  // Astrologer share image generateAstrologerImage
+  final String generateAstrologerImage = "generateAstrologerImage";
+
   // added by raj
   // final String addNoticeToAstrologer = "addNoticeToAstrologer";
 
