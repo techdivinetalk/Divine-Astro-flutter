@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:app_settings/app_settings.dart';
 import "package:contacts_service/contacts_service.dart";
 import 'package:cron/cron.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/MiddleWare.dart';
@@ -46,6 +47,7 @@ import 'package:intl/intl.dart';
 import 'package:path_provider/path_provider.dart';
 import "package:permission_handler/permission_handler.dart";
 import 'package:screenshot/screenshot.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/PopupManager.dart';
@@ -57,6 +59,7 @@ import '../../common/switch_component.dart';
 import '../../di/shared_preference_service.dart';
 import '../../firebase_service/firebasae_event.dart';
 import '../../model/AstroRitentionModel.dart';
+import '../../model/GenerateImageModel.dart';
 import '../../model/astro_notice_board_response.dart';
 import '../../model/chat_assistant/CustomerDetailsResponse.dart';
 import '../../model/constant_details_model_class.dart';
@@ -352,8 +355,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     super.onInit();
     debugPrint("test_onInit: call");
     isInit = true;
-
     initData();
+    getDeviceDetails();
+
 // // Log when the scroll controller is attached
 //     print('ScrollController attached: ${scrollController.positions.length}');
 //     scrollController.addListener(() {
@@ -377,7 +381,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       getAllDashboardData();
       userData = preferenceService.getUserDetail()!;
       getRitentionDataApi();
-
       appbarTitle.value =
           "${userData.name.toString().capitalizeFirst} (${userData.uniqueNo})";
 
@@ -458,7 +461,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           } else {}
         },
       );
+      generateImage();
     }
+
     print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
     Future.delayed(const Duration(seconds: 3), () {
       print("isLogged");
@@ -494,6 +499,171 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     getAstrologerStatus();
     getConsulation();
     // cron.schedule(Schedule.parse('*/5 * * * * *'), checkForScheduleUpdate);
+  }
+
+  GenerateImageModel? generateImageModel;
+  generateImage() async {
+    try {
+      var data = await userRepository.generateImageRepo({});
+      if (data.success == true) {
+        generateImageModel = data;
+      } else {
+        generateImageModel = null;
+      }
+      update();
+    } catch (error) {
+      debugPrint("error $error");
+      if (error is AppException) {
+        error.onException();
+      } else {
+        divineSnackBar(data: error.toString(), color: appColors.redColor);
+      }
+    }
+  }
+
+  Future<String> download() async {
+    var root = await getTemporaryDirectory();
+    var url = pref.getAmazonUrl()! + "/" + generateImageModel!.data!.image!;
+
+    print("urlvideo :: $url");
+
+    // Extract filename from URL
+    String filename = Uri.parse(url).pathSegments.last;
+    String tempPath = "${root.path}/$filename";
+
+    try {
+      // Configure Dio
+      Dio dio = Dio();
+      dio.options.headers = {
+        'Connection': 'keep-alive',
+        'Keep-Alive': 'timeout=5, max=1000',
+      };
+
+      final response = await dio.get(
+        url,
+        options: Options(
+          responseType: ResponseType.bytes,
+          followRedirects: false,
+          validateStatus: (status) {
+            return status! < 500;
+          },
+        ),
+      );
+      saveImage(response.data);
+      // saveImage(Get.context!,url);
+      // Log headers
+      print(response.headers);
+
+      // Save file
+      File file = File(tempPath);
+      print("File will be saved at: ${file.path}");
+      var raf = file.openSync(mode: FileMode.write);
+      raf.writeFromSync(response.data);
+      await raf.close();
+
+      // Share the file
+      await Share.shareXFiles([XFile(file.path)]);
+      return file.path;
+    } catch (e) {
+      print("Error downloading file: $e");
+      return "";
+    }
+  }
+
+  saveImage(image) async {
+    Directory savePath = await getGalleryPath();
+    String fileName =
+        "${savePath.path}/Template${DateTime.now().microsecond}${DateTime.now().millisecond}.png";
+    bool isPermission = await askStoragePermission();
+    if (isPermission) {
+      await File(fileName).writeAsBytes(image);
+    } else {
+      divineSnackBar(data: "Please give permission of storage.");
+      openAppSettings();
+      update();
+    }
+    update();
+  }
+
+  Future<Directory> getGalleryPath() async {
+    if (Platform.isAndroid) {
+      return Directory('/storage/emulated/0/Pictures');
+    } else if (Platform.isIOS) {
+      return await getApplicationDocumentsDirectory(); // iOS-specific path
+    } else {
+      throw UnsupportedError("Unsupported platform");
+    }
+  }
+
+  Future<Directory> getDownloadPath() async {
+    Directory directory;
+    if (Platform.isIOS) {
+      directory = await getApplicationDocumentsDirectory();
+      return directory;
+    } else {
+      Directory appDocDirFolder = Directory('/storage/emulated/0/Download');
+      bool isPermission = await askStoragePermission();
+      if (isPermission) {
+        directory = Directory('/storage/emulated/0/Download');
+        appDocDirFolder = Directory('${directory.path}');
+        if (await appDocDirFolder.exists()) {
+          return appDocDirFolder;
+        } else {
+          final Directory _appDocDirNewFolder =
+              await appDocDirFolder.create(recursive: true);
+          return _appDocDirNewFolder;
+        }
+      }
+      return appDocDirFolder;
+    }
+  }
+
+  int currentSdk = 0;
+
+  getDeviceDetails() async {
+    var deviceInfo = DeviceInfoPlugin();
+    if (Platform.isAndroid) {
+      var androidDeviceInfo = await deviceInfo.androidInfo;
+      currentSdk = androidDeviceInfo.version.sdkInt ?? 0;
+      debugPrint("currentSdk : $currentSdk");
+      update();
+    }
+  }
+
+  Future<bool> askStoragePermission() async {
+    bool isPermission = false;
+    if (currentSdk >= 32) {
+      var checkPermission = await Permission.photos.status;
+      if (checkPermission.isDenied) {
+        var status = await Permission.photos.request();
+        if (status.isGranted) {
+          isPermission = true;
+        } else if (status.isPermanentlyDenied) {
+          openAppSettings();
+        }
+      } else if (checkPermission.isGranted) {
+        isPermission = true;
+      } else if (checkPermission.isPermanentlyDenied) {
+        openAppSettings();
+      }
+    } else {
+      var checkPermission = await Permission.storage.status;
+
+      if (checkPermission.isDenied) {
+        var status = await Permission.storage.request();
+        if (status.isGranted) {
+          isPermission = true;
+        } else if (status.isPermanentlyDenied) {
+          openAppSettings();
+        }
+      } else if (checkPermission.isGranted) {
+        isPermission = true;
+      } else if (checkPermission.isPermanentlyDenied) {
+        openAppSettings();
+      }
+    }
+    print("isPermission-->>$isPermission");
+    return isPermission;
   }
 
   askNotificationPermission() async {
@@ -1401,14 +1571,12 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   getRitentionDataApi() async {
     try {
       var data = await userRepository.getRitentionData({});
-      getRitentionModel = data;
-      print(
-          "-----------------------getRitentionData -------- ${data.toJson().toString()}");
-      print(
-          "-----------------------getRitentionData -------- ${getRitentionModel!.toJson().toString()}");
 
-      print(
-          "-----------------------getRitentionData -------- ${getRitentionModel!.toJson().toString()}");
+      if (data.success == true) {
+        getRitentionModel = data;
+      } else {
+        getRitentionModel = null;
+      }
       update();
       // getDashboardDetail();
     } catch (error) {

@@ -4,7 +4,6 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:divine_astrologer/common/colors.dart';
-import 'package:divine_astrologer/firebase_service/firebase_service.dart';
 import 'package:divine_astrologer/model/ChatOrderResponse.dart';
 import 'package:divine_astrologer/model/leave/LeaveStatusModel.dart';
 import 'package:divine_astrologer/model/leave/LeaveSubmitModel.dart';
@@ -42,6 +41,7 @@ import '../model/AllSupportIssueModel.dart';
 import '../model/AstroRitentionModel.dart';
 import '../model/AstroTrainingSessionModel.dart';
 import '../model/FinancialCreateIssueModel.dart';
+import '../model/GenerateImageModel.dart';
 import '../model/GetAstroOnboarding.dart';
 import '../model/OnBoardingStageModel.dart';
 import '../model/PassBookDataModel.dart';
@@ -200,6 +200,36 @@ class UserRepository extends ApiProvider {
           final blockedCustomerList =
               ViewTrainingVideoModelClass.fromJson(json.decode(response.body));
           return blockedCustomerList;
+        }
+      } else {
+        throw CustomException(json.decode(response.body)["error"]);
+      }
+    } catch (e, s) {
+      debugPrint("we got $e $s");
+      rethrow;
+    }
+  }
+
+  Future<GenerateImageModel> generateImageRepo(
+      Map<String, dynamic> param) async {
+    try {
+      final response = await post(generateAstrologerImage,
+          body: jsonEncode(param).toString(),
+          headers: await getJsonHeaderURL());
+      if (response.statusCode == HttpStatus.unauthorized) {
+        Utils().handleStatusCodeUnauthorizedServer();
+      } else if (response.statusCode == HttpStatus.badRequest) {
+        Utils().handleStatusCode400(response.body);
+      }
+
+      if (response.statusCode == 200) {
+        if (json.decode(response.body)["status_code"] ==
+            HttpStatus.unauthorized) {
+          Utils().handleStatusCodeUnauthorizedBackend();
+          throw CustomException(json.decode(response.body)["error"]);
+        } else {
+          final data = GenerateImageModel.fromJson(json.decode(response.body));
+          return data;
         }
       } else {
         throw CustomException(json.decode(response.body)["error"]);
