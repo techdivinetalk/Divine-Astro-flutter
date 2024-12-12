@@ -523,7 +523,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
 
   Future<String> download() async {
     var root = await getTemporaryDirectory();
-    var url = pref.getAmazonUrl()! + "/" + generateImageModel!.data!.image!;
+    var url = "${pref.getAmazonUrl()!}/${generateImageModel!.data!.image!}";
 
     print("urlvideo :: $url");
 
