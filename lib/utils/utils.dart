@@ -7,8 +7,7 @@ import 'package:divine_astrologer/screens/auth/login/login_controller.dart';
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_file_dialog/flutter_file_dialog.dart';
-import 'package:get/get.dart';
+ import 'package:get/get.dart';
 import 'package:html/parser.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -255,59 +254,3 @@ String getfilesizestring({required int bytes, int decimals = 0}) {
 //   }
 // }
 
-Future<void> saveImage(BuildContext context, url) async {
-  final scaffoldMessenger = ScaffoldMessenger.of(context);
-  late String message;
-  var random = Random();
-
-  try {
-    // Download image
-    final http.Response response = await http.get(Uri.parse(url));
-
-    // Get temporary directory
-    final dir = await getTemporaryDirectory();
-
-    // Create an image name
-    var filename = '${dir.path}/Template${random.nextInt(100)}.png';
-
-    // Save to filesystem
-    final file = File(filename);
-    await file.writeAsBytes(response.bodyBytes);
-
-    // Ask the user to save it
-
-    final params = SaveFileDialogParams(sourceFilePath: file.path);
-    final finalPath = await FlutterFileDialog.saveFile(params: params);
-
-    if (finalPath != null) {
-      message = 'Image saved to disk';
-    }
-  } catch (e) {
-    message = e.toString();
-    scaffoldMessenger.showSnackBar(SnackBar(
-      content: Text(
-        message,
-        style: TextStyle(
-          fontSize: 12,
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      backgroundColor: Color(0xFFe91e63),
-    ));
-  }
-
-  if (message != null) {
-    scaffoldMessenger.showSnackBar(SnackBar(
-      content: Text(
-        message,
-        style: TextStyle(
-          fontSize: 12,
-          color: Colors.white,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-      backgroundColor: Color(0xFFe91e63),
-    ));
-  }
-}
