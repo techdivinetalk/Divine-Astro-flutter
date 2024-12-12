@@ -41,6 +41,7 @@ import 'package:flutter/services.dart';
 import "package:flutter_broadcasts/flutter_broadcasts.dart";
 import 'package:flutter_expanded_tile/flutter_expanded_tile.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -521,7 +522,11 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     }
   }
 
+  RxBool sharingImage = false.obs;
+
   Future<String> download() async {
+    sharingImage.value = true;
+    update();
     var root = await getTemporaryDirectory();
     var url = "${pref.getAmazonUrl()!}/${generateImageModel!.data!.image!}";
 
@@ -560,11 +565,18 @@ class HomeController extends GetxController with WidgetsBindingObserver {
       var raf = file.openSync(mode: FileMode.write);
       raf.writeFromSync(response.data);
       await raf.close();
+      sharingImage.value = false;
+      update();
 
       // Share the file
       await Share.shareXFiles([XFile(file.path)]);
       return file.path;
     } catch (e) {
+      divineSnackBar(data: "something went wrong");
+
+      sharingImage.value = false;
+      update();
+
       print("Error downloading file: $e");
       return "";
     }
@@ -576,7 +588,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         "${savePath.path}/Template${DateTime.now().microsecond}${DateTime.now().millisecond}.png";
     bool isPermission = await askStoragePermission();
     if (isPermission) {
-      await File(fileName).writeAsBytes(image);
+      await File(fileName).writeAsBytes(image).then((value) {
+        Fluttertoast.showToast(msg: "Image saved successfully");
+      });
     } else {
       divineSnackBar(data: "Please give permission of storage.");
       openAppSettings();

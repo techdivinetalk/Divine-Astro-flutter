@@ -17,6 +17,7 @@ import 'Widget/all_order_history_ui.dart';
 import 'Widget/call_order_history_ui.dart';
 import 'Widget/chat_order_history_ui.dart';
 import 'Widget/fine_orders_ui.dart';
+import 'Widget/refund_order_ui.dart';
 import 'Widget/suggest_remedies_history.dart';
 import 'order_history_controller.dart';
 
@@ -152,7 +153,7 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
 
     controller = Get.find<OrderHistoryController>();
     controller.tabbarController = TabController(
-        length: 7, vsync: this, initialIndex: widget.initialPage ?? 0);
+        length: 8, vsync: this, initialIndex: widget.initialPage ?? 0);
     // scrollController = ScrollController();
     controller.tabbarController?.addListener(() {
       /* if (controller.tabbarController!.index == 0) {
@@ -218,6 +219,9 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
                   } else if (value == 6) {
                     controller.getOrderHistory(
                         type: 6, page: controller.finePageCount); // shop
+                  } else if (value == 7) {
+                    controller.getOrderHistory(
+                        type: 7, page: controller.refundLogsPageCount); // shop
                   }
                 },
                 indicatorColor: appColors.blackColor,
@@ -232,7 +236,8 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
                   "gifts".tr,
                   ("remedySuggested".tr),
                   "order_feedbacks".tr,
-                  "fines".tr
+                  "fines".tr,
+                  "Refund logs".tr
                 ].map((e) => Tab(text: e)).toList(),
               ),
             ),
@@ -271,6 +276,12 @@ class _OrderTabState extends State<OrderTab> with TickerProviderStateMixin {
                           controller.finePageCount == 1)
                       ? const LoadingWidget()
                       : FineOrderHistory(),
+                ),
+                Obx(
+                  () => (controller.orderFineCalling.value &&
+                          controller.refundLogsPageCount == 1)
+                      ? const LoadingWidget()
+                      : RefundOrderUi(),
                 ),
               ],
             ),

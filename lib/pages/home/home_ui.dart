@@ -3324,16 +3324,27 @@ class HomeUI extends GetView<HomeController> {
                           child: Padding(
                             padding: const EdgeInsets.only(
                                 left: 10, right: 10, top: 6, bottom: 6),
-                            child: Align(
-                              alignment: Alignment.center,
-                              child: CustomText(
-                                'Share Now',
-                                fontWeight: FontWeight.w600,
-                                fontColor: appColors.white,
-                                maxLines: 1,
-                                fontSize: 16,
-                              ),
-                            ),
+                            child: controller.sharingImage.value
+                                ? Center(
+                                    child: SizedBox(
+                                      height: 30,
+                                      width: 30,
+                                      child: CircularProgressIndicator(
+                                        color: appColors.white,
+                                        strokeWidth: 2,
+                                      ),
+                                    ),
+                                  )
+                                : Align(
+                                    alignment: Alignment.center,
+                                    child: CustomText(
+                                      'Share Now',
+                                      fontWeight: FontWeight.w600,
+                                      fontColor: appColors.white,
+                                      maxLines: 1,
+                                      fontSize: 16,
+                                    ),
+                                  ),
                           ),
                         ),
                       ),

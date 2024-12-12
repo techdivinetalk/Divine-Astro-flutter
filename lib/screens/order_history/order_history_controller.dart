@@ -11,6 +11,7 @@ import 'package:intl/intl.dart';
 import '../../common/app_exception.dart';
 import '../../di/shared_preference_service.dart';
 import '../../model/order_history_model/Fine_order_histroy_model.dart';
+import '../../model/order_history_model/RefundLogsModel.dart';
 import '../../model/order_history_model/all_order_history.dart';
 import '../../model/order_history_model/call_order_history.dart';
 import '../../model/order_history_model/chat_order_history.dart';
@@ -44,6 +45,7 @@ class OrderHistoryController extends GetxController {
   RxList<FeedBackData> feedHistoryList = <FeedBackData>[].obs;
   RxList<GiftDataList> giftHistoryList = <GiftDataList>[].obs;
   RxList<FineData> fineHistoryList = <FineData>[].obs;
+  RxList<RefundLogsModelList> refundHistoryList = <RefundLogsModelList>[].obs;
   RxList<RemedySuggestedDataList> remedySuggestedHistoryList =
       <RemedySuggestedDataList>[].obs;
   final preferenceService = Get.find<SharedPreferenceService>();
@@ -55,6 +57,7 @@ class OrderHistoryController extends GetxController {
   var remedyPageCount = 1;
   var feedBackPageCount = 1;
   var finePageCount = 1;
+  var refundLogsPageCount = 1;
   double calculatePercentage(double value, double price) {
     return value / 100 * price;
   }
@@ -241,6 +244,22 @@ class OrderHistoryController extends GetxController {
           if (page == 1) fineHistoryList.clear();
           fineHistoryList.addAll(history);
           finePageCount++;
+        } else {
+          emptyMsg.value = data.message ?? "No data found!";
+        }
+      } else if (type == 7) {
+        orderFineCalling.value = true;
+        update();
+        RefundLogsModel data =
+            await OrderHistoryRepository().refundLogOrderHistory(params);
+        orderFineCalling.value = false;
+        var history = data.data;
+
+        if (history!.isNotEmpty && data.data != null) {
+          emptyMsg.value = "";
+          if (page == 1) fineHistoryList.clear();
+          refundHistoryList.addAll(history);
+          refundLogsPageCount++;
         } else {
           emptyMsg.value = data.message ?? "No data found!";
         }
