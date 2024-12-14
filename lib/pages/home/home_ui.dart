@@ -1811,7 +1811,9 @@ class HomeUI extends GetView<HomeController> {
                           astroHome.toString() == "0"
                               ? PerformanceTab(context, controller: controller)
                               : SizedBox(),
-                          TemplateTab(context, controller: controller),
+                          astroTemplate.toString() == "1"
+                              ? TemplateTab(context, controller: controller)
+                              : SizedBox(),
                           Obx(
                             () => controller.isFeedbackAvailable.value
                                 ? controller.homeData?.feedback == null

@@ -462,7 +462,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           } else {}
         },
       );
-      generateImage();
+      if(astroTemplate.toString() =="1") {
+        generateImage();
+      }
     }
 
     print("beforeGoing 3 - ${preferenceService.getUserDetail()?.id}");
