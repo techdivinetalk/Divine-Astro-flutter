@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'dart:math';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
@@ -10,6 +11,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../../common/app_exception.dart';
 import '../../common/colors.dart';
@@ -137,16 +139,19 @@ class SupportIssueController extends GetxController {
                           },
                           child: Column(
                             children: [
-                              Assets.svg.camera.svg(),
+                              SizedBox(
+                                  height: 80,
+                                  width: 80,
+                                  child: Assets.svg.camera.svg()),
                               SizedBox(height: 8.h),
                               CustomText(
-                                "camera".tr,
+                                "Camera".tr,
                                 fontSize: 16.sp,
                               ),
                             ],
                           ),
                         ),
-                        SizedBox(width: 64.w),
+                        SizedBox(width: 10.w),
                         CustomButton(
                           onTap: () async {
                             Get.back();
@@ -154,10 +159,38 @@ class SupportIssueController extends GetxController {
                           },
                           child: Column(
                             children: [
-                              Assets.svg.gallery.svg(),
+                              SizedBox(
+                                  height: 80,
+                                  width: 80,
+                                  child: Assets.svg.gallery.svg()),
                               SizedBox(height: 8.h),
                               CustomText(
-                                "gallery".tr,
+                                "Gallery".tr,
+                                fontSize: 16.sp,
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(width: 10.w),
+                        CustomButton(
+                          onTap: () async {
+                            Get.back();
+                            await getMedia();
+                          },
+                          child: Column(
+                            children: [
+                              SizedBox(
+                                height: 80,
+                                width: 80,
+                                child: Icon(
+                                  Icons.video_collection,
+                                  color: Color(0xff84909a),
+                                  size: 80,
+                                ),
+                              ),
+                              SizedBox(height: 8.h),
+                              CustomText(
+                                "Media".tr,
                                 fontSize: 16.sp,
                               ),
                             ],
@@ -181,119 +214,35 @@ class SupportIssueController extends GetxController {
       List<XFile>? pickedFiles;
 
       if (isCamera) {
-        // Pick a single image from the camera
         XFile? pickedFile = await picker.pickImage(
           source: ImageSource.camera,
-          // imageQuality: 90,
-          // maxWidth: 250,
         );
         if (pickedFile != null) {
-          // selectedImages.add(pickedFile.path);
-          // selectedFiles.add(File(pickedFile.path));
           final imageTemp = File(pickedFile.path);
 
-          int imageSize = await File(pickedFile.path)
-              .length(); // Get the image size in bytes
+          int imageSize = await File(pickedFile.path).length();
           await compressImages(XFile(pickedFile.path));
-
-          // if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
-          //   Fluttertoast.showToast(
-          //       msg:
-          //           "Image Size is more then 2 MB"); // Optionally, you can show an alert to the user or handle it accordingly
-          // } else {
-          //   selectedImages.add(pickedFile.path);
-          //   selectedFiles.add(File(pickedFile.path));
-          // }
         }
       } else {
-        // Pick multiple images from the gallery
-        pickedFiles = await picker.pickMultiImage(
-            // imageQuality: 90,
-            // maxWidth: 250,
-            );
-        // if (pickedFiles != null && pickedFiles.isNotEmpty) {
-        //   selectedImages.addAll(pickedFiles.map((pickedFile) => pickedFile.path));
-        //   selectedFiles.addAll(
-        //       pickedFiles.map((pickedFile) => File(pickedFile.path)).toList());
-        // }
+        pickedFiles = await picker.pickMultiImage();
 
         int oversizedCount = 0;
 
         final imageTemp = File(pickedFiles[0].path);
         for (var pickedFile in pickedFiles) {
-          int imageSize = await File(pickedFile.path)
-              .length(); // Get the image size in bytes
+          int imageSize = await File(pickedFile.path).length();
           await compressImages(XFile(pickedFile.path));
-          // if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
-          //   oversizedCount++;
-          // } else {
-          //   selectedImages.add(pickedFile.path);
-          //   selectedFiles.add(File(pickedFile.path));
-          // }
         }
         if (oversizedCount > 0) {
           Fluttertoast.showToast(
               msg: "$oversizedCount images exceed 2 MB and cannot be uploaded");
         }
-        // if (selectedImages.isNotEmpty) {
-        //   Fluttertoast.showToast(
-        //       msg:
-        //           "Images selected successfully: ${selectedImages.length} images");
-        // }
       }
       print("selectedImages - $selectedImages");
       print("selectedImages - $selectedFiles");
       update();
     }
   }
-
-  /*compressImages(croppedFile) async {
-    int oversizedCount = 0;
-
-    uploadFile = File(croppedFile.path);
-    final filePath = uploadFile!.absolute.path;
-    final lastIndex = filePath
-        .lastIndexOf(RegExp(r'\.(png|jpg|jpeg|heic)', caseSensitive: false));
-
-    debugPrint("File path: $filePath");
-    debugPrint("Last index of extension: $lastIndex");
-    final splitted = filePath.substring(0, (lastIndex));
-    if (lastIndex != -1) {
-      final splitted = filePath.substring(0, lastIndex);
-      final extension = filePath.substring(lastIndex);
-      final outPath = extension.toLowerCase() == '.heic'
-          ? "${splitted}_out.jpg"
-          : "${splitted}_out$extension";
-      var result = await FlutterImageCompress.compressAndGetFile(
-        filePath,
-        outPath,
-        minWidth: 500,
-      );
-      if (result != null) {
-        int imageSize =
-            await File(result.path).length(); // Get the image size in bytes
-
-        if (!FileUtils.isFileSizeValid(bytes: imageSize)) {
-          oversizedCount++;
-          Fluttertoast.showToast(
-              msg:
-                  "Image Size is more then 2 MB"); // Optionally, you can show an alert to the user or handle it accordingly
-        } else {
-          selectedImages.add(result.path);
-          selectedFiles.add(File(result.path));
-        }
-        if (oversizedCount > 0) {
-          Fluttertoast.showToast(
-              msg: "$oversizedCount images exceed 2 MB and cannot be uploaded");
-        }
-        // selectedImages.add(result.path);
-        // selectedFiles.add(File(result.path));
-      } else {
-        debugPrint("The file path does not contain .png, .jpg, or .jpeg.");
-      }
-      // uploadImage(File(result.path));
-    }
-  }*/
 
   compressImages(croppedFile) async {
     int oversizedCount = 0;
@@ -328,22 +277,15 @@ class SupportIssueController extends GetxController {
       );
 
       if (result != null) {
-        int imageSize =
-            await File(result.path).length(); // Get the image size in bytes
+        int imageSize = await File(result.path).length();
 
         if (!FileUtils.isFileSizeValid(bytes: imageSize, maxSizeInMB: 5)) {
           oversizedCount++;
-          // Fluttertoast.showToast(msg: "Image Size is more than 2 MB");
           Fluttertoast.showToast(msg: "Image Size should be less then 5 MB");
         } else {
           selectedImages.add(result.path);
           selectedFiles.add(File(result.path));
         }
-
-        // if (oversizedCount > 0) {
-        //   Fluttertoast.showToast(
-        //       msg: "$oversizedCount images exceed 2 MB and cannot be uploaded");
-        // }
       } else {
         debugPrint("Failed to compress the image.");
       }
@@ -354,6 +296,7 @@ class SupportIssueController extends GetxController {
   }
 
   var currentUploadedFile;
+  var currentUploadedVideo;
   Future<void> uploadImage(imageFile) async {
     var token = await preferenceService.getToken();
     isLoading(true);
@@ -405,10 +348,6 @@ class SupportIssueController extends GetxController {
 
     if (response.statusCode == 200) {
       print("Image uploaded successfully.");
-
-      // if (image.isNotEmpty) {
-      //   poojaImageUrl = image;
-      // }
     } else {
       isLoading(false);
 
@@ -432,13 +371,34 @@ class SupportIssueController extends GetxController {
 
         update();
       }
+      for (var videoFile in selectedMedias) {
+        print("111");
+
+        await uploadVideo(videoFile);
+        print("111");
+
+        update();
+      }
       Future.delayed(Duration(seconds: 2)).then((c) {
-        if (selectedFiles.length == uploadedImagesList.length &&
-            uploadedImagesList.contains(currentUploadedFile)) {
+        if ((selectedFiles.isEmpty &&
+                selectedMedias.isNotEmpty &&
+                selectedMedias.length == mediaUrls.length &&
+                mediaUrls.contains(currentUploadedVideo)) ||
+            (selectedMedias.isEmpty &&
+                selectedFiles.isNotEmpty &&
+                selectedFiles.length == uploadedImagesList.length &&
+                uploadedImagesList.contains(currentUploadedFile)) ||
+            (selectedFiles.length == uploadedImagesList.length &&
+                uploadedImagesList.contains(currentUploadedFile) &&
+                selectedMedias.length == mediaUrls.length &&
+                mediaUrls.contains(currentUploadedVideo))) {
           print("222");
           submitIssues();
+        } else {
+          Fluttertoast.showToast(msg: "Add any Media");
         }
       });
+
       print("111");
     }
     print("uploadedImages -- ${uploadedImagesList.toString()}");
@@ -455,13 +415,15 @@ class SupportIssueController extends GetxController {
             "mobile_no": mobileController.text,
             "description": descriptionController.text,
             "ticket_type": selected,
-            "images": uploadedImagesList
+            "images": uploadedImagesList,
+            "media": mediaUrls,
           }
         : {
             "astrologer_id": userData!.id.toString(),
             "description": descriptionController.text,
             "ticket_type": selected,
-            "images": uploadedImagesList
+            "images": uploadedImagesList,
+            "media": mediaUrls,
           };
 
     print("paramssss${param.toString()}");
@@ -480,6 +442,8 @@ class SupportIssueController extends GetxController {
         uploadedImagesList.clear();
         selectedImages.clear();
         selectedFiles.clear();
+        selectedMedias.value.clear();
+        mediaUrls.value.clear();
         selected = null;
         if (isLogin.value == 1) {
         } else {
@@ -497,6 +461,8 @@ class SupportIssueController extends GetxController {
       uploadedImagesList.clear();
       selectedImages.clear();
       selectedFiles.clear();
+      selectedMedias.value.clear();
+      selectedMedias.clear();
 
       isLoading(false);
       debugPrint("error $error");
@@ -507,5 +473,125 @@ class SupportIssueController extends GetxController {
       }
     }
     update();
+  }
+
+  RxList mediaUrls = [].obs;
+  RxList selectedMedias = [].obs;
+  RxBool pickingFileLoading = false.obs;
+  bool isStoryMoreThan2MB = false;
+
+  getMedia() async {
+    pickingFileLoading.value = true;
+    if (await PermissionHelper().askStoragePermission(Permission.videos)) {
+      pickingFileLoading.value = true;
+
+      try {
+        FilePickerResult? result = await FilePicker.platform.pickFiles(
+          type: FileType.video,
+          allowCompression: true,
+          allowMultiple: false,
+        );
+        int fileSizeInBytes =
+            await File(result!.files.single.path ?? "").length();
+        double sizeInKB = fileSizeInBytes / 1024;
+        print("pick video size : ${sizeInKB}");
+        print("maximumStorySize : ${maximumStorySize.value}");
+        if (sizeInKB < double.parse(maximumStorySize.value.toString())) {
+          if (sizeInKB > 2048) {
+            isStoryMoreThan2MB = true;
+          }
+          // Fluttertoast.showToast(msg: "${'uploadStory'.tr}..");
+          selectedMedias.value.add(result.files.single.path!);
+          print("object-------------${selectedMedias.value.toString()}");
+          // await uploadImage(File(result.files.single.path!));
+        } else {
+          isLoading.value = false;
+
+          Fluttertoast.showToast(
+              msg:
+                  "Story video size should be maximum ${convertKBtoMB(double.parse(maximumStorySize.value.toString()))} MB",
+              backgroundColor: appColors.red);
+        }
+      } catch (e) {}
+    }
+    update();
+  }
+
+  String convertKBtoMB(double sizeInKB) {
+    return (sizeInKB / 1024).toStringAsFixed(0);
+  }
+
+  uploadVideo(imageFile) async {
+    var uploadedStory;
+    isLoading(true);
+    var token = await preferenceService.getToken();
+    print("image length - ${imageFile}");
+
+    var uri = Uri.parse("${ApiProvider.imageBaseUrl}uploadImage");
+    print("api apia----->${"${ApiProvider.imageBaseUrl}uploadImage"}");
+
+    var request = http.MultipartRequest('POST', uri);
+    request.headers.addAll({
+      'Authorization': 'Bearer $token',
+      'Content-type': 'application/json',
+      'Accept': 'application/json',
+    });
+
+    // Attach the image file to the request
+    request.files.add(await http.MultipartFile.fromPath(
+      'image',
+      imageFile,
+    ));
+    request.fields.addAll({"module_name": "support"});
+    if (isStoryMoreThan2MB) {
+      request.fields.addAll({"is_large_file": "1"});
+    }
+
+    print("request : ${request.toString()}");
+    print("request : ${request.headers.toString()}");
+    print("request : ${request.fields.toString()}");
+    var response = await request.send();
+
+    // Listen for the response
+    print(response.toString());
+    // Listen for the response
+    response.stream.transform(utf8.decoder).listen((value) {
+      print("value ----> $value");
+      // if (value.isEmpty) {
+      //   isLoading(false);
+      // }
+      if (jsonDecode(value)["data"]["path"] == null) {
+        // Convert the string to JSON
+        Map<String, dynamic> jsonResponse = jsonDecode(value.toString());
+        isLoading.value = false;
+
+        Fluttertoast.showToast(
+          msg: jsonResponse['data']['image'][0].toString(),
+        );
+        isLoading(false);
+        Get.back();
+      } else {
+        print(value); // Handle the response from the server
+        uploadedStory = jsonDecode(value)["data"]["path"];
+        update();
+        print(
+            "Image uploaded successfully. --  - ${jsonDecode(value)["data"]["full_path"].toString()}");
+        mediaUrls.value.add(jsonDecode(value)["data"]["path"]);
+        currentUploadedVideo = jsonDecode(value)["data"]["path"];
+
+        update();
+        print(
+            "valuevaluevaluevaluevaluevaluevalue"); // Handle the response from the server
+      }
+    });
+
+    if (response.statusCode == 200) {
+      print("Image uploaded successfully.");
+      // uploadStory(uploadedStory.toString());
+    } else {
+      isLoading(false);
+
+      print("Failed to upload image.");
+    }
   }
 }

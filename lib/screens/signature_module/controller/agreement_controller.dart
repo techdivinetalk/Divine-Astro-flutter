@@ -36,7 +36,11 @@ class AgreementController extends GetxController {
     }
   }
 
+  RxBool loading = false.obs;
+
   getAstrologerStatus() async {
+    loading.value = true;
+    update();
     UserData? userData = await pref.getUserDetail();
     print("---------------${userData!.toJson().toString()}");
     try {
@@ -44,6 +48,7 @@ class AgreementController extends GetxController {
         'Connection': 'keep-alive',
         'Keep-Alive': 'timeout=5, max=1000',
       };
+
       print(
           "${isLiveServer.value == 1 ? ApiProvider.agreementBase : ApiProvider.agreementBaseDebug}${ApiProvider.getAstroExclusiveAgreement}${userData!.id}");
       final response = await Dio().get(
@@ -69,8 +74,12 @@ class AgreementController extends GetxController {
 
         update();
         downloadPDF(agreementModel.data!.pdfLink ?? "");
+        loading.value = false;
+        update();
       }
     } catch (e) {
+      loading.value = false;
+      update();
       print("getting error --- astrologerAgreement ${e}");
     }
   }
@@ -89,8 +98,11 @@ class AgreementController extends GetxController {
       // Download the file
       await dio.download(url, filePath);
       pdfPath = loadPdfFromFile(filePath);
+      loading.value = false;
       update();
     } catch (e) {
+      loading.value = false;
+
       progressMessage = "Download failed: $e";
     }
   }

@@ -288,7 +288,7 @@ class SupportIssueScreen extends GetView<SupportIssueController> {
                           ),
                           SizedBox(height: 10.h),
                           CustomText(
-                            '${"upload".tr} ${"image".tr}',
+                            '${"upload".tr} ${"media".tr}',
                             fontColor: appColors.textColor,
                           ),
                           SingleChildScrollView(
@@ -315,6 +315,34 @@ class SupportIssueScreen extends GetView<SupportIssueController> {
                               ],
                             ),
                           ),
+                          controller.selectedMedias.value.isEmpty ||
+                                  controller.selectedImages.isEmpty
+                              ? SizedBox()
+                              : SizedBox(
+                                  height: 10,
+                                ),
+                          controller.selectedMedias.value.isEmpty ||
+                                  controller.selectedImages.isEmpty
+                              ? SizedBox()
+                              : CustomText("&"),
+                          controller.selectedMedias.value.isEmpty
+                              ? SizedBox()
+                              : SizedBox(
+                                  height: 10,
+                                ),
+                          controller.selectedMedias.value.isEmpty
+                              ? SizedBox()
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    CustomText(
+                                      "${controller.selectedMedias.value.length}",
+                                      fontColor: appColors.guideColor,
+                                    ),
+                                    CustomText(" Video Selected"),
+                                  ],
+                                ),
                         ],
                       ),
                     ),
@@ -349,11 +377,12 @@ class SupportIssueScreen extends GetView<SupportIssueController> {
                               controller.showMimimum.value = true;
                               controller.update();
                               Fluttertoast.showToast(msg: "Detail is to short");
-                            } else if (controller.selectedFiles.isEmpty) {
+                            } else if (controller.selectedFiles.isEmpty &&
+                                controller.selectedMedias.value.isEmpty) {
                               controller.showMimimum.value = false;
                               controller.update();
 
-                              Fluttertoast.showToast(msg: "Select Images");
+                              Fluttertoast.showToast(msg: "Select Media");
                             } else {
                               if (!controller.isLoading.value) {
                                 controller.showMimimum.value = false;
@@ -372,12 +401,14 @@ class SupportIssueScreen extends GetView<SupportIssueController> {
                               controller.showMimimum.value = true;
                               controller.update();
                               Fluttertoast.showToast(msg: "Detail is to short");
-                            } else if (controller.selectedFiles.isEmpty) {
-                              controller.showMimimum.value = false;
-                              controller.update();
-
-                              Fluttertoast.showToast(msg: "Select Images");
-                            } else {
+                            }
+                            // else if (controller.selectedFiles.isEmpty) {
+                            //   controller.showMimimum.value = false;
+                            //   controller.update();
+                            //
+                            //   Fluttertoast.showToast(msg: "Select Images");
+                            // }
+                            else {
                               if (!controller.isLoading.value) {
                                 controller.showMimimum.value = false;
                                 controller.update();

@@ -269,7 +269,7 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
                           ),
                           SizedBox(height: 10.h),
                           CustomText(
-                            '${"upload".tr} ${"image".tr}',
+                            '${"upload".tr} ${"media".tr}',
                             fontColor: appColors.textColor,
                           ),
                           SingleChildScrollView(
@@ -296,6 +296,34 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
                               ],
                             ),
                           ),
+                          controller.selectedMedias.value.isEmpty ||
+                                  controller.selectedImages.isEmpty
+                              ? SizedBox()
+                              : SizedBox(
+                                  height: 10,
+                                ),
+                          controller.selectedMedias.value.isEmpty ||
+                                  controller.selectedImages.isEmpty
+                              ? SizedBox()
+                              : CustomText("&"),
+                          controller.selectedMedias.value.isEmpty
+                              ? SizedBox()
+                              : SizedBox(
+                                  height: 10,
+                                ),
+                          controller.selectedMedias.value.isEmpty
+                              ? SizedBox()
+                              : Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    CustomText(
+                                      "${controller.selectedMedias.value.length}",
+                                      fontColor: appColors.guideColor,
+                                    ),
+                                    CustomText(" Video Selected"),
+                                  ],
+                                ),
                         ],
                       ),
                     ),
@@ -325,11 +353,12 @@ class TechnicalIssueScreen extends GetView<TechnicalIssueController> {
                             controller.showMimimum.value = true;
                             controller.update();
                             Fluttertoast.showToast(msg: "Detail is to short");
-                          } else if (controller.selectedFiles.isEmpty) {
+                          } else if (controller.selectedFiles.isEmpty &&
+                              controller.selectedMedias.value.isEmpty) {
                             controller.showMimimum.value = false;
                             controller.update();
 
-                            Fluttertoast.showToast(msg: "Select Images");
+                            Fluttertoast.showToast(msg: "Select Media");
                           } else {
                             controller.showMimimum.value = false;
                             controller.update();
