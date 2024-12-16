@@ -508,6 +508,8 @@ class FinancialSupportController extends GetxController {
         selectedFiles.clear();
         selectedMedias.value.clear();
         selectedMedias.clear();
+        mediaUrls.value.clear();
+        mediaUrls.clear();
 
         selected = null;
         Get.toNamed(RouteName.allFinancialSupportIssues);

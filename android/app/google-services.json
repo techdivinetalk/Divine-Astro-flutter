@@ -3,7 +3,7 @@
     "project_number": "507681862980",
     "firebase_url": "https://divine-live-f7f79-default-rtdb.asia-southeast1.firebasedatabase.app",
     "project_id": "divine-live-f7f79",
-    "storage_bucket": "divine-live-f7f79.appspot.com"
+    "storage_bucket": "divine-live-f7f79.firebasestorage.app"
   },
   "client": [
     {

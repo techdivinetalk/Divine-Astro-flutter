@@ -3305,7 +3305,6 @@ class HomeUI extends GetView<HomeController> {
                       CommonImageView(
                         imagePath:
                             "${preferenceService.getAmazonUrl()!}/${controller.generateImageModel!.data!.image!}",
-                        height: 160,
                         width: 160,
                         radius: BorderRadius.circular(16),
                       ),

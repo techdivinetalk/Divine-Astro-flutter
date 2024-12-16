@@ -567,6 +567,8 @@ class TechnicalIssueController extends GetxController {
         selectedMedias.value.clear();
         selectedMedias.clear();
         selectedFiles.clear();
+        mediaUrls.value.clear();
+        mediaUrls.clear();
 
         selected = null;
         Get.toNamed(RouteName.allTechnicalIssues);

@@ -444,6 +444,7 @@ class SupportIssueController extends GetxController {
         selectedFiles.clear();
         selectedMedias.value.clear();
         mediaUrls.value.clear();
+        mediaUrls.clear();
         selected = null;
         if (isLogin.value == 1) {
         } else {
@@ -463,7 +464,8 @@ class SupportIssueController extends GetxController {
       selectedFiles.clear();
       selectedMedias.value.clear();
       selectedMedias.clear();
-
+      mediaUrls.value.clear();
+      mediaUrls.clear();
       isLoading(false);
       debugPrint("error $error");
       if (error is AppException) {
