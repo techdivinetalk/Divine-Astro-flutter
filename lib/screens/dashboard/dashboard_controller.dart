@@ -132,8 +132,6 @@ class DashboardController extends GetxController
   }
 
   void checkPermissions() async {
-    Get.put(HomeController()).changePreviewCode(false);
-
     if (await Permission.camera.isDenied ||
         await Permission.microphone.isDenied) {
       Get.bottomSheet(
@@ -165,7 +163,6 @@ class DashboardController extends GetxController
               GestureDetector(
                 onTap: () {
                   requestPermissions();
-                  Get.put(HomeController()).changePreviewCode(true);
                 },
                 child: Container(
                   height: 60,
@@ -427,8 +424,6 @@ class DashboardController extends GetxController
     } else {
       log(commonConstants.data.notice.toString());
       if (showAllPopup.value == true) {
-        Get.put(HomeController()).changePreviewCode(false);
-
         showRecommendedPopupAlert();
       }
     } //added by: dev-dharam
@@ -650,8 +645,6 @@ class DashboardController extends GetxController
         if (showAllPopup.value == true) {
           if (int.parse(data.data!.appVersion!.split(".").join("")) >
               int.parse(packageInfo.version.split(".").join(""))) {
-            Get.put(HomeController()).changePreviewCode(false);
-
             Get.bottomSheet(
               const ForceUpdateSheet(),
               isDismissible: false,
@@ -1359,7 +1352,6 @@ navigateForOnBoardingGlobal(commonConstants) async {
     isOnPage.value = 1;
     disableButton.value = false;
     showAllPopup.value = false;
-    Get.put(HomeController()).changePreviewCode(false);
 
     Get.toNamed(
       RouteName.onBoardingScreen,
@@ -1369,7 +1361,6 @@ navigateForOnBoardingGlobal(commonConstants) async {
 
     Get.put(HomeController()).showPopup = false;
     showAllPopup.value = false;
-    Get.put(HomeController()).changePreviewCode(false);
 
     if (commonConstants.data.onboarding_reject_stage_no.isNotEmpty) {
       disableButton.value = false;
@@ -1550,7 +1541,6 @@ navigateForOnBoardingGlobal(commonConstants) async {
     disableButton.value = true;
     Get.put(HomeController()).showPopup = false;
     showAllPopup.value = false;
-    Get.put(HomeController()).changePreviewCode(false);
 
     if (commonConstants.data.stage_no.toString() == "4") {
       onBoardingList = [5];
