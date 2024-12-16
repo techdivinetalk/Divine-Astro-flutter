@@ -1367,8 +1367,6 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           homeData?.technical_support == [] ||
           homeData?.technical_support!.isEmpty) {
       } else {
-        previewed.value = 0;
-
         log("Technical_Support -- ${homeData?.technical_support.toString()}");
         update();
         if (Get.find<DashboardController>().selectedIndex.value == 0 &&
