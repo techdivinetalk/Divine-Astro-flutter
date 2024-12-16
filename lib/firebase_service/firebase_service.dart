@@ -84,6 +84,7 @@ RxInt razorPayLink = 0.obs;
 RxInt productChat = 1.obs;
 RxInt asForGifts = 1.obs;
 RxInt otp_autoFill = 0.obs;
+RxInt showCasePreview = 0.obs;
 RxInt customProduct = 1.obs;
 RxInt tarotCard = 1.obs;
 RxInt acceptChatRequestScreen = 1.obs;
@@ -600,6 +601,8 @@ class AppFirebaseService {
         break;
       case "otp_autoFill":
         otp_autoFill(int.parse(dataSnapshot.value.toString()));
+        break; case "showCasePreview":
+      showCasePreview(int.parse(dataSnapshot.value.toString()));
         break;
       case "customProduct":
         customProduct(int.parse(dataSnapshot.value.toString()));

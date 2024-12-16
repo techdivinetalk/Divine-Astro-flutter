@@ -8,6 +8,7 @@ import '../../../common/colors.dart';
 import '../../../common/common_elevated_button.dart';
 import '../../../common/common_functions.dart';
 import '../../../common/custom_widgets.dart';
+import '../../../pages/home/home_controller.dart';
 import '../../../repository/pre_defind_repository.dart';
 import '../dashboard_controller.dart';
 
@@ -127,6 +128,8 @@ class StartPopUp extends GetView<DashboardController> {
                                         divineSnackBar(
                                             data: "Accept the condition");
                                       }
+                                      Get.put(HomeController())
+                                          .changePreviewCode(true);
                                     },
                                     backgroundColor: AppColors().red,
                                     borderColor: AppColors().red,

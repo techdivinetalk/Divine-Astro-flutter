@@ -351,6 +351,27 @@ class HomeController extends GetxController with WidgetsBindingObserver {
     super.onReady();
   }
 
+  var contexts;
+  GlobalKey one = GlobalKey();
+
+  changePreviewCode(bool) {
+    // if (bool == true) {
+    //   showPreview.value = 0;
+    //   if (previewed.value == 0) {
+    //     WidgetsBinding.instance.addPostFrameCallback(
+    //         (_) => ShowCaseWidget.of(contexts).startShowCase([one]));
+    //   }
+    // } else if (bool == false) {
+    //   showPreview.value = 1;
+    // } else {
+    //   showPreview.value = 0;
+    //   if (previewed.value == 0) {
+    //     WidgetsBinding.instance.addPostFrameCallback(
+    //         (_) => ShowCaseWidget.of(contexts).startShowCase([one]));
+    //   }
+    // }
+  }
+
   @override
   void onInit() async {
     super.onInit();
@@ -462,7 +483,7 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           } else {}
         },
       );
-      if(astroTemplate.toString() =="1") {
+      if (astroTemplate.toString() == "1") {
         generateImage();
       }
     }
@@ -1346,6 +1367,8 @@ class HomeController extends GetxController with WidgetsBindingObserver {
           homeData?.technical_support == [] ||
           homeData?.technical_support!.isEmpty) {
       } else {
+        previewed.value = 0;
+
         log("Technical_Support -- ${homeData?.technical_support.toString()}");
         update();
         if (Get.find<DashboardController>().selectedIndex.value == 0 &&

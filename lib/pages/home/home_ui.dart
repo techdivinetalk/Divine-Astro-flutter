@@ -39,6 +39,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:marquee/marquee.dart';
 import 'package:screenshot/screenshot.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:velocity_x/velocity_x.dart';
 
@@ -68,6 +69,18 @@ class HomeUI extends GetView<HomeController> {
         assignId: true,
         init: HomeController(),
         builder: (controller) {
+          controller.contexts = context;
+          // if (ModalRoute.of(context)?.isCurrent == true &&
+          //     previewed.value == 0 &&
+          //     showCasePreview.value.toString() == "1") {
+          //   WidgetsBinding.instance.addPostFrameCallback((_) =>
+          //       ShowCaseWidget.of(context).startShowCase([controller.one]));
+          // }
+
+          // if (previewed.value == 0) {
+          //   WidgetsBinding.instance.addPostFrameCallback((_) =>
+          //       ShowCaseWidget.of(context).startShowCase([controller.one]));
+          // }
           // controller.scrollController.addListener(() {
           //   if (controller.scrollController.position.maxScrollExtent ==
           //       controller.scrollController.position.pixels) {
@@ -75,6 +88,13 @@ class HomeUI extends GetView<HomeController> {
           // });
           controller.scrollController.addListener(() async {
             // Check if the user is at the bottom
+            if (ModalRoute.of(context)?.isCurrent == true &&
+                previewed.value == 0 &&
+                showCasePreview.value.toString() == "1") {
+              WidgetsBinding.instance.addPostFrameCallback((_) =>
+                  ShowCaseWidget.of(context).startShowCase([controller.one]));
+            }
+
             if (controller.scrollController.hasClients) {
               final double maxScrollExtent =
                   controller.scrollController.position.maxScrollExtent;
@@ -217,47 +237,61 @@ class HomeUI extends GetView<HomeController> {
                                   isAgreement.value == 1
                               ? Padding(
                                   padding: const EdgeInsets.symmetric(
-                                      horizontal: 10, vertical: 6),
+                                      horizontal: 14, vertical: 6),
                                   child: GestureDetector(
                                     onTap: () {
                                       Get.to(() => AgreementScreen());
                                     },
-                                    child: Container(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 10),
-                                      height: 45,
-                                      width: double.infinity,
-                                      decoration: BoxDecoration(
-                                        color: appColors.white,
-                                        boxShadow: [
-                                          BoxShadow(
-                                            blurRadius: 6,
-                                            spreadRadius: 2,
-                                            color:
-                                                appColors.grey.withOpacity(0.2),
-                                          ),
-                                        ],
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
+                                    child: Showcase(
+                                      key: controller.one,
+                                      onBarrierClick: () {
+                                        previewed.value = 1;
+                                        controller.update();
+                                      },
+                                      description:
+                                          'Before using the app please sign\nyour Exclusive Agreement',
+                                      descTextStyle: TextStyle(
+                                        fontSize: 12.sp,
+                                        fontWeight: FontWeight.w400,
+                                        fontFamily: FontFamily.poppins,
                                       ),
-                                      alignment: Alignment.centerLeft,
-                                      child: Row(
-                                        children: [
-                                          Text(
-                                            "Exclusive agreement".tr,
-                                            style: TextStyle(
-                                              fontFamily: FontFamily.poppins,
-                                              fontWeight: FontWeight.w600,
-                                              color: appColors.black,
-                                              fontSize: 12,
+                                      child: Container(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 16),
+                                        height: 45,
+                                        width: double.infinity,
+                                        decoration: BoxDecoration(
+                                          color: appColors.white,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              blurRadius: 6,
+                                              spreadRadius: 2,
+                                              color: appColors.grey
+                                                  .withOpacity(0.2),
                                             ),
-                                          ),
-                                          Spacer(),
-                                          Icon(
-                                            Icons.arrow_forward_ios_outlined,
-                                            size: 13,
-                                          ),
-                                        ],
+                                          ],
+                                          borderRadius:
+                                              BorderRadius.circular(10.0),
+                                        ),
+                                        alignment: Alignment.centerLeft,
+                                        child: Row(
+                                          children: [
+                                            Text(
+                                              "Exclusive agreement".tr,
+                                              style: TextStyle(
+                                                fontFamily: FontFamily.poppins,
+                                                fontWeight: FontWeight.w600,
+                                                color: appColors.black,
+                                                fontSize: 12,
+                                              ),
+                                            ),
+                                            Spacer(),
+                                            Icon(
+                                              Icons.arrow_forward_ios_outlined,
+                                              size: 13,
+                                            ),
+                                          ],
+                                        ),
                                       ),
                                     ),
                                   ),

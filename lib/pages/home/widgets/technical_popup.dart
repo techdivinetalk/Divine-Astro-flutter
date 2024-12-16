@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../../common/colors.dart';
 import '../../../common/common_elevated_button.dart';
 import '../../../common/routes.dart';
+import '../../../firebase_service/firebase_service.dart';
+import '../../../screens/live_page/constant.dart';
 import '../home_controller.dart';
 
 Future<void> showTechnicalPopupAlert() async {
@@ -33,6 +36,18 @@ Future<void> showTechnicalPopupAlert() async {
             child: CommonElevatedButton(
               text: "okay".tr,
               onPressed: () {
+                Get.put(HomeController()).changePreviewCode(true);
+                previewed.value = 0;
+                if (Navigator.of(Get.put(HomeController()).contexts)
+                            .overlay
+                            ?.context !=
+                        null &&
+                    previewed.value == 0 &&
+                    showCasePreview.value.toString() == "1") {
+                  WidgetsBinding.instance.addPostFrameCallback((_) =>
+                      ShowCaseWidget.of(Get.put(HomeController()).contexts)
+                          .startShowCase([Get.put(HomeController()).one]));
+                }
                 Get.back();
               },
               backgroundColor: AppColors().red,

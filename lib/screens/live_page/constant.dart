@@ -49,6 +49,9 @@ RxBool disableButton = false.obs;
 RxInt isNextPage = 0.obs;
 RxInt pendingStage = 0.obs;
 RxBool showAllPopup = true.obs;
+RxInt showPreview = 0.obs;
+RxInt previewed = 0.obs;
+
 var onBoardingAgrrementSigned = false.obs;
 var alternateMobile = "".obs;
 var onBoardingData1 = {}.obs;

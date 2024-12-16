@@ -9,10 +9,12 @@ import 'package:divine_astrologer/screens/dashboard/widgets/rejoin_widget.dart';
 import 'package:divine_astrologer/screens/live_dharam/widgets/custom_image_widget.dart';
 import 'package:divine_astrologer/screens/side_menu/wait_list/wait_list_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_broadcasts/flutter_broadcasts.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:showcaseview/showcaseview.dart';
 
 import '../../../common/colors.dart';
 import '../../../gen/assets.gen.dart';
@@ -79,269 +81,314 @@ class DashboardScreen extends GetView<DashboardController> {
             }
           },
           child: Material(
-            child: StreamBuilder<BroadcastMessage>(
-                initialData: BroadcastMessage(name: '', data: {}),
-                stream: controller.broadcastReceiver.messages,
-                builder: (context, broadcastSnapshot) {
-                  final isDataNull = broadcastSnapshot.data != null &&
-                      broadcastSnapshot.data?.data != null &&
-                      broadcastSnapshot.data?.data?['orderData'] != null &&
-                      broadcastSnapshot.data?.data?['orderData']['status'] !=
-                          null;
-                  return Stack(
-                    children: [
-                      Scaffold(
-                          backgroundColor: appColors.white,
-                          key: controller.scaffoldkey,
-                          floatingActionButtonLocation:
-                              FloatingActionButtonLocation.centerFloat,
-                          body: Obx(
-                            () {
-                              debugPrint(
-                                  "test_selectedIndex: ${controller.selectedIndex.value}");
-                              if (controller.selectedIndex.value == 0) {
-                                // debugPrint(
-                                //     "test_selectedIndex_isRegistered: ${Get.isRegistered<HomeController>()}");
-                                // if (Get.isRegistered<HomeController>() &&
-                                //     !Get.find<HomeController>().isInit) {
-                                //   Get.find<HomeController>().onInit();
-                                // }
-                              } else if (controller.selectedIndex.value == 1) {
-                                debugPrint(
-                                    "test_selectedIndex_isRegistered: ${Get.isRegistered<PerformanceController>()}");
-                                if (Get.isRegistered<PerformanceController>() &&
-                                    !Get.find<PerformanceController>().isInit) {
-                                  Get.find<PerformanceController>().onInit();
-                                }
-                              } else if (controller.selectedIndex.value == 2) {
-                                // debugPrint(
-                                //     "test_selectedIndex_isRegistered: ${Get.isRegistered<ChatAssistanceController>()}");
-                                // if (Get.isRegistered<ChatAssistanceController>()
-                                //     /*      &&
-                                //     !Get.find<ChatAssistanceController>()
-                                //         .isInit*/
-                                //     ) {
-                                //   print("fetchedddd");
-                                //   Get.find<ChatAssistanceController>().onInit();
-                                // }
-                              } else if (controller.selectedIndex.value == 3) {
-                                // debugPrint(
-                                //     "test_selectedIndex_isRegistered: ${Get.isRegistered<WaitListUIController>()}");
-                                // if (Get.isRegistered<WaitListUIController>() &&
-                                //     !Get.find<WaitListUIController>().isInit) {
-                                //   Get.find<WaitListUIController>().onInit();
-                                //   WaitListUIController(WaitingListQueueRepo())
-                                //       .getWaitingList();
-                                // }
-                              } else if (controller.selectedIndex.value == 4) {
-                                // debugPrint(
-                                //     "test_selectedIndex_isRegistered: ${Get.isRegistered<ProfilePageController>()}");
-                                // if (Get.isRegistered<ProfilePageController>() &&
-                                //     !Get.find<ProfilePageController>().isInit) {
-                                //   Get.find<ProfilePageController>().onInit();
-                                // }
-                              }
+            child: ShowCaseWidget(
+                autoPlay: false,
+                autoPlayDelay: Duration(seconds: 3),
+                onStart: (index, key) {
+                  debugPrint('onStart: $index, $key');
+                },
+                onComplete: (index, key) {
+                  debugPrint('onComplete: $index, $key');
+                  if (index == 4)
+                    SystemChrome.setSystemUIOverlayStyle(
+                        SystemUiOverlayStyle.light.copyWith(
+                            statusBarIconBrightness: Brightness.dark,
+                            statusBarColor: Colors.white));
+                },
+                builder: (context) {
+                  return StreamBuilder<BroadcastMessage>(
+                      initialData: BroadcastMessage(name: '', data: {}),
+                      stream: controller.broadcastReceiver.messages,
+                      builder: (context, broadcastSnapshot) {
+                        final isDataNull = broadcastSnapshot.data != null &&
+                            broadcastSnapshot.data?.data != null &&
+                            broadcastSnapshot.data?.data?['orderData'] !=
+                                null &&
+                            broadcastSnapshot.data?.data?['orderData']
+                                    ['status'] !=
+                                null;
+                        return Stack(
+                          children: [
+                            Scaffold(
+                                backgroundColor: appColors.white,
+                                key: controller.scaffoldkey,
+                                floatingActionButtonLocation:
+                                    FloatingActionButtonLocation.centerFloat,
+                                body: Obx(
+                                  () {
+                                    debugPrint(
+                                        "test_selectedIndex: ${controller.selectedIndex.value}");
+                                    if (controller.selectedIndex.value == 0) {
+                                      // debugPrint(
+                                      //     "test_selectedIndex_isRegistered: ${Get.isRegistered<HomeController>()}");
+                                      // if (Get.isRegistered<HomeController>() &&
+                                      //     !Get.find<HomeController>().isInit) {
+                                      //   Get.find<HomeController>().onInit();
+                                      // }
+                                    } else if (controller.selectedIndex.value ==
+                                        1) {
+                                      debugPrint(
+                                          "test_selectedIndex_isRegistered: ${Get.isRegistered<PerformanceController>()}");
+                                      if (Get.isRegistered<
+                                              PerformanceController>() &&
+                                          !Get.find<PerformanceController>()
+                                              .isInit) {
+                                        Get.find<PerformanceController>()
+                                            .onInit();
+                                      }
+                                    } else if (controller.selectedIndex.value ==
+                                        2) {
+                                      // debugPrint(
+                                      //     "test_selectedIndex_isRegistered: ${Get.isRegistered<ChatAssistanceController>()}");
+                                      // if (Get.isRegistered<ChatAssistanceController>()
+                                      //     /*      &&
+                                      //     !Get.find<ChatAssistanceController>()
+                                      //         .isInit*/
+                                      //     ) {
+                                      //   print("fetchedddd");
+                                      //   Get.find<ChatAssistanceController>().onInit();
+                                      // }
+                                    } else if (controller.selectedIndex.value ==
+                                        3) {
+                                      // debugPrint(
+                                      //     "test_selectedIndex_isRegistered: ${Get.isRegistered<WaitListUIController>()}");
+                                      // if (Get.isRegistered<WaitListUIController>() &&
+                                      //     !Get.find<WaitListUIController>().isInit) {
+                                      //   Get.find<WaitListUIController>().onInit();
+                                      //   WaitListUIController(WaitingListQueueRepo())
+                                      //       .getWaitingList();
+                                      // }
+                                    } else if (controller.selectedIndex.value ==
+                                        4) {
+                                      // debugPrint(
+                                      //     "test_selectedIndex_isRegistered: ${Get.isRegistered<ProfilePageController>()}");
+                                      // if (Get.isRegistered<ProfilePageController>() &&
+                                      //     !Get.find<ProfilePageController>().isInit) {
+                                      //   Get.find<ProfilePageController>().onInit();
+                                      // }
+                                    }
 
-                              return AnimatedSwitcher(
-                                duration: const Duration(milliseconds: 250),
-                                child: widgetOptions
-                                    .elementAt(controller.selectedIndex.value),
-                                transitionBuilder: (child, anim) {
-                                  return FadeTransition(
-                                      opacity: anim, child: child);
-                                },
-                              );
-                            },
-                          ),
-                          bottomNavigationBar: Obx(() => SafeArea(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    Container(
-                                      width: ScreenUtil().screenWidth * 0.9,
-                                      height: 1,
-                                      color:
-                                          appColors.lightGrey.withOpacity(0.50),
-                                    ),
-                                    const SizedBox(height: 10),
-                                    BottomNavigationBar(
-                                      backgroundColor: appColors.white,
-                                      type: BottomNavigationBarType.fixed,
-                                      selectedFontSize: 10,
-                                      unselectedFontSize: 10,
-                                      selectedItemColor: appColors.darkBlue,
-                                      unselectedItemColor: appColors.lightGrey,
-                                      items: <BottomNavigationBarItem>[
-                                        BottomNavigationBarItem(
-                                          key: controller.keyHome,
-                                          icon: InkWell(
-                                            onTap: () {
-                                              controller.selectedIndex.value =
-                                                  0;
-                                              if (Get.isRegistered<
-                                                      HomeController>() &&
-                                                  !Get.find<HomeController>()
-                                                      .isInit) {
-                                                Get.find<HomeController>()
-                                                    .onInit();
-                                              }
-                                            },
-                                            child: Column(
-                                              children: [
-                                                Assets.images.icSelectedHome.svg(
-                                                    height: 22.h,
-                                                    colorFilter: ColorFilter.mode(
-                                                        controller.selectedIndex
-                                                                    .value ==
-                                                                0
-                                                            ? appColors.darkBlue
-                                                            : appColors
-                                                                .lightGrey,
-                                                        BlendMode.srcIn)),
-                                                const SizedBox(height: 5),
-                                              ],
-                                            ),
+                                    return AnimatedSwitcher(
+                                      duration:
+                                          const Duration(milliseconds: 250),
+                                      child: widgetOptions.elementAt(
+                                          controller.selectedIndex.value),
+                                      transitionBuilder: (child, anim) {
+                                        return FadeTransition(
+                                            opacity: anim, child: child);
+                                      },
+                                    );
+                                  },
+                                ),
+                                bottomNavigationBar: Obx(() => SafeArea(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: [
+                                          Container(
+                                            width:
+                                                ScreenUtil().screenWidth * 0.9,
+                                            height: 1,
+                                            color: appColors.lightGrey
+                                                .withOpacity(0.50),
                                           ),
-                                          label: 'home'.tr,
-                                        ),
-                                        BottomNavigationBarItem(
-                                          key: controller.keyPerformance,
-                                          icon: Column(
-                                            children: [
-                                              Assets.images.icSelectedPerfom.svg(
-                                                  height: 22.h,
-                                                  colorFilter: ColorFilter.mode(
-                                                      controller.selectedIndex
-                                                                  .value ==
-                                                              1
-                                                          ? appColors.darkBlue
-                                                          : appColors.lightGrey,
-                                                      BlendMode.srcIn)),
-                                              const SizedBox(height: 5),
-                                            ],
-                                          ),
-                                          label: 'performance'.tr,
-                                        ),
-                                        BottomNavigationBarItem(
-                                          key: controller.keyAssistance,
-                                          icon: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Assets.images.icChatBottom.svg(
-                                                  height: 22.h,
-                                                  colorFilter: ColorFilter.mode(
-                                                      controller.selectedIndex
-                                                                  .value ==
-                                                              2
-                                                          ? appColors.darkBlue
-                                                          : appColors.lightGrey,
-                                                      BlendMode.srcIn)),
-                                              const SizedBox(height: 5),
-                                            ],
-                                          ),
-                                          label: "assistance".tr,
-                                        ),
-                                        BottomNavigationBarItem(
-                                          key: controller.keyQueue,
-                                          icon: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.center,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Assets.svg.queue.svg(
-                                                  height: 22.h,
-                                                  colorFilter: ColorFilter.mode(
-                                                      controller.selectedIndex
-                                                                  .value ==
-                                                              3
-                                                          ? appColors.darkBlue
-                                                          : appColors.lightGrey,
-                                                      BlendMode.srcIn)),
-                                              const SizedBox(height: 5),
-                                            ],
-                                          ),
-                                          label: "orders".tr,
-                                        ),
+                                          const SizedBox(height: 10),
+                                          BottomNavigationBar(
+                                            backgroundColor: appColors.white,
+                                            type: BottomNavigationBarType.fixed,
+                                            selectedFontSize: 10,
+                                            unselectedFontSize: 10,
+                                            selectedItemColor:
+                                                appColors.darkBlue,
+                                            unselectedItemColor:
+                                                appColors.lightGrey,
+                                            items: <BottomNavigationBarItem>[
+                                              BottomNavigationBarItem(
+                                                key: controller.keyHome,
+                                                icon: InkWell(
+                                                  onTap: () {
+                                                    controller.selectedIndex
+                                                        .value = 0;
+                                                    if (Get.isRegistered<
+                                                            HomeController>() &&
+                                                        !Get.find<
+                                                                HomeController>()
+                                                            .isInit) {
+                                                      Get.find<HomeController>()
+                                                          .onInit();
+                                                    }
+                                                  },
+                                                  child: Column(
+                                                    children: [
+                                                      Assets.images.icSelectedHome.svg(
+                                                          height: 22.h,
+                                                          colorFilter: ColorFilter.mode(
+                                                              controller
+                                                                          .selectedIndex
+                                                                          .value ==
+                                                                      0
+                                                                  ? appColors
+                                                                      .darkBlue
+                                                                  : appColors
+                                                                      .lightGrey,
+                                                              BlendMode.srcIn)),
+                                                      const SizedBox(height: 5),
+                                                    ],
+                                                  ),
+                                                ),
+                                                label: 'home'.tr,
+                                              ),
+                                              BottomNavigationBarItem(
+                                                key: controller.keyPerformance,
+                                                icon: Column(
+                                                  children: [
+                                                    Assets.images.icSelectedPerfom.svg(
+                                                        height: 22.h,
+                                                        colorFilter: ColorFilter.mode(
+                                                            controller.selectedIndex
+                                                                        .value ==
+                                                                    1
+                                                                ? appColors
+                                                                    .darkBlue
+                                                                : appColors
+                                                                    .lightGrey,
+                                                            BlendMode.srcIn)),
+                                                    const SizedBox(height: 5),
+                                                  ],
+                                                ),
+                                                label: 'performance'.tr,
+                                              ),
+                                              BottomNavigationBarItem(
+                                                key: controller.keyAssistance,
+                                                icon: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Assets.images.icChatBottom.svg(
+                                                        height: 22.h,
+                                                        colorFilter: ColorFilter.mode(
+                                                            controller.selectedIndex
+                                                                        .value ==
+                                                                    2
+                                                                ? appColors
+                                                                    .darkBlue
+                                                                : appColors
+                                                                    .lightGrey,
+                                                            BlendMode.srcIn)),
+                                                    const SizedBox(height: 5),
+                                                  ],
+                                                ),
+                                                label: "assistance".tr,
+                                              ),
+                                              BottomNavigationBarItem(
+                                                key: controller.keyQueue,
+                                                icon: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.center,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Assets.svg.queue.svg(
+                                                        height: 22.h,
+                                                        colorFilter: ColorFilter.mode(
+                                                            controller.selectedIndex
+                                                                        .value ==
+                                                                    3
+                                                                ? appColors
+                                                                    .darkBlue
+                                                                : appColors
+                                                                    .lightGrey,
+                                                            BlendMode.srcIn)),
+                                                    const SizedBox(height: 5),
+                                                  ],
+                                                ),
+                                                label: "orders".tr,
+                                              ),
 
-                                        // Profile Tab comment
-                                        BottomNavigationBarItem(
-                                          key: controller.keyProfile,
-                                          icon: Column(
-                                            children: [
-                                              userImage.value
-                                                          .contains("null") ||
-                                                      userImage.value.isEmpty ||
-                                                      userImage.value == ""
-                                                  ? SizedBox(
-                                                      height: 30.h,
-                                                      width: 30.h,
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(
-                                                                    100.h),
-                                                        child: Image.asset(
-                                                            Assets
+                                              // Profile Tab comment
+                                              BottomNavigationBarItem(
+                                                key: controller.keyProfile,
+                                                icon: Column(
+                                                  children: [
+                                                    userImage.value.contains(
+                                                                "null") ||
+                                                            userImage.value
+                                                                .isEmpty ||
+                                                            userImage.value ==
+                                                                ""
+                                                        ? SizedBox(
+                                                            height: 30.h,
+                                                            width: 30.h,
+                                                            child: ClipRRect(
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          100.h),
+                                                              child: Image
+                                                                  .asset(Assets
+                                                                      .images
+                                                                      .defaultProfile
+                                                                      .path),
+                                                            ),
+                                                          )
+                                                        : CommonImageView(
+                                                            imagePath:
+                                                                userImage.value,
+                                                            fit: BoxFit.cover,
+                                                            height: 30.h,
+                                                            width: 30.h,
+                                                            placeHolder: Assets
                                                                 .images
                                                                 .defaultProfile
-                                                                .path),
-                                                      ),
-                                                    )
-                                                  : CommonImageView(
-                                                      imagePath:
-                                                          userImage.value,
-                                                      fit: BoxFit.cover,
-                                                      height: 30.h,
-                                                      width: 30.h,
-                                                      placeHolder: Assets.images
-                                                          .defaultProfile.path,
-                                                      radius:
-                                                          BorderRadius.circular(
-                                                              100.h),
-                                                    ),
-                                              const SizedBox(height: 5),
+                                                                .path,
+                                                            radius: BorderRadius
+                                                                .circular(
+                                                                    100.h),
+                                                          ),
+                                                    const SizedBox(height: 5),
+                                                  ],
+                                                ),
+                                                label: "profile".tr,
+                                              ),
                                             ],
-                                          ),
-                                          label: "profile".tr,
-                                        ),
-                                      ],
-                                      elevation: 0,
-                                      currentIndex:
-                                          controller.selectedIndex.value,
-                                      onTap: (value) {
-                                        if (value == 2 &&
-                                            isEngagedStatus.value == 2) {
-                                          Fluttertoast.showToast(
-                                              msg:
-                                                  'Can\'t Perform this action while in a Chat');
-                                        } else {
-                                          controller.selectedIndex.value =
-                                              value;
-                                          dasboardCurrentIndex(value);
-                                        }
-                                        /* if (controller.selectedIndex.value == 2) {
-                                         // Get.toNamed(RouteName.orderHistory);
-                                        } else {
+                                            elevation: 0,
+                                            currentIndex:
+                                                controller.selectedIndex.value,
+                                            onTap: (value) {
+                                              if (value == 2 &&
+                                                  isEngagedStatus.value == 2) {
+                                                Fluttertoast.showToast(
+                                                    msg:
+                                                        'Can\'t Perform this action while in a Chat');
+                                              } else {
+                                                controller.selectedIndex.value =
+                                                    value;
+                                                dasboardCurrentIndex(value);
+                                              }
+                                              /* if (controller.selectedIndex.value == 2) {
+                                             // Get.toNamed(RouteName.orderHistory);
+                                            } else {
 
-                                        }*/
-                                      },
-                                    ),
-                                  ],
-                                ),
-                              ))),
-                      controller.chatOrderData != null &&
-                              controller.chatOrderData?.status.toString() == "0"
-                          ? acceptBottomBar(
-                              chatOrderData: controller.chatOrderData)
-                          : const SizedBox(),
-                      rejoinVisibility()
-                    ],
-                  );
+                                            }*/
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ))),
+                            controller.chatOrderData != null &&
+                                    controller.chatOrderData?.status
+                                            .toString() ==
+                                        "0"
+                                ? acceptBottomBar(
+                                    chatOrderData: controller.chatOrderData)
+                                : const SizedBox(),
+                            rejoinVisibility()
+                          ],
+                        );
+                      });
                 }),
           ),
         );

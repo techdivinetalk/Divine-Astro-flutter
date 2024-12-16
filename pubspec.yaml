@@ -133,6 +133,7 @@ dependencies:
   sms_autofill: ^2.3.1
   network_info_plus: ^6.0.1
   share_plus: ^10.1.2
+  showcaseview: ^3.0.0
   # awesome_notifications: ^0.9.3+1
 
 
