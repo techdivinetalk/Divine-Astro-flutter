@@ -49,6 +49,7 @@ import 'package:path_provider/path_provider.dart';
 import "package:permission_handler/permission_handler.dart";
 import 'package:screenshot/screenshot.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:showcaseview/showcaseview.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../common/PopupManager.dart';
@@ -349,6 +350,12 @@ class HomeController extends GetxController with WidgetsBindingObserver {
   void onReady() {
     isInit = false;
     super.onReady();
+    if (ModalRoute.of(contexts)?.isCurrent != true &&
+        previewed.value == 0 &&
+        showCasePreview.value.toString() == "1") {
+      WidgetsBinding.instance.addPostFrameCallback(
+          (_) => ShowCaseWidget.of(contexts).startShowCase([one]));
+    }
   }
 
   var contexts;

@@ -88,12 +88,12 @@ class HomeUI extends GetView<HomeController> {
           // });
           controller.scrollController.addListener(() async {
             // Check if the user is at the bottom
-            if (ModalRoute.of(context)?.isCurrent == true &&
-                previewed.value == 0 &&
-                showCasePreview.value.toString() == "1") {
-              WidgetsBinding.instance.addPostFrameCallback((_) =>
-                  ShowCaseWidget.of(context).startShowCase([controller.one]));
-            }
+            // if (ModalRoute.of(context)?.isCurrent == true &&
+            //     previewed.value == 0 &&
+            //     showCasePreview.value.toString() == "1") {
+            //   WidgetsBinding.instance.addPostFrameCallback((_) =>
+            //       ShowCaseWidget.of(context).startShowCase([controller.one]));
+            // }
 
             if (controller.scrollController.hasClients) {
               final double maxScrollExtent =

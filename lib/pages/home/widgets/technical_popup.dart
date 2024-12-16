@@ -37,11 +37,9 @@ Future<void> showTechnicalPopupAlert() async {
               text: "okay".tr,
               onPressed: () {
                 Get.put(HomeController()).changePreviewCode(true);
-                previewed.value = 0;
-                if (Navigator.of(Get.put(HomeController()).contexts)
-                            .overlay
-                            ?.context !=
-                        null &&
+                if (ModalRoute.of(Get.put(HomeController()).contexts)
+                            ?.isCurrent !=
+                        true &&
                     previewed.value == 0 &&
                     showCasePreview.value.toString() == "1") {
                   WidgetsBinding.instance.addPostFrameCallback((_) =>
