@@ -26,7 +26,6 @@ import 'package:get_storage/get_storage.dart';
 import 'package:overlay_support/overlay_support.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sms_autofill/sms_autofill.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:zego_uikit_prebuilt_call/zego_uikit_prebuilt_call.dart';
 import 'package:zego_uikit_signaling_plugin/zego_uikit_signaling_plugin.dart';
@@ -49,6 +48,8 @@ import 'localization/translations.dart';
 import 'model/chat_assistant/chat_assistant_astrologer_response.dart';
 import 'model/constant_details_model_class.dart';
 import 'screens/live_page/constant.dart';
+
+late List<CameraDescription> _cameras;
 
 // 8393008800
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -107,6 +108,7 @@ Future<void> main() async {
   }
   await initServices();
   Get.put(UserRepository());
+  _cameras = await availableCameras();
 
   GiftsSingleton().init();
   LiveSharedPreferencesSingleton().init();
@@ -128,8 +130,11 @@ Future<void> main() async {
   });
 
   await FirebaseMessaging.instance.getInitialMessage().then((message) async {
-    if (message!.data.isNotEmpty) {
-      var payload = message!.data;
+    if (message == null) {
+      log('notification payload: -- nulll is getting');
+
+    } else if (message.data.isNotEmpty) {
+      var payload = message.data;
       if (payload.isNotEmpty) {
         log('notification payload: -- ${payload}');
 

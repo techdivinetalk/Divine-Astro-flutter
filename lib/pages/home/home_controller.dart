@@ -1588,6 +1588,9 @@ class HomeController extends GetxController with WidgetsBindingObserver {
         showAgreement = data.data!.showAgreement ?? 0;
         update();
         log("showAgreement----->>>>$showAgreement");
+      } else {
+        previewed.value = 1;
+        update();
       }
       print("constantDetailsModelClass.data!.showAgreement");
       getConstantDetails = data;

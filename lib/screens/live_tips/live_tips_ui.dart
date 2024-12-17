@@ -1,5 +1,6 @@
 // import 'package:camera/camera.dart';
-import 'package:camerax/camerax.dart';
+// import 'package:camerax/camerax.dart';
+import 'package:camera/camera.dart';
 import 'package:divine_astrologer/app_socket/app_socket.dart';
 import 'package:divine_astrologer/common/app_textstyle.dart';
 import 'package:divine_astrologer/common/colors.dart';
@@ -11,6 +12,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 
+import '../../main.dart';
 import '../live_page/constant.dart';
 import 'live_tips_controller.dart';
 
@@ -25,12 +27,10 @@ class LiveTipsUI extends GetView<LiveTipsController> {
       builder: (controller) {
         return Scaffold(
           body: Stack(children: <Widget>[
-            Container(
+            SizedBox(
               height: double.infinity,
               width: double.infinity,
-              child: CameraView(
-                controller.controller!,
-              ),
+              child: CameraPreview(controller.cameraController),
             ),
             /*ShaderMask(
               shaderCallback: (rect) {
@@ -92,9 +92,17 @@ class LiveTipsUI extends GetView<LiveTipsController> {
                           padding: EdgeInsets.only(top: 20.h),
                           child: InkWell(
                             onTap: () {
-                              controller.toggleCameraLens();
-                              print(
-                                  "------------------------------------------------changing toggle${showFrontCamera.value}");
+                              controller.initCamera(cameras![
+                                  controller.isFrontCamera.value ? 0 : 1]);
+                              controller.isFrontCamera.value =
+                                  !controller.isFrontCamera.value;
+                              if (controller.isFrontCamera.value) {
+                                showFrontCamera.value = true;
+                              } else {
+                                showFrontCamera.value = false;
+                              }
+
+                              controller.update();
                             },
                             child: Obx(
                               () => Icon(

@@ -1,7 +1,8 @@
 import 'dart:async';
 import 'dart:developer';
 
-import 'package:camerax/camerax.dart';
+// import 'package:camerax/camerax.dart';
+import 'package:camera/camera.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:divine_astrologer/di/shared_preference_service.dart';
 import 'package:divine_astrologer/model/live/blocked_customer_list_res.dart';
@@ -11,6 +12,7 @@ import 'package:divine_astrologer/screens/live_dharam/live_global_singleton.dart
 import 'package:divine_astrologer/screens/live_page/constant.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -19,11 +21,14 @@ import 'package:get/get_connect/http/src/status/http_status.dart';
 import '../../common/app_textstyle.dart';
 import '../../common/colors.dart';
 import '../../common/common_bottomsheet.dart';
+import '../../common/common_functions.dart';
 import '../../common/routes.dart';
 import '../../gen/assets.gen.dart';
+import '../../main.dart';
 
 class LiveTipsController extends GetxController {
-  CameraController? controller;
+  // CameraController? controller;
+  late CameraController cameraController;
 
   var pref = Get.find<SharedPreferenceService>();
   String astroId = "", name = "", image = "";
@@ -42,44 +47,30 @@ class LiveTipsController extends GetxController {
 
   @override
   void onInit() {
-    controller = CameraController(CameraFacing.front);
+    // controller = CameraController(CameraFacing.front);
     DeviceOrientation portraitMode = DeviceOrientation.portraitUp;
-    controller?.startAsync().then((_) {});
-    // controller?.lockCaptureOrientation(portraitMode);
-    // controller!.initialize().then((_) {
-    //   // controller?.lockCaptureOrientation(portraitMode);
-    //   if (!Get.context!.mounted) {
-    //     CameraLensDirection.front;
-    //     return;
-    //   }
-    //   update();
-    // }).catchError((Object e) {
-    //   if (e is CameraException) {
-    //     switch (e.code) {
-    //       case 'CameraAccessDenied':
-    //         // Handle access errors here.
-    //         break;
-    //       default:
-    //         // Handle other errors here.
-    //         break;
-    //     }
-    //   }
-    // });
+    // controller?.startAsync().then((_) {});
+    // controller = CameraController(cameras![1], ResolutionPreset.max);
+    // cameraController = CameraController(cameras!.last, ResolutionPreset.max);
+    initCamera(cameras!.last);
+    isFrontCamera.value = true;
     super.onInit();
   }
 
   @override
   void dispose() {
     streamController.close();
+    cameraController.dispose();
 
     super.dispose();
   }
 
   @override
   void onClose() {
-    if (controller != null) {
-      controller!.dispose();
+    if (cameraController != null) {
+      cameraController.dispose();
     }
+
     super.onClose();
   }
 
@@ -139,8 +130,8 @@ class LiveTipsController extends GetxController {
       }).then((value) async {
         print("successfully added");
         LiveGlobalSingleton().isInLiveScreen = true;
-        if (controller != null) {
-          controller!.dispose();
+        if (cameraController != null) {
+          cameraController!.dispose();
         }
         await Get.offNamed(RouteName.liveDharamScreen, arguments: userId);
         LiveGlobalSingleton().isInLiveScreen = false;
@@ -371,20 +362,156 @@ class LiveTipsController extends GetxController {
     );
   }
 
-  toggleCameraLens() {
-    isFrontCamera.value = !isFrontCamera.value;
-    controller = CameraController(
-      isFrontCamera.value ? CameraFacing.front : CameraFacing.back,
-    );
-    if (isFrontCamera.value) {
-      showFrontCamera.value = true;
-    } else {
-      showFrontCamera.value = false;
+  // toggleCameraLens() {
+  //   isFrontCamera.value = !isFrontCamera.value;
+  //   controller = CameraController(
+  //     isFrontCamera.value ? CameraFacing.front : CameraFacing.back,
+  //   );
+  //   if (isFrontCamera.value) {
+  //     showFrontCamera.value = true;
+  //   } else {
+  //     showFrontCamera.value = false;
+  //   }
+
+  Future initCamera(CameraDescription cameraDescription) async {
+// create a CameraController
+    cameraController =
+        CameraController(cameraDescription, ResolutionPreset.high);
+// Next, initialize the controller. This returns a Future.
+    try {
+      await cameraController.initialize().then((_) {
+        update();
+        return;
+      });
+      update();
+    } on CameraException catch (e) {
+      debugPrint("camera error $e");
+    }
+  }
+
+// /// Display a row of toggle to select the camera (or a message if no camera is available).
+  Widget cameraTogglesRowWidget() {
+    final List<Widget> toggles = <Widget>[];
+
+    void onChanged(CameraDescription? description) {
+      if (description == null) {
+        return;
+      }
+
+      onNewCameraSelected(description);
+      update();
     }
 
-    print(
-        "------------------------------------------------changing toggle${showFrontCamera.value}");
-    controller?.startAsync().then((_) {});
+    if (cameras!.isEmpty) {
+      SchedulerBinding.instance.addPostFrameCallback((_) async {
+        divineSnackBar(data: 'No camera found.');
+      });
+      return const Text('None');
+    } else {
+      for (final CameraDescription cameraDescription in cameras!) {
+        toggles.add(
+          SizedBox(
+            width: 90.0,
+            child: RadioListTile<CameraDescription>(
+              title: Icon(getCameraLensIcon(cameraDescription.lensDirection)),
+              groupValue: cameraController.description,
+              value: cameraDescription,
+              onChanged: onChanged,
+            ),
+          ),
+        );
+      }
+    }
+
+    return Row(children: toggles);
+  }
+
+  Future<void> onNewCameraSelected(data) async {
+    if (cameraController != null) {
+      //   I/flutter ( 5522): ------------------------CameraDescription(0, CameraLensDirection.back, 90)
+      // I/flutter ( 5522): ------------------------back
+      // I/flutter ( 5522): ------------------------1
+      // I/flutter ( 5522): ------------------------CameraLensDirection.back
+      //   I/flutter ( 5522): ------------------------CameraDescription(1, CameraLensDirection.front, 270)
+      // I/flutter ( 5522): ------------------------front
+      // I/flutter ( 5522): ------------------------0
+      // I/flutter ( 5522): ------------------------CameraLensDirection.front
+      if (cameraController.description.lensDirection.name.toString() ==
+          "front") {
+        isFrontCamera.value = false;
+        return cameraController.setDescription(cameras!.last);
+      } else {
+        isFrontCamera.value = true;
+
+        return cameraController.setDescription(cameras!.first);
+      }
+    } else {
+      return _initializeCameraController(cameraController.description);
+    }
+  }
+
+  IconData getCameraLensIcon(CameraLensDirection direction) {
+    switch (direction) {
+      case CameraLensDirection.back:
+        return Icons.camera_rear;
+      case CameraLensDirection.front:
+        return Icons.camera_front;
+      case CameraLensDirection.external:
+        return Icons.camera;
+    }
+    // This enum is from a different package, so a new value could be added at
+    // any time. The example should keep working if that happens.
+    // ignore: dead_code
+    return Icons.camera;
+  }
+
+  Future<void> _initializeCameraController(
+      CameraDescription cameraDescription) async {
+    final CameraController cameraControllers = CameraController(
+      cameraDescription,
+      ResolutionPreset.max,
+      imageFormatGroup: ImageFormatGroup.jpeg,
+    );
+
+    cameraController = cameraControllers;
+
+    // If the controller is updated then update the UI.
+    cameraController.addListener(() {
+      if (cameraController.value.hasError) {
+        divineSnackBar(
+            data: 'Camera error ${cameraController.value.errorDescription}');
+      }
+    });
+
+    try {
+      await cameraController.initialize();
+      await Future.wait(<Future<Object?>>[]);
+    } on CameraException catch (e) {
+      switch (e.code) {
+        case 'CameraAccessDenied':
+          divineSnackBar(data: 'You have denied camera access.');
+        case 'CameraAccessDeniedWithoutPrompt':
+          // iOS only
+          divineSnackBar(
+              data: 'Please go to Settings app to enable camera access.');
+        case 'CameraAccessRestricted':
+          // iOS only
+          divineSnackBar(data: 'Camera access is restricted.');
+        case 'AudioAccessDenied':
+          divineSnackBar(data: 'You have denied audio access.');
+        case 'AudioAccessDeniedWithoutPrompt':
+          // iOS only
+          divineSnackBar(
+              data: 'Please go to Settings app to enable audio access.');
+        case 'AudioAccessRestricted':
+          // iOS only
+          divineSnackBar(data: 'Audio access is restricted.');
+        default:
+          divineSnackBar(data: 'e.');
+          break;
+      }
+    }
+
     update();
   }
 }

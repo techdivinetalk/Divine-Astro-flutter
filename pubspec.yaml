@@ -127,7 +127,7 @@ dependencies:
   tutorial_coach_mark: ^1.2.11
   animated_custom_dropdown: ^3.1.1
   easy_debounce: ^2.0.3
-  camerax: ^0.1.2
+#  camerax: ^0.1.2
   firebase_analytics: ^11.3.2
   webview_flutter: ^4.8.0
   sms_autofill: ^2.3.1
